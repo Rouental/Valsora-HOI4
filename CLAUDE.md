@@ -114,7 +114,7 @@ Aislada is the worked example of a built-out nation:
 - **Icons.** Vanilla icons only, checked against vanilla `interface/goals.gfx`.
 - **Portraits** live in `source/portraits/` and are registered in `nations.PORTRAITS`
   (source, crop box, optional red tint). Each becomes `gfx/leaders/VAL/<name>.dds` and a
-  `GFX_portrait_<name>` sprite. `green_uniform_leader` is prepared but not yet assigned.
+  `GFX_portrait_<name>` sprite. `green_uniform_leader` and `crowned_leader` are prepared but not yet assigned.
 - **City names**: `nations.CITY_NAMES` overrides victory point names by province id
   (2246 = Aislada's capital, "The Great and Noble City of Merlovia"). The ids follow the
   placeholder provinces; `build_mod.py` stops if a named id is no longer a victory point.

@@ -139,6 +139,7 @@ PORTRAITS = {
     "AIS_communist_merlovich": ("source/portraits/merlovich_emu.png", 0, 95, 300, "red"),
     # prepared, not yet given to a character
     "green_uniform_leader": ("source/portraits/green_uniform_leader.png", 260, 90, 900, None),
+    "crowned_leader": ("source/portraits/crowned_leader.png", 340, 200, 1100, None),
 }
 
 # Hand-picked victory point names, by province id. Ids come from the placeholder
