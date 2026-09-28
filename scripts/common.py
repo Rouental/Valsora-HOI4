@@ -6,11 +6,10 @@
 MAP_W, MAP_H = 5120, 2560
 
 # Output pixels per source (.pdn) pixel for every continent. A straight fit of the
-# 14000-wide source into 5120 would be 0.366, so 0.37 draws each continent a little
-# larger relative to the frame than the source does, and ~26% wider than the previous
-# 5632x2048 build (0.293). 0.38 no longer leaves room for 100 px oceans between every
-# pair of continents plus a clean wrap seam.
-SCALE = 0.37
+# 14000-wide source into 5120 would be 0.366; 0.375 draws each continent a little
+# larger relative to the frame than the source does, and ~28% wider than the previous
+# 5632x2048 build (0.293). At 0.38 the gaps between continents drop to ~91 px.
+SCALE = 0.375
 
 # Minimum open water between two different continents, in output pixels, and the
 # empty band kept along the top and bottom edges.

@@ -34,7 +34,7 @@ def write_bmp(path, img, palette=None):
     with open(path, "wb") as f:
         f.write(b"BM" + struct.pack("<IHHI", size, 0, 0, offset))
         f.write(struct.pack("<IiiHHIIiiII", 40, w, h, 1, bpp, 0, data.nbytes, 2835, 2835,
-                            ncol, 0))
+                            0 if ncol == 256 else ncol, 0))  # 0 = full 256 palette, as vanilla
         f.write(pal_bytes)
         f.write(data.tobytes())
 

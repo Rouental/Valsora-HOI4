@@ -115,6 +115,14 @@ def main():
     land |= pond[wlab]
     kind = np.where(land, 1, np.where(wlab == ocean_id, 0, 2)).astype(np.uint8)
 
+    # centre exactly on the final land (layout.py centres on a coarse grid, before
+    # specks are dropped); export_canvas.py applies the same shift
+    rows = np.nonzero(land.any(axis=1))[0]
+    cols = np.nonzero(land.any(axis=0))[0]
+    dy = ((MAP_H - 1 - rows[-1]) - rows[0]) // 2
+    dx = ((MAP_W - 1 - cols[-1]) - cols[0]) // 2
+    kind, cont, land = (np.roll(a, (dy, dx), axis=(0, 1)) for a in (kind, cont, land))
+
     # layout.py keeps land off the wrap seam; a province may not cross it
     if land[:, 0].any() or land[:, -1].any():
         raise SystemExit("land touches the wrap seam at x = 0")
@@ -131,7 +139,7 @@ def main():
           f"{ln} lakes ({lakes.sum()} px); dropped {dropped} specks, filled {filled} ponds")
     for k, name in enumerate(CONTINENTS, 1):
         print(f"  {name:>13}: {(cont == k).sum():>8} px")
-    np.savez_compressed("work/world.npz", kind=kind, cont=cont)
+    np.savez_compressed("work/world.npz", kind=kind, cont=cont, shift=(dy, dx))
 
 
 if __name__ == "__main__":

@@ -135,6 +135,13 @@ def main():
         if not moved:
             print(f"converged after {it} iterations")
             break
+    # centre the land: equal empty bands top and bottom, and equal ocean either side
+    # of the wrap seam (whole-map shifts keep every gap)
+    can = render(masks, pos, W, H)
+    rows = np.nonzero((can >= 0).any(axis=1))[0]
+    cols = np.nonzero((can >= 0).any(axis=0))[0]
+    pos[:, 1] += ((H - 1 - rows[-1]) - rows[0]) / 2
+    pos[:, 0] += ((W - 1 - cols[-1]) - cols[0]) / 2
     # report at full output resolution
     posf = pos * F
     g = gaps(full, posf, MAP_W, MAP_H, int(MIN_GAP * 3))

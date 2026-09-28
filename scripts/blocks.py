@@ -33,9 +33,12 @@ CORES = {
 }
 # islands the author's continents map puts somewhere other than their nearest core
 OVERRIDES = {(9574, 3082): "ORIENTALIS"}
-# for splitting the WEST block into two continents later
+# islands deleted outright at the author's request (source x, y)
+DELETE = [(1087, 6590)]  # lone islet far south-west of Araseos
+# for splitting the WEST block into two continents later; islands in these lists
+# take that continent, the rest follow the nearer main landmass
 NONSCIO = [(3598, 1910), (1486, 1426)]
-ARASEOS = [(3010, 5170)]
+ARASEOS = [(3010, 5170), (2615, 4051)]  # 2nd: island north of Araseos the author moved
 
 
 def main():
@@ -114,6 +117,11 @@ def main():
         j = np.argmin((wy + max(0, cy - 1500) - cy) ** 2 + (wx + max(0, cx - 1500) - cx) ** 2)
         blk[m] = win[wy[j], wx[j]]
         kept += 1
+    for x, y in DELETE:
+        win = labf[y - 40:y + 40, x - 40:x + 40]
+        ks = set(np.unique(win[blk[y - 40:y + 40, x - 40:x + 40] >= 0])) - {0}
+        assert len(ks) == 1, f"DELETE seed ({x}, {y}) must sit on exactly one island"
+        blk[labf == ks.pop()] = -1
     np.save("work/block_full.npy", blk)
     json.dump(dict(nonscio=NONSCIO, araseos=ARASEOS), open("work/seeds.json", "w"))
     print(f"removed Antarctica ({int((labf == main_ant).sum())} px), kept {kept} islands near it")

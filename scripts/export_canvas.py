@@ -36,6 +36,7 @@ def main():
     lay = json.load(open("work/layout.json"))
     src = np.load("work/pdn/layer1.npy", mmap_mode="r")
     blk = np.load("work/block_full.npy", mmap_mode="r")
+    dy, dx = np.load("work/world.npz")["shift"]
     out = np.zeros((MAP_H, MAP_W, 3), np.uint8)
     ok = np.zeros((MAP_H, MAP_W), bool)
     for i, b in enumerate(lay["blocks"]):
@@ -49,7 +50,7 @@ def main():
         bcrop = np.asarray(blk[sy0:sy1, sx0:sx1])
         rgba = crop[sy - sy0, sx - sx0]
         good = (bcrop[sy - sy0, sx - sx0] == i) & (rgba[:, 3] > 0) & (rgba[:, :3].max(axis=1) > 20)
-        Y, X = ys + oy, (xs + ox) % MAP_W
+        Y, X = ys + oy + dy, (xs + ox + dx) % MAP_W
         out[Y[good], X[good]] = rgba[good, :3]
         ok[Y[good], X[good]] = True
     # fill border lines and resampling gaps from the nearest coloured pixel

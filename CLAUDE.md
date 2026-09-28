@@ -56,25 +56,28 @@ mismatch, missing localisation) and catches all of them.
 - **Continents move as rigid blocks** (`blocks.py`): each block is a core landmass, named
   by seed pixels, plus the islands nearest to it. Nonscio + Araseos are **one block**
   because the Aikos / Midtierre archipelago interlocks them; they are split into two
-  continents afterwards by nearest main landmass. One island (source x 9574, y 3082) is
-  forced to Orientalis to match the author's continents map.
+  continents afterwards by nearest main landmass. Hand overrides, all by source seed
+  pixel in `blocks.py`: the island at (9574, 3082) belongs to Orientalis (author's
+  continents map); the island at (2615, 4051) north of Araseos belongs to Araseos; the
+  islet at (1087, 6590) south-west of Araseos is deleted (author's request).
 - **Antarctica** is the landmass touching the bottom edge. Islets within 5 px of it are
   removed with it; three real islands south of Usnistan are kept.
-- **Scale 0.37** output px per source px (a straight fit would be 0.366; the previous
-  5632×2048 build used 0.293). At 0.38 there is not enough room for 100 px oceans between
-  every pair plus a clear seam.
+- **Scale 0.375** output px per source px (a straight fit would be 0.366; the previous
+  5632×2048 build used 0.293). At 0.38 the tightest gaps drop to ~91 px.
 - **Layout** (`layout.py`): start from the source layout, stretched vertically into
   Antarctica's space. Then push apart every pair of blocks closer than 100 px along the
   line between their nearest coasts, with a fading pull back to the start. The wrap seam
-  (x = 0) is a wall no block may cross.
+  (x = 0) is a wall no block may cross. `compose.py` then centres the final land exactly
+  (equal margins top/bottom and either side of the seam) and records the shift in
+  `work/world.npz`, which `export_canvas.py` applies too.
 - **Provinces are bricks**: 32 px on land, 128 px at sea, 48 px on lakes, with odd rows
   offset by half a brick so only three provinces meet at grid corners. Bricks never cross
   the seam (the edge half-bricks of odd rows are folded into their neighbour). Pieces under
   25% of a brick merge into the same-kind neighbour with the longest shared border.
   Remaining X-crossings (coasts, seam) are fixed by moving single pixels, never letting a
   lake touch the sea.
-- **Islands under 16 px are dropped and ponds under 64 px filled.** 673 islets went this
-  way; they are 1–4 px specks at game scale.
+- **Islands under 16 px are dropped and ponds under 64 px filled.** About 660 islets go
+  this way; they are 1–4 px specks at game scale.
 - **Enclosed water becomes lakes**, including the author's inland seas (Piscary, Norlany,
   Sasurs). If they should be navigable, they need to become sea provinces in their own
   naval regions.
@@ -99,6 +102,9 @@ mismatch, missing localisation) and catches all of them.
   be > 95, water < 95. `terrain.bmp`: index 0 = plains, 15 = ocean (lakes too). `rivers.bmp`:
   255 = land, 254 = water. `cities.bmp`: map-sized; index 4 is in no city group, so no town
   meshes. All of these must be exactly map-sized.
+- 8-bit BMPs with a full 256-colour palette write `biClrUsed = 0`, as vanilla does. The
+  first in-game test logged "Palette in rivers.bmp is probably not correct" with 256
+  there; not yet confirmed whether the fix silences it.
 - `trees.bmp`: any size (vanilla 75/256 of the map). `world_normal.bmp`: half size,
   24-bit, flat = RGB (128,128,255).
 - `map/terrain/`: `colormap_rgb_cityemissivemask_a.dds` and `fow_rgb_waterspec_a.dds` at
@@ -147,10 +153,11 @@ Left loaded on purpose, and noisy in `error.log`:
 
 ## Current state
 
-- 5,036 provinces (4,341 land, 625 sea, 70 lakes), 543 states, 125 strategic regions
-  (78 land, 47 sea), 7 countries.
-- **Not yet confirmed in-game.** The previous build crashed on several of the rules above,
-  all now encoded in `check_mod.py`. The first in-game test is the next step.
+- 5,138 provinces (4,453 land, 613 sea, 72 lakes), 548 states, 128 strategic regions
+  (81 land, 47 sea), 7 countries.
+- **Loads in-game without crashing** (first build, confirmed by the author). Its
+  `error.log` was vanilla-reference noise (decisions, missions, ai_faction_theaters
+  region ids) plus the rivers.bmp palette warning above.
 
 ## Known gaps
 
