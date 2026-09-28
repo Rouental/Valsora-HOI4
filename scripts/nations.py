@@ -1,6 +1,7 @@
 """Hand-written content for individual nations, layered on the generated placeholders.
 
 Aislada is the worked example: a leader with a custom portrait and its own focus tree.
+Nonscio (NSC) has per-ideology names and the Cahun leaders.
 build_mod.py calls these hooks; add further nations the same way.
 """
 import numpy as np
@@ -13,9 +14,27 @@ HISTORY = {
     # recruit_character only works in history files, so Communist Merlovich is
     # recruited at game start too; he waits as communist party leader until "Explode"
     "AIS": ["recruit_character = AIS_merlovich", "recruit_character = AIS_communist_merlovich"],
+    # Roland leads the ruling non-aligned party at start; Serelle leads the fascists
+    "NSC": ["recruit_character = NSC_roland_cahun", "recruit_character = NSC_serelle_cahun"],
+}
+
+# Country names while a given ideology rules: tag -> ideology -> (name, formal
+# name, adjective). Ideologies left out use the placeholder name from build_mod.py.
+IDEOLOGY_NAMES = {
+    "NSC": {
+        "democratic": ("Boring Rouental", "The Liberal and Functional Republic of Rouental",
+                       "Rouentaise"),
+        "fascism": ("Powerful Rouental", "The Absolute Iron Rouentaise Monarchy", "Rouentaise"),
+        "communism": ("Shitty Rouental", "The Red Workers' Peoples' Republic of Rouental",
+                      "Rouentaise"),
+        "neutrality": ("Perfect Rouental", "The Serene and Beautiful Feudal Realm of Rouental",
+                       "Rouentaise"),
+    },
 }
 
 LOCALISATION = [
+    ' NSC_serelle_cahun:0 "Serelle Cahun"',
+    ' NSC_roland_cahun:0 "Roland Cahun"',
     ' AIS_merlovich:0 "Merlovich"',
     ' AIS_communist_merlovich:0 "Communist Merlovich"',
     ' AIS_focus:0 "Aisladan Focus Tree"',
@@ -26,6 +45,36 @@ LOCALISATION = [
     ' AIS_explode:0 "Fucking Explode"',
     ' AIS_explode_desc:0 "It was always going to end like this. Merlovich returns, redder."',
 ]
+
+NSC_CHARACTERS = """characters = {
+	NSC_roland_cahun = {
+		name = NSC_roland_cahun
+		portraits = {
+			civilian = {
+				large = GFX_portrait_NSC_roland_cahun
+			}
+		}
+		country_leader = {
+			ideology = despotism
+			expire = "1965.1.1.1"
+			id = -1
+		}
+	}
+	NSC_serelle_cahun = {
+		name = NSC_serelle_cahun
+		portraits = {
+			civilian = {
+				large = GFX_portrait_NSC_serelle_cahun
+			}
+		}
+		country_leader = {
+			ideology = fascism_ideology
+			expire = "1965.1.1.1"
+			id = -1
+		}
+	}
+}
+"""
 
 CHARACTERS = """characters = {
 	AIS_merlovich = {
@@ -137,9 +186,8 @@ FOCUS_TREE = """focus_tree = {
 PORTRAITS = {
     "AIS_merlovich": ("source/portraits/merlovich_emu.png", 0, 95, 300, None),
     "AIS_communist_merlovich": ("source/portraits/merlovich_emu.png", 0, 95, 300, "red"),
-    # prepared, not yet given to a character
-    "green_uniform_leader": ("source/portraits/green_uniform_leader.png", 260, 90, 900, None),
-    "crowned_leader": ("source/portraits/crowned_leader.png", 340, 200, 1100, None),
+    "NSC_serelle_cahun": ("source/portraits/serelle_cahun.png", 260, 90, 900, None),
+    "NSC_roland_cahun": ("source/portraits/roland_cahun.png", 340, 200, 1100, None),
 }
 
 # Hand-picked victory point names, by province id. Ids come from the placeholder
@@ -167,6 +215,7 @@ def redden(rgba):
 def write_files(write, out):
     """Write every nation-specific file into the mod folder."""
     write("common/characters/AIS.txt", CHARACTERS)
+    write("common/characters/NSC.txt", NSC_CHARACTERS)
     write("common/national_focus/aislada.txt", FOCUS_TREE)
     sprites = []
     for name, (src, x0, y0, w, tint) in PORTRAITS.items():

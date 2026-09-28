@@ -548,8 +548,9 @@ def main():
         tag, name, adj, _ = COUNTRIES[c]
         loc += [f' {tag}:0 "{name}"', f' {tag}_DEF:0 "{name}"', f' {tag}_ADJ:0 "{adj}"']
         for ideo in ("democratic", "fascism", "communism", "neutrality"):
-            loc += [f' {tag}_{ideo}:0 "{name}"', f' {tag}_{ideo}_DEF:0 "{name}"',
-                    f' {tag}_{ideo}_ADJ:0 "{adj}"']
+            n, d, a = nations.IDEOLOGY_NAMES.get(tag, {}).get(ideo, (name, name, adj))
+            loc += [f' {tag}_{ideo}:0 "{n}"', f' {tag}_{ideo}_DEF:0 "{d}"',
+                    f' {tag}_{ideo}_ADJ:0 "{a}"']
         loc.append(f' {c}:0 "{name}"')
     loc += [f' VAL_STATE_{s + 1}:0 "{state_name[s]}"' for s in range(len(states))]
     loc += [f' VAL_REGION_{r + 1}:0 "{region_name[r]}"' for r in range(len(regions))]
