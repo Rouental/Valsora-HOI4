@@ -104,9 +104,12 @@ Aislada is the worked example of a built-out nation:
   `country = { factor = 0 modifier = { add = 10 tag = AIS } }`. It is one chain:
   1. NationStates account: +25 political power.
   2. Become Cartographer: −0.5 stability.
-  3. Explode: capital state −100 manpower, communism 100%, ruling party communism.
-     It recruits `AIS_communist_merlovich` ("Communist Merlovich", `marxism`, same
-     portrait) *before* switching party, so he takes over, then retires the original.
+  3. Fucking Explode: capital state −100 manpower, communism 100%, ruling party
+     communism, then `promote_character = AIS_communist_merlovich` ("Communist
+     Merlovich", `marxism`, same portrait) and retire the original.
+     **`recruit_character` is ignored outside history files** (error.log: "should only
+     happen in game/history files"), so both Merlovichs are recruited in the country
+     history; the communist one sits as communist party leader until the focus.
 - **Icons.** Vanilla icons only, checked against vanilla `interface/goals.gfx`.
 
 `check_mod.py` also checks that recruited characters exist and are localised, that portrait

@@ -10,7 +10,9 @@ from imgio import write_dds
 
 # extra lines appended to history/countries/<TAG> - <Name>.txt
 HISTORY = {
-    "AIS": ["recruit_character = AIS_merlovich"],
+    # recruit_character only works in history files, so Communist Merlovich is
+    # recruited at game start too; he waits as communist party leader until "Explode"
+    "AIS": ["recruit_character = AIS_merlovich", "recruit_character = AIS_communist_merlovich"],
 }
 
 LOCALISATION = [
@@ -21,7 +23,7 @@ LOCALISATION = [
     ' AIS_nationstates_account_desc:0 "Every great nation begins with a login."',
     ' AIS_become_cartographer:0 "Become Cartographer"',
     ' AIS_become_cartographer_desc:0 "Drawing the world is harder than ruling it."',
-    ' AIS_explode:0 "Explode"',
+    ' AIS_explode:0 "Fucking Explode"',
     ' AIS_explode_desc:0 "It was always going to end like this. Merlovich returns, redder."',
 ]
 
@@ -116,7 +118,6 @@ FOCUS_TREE = """focus_tree = {
 		cost = 10
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
-			recruit_character = AIS_communist_merlovich
 			capital_scope = {
 				add_manpower = -100
 			}
@@ -130,6 +131,7 @@ FOCUS_TREE = """focus_tree = {
 				ruling_party = communism
 				elections_allowed = no
 			}
+			promote_character = AIS_communist_merlovich
 			retire_character = AIS_merlovich
 		}
 	}
