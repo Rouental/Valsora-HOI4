@@ -42,6 +42,8 @@ LOCALISATION = [
     ' NSC_kick_out_brother_desc:0 "Serelle has waited long enough. Roland has not."',
     ' NSC_parasites_rude:0 "Kick Out the Parasites (Rudely)"',
     ' NSC_parasites_rude_desc:0 "The Cahuns are shown the door. Then the window."',
+    ' NSC_steady_as_she_goes:0 "Steady As She Goes"',
+    ' NSC_steady_as_she_goes_desc:0 "The Cahuns stay. Roland stays. Everything stays."',
     ' AIS_merlovich:0 "Merlovich"',
     ' AIS_communist_merlovich:0 "Communist Merlovich"',
     ' AIS_focus:0 "Aisladan Focus Tree"',
@@ -187,7 +189,7 @@ FOCUS_TREE = """focus_tree = {
 """
 
 
-# Rouental: three mutually exclusive ways to end the non-aligned monarchy.
+# Rouental: four mutually exclusive political paths, in one row.
 NSC_FOCUS_TREE = """focus_tree = {
 	id = NSC_focus
 
@@ -212,7 +214,7 @@ NSC_FOCUS_TREE = """focus_tree = {
 		x = 0
 		y = 0
 		cost = 10
-		mutually_exclusive = { focus = NSC_kick_out_brother focus = NSC_parasites_rude }
+		mutually_exclusive = { focus = NSC_kick_out_brother focus = NSC_parasites_rude focus = NSC_steady_as_she_goes }
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
 			set_popularities = {
@@ -236,7 +238,7 @@ NSC_FOCUS_TREE = """focus_tree = {
 		x = 2
 		y = 0
 		cost = 10
-		mutually_exclusive = { focus = NSC_parasites_polite focus = NSC_parasites_rude }
+		mutually_exclusive = { focus = NSC_parasites_polite focus = NSC_parasites_rude focus = NSC_steady_as_she_goes }
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
 			set_popularities = {
@@ -257,10 +259,10 @@ NSC_FOCUS_TREE = """focus_tree = {
 	focus = {
 		id = NSC_parasites_rude
 		icon = GFX_goal_support_communism
-		x = 4
+		x = 6
 		y = 0
 		cost = 10
-		mutually_exclusive = { focus = NSC_parasites_polite focus = NSC_kick_out_brother }
+		mutually_exclusive = { focus = NSC_parasites_polite focus = NSC_kick_out_brother focus = NSC_steady_as_she_goes }
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
 			set_popularities = {
@@ -274,6 +276,30 @@ NSC_FOCUS_TREE = """focus_tree = {
 				elections_allowed = no
 			}
 			retire_character = NSC_roland_cahun
+			retire_character = NSC_serelle_cahun
+		}
+	}
+
+	focus = {
+		id = NSC_steady_as_she_goes
+		icon = GFX_focus_AUS_bring_back_the_habsburg_rule
+		x = 4
+		y = 0
+		cost = 10
+		mutually_exclusive = { focus = NSC_parasites_polite focus = NSC_parasites_rude focus = NSC_kick_out_brother }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			set_popularities = {
+				democratic = 0
+				fascism = 0
+				communism = 0
+				neutrality = 100
+			}
+			set_politics = {
+				ruling_party = neutrality
+				elections_allowed = no
+			}
+			promote_character = NSC_roland_cahun
 			retire_character = NSC_serelle_cahun
 		}
 	}
