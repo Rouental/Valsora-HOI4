@@ -105,6 +105,8 @@ Aislada is the worked example of a built-out nation:
   1. NationStates account: +25 political power.
   2. Become Cartographer: −0.5 stability.
   3. Explode: capital state −100 manpower, communism 100%, ruling party communism.
+     It recruits `AIS_communist_merlovich` ("Communist Merlovich", `marxism`, same
+     portrait) *before* switching party, so he takes over, then retires the original.
 - **Icons.** Vanilla icons only, checked against vanilla `interface/goals.gfx`.
 
 `check_mod.py` also checks that recruited characters exist and are localised, that portrait
@@ -189,8 +191,7 @@ Left loaded on purpose, and noisy in `error.log`:
    noise.
 3. Lakes vs. inland seas (see Decisions).
 4. Country content: only Aislada has a leader and focus tree; the rest use generated
-   leaders and the generic tree. No units or proper flags. After Aislada's "Explode" the
-   communist party has no defined leader, so the game generates one.
+   leaders and the generic tree. No units or proper flags.
 
 ## Working with the author
 

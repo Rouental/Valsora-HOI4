@@ -15,13 +15,14 @@ HISTORY = {
 
 LOCALISATION = [
     ' AIS_merlovich:0 "Merlovich"',
+    ' AIS_communist_merlovich:0 "Communist Merlovich"',
     ' AIS_focus:0 "Aisladan Focus Tree"',
     ' AIS_nationstates_account:0 "Make a NationStates Account"',
     ' AIS_nationstates_account_desc:0 "Every great nation begins with a login."',
     ' AIS_become_cartographer:0 "Become Cartographer"',
     ' AIS_become_cartographer_desc:0 "Drawing the world is harder than ruling it."',
     ' AIS_explode:0 "Explode"',
-    ' AIS_explode_desc:0 "It was always going to end like this."',
+    ' AIS_explode_desc:0 "It was always going to end like this. Merlovich returns, redder."',
 ]
 
 CHARACTERS = """characters = {
@@ -34,6 +35,20 @@ CHARACTERS = """characters = {
 		}
 		country_leader = {
 			ideology = despotism
+			expire = "1965.1.1.1"
+			id = -1
+		}
+	}
+	# who Merlovich becomes after the "Explode" focus
+	AIS_communist_merlovich = {
+		name = AIS_communist_merlovich
+		portraits = {
+			civilian = {
+				large = GFX_portrait_AIS_merlovich
+			}
+		}
+		country_leader = {
+			ideology = marxism
 			expire = "1965.1.1.1"
 			id = -1
 		}
@@ -101,6 +116,7 @@ FOCUS_TREE = """focus_tree = {
 		cost = 10
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
+			recruit_character = AIS_communist_merlovich
 			capital_scope = {
 				add_manpower = -100
 			}
@@ -114,6 +130,7 @@ FOCUS_TREE = """focus_tree = {
 				ruling_party = communism
 				elections_allowed = no
 			}
+			retire_character = AIS_merlovich
 		}
 	}
 }
