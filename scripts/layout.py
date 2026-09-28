@@ -19,11 +19,43 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 from scipy import ndimage as ndi
+from skimage.morphology import skeletonize
 
 from common import BLOCKS, MAP_W, MAP_H, SCALE, MIN_GAP, MARGIN_Y, SEAM_MARGIN
 
 SRC_W = 14000
 F = 4  # optimise at quarter output resolution
+
+
+def channels(land, w, h):
+    """Output pixels that must stay water so separate islands stay separate.
+
+    Shrinking by area fills in straits narrower than ~1.5 output px and fuses the
+    islands either side. So the centre line of the water is traced at source
+    resolution, and an output pixel on it is kept as water when the land around it
+    belongs to two different source landmasses. Centre-line spurs that only run into
+    a single coastline are ignored. The kept line is made 4-connected, so a strait
+    stays continuous for provinces and ships."""
+    lab, _ = ndi.label(land, structure=np.ones((3, 3)))
+    sy, sx = land.shape
+    yc = np.minimum(((np.arange(h) + 0.5) * sy / h).astype(int), sy - 1)
+    xc = np.minimum(((np.arange(w) + 0.5) * sx / w).astype(int), sx - 1)
+    # landmass under each output pixel (sampled at its centre; gaps take a neighbour's)
+    owner = lab[yc][:, xc]
+    owner = np.where(owner > 0, owner, ndi.maximum_filter(owner, size=3))
+    sk = skeletonize(~land)
+    ys, xs = np.nonzero(sk)
+    line = np.zeros((h, w), bool)
+    line[np.minimum(ys * h // sy, h - 1), np.minimum(xs * w // sx, w - 1)] = True
+    hi = ndi.maximum_filter(owner, size=3)
+    lo = -ndi.maximum_filter(np.where(owner > 0, -owner, -np.iinfo(owner.dtype).max), size=3)
+    out = line & (hi != lo) & (lo > 0)
+    # a diagonal-only step would let land touch across it; fill the corner
+    diag = out[:-1, :-1] & out[1:, 1:] & ~out[:-1, 1:] & ~out[1:, :-1]
+    anti = out[:-1, 1:] & out[1:, :-1] & ~out[:-1, :-1] & ~out[1:, 1:]
+    out[:-1, 1:] |= diag
+    out[:-1, :-1] |= anti
+    return out
 
 
 def scale_blocks(blk):
@@ -40,7 +72,7 @@ def scale_blocks(blk):
         w = round((x1 - x0) * SCALE)
         h = round((y1 - y0) * SCALE)
         small = np.asarray(Image.fromarray(crop.astype(np.float32)).resize((w, h), Image.BOX))
-        np.save(f"work/blocks/{i}.npy", small >= 0.5)
+        np.save(f"work/blocks/{i}.npy", (small >= 0.5) & ~channels(crop, w, h))
         meta.append(dict(src_bbox=[x0, y0, x1, y1], src_centroid=[cx + x0, cy + y0]))
     return meta
 

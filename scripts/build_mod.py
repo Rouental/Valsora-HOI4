@@ -548,9 +548,9 @@ def main():
         tag, name, adj, _ = COUNTRIES[c]
         loc += [f' {tag}:0 "{name}"', f' {tag}_DEF:0 "{name}"', f' {tag}_ADJ:0 "{adj}"']
         for ideo in ("democratic", "fascism", "communism", "neutrality"):
-            n, d, a = nations.IDEOLOGY_NAMES.get(tag, {}).get(ideo, (name, name, adj))
-            loc += [f' {tag}_{ideo}:0 "{n}"', f' {tag}_{ideo}_DEF:0 "{d}"',
-                    f' {tag}_{ideo}_ADJ:0 "{a}"']
+            i_name, i_def, i_adj = nations.IDEOLOGY_NAMES.get(tag, {}).get(ideo, (name, name, adj))
+            loc += [f' {tag}_{ideo}:0 "{i_name}"', f' {tag}_{ideo}_DEF:0 "{i_def}"',
+                    f' {tag}_{ideo}_ADJ:0 "{i_adj}"']
         loc.append(f' {c}:0 "{name}"')
     loc += [f' VAL_STATE_{s + 1}:0 "{state_name[s]}"' for s in range(len(states))]
     loc += [f' VAL_REGION_{r + 1}:0 "{region_name[r]}"' for r in range(len(regions))]
@@ -561,11 +561,17 @@ def main():
     write("localisation/english/valsora_l_english.yml", "\n".join(loc) + "\n", bom=True)
     nations.write_files(write, OUT)
     vp_ids = {int(pid[c]) for c in state_capital}
-    stale = sorted(set(nations.CITY_NAMES) - vp_ids)
+    city_names = {}
+    for key, name in nations.CITY_NAMES.items():
+        if isinstance(key, str) and key.startswith("capital:"):
+            c = next(c for c in CONTINENTS if COUNTRIES[c][0] == key[8:])
+            key = int(pid[state_capital[capital_state[c]]])
+        city_names[key] = name
+    stale = sorted(set(city_names) - vp_ids)
     if stale:
         raise SystemExit(f"nations.CITY_NAMES names provinces that are not victory points: {stale}")
     # victory point names share vanilla's keys, so they go in replace/ to win over Earth names
-    vp = ["l_english:"] + [f' VICTORY_POINTS_{pid[c]}:0 "{nations.CITY_NAMES.get(int(pid[c]), state_name[s] + " City")}"'
+    vp = ["l_english:"] + [f' VICTORY_POINTS_{pid[c]}:0 "{city_names.get(int(pid[c]), state_name[s] + " City")}"'
                            for s, c in enumerate(state_capital)]
     write("localisation/english/replace/valsora_victory_points_l_english.yml", "\n".join(vp) + "\n",
           bom=True)

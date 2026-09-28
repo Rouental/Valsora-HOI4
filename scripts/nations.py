@@ -316,10 +316,11 @@ PORTRAITS = {
     "NSC_roland_cahun": ("source/portraits/roland_cahun.png", 340, 200, 1100, None),
 }
 
-# Hand-picked victory point names, by province id. Ids come from the placeholder
-# province layout, so they must be re-checked if the map is regenerated.
+# Hand-picked victory point names. Key either a province id (ids follow the placeholder
+# provinces and shift when the map is rebuilt) or "capital:TAG" for a country's
+# capital city, which stays correct across rebuilds.
 CITY_NAMES = {
-    2246: "The Great and Noble City of Merlovia",  # Aislada's capital
+    "capital:AIS": "The Great and Noble City of Merlovia",
 }
 
 

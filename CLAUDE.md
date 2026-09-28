@@ -77,6 +77,12 @@ mismatch, missing localisation) and catches all of them.
   25% of a brick merge into the same-kind neighbour with the longest shared border.
   Remaining X-crossings (coasts, seam) are fixed by moving single pixels, never letting a
   lake touch the sea.
+- **Straits are traced, not averaged** (`layout.channels`). Shrinking by area filled in
+  channels narrower than ~1.5 output px and fused 21 large islands to their neighbours
+  (author's report). The water's centre line is traced at source resolution and kept as
+  4-connected water wherever the land on either side belongs to two different source
+  landmasses. That reopened 44 straits. `dist/strait_fixes_map.png` and
+  `strait_fixes_*.png` show each one before and after.
 - **Islands under 16 px are dropped and ponds under 64 px filled.** About 660 islets go
   this way; they are 1–4 px specks at game scale.
 - **Enclosed water becomes lakes**, including the author's inland seas (Piscary, Norlany,
@@ -115,9 +121,10 @@ Aislada is the worked example of a built-out nation:
 - **Portraits** live in `source/portraits/` and are registered in `nations.PORTRAITS`
   (source, crop box, optional red tint). Each becomes `gfx/leaders/VAL/<name>.dds` and a
   `GFX_portrait_<name>` sprite.
-- **City names**: `nations.CITY_NAMES` overrides victory point names by province id
-  (2246 = Aislada's capital, "The Great and Noble City of Merlovia"). The ids follow the
-  placeholder provinces; `build_mod.py` stops if a named id is no longer a victory point.
+- **City names**: `nations.CITY_NAMES` overrides victory point names, keyed by
+  `"capital:TAG"` (e.g. Aislada's capital is "The Great and Noble City of Merlovia") or
+  by province id. Ids shift whenever the map is rebuilt, so prefer the capital key;
+  `build_mod.py` stops if a named id is no longer a victory point.
 - **Nonscio → Rouental.** `nations.IDEOLOGY_NAMES["NSC"]` gives the per-ideology names
   from the author's localisation file (Perfect / Powerful / Boring / Shitty Rouental,
   adjective Rouentaise). The base `NSC` name is still "Nonscio".
