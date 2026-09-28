@@ -19,6 +19,24 @@ work/       intermediates, gitignored (decoded .pdn layers are 3.5 GB)
 build/      the unzipped mod, gitignored
 ```
 
+## The editable map: `source/HOI4 Mod Map.pdn`
+
+The author edits this file from now on. It is exactly game size (5120×2560, one pixel =
+one map pixel) and has the original's nine layers, made by `make_mod_pdn.py` from the
+current map.
+- **Land** is any opaque pixel of "Land & Borders & Colours"; water is transparent. The
+  other layers are for looks only.
+- **Continents** come from `source/hoi4_continents_5120x2560.png`; land drawn outside
+  it takes the nearest continent.
+- **Build.** While this file exists, `run_all.sh` reads it directly: the original
+  `.pdn`, `blocks.py` and `layout.py` are skipped, and nothing is moved or rescaled.
+  The first build from it gave a byte-identical mod.
+- **Edge columns.** The first and last pixel columns must stay water, because the map
+  wraps there; `compose.py` stops with a message otherwise.
+- **Writing a `.pdn`.** `writepdn.py` copies the original's object graph and patches the
+  size fields: 19 width and 19 height int32s, 9 strides, 9 int64 lengths. It only works
+  while the layer count and names stay the same.
+
 ## Rebuilding
 
 `sh scripts/run_all.sh` from the repo root: about 2.5 minutes, plus about 2 minutes for the
@@ -26,9 +44,10 @@ one-time `.pdn` decode. Needs `numpy scipy pillow scikit-image`. Output is deter
 
 | step | does |
 |---|---|
-| `readpdn.py` | decodes the `.pdn` into one RGBA `.npy` per layer |
-| `blocks.py` | land mask, groups landmasses into continent blocks, removes Antarctica |
-| `layout.py` | scales every block and pushes them apart |
+| `readpdn.py` | decodes a `.pdn` into one RGBA `.npy` per layer |
+| `make_mod_pdn.py` / `writepdn.py` | write `source/HOI4 Mod Map.pdn` (run once; now the author's file) |
+| `blocks.py` | original mode only: land mask, continent blocks, removes Antarctica |
+| `layout.py` | original mode only: scales every block and pushes them apart |
 | `compose.py` | game-resolution land / ocean / lakes, continent per pixel |
 | `provinces.py` | brick provinces, sliver merging, X-crossing repair, validation |
 | `regions.py` | states, strategic regions, anchor points |

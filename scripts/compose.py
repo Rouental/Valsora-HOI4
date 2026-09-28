@@ -10,11 +10,13 @@ Cleanup, all with 4-connectivity because HOI4 provinces must be 4-connected:
     MIN_LAKE are filled in as land.
 """
 import json
+from pathlib import Path
 
 import numpy as np
+from PIL import Image
 from scipy import ndimage as ndi
 
-from common import MAP_W, MAP_H, SCALE, MIN_PROVINCE, MIN_LAKE, CONTINENTS
+from common import MAP_W, MAP_H, SCALE, MIN_PROVINCE, MIN_LAKE, CONTINENTS, CONT_COLOURS
 
 N4 = ndi.generate_binary_structure(2, 1)
 
@@ -76,7 +78,40 @@ def despeckle(cont):
             break
 
 
+MOD_PDN = Path("source/HOI4 Mod Map.pdn")
+
+
+def from_mod_pdn():
+    """Direct mode: land is the opaque pixels of the game-sized "HOI4 Mod Map.pdn"
+    (decoded to work/pdn_mod). Continents come from the reference image; land the
+    author added outside it takes the nearest continent."""
+    land = np.load("work/pdn_mod/layer1.npy", mmap_mode="r")[..., 3] > 0
+    if land.shape != (MAP_H, MAP_W):
+        raise SystemExit(f"{MOD_PDN} must be {MAP_W}x{MAP_H}, not {land.shape[1]}x{land.shape[0]}")
+    ref = np.asarray(Image.open("source/hoi4_continents_5120x2560.png").convert("RGB"))
+    cont = np.zeros((MAP_H, MAP_W), np.uint8)
+    for k, col in enumerate(CONT_COLOURS, 1):
+        cont[(ref == col).all(axis=-1)] = k
+    idx = ndi.distance_transform_edt(cont == 0, return_distances=False, return_indices=True)
+    cont = np.where(land, cont[idx[0], idx[1]], 0).astype(np.uint8)
+    return cont
+
+
 def main():
+    direct = MOD_PDN.exists()
+    if direct:
+        cont = from_mod_pdn()
+        print(f"reading the map from {MOD_PDN}")
+    else:
+        cont = from_blocks()
+    land = cont > 0
+    if not direct:
+        despeckle(cont)
+    finish(cont, land, direct)
+
+
+def from_blocks():
+    """Original mode: continent blocks from the author's .pdn, placed by layout.py."""
     lay = json.load(open("work/layout.json"))
     cont = np.zeros((MAP_H, MAP_W), np.uint8)
     split = west_split()
@@ -94,9 +129,10 @@ def main():
             cont[Y, X] = split[qy, qx]
         else:
             cont[Y, X] = CONTINENTS.index(block_cont[b["name"]]) + 1
-    land = cont > 0
-    despeckle(cont)
+    return cont
 
+
+def finish(cont, land, direct):
     # drop islands too small to be a province
     lab, n = label_wrap(land)
     sizes = np.bincount(lab.ravel(), minlength=n + 1)
@@ -117,15 +153,20 @@ def main():
 
     # centre exactly on the final land (layout.py centres on a coarse grid, before
     # specks are dropped); export_canvas.py applies the same shift
-    rows = np.nonzero(land.any(axis=1))[0]
-    cols = np.nonzero(land.any(axis=0))[0]
-    dy = ((MAP_H - 1 - rows[-1]) - rows[0]) // 2
-    dx = ((MAP_W - 1 - cols[-1]) - cols[0]) // 2
-    kind, cont, land = (np.roll(a, (dy, dx), axis=(0, 1)) for a in (kind, cont, land))
+    # (direct mode: the author places the land, so nothing moves)
+    dy = dx = 0
+    if not direct:
+        rows = np.nonzero(land.any(axis=1))[0]
+        cols = np.nonzero(land.any(axis=0))[0]
+        dy = ((MAP_H - 1 - rows[-1]) - rows[0]) // 2
+        dx = ((MAP_W - 1 - cols[-1]) - cols[0]) // 2
+        kind, cont, land = (np.roll(a, (dy, dx), axis=(0, 1)) for a in (kind, cont, land))
 
-    # layout.py keeps land off the wrap seam; a province may not cross it
+    # a province may not cross the wrap seam, so no land in the first or last column
     if land[:, 0].any() or land[:, -1].any():
-        raise SystemExit("land touches the wrap seam at x = 0")
+        rows = np.nonzero(land[:, 0] | land[:, -1])[0]
+        raise SystemExit(f"land touches the left/right map edge (rows {rows.min()}-{rows.max()}); "
+                         "leave the first and last pixel columns as water")
 
     # continent id for pond pixels that were filled: take the nearest land pixel's
     need = land & (cont == 0)

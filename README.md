@@ -15,6 +15,14 @@ Provinces are placeholder squares, with one placeholder country per continent.
 3. Enable **Valsora (test map)** in the launcher and start the game with `-debug`, so
    map errors are logged instead of crashing.
 
+## Editing the map
+
+Edit **`source/HOI4 Mod Map.pdn`** in paint.net. It is exactly the game's size, so one
+pixel is one map pixel. On the "Land & Borders & Colours" layer, any painted pixel is
+land and any transparent pixel is water. The other layers only affect how the file
+looks. Keep the leftmost and rightmost pixel columns as water, because the map wraps
+around there. Upload the saved file to `source/` on GitHub and ask for a rebuild.
+
 ## Files for drawing
 
 - `dist/valsora_land_5120x2560.png`: land, sea and lakes exactly as in the game.

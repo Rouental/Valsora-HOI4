@@ -24,6 +24,9 @@ BLOCKS = ["WEST", "AISLADA", "SOLITAS", "YASTREOVAKIA", "USNISTAN", "ORIENTALIS"
 
 # HOI4 continents (map/continent.txt), in order: definition.csv uses index + 1.
 CONTINENTS = ["nonscio", "araseos", "aislada", "solitas", "yastreovakia", "usnistan", "orientalis"]
+# Their colours in source/hoi4_continents_5120x2560.png.
+CONT_COLOURS = [(216, 84, 84), (116, 152, 206), (70, 170, 70), (214, 110, 214),
+                (96, 190, 150), (184, 172, 100), (236, 160, 70)]
 
 # Smallest province HOI4 accepts without complaint is 8 px; 16 leaves headroom.
 MIN_PROVINCE = 16

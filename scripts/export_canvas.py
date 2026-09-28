@@ -32,7 +32,19 @@ def main():
     land_img[pk == 2] = LAKE
     Image.fromarray(land_img).save(DIST / "valsora_land_5120x2560.png", optimize=True)
 
-    # the author's country colours, carried along with each continent block
+    if Path("source/HOI4 Mod Map.pdn").exists():
+        # direct mode: the country colours are the mod .pdn's land layer as drawn
+        out = np.asarray(np.load("work/pdn_mod/layer1.npy", mmap_mode="r")[..., :3]).copy()
+        out[pk == 0] = SEA
+        out[pk == 2] = LAKE
+    else:
+        out = carried_colours(pk)
+    Image.fromarray(out).save(DIST / "valsora_countries_5120x2560.png", optimize=True)
+    overview(pk, cont, lab, kind)
+
+
+def carried_colours(pk):
+    """The old .pdn's country colours, carried along with each continent block."""
     lay = json.load(open("work/layout.json"))
     src = np.load("work/pdn/layer1.npy", mmap_mode="r")
     blk = np.load("work/block_full.npy", mmap_mode="r")
@@ -58,7 +70,10 @@ def main():
     out = out[idx[0], idx[1]]
     out[pk == 0] = SEA
     out[pk == 2] = LAKE
-    Image.fromarray(out).save(DIST / "valsora_countries_5120x2560.png", optimize=True)
+    return out
+
+
+def overview(pk, cont, lab, kind):
 
     # labelled overview
     pal = {1: (216, 84, 84), 2: (116, 152, 206), 3: (70, 170, 70), 4: (214, 110, 214),
