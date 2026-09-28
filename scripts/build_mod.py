@@ -398,7 +398,8 @@ def main():
             rows.append(f"{s};floating_harbor;{sx + 0.5:.2f};9.50;{H - sy - 0.5:.2f};{rot:.2f};{pid[S]}")
             for btype in COASTAL_BUILDINGS:
                 rows.append(f"{s};{btype};{pos(ly, lx)};{rot:.2f};0")
-    write("map/buildings.txt", "\n".join(rows) + "\n")
+    # no trailing newline: the game reads an empty last line as a malformed row
+    write("map/buildings.txt", "\n".join(rows))
 
     rows = []
     for i in range(n):

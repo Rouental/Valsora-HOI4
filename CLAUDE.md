@@ -102,9 +102,8 @@ mismatch, missing localisation) and catches all of them.
   be > 95, water < 95. `terrain.bmp`: index 0 = plains, 15 = ocean (lakes too). `rivers.bmp`:
   255 = land, 254 = water. `cities.bmp`: map-sized; index 4 is in no city group, so no town
   meshes. All of these must be exactly map-sized.
-- 8-bit BMPs with a full 256-colour palette write `biClrUsed = 0`, as vanilla does. The
-  first in-game test logged "Palette in rivers.bmp is probably not correct" with 256
-  there; not yet confirmed whether the fix silences it.
+- 8-bit BMPs with a full 256-colour palette write `biClrUsed = 0`, as vanilla does; with
+  256 there the game logs "Palette in rivers.bmp is probably not correct".
 - `trees.bmp`: any size (vanilla 75/256 of the map). `world_normal.bmp`: half size,
   24-bit, flat = RGB (128,128,255).
 - `map/terrain/`: `colormap_rgb_cityemissivemask_a.dds` and `fow_rgb_waterspec_a.dds` at
@@ -157,7 +156,10 @@ Left loaded on purpose, and noisy in `error.log`:
   (81 land, 47 sea), 7 countries.
 - **Loads in-game without crashing** (first build, confirmed by the author). Its
   `error.log` was vanilla-reference noise (decisions, missions, ai_faction_theaters
-  region ids) plus the rivers.bmp palette warning above.
+  region ids) plus the rivers.bmp palette warning above, which the biClrUsed fix
+  silenced. Second build: only a trailing newline in `buildings.txt` (read as a
+  malformed empty row, now removed) and "failed to generate a name/portrait" for our
+  countries, which have no name lists or scientist portraits yet.
 
 ## Known gaps
 
