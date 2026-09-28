@@ -356,6 +356,36 @@ def main(mod):
         if c not in keys:
             err(f"continent {c} has no localisation")
 
+    # ------------------------------------------------------------ characters, focus trees
+    chars = set()
+    for f in (mod / "common/characters").glob("*.txt"):
+        chars |= set(re.findall(r"^\t(\w+)\s*=\s*\{", strip(f.read_text()), re.M))
+    sprites = {}
+    for f in (mod / "interface").glob("*.gfx"):
+        for name, tex in re.findall(r'name\s*=\s*"(\w+)"\s*texturefile\s*=\s*"([^"]+)"', f.read_text()):
+            sprites[name] = tex
+            if not (mod / tex).exists():
+                err(f"sprite {name} points at missing {tex}")
+    for f in (mod / "history/countries").glob("*.txt"):
+        for c in re.findall(r"recruit_character\s*=\s*(\w+)", f.read_text()):
+            if c not in chars:
+                err(f"{f.name} recruits unknown character {c}")
+            if c not in keys:
+                err(f"character {c} has no localisation")
+    for f in (mod / "common/characters").glob("*.txt"):
+        for spr in re.findall(r"large\s*=\s*(GFX_\w+)", f.read_text()):
+            if spr not in sprites:
+                err(f"portrait sprite {spr} is not defined in interface/")
+    for f in (mod / "common/national_focus").glob("*.txt"):
+        text = strip(f.read_text())
+        ids = re.findall(r"\bfocus\s*=\s*\{\s*id\s*=\s*(\w+)", text)
+        for fid in ids:
+            if fid not in keys:
+                err(f"focus {fid} has no localisation")
+        for pre in re.findall(r"prerequisite\s*=\s*\{\s*focus\s*=\s*(\w+)", text):
+            if pre not in ids:
+                err(f"{f.name}: prerequisite {pre} is not a focus in the tree")
+
     # ------------------------------------------------------------ descriptors
     desc = (mod / "descriptor.mod").read_text()
     rps = re.findall(r'replace_path="([^"]+)"', desc)

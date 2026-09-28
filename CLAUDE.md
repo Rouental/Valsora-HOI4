@@ -33,6 +33,7 @@ one-time `.pdn` decode. Needs `numpy scipy pillow scikit-image`. Output is deter
 | `provinces.py` | brick provinces, sliver merging, X-crossing repair, validation |
 | `regions.py` | states, strategic regions, anchor points |
 | `build_mod.py` | every mod file |
+| `nations.py` | hand-written per-nation content (leaders, portraits, focus trees), used by `build_mod.py` |
 | `check_mod.py` | re-reads the built files and checks every rule below |
 | `export_canvas.py` | drawing canvases and previews in `dist/` |
 | `package.py` | `dist/valsora_test.zip` |
@@ -90,6 +91,24 @@ mismatch, missing localisation) and catches all of them.
 - **Localisation keys are our own** (`VAL_STATE_n`, `VAL_REGION_n`), so vanilla's
   `STATE_n` / `STRATEGICREGION_n` Earth names never show. Victory point names have to
   reuse vanilla's `VICTORY_POINTS_<id>` keys, so they live in `localisation/english/replace/`.
+
+## Nation content (`nations.py`)
+
+Aislada is the worked example of a built-out nation:
+- **Leader.** Merlovich (`AIS_merlovich`) is defined in `common/characters/AIS.txt` as a
+  neutrality (`despotism`) country leader and recruited from the country history.
+- **Portrait.** Referenced as a sprite (`GFX_portrait_AIS_merlovich`, declared in
+  `interface/valsora_portraits.gfx`), the way vanilla does it. The image is a 156×210 DDS
+  cropped from `source/merlovich_emu.png`.
+- **Focus tree.** `common/national_focus/aislada.txt` is picked for AIS by
+  `country = { factor = 0 modifier = { add = 10 tag = AIS } }`. It is one chain:
+  1. NationStates account: +25 political power.
+  2. Become Cartographer: −0.5 stability.
+  3. Explode: capital state −100 manpower, communism 100%, ruling party communism.
+- **Icons.** Vanilla icons only, checked against vanilla `interface/goals.gfx`.
+
+`check_mod.py` also checks that recruited characters exist and are localised, that portrait
+sprites resolve to files, and that every focus id and prerequisite is valid and localised.
 
 ## What HOI4 requires (verified against vanilla 1.19.3 files)
 
@@ -169,7 +188,9 @@ Left loaded on purpose, and noisy in `error.log`:
 2. Terrain is plains everywhere; there are no rivers, railways or trees; the relief is
    noise.
 3. Lakes vs. inland seas (see Decisions).
-4. Country content: no leaders, focuses, units or proper flags.
+4. Country content: only Aislada has a leader and focus tree; the rest use generated
+   leaders and the generic tree. No units or proper flags. After Aislada's "Explode" the
+   communist party has no defined leader, so the game generates one.
 
 ## Working with the author
 

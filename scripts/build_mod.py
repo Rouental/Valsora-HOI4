@@ -15,6 +15,7 @@ from PIL import Image
 from scipy import ndimage as ndi
 
 from common import MAP_W, MAP_H, CONTINENTS, MOD_NAME, MOD_DIR_NAME
+import nations
 from imgio import write_bmp, write_dds, write_tga, palette_from_header
 
 W, H = MAP_W, MAP_H
@@ -495,6 +496,7 @@ def main():
             "\tcommunism = 10",
             "\tneutrality = 55",
             "}",
+            *nations.HISTORY.get(tag, []),
             ""]))
         flag = np.zeros((52, 82, 4), np.uint8)
         flag[..., 3] = 255
@@ -554,7 +556,9 @@ def main():
     loc += [' VALSORA_BOOKMARK:0 "Valsora"',
             ' VALSORA_BOOKMARK_DESC:0 "Placeholder map of Valsora: square provinces, one country per continent."',
             ' VALSORA_PLACEHOLDER_DESC:0 "A placeholder country covering its whole continent."']
+    loc += nations.LOCALISATION
     write("localisation/english/valsora_l_english.yml", "\n".join(loc) + "\n", bom=True)
+    nations.write_files(write, OUT)
     # victory point names share vanilla's keys, so they go in replace/ to win over Earth names
     vp = ["l_english:"] + [f' VICTORY_POINTS_{pid[c]}:0 "{state_name[s]} City"'
                            for s, c in enumerate(state_capital)]
