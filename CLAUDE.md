@@ -124,6 +124,11 @@ Aislada is the worked example of a built-out nation:
   - Leaders are in `common/characters/NSC.txt`: Roland Cahun (`despotism`, leads at
     start) and Serelle Cahun (`fascism_ideology`, fascist party leader).
   - Portraits come from `source/portraits/roland_cahun.png` and `serelle_cahun.png`.
+  - `common/national_focus/rouental.txt` has three mutually exclusive focuses in one row:
+    - Kick Out the Parasites (Polite): democratic, elections on, both Cahuns retired.
+    - Kick Out Your Brother: fascist, Serelle promoted, Roland retired.
+    - Kick Out the Parasites (Rudely): communist, both Cahuns retired.
+  - The democratic and communist parties have no defined leader, so the game generates one.
 - **Nation names** come from `COUNTRIES` in `build_mod.py`: name and adjective feed
   `TAG`, `TAG_DEF`, `TAG_ADJ`, the per-ideology variants (`TAG_communism` etc.) and the
   continent key.

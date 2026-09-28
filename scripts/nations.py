@@ -35,6 +35,13 @@ IDEOLOGY_NAMES = {
 LOCALISATION = [
     ' NSC_serelle_cahun:0 "Serelle Cahun"',
     ' NSC_roland_cahun:0 "Roland Cahun"',
+    ' NSC_focus:0 "Rouentaise Focus Tree"',
+    ' NSC_parasites_polite:0 "Kick Out the Parasites (Polite)"',
+    ' NSC_parasites_polite_desc:0 "The Cahuns are thanked for their service and shown the door."',
+    ' NSC_kick_out_brother:0 "Kick Out Your Brother"',
+    ' NSC_kick_out_brother_desc:0 "Serelle has waited long enough. Roland has not."',
+    ' NSC_parasites_rude:0 "Kick Out the Parasites (Rudely)"',
+    ' NSC_parasites_rude_desc:0 "The Cahuns are shown the door. Then the window."',
     ' AIS_merlovich:0 "Merlovich"',
     ' AIS_communist_merlovich:0 "Communist Merlovich"',
     ' AIS_focus:0 "Aisladan Focus Tree"',
@@ -180,6 +187,99 @@ FOCUS_TREE = """focus_tree = {
 """
 
 
+# Rouental: three mutually exclusive ways to end the non-aligned monarchy.
+NSC_FOCUS_TREE = """focus_tree = {
+	id = NSC_focus
+
+	country = {
+		factor = 0
+		modifier = {
+			add = 10
+			tag = NSC
+		}
+	}
+
+	default = no
+	continuous_focus_position = { x = 50 y = 1000 }
+
+	initial_show_position = {
+		focus = NSC_kick_out_brother
+	}
+
+	focus = {
+		id = NSC_parasites_polite
+		icon = GFX_goal_support_democracy
+		x = 0
+		y = 0
+		cost = 10
+		mutually_exclusive = { focus = NSC_kick_out_brother focus = NSC_parasites_rude }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			set_popularities = {
+				democratic = 100
+				fascism = 0
+				communism = 0
+				neutrality = 0
+			}
+			set_politics = {
+				ruling_party = democratic
+				elections_allowed = yes
+			}
+			retire_character = NSC_roland_cahun
+			retire_character = NSC_serelle_cahun
+		}
+	}
+
+	focus = {
+		id = NSC_kick_out_brother
+		icon = GFX_goal_support_fascism
+		x = 2
+		y = 0
+		cost = 10
+		mutually_exclusive = { focus = NSC_parasites_polite focus = NSC_parasites_rude }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			set_popularities = {
+				democratic = 0
+				fascism = 100
+				communism = 0
+				neutrality = 0
+			}
+			set_politics = {
+				ruling_party = fascism
+				elections_allowed = no
+			}
+			promote_character = NSC_serelle_cahun
+			retire_character = NSC_roland_cahun
+		}
+	}
+
+	focus = {
+		id = NSC_parasites_rude
+		icon = GFX_goal_support_communism
+		x = 4
+		y = 0
+		cost = 10
+		mutually_exclusive = { focus = NSC_parasites_polite focus = NSC_kick_out_brother }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			set_popularities = {
+				democratic = 0
+				fascism = 0
+				communism = 100
+				neutrality = 0
+			}
+			set_politics = {
+				ruling_party = communism
+				elections_allowed = no
+			}
+			retire_character = NSC_roland_cahun
+			retire_character = NSC_serelle_cahun
+		}
+	}
+}
+"""
+
 # Leader portraits: sprite name -> (source image, crop left, crop top, crop width,
 # recolour). The crop keeps HOI4's 156x210 shape and is scaled down to it; each one
 # becomes gfx/leaders/VAL/<name>.dds plus a GFX_portrait_<name> sprite.
@@ -216,6 +316,7 @@ def write_files(write, out):
     """Write every nation-specific file into the mod folder."""
     write("common/characters/AIS.txt", CHARACTERS)
     write("common/characters/NSC.txt", NSC_CHARACTERS)
+    write("common/national_focus/rouental.txt", NSC_FOCUS_TREE)
     write("common/national_focus/aislada.txt", FOCUS_TREE)
     sprites = []
     for name, (src, x0, y0, w, tint) in PORTRAITS.items():

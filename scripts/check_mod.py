@@ -382,9 +382,10 @@ def main(mod):
         for fid in ids:
             if fid not in keys:
                 err(f"focus {fid} has no localisation")
-        for pre in re.findall(r"prerequisite\s*=\s*\{\s*focus\s*=\s*(\w+)", text):
-            if pre not in ids:
-                err(f"{f.name}: prerequisite {pre} is not a focus in the tree")
+        for block in re.findall(r"(?:prerequisite|mutually_exclusive)\s*=\s*\{([^}]*)\}", text):
+            for pre in re.findall(r"focus\s*=\s*(\w+)", block):
+                if pre not in ids:
+                    err(f"{f.name}: {pre} is referenced but is not a focus in the tree")
 
     # ------------------------------------------------------------ descriptors
     desc = (mod / "descriptor.mod").read_text()
