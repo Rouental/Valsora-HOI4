@@ -58,18 +58,6 @@ CHARACTERS = """characters = {
 }
 """
 
-SPRITES = """spriteTypes = {
-	spriteType = {
-		name = "GFX_portrait_AIS_merlovich"
-		texturefile = "gfx/leaders/AIS/Portrait_Aislada_Merlovich.dds"
-	}
-	spriteType = {
-		name = "GFX_portrait_AIS_communist_merlovich"
-		texturefile = "gfx/leaders/AIS/Portrait_Aislada_Communist_Merlovich.dds"
-	}
-}
-"""
-
 FOCUS_TREE = """focus_tree = {
 	id = AIS_focus
 
@@ -143,26 +131,29 @@ FOCUS_TREE = """focus_tree = {
 """
 
 
-def portrait(src="source/merlovich_emu.png"):
-    """156x210 leader portrait (vanilla's size), cropped around the emu's head."""
+# Leader portraits: sprite name -> (source image, crop left, crop top, crop width,
+# recolour). The crop keeps HOI4's 156x210 shape and is scaled down to it; each one
+# becomes gfx/leaders/VAL/<name>.dds plus a GFX_portrait_<name> sprite.
+PORTRAITS = {
+    "AIS_merlovich": ("source/portraits/merlovich_emu.png", 0, 95, 300, None),
+    "AIS_communist_merlovich": ("source/portraits/merlovich_emu.png", 0, 95, 300, "red"),
+    # prepared, not yet given to a character
+    "green_uniform_leader": ("source/portraits/green_uniform_leader.png", 260, 90, 900, None),
+}
+
+# Hand-picked victory point names, by province id. Ids come from the placeholder
+# province layout, so they must be re-checked if the map is regenerated.
+CITY_NAMES = {
+    2246: "The Great and Noble City of Merlovia",  # Aislada's capital
+}
+
+
+def portrait(src, x0, y0, w):
+    """Crop a 156:210 box and scale it to vanilla's 156x210 leader portrait size."""
     im = Image.open(src).convert("RGB")
-    w = 300
     h = round(w * 210 / 156)
-    crop = im.crop((0, 95, w, 95 + h)).resize((156, 210), Image.LANCZOS)
-    rgba = np.dstack([np.asarray(crop), np.full((210, 156), 255, np.uint8)])
-    return rgba
-
-
-def write_files(write, out):
-    """Write every nation-specific file into the mod folder."""
-    write("common/characters/AIS.txt", CHARACTERS)
-    write("interface/valsora_portraits.gfx", SPRITES)
-    write("common/national_focus/aislada.txt", FOCUS_TREE)
-    path = out / "gfx/leaders/AIS/Portrait_Aislada_Merlovich.dds"
-    path.parent.mkdir(parents=True, exist_ok=True)
-    rgba = portrait()
-    write_dds(path, rgba)
-    write_dds(path.with_name("Portrait_Aislada_Communist_Merlovich.dds"), redden(rgba))
+    crop = im.crop((x0, y0, x0 + w, y0 + h)).resize((156, 210), Image.LANCZOS)
+    return np.dstack([np.asarray(crop), np.full((210, 156), 255, np.uint8)])
 
 
 def redden(rgba):
@@ -170,3 +161,20 @@ def redden(rgba):
     lum = rgba[..., :3].astype(np.float32) @ np.array([0.299, 0.587, 0.114], np.float32)
     red = np.stack([np.clip(lum * 1.1 + 70, 0, 255), lum * 0.3, lum * 0.25], axis=-1)
     return np.dstack([red.round().astype(np.uint8), rgba[..., 3]])
+
+
+def write_files(write, out):
+    """Write every nation-specific file into the mod folder."""
+    write("common/characters/AIS.txt", CHARACTERS)
+    write("common/national_focus/aislada.txt", FOCUS_TREE)
+    sprites = []
+    for name, (src, x0, y0, w, tint) in PORTRAITS.items():
+        rgba = portrait(src, x0, y0, w)
+        if tint == "red":
+            rgba = redden(rgba)
+        path = out / f"gfx/leaders/VAL/{name}.dds"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        write_dds(path, rgba)
+        sprites.append(f'\tspriteType = {{\n\t\tname = "GFX_portrait_{name}"\n'
+                       f'\t\ttexturefile = "gfx/leaders/VAL/{name}.dds"\n\t}}\n')
+    write("interface/valsora_portraits.gfx", "spriteTypes = {\n" + "".join(sprites) + "}\n")

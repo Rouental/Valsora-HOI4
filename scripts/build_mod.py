@@ -559,8 +559,12 @@ def main():
     loc += nations.LOCALISATION
     write("localisation/english/valsora_l_english.yml", "\n".join(loc) + "\n", bom=True)
     nations.write_files(write, OUT)
+    vp_ids = {int(pid[c]) for c in state_capital}
+    stale = sorted(set(nations.CITY_NAMES) - vp_ids)
+    if stale:
+        raise SystemExit(f"nations.CITY_NAMES names provinces that are not victory points: {stale}")
     # victory point names share vanilla's keys, so they go in replace/ to win over Earth names
-    vp = ["l_english:"] + [f' VICTORY_POINTS_{pid[c]}:0 "{state_name[s]} City"'
+    vp = ["l_english:"] + [f' VICTORY_POINTS_{pid[c]}:0 "{nations.CITY_NAMES.get(int(pid[c]), state_name[s] + " City")}"'
                            for s, c in enumerate(state_capital)]
     write("localisation/english/replace/valsora_victory_points_l_english.yml", "\n".join(vp) + "\n",
           bom=True)
