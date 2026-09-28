@@ -1,0 +1,4 @@
+# pipeline intermediates (regenerate with scripts/run_all.sh)
+work/
+build/
+__pycache__/

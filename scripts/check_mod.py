@@ -1,0 +1,383 @@
+"""Verify a built mod against every rule that HOI4 is known to crash or complain on.
+
+Reads only the files on disk (not the pipeline's intermediates), so it also catches
+writer bugs. Usage: python3 scripts/check_mod.py [build/valsora_test]
+Exits non-zero if any error is found.
+"""
+import re
+import struct
+import sys
+from collections import defaultdict
+from pathlib import Path
+
+import numpy as np
+from scipy import ndimage as ndi
+from skimage.measure import label as sklabel
+
+sys.path.insert(0, str(Path(__file__).parent))
+from imgio import read_bmp  # noqa: E402
+
+VANILLA_STATE_CATEGORIES = {"wasteland", "enclave", "tiny_island", "pastoral", "small_island",
+                            "rural", "town", "large_town", "city", "large_city", "metropolis",
+                            "megalopolis"}
+STATE_BUILDINGS = {"air_base": 1, "anti_air_building": 3, "arms_factory": 6,
+                   "industrial_complex": 6, "fuel_silo": 1, "nuclear_reactor_spawn": 1,
+                   "radar_station": 1, "rocket_site_spawn": 1, "stronghold_network": 1,
+                   "synthetic_refinery": 1}
+PROVINCE_BUILDINGS = {"bunker", "special_project_facility_spawn", "supply_node"}
+COASTAL_BUILDINGS = {"naval_base_spawn", "floating_harbor", "naval_headquarters",
+                     "naval_supply_hub", "coastal_bunker"}
+LAND_STACKS = {0, 1, 9, 10, 21, 22, 38}
+SEA_STACKS = {0, 1, 2, 9, 10, 11, 12, 21, 22, 23, 30, 31, 38}
+
+errors, notes = [], []
+
+
+def err(msg):
+    errors.append(msg)
+
+
+def note(msg):
+    notes.append(msg)
+
+
+def blocks(text, key):
+    """Top-level `key = { ... }` bodies (brace-matched)."""
+    out = []
+    for m in re.finditer(rf"\b{key}\s*=\s*\{{", text):
+        depth, i = 1, m.end()
+        while depth:
+            depth += {"{": 1, "}": -1}.get(text[i], 0)
+            i += 1
+        out.append(text[m.end():i - 1])
+    return out
+
+
+def field(body, key):
+    m = re.search(rf"\b{key}\s*=\s*\"?([\w.\-]+)\"?", body)
+    return m.group(1) if m else None
+
+
+def id_list(body, key):
+    b = blocks(body, key)
+    return [int(x) for x in b[0].split()] if b else []
+
+
+def main(mod):
+    mod = Path(mod)
+    strip = lambda t: re.sub(r"#[^\n]*", "", t)  # noqa: E731
+
+    # ------------------------------------------------------------ provinces.bmp
+    pb = read_bmp(mod / "map/provinces.bmp")
+    W, H = pb["width"], pb["height"]
+    if pb["bpp"] != 24 or pb["header"] != 40:
+        err(f"provinces.bmp must be 24-bit with a 40-byte header (got {pb['bpp']}, {pb['header']})")
+    if W % 256 or H % 256:
+        err(f"map size {W}x{H} is not a multiple of 256")
+    if W * H > 13_238_272:
+        err(f"map area {W * H} exceeds HOI4's ~13,238,272 pixel limit")
+    if (mod / "map/provinces.bmp").stat().st_size > 40 * 1024 * 1024:
+        err("provinces.bmp is over 40 MiB")
+    rgb = pb["img"].astype(np.int64)
+    code = (rgb[..., 0] << 16) | (rgb[..., 1] << 8) | rgb[..., 2]
+
+    # ------------------------------------------------------------ definition.csv
+    raw = (mod / "map/definition.csv").read_bytes()
+    if b"\r\n" not in raw or raw.count(b"\n") != raw.count(b"\r\n"):
+        err("definition.csv must use CRLF line endings")
+    lines = raw.decode().strip().splitlines()
+    if lines[0] != "0;0;0;0;land;false;unknown;0":
+        err(f"definition.csv first line is {lines[0]!r}")
+    continents = blocks(strip((mod / "map/continent.txt").read_text()), "continents")[0].split()
+    ids, cols, types, coast_def, conts = [], [], [], [], []
+    for ln in lines[1:]:
+        f = ln.split(";")
+        ids.append(int(f[0]))
+        cols.append((int(f[1]) << 16) | (int(f[2]) << 8) | int(f[3]))
+        types.append(f[4])
+        coast_def.append(f[5] == "true")
+        conts.append(int(f[7]))
+        if f[4] not in ("land", "sea", "lake"):
+            err(f"province {f[0]}: bad type {f[4]}")
+        if f[4] == "land" and not 1 <= int(f[7]) <= len(continents):
+            err(f"province {f[0]}: land with continent {f[7]}")
+    n = len(ids)
+    if ids != list(range(1, n + 1)):
+        err("province ids are not contiguous from 1")
+    if len(set(cols)) != n:
+        err("duplicate province colours in definition.csv")
+    col_to_id = dict(zip(cols, ids))
+    uniq = np.unique(code)
+    missing = [c for c in uniq if c not in col_to_id]
+    if missing:
+        err(f"{len(missing)} colours in provinces.bmp have no definition")
+    unused = set(cols) - set(uniq.tolist())
+    if unused:
+        err(f"{len(unused)} defined provinces do not appear in provinces.bmp")
+    lut_keys = np.array(sorted(col_to_id))
+    lut_vals = np.array([col_to_id[k] for k in lut_keys])
+    prov = lut_vals[np.searchsorted(lut_keys, code)] - 1  # 0-based
+    kind = np.array([{"sea": 0, "land": 1, "lake": 2}[t] for t in types])
+
+    # ------------------------------------------------------------ province shapes
+    size = np.bincount(prov.ravel(), minlength=n)
+    if size.min() < 8:
+        err(f"{(size < 8).sum()} provinces under 8 px (HOI4 minimum)")
+    regions_n = int(sklabel(prov, background=-1, connectivity=1).max())
+    if regions_n != n:
+        err(f"{regions_n - n} provinces are not 4-connected")
+    for i, sl in enumerate(ndi.find_objects(prov + 1)):
+        if sl[0].stop - sl[0].start >= H / 8 or sl[1].stop - sl[1].start >= W / 8:
+            err(f"province {i + 1} bounding box exceeds 1/8 of the map")
+    a, b = prov[:-1], np.roll(prov, -1, axis=1)[:-1]
+    c, d = prov[1:], np.roll(prov, -1, axis=1)[1:]
+    xc = (a != b) & (a != c) & (a != d) & (b != c) & (b != d) & (c != d)
+    if xc.any():
+        err(f"{int(xc.sum())} X-crossings, first at {np.argwhere(xc)[0].tolist()}")
+    pairs = set()
+    for p1, p2 in ((prov[:, :-1], prov[:, 1:]), (prov[:-1], prov[1:]), (prov[:, -1:], prov[:, :1])):
+        m = p1 != p2
+        pairs |= set(zip(p1[m].tolist(), p2[m].tolist()))
+    nbrs = defaultdict(set)
+    for x, y in pairs:
+        nbrs[x].add(y)
+        nbrs[y].add(x)
+    coastal = np.zeros(n, bool)
+    for x, y in pairs:
+        if {kind[x], kind[y]} == {0, 2}:
+            err(f"lake {x + 1} touches sea {y + 1}")
+        if {kind[x], kind[y]} == {0, 1}:
+            coastal[x] = coastal[y] = True
+    bad_coast = int((coastal != np.array(coast_def)).sum())
+    if bad_coast:
+        err(f"{bad_coast} provinces have a wrong coastal flag")
+
+    # ------------------------------------------------------------ other bitmaps
+    pix_kind = kind[prov]
+    for name, bpp in (("heightmap", 8), ("terrain", 8), ("rivers", 8), ("cities", 8)):
+        bm = read_bmp(mod / f"map/{name}.bmp")
+        if (bm["width"], bm["height"]) != (W, H) or bm["bpp"] != bpp or bm["header"] != 40:
+            err(f"{name}.bmp must be {W}x{H}, {bpp}-bit, 40-byte header")
+        if name == "heightmap":
+            hm = bm["img"]
+            if (hm[pix_kind == 1] <= 95).any():
+                err(f"{int((hm[pix_kind == 1] <= 95).sum())} land pixels at or below sea level")
+            if (hm[pix_kind != 1] >= 95).any():
+                err(f"{int((hm[pix_kind != 1] >= 95).sum())} water pixels at or above sea level")
+    wn = read_bmp(mod / "map/world_normal.bmp")
+    if (wn["width"], wn["height"], wn["bpp"]) != (W // 2, H // 2, 24):
+        err("world_normal.bmp must be half the map size, 24-bit")
+    tr = read_bmp(mod / "map/trees.bmp")
+    if tr["bpp"] != 8:
+        err("trees.bmp must be 8-bit")
+    for name, div in (("colormap_rgb_cityemissivemask_a", 2), ("colormap_water_0", 2),
+                      ("colormap_water_1", 4), ("colormap_water_2", 8), ("fow_rgb_waterspec_a", 2)):
+        p = mod / f"map/terrain/{name}.dds"
+        hdr = p.read_bytes()[:128]
+        h, w = struct.unpack_from("<II", hdr, 12)
+        if hdr[:4] != b"DDS " or (w, h) != (W // div, H // div):
+            err(f"{name}.dds should be {W // div}x{H // div}")
+        if p.stat().st_size != 128 + w * h * 4:
+            err(f"{name}.dds has the wrong data length")
+
+    # ------------------------------------------------------------ countries
+    tags = {}
+    for f in (mod / "common/country_tags").glob("*.txt"):
+        for tag, path in re.findall(r"^(\w{3})\s*=\s*\"([^\"]+)\"", f.read_text(), re.M):
+            tags[tag] = path
+            if not (mod / "common" / path).exists():
+                err(f"country file common/{path} missing")
+    hist = {}
+    for f in (mod / "history/countries").glob("*.txt"):
+        tag = f.name[:3]
+        if tag not in tags:
+            err(f"history file {f.name} for unknown tag")
+        hist[tag] = int(field(f.read_text(), "capital"))
+
+    # ------------------------------------------------------------ states
+    state_provs, owner = {}, {}
+    for f in (mod / "history/states").glob("*.txt"):
+        body = blocks(strip(f.read_text()), "state")[0]
+        sid = int(field(body, "id"))
+        state_provs[sid] = id_list(body, "provinces")
+        owner[sid] = field(body, "owner")
+        if field(body, "state_category") not in VANILLA_STATE_CATEGORIES:
+            err(f"state {sid}: unknown state_category")
+        if owner[sid] not in tags:
+            err(f"state {sid}: owner {owner[sid]} is not a defined tag")
+        vp = blocks(body, "victory_points")
+        if vp and int(vp[0].split()[0]) not in state_provs[sid]:
+            err(f"state {sid}: victory point outside the state")
+    if sorted(state_provs) != list(range(1, len(state_provs) + 1)):
+        err("state ids are not contiguous from 1")
+    state_of = {}
+    for sid, ps in state_provs.items():
+        for p in ps:
+            if p in state_of:
+                err(f"province {p} is in states {state_of[p]} and {sid}")
+            state_of[p] = sid
+            if kind[p - 1] != 1:
+                err(f"state {sid} contains non-land province {p}")
+    for i in range(n):
+        if kind[i] == 1 and i + 1 not in state_of:
+            err(f"land province {i + 1} is in no state")
+    for tag, cap in hist.items():
+        if owner.get(cap) != tag:
+            err(f"{tag}'s capital state {cap} is not owned by it")
+
+    # ------------------------------------------------------------ strategic regions
+    region_of, region_provs = {}, {}
+    for f in (mod / "map/strategicregions").glob("*.txt"):
+        body = blocks(strip(f.read_text()), "strategic_region")[0]
+        rid = int(field(body, "id"))
+        region_provs[rid] = id_list(body, "provinces")
+        if len(blocks(body, "period")) != 12:
+            note(f"region {rid} does not have 12 weather periods")
+        for p in region_provs[rid]:
+            if p in region_of:
+                err(f"province {p} is in regions {region_of[p]} and {rid}")
+            region_of[p] = rid
+    if sorted(region_provs) != list(range(1, len(region_provs) + 1)):
+        err("strategic region ids are not contiguous from 1")
+    for i in range(n):
+        if i + 1 not in region_of:
+            err(f"province {i + 1} is in no strategic region")
+    for sid, ps in state_provs.items():
+        if len({region_of.get(p) for p in ps}) != 1:
+            err(f"state {sid} spans several strategic regions")
+    for rid, ps in region_provs.items():
+        ks = {kind[p - 1] for p in ps}
+        if 0 in ks and ks != {0}:
+            err(f"region {rid} mixes sea with land/lakes")
+        if ks == {0}:
+            members, seen, stack = set(p - 1 for p in ps), set(), [ps[0] - 1]
+            while stack:
+                u = stack.pop()
+                if u in seen:
+                    continue
+                seen.add(u)
+                stack.extend(v for v in nbrs[u] if v in members and v not in seen)
+            if seen != members:
+                err(f"sea region {rid} is not contiguous")
+
+    # ------------------------------------------------------------ positions
+    def inside(x, z):
+        px, py = int(float(x)), H - 1 - int(float(z))
+        if not (0 <= px < W and 0 <= py < H):
+            return None
+        return int(prov[py, px]) + 1
+
+    have = defaultdict(lambda: defaultdict(int))
+    prov_have = defaultdict(set)
+    for ln in (mod / "map/buildings.txt").read_text().splitlines():
+        sid, bt, x, y, z, rot, sea = ln.split(";")
+        sid, sea = int(sid), int(sea)
+        at = inside(x, z)
+        have[sid][bt] += 1
+        if bt == "floating_harbor":
+            if at is None or kind[at - 1] != 0:
+                err(f"floating_harbor for state {sid} is not on the sea")
+        else:
+            if at is None or state_of.get(at) != sid:
+                err(f"{bt} for state {sid} at ({x},{z}) lies outside the state")
+                continue
+            prov_have[at].add(bt)
+        if bt in ("naval_base_spawn", "floating_harbor"):
+            if sea < 1 or kind[sea - 1] != 0:
+                err(f"{bt} in state {sid} names non-sea province {sea}")
+            elif bt == "naval_base_spawn" and sea - 1 not in nbrs[at - 1]:
+                err(f"naval_base_spawn in province {at} names non-adjacent sea {sea}")
+    for sid, ps in state_provs.items():
+        n_coast = sum(coastal[p - 1] for p in ps)
+        if have[sid]["floating_harbor"] < n_coast:
+            err(f"state {sid} has {have[sid]['floating_harbor']} floating_harbor rows for {n_coast} coastal provinces")
+        if n_coast and have[sid]["dockyard"] < 1:
+            err(f"coastal state {sid} has no dockyard position")
+        for bt, cnt in STATE_BUILDINGS.items():
+            if have[sid][bt] < cnt:
+                err(f"state {sid} has {have[sid][bt]} {bt} positions, needs {cnt}")
+    for i in range(n):
+        if kind[i] != 1:
+            continue
+        need = PROVINCE_BUILDINGS | (COASTAL_BUILDINGS - {"floating_harbor"} if coastal[i] else set())
+        if need - prov_have[i + 1]:
+            err(f"province {i + 1} lacks positions for {sorted(need - prov_have[i + 1])}")
+    stacks = defaultdict(set)
+    for ln in (mod / "map/unitstacks.txt").read_text().splitlines():
+        p, t, x, y, z, rot, off = ln.split(";")
+        if inside(x, z) != int(p):
+            err(f"unit stack {t} of province {p} lies outside it")
+        stacks[int(p)].add(int(t))
+    for i in range(n):
+        want = LAND_STACKS if kind[i] == 1 else SEA_STACKS if kind[i] == 0 else set()
+        if want - stacks[i + 1]:
+            err(f"province {i + 1} lacks unit stacks {sorted(want - stacks[i + 1])}")
+    wp = defaultdict(set)
+    for ln in (mod / "map/weatherpositions.txt").read_text().splitlines():
+        rid, x, y, z, sz = ln.split(";")
+        if region_of.get(inside(x, z)) != int(rid):
+            err(f"weather position of region {rid} lies outside it")
+        wp[int(rid)].add(sz)
+    for rid in region_provs:
+        if wp[rid] != {"small", "big"}:
+            err(f"region {rid} needs a small and a big weather position (has {wp[rid]})")
+    for ln in (mod / "map/supply_nodes.txt").read_text().splitlines():
+        lvl, p = ln.split()
+        if int(p) not in state_of:
+            err(f"supply node on province {p}, which is in no state")
+    adj = (mod / "map/adjacencies.csv").read_bytes()
+    if not adj.rstrip().endswith(b"-1;-1;;-1;-1;-1;-1;-1;-1") or b"\r\n" not in adj:
+        err("adjacencies.csv needs CRLF and the -1 end line")
+    if not (mod / "map/buildings.txt").read_text().strip():
+        err("buildings.txt must not be empty")
+
+    # ------------------------------------------------------------ localisation
+    keys = set()
+    for f in (mod / "localisation").rglob("*.yml"):
+        raw = f.read_bytes()
+        if not raw.startswith(b"\xef\xbb\xbf"):
+            err(f"{f.name} must be UTF-8 with BOM")
+        if not f.name.endswith("_l_english.yml") or b"l_english:" not in raw[:20]:
+            err(f"{f.name} must be an l_english file")
+        keys |= set(re.findall(r"^ (\S+?):\d? ", raw.decode("utf-8-sig"), re.M))
+    for f in (mod / "history/states").glob("*.txt"):
+        k = field(f.read_text(), "name")
+        if k not in keys:
+            err(f"state name {k} has no localisation")
+    for f in (mod / "map/strategicregions").glob("*.txt"):
+        k = field(f.read_text(), "name")
+        if k not in keys:
+            err(f"region name {k} has no localisation")
+    for tag in tags:
+        for k in (tag, f"{tag}_DEF", f"{tag}_ADJ"):
+            if k not in keys:
+                err(f"missing localisation {k}")
+    for c in continents:
+        if c not in keys:
+            err(f"continent {c} has no localisation")
+
+    # ------------------------------------------------------------ descriptors
+    desc = (mod / "descriptor.mod").read_text()
+    rps = re.findall(r'replace_path="([^"]+)"', desc)
+    outer = mod.parent / f"{mod.name}.mod"
+    if outer.exists() and re.findall(r'replace_path="([^"]+)"', outer.read_text()) != rps:
+        err("descriptor.mod and the launcher .mod have different replace_path lines")
+    for rp in rps:
+        if not any((mod / rp).glob("*.*")):
+            err(f"replaced folder {rp} has no file in the mod")
+
+    lands = int((kind == 1).sum())
+    print(f"{W}x{H}, {n} provinces ({lands} land, {(kind == 0).sum()} sea, {(kind == 2).sum()} lake), "
+          f"{len(state_provs)} states, {len(region_provs)} strategic regions, {len(tags)} countries")
+    for m in notes[:20]:
+        print("note:", m)
+    for m in errors[:50]:
+        print("ERROR:", m)
+    if errors:
+        print(f"{len(errors)} errors")
+        sys.exit(1)
+    print("all checks passed")
+
+
+if __name__ == "__main__":
+    main(sys.argv[1] if len(sys.argv) > 1 else "build/valsora_test")
