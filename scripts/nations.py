@@ -46,7 +46,7 @@ CHARACTERS = """characters = {
 		name = AIS_communist_merlovich
 		portraits = {
 			civilian = {
-				large = GFX_portrait_AIS_merlovich
+				large = GFX_portrait_AIS_communist_merlovich
 			}
 		}
 		country_leader = {
@@ -62,6 +62,10 @@ SPRITES = """spriteTypes = {
 	spriteType = {
 		name = "GFX_portrait_AIS_merlovich"
 		texturefile = "gfx/leaders/AIS/Portrait_Aislada_Merlovich.dds"
+	}
+	spriteType = {
+		name = "GFX_portrait_AIS_communist_merlovich"
+		texturefile = "gfx/leaders/AIS/Portrait_Aislada_Communist_Merlovich.dds"
 	}
 }
 """
@@ -156,4 +160,13 @@ def write_files(write, out):
     write("common/national_focus/aislada.txt", FOCUS_TREE)
     path = out / "gfx/leaders/AIS/Portrait_Aislada_Merlovich.dds"
     path.parent.mkdir(parents=True, exist_ok=True)
-    write_dds(path, portrait())
+    rgba = portrait()
+    write_dds(path, rgba)
+    write_dds(path.with_name("Portrait_Aislada_Communist_Merlovich.dds"), redden(rgba))
+
+
+def redden(rgba):
+    """The same portrait washed in revolutionary red: brightness kept, hue forced red."""
+    lum = rgba[..., :3].astype(np.float32) @ np.array([0.299, 0.587, 0.114], np.float32)
+    red = np.stack([np.clip(lum * 1.1 + 70, 0, 255), lum * 0.3, lum * 0.25], axis=-1)
+    return np.dstack([red.round().astype(np.uint8), rgba[..., 3]])
