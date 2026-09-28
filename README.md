@@ -18,17 +18,16 @@ Provinces are placeholder squares, with one placeholder country per continent.
 ## Editing the map
 
 Edit **`source/HOI4 Mod Map.pdn`** in paint.net. It is exactly the game's size, so one
-pixel is one map pixel. On the "Land & Borders & Colours" layer, any painted pixel is
-land and any transparent pixel is water. The other layers only affect how the file
-looks. Keep the leftmost and rightmost pixel columns as water, because the map wraps
-around there. Upload the saved file to `source/` on GitHub and ask for a rebuild.
+pixel is one map pixel. It has one layer for each kind of map data: Heightmap, Terrain,
+Rivers, Continents, Provinces, Strategic Regions, States and Countries. See
+**[docs/EDITING.md](docs/EDITING.md)** for what each layer does, the colours to use, and
+step-by-step recipes. Upload the saved file to `source/` on GitHub and ask for a
+rebuild.
 
-## Files for drawing
+## Files
 
 - `dist/valsora_land_5120x2560.png`: land, sea and lakes exactly as in the game.
-- `dist/valsora_countries_5120x2560.png`: the same map with the country colours from the
-  `.pdn` moved onto the new layout. Draw country borders on this.
-- `dist/preview_provinces.png`: the placeholder provinces.
+- `dist/preview_provinces.png`, `dist/preview_layout.png`: small overviews.
 
 ## Rebuild
 

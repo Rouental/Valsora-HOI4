@@ -21,40 +21,56 @@ build/      the unzipped mod, gitignored
 
 ## The editable map: `source/HOI4 Mod Map.pdn`
 
-The author edits this file from now on. It is exactly game size (5120×2560, one pixel =
-one map pixel) and has the original's nine layers, made by `make_mod_pdn.py` from the
-current map.
-- **Land** is any opaque pixel of "Land & Borders & Colours"; water is transparent. The
-  other layers are for looks only.
-- **Continents** come from `source/hoi4_continents_5120x2560.png`; land drawn outside
-  it takes the nearest continent.
-- **Build.** While this file exists, `run_all.sh` reads it directly: the original
-  `.pdn`, `blocks.py` and `layout.py` are skipped, and nothing is moved or rescaled.
-  The first build from it gave a byte-identical mod.
-- **Edge columns.** The first and last pixel columns must stay water, because the map
-  wraps there; `compose.py` stops with a message otherwise.
-- **Writing a `.pdn`.** `writepdn.py` copies the original's object graph and patches the
-  size fields: 19 width and 19 height int32s, 9 strides, 9 int64 lengths. It only works
-  while the layer count and names stay the same.
+The author edits this file from now on; `docs/EDITING.md` is their guide (keep it in
+step with `read_layers.py`). It is exactly game size (5120×2560, one pixel = one map
+pixel), and each layer is one kind of game data, found **by name**. Bottom to top:
+Heightmap, Terrain, Rivers, Continents, Provinces, Strategic Regions, States, Countries,
+and "Notes (ignored by the build)". Unknown layer names are ignored, so the author may
+add their own.
+- **Provinces**: one colour per province, which is also its provinces.bmp colour. Ids
+  are assigned in reading order (first pixel, row by row), so they shift when provinces
+  change. Refer to places by `capital:TAG`, never by id.
+- **Terrain**: vanilla terrain.bmp palette colours. Ocean (index 15) means sea, the
+  lakes colour (14) means lake, and anything else is land. The game gets 15 for all
+  water. A province's kind and terrain type are the majority of its pixels.
+- **Everything else is decided per province by majority.** Blank provinces on States,
+  Countries, Strategic Regions or Continents take the nearest painted area of the right
+  kind, with a note. Region colours count only on their own kind (a colour is a sea
+  region if most of its pixels are sea). A blank land province joins its state's region.
+- **Countries** are matched by exact colour to `common.COUNTRIES`, per state; a country
+  owning no state is left out of the mod.
+- **Errors and notes.** Real errors (split or tiny provinces, black or transparent
+  pixels, mixed or split regions, a state in two regions) stop the build with a numbered
+  list of (x, y) pixel positions. X-crossings are repaired automatically.
+- **Heightmap**: clamped to 94 / 96 on the wrong side of sea level. Rivers use the
+  rivers.bmp palette; river pixels on water are dropped.
+- **Regenerating the file.** `make_game_pdn.py` writes it from a placeholder build.
+  `writepdn.py` copies the original `.pdn`'s object graph (nine layers), patches the size
+  fields (19 widths, 19 heights, 9 strides, 9 lengths) and rewrites each layer's name,
+  visibility and opacity. It would overwrite the author's edits, so don't run it casually.
+- **Round trip.** The first layer build matched the placeholder build exactly (same
+  province colours, states, owners, regions and bitmaps), with only the ids renumbered.
 
 ## Rebuilding
 
-`sh scripts/run_all.sh` from the repo root: about 2.5 minutes, plus about 2 minutes for the
-one-time `.pdn` decode. Needs `numpy scipy pillow scikit-image`. Output is deterministic.
+`sh scripts/run_all.sh` from the repo root: about 1 minute from `HOI4 Mod Map.pdn`. Placeholder
+mode (used when that file is absent) takes about 2.5 minutes, plus about 2 minutes for the
+one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`. Output is deterministic.
 
 | step | does |
 |---|---|
-| `readpdn.py` | decodes a `.pdn` into one RGBA `.npy` per layer |
-| `make_mod_pdn.py` / `writepdn.py` | write `source/HOI4 Mod Map.pdn` (run once; now the author's file) |
-| `blocks.py` | original mode only: land mask, continent blocks, removes Antarctica |
-| `layout.py` | original mode only: scales every block and pushes them apart |
-| `compose.py` | game-resolution land / ocean / lakes, continent per pixel |
-| `provinces.py` | brick provinces, sliver merging, X-crossing repair, validation |
-| `regions.py` | states, strategic regions, anchor points |
+| `readpdn.py` | decodes a `.pdn` into one RGBA `.npy` per layer, plus `layers.txt` |
+| `read_layers.py` | **normal mode**: the layers of `HOI4 Mod Map.pdn` → provinces, states, regions, owners, heights, terrain, rivers |
+| `blocks.py` | placeholder mode only: land mask, continent blocks, removes Antarctica |
+| `layout.py` | placeholder mode only: scales every block and pushes them apart |
+| `compose.py` | placeholder mode only: game-resolution land / ocean / lakes, continent per pixel |
+| `provinces.py` | placeholder mode only: brick provinces, sliver merging, X-crossing repair |
+| `regions.py` | placeholder mode only: states, strategic regions |
+| `make_game_pdn.py` / `writepdn.py` | turn a placeholder build into a fresh `HOI4 Mod Map.pdn` |
 | `build_mod.py` | every mod file |
 | `nations.py` | hand-written per-nation content (leaders, portraits, focus trees), used by `build_mod.py` |
 | `check_mod.py` | re-reads the built files and checks every rule below |
-| `export_canvas.py` | drawing canvases and previews in `dist/` |
+| `export_canvas.py` | previews in `dist/` |
 | `package.py` | `dist/valsora_test.zip` |
 
 **A clean `check_mod.py` run is the bar for shipping a build.** It was mutation-tested
@@ -226,8 +242,8 @@ Left loaded on purpose, and noisy in `error.log`:
 
 ## Current state
 
-- 5,138 provinces (4,453 land, 613 sea, 72 lakes), 548 states, 128 strategic regions
-  (81 land, 47 sea), 7 countries.
+- 5,163 provinces (4,480 land, 614 sea, 69 lakes), 548 states, 127 strategic regions,
+  7 countries. All still placeholders, now held in the layers of `HOI4 Mod Map.pdn`.
 - **Loads in-game without crashing** (first build, confirmed by the author). Its
   `error.log` was vanilla-reference noise (decisions, missions, ai_faction_theaters
   region ids) plus the rivers.bmp palette warning above, which the biClrUsed fix
@@ -237,9 +253,9 @@ Left loaded on purpose, and noisy in `error.log`:
 
 ## Known gaps
 
-1. Provinces, states and regions are placeholders. Next is the author drawing countries
-   on `dist/valsora_countries_5120x2560.png` (the old `.pdn` colours already moved to the
-   new layout), then real provinces that respect those borders.
+1. Provinces, states and regions are placeholders. Next is the author painting real
+   countries, states and provinces on the layers of `HOI4 Mod Map.pdn`. The old `.pdn`'s
+   country colours, moved to the new layout, are its Notes layer.
 2. Terrain is plains everywhere; there are no rivers, railways or trees; the relief is
    noise.
 3. Lakes vs. inland seas (see Decisions).

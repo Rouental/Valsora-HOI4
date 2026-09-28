@@ -27,8 +27,36 @@ def _patch(graph, old, new, fmt, expect):
     return graph.replace(a, b)
 
 
-def write_pdn(template, out, layers):
-    """layers: list of HxWx4 uint8 RGBA arrays, bottom layer first."""
+def _set_layer_props(graph, names, visible, opacity):
+    """Rewrite each layer's name, visibility and opacity. In the graph a name is a
+    BinaryObjectString (0x06, object id, length byte, UTF-8), followed by a 5-byte
+    reference to its metadata list and then three bytes: visible, isBackground,
+    opacity. The stream has no byte offsets, so a name may change length."""
+    out, pos = bytearray(), 0
+    start = graph.find(b"blendMode")
+    for k, (name, vis, opa) in enumerate(zip(names, visible, opacity)):
+        i = start
+        while True:  # next string record that is followed by the property bytes
+            i = graph.find(b"\x06", i)
+            ln = graph[i + 5]
+            j = i + 6 + ln
+            if graph[j] == 0x09 and graph[j + 5] in (0, 1) and graph[j + 6] in (0, 1):
+                break
+            i += 1
+        enc = name.encode("utf-8")
+        if len(enc) > 127:
+            raise ValueError("layer names must be under 128 bytes")
+        out += graph[pos:i + 5] + bytes([len(enc)]) + enc + graph[j:j + 5]
+        out += bytes([1 if vis else 0, graph[j + 6], opa])
+        pos = j + 8
+        start = j + 8
+    out += graph[pos:]
+    return bytes(out)
+
+
+def write_pdn(template, out, layers, names=None, visible=None, opacity=None):
+    """layers: list of HxWx4 uint8 RGBA arrays, bottom layer first. names, visible
+    (bools) and opacity (0-255) are per layer; left out, the template's are kept."""
     buf = open(template, "rb").read()
     n = buf[4] | (buf[5] << 8) | (buf[6] << 16)
     xml = buf[7:7 + n].decode("utf-8")
@@ -45,11 +73,14 @@ def write_pdn(template, out, layers):
     graph = _patch(graph, oh, h, "<i", 2 * nl + 1)
     graph = _patch(graph, ow * 4, w * 4, "<i", nl)
     graph = _patch(graph, ow * oh * 4, w * h * 4, "<q", nl)
+    if names is not None:
+        graph = _set_layer_props(graph, names, visible or [True] * nl, opacity or [255] * nl)
 
     # header: new size and a thumbnail of the flattened image
     flat = Image.new("RGBA", (w, h))
-    for lay in layers:
-        flat = Image.alpha_composite(flat, Image.fromarray(lay))
+    for k, lay in enumerate(layers):
+        if visible is None or visible[k]:
+            flat = Image.alpha_composite(flat, Image.fromarray(lay))
     thumb = flat.resize((256, 128), Image.BOX)
     png = io.BytesIO()
     thumb.save(png, "PNG")

@@ -24,7 +24,28 @@ BLOCKS = ["WEST", "AISLADA", "SOLITAS", "YASTREOVAKIA", "USNISTAN", "ORIENTALIS"
 
 # HOI4 continents (map/continent.txt), in order: definition.csv uses index + 1.
 CONTINENTS = ["nonscio", "araseos", "aislada", "solitas", "yastreovakia", "usnistan", "orientalis"]
-# Their colours in source/hoi4_continents_5120x2560.png.
+# One placeholder country per continent: tag, name, adjective, colour.
+COUNTRIES = {
+    "nonscio": ("NSC", "Nonscio", "Nonscian", (216, 84, 84)),
+    "araseos": ("ARS", "Araseos", "Araseosi", (116, 152, 206)),
+    "aislada": ("AIS", "Aislada", "Aisladan", (70, 170, 70)),
+    "solitas": ("SLT", "Solitas", "Solitan", (214, 110, 214)),
+    "yastreovakia": ("YAS", "Yastreovakia", "Yastreovakian", (96, 190, 150)),
+    "usnistan": ("USN", "Usnistan", "Usnistani", (184, 172, 100)),
+    "orientalis": ("ORI", "Orientalis", "Orientalian", (236, 160, 70)),
+}
+
+# Graphical terrain: terrain.bmp palette index -> terrain type (vanilla 1.19.3
+# common/terrain/00_terrain.txt). The index's palette colour is what the Terrain layer
+# of "HOI4 Mod Map.pdn" uses. Index 14 marks lakes there; the game gets 15 for both.
+TERRAIN_TYPES = {0: "plains", 1: "forest", 2: "hills", 3: "desert", 4: "forest", 5: "plains",
+                 6: "mountain", 7: "desert", 8: "desert", 9: "marsh", 10: "mountain",
+                 11: "mountain", 12: "desert", 13: "urban", 14: "lakes", 15: "ocean",
+                 16: "mountain", 17: "hills", 18: "mountain", 19: "plains", 20: "mountain",
+                 21: "jungle", 22: "jungle", 27: "mountain", 31: "mountain"}
+TERRAIN_OCEAN, TERRAIN_LAKE, TERRAIN_PLAINS = 15, 14, 0
+
+# Their colours on the Continents layer of "HOI4 Mod Map.pdn".
 CONT_COLOURS = [(216, 84, 84), (116, 152, 206), (70, 170, 70), (214, 110, 214),
                 (96, 190, 150), (184, 172, 100), (236, 160, 70)]
 

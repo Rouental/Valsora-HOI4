@@ -24,6 +24,8 @@ STATE_BUILDINGS = {"air_base": 1, "anti_air_building": 3, "arms_factory": 6,
                    "industrial_complex": 6, "fuel_silo": 1, "nuclear_reactor_spawn": 1,
                    "radar_station": 1, "rocket_site_spawn": 1, "stronghold_network": 1,
                    "synthetic_refinery": 1}
+# vanilla 1.19.3 common/terrain/00_terrain.txt land categories
+LAND_TERRAIN = {"plains", "forest", "hills", "mountain", "desert", "marsh", "jungle", "urban"}
 PROVINCE_BUILDINGS = {"bunker", "special_project_facility_spawn", "supply_node"}
 COASTAL_BUILDINGS = {"naval_base_spawn", "floating_harbor", "naval_headquarters",
                      "naval_supply_hub", "coastal_bunker"}
@@ -99,6 +101,9 @@ def main(mod):
         conts.append(int(f[7]))
         if f[4] not in ("land", "sea", "lake"):
             err(f"province {f[0]}: bad type {f[4]}")
+        want = {"sea": {"ocean"}, "lake": {"lakes"}}.get(f[4], LAND_TERRAIN)
+        if f[6] not in want:
+            err(f"province {f[0]}: {f[4]} with terrain {f[6]}")
         if f[4] == "land" and not 1 <= int(f[7]) <= len(continents):
             err(f"province {f[0]}: land with continent {f[7]}")
     n = len(ids)
@@ -158,6 +163,10 @@ def main(mod):
         bm = read_bmp(mod / f"map/{name}.bmp")
         if (bm["width"], bm["height"]) != (W, H) or bm["bpp"] != bpp or bm["header"] != 40:
             err(f"{name}.bmp must be {W}x{H}, {bpp}-bit, 40-byte header")
+        if name == "terrain" and (bm["img"][pix_kind != 1] != 15).any():
+            err("terrain.bmp: water must be index 15 (ocean)")
+        if name == "terrain" and (bm["img"][pix_kind == 1] == 15).any():
+            err("terrain.bmp: land uses the ocean index 15")
         if name == "heightmap":
             hm = bm["img"]
             if (hm[pix_kind == 1] <= 95).any():

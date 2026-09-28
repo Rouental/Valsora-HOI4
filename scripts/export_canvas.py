@@ -32,14 +32,11 @@ def main():
     land_img[pk == 2] = LAKE
     Image.fromarray(land_img).save(DIST / "valsora_land_5120x2560.png", optimize=True)
 
-    if Path("source/HOI4 Mod Map.pdn").exists():
-        # direct mode: the country colours are the mod .pdn's land layer as drawn
-        out = np.asarray(np.load("work/pdn_mod/layer1.npy", mmap_mode="r")[..., :3]).copy()
-        out[pk == 0] = SEA
-        out[pk == 2] = LAKE
-    else:
-        out = carried_colours(pk)
-    Image.fromarray(out).save(DIST / "valsora_countries_5120x2560.png", optimize=True)
+    if Path("work/layout.json").exists() and not Path("work/pdn_game").exists():
+        # placeholder mode only: once the map comes from "HOI4 Mod Map.pdn", this
+        # image lives on as that file's Notes layer and is left as it is
+        Image.fromarray(carried_colours(pk)).save(DIST / "valsora_countries_5120x2560.png",
+                                                  optimize=True)
     overview(pk, cont, lab, kind)
 
 

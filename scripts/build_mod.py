@@ -7,14 +7,14 @@ launcher's outer descriptor).
 import json
 import math
 import shutil
-from collections import defaultdict
+from collections import Counter, defaultdict
 from pathlib import Path
 
 import numpy as np
 from PIL import Image
 from scipy import ndimage as ndi
 
-from common import MAP_W, MAP_H, CONTINENTS, MOD_NAME, MOD_DIR_NAME
+from common import MAP_W, MAP_H, CONTINENTS, MOD_NAME, MOD_DIR_NAME, COUNTRIES
 import nations
 from imgio import write_bmp, write_dds, write_tga, palette_from_header
 
@@ -22,17 +22,6 @@ W, H = MAP_W, MAP_H
 OUT = Path("build") / MOD_DIR_NAME
 PAL = Path("source/palettes")
 CRLF = "\r\n"
-
-# One placeholder country per continent: tag, name, adjective, colour.
-COUNTRIES = {
-    "nonscio": ("NSC", "Nonscio", "Nonscian", (216, 84, 84)),
-    "araseos": ("ARS", "Araseos", "Araseosi", (116, 152, 206)),
-    "aislada": ("AIS", "Aislada", "Aisladan", (70, 170, 70)),
-    "solitas": ("SLT", "Solitas", "Solitan", (214, 110, 214)),
-    "yastreovakia": ("YAS", "Yastreovakia", "Yastreovakian", (96, 190, 150)),
-    "usnistan": ("USN", "Usnistan", "Usnistani", (184, 172, 100)),
-    "orientalis": ("ORI", "Orientalis", "Orientalian", (236, 160, 70)),
-}
 
 REPLACE_PATHS = [
     "history/states", "history/countries", "history/units", "history/general",
@@ -195,14 +184,23 @@ def main():
     anchor, size, state_of = reg["anchor"], reg["size"], reg["state_of"]
     rj = json.load(open("work/regions.json"))
     states, regions = rj["states"], rj["regions"]
+    world = np.load("work/world.npz")
+    by_tag = {v[0]: c for c, v in COUNTRIES.items()}
+    # owner of every state: from the Countries layer, or the continent's placeholder
+    owners = [by_tag[t] for t in rj["owners"]] if "owners" in rj else \
+        [CONTINENTS[int(cont[g[0]]) - 1] for g in states]
+    present = [c for c in CONTINENTS if c in owners]  # countries that own a state
     n = len(kind)
     pid = np.arange(n) + 1  # HOI4 province ids start at 1
     pix_kind = kind[lab]  # repairs may have moved single pixels between kinds
 
     # ---------------------------------------------------------------- provinces.bmp
-    rng = np.random.default_rng(20260928)
-    codes = rng.choice(np.arange(1, 1 << 24), size=n, replace=False)
-    colors = np.stack([codes >> 16, (codes >> 8) & 255, codes & 255], 1).astype(np.uint8)
+    if "colors" in p:  # the author's Provinces layer
+        colors = p["colors"]
+    else:
+        rng = np.random.default_rng(20260928)
+        codes = rng.choice(np.arange(1, 1 << 24), size=n, replace=False)
+        colors = np.stack([codes >> 16, (codes >> 8) & 255, codes & 255], 1).astype(np.uint8)
     (OUT / "map").mkdir(parents=True, exist_ok=True)
     write_bmp(OUT / "map/provinces.bmp", colors[lab])
 
@@ -236,22 +234,28 @@ def main():
             port[L] = (c, S, int(r[2]), int(r[3]), int(r[4]), int(r[5]))
 
     # ---------------------------------------------------------------- definition.csv
-    terrain = {0: "ocean", 1: "plains", 2: "lakes"}
+    terrain = list(p["terrain"]) if "terrain" in p else \
+        [{0: "ocean", 1: "plains", 2: "lakes"}[k] for k in kind]
     ptype = {0: "sea", 1: "land", 2: "lake"}
     lines = ["0;0;0;0;land;false;unknown;0"]
     for i in range(n):
         r, g, bb = colors[i]
         lines.append(f"{pid[i]};{r};{g};{bb};{ptype[kind[i]]};{'true' if coastal[i] else 'false'};"
-                     f"{terrain[kind[i]]};{int(cont[i]) if kind[i] == 1 else 0}")
+                     f"{terrain[i]};{int(cont[i]) if kind[i] == 1 else 0}")
     write("map/definition.csv", "\n".join(lines) + "\n", crlf=True)
 
     # ---------------------------------------------------------------- bitmaps
-    height, d_sea = heightmap(pix_kind)
+    # heights, terrain and rivers come from the .pdn's layers when there are some
+    if "height" in world:
+        height, d_sea = world["height"], coast_distance(pix_kind != 1)[0]
+        tmap, rmap = world["terrain"], world["rivers"]
+    else:
+        height, d_sea = heightmap(pix_kind)
+        tmap = np.where(pix_kind == 1, 0, 15).astype(np.uint8)
+        rmap = np.where(pix_kind == 1, 255, 254).astype(np.uint8)
     write_bmp(OUT / "map/heightmap.bmp", height, palette_from_header(PAL / "heightmap.bmp.header.bin"))
-    write_bmp(OUT / "map/terrain.bmp", np.where(pix_kind == 1, 0, 15).astype(np.uint8),
-              palette_from_header(PAL / "terrain.bmp.header.bin"))
-    write_bmp(OUT / "map/rivers.bmp", np.where(pix_kind == 1, 255, 254).astype(np.uint8),
-              palette_from_header(PAL / "rivers.bmp.header.bin"))
+    write_bmp(OUT / "map/terrain.bmp", tmap, palette_from_header(PAL / "terrain.bmp.header.bin"))
+    write_bmp(OUT / "map/rivers.bmp", rmap, palette_from_header(PAL / "rivers.bmp.header.bin"))
     # cities.bmp index 4 belongs to no city group: no generated town meshes
     write_bmp(OUT / "map/cities.bmp", np.full((H, W), 4, np.uint8),
               palette_from_header(PAL / "cities.bmp.header.bin"))
@@ -290,15 +294,15 @@ def main():
     cont_count = defaultdict(int)
     state_name = []
     for s, g in enumerate(states):
-        c = CONTINENTS[int(cont[g[0]]) - 1]
+        c = owners[s]
         cont_count[c] += 1
         state_name.append(f"{COUNTRIES[c][1]} {cont_count[c]}")
     state_capital = [max(g, key=lambda i: (size[i], -i)) for g in states]
     state_coastal = [any(coastal[i] for i in g) for g in states]
-    # country capital: the sizeable state nearest its continent's centre of mass
+    # country capital: the sizeable state nearest the centre of the country's land
     capital_state = {}
-    for ci, c in enumerate(CONTINENTS, 1):
-        members = [s for s, g in enumerate(states) if cont[g[0]] == ci]
+    for c in present:
+        members = [s for s in range(len(states)) if owners[s] == c]
         cy = np.average([reg["centre"][i][0] for s in members for i in states[s]],
                         weights=[size[i] for s in members for i in states[s]])
         cx = np.average([reg["centre"][i][1] for s in members for i in states[s]],
@@ -307,7 +311,7 @@ def main():
         capital_state[c] = min(big, key=lambda s: np.hypot(*(np.mean(
             [reg["centre"][i] for i in states[s]], axis=0) - (cy, cx))))
     for s, g in enumerate(states):
-        c = CONTINENTS[int(cont[g[0]]) - 1]
+        c = owners[s]
         tag = COUNTRIES[c][0]
         is_cap = capital_state[c] == s
         px = sum(int(size[i]) for i in g)
@@ -350,7 +354,8 @@ def main():
     for r, rg in enumerate(regions):
         provs = rg["provinces"]
         if rg["kind"] == "land":
-            c = CONTINENTS[int(cont[states[rg["states"][0]][0]]) - 1]
+            c = Counter(owners[s] for s in rg["states"]).most_common(1)[0][0] \
+                if rg["states"] else CONTINENTS[int(cont[provs[0]]) - 1]
             land_count[c] += 1
             region_name.append(f"{COUNTRIES[c][1]} Region {land_count[c]}")
         else:
@@ -472,7 +477,7 @@ def main():
 
     # ---------------------------------------------------------------- countries
     tags = []
-    for c in CONTINENTS:
+    for c in present:
         tag, name, adj, col = COUNTRIES[c]
         tags.append(tag)
         write(f"common/countries/Valsora {name}.txt",
@@ -507,7 +512,7 @@ def main():
             (OUT / f"gfx/flags/{path}").mkdir(parents=True, exist_ok=True)
             write_tga(OUT / f"gfx/flags/{path}{tag}.tga", img)
     write("common/country_tags/valsora_countries.txt",
-          "".join(f'{COUNTRIES[c][0]} = "countries/Valsora {COUNTRIES[c][1]}.txt"\n' for c in CONTINENTS))
+          "".join(f'{COUNTRIES[c][0]} = "countries/Valsora {COUNTRIES[c][1]}.txt"\n' for c in present))
 
     write("common/bookmarks/valsora.txt", "\n".join([
         "bookmarks = {",
@@ -544,14 +549,14 @@ def main():
 
     # ---------------------------------------------------------------- localisation
     loc = ["l_english:"]
-    for c in CONTINENTS:
+    for c in present:
         tag, name, adj, _ = COUNTRIES[c]
         loc += [f' {tag}:0 "{name}"', f' {tag}_DEF:0 "{name}"', f' {tag}_ADJ:0 "{adj}"']
         for ideo in ("democratic", "fascism", "communism", "neutrality"):
             i_name, i_def, i_adj = nations.IDEOLOGY_NAMES.get(tag, {}).get(ideo, (name, name, adj))
             loc += [f' {tag}_{ideo}:0 "{i_name}"', f' {tag}_{ideo}_DEF:0 "{i_def}"',
                     f' {tag}_{ideo}_ADJ:0 "{i_adj}"']
-        loc.append(f' {c}:0 "{name}"')
+    loc += [f' {c}:0 "{COUNTRIES[c][1]}"' for c in CONTINENTS]  # continent names
     loc += [f' VAL_STATE_{s + 1}:0 "{state_name[s]}"' for s in range(len(states))]
     loc += [f' VAL_REGION_{r + 1}:0 "{region_name[r]}"' for r in range(len(regions))]
     loc += [' VALSORA_BOOKMARK:0 "Valsora"',
@@ -564,7 +569,9 @@ def main():
     city_names = {}
     for key, name in nations.CITY_NAMES.items():
         if isinstance(key, str) and key.startswith("capital:"):
-            c = next(c for c in CONTINENTS if COUNTRIES[c][0] == key[8:])
+            c = by_tag[key[8:]]
+            if c not in capital_state:
+                continue  # that country owns no land at the moment
             key = int(pid[state_capital[capital_state[c]]])
         city_names[key] = name
     stale = sorted(set(city_names) - vp_ids)
