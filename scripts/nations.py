@@ -15,7 +15,10 @@ HISTORY = {
     # recruited at game start too; he waits as communist party leader until "Explode"
     "AIS": ["recruit_character = AIS_merlovich", "recruit_character = AIS_communist_merlovich"],
     # Roland leads the ruling non-aligned party at start; Serelle leads the fascists
-    "ROU": ["recruit_character = ROU_roland_cahun", "recruit_character = ROU_serelle_cahun"],
+    "ROU": ["recruit_character = ROU_roland_cahun", "recruit_character = ROU_serelle_cahun",
+            # Rouental leads the Association of Reibonnaise States from the start
+            "create_faction_from_template = faction_template_reibonnaise_association",
+            *[f"add_to_faction = {t}" for t in ("GDN", "LST", "EVR", "HLR", "SGV", "LZC", "SGN")]],
 }
 
 # Country names while a given ideology rules: tag -> ideology -> (name, formal
@@ -47,6 +50,9 @@ FORMAL_NAMES = {
 }
 
 LOCALISATION = [
+    ' VAL_reibonnaise_association:0 "The Association of Reibonnaise States"',
+    ' ROU_plans_for_cardonia:0 "Plans for Cardonia"',
+    ' ROU_plans_for_cardonia_desc:0 "A war goal against Cardonia, for testing."',
     ' ROU_serelle_cahun:0 "Serelle Cahun"',
     ' ROU_roland_cahun:0 "Roland Cahun"',
     ' ROU_focus:0 "Rouentaise Focus Tree"',
@@ -298,6 +304,23 @@ ROU_FOCUS_TREE = """focus_tree = {
 		}
 	}
 
+	# for testing wars: a war goal on Cardonia without justifying one
+	focus = {
+		id = ROU_plans_for_cardonia
+		icon = GFX_goal_generic_major_war
+		x = 8
+		y = 0
+		cost = 1
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		available = { country_exists = CRD }
+		completion_reward = {
+			create_wargoal = {
+				type = annex_everything
+				target = CRD
+			}
+		}
+	}
+
 	focus = {
 		id = ROU_steady_as_she_goes
 		icon = GFX_focus_AUS_bring_back_the_habsburg_rule
@@ -321,6 +344,25 @@ ROU_FOCUS_TREE = """focus_tree = {
 			promote_character = ROU_roland_cahun
 			retire_character = ROU_serelle_cahun
 		}
+	}
+}
+"""
+
+# Factions that exist at game start, created from these templates in the leader's
+# history. Goals, rules, manifest and icon are vanilla's (as in its generic template).
+FACTION_TEMPLATES = """faction_template_reibonnaise_association = {
+	name = VAL_reibonnaise_association
+	manifest = faction_manifest_strength_in_unity
+	icon = GFX_faction_logo_generic
+	visible = {
+		always = no
+	}
+	goals = {
+		faction_goal_a_military_base
+	}
+	default_rules = {
+		joining_rule_neighbors_only
+		change_leader_rule_manpower
 	}
 }
 """
@@ -360,6 +402,7 @@ def redden(rgba):
 
 def write_files(write, out):
     """Write every nation-specific file into the mod folder."""
+    write("common/factions/templates/valsora_factions.txt", FACTION_TEMPLATES)
     write("common/characters/AIS.txt", CHARACTERS)
     write("common/characters/ROU.txt", ROU_CHARACTERS)
     write("common/national_focus/rouental.txt", ROU_FOCUS_TREE)

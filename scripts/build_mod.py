@@ -15,6 +15,7 @@ from PIL import Image
 from scipy import ndimage as ndi
 
 from common import MAP_W, MAP_H, CONTINENTS, MOD_NAME, MOD_DIR_NAME, COUNTRIES, PLACEHOLDERS
+import cultures
 import nations
 import superevents
 from imgio import write_bmp, write_dds, write_tga, palette_from_header
@@ -481,11 +482,15 @@ def main():
     # ---------------------------------------------------------------- countries
     # the bookmark recommends only the placeholder countries, to keep the list short
     tags = [COUNTRIES[c][0] for c in present if c in PLACEHOLDERS]
+    # generic portraits, name lists and graphical culture by the capital's continent
+    tag_continent = {COUNTRIES[c][0]: CONTINENTS[int(cont[states[capital_state[c]][0]]) - 1]
+                     for c in present}
+    gfx = cultures.write_files(write, tag_continent, CONTINENTS)
     for c in present:
         tag, name, adj, col = COUNTRIES[c]
         write(f"common/countries/Valsora {name}.txt",
-              "graphical_culture = western_european_gfx\n"
-              "graphical_culture_2d = western_european_2d\n"
+              f"graphical_culture = {gfx[tag]}_gfx\n"
+              f"graphical_culture_2d = {gfx[tag]}_2d\n"
               f"color = {{ {col[0]} {col[1]} {col[2]} }}\n")
         write(f"history/countries/{tag} - {name}.txt", "\n".join([
             f"capital = {capital_state[c] + 1}",

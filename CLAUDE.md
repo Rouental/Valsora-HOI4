@@ -104,6 +104,7 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `build_mod.py` | every mod file |
 | `nations.py` | hand-written per-nation content (leaders, portraits, focus trees), used by `build_mod.py` |
 | `superevents.py` | TNO-style superevent windows, their texts, picture and music |
+| `cultures.py` | generic portraits, name lists and graphical culture per continent / country |
 | `check_mod.py` | re-reads the built files and checks every rule below |
 | `export_canvas.py` | previews in `dist/` |
 | `package.py` | `dist/valsora_test.zip` |
@@ -217,6 +218,15 @@ Aislada is the worked example of a built-out nation:
     - Kick Out the Parasites (Rudely): communist, both Cahuns retired.
     - Left to right: Polite, Brother, Steady, Rudely.
   - The democratic and communist parties have no defined leader, so the game generates one.
+  - **Plans for Cardonia** (x = 8, cost 1, not exclusive) creates an `annex_everything`
+    war goal on CRD. It is for testing wars without justifying.
+  - **Faction.** ROU starts as leader of "The Association of Reibonnaise States",
+    together with GDN, LST, EVR, HLR, SGV, LZC and SGN.
+    - Its template, `faction_template_reibonnaise_association` in
+      `common/factions/templates/valsora_factions.txt`, uses vanilla's generic manifest,
+      goal, rules and icon.
+    - ROU's history does `create_faction_from_template` + `add_to_faction`, the way
+      vanilla ENG does in 1.19.
 - **Nation names** come from `COUNTRIES` in `build_mod.py`: name and adjective feed
   `TAG`, `TAG_DEF`, `TAG_ADJ`, the per-ideology variants (`TAG_communism` etc.) and the
   continent key.
@@ -229,6 +239,29 @@ Aislada is the worked example of a built-out nation:
   their map colour.
 - **Formal names** (`nations.FORMAL_NAMES`, e.g. "the County of Evriches") feed
   `TAG_DEF` and the per-ideology `_DEF` keys that have no `IDEOLOGY_NAMES` entry.
+
+## Cultures (`cultures.py`): generic portraits, names, graphical culture
+
+Vanilla's generic portrait lists (`portraits/*.txt`) are keyed by Earth continents, which
+don't exist here. That was the cause of "Failed to generate a portrait / name" and
+"unknown continent europe" in error.log. So the build writes:
+- **`portraits/valsora_portraits.txt`.** One `continent = { name = <ours> … }` block per
+  continent, plus `TAG = { … }` blocks for countries that look different. Each block has
+  army / navy / political (per ideology) lists of vanilla 1.19 generic sprites.
+  `source/names/vanilla_portrait_sprites.txt` is the list of those sprites, copied from
+  vanilla `interface/_random_portraits.gfx`; `check_mod.py` checks against it.
+- **`common/names/valsora_names.txt`.** Each tag gets a vanilla culture's name block
+  (`source/names/vanilla_names.txt`). UTF-8 without BOM, like vanilla.
+- **Graphical culture** in `common/countries`.
+- **Who gets what:**
+  - The continent default applies: Nonscio GER, Araseos ITA, Aislada SWE, Solitas SPR,
+    Yastreovakia POL (all Europe portraits); Usnistan PER with Arab + African portraits
+    and middle_eastern gfx; Orientalis JAP with Asian portraits and asian gfx.
+  - Overrides are in `TAG_CULTURE`. The Reibonnaise states (ROU SGN EVR HLR SGV LST LZC
+    GDN) use FRA names and France portraits (author: French for now); Cardonia uses ENG.
+- **Scientists and operatives** have no blocks yet. Vanilla's scientist file format
+  (`998_scientist_portraits.txt`) couldn't be fetched, so "failed to generate a
+  portrait … scientist" may remain.
 
 ## Superevents (`superevents.py`)
 
@@ -357,7 +390,7 @@ Left loaded on purpose, and noisy in `error.log`:
 3. Lakes vs. inland seas (see Decisions).
 4. Country content: only Aislada has a leader and focus tree; the rest use generated
    leaders and the generic tree. No units; flags only for Rouental and its neighbours.
-   No name lists, hence "failed to generate a name/portrait" in error.log.
+   Generic portraits and name lists exist (see Cultures), but not yet for scientists.
 
 ## Working with the author
 

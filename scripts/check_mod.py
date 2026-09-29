@@ -456,6 +456,42 @@ def main(mod):
         if k not in keys:
             err(f"button text {k} has no localisation")
 
+    # ------------------------------------------------------------ portraits, names, factions
+    vanilla_sprites = set(l.strip() for l in open("source/names/vanilla_portrait_sprites.txt")
+                          if l.strip() and not l.startswith("#"))
+    for f in (mod / "portraits").glob("*.txt"):
+        text = strip(f.read_text())
+        for spr in set(re.findall(r'"(GFX_\w+)"', text)):
+            if spr not in vanilla_sprites and spr not in sprites:
+                err(f"{f.name}: portrait sprite {spr} exists neither in vanilla nor in the mod")
+        for c in re.findall(r"continent\s*=\s*\{\s*name\s*=\s*(\w+)", text):
+            if c not in continents:
+                err(f"{f.name}: continent {c} is not in map/continent.txt")
+    named = set()
+    for f in (mod / "common/names").glob("*.txt"):
+        named |= set(re.findall(r"^(\w{3}) = \{", f.read_text(encoding="utf-8"), re.M))
+    for tag in tags:
+        if tag not in named:
+            err(f"country {tag} has no name list in common/names")
+    templates = {}
+    for f in (mod / "common/factions/templates").glob("*.txt"):
+        for tname, body in re.findall(r"^(\w+)\s*=\s*\{(.*?)^\}", strip(f.read_text()), re.S | re.M):
+            templates[tname] = body
+            k = field(body, "name")
+            if k and k not in keys:
+                err(f"faction template {tname}: name {k} has no localisation")
+    for f in (mod / "history/countries").glob("*.txt"):
+        text = f.read_text()
+        for t in re.findall(r"create_faction_from_template\s*=\s*(\w+)", text):
+            if t not in templates:
+                err(f"{f.name} creates a faction from unknown template {t}")
+        for t in re.findall(r"add_to_faction\s*=\s*(\w+)", text):
+            if t not in tags:
+                err(f"{f.name} adds unknown country {t} to its faction")
+    for t in set(re.findall(r"target\s*=\s*([A-Z]{3})\b", scripted)):
+        if t not in tags:
+            err(f"a war goal or effect targets {t}, which is not a country in the mod")
+
     # ------------------------------------------------------------ descriptors
     desc = (mod / "descriptor.mod").read_text()
     rps = re.findall(r'replace_path="([^"]+)"', desc)
