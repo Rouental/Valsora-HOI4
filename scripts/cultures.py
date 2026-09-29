@@ -61,10 +61,10 @@ REGIONS = {
 
 # continent -> culture: vanilla name block, portrait region, graphical culture
 CONTINENT_CULTURE = {
-    "nonscio": dict(names="GER", portraits="europe", gfx="western_european"),
+    "nonscio": dict(names="ENG", portraits="europe", gfx="western_european"),
     "araseos": dict(names="ITA", portraits="europe", gfx="western_european"),
-    "aislada": dict(names="SWE", portraits="europe", gfx="western_european"),
-    "solitas": dict(names="SPR", portraits="europe", gfx="western_european"),
+    "aislada": dict(names="AST", portraits="europe", gfx="commonwealth"),
+    "solitas": dict(names="SWE", portraits="europe", gfx="western_european"),
     "yastreovakia": dict(names="POL", portraits="europe", gfx="eastern_european"),
     "usnistan": dict(names="PER", portraits="mideast_africa", gfx="middle_eastern"),
     "orientalis": dict(names="JAP", portraits="asia", gfx="asian"),
@@ -75,7 +75,6 @@ _FRENCH = dict(names="FRA", portraits="france", gfx="western_european")
 TAG_CULTURE = {
     # the Reibonnaise states: French for now (author, 2026-09-29)
     **{t: _FRENCH for t in ("ROU", "SGN", "EVR", "HLR", "SGV", "LST", "LZC", "GDN")},
-    "CRD": dict(names="ENG", portraits="europe", gfx="western_european"),
 }
 
 

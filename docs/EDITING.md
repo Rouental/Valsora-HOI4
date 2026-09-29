@@ -194,7 +194,10 @@ that ideology rules, like Rouental's tricolour.
 
 ### Strategic Regions
 
-One colour per region. Weather, air zones and naval zones work per region.
+One colour per region. Weather, air zones and naval zones work per region. **Sea zones
+are painted in blues, land regions in anything but blue**, so they are easy to tell
+apart. Keep to that when you add or repaint one. To make a sea zone bigger, paint its
+blue over a neighbouring sea zone; to split one, paint part of it a new blue.
 - **Sea and land need separate regions.** Lakes go with the land around them.
 - **A sea region must be one connected body of water.**
 - **A state must lie inside one region.** A land province with no land-region colour
@@ -223,6 +226,9 @@ other.
 3. That's it. States, Countries, Regions and Continents fill themselves in from the
    nearest land, and the heightmap lifts it above sea level. Paint those layers too if
    you want it to go somewhere specific.
+
+**Make a lake navigable.** Ships can't sail on lakes. Terrain layer: paint the lake in
+the ocean colour (8, 31, 130). Strategic Regions layer: give it a blue of its own.
 
 **Remove land / make a new lake.** Terrain layer: paint it ocean or lakes. Provinces
 layer: repaint it as its own water province(s), or merge it into the neighbouring sea

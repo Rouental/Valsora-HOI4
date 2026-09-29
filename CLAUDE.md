@@ -100,6 +100,7 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `regions.py` | placeholder mode only: states, strategic regions |
 | `make_game_pdn.py` / `writepdn.py` | turn a placeholder build into a fresh `HOI4 Mod Map.pdn` |
 | `apply_outlines.py` | by hand: the author's outline layers → provinces, states, countries in the `.pdn` |
+| `pdn_tools.py` | by hand: `navigable` (lake → sea with its own region), `sea_zones` (regroup and recolour regions) |
 | `rivers.py` | plain river lines → HOI4 rivers.bmp format, and the river rules check |
 | `build_mod.py` | every mod file |
 | `nations.py` | hand-written per-nation content (leaders, portraits, focus trees), used by `build_mod.py` |
@@ -157,8 +158,17 @@ mismatch, missing localisation) and catches all of them.
 - **Islands under 16 px are dropped and ponds under 64 px filled.** About 660 islets go
   this way; they are 1–4 px specks at game scale.
 - **Enclosed water becomes lakes**, including the author's inland seas (Piscary, Norlany,
-  Sasurs). If they should be navigable, they need to become sea provinces in their own
-  naval regions.
+  Sasurs).
+  - The two inland seas that have islands are navigable sea (author's request), each in
+    a sea region of its own: Nonscio's, south of Rouental, and Yastreovakia's northern
+    one. They were made with `pdn_tools.py navigable`.
+  - Other lakes stay lakes.
+- **Sea zones are large** (author's request, to tinker with). `pdn_tools.py sea_zones
+  1536` regrouped the sea provinces into 17 regions on a 1536 × 768 px grid, split into
+  connected pieces, with small pieces merged into their neighbour.
+- **Region colours.** Sea regions are always blues (hue 0.53–0.70). Land regions are
+  never blue, cyan or indigo (hue 0.42–0.82 is excluded), so the author can tell them
+  apart on the layer.
 - **States** bucket land provinces on a 96 px grid per continent, split into connected
   pieces; small island pieces join the nearest state within 160 px. **Land regions**
   bucket whole states on a 384 px grid; **sea regions** bucket sea provinces on a 512 px
@@ -254,11 +264,12 @@ don't exist here. That was the cause of "Failed to generate a portrait / name" a
   (`source/names/vanilla_names.txt`). UTF-8 without BOM, like vanilla.
 - **Graphical culture** in `common/countries`.
 - **Who gets what:**
-  - The continent default applies: Nonscio GER, Araseos ITA, Aislada SWE, Solitas SPR,
-    Yastreovakia POL (all Europe portraits); Usnistan PER with Arab + African portraits
-    and middle_eastern gfx; Orientalis JAP with Asian portraits and asian gfx.
-  - Overrides are in `TAG_CULTURE`. The Reibonnaise states (ROU SGN EVR HLR SGV LST LZC
-    GDN) use FRA names and France portraits (author: French for now); Cardonia uses ENG.
+  - The continent defaults (author's choices) all use Europe portraits except where
+    noted: Nonscio ENG, Araseos ITA, Aislada AST (commonwealth gfx), Solitas SWE,
+    Yastreovakia POL. Usnistan is PER with Arab + African portraits and middle_eastern
+    gfx; Orientalis is JAP with Asian portraits and asian gfx.
+  - Overrides are in `TAG_CULTURE`: the Reibonnaise states (ROU SGN EVR HLR SGV LST LZC
+    GDN) use FRA names and France portraits (author: French for now).
 - **Scientists and operatives** have no blocks yet. Vanilla's scientist file format
   (`998_scientist_portraits.txt`) couldn't be fetched, so "failed to generate a
   portrait … scientist" may remain.
@@ -365,7 +376,7 @@ Left loaded on purpose, and noisy in `error.log`:
 
 ## Current state
 
-- 5,564 provinces (4,881 land, 614 sea, 69 lakes), 663 states, 127 strategic regions,
+- 5,564 provinces (4,881 land, 644 sea, 39 lakes), 663 states, 97 strategic regions (17 sea),
   16 countries. Real: Rouental and its seven neighbours (56 states, about 175
   provinces), and Cardonia to the north (67 states, about 300 provinces). Cardonia is
   17 outlined patches plus nine islands the author's References layer colours
