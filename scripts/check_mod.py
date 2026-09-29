@@ -418,15 +418,23 @@ def main(mod):
     for ev in set(re.findall(r"country_event\s*=\s*\{\s*id\s*=\s*([\w.]+)", scripted)):
         if ev not in events:
             err(f"event {ev} is fired but not defined")
-    songs = {}
-    for f in (mod / "music").glob("*.asset"):
+    # songs: defined in a music/**/*.asset next to their file, and (the game ignores them
+    # otherwise: "Song doesnt exist") listed in a station .txt with music_station = "..."
+    songs, in_station = {}, set()
+    for f in (mod / "music").rglob("*.asset"):
         for name, fn in re.findall(r'name\s*=\s*"(\w+)"\s*file\s*=\s*"([^"]+)"', f.read_text()):
             songs[name] = fn
-            if not (mod / "music" / fn).exists():
-                err(f"song {name} points at missing music/{fn}")
+            if not (f.parent / fn).exists():
+                err(f"song {name} points at missing {(f.parent / fn).relative_to(mod)}")
+    for f in (mod / "music").rglob("*.txt"):
+        text = strip(f.read_text())
+        if re.search(r"music_station\s*=", text):
+            in_station |= set(re.findall(r'song\s*=\s*"(\w+)"', text))
     for song in set(re.findall(r'play_song\s*=\s*"(\w+)"', scripted)):
         if song not in songs:
             err(f"play_song {song} is not defined in music/")
+        elif song not in in_station:
+            err(f"play_song {song} is not in any music station, so the game won't find it")
     for f in (mod / "common/scripted_localisation").glob("*.txt"):
         for k in re.findall(r"localization_key\s*=\s*(\w+)", f.read_text()):
             if k not in keys:

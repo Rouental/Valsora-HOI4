@@ -61,6 +61,8 @@ SUPEREVENTS = [
 
 # song name -> audio file in source/superevents (Ogg Vorbis, like vanilla music)
 SONGS = {"valsora_gladiators": "entry_of_the_gladiators.ogg"}
+SONG_TITLES = {"valsora_gladiators": "Julius Fucik - Entry of the Gladiators"}
+STATION = "valsora"  # music station the songs live in
 
 
 def flag(se):
@@ -84,6 +86,152 @@ def fit(path):
     x0, y0 = (w - tw) // 2, (h - th) // 2
     im = im.crop((x0, y0, x0 + tw, y0 + th)).resize((PIC_W, PIC_H), Image.LANCZOS)
     return np.dstack([np.asarray(im), np.full((PIC_H, PIC_W), 255, np.uint8)])
+
+
+def background(w, h):
+    """A dark, faintly textured panel with a gold double frame."""
+    rng = np.random.default_rng(5)
+    y = np.linspace(0, 1, h)[:, None]
+    base = 24 + 10 * (1 - y) + rng.normal(0, 2.5, (h, w))
+    img = np.dstack([base * 0.95, base, base * 1.12]).clip(0, 255)
+    gold, dim = np.array([176, 148, 88]), np.array([120, 100, 60])
+    img[:3], img[-3:], img[:, :3], img[:, -3:] = gold, gold, gold, gold
+    img[7], img[-8], img[7:-7, 7], img[7:-7, -8] = dim, dim, dim, dim
+    x0, y0 = 30, 62  # frame around the picture
+    img[y0 - 2:y0, x0 - 2:x0 + PIC_W + 2] = gold
+    img[y0 + PIC_H:y0 + PIC_H + 2, x0 - 2:x0 + PIC_W + 2] = gold
+    img[y0 - 2:y0 + PIC_H + 2, x0 - 2:x0] = gold
+    img[y0 - 2:y0 + PIC_H + 2, x0 + PIC_W:x0 + PIC_W + 2] = gold
+    return np.dstack([img.round().astype(np.uint8), np.full((h, w), 255, np.uint8)])
+
+
+def write_station_interface(write, out):
+    """The radio menu entry and faceplate every music station needs (layout from the
+    Music Mod Creation Tool's HOI4 template), with a cover showing the first picture."""
+    cover = Image.fromarray(fit(SUPEREVENTS[0]["picture"])[..., :3]).resize((162, 130), Image.LANCZOS)
+    a = np.asarray(cover).astype(float)
+    frames = np.concatenate([a * 0.75, a], axis=1)  # normal, selected
+    path = out / f"gfx/interface/valsora/radio_station_cover_{STATION}.dds"
+    write_dds(path, np.dstack([frames.round().astype(np.uint8), np.full((130, 324), 255, np.uint8)]))
+    write(f"interface/{STATION}_music_station.gfx", "spriteTypes = {\n\tspriteType = {\n"
+          f'\t\tname = "GFX_radio_station_cover_{STATION}"\n'
+          f'\t\ttexturefile = "gfx/interface/valsora/radio_station_cover_{STATION}.dds"\n'
+          "\t\tnoOfFrames = 2\n\t}\n}\n")
+    write(f"interface/{STATION}_music_station.gui", STATION_GUI.replace("STATION", STATION))
+
+
+STATION_GUI = """guiTypes = {
+	containerWindowType = {
+		name = "STATION_faceplate"
+		position = { x = 0 y = 0 }
+		size = { width = 590 height = 46 }
+		iconType = {
+			name = "musicplayer_header_bg"
+			spriteType = "GFX_musicplayer_header_bg"
+			position = { x = 0 y = 0 }
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "track_name"
+			position = { x = 72 y = 20 }
+			font = "hoi_18b"
+			text = ""
+			maxWidth = 450
+			maxHeight = 25
+			format = center
+		}
+		instantTextboxType = {
+			name = "track_elapsed"
+			position = { x = 124 y = 30 }
+			font = "hoi_18b"
+			text = "00:00"
+			maxWidth = 50
+			maxHeight = 25
+			format = center
+		}
+		instantTextboxType = {
+			name = "track_duration"
+			position = { x = 420 y = 30 }
+			font = "hoi_18b"
+			text = "00:00"
+			maxWidth = 50
+			maxHeight = 25
+			format = center
+		}
+		buttonType = {
+			name = "prev_button"
+			position = { x = 220 y = 20 }
+			quadTextureSprite = "GFX_musicplayer_previous_button"
+			buttonFont = "Main_14_black"
+			Orientation = "LOWER_LEFT"
+			clicksound = click_close
+			pdx_tooltip = "MUSICPLAYER_PREV"
+		}
+		buttonType = {
+			name = "play_button"
+			position = { x = 263 y = 20 }
+			quadTextureSprite = "GFX_musicplayer_play_pause_button"
+			buttonFont = "Main_14_black"
+			Orientation = "LOWER_LEFT"
+			clicksound = click_close
+		}
+		buttonType = {
+			name = "next_button"
+			position = { x = 336 y = 20 }
+			quadTextureSprite = "GFX_musicplayer_next_button"
+			buttonFont = "Main_14_black"
+			Orientation = "LOWER_LEFT"
+			clicksound = click_close
+			pdx_tooltip = "MUSICPLAYER_NEXT"
+		}
+		extendedScrollbarType = {
+			name = "volume_slider"
+			position = { x = 100 y = 45 }
+			size = { width = 75 height = 18 }
+			tileSize = { width = 12 height = 12 }
+			maxValue = 100
+			minValue = 0
+			stepSize = 1
+			startValue = 50
+			horizontal = yes
+			orientation = lower_left
+			origo = lower_left
+			setTrackFrameOnChange = yes
+			slider = {
+				name = "Slider"
+				quadTextureSprite = "GFX_scroll_drager"
+				position = { x = 0 y = 1 }
+				pdx_tooltip = "MUSICPLAYER_ADJUST_VOL"
+			}
+			track = {
+				name = "Track"
+				quadTextureSprite = "GFX_volume_track"
+				position = { x = 0 y = 3 }
+				alwaystransparent = yes
+				pdx_tooltip = "MUSICPLAYER_ADJUST_VOL"
+			}
+		}
+		buttonType = {
+			name = "shuffle_button"
+			position = { x = 425 y = 20 }
+			quadTextureSprite = "GFX_toggle_shuffle_buttons"
+			buttonFont = "Main_14_black"
+			Orientation = "LOWER_LEFT"
+			clicksound = click_close
+		}
+	}
+	containerWindowType = {
+		name = "STATION_stations_entry"
+		size = { width = 162 height = 130 }
+		checkBoxType = {
+			name = "select_station_button"
+			position = { x = 0 y = 0 }
+			quadTextureSprite = "GFX_radio_station_cover_STATION"
+			clicksound = decisions_ui_button
+		}
+	}
+}
+"""
 
 
 def write_files(write, out):
@@ -167,7 +315,7 @@ def write_files(write, out):
         "\t\tmoveable = yes",
         "\t\tshow_sound = event_popup",
         "\t\thide_sound = menu_close_window",
-        '\t\tbackground = { name = "Background" spriteType = "GFX_tiled_window_transparent" }',
+        '\t\tbackground = { name = "Background" spriteType = "GFX_valsora_superevent_bg" }',
         "\t\tinstantTextBoxType = {",
         '\t\t\tname = "valsora_superevent_title"',
         "\t\t\tposition = { x = 30 y = 18 }",
@@ -207,6 +355,11 @@ def write_files(write, out):
         "\t}",
         "}", ""]))
     gfx = []
+    bg = out / "gfx/interface/valsora/superevent_bg.dds"
+    bg.parent.mkdir(parents=True, exist_ok=True)
+    write_dds(bg, background(W, H))
+    gfx.append('\tspriteType = {\n\t\tname = "GFX_valsora_superevent_bg"\n'
+               '\t\ttexturefile = "gfx/interface/valsora/superevent_bg.dds"\n\t}\n')
     for pic in pictures:
         path = out / f"gfx/interface/valsora/superevent_{Path(pic).stem}.dds"
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -215,15 +368,22 @@ def write_files(write, out):
                    f'\t\ttexturefile = "gfx/interface/valsora/superevent_{Path(pic).stem}.dds"\n\t}}\n')
     write("interface/valsora_superevent.gfx", "spriteTypes = {\n" + "".join(gfx) + "}\n")
 
-    # music
-    (out / "music").mkdir(parents=True, exist_ok=True)
-    asset = []
+    # music: HOI4 only knows songs that belong to a music station, so the superevent
+    # songs get a station of their own ("Valsora Radio" in the radio menu), where they
+    # have zero chance of coming up in normal play
+    st = out / "music" / STATION
+    st.mkdir(parents=True, exist_ok=True)
+    asset, txt = [], [f'music_station = "{STATION}"', ""]
     for name, f in SONGS.items():
-        (out / "music" / f).write_bytes((SRC / f).read_bytes())
+        (st / f).write_bytes((SRC / f).read_bytes())
         asset.append(f'music = {{\n\tname = "{name}"\n\tfile = "{f}"\n\tvolume = 0.8\n}}\n')
-    write("music/valsora_superevents.asset", "".join(asset))
+        txt.append(f'music = {{\n\tsong = "{name}"\n\tchance = {{\n\t\tmodifier = {{ factor = 0 }}\n\t}}\n}}\n')
+    write(f"music/{STATION}/{STATION}.asset", "".join(asset))
+    write(f"music/{STATION}/{STATION}.txt", "\n".join(txt))
+    write_station_interface(write, out)
 
-    loc = [' VAL_SE_CLOSE:0 "History Marches On"']
+    loc = [' VAL_SE_CLOSE:0 "History Marches On"', f' {STATION}_TITLE:0 "Valsora Radio"']
+    loc += [f' {name}:0 "{title}"' for name, title in SONG_TITLES.items()]
     for se in SUPEREVENTS:
         key = f"VAL_SE_{se['id'].upper()}"
         loc += [f' {key}_TITLE:0 "{se["title"]}"', f' {key}_QUOTE:0 "\\"{se["quote"]}\\""',

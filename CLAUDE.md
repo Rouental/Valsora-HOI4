@@ -232,7 +232,9 @@ Aislada is the worked example of a built-out nation:
 
 ## Superevents (`superevents.py`)
 
-TNO-style, built only from vanilla pieces. **Not yet confirmed in-game.** How they work:
+TNO-style, built only from vanilla pieces. **Confirmed in-game** (author, 2026-09-29):
+the first build showed window, picture and text, but no music and no background (both
+fixed below, not yet retested). How they work:
 - **Calling one.** `valsora_superevent_<id> = yes` (inside `hidden_effect` in a focus).
   It sets global flag `valsora_superevent_<id>`, clearing the others, and fires hidden
   event `valsora_superevent.N` for every human player.
@@ -243,18 +245,27 @@ TNO-style, built only from vanilla pieces. **Not yet confirmed in-game.** How th
   localisation keyed on the global flags. There is one picture icon per distinct image,
   shown via `<element>_visible` triggers. The close button's `_click` clears the flag.
 - **Assets.** The music is `source/superevents/entry_of_the_gladiators.ogg`: the first
-  45 s of the author's MP3 with a 4 s fade, Vorbis like vanilla music. It is declared
-  in `music/valsora_superevents.asset`. Pictures are cropped to 2:1 and scaled to
-  840×420 DDS.
+  45 s of the author's MP3 with a 4 s fade, Vorbis like vanilla music.
+- **Songs must belong to a music station**, or `play_song` logs "Song doesnt exist" (the
+  first build had only an `.asset`).
+  - Layout, from the Music Mod Creation Tool's HOI4 template: `music/valsora/` holds the
+    `.ogg`, `valsora.asset` (`music = { name file volume }`) and `valsora.txt`
+    (`music_station = "valsora"` + `music = { song chance }`, here chance factor 0).
+  - The station also needs `interface/valsora_music_station.gui` (`valsora_faceplate`
+    and `valsora_stations_entry`), a 2-frame cover sprite, and loc `valsora_TITLE`
+    ("Valsora Radio") plus each song key.
+- **Pictures** are cropped to 2:1 and scaled to 840×420 DDS.
+- **Background.** `GFX_tiled_window_transparent` is see-through (vanilla's event window
+  gets its look from separate header/footer images), so the window has its own
+  generated background, `superevent_bg.dds`: dark, with gold frames.
 - **Current set.** Five superevents: one per Rouental focus and one for AIS "Fucking
   Explode". The quotes are Claude-written, and all use the author's anime picture.
 - **Checks.** `check_mod.py` checks scripted effects and events that are used, songs
   and their files, scripted localisation keys, and GUI window, element, sprite and
   button-text references (mutation-tested).
-- **If it fails in-game:**
-  - the likeliest suspects are `play_song` finding a song that is only in an `.asset`
-    and in no station file;
-  - then the font names (copied from vanilla `eventwindow.gui` / `topbar.gui`).
+- **error.log on that test** also had 128 pairs of `Icon definition "" / "_small"`
+  (icon_entry.cpp) when a second game was started. Source unknown, not seen before;
+  watch for it.
 
 `check_mod.py` also checks that recruited characters exist and are localised, that portrait
 sprites resolve to files, and that every focus id and prerequisite is valid and localised.
