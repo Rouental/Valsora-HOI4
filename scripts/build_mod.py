@@ -16,6 +16,7 @@ from scipy import ndimage as ndi
 
 from common import MAP_W, MAP_H, CONTINENTS, MOD_NAME, MOD_DIR_NAME, COUNTRIES, PLACEHOLDERS
 import nations
+import superevents
 from imgio import write_bmp, write_dds, write_tga, palette_from_header
 
 W, H = MAP_W, MAP_H
@@ -577,6 +578,7 @@ def main():
             ' VALSORA_BOOKMARK_DESC:0 "Placeholder map of Valsora: square provinces, one country per continent."',
             ' VALSORA_PLACEHOLDER_DESC:0 "A placeholder country, until the real ones are drawn."']
     loc += nations.LOCALISATION
+    loc += superevents.write_files(write, OUT)
     write("localisation/english/valsora_l_english.yml", "\n".join(loc) + "\n", bom=True)
     nations.write_files(write, OUT)
     vp_ids = {int(pid[c]) for c in state_capital}

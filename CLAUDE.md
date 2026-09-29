@@ -98,6 +98,7 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `rivers.py` | plain river lines → HOI4 rivers.bmp format, and the river rules check |
 | `build_mod.py` | every mod file |
 | `nations.py` | hand-written per-nation content (leaders, portraits, focus trees), used by `build_mod.py` |
+| `superevents.py` | TNO-style superevent windows, their texts, picture and music |
 | `check_mod.py` | re-reads the built files and checks every rule below |
 | `export_canvas.py` | previews in `dist/` |
 | `package.py` | `dist/valsora_test.zip` |
@@ -223,6 +224,32 @@ Aislada is the worked example of a built-out nation:
   their map colour.
 - **Formal names** (`nations.FORMAL_NAMES`, e.g. "the County of Evriches") feed
   `TAG_DEF` and the per-ideology `_DEF` keys that have no `IDEOLOGY_NAMES` entry.
+
+## Superevents (`superevents.py`)
+
+TNO-style, built only from vanilla pieces. **Not yet confirmed in-game.** How they work:
+- **Calling one.** `valsora_superevent_<id> = yes` (inside `hidden_effect` in a focus).
+  It sets global flag `valsora_superevent_<id>`, clearing the others, and fires hidden
+  event `valsora_superevent.N` for every human player.
+- **The event** sets country flag `valsora_superevent_open` and does
+  `play_song = "valsora_gladiators"`, the way vanilla plays its speeches.
+- **The window.** A `player_context` scripted GUI (`valsora_superevent_window`) is
+  visible while that flag is set. Title, quote and author come from scripted
+  localisation keyed on the global flags. There is one picture icon per distinct image,
+  shown via `<element>_visible` triggers. The close button's `_click` clears the flag.
+- **Assets.** The music is `source/superevents/entry_of_the_gladiators.ogg`: the first
+  45 s of the author's MP3 with a 4 s fade, Vorbis like vanilla music. It is declared
+  in `music/valsora_superevents.asset`. Pictures are cropped to 2:1 and scaled to
+  840×420 DDS.
+- **Current set.** Five superevents: one per Rouental focus and one for AIS "Fucking
+  Explode". The quotes are Claude-written, and all use the author's anime picture.
+- **Checks.** `check_mod.py` checks scripted effects and events that are used, songs
+  and their files, scripted localisation keys, and GUI window, element, sprite and
+  button-text references (mutation-tested).
+- **If it fails in-game:**
+  - the likeliest suspects are `play_song` finding a song that is only in an `.asset`
+    and in no station file;
+  - then the font names (copied from vanilla `eventwindow.gui` / `topbar.gui`).
 
 `check_mod.py` also checks that recruited characters exist and are localised, that portrait
 sprites resolve to files, and that every focus id and prerequisite is valid and localised.

@@ -181,6 +181,7 @@ FOCUS_TREE = """focus_tree = {
 		cost = 10
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
+			hidden_effect = { valsora_superevent_ais_explode = yes }
 			capital_scope = {
 				add_manpower = -100
 			}
@@ -230,6 +231,7 @@ ROU_FOCUS_TREE = """focus_tree = {
 		mutually_exclusive = { focus = ROU_kick_out_brother focus = ROU_parasites_rude focus = ROU_steady_as_she_goes }
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
+			hidden_effect = { valsora_superevent_rou_polite = yes }
 			set_popularities = {
 				democratic = 100
 				fascism = 0
@@ -254,6 +256,7 @@ ROU_FOCUS_TREE = """focus_tree = {
 		mutually_exclusive = { focus = ROU_parasites_polite focus = ROU_parasites_rude focus = ROU_steady_as_she_goes }
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
+			hidden_effect = { valsora_superevent_rou_brother = yes }
 			set_popularities = {
 				democratic = 0
 				fascism = 100
@@ -278,6 +281,7 @@ ROU_FOCUS_TREE = """focus_tree = {
 		mutually_exclusive = { focus = ROU_parasites_polite focus = ROU_kick_out_brother focus = ROU_steady_as_she_goes }
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
+			hidden_effect = { valsora_superevent_rou_rude = yes }
 			set_popularities = {
 				democratic = 0
 				fascism = 0
@@ -302,6 +306,7 @@ ROU_FOCUS_TREE = """focus_tree = {
 		mutually_exclusive = { focus = ROU_parasites_polite focus = ROU_parasites_rude focus = ROU_kick_out_brother }
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
+			hidden_effect = { valsora_superevent_rou_steady = yes }
 			set_popularities = {
 				democratic = 0
 				fascism = 0

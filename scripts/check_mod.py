@@ -401,6 +401,53 @@ def main(mod):
                 if pre not in ids:
                     err(f"{f.name}: {pre} is referenced but is not a focus in the tree")
 
+    # ------------------------------------------------------------ superevents and other scripting
+    effects = set()
+    for f in (mod / "common/scripted_effects").glob("*.txt"):
+        effects |= set(re.findall(r"^(\w+)\s*=\s*\{", strip(f.read_text()), re.M))
+    events = set()
+    for f in (mod / "events").glob("*.txt"):
+        events |= set(re.findall(r"^\s*id\s*=\s*([\w.]+)", strip(f.read_text()), re.M))
+    scripted = ""
+    for d in ("common/national_focus", "common/scripted_effects", "events"):
+        for f in (mod / d).glob("*.txt"):
+            scripted += strip(f.read_text()) + "\n"
+    for name in set(re.findall(r"\b(valsora_\w+)\s*=\s*yes", scripted)):
+        if name not in effects:
+            err(f"scripted effect {name} is used but not defined")
+    for ev in set(re.findall(r"country_event\s*=\s*\{\s*id\s*=\s*([\w.]+)", scripted)):
+        if ev not in events:
+            err(f"event {ev} is fired but not defined")
+    songs = {}
+    for f in (mod / "music").glob("*.asset"):
+        for name, fn in re.findall(r'name\s*=\s*"(\w+)"\s*file\s*=\s*"([^"]+)"', f.read_text()):
+            songs[name] = fn
+            if not (mod / "music" / fn).exists():
+                err(f"song {name} points at missing music/{fn}")
+    for song in set(re.findall(r'play_song\s*=\s*"(\w+)"', scripted)):
+        if song not in songs:
+            err(f"play_song {song} is not defined in music/")
+    for f in (mod / "common/scripted_localisation").glob("*.txt"):
+        for k in re.findall(r"localization_key\s*=\s*(\w+)", f.read_text()):
+            if k not in keys:
+                err(f"scripted localisation key {k} has no localisation")
+    gui = "".join(f.read_text() for f in (mod / "interface").glob("*.gui"))
+    gui_names = set(re.findall(r'name\s*=\s*"(\w+)"', gui))
+    for f in (mod / "common/scripted_guis").glob("*.txt"):
+        text = strip(f.read_text())
+        for w in re.findall(r'window_name\s*=\s*"(\w+)"', text):
+            if w not in gui_names:
+                err(f"scripted GUI window {w} is not in any interface/*.gui")
+        for el in re.findall(r"^\s*(\w+)_(?:click|visible)\s*=", text, re.M):
+            if el not in gui_names:
+                err(f"scripted GUI refers to element {el}, which no .gui defines")
+    for spr in set(re.findall(r'(?:spriteType|quadTextureSprite)\s*=\s*"(GFX_valsora_\w+)"', gui)):
+        if spr not in sprites:
+            err(f"GUI sprite {spr} is not defined in interface/")
+    for k in re.findall(r'buttonText\s*=\s*"(\w+)"', gui):
+        if k not in keys:
+            err(f"button text {k} has no localisation")
+
     # ------------------------------------------------------------ descriptors
     desc = (mod / "descriptor.mod").read_text()
     rps = re.findall(r'replace_path="([^"]+)"', desc)
