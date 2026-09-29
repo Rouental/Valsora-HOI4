@@ -179,6 +179,7 @@ with no land left is simply left out of the game.
 | Lustiana | LST | 200, 118, 152 |
 | Lanzerac | LZC | 128, 162, 76 |
 | Guedelon | GDN | 58, 88, 138 |
+| Cardonia | CRD | 193, 77, 184 |
 
 The first seven are the placeholders, one per continent, and the only ones the start
 menu recommends. Brand-new countries need a line of code as well (tag, name and colour
@@ -239,5 +240,8 @@ neighbours were made:
    (about 12 × 12 pixels). Leave no gaps in the lines, or the patch will leak into its
    neighbour.
 4. Write each country's name in or next to its patches on any layer, e.g. "Names".
-5. Upload and ask. A script (`scripts/apply_outlines.py`) turns the patches into
+5. Islands you want included but can't outline, just mention (or colour them on a
+   reference layer).
+6. Upload and ask. Areas that already belong to a real country are left alone, so
+   you can outline one region at a time. A script (`scripts/apply_outlines.py`) turns the patches into
    states, provinces and owners on the real layers, and makes new countries.

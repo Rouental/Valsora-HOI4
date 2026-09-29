@@ -43,6 +43,7 @@ FORMAL_NAMES = {
     "SGV": "the Duchy of Selgrave",
     "HLR": "the Principality of Hollier",
     "ROU": "the Holy Principality of Rouental",
+    "CRD": "the Cardonian Kingdom",
 }
 
 LOCALISATION = [

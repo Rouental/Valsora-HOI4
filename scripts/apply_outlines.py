@@ -16,6 +16,7 @@ that leftover slivers of cut placeholder provinces and states join a neighbour.
     python3 scripts/apply_outlines.py <input.pdn>
 """
 import shutil
+import subprocess
 import sys
 from collections import Counter, defaultdict
 from pathlib import Path
@@ -24,28 +25,30 @@ import numpy as np
 from scipy import ndimage as ndi
 from skimage.measure import label as sklabel
 
-from common import COUNTRIES, MAP_W as W, MAP_H as H, MIN_PROVINCE
+from common import COUNTRIES, MAP_W as W, MAP_H as H, MIN_PROVINCE, PLACEHOLDERS
 from writepdn import write_pdn
 
-SRC = Path("work/pdn_new")
+SRC = Path("work/pdn_outlines")  # the input .pdn, decoded here first
 OUT = Path("source/HOI4 Mod Map.pdn")
 LINE_LAYERS = ["Borders", "Necessary Provinces"]
 OCEAN, LAKES = (8, 31, 130), (55, 90, 220)
 
-# Rouental and its neighbours (author's map of 2026-09-29). (x, y) = a pixel inside.
-DEFAULT_OWNER = "rouental"
+# Who gets the newly outlined patches. Patches already painted in a real (non-
+# placeholder) country's colour were done by an earlier run and are left alone, so
+# each run only needs the new countries. (x, y) = a pixel inside a patch.
+#
+# 2026-09-29, Rouental and neighbours: DEFAULT_OWNER "rouental"; selgrave (859, 762),
+# lanzerac (853, 781), lustiana (823, 786), evriches (797, 802), hollier (845, 815),
+# seigne (811, 818), guedelon (748, 871); rouental exclaves (829, 765), (798, 792),
+# (823, 803) and the lake island (811, 906), which has no outline.
+# 2026-09-29, Cardonia north of Rouental: every new patch, plus the islands the
+# author's References layer colours Cardonian (they have no outlines).
+DEFAULT_OWNER = "cardonia"
 OWNERS = {
-    "selgrave": [(859, 762)],
-    "lanzerac": [(853, 781)],
-    "lustiana": [(823, 786)],
-    "evriches": [(797, 802)],
-    "hollier": [(845, 815)],
-    "seigne": [(811, 818)],
-    "guedelon": [(748, 871)],
-    # Rouental's exclaves ("RT") are enclosed patches like the rest; the lake island
-    # has no outline, so it is named here to be included
-    "rouental": [(829, 765), (798, 792), (823, 803), (811, 906)],
+    "cardonia": [(873, 630), (905, 593), (920, 548), (605, 646), (598, 726),
+                 (698, 536), (618, 549), (593, 562), (689, 580)],
 }
+MIN_STATE = 150      # smaller patches (islets) join the nearest state of their country
 STATE_MAX = 1000     # patches bigger than this become several states ...
 STATE_AREA = 650     # ... of about this size
 PROVINCE_AREA = 150  # target province size inside the outlines (placeholders: 1024)
@@ -119,6 +122,8 @@ def kmeans_split(ys, xs, k, seed=0):
 
 
 def main():
+    subprocess.run([sys.executable, str(Path(__file__).parent / "readpdn.py"), sys.argv[1], str(SRC)],
+                   check=True, stdout=subprocess.DEVNULL)
     names = (SRC / "layers.txt").read_text().splitlines()
     L = {nm: np.load(SRC / f"layer{k}.npy") for k, nm in enumerate(names)}
     terr = code(L["Terrain"][..., :3])
@@ -142,12 +147,20 @@ def main():
     chosen = [i for i in np.nonzero(touch)[0] if i != outside] + \
         [i for i in owner_of if not touch[i]]
     chosen = sorted(set(chosen))
+    # skip patches an earlier run already turned into a real country
+    K0 = code(L["Countries"][..., :3])
+    real = [code(np.array(COUNTRIES[c][3])) for c in COUNTRIES if c not in PLACEHOLDERS]
+    done = np.isin(K0, real) & land
+    dsum = np.bincount(cells[done], minlength=len(size))
+    before = len(chosen)
+    chosen = [i for i in chosen if dsum[i] * 2 < size[i]]
+    print(f"{before - len(chosen)} patches were outlined by an earlier run and are kept as they are")
     for i in chosen:
         owner_of.setdefault(int(i), DEFAULT_OWNER)
     # line pixels on land go to the nearest patch (inside or out)
     idx = ndi.distance_transform_edt(cells == 0, return_distances=False, return_indices=True)
     cells = np.where(land & (cells == 0), cells[idx[0], idx[1]], cells)
-    area = np.isin(cells, chosen)
+    area = np.isin(cells, chosen) & ~done
     print(f"{len(chosen)} outlined patches, {area.sum()} px, outside patch {outside}")
 
     P = code(L["Provinces"][..., :3])
@@ -227,6 +240,21 @@ def main():
     S = np.where(L["States"][..., 3] > 0, code(L["States"][..., :3]), -1)
     scols = Colours(S[S >= 0], 2)
     newS = S.copy()
+    # islets too small for a state of their own join the nearest state of their country
+    cent = {}
+    for c in prov_state:
+        ys, xs = np.nonzero(win == c)
+        cent[c] = (ys.mean(), xs.mean())
+    patch_size = {i: int(size[i]) for i in chosen}
+    for c, key in list(prov_state.items()):
+        if patch_size[key[0]] >= MIN_STATE:
+            continue
+        best = min((k for k in prov_state if patch_size[prov_state[k][0]] >= MIN_STATE
+                    and prov_owner[k] == prov_owner[c]),
+                   key=lambda k: np.hypot(cent[k][0] - cent[c][0], cent[k][1] - cent[c][1]),
+                   default=None)
+        if best is not None:
+            prov_state[c] = prov_state[best]
     # one state per (patch, piece), as drawn
     groups = defaultdict(list)
     for c, key in prov_state.items():

@@ -43,6 +43,7 @@ COUNTRIES = {
     "lustiana": ("LST", "Lustiana", "Lustianan", (200, 118, 152)),
     "lanzerac": ("LZC", "Lanzerac", "Lanzeracois", (128, 162, 76)),
     "guedelon": ("GDN", "Guedelon", "Guedelonnais", (58, 88, 138)),
+    "cardonia": ("CRD", "Cardonia", "Cardonian", (193, 77, 184)),
 }
 # The placeholder countries, one per continent, are the recommended starts in the
 # bookmark; the rest are playable but not listed there.

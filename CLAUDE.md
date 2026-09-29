@@ -64,7 +64,12 @@ lines, see below). Unknown layer names are ignored, so the author keeps their ow
     ~650 px states that fill the same shape.
   - Every state is cut into ~150 px provinces for a granular map (placeholder bricks
     elsewhere are 1,024 px). Pieces are forced 4-connected.
-  - `OWNERS` names patches by seed pixel; the rest go to `DEFAULT_OWNER`.
+  - `OWNERS` names patches by seed pixel; the rest go to `DEFAULT_OWNER`. Each run only
+    needs the new region: patches already painted in a real (non-placeholder) country
+    colour are skipped, and past runs' seeds are kept as comments. The script decodes
+    its input `.pdn` itself (`work/pdn_outlines`).
+  - Islets under 150 px join the nearest state of their country instead of becoming
+    states.
   - Cut placeholder provinces and states are cleaned up iteratively: scraps join a
     neighbour (a new province's scrap stays in its state), never a new state, and
     states are forced into one region.
@@ -162,7 +167,7 @@ mismatch, missing localisation) and catches all of them.
     tag, so Solitas is `SLT`). They are `common.PLACEHOLDERS`, the only countries the
     bookmark recommends (author's wish, to keep the start menu short).
   - Real countries the author drew: Rouental ROU, Seigne SGN, Evriches EVR, Hollier
-    HLR, Selgrave SGV, Lustiana LST, Lanzerac LZC, Guedelon GDN. All tags were checked
+    HLR, Selgrave SGV, Lustiana LST, Lanzerac LZC, Guedelon GDN, Cardonia CRD. All tags were checked
     against vanilla `common/country_tags`; new tags must be too.
   - The adjectives of the neighbours are guesses; the author may rename them.
 - **Localisation keys are our own** (`VAL_STATE_n`, `VAL_REGION_n`), so vanilla's
@@ -315,10 +320,12 @@ Left loaded on purpose, and noisy in `error.log`:
 
 ## Current state
 
-- 5,312 provinces (4,629 land, 614 sea, 69 lakes), 603 states, 127 strategic regions,
-  15 countries. Rouental and its seven neighbours are real: the author's 54 outlined
-  patches became 56 states and about 175 provinces. Everything else is still
-  placeholder bricks. Two rivers in Rouental.
+- 5,564 provinces (4,881 land, 614 sea, 69 lakes), 663 states, 127 strategic regions,
+  16 countries. Real: Rouental and its seven neighbours (56 states, about 175
+  provinces), and Cardonia to the north (67 states, about 300 provinces). Cardonia is
+  17 outlined patches plus nine islands the author's References layer colours
+  Cardonian (seeded by hand). Everything else is still placeholder bricks. Two rivers
+  in Rouental.
 - **Rouental build loads and plays** (author, 2026-09-29): its error.log had nothing from
   our map or files, only vanilla noise and the name/portrait generation lines.
 - **Loads in-game without crashing** (first build, confirmed by the author). Its
