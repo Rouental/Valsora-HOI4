@@ -64,6 +64,13 @@ lines, see below). Unknown layer names are ignored, so the author keeps their ow
     ~650 px states that fill the same shape.
   - Every state is cut into ~150 px provinces for a granular map (placeholder bricks
     elsewhere are 1,024 px). Pieces are forced 4-connected.
+  - **Borders are organic** (`organic.py`, from 2026-09-29 on). k-means places the
+    pieces; then each grows from the pixel nearest its k-means centre by a compact
+    watershed over fractal noise (compactness 0.2 / spacing, noise at 0.6 / 0.25 / 0.09
+    of the spacing). The author approved this wiggliness from a preview.
+  - Areas outlined earlier (Rouental and neighbours, Cardonia) keep their k-means
+    borders, and placeholder bricks stay: the author will outline more nations and
+    touch borders up by hand, rather than re-cutting what exists.
   - `OWNERS` names patches by seed pixel; the rest go to `DEFAULT_OWNER`. Each run only
     needs the new region: patches already painted in a real (non-placeholder) country
     colour are skipped, and past runs' seeds are kept as comments. The script decodes
@@ -101,6 +108,7 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `make_game_pdn.py` / `writepdn.py` | turn a placeholder build into a fresh `HOI4 Mod Map.pdn` |
 | `apply_outlines.py` | by hand: the author's outline layers → provinces, states, countries in the `.pdn` |
 | `pdn_tools.py` | by hand: `navigable` (lake → sea with its own region), `sea_zones` (regroup and recolour regions) |
+| `organic.py` | organic splitting (seeded watershed over noise), used by `apply_outlines.py` |
 | `rivers.py` | plain river lines → HOI4 rivers.bmp format, and the river rules check |
 | `build_mod.py` | every mod file |
 | `nations.py` | hand-written per-nation content (leaders, portraits, focus trees), used by `build_mod.py` |

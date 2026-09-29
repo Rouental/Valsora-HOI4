@@ -26,6 +26,7 @@ from scipy import ndimage as ndi
 from skimage.measure import label as sklabel
 
 from common import COUNTRIES, MAP_W as W, MAP_H as H, MIN_PROVINCE, PLACEHOLDERS
+import organic
 from writepdn import write_pdn
 
 SRC = Path("work/pdn_outlines")  # the input .pdn, decoded here first
@@ -121,6 +122,23 @@ def kmeans_split(ys, xs, k, seed=0):
     return grid[ys - y0, xs - x0]
 
 
+def organic_split(ys, xs, k, seed=0):
+    """k pieces with natural borders: k-means picks where the pieces sit, then each grows
+    from the pixel nearest its k-means centre over noise (organic.py)."""
+    if k <= 1:
+        return np.zeros(len(ys), int)
+    a = kmeans_split(ys, xs, k, seed)
+    seeds = []
+    for j in range(k):
+        m = a == j
+        if not m.any():
+            continue
+        cy, cx = ys[m].mean(), xs[m].mean()
+        i = np.argmin((ys[m] - cy) ** 2 + (xs[m] - cx) ** 2)
+        seeds.append((ys[m][i], xs[m][i]))
+    return organic.split(ys, xs, seeds, seed)
+
+
 def main():
     subprocess.run([sys.executable, str(Path(__file__).parent / "readpdn.py"), sys.argv[1], str(SRC)],
                    check=True, stdout=subprocess.DEVNULL)
@@ -172,13 +190,13 @@ def main():
     for i in chosen:
         ys, xs = np.nonzero(cells == i)
         ks = max(1, round(len(ys) / STATE_AREA)) if len(ys) > STATE_MAX else 1
-        st = kmeans_split(ys, xs, ks, seed=int(i))
+        st = organic_split(ys, xs, ks, seed=int(i))
         for j in range(ks):
             sy, sx = ys[st == j], xs[st == j]
             if len(sy) == 0:
                 continue
             kp = min(max(1, round(len(sy) / PROVINCE_AREA)), len(sy) // MIN_PROVINCE or 1)
-            parts = kmeans_split(sy, sx, kp, seed=int(i) * 31 + j)
+            parts = organic_split(sy, sx, kp, seed=int(i) * 31 + j)
             for q in range(kp):
                 if not (parts == q).any():
                     continue
