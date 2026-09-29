@@ -47,6 +47,12 @@ LAND_STACKS = [0, 1, 9, 10, 21, 22, 38]
 SEA_STACKS = [0, 1, 2, 9, 10, 11, 12, 21, 22, 23, 30, 31, 38]
 
 
+def ui_colour(rgb):
+    """Colour for text and flags in the UI: a quarter of the way to white, so dark map
+    colours (Lustiana's black) stay readable, as vanilla's color_ui is brighter too."""
+    return tuple(round(v + (255 - v) * 0.25) for v in rgb)
+
+
 def cosmetic(tag, ideology):
     """Cosmetic tag used while `ideology` rules `tag` (see nations.LOOKS)."""
     return f"{tag}_{ideology.upper()}"
@@ -497,7 +503,7 @@ def main():
         write(f"common/countries/Valsora {name}.txt",
               f"graphical_culture = {gfx[tag]}_gfx\n"
               f"graphical_culture_2d = {gfx[tag]}_2d\n"
-              f"color = {{ {col[0]} {col[1]} {col[2]} }}\n")
+              f"color = rgb {{ {col[0]} {col[1]} {col[2]} }}\n")
         write(f"history/countries/{tag} - {name}.txt", "\n".join([
             f"capital = {capital_state[c] + 1}",
             "set_research_slots = 3",
@@ -568,8 +574,13 @@ def main():
     write("common/on_actions/valsora_on_actions.txt", "\n".join([
         "on_actions = {", "\ton_ruling_party_change = {", "\t\teffect = {", *looks,
         "\t\t}", "\t}", "}", ""]))
+    # the map colour comes from colors.txt, not the country file: tags missing there get
+    # generated colours (in-game, 2026-09-29), so ours replaces vanilla's
+    write("common/countries/colors.txt", "#reload countrycolors\n\n" + "".join(
+        f"{COUNTRIES[c][0]} = {{\n\tcolor = rgb {{ {r} {g} {b} }}\n\tcolor_ui = rgb {{ {' '.join(map(str, ui_colour((r, g, b))))} }}\n}}\n"
+        for c in present for r, g, b in [COUNTRIES[c][3]]))
     write("common/countries/cosmetic.txt", "".join(
-        f"{cosmetic(tag, i)} = {{\n\tcolor = rgb {{ {r} {g} {b} }}\n\tcolor_ui = rgb {{ {r} {g} {b} }}\n}}\n"
+        f"{cosmetic(tag, i)} = {{\n\tcolor = rgb {{ {r} {g} {b} }}\n\tcolor_ui = rgb {{ {' '.join(map(str, ui_colour((r, g, b))))} }}\n}}\n"
         for tag, per in nations.LOOKS.items() for i, (r, g, b) in per.items()))
     ideologies.write_files(write, OUT)
     for d in ("common/decisions", "common/ai_strategy", "common/ai_strategy_plans",

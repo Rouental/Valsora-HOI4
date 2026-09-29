@@ -189,7 +189,7 @@ in `scripts/common.py`); ask for them, or draw them as outlines (below).
 
 Flags are PNG pictures in `source/flags/`, named by tag: `ROU.png`, `EVR.png`… Any
 size works; the build shrinks them to the game's sizes. A flag named
-`TAG_democratic.png` (or `_fascism`, `_communism`, `_neutrality`) is shown only while
+`TAG_democratic.png` (or `_fascism`, `_communism`, `_neutrality`, `_theocracy`) is shown only while
 that ideology rules, like Rouental's tricolour.
 
 ### Strategic Regions

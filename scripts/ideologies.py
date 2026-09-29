@@ -15,6 +15,7 @@ import re
 from pathlib import Path
 
 import numpy as np
+from PIL import Image
 
 from imgio import write_dds
 
@@ -107,18 +108,32 @@ def ideology_file():
     return text[:end] + block + "}\n"
 
 
+POLITICS_GUI = Path("source/interface/vanilla_countrypoliticsview.gui")
+# vanilla's party list has room for four 16 px rows; five fit at 13 px, one px higher
+PARTY_ROW = 13
+PARTY_GRID = ("position = { x = 260 y = 184 }\n\t\t\t\tsize = { width = 100%% height = 100%% }\n"
+              "\t\t\t\tslotsize = { width = 230 height = 16 }")
+
+
+def politics_gui():
+    """Vanilla's politics view with the party list squeezed so five ideologies fit."""
+    s = POLITICS_GUI.read_text(encoding="utf-8")
+    if PARTY_GRID not in s:
+        raise SystemExit(f"{POLITICS_GUI}: parties_grid not found as expected")
+    return s.replace(PARTY_GRID, PARTY_GRID.replace("y = 184", "y = 183")
+                     .replace("height = 16", f"height = {PARTY_ROW}"))
+
+
+ICON = Path("source/ideologies/theocracy_placeholder.png")  # author's placeholder, to be replaced
+
+
 def icon():
-    """A 64x64 party icon for Theocratic: a white cross on a gold disc."""
-    s = 64
-    y, x = np.mgrid[0:s, 0:s]
-    d = np.hypot(y - s / 2 + 0.5, x - s / 2 + 0.5)
-    img = np.zeros((s, s, 4), np.uint8)
-    disc = d < s / 2 - 2
-    img[disc] = (190, 150, 60, 255)
-    img[(d >= s / 2 - 4) & disc] = (120, 90, 30, 255)
-    cross = ((abs(x - s / 2) < 5) & (y > 12) & (y < 52)) | ((abs(y - 26) < 5) & (x > 18) & (x < 46))
-    img[cross & disc] = (250, 250, 245, 255)
-    return img
+    """The 64x64 party icon for Theocratic: the author's placeholder picture, centre-cropped."""
+    im = Image.open(ICON).convert("RGBA")
+    w, h = im.size
+    k = min(w, h)
+    im = im.crop(((w - k) // 2, (h - k) // 2, (w - k) // 2 + k, (h - k) // 2 + k))
+    return np.asarray(im.resize((64, 64), Image.LANCZOS))
 
 
 def write_files(write, out):
@@ -129,5 +144,6 @@ def write_files(write, out):
     write("interface/valsora_ideologies.gfx", "spriteTypes = {\n\tspriteType = {\n"
           '\t\tname = "GFX_ideology_theocracy_group"\n'
           '\t\ttexturefile = "gfx/interface/ideologies/valsora_theocracy_group.dds"\n\t}\n}\n')
+    write("interface/countrypoliticsview.gui", politics_gui())
     write("localisation/english/replace/valsora_ideologies_l_english.yml",
           "l_english:\n" + "\n".join(LOCALISATION) + "\n", bom=True)

@@ -275,8 +275,12 @@ working; names come from `localisation/english/replace/`:
 - `fascism` is Authoritarian, coloured black (20,20,20).
 - `neutrality` is Monarchist, coloured purple (128,48,168).
 - `theocracy` Theocratic is **new**, coloured white (238,238,238). Its sub-ideologies are
-  `theocrat` and `clerical_monarchism`, and its party icon is a generated
-  `GFX_ideology_theocracy_group`.
+  `theocrat` and `clerical_monarchism`. Its party icon `GFX_ideology_theocracy_group` is
+  a placeholder, `source/ideologies/theocracy_placeholder.png` (the anime picture),
+  centre-cropped to 64×64. The author and a friend will draw the real icons.
+- **Party list.** Vanilla's politics view fits four 16 px party rows. `interface/countrypoliticsview.gui`
+  is vanilla's (`source/interface/`) with `parties_grid` rows at 13 px, so five fit;
+  `check_mod.py` checks it.
 
 How it's built:
 - `common/ideologies/00_ideologies.txt` overrides vanilla. It is vanilla's file
@@ -286,6 +290,10 @@ How it's built:
 - `check_mod.py` checks that popularities name real ideologies and sum to 100, that
   every `ruling_party` / `has_government` is an ideology, and that character
   sub-ideologies exist.
+
+**Map colours come from `common/countries/colors.txt`**, not the `color` in each
+country file. Tags missing there got random colours in-game, which is why most were
+wrong until the build wrote its own (`color` plus a lighter `color_ui`).
 
 **Map colour per government** (`nations.LOOKS`) uses cosmetic tags `TAG_<IDEOLOGY>`,
 defined in `common/countries/cosmetic.txt`. An `on_ruling_party_change` on_action sets

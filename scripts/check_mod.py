@@ -452,9 +452,17 @@ def main(mod):
     for spr in set(re.findall(r'(?:spriteType|quadTextureSprite)\s*=\s*"(GFX_valsora_\w+)"', gui)):
         if spr not in sprites:
             err(f"GUI sprite {spr} is not defined in interface/")
-    for k in re.findall(r'buttonText\s*=\s*"(\w+)"', gui):
+    own_gui = "".join(f.read_text() for f in (mod / "interface").glob("valsora_*.gui"))
+    for k in re.findall(r'buttonText\s*=\s*"(\w+)"', own_gui):  # vanilla overrides use vanilla keys
         if k not in keys:
             err(f"button text {k} has no localisation")
+    # the party list: vanilla's box holds 4 x 16 px rows
+    pv = mod / "interface/countrypoliticsview.gui"
+    row = re.search(r'"parties_grid".*?slotsize\s*=\s*\{[^}]*height\s*=\s*(\d+)', pv.read_text(), re.S) \
+        if pv.exists() else None
+    n_ideo = len(re.findall(r"^\t(\w+) = \{", (mod / "common/ideologies/00_ideologies.txt").read_text(), re.M))
+    if n_ideo * (int(row.group(1)) if row else 16) > 4 * 16 + 2:
+        err(f"{n_ideo} ideologies do not fit the politics view's party list")
 
     # ------------------------------------------------------------ portraits, names, factions
     vanilla_sprites = set(l.strip() for l in open("source/names/vanilla_portrait_sprites.txt")
