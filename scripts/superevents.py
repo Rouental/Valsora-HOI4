@@ -386,6 +386,7 @@ def write_files(write, out):
     loc += [f' {name}:0 "{title}"' for name, title in SONG_TITLES.items()]
     for se in SUPEREVENTS:
         key = f"VAL_SE_{se['id'].upper()}"
-        loc += [f' {key}_TITLE:0 "{se["title"]}"', f' {key}_QUOTE:0 "\\"{se["quote"]}\\""',
+        # §W ... §! = white: the typewriter fonts draw dark on the dark panel
+        loc += [f' {key}_TITLE:0 "§W{se["title"]}§!"', f' {key}_QUOTE:0 "§W\\"{se["quote"]}\\"§!"',
                 f' {key}_AUTHOR:0 "- {se["author"]}"']
     return loc

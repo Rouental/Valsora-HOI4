@@ -234,7 +234,8 @@ Aislada is the worked example of a built-out nation:
 
 TNO-style, built only from vanilla pieces. **Confirmed in-game** (author, 2026-09-29):
 the first build showed window, picture and text, but no music and no background (both
-fixed below, not yet retested). How they work:
+fixed below and confirmed: music plays, background shows). Title and quote are
+white via `§W…§!` in their localisation (the typewriter fonts draw dark). How they work:
 - **Calling one.** `valsora_superevent_<id> = yes` (inside `hidden_effect` in a focus).
   It sets global flag `valsora_superevent_<id>`, clearing the others, and fires hidden
   event `valsora_superevent.N` for every human player.
