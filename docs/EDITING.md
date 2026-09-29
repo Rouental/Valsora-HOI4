@@ -43,13 +43,16 @@ files and so on). The build writes all of them.
 |---|---|---|
 | **Heightmap** | 3D relief: how high the ground looks | No: roughly is fine |
 | **Terrain** | what is land, sea or lake, plus each province's terrain type | Yes, for land vs water |
-| **Rivers** | rivers (empty for now) | Yes, if you add any |
+| **Rivers** | rivers in HOI4's exact format (optional, for experts) | Yes |
 | **Continents** | which continent each land province belongs to | No: blanks are filled in |
 | **Provinces** | every province's shape | **Yes: the most important layer** |
 | **Strategic Regions** | weather and air/naval zones | No: blanks are filled in |
 | **States** | states: what a country owns, and where factories go | No: blanks are filled in |
 | **Countries** | who owns each state at the start | No: blanks are filled in |
 | **Notes (ignored by the build)** | nothing: the old drawing's country colours, for reference | – |
+| **Major Rivers**, **Minor Rivers** (optional) | rivers, drawn as simple lines | No: the build tidies them |
+
+Any other layer (your references, names, sketches) is ignored by the build.
 
 "Blanks are filled in" means: if you leave a spot transparent, it joins whatever is
 painted nearest to it, and the build tells you where it did that.
@@ -103,16 +106,30 @@ looks; the terrain *type* comes from the Terrain layer.
 
 ### Rivers
 
-Leave it transparent for no rivers. HOI4 rivers are fiddly:
-- A river is a **1-pixel-wide** line drawn with the Pencil, on land only.
-- It starts with one **green** pixel, and every other pixel is a shade of blue.
-- A **red** pixel marks where it flows into another river.
-- A **yellow** pixel marks where it splits off.
-- The game reports broken rivers in `error.log`.
+**The easy way: the Major Rivers and Minor Rivers layers.** Draw each river as a
+1-pixel line with the Pencil, in any colour, on land. Major rivers count as large
+rivers in the game (a bigger attack penalty to cross), minor ones as small rivers.
+The build converts them into HOI4's fussy format for you:
+- The end nearest the sea (or a lake) is the mouth. If the line stops a few pixels
+  short of the water, it is extended to reach it.
+- The longest line is the main river and gets the green source pixel. Every side
+  branch becomes a tributary with a red pixel where it joins.
+- Diagonal steps get an extra pixel, because HOI4 rivers may only connect edge to edge.
+- Tiny loops and stubs (under 6 px) are tidied away.
+- Rivers widen towards the mouth.
+
+The build prints how many pixels it drew. Ask to see a close-up if you want to check.
+
+Rivers matter in combat when they lie **between** two provinces: HOI4 counts a river
+crossing when the line between two province centres crosses a river. A river running
+through the middle of provinces still looks right but slows fewer attacks.
+
+**The exact way: the Rivers layer.** Anything painted here is used as it is, in HOI4's
+own colours, and wins over the Major/Minor layers where both have a pixel:
 
 | Pixel | Colour |
 |---|---|
-| start of a river | 0, 255, 0 |
+| start of a river (one per river) | 0, 255, 0 |
 | joins another river | 255, 0, 0 |
 | splits off | 255, 252, 0 |
 | narrowest → widest | 0, 225, 255 · 0, 200, 255 · 0, 150, 255 · 0, 100, 255 · 0, 0, 255 · 0, 0, 225 · 0, 0, 200 · 0, 0, 150 · 0, 0, 100 |
@@ -147,16 +164,25 @@ with no land left is simply left out of the game.
 
 | Country | Tag | Colour |
 |---|---|---|
-| Nonscio (Rouental) | NSC | 216, 84, 84 |
+| Nonscio | NSC | 216, 84, 84 |
 | Araseos | ARS | 116, 152, 206 |
 | Aislada | AIS | 70, 170, 70 |
 | Solitas | SLT | 214, 110, 214 |
 | Yastreovakia | YAS | 96, 190, 150 |
 | Usnistan | USN | 184, 172, 100 |
 | Orientalis | ORI | 236, 160, 70 |
+| Rouental | ROU | 215, 174, 95 |
+| Seigne | SGN | 122, 92, 164 |
+| Evriches | EVR | 64, 128, 112 |
+| Hollier | HLR | 158, 98, 58 |
+| Selgrave | SGV | 86, 108, 164 |
+| Lustiana | LST | 200, 118, 152 |
+| Lanzerac | LZC | 128, 162, 76 |
+| Guedelon | GDN | 58, 88, 138 |
 
-Brand-new countries need a line of code as well (tag, name and colour in
-`scripts/common.py`). Ask, and it's a one-line change.
+The first seven are the placeholders, one per continent, and the only ones the start
+menu recommends. Brand-new countries need a line of code as well (tag, name and colour
+in `scripts/common.py`); ask for them, or draw them as outlines (below).
 
 ### Strategic Regions
 
@@ -195,6 +221,17 @@ layer: repaint it as its own water province(s), or merge it into the neighbourin
 province with the Paint Bucket.
 
 **Make mountains.** Terrain layer: mountain colour. Heightmap: paint brighter greys.
+
+**Draw new countries and provinces as outlines.** This is how Rouental and its
+neighbours were made:
+1. On a layer called **Borders**, draw country borders as 1-pixel Pencil lines.
+2. On a layer called **Necessary Provinces**, draw the lines inside a country that
+   must become province borders.
+3. Every closed-off patch of land becomes a province. Leave no gaps in the lines, or
+   the patch will leak into its neighbour.
+4. Write each country's name in or next to its patches on any layer, e.g. "Names".
+5. Upload and ask. A script (`scripts/apply_outlines.py`) turns the patches into
+   provinces, states and owners on the real layers, and makes new countries.
 
 ---
 

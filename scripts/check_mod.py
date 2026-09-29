@@ -16,6 +16,7 @@ from skimage.measure import label as sklabel
 
 sys.path.insert(0, str(Path(__file__).parent))
 from imgio import read_bmp  # noqa: E402
+from rivers import problems as river_problems  # noqa: E402
 
 VANILLA_STATE_CATEGORIES = {"wasteland", "enclave", "tiny_island", "pastoral", "small_island",
                             "rural", "town", "large_town", "city", "large_city", "metropolis",
@@ -167,6 +168,10 @@ def main(mod):
             err("terrain.bmp: water must be index 15 (ocean)")
         if name == "terrain" and (bm["img"][pix_kind == 1] == 15).any():
             err("terrain.bmp: land uses the ocean index 15")
+        if name == "rivers":
+            riv = bm["img"]
+            for m in river_problems(np.where(riv <= 11, riv, 255).astype(np.uint8), pix_kind == 1):
+                err(f"rivers.bmp: {m}")
         if name == "heightmap":
             hm = bm["img"]
             if (hm[pix_kind == 1] <= 95).any():

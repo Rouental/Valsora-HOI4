@@ -14,7 +14,7 @@ import numpy as np
 from PIL import Image
 from scipy import ndimage as ndi
 
-from common import MAP_W, MAP_H, CONTINENTS, MOD_NAME, MOD_DIR_NAME, COUNTRIES
+from common import MAP_W, MAP_H, CONTINENTS, MOD_NAME, MOD_DIR_NAME, COUNTRIES, PLACEHOLDERS
 import nations
 from imgio import write_bmp, write_dds, write_tga, palette_from_header
 
@@ -189,7 +189,7 @@ def main():
     # owner of every state: from the Countries layer, or the continent's placeholder
     owners = [by_tag[t] for t in rj["owners"]] if "owners" in rj else \
         [CONTINENTS[int(cont[g[0]]) - 1] for g in states]
-    present = [c for c in CONTINENTS if c in owners]  # countries that own a state
+    present = [c for c in COUNTRIES if c in owners]  # countries that own a state
     n = len(kind)
     pid = np.arange(n) + 1  # HOI4 province ids start at 1
     pix_kind = kind[lab]  # repairs may have moved single pixels between kinds
@@ -476,10 +476,10 @@ def main():
           + frame("frame_border_logo_entity", "frame_border_logo_entity_top", 300, W // 2, 0, H + 82))
 
     # ---------------------------------------------------------------- countries
-    tags = []
+    # the bookmark recommends only the placeholder countries, to keep the list short
+    tags = [COUNTRIES[c][0] for c in present if c in PLACEHOLDERS]
     for c in present:
         tag, name, adj, col = COUNTRIES[c]
-        tags.append(tag)
         write(f"common/countries/Valsora {name}.txt",
               "graphical_culture = western_european_gfx\n"
               "graphical_culture_2d = western_european_2d\n"
@@ -561,7 +561,7 @@ def main():
     loc += [f' VAL_REGION_{r + 1}:0 "{region_name[r]}"' for r in range(len(regions))]
     loc += [' VALSORA_BOOKMARK:0 "Valsora"',
             ' VALSORA_BOOKMARK_DESC:0 "Placeholder map of Valsora: square provinces, one country per continent."',
-            ' VALSORA_PLACEHOLDER_DESC:0 "A placeholder country covering its whole continent."']
+            ' VALSORA_PLACEHOLDER_DESC:0 "A placeholder country, until the real ones are drawn."']
     loc += nations.LOCALISATION
     write("localisation/english/valsora_l_english.yml", "\n".join(loc) + "\n", bom=True)
     nations.write_files(write, OUT)

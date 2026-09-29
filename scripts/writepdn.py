@@ -69,10 +69,11 @@ def write_pdn(template, out, layers, names=None, visible=None, opacity=None):
     g0 = 7 + n
     g1 = buf.find(b"\x0b\x00\x00\x04\x00\x00", g0) + 1  # MessageEnd, then layer data
     graph = buf[g0:g1]
-    graph = _patch(graph, ow, w, "<i", 2 * nl + 1)
-    graph = _patch(graph, oh, h, "<i", 2 * nl + 1)
-    graph = _patch(graph, ow * 4, w * 4, "<i", nl)
-    graph = _patch(graph, ow * oh * 4, w * h * 4, "<q", nl)
+    if (ow, oh) != (w, h):
+        graph = _patch(graph, ow, w, "<i", 2 * nl + 1)
+        graph = _patch(graph, oh, h, "<i", 2 * nl + 1)
+        graph = _patch(graph, ow * 4, w * 4, "<i", nl)
+        graph = _patch(graph, ow * oh * 4, w * h * 4, "<q", nl)
     if names is not None:
         graph = _set_layer_props(graph, names, visible or [True] * nl, opacity or [255] * nl)
 

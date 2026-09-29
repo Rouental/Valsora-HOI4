@@ -32,12 +32,15 @@ from common import (MAP_W, MAP_H, CONT_COLOURS, COUNTRIES, TERRAIN_TYPES,
                     TERRAIN_OCEAN, TERRAIN_LAKE, MAX_BOX)
 from imgio import palette_from_header
 from provinces import adjacency, crossings, repair
+import rivers as river_lines
 from regions import anchors
 
 W, H = MAP_W, MAP_H
 SRC = Path(sys.argv[1] if len(sys.argv) > 1 else "work/pdn_game")
 LAYERS = ["Heightmap", "Terrain", "Rivers", "Continents", "Provinces", "Strategic Regions",
           "States", "Countries"]
+# rivers drawn as plain lines, converted by rivers.py
+OPTIONAL = ["Major Rivers", "Minor Rivers"]
 MIN_PIXELS = 8
 
 errors, notes = [], []
@@ -55,6 +58,9 @@ def load():
         if want not in names:
             sys.exit(f'The .pdn has no layer named "{want}". Layers found: {names}')
         out[want] = np.load(SRC / f"layer{names.index(want)}.npy")
+    for opt in OPTIONAL:
+        if opt in names:
+            out[opt] = np.load(SRC / f"layer{names.index(opt)}.npy")
     if out["Provinces"].shape[:2] != (H, W):
         sys.exit(f"The .pdn must be {W}x{H} pixels.")
     return out
@@ -354,7 +360,17 @@ def main():
     rv = to_palette(L["Rivers"], rpal, list(range(12)), "Rivers")
     if ((rv >= 0) & water).any():
         print(f"note: Rivers: {((rv >= 0) & water).sum()} river pixels on water were ignored")
-    rivers = np.where((rv >= 0) & ~water, rv, np.where(water, 254, 255)).astype(np.uint8)
+    if any(nm in L for nm in OPTIONAL):
+        lines = {nm: (L[nm][..., 3] > 0) if nm in L else np.zeros((H, W), bool) for nm in OPTIONAL}
+        auto = river_lines.trace(lines["Major Rivers"], lines["Minor Rivers"], ~water)
+        drawn = sum(int(m.sum()) for m in lines.values())
+        rv = np.where(rv >= 0, rv, np.where(auto != river_lines.NONE, auto, -1))
+        print(f"note: Rivers: {drawn} pixels drawn on Major/Minor Rivers became "
+              f"{(auto != river_lines.NONE).sum()} river pixels")
+    rv = np.where(water, -1, rv)
+    for m in river_lines.problems(np.where(rv >= 0, rv, river_lines.NONE).astype(np.uint8), ~water):
+        print("note: river problem (the game may draw this river wrong):", m)
+    rivers = np.where(rv >= 0, rv, np.where(water, 254, 255)).astype(np.uint8)
     terrain_bmp = np.where(water, TERRAIN_OCEAN, terr).astype(np.uint8)
     t_major = majority(terrain_bmp.astype(np.int64), lab, n)
     ptype = [TERRAIN_TYPES[int(t)] if kind[i] == 1 else ("ocean" if kind[i] == 0 else "lakes")

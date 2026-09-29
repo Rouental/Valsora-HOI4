@@ -24,7 +24,8 @@ BLOCKS = ["WEST", "AISLADA", "SOLITAS", "YASTREOVAKIA", "USNISTAN", "ORIENTALIS"
 
 # HOI4 continents (map/continent.txt), in order: definition.csv uses index + 1.
 CONTINENTS = ["nonscio", "araseos", "aislada", "solitas", "yastreovakia", "usnistan", "orientalis"]
-# One placeholder country per continent: tag, name, adjective, colour.
+# Countries: tag, name, adjective, colour. The first seven are the placeholders, one
+# per continent, keyed by continent.
 COUNTRIES = {
     "nonscio": ("NSC", "Nonscio", "Nonscian", (216, 84, 84)),
     "araseos": ("ARS", "Araseos", "Araseosi", (116, 152, 206)),
@@ -33,7 +34,19 @@ COUNTRIES = {
     "yastreovakia": ("YAS", "Yastreovakia", "Yastreovakian", (96, 190, 150)),
     "usnistan": ("USN", "Usnistan", "Usnistani", (184, 172, 100)),
     "orientalis": ("ORI", "Orientalis", "Orientalian", (236, 160, 70)),
+    # real countries drawn by the author (tags checked against vanilla's country_tags)
+    "rouental": ("ROU", "Rouental", "Rouentaise", (215, 174, 95)),
+    "seigne": ("SGN", "Seigne", "Seignois", (122, 92, 164)),
+    "evriches": ("EVR", "Evriches", "Evrichois", (64, 128, 112)),
+    "hollier": ("HLR", "Hollier", "Hollierois", (158, 98, 58)),
+    "selgrave": ("SGV", "Selgrave", "Selgravian", (86, 108, 164)),
+    "lustiana": ("LST", "Lustiana", "Lustianan", (200, 118, 152)),
+    "lanzerac": ("LZC", "Lanzerac", "Lanzeracois", (128, 162, 76)),
+    "guedelon": ("GDN", "Guedelon", "Guedelonnais", (58, 88, 138)),
 }
+# The placeholder countries, one per continent, are the recommended starts in the
+# bookmark; the rest are playable but not listed there.
+PLACEHOLDERS = CONTINENTS
 
 # Graphical terrain: terrain.bmp palette index -> terrain type (vanilla 1.19.3
 # common/terrain/00_terrain.txt). The index's palette colour is what the Terrain layer

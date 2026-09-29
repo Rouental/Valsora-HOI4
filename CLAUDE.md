@@ -25,8 +25,9 @@ The author edits this file from now on; `docs/EDITING.md` is their guide (keep i
 step with `read_layers.py`). It is exactly game size (5120×2560, one pixel = one map
 pixel), and each layer is one kind of game data, found **by name**. Bottom to top:
 Heightmap, Terrain, Rivers, Continents, Provinces, Strategic Regions, States, Countries,
-and "Notes (ignored by the build)". Unknown layer names are ignored, so the author may
-add their own.
+and "Notes (ignored by the build)". Optional: "Major Rivers" / "Minor Rivers" (plain
+lines, see below). Unknown layer names are ignored, so the author keeps their own
+(References, Names, Borders, Necessary Provinces…).
 - **Provinces**: one colour per province, which is also its provinces.bmp colour. Ids
   are assigned in reading order (first pixel, row by row), so they shift when provinces
   change. Refer to places by `capital:TAG`, never by id.
@@ -42,8 +43,33 @@ add their own.
 - **Errors and notes.** Real errors (split or tiny provinces, black or transparent
   pixels, mixed or split regions, a state in two regions) stop the build with a numbered
   list of (x, y) pixel positions. X-crossings are repaired automatically.
-- **Heightmap**: clamped to 94 / 96 on the wrong side of sea level. Rivers use the
-  rivers.bmp palette; river pixels on water are dropped.
+- **Heightmap**: clamped to 94 / 96 on the wrong side of sea level.
+- **Rivers** (`rivers.py`). HOI4 needs rivers 1 px wide, edge-connected only, with
+  exactly one green source per system and red flow-ins where tributaries join (vanilla
+  wiki). The author draws plain lines on "Major Rivers" / "Minor Rivers" (any colour).
+  `rivers.trace` converts them:
+  - it skeletonises the lines and picks the mouth as the end nearest water, extending
+    it up to 8 px to reach the water;
+  - the main stem runs to the farthest end, preferring major pixels; side branches
+    become tributaries, recursively;
+  - diagonal steps get corners, and loops/U-turns are shortcut;
+  - branches under 6 px are dropped;
+  - widths: major 7→9, minor 4→5 (7+ is a large river).
+  The exact-palette "Rivers" layer wins where set, and river pixels on water are
+  dropped. `check_mod.py` checks the result with `rivers.problems`.
+- **Outlines → provinces** (`apply_outlines.py`, run by hand, not by `run_all.sh`).
+  The author draws 1-px country borders on "Borders" and province lines on "Necessary
+  Provinces".
+  - Every enclosed patch becomes a province; patches over 2,000 px would be k-means
+    split.
+  - `OWNERS` names patches by seed pixel; the rest go to `DEFAULT_OWNER`.
+  - Each other country is one state; the default owner's states are grown to about
+    3,500 px, with exclaves and islands separate.
+  - Cut placeholder provinces and states are cleaned up iteratively: scraps join
+    neighbours, never a new state, and states are forced into one region.
+  - It rewrites Provinces / States / Countries / Strategic Regions and saves
+    `source/HOI4 Mod Map.pdn`, using the author's upload as the template;
+    `writepdn` copies the object graph verbatim when the size is unchanged.
 - **Regenerating the file.** `make_game_pdn.py` writes it from a placeholder build.
   `writepdn.py` copies the original `.pdn`'s object graph (nine layers), patches the size
   fields (19 widths, 19 heights, 9 strides, 9 lengths) and rewrites each layer's name,
@@ -67,6 +93,8 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `provinces.py` | placeholder mode only: brick provinces, sliver merging, X-crossing repair |
 | `regions.py` | placeholder mode only: states, strategic regions |
 | `make_game_pdn.py` / `writepdn.py` | turn a placeholder build into a fresh `HOI4 Mod Map.pdn` |
+| `apply_outlines.py` | by hand: the author's outline layers → provinces, states, countries in the `.pdn` |
+| `rivers.py` | plain river lines → HOI4 rivers.bmp format, and the river rules check |
 | `build_mod.py` | every mod file |
 | `nations.py` | hand-written per-nation content (leaders, portraits, focus trees), used by `build_mod.py` |
 | `check_mod.py` | re-reads the built files and checks every rule below |
@@ -127,8 +155,14 @@ mismatch, missing localisation) and catches all of them.
   pieces; small island pieces join the nearest state within 160 px. **Land regions**
   bucket whole states on a 384 px grid; **sea regions** bucket sea provinces on a 512 px
   grid and must stay contiguous. Lakes go into the land region they border most.
-- **Countries**: one placeholder per continent. Tags are NSC ARS AIS SLT YAS USN ORI;
-  `SOL` is a vanilla tag, so Solitas is `SLT`.
+- **Countries**:
+  - One placeholder per continent: NSC ARS AIS SLT YAS USN ORI (`SOL` is a vanilla
+    tag, so Solitas is `SLT`). They are `common.PLACEHOLDERS`, the only countries the
+    bookmark recommends (author's wish, to keep the start menu short).
+  - Real countries the author drew: Rouental ROU, Seigne SGN, Evriches EVR, Hollier
+    HLR, Selgrave SGV, Lustiana LST, Lanzerac LZC, Guedelon GDN. All tags were checked
+    against vanilla `common/country_tags`; new tags must be too.
+  - The adjectives of the neighbours are guesses; the author may rename them.
 - **Localisation keys are our own** (`VAL_STATE_n`, `VAL_REGION_n`), so vanilla's
   `STATE_n` / `STRATEGICREGION_n` Earth names never show. Victory point names have to
   reuse vanilla's `VICTORY_POINTS_<id>` keys, so they live in `localisation/english/replace/`.
@@ -160,10 +194,12 @@ Aislada is the worked example of a built-out nation:
   `"capital:TAG"` (e.g. Aislada's capital is "The Great and Noble City of Merlovia") or
   by province id. Ids shift whenever the map is rebuilt, so prefer the capital key;
   `build_mod.py` stops if a named id is no longer a victory point.
-- **Nonscio → Rouental.** `nations.IDEOLOGY_NAMES["NSC"]` gives the per-ideology names
-  from the author's localisation file (Perfect / Powerful / Boring / Shitty Rouental,
-  adjective Rouentaise). The base `NSC` name is still "Nonscio".
-  - Leaders are in `common/characters/NSC.txt`: Roland Cahun (`despotism`, leads at
+- **Rouental (ROU)** is the country the author outlined inside Nonscio. Everything
+  first built for NSC moved to it, with `NSC_` renamed `ROU_`; NSC is plain "Nonscio"
+  again. `nations.IDEOLOGY_NAMES["ROU"]` gives the per-ideology names from the author's
+  localisation file (Perfect / Powerful / Boring / Shitty Rouental, adjective
+  Rouentaise).
+  - Leaders are in `common/characters/ROU.txt`: Roland Cahun (`despotism`, leads at
     start) and Serelle Cahun (`fascism_ideology`, fascist party leader).
   - Portraits come from `source/portraits/roland_cahun.png` and `serelle_cahun.png`.
   - `common/national_focus/rouental.txt` has four mutually exclusive focuses in one row:
@@ -242,8 +278,9 @@ Left loaded on purpose, and noisy in `error.log`:
 
 ## Current state
 
-- 5,163 provinces (4,480 land, 614 sea, 69 lakes), 548 states, 127 strategic regions,
-  7 countries. All still placeholders, now held in the layers of `HOI4 Mod Map.pdn`.
+- 5,192 provinces (4,509 land, 614 sea, 69 lakes), 564 states, 127 strategic regions,
+  15 countries. Rouental and its seven neighbours are real (the author's outlines, 54
+  patches); everything else is still placeholder bricks. Two rivers in Rouental.
 - **Loads in-game without crashing** (first build, confirmed by the author). Its
   `error.log` was vanilla-reference noise (decisions, missions, ai_faction_theaters
   region ids) plus the rivers.bmp palette warning above, which the biClrUsed fix
@@ -253,8 +290,8 @@ Left loaded on purpose, and noisy in `error.log`:
 
 ## Known gaps
 
-1. Provinces, states and regions are placeholders. Next is the author painting real
-   countries, states and provinces on the layers of `HOI4 Mod Map.pdn`. The old `.pdn`'s
+1. Outside Rouental, provinces, states and regions are placeholders. The author is
+   outlining countries region by region (see `apply_outlines.py`). The old `.pdn`'s
    country colours, moved to the new layout, are its Notes layer.
 2. Terrain is plains everywhere; there are no rivers, railways or trees; the relief is
    noise.

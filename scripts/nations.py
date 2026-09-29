@@ -1,7 +1,7 @@
 """Hand-written content for individual nations, layered on the generated placeholders.
 
 Aislada is the worked example: a leader with a custom portrait and its own focus tree.
-Nonscio (NSC) has per-ideology names and the Cahun leaders.
+Rouental (ROU) has per-ideology names, the Cahun leaders and its own focus tree.
 build_mod.py calls these hooks; add further nations the same way.
 """
 import numpy as np
@@ -15,13 +15,13 @@ HISTORY = {
     # recruited at game start too; he waits as communist party leader until "Explode"
     "AIS": ["recruit_character = AIS_merlovich", "recruit_character = AIS_communist_merlovich"],
     # Roland leads the ruling non-aligned party at start; Serelle leads the fascists
-    "NSC": ["recruit_character = NSC_roland_cahun", "recruit_character = NSC_serelle_cahun"],
+    "ROU": ["recruit_character = ROU_roland_cahun", "recruit_character = ROU_serelle_cahun"],
 }
 
 # Country names while a given ideology rules: tag -> ideology -> (name, formal
 # name, adjective). Ideologies left out use the placeholder name from build_mod.py.
 IDEOLOGY_NAMES = {
-    "NSC": {
+    "ROU": {
         "democratic": ("Boring Rouental", "The Liberal and Functional Republic of Rouental",
                        "Rouentaise"),
         "fascism": ("Powerful Rouental", "The Absolute Iron Rouentaise Monarchy", "Rouentaise"),
@@ -33,17 +33,17 @@ IDEOLOGY_NAMES = {
 }
 
 LOCALISATION = [
-    ' NSC_serelle_cahun:0 "Serelle Cahun"',
-    ' NSC_roland_cahun:0 "Roland Cahun"',
-    ' NSC_focus:0 "Rouentaise Focus Tree"',
-    ' NSC_parasites_polite:0 "Kick Out the Parasites (Polite)"',
-    ' NSC_parasites_polite_desc:0 "The Cahuns are thanked for their service and shown the door."',
-    ' NSC_kick_out_brother:0 "Kick Out Your Brother"',
-    ' NSC_kick_out_brother_desc:0 "Serelle has waited long enough. Roland has not."',
-    ' NSC_parasites_rude:0 "Kick Out the Parasites (Rudely)"',
-    ' NSC_parasites_rude_desc:0 "The Cahuns are shown the door. Then the window."',
-    ' NSC_steady_as_she_goes:0 "Steady As She Goes"',
-    ' NSC_steady_as_she_goes_desc:0 "The Cahuns stay. Roland stays. Everything stays."',
+    ' ROU_serelle_cahun:0 "Serelle Cahun"',
+    ' ROU_roland_cahun:0 "Roland Cahun"',
+    ' ROU_focus:0 "Rouentaise Focus Tree"',
+    ' ROU_parasites_polite:0 "Kick Out the Parasites (Polite)"',
+    ' ROU_parasites_polite_desc:0 "The Cahuns are thanked for their service and shown the door."',
+    ' ROU_kick_out_brother:0 "Kick Out Your Brother"',
+    ' ROU_kick_out_brother_desc:0 "Serelle has waited long enough. Roland has not."',
+    ' ROU_parasites_rude:0 "Kick Out the Parasites (Rudely)"',
+    ' ROU_parasites_rude_desc:0 "The Cahuns are shown the door. Then the window."',
+    ' ROU_steady_as_she_goes:0 "Steady As She Goes"',
+    ' ROU_steady_as_she_goes_desc:0 "The Cahuns stay. Roland stays. Everything stays."',
     ' AIS_merlovich:0 "Merlovich"',
     ' AIS_communist_merlovich:0 "Communist Merlovich"',
     ' AIS_focus:0 "Aisladan Focus Tree"',
@@ -55,12 +55,12 @@ LOCALISATION = [
     ' AIS_explode_desc:0 "It was always going to end like this. Merlovich returns, redder."',
 ]
 
-NSC_CHARACTERS = """characters = {
-	NSC_roland_cahun = {
-		name = NSC_roland_cahun
+ROU_CHARACTERS = """characters = {
+	ROU_roland_cahun = {
+		name = ROU_roland_cahun
 		portraits = {
 			civilian = {
-				large = GFX_portrait_NSC_roland_cahun
+				large = GFX_portrait_ROU_roland_cahun
 			}
 		}
 		country_leader = {
@@ -69,11 +69,11 @@ NSC_CHARACTERS = """characters = {
 			id = -1
 		}
 	}
-	NSC_serelle_cahun = {
-		name = NSC_serelle_cahun
+	ROU_serelle_cahun = {
+		name = ROU_serelle_cahun
 		portraits = {
 			civilian = {
-				large = GFX_portrait_NSC_serelle_cahun
+				large = GFX_portrait_ROU_serelle_cahun
 			}
 		}
 		country_leader = {
@@ -190,14 +190,14 @@ FOCUS_TREE = """focus_tree = {
 
 
 # Rouental: four mutually exclusive political paths, in one row.
-NSC_FOCUS_TREE = """focus_tree = {
-	id = NSC_focus
+ROU_FOCUS_TREE = """focus_tree = {
+	id = ROU_focus
 
 	country = {
 		factor = 0
 		modifier = {
 			add = 10
-			tag = NSC
+			tag = ROU
 		}
 	}
 
@@ -205,16 +205,16 @@ NSC_FOCUS_TREE = """focus_tree = {
 	continuous_focus_position = { x = 50 y = 1000 }
 
 	initial_show_position = {
-		focus = NSC_kick_out_brother
+		focus = ROU_kick_out_brother
 	}
 
 	focus = {
-		id = NSC_parasites_polite
+		id = ROU_parasites_polite
 		icon = GFX_goal_support_democracy
 		x = 0
 		y = 0
 		cost = 10
-		mutually_exclusive = { focus = NSC_kick_out_brother focus = NSC_parasites_rude focus = NSC_steady_as_she_goes }
+		mutually_exclusive = { focus = ROU_kick_out_brother focus = ROU_parasites_rude focus = ROU_steady_as_she_goes }
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
 			set_popularities = {
@@ -227,18 +227,18 @@ NSC_FOCUS_TREE = """focus_tree = {
 				ruling_party = democratic
 				elections_allowed = yes
 			}
-			retire_character = NSC_roland_cahun
-			retire_character = NSC_serelle_cahun
+			retire_character = ROU_roland_cahun
+			retire_character = ROU_serelle_cahun
 		}
 	}
 
 	focus = {
-		id = NSC_kick_out_brother
+		id = ROU_kick_out_brother
 		icon = GFX_goal_support_fascism
 		x = 2
 		y = 0
 		cost = 10
-		mutually_exclusive = { focus = NSC_parasites_polite focus = NSC_parasites_rude focus = NSC_steady_as_she_goes }
+		mutually_exclusive = { focus = ROU_parasites_polite focus = ROU_parasites_rude focus = ROU_steady_as_she_goes }
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
 			set_popularities = {
@@ -251,18 +251,18 @@ NSC_FOCUS_TREE = """focus_tree = {
 				ruling_party = fascism
 				elections_allowed = no
 			}
-			promote_character = NSC_serelle_cahun
-			retire_character = NSC_roland_cahun
+			promote_character = ROU_serelle_cahun
+			retire_character = ROU_roland_cahun
 		}
 	}
 
 	focus = {
-		id = NSC_parasites_rude
+		id = ROU_parasites_rude
 		icon = GFX_goal_support_communism
 		x = 6
 		y = 0
 		cost = 10
-		mutually_exclusive = { focus = NSC_parasites_polite focus = NSC_kick_out_brother focus = NSC_steady_as_she_goes }
+		mutually_exclusive = { focus = ROU_parasites_polite focus = ROU_kick_out_brother focus = ROU_steady_as_she_goes }
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
 			set_popularities = {
@@ -275,18 +275,18 @@ NSC_FOCUS_TREE = """focus_tree = {
 				ruling_party = communism
 				elections_allowed = no
 			}
-			retire_character = NSC_roland_cahun
-			retire_character = NSC_serelle_cahun
+			retire_character = ROU_roland_cahun
+			retire_character = ROU_serelle_cahun
 		}
 	}
 
 	focus = {
-		id = NSC_steady_as_she_goes
+		id = ROU_steady_as_she_goes
 		icon = GFX_focus_AUS_bring_back_the_habsburg_rule
 		x = 4
 		y = 0
 		cost = 10
-		mutually_exclusive = { focus = NSC_parasites_polite focus = NSC_parasites_rude focus = NSC_kick_out_brother }
+		mutually_exclusive = { focus = ROU_parasites_polite focus = ROU_parasites_rude focus = ROU_kick_out_brother }
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
 			set_popularities = {
@@ -299,8 +299,8 @@ NSC_FOCUS_TREE = """focus_tree = {
 				ruling_party = neutrality
 				elections_allowed = no
 			}
-			promote_character = NSC_roland_cahun
-			retire_character = NSC_serelle_cahun
+			promote_character = ROU_roland_cahun
+			retire_character = ROU_serelle_cahun
 		}
 	}
 }
@@ -312,8 +312,8 @@ NSC_FOCUS_TREE = """focus_tree = {
 PORTRAITS = {
     "AIS_merlovich": ("source/portraits/merlovich_emu.png", 0, 95, 300, None),
     "AIS_communist_merlovich": ("source/portraits/merlovich_emu.png", 0, 95, 300, "red"),
-    "NSC_serelle_cahun": ("source/portraits/serelle_cahun.png", 260, 90, 900, None),
-    "NSC_roland_cahun": ("source/portraits/roland_cahun.png", 340, 200, 1100, None),
+    "ROU_serelle_cahun": ("source/portraits/serelle_cahun.png", 260, 90, 900, None),
+    "ROU_roland_cahun": ("source/portraits/roland_cahun.png", 340, 200, 1100, None),
 }
 
 # Hand-picked victory point names. Key either a province id (ids follow the placeholder
@@ -342,8 +342,8 @@ def redden(rgba):
 def write_files(write, out):
     """Write every nation-specific file into the mod folder."""
     write("common/characters/AIS.txt", CHARACTERS)
-    write("common/characters/NSC.txt", NSC_CHARACTERS)
-    write("common/national_focus/rouental.txt", NSC_FOCUS_TREE)
+    write("common/characters/ROU.txt", ROU_CHARACTERS)
+    write("common/national_focus/rouental.txt", ROU_FOCUS_TREE)
     write("common/national_focus/aislada.txt", FOCUS_TREE)
     sprites = []
     for name, (src, x0, y0, w, tint) in PORTRAITS.items():
