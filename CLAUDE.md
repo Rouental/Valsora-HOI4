@@ -305,7 +305,7 @@ localised for every ideology. Rouental:
 |---|---|---|
 | Monarchist, Authoritarian | royal green | banner of arms |
 | Democratic | tan | tricolour |
-| Communist | red | plain red |
+| Communist | maroon (128, 16, 16) | plain maroon |
 | Theocratic | gold | sword and fleurs quarter of the banner |
 
 ## Cultures (`cultures.py`): generic portraits, names, graphical culture

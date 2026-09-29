@@ -44,7 +44,7 @@ IDEOLOGY_NAMES = {
 # on_ruling_party_change on_action.
 LOOKS = {
     # Rouental: monarchist and authoritarian keep the royal green (author)
-    "ROU": {"democratic": (215, 174, 95), "communism": (190, 24, 24), "theocracy": (212, 175, 55)},
+    "ROU": {"democratic": (215, 174, 95), "communism": (128, 16, 16), "theocracy": (212, 175, 55)},
 }
 
 # Formal names (TAG_DEF, used in phrases like "war against ..."), from the author's
