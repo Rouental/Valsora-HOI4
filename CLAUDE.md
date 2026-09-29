@@ -215,6 +215,15 @@ Aislada is the worked example of a built-out nation:
   `TAG`, `TAG_DEF`, `TAG_ADJ`, the per-ideology variants (`TAG_communism` etc.) and the
   continent key.
 
+- **Flags** are `source/flags/TAG.png`, any size (HOI4 gets 82×52, 41×26 and 10×7
+  32-bit TGAs, bottom-left origin). `TAG_<ideology>.png` is used only while that
+  ideology rules: Rouental's banner of arms is `ROU.png` and its blue-white-gold
+  tricolour is `ROU_democratic.png` (author's choice). The other seven were cropped
+  from the author's flag sheet. Countries without a PNG get a placeholder stripe in
+  their map colour.
+- **Formal names** (`nations.FORMAL_NAMES`, e.g. "the County of Evriches") feed
+  `TAG_DEF` and the per-ideology `_DEF` keys that have no `IDEOLOGY_NAMES` entry.
+
 `check_mod.py` also checks that recruited characters exist and are localised, that portrait
 sprites resolve to files, and that every focus id and prerequisite is valid and localised.
 
@@ -283,6 +292,8 @@ Left loaded on purpose, and noisy in `error.log`:
   15 countries. Rouental and its seven neighbours are real: the author's 54 outlined
   patches became 56 states and about 175 provinces. Everything else is still
   placeholder bricks. Two rivers in Rouental.
+- **Rouental build loads and plays** (author, 2026-09-29): its error.log had nothing from
+  our map or files, only vanilla noise and the name/portrait generation lines.
 - **Loads in-game without crashing** (first build, confirmed by the author). Its
   `error.log` was vanilla-reference noise (decisions, missions, ai_faction_theaters
   region ids) plus the rivers.bmp palette warning above, which the biClrUsed fix
@@ -299,7 +310,8 @@ Left loaded on purpose, and noisy in `error.log`:
    noise.
 3. Lakes vs. inland seas (see Decisions).
 4. Country content: only Aislada has a leader and focus tree; the rest use generated
-   leaders and the generic tree. No units or proper flags.
+   leaders and the generic tree. No units; flags only for Rouental and its neighbours.
+   No name lists, hence "failed to generate a name/portrait" in error.log.
 
 ## Working with the author
 

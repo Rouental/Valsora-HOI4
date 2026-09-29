@@ -184,6 +184,13 @@ The first seven are the placeholders, one per continent, and the only ones the s
 menu recommends. Brand-new countries need a line of code as well (tag, name and colour
 in `scripts/common.py`); ask for them, or draw them as outlines (below).
 
+### Flags
+
+Flags are PNG pictures in `source/flags/`, named by tag: `ROU.png`, `EVR.png`… Any
+size works; the build shrinks them to the game's sizes. A flag named
+`TAG_democratic.png` (or `_fascism`, `_communism`, `_neutrality`) is shown only while
+that ideology rules, like Rouental's tricolour.
+
 ### Strategic Regions
 
 One colour per region. Weather, air zones and naval zones work per region.

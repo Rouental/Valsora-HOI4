@@ -32,6 +32,19 @@ IDEOLOGY_NAMES = {
     },
 }
 
+# Formal names (TAG_DEF, used in phrases like "war against ..."), from the author's
+# flag sheet. Ideologies with their own names in IDEOLOGY_NAMES keep those.
+FORMAL_NAMES = {
+    "GDN": "the Free City of Guedelon",
+    "EVR": "the County of Evriches",
+    "SGN": "the County of Seigne",
+    "LZC": "the Republic of Lanzerac",
+    "LST": "the Duchy of Lustiana",
+    "SGV": "the Duchy of Selgrave",
+    "HLR": "the Principality of Hollier",
+    "ROU": "the Holy Principality of Rouental",
+}
+
 LOCALISATION = [
     ' ROU_serelle_cahun:0 "Serelle Cahun"',
     ' ROU_roland_cahun:0 "Roland Cahun"',

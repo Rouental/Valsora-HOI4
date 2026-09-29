@@ -21,6 +21,8 @@ from imgio import write_bmp, write_dds, write_tga, palette_from_header
 W, H = MAP_W, MAP_H
 OUT = Path("build") / MOD_DIR_NAME
 PAL = Path("source/palettes")
+FLAGS = Path("source/flags")
+IDEOLOGIES = ("democratic", "fascism", "communism", "neutrality")
 CRLF = "\r\n"
 
 REPLACE_PATHS = [
@@ -503,14 +505,25 @@ def main():
             "}",
             *nations.HISTORY.get(tag, []),
             ""]))
-        flag = np.zeros((52, 82, 4), np.uint8)
-        flag[..., 3] = 255
-        flag[..., :3] = col
-        flag[18:34, :, :3] = 255
-        for path, (w, h) in (("", (82, 52)), ("medium/", (41, 26)), ("small/", (10, 7))):
-            img = np.asarray(Image.fromarray(flag).resize((w, h), Image.BOX))
-            (OUT / f"gfx/flags/{path}").mkdir(parents=True, exist_ok=True)
-            write_tga(OUT / f"gfx/flags/{path}{tag}.tga", img)
+        # flags: the author's source/flags/TAG.png (and TAG_<ideology>.png for a flag
+        # used only while that ideology rules), else a placeholder in the map colour
+        variants = {tag: None}
+        variants.update({f"{tag}_{i}": None for i in IDEOLOGIES
+                         if (FLAGS / f"{tag}_{i}.png").exists()})
+        for name in variants:
+            src = FLAGS / f"{name}.png"
+            if src.exists():
+                big = Image.open(src).convert("RGBA")
+            else:
+                flag = np.zeros((52, 82, 4), np.uint8)
+                flag[..., 3] = 255
+                flag[..., :3] = col
+                flag[18:34, :, :3] = 255
+                big = Image.fromarray(flag)
+            for path, (w, h) in (("", (82, 52)), ("medium/", (41, 26)), ("small/", (10, 7))):
+                img = np.asarray(big.resize((w, h), Image.LANCZOS if src.exists() else Image.BOX))
+                (OUT / f"gfx/flags/{path}").mkdir(parents=True, exist_ok=True)
+                write_tga(OUT / f"gfx/flags/{path}{name}.tga", img)
     write("common/country_tags/valsora_countries.txt",
           "".join(f'{COUNTRIES[c][0]} = "countries/Valsora {COUNTRIES[c][1]}.txt"\n' for c in present))
 
@@ -551,9 +564,10 @@ def main():
     loc = ["l_english:"]
     for c in present:
         tag, name, adj, _ = COUNTRIES[c]
-        loc += [f' {tag}:0 "{name}"', f' {tag}_DEF:0 "{name}"', f' {tag}_ADJ:0 "{adj}"']
+        formal = nations.FORMAL_NAMES.get(tag, name)
+        loc += [f' {tag}:0 "{name}"', f' {tag}_DEF:0 "{formal}"', f' {tag}_ADJ:0 "{adj}"']
         for ideo in ("democratic", "fascism", "communism", "neutrality"):
-            i_name, i_def, i_adj = nations.IDEOLOGY_NAMES.get(tag, {}).get(ideo, (name, name, adj))
+            i_name, i_def, i_adj = nations.IDEOLOGY_NAMES.get(tag, {}).get(ideo, (name, formal, adj))
             loc += [f' {tag}_{ideo}:0 "{i_name}"', f' {tag}_{ideo}_DEF:0 "{i_def}"',
                     f' {tag}_{ideo}_ADJ:0 "{i_adj}"']
     loc += [f' {c}:0 "{COUNTRIES[c][1]}"' for c in CONTINENTS]  # continent names
