@@ -70,6 +70,15 @@ def main(mod):
     mod = Path(mod)
     strip = lambda t: re.sub(r"#[^\n]*", "", t)  # noqa: E731
 
+    # ------------------------------------------------------------ file names
+    # Windows ignores case: two names differing only in case are one file there
+    seen = {}
+    for f in mod.rglob("*"):
+        k = str(f.relative_to(mod)).lower()
+        if k in seen:
+            err(f"{f.relative_to(mod)} and {seen[k]} are the same file on Windows (case)")
+        seen[k] = f.relative_to(mod)
+
     # ------------------------------------------------------------ provinces.bmp
     pb = read_bmp(mod / "map/provinces.bmp")
     W, H = pb["width"], pb["height"]

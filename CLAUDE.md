@@ -295,7 +295,7 @@ How it's built:
 country file. Tags missing there got random colours in-game, which is why most were
 wrong until the build wrote its own (`color` plus a lighter `color_ui`).
 
-**Map colour per government** (`nations.LOOKS`) uses cosmetic tags `TAG_<IDEOLOGY>`,
+**Map colour per government** (`nations.LOOKS`) uses cosmetic tags `TAG_GOV_<IDEOLOGY>` (not `TAG_<IDEOLOGY>`: its flag would clash with `TAG_<ideology>.tga` on Windows, which ignores case; `check_mod.py` checks file names for this),
 defined in `common/countries/cosmetic.txt`. An `on_ruling_party_change` on_action sets
 them, or drops them for ideologies with no entry, so every route to power recolours the
 country. Their flags reuse `source/flags/TAG_<ideology>.png`, and their names are

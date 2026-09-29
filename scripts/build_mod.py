@@ -54,8 +54,10 @@ def ui_colour(rgb):
 
 
 def cosmetic(tag, ideology):
-    """Cosmetic tag used while `ideology` rules `tag` (see nations.LOOKS)."""
-    return f"{tag}_{ideology.upper()}"
+    """Cosmetic tag used while `ideology` rules `tag` (see nations.LOOKS). Not TAG_IDEOLOGY:
+    its flag ROU_COMMUNISM.tga would clash with ROU_communism.tga on Windows, which
+    ignores case (the author's unzip asked about duplicate files)."""
+    return f"{tag}_GOV_{ideology.upper()}"
 
 
 def write(path, text, bom=False, crlf=False):
