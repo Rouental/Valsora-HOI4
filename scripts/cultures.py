@@ -33,21 +33,24 @@ REGIONS = {
         political=dict(communism=["GFX_Portrait_Europe_Generic_1"],
                        democratic=["GFX_Portrait_Europe_Generic_2"],
                        fascism=["GFX_Portrait_Europe_Generic_3"],
-                       neutrality=["GFX_Portrait_Europe_Generic_3"])),
+                       neutrality=["GFX_Portrait_Europe_Generic_3"],
+                       theocracy=["GFX_Portrait_Europe_Generic_3"])),
     "france": dict(
         army=_seq("GFX_Portrait_France_Generic_land", 9),
         navy=_seq("GFX_Portrait_France_Generic_navy", 3),
         political=dict(communism=["GFX_Portrait_Europe_Generic_1"],
                        democratic=["GFX_Portrait_Europe_Generic_2"],
                        fascism=["GFX_Portrait_Europe_Generic_3"],
-                       neutrality=["GFX_Portrait_Europe_Generic_3"])),
+                       neutrality=["GFX_Portrait_Europe_Generic_3"],
+                       theocracy=["GFX_Portrait_Europe_Generic_3"])),
     "mideast_africa": dict(
         army=_seq("GFX_Portrait_Arabia_Generic_land", 3) + _seq("GFX_Portrait_Africa_Generic_land", 3),
         navy=_seq("GFX_Portrait_Arabia_Generic_navy", 3) + _seq("GFX_Portrait_Africa_Generic_navy", 3),
         political=dict(communism=["GFX_Portrait_Arabia_Generic_1", "GFX_Portrait_Africa_Generic_1"],
                        democratic=["GFX_Portrait_Arabia_Generic_2", "GFX_Portrait_Africa_Generic_2"],
                        fascism=["GFX_Portrait_Arabia_Generic_3", "GFX_Portrait_Africa_Generic_3"],
-                       neutrality=["GFX_Portrait_Arabia_Generic_3", "GFX_Portrait_Africa_Generic_3"])),
+                       neutrality=["GFX_Portrait_Arabia_Generic_3", "GFX_Portrait_Africa_Generic_3"],
+                       theocracy=["GFX_Portrait_Arabia_Generic_3", "GFX_Portrait_Africa_Generic_3"])),
     "asia": dict(
         army=_seq("GFX_Portrait_Asia_Generic_land", 5) + _seq("GFX_Portrait_Japan_Generic_land", 9)
         + _seq("GFX_portrait_se_asia_generic_land", 3),
@@ -56,7 +59,8 @@ REGIONS = {
         political=dict(communism=["GFX_Portrait_Asia_Generic_1"],
                        democratic=["GFX_Portrait_Asia_Generic_2"],
                        fascism=["GFX_Portrait_Asia_Generic_3"],
-                       neutrality=["GFX_Portrait_Asia_Generic_3"])),
+                       neutrality=["GFX_Portrait_Asia_Generic_3"],
+                       theocracy=["GFX_Portrait_Asia_Generic_3"])),
 }
 
 # continent -> culture: vanilla name block, portrait region, graphical culture

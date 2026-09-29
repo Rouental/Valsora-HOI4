@@ -16,6 +16,7 @@ from scipy import ndimage as ndi
 
 from common import MAP_W, MAP_H, CONTINENTS, MOD_NAME, MOD_DIR_NAME, COUNTRIES, PLACEHOLDERS
 import cultures
+import ideologies
 import nations
 import superevents
 from imgio import write_bmp, write_dds, write_tga, palette_from_header
@@ -24,7 +25,7 @@ W, H = MAP_W, MAP_H
 OUT = Path("build") / MOD_DIR_NAME
 PAL = Path("source/palettes")
 FLAGS = Path("source/flags")
-IDEOLOGIES = ("democratic", "fascism", "communism", "neutrality")
+IDEOLOGIES = ideologies.IDEOLOGIES
 CRLF = "\r\n"
 
 REPLACE_PATHS = [
@@ -44,6 +45,11 @@ COASTAL_BUILDINGS = ["naval_headquarters", "naval_supply_hub", "coastal_bunker"]
 # Unit stack types vanilla provinces carry (measured in vanilla-derived maps).
 LAND_STACKS = [0, 1, 9, 10, 21, 22, 38]
 SEA_STACKS = [0, 1, 2, 9, 10, 11, 12, 21, 22, 23, 30, 31, 38]
+
+
+def cosmetic(tag, ideology):
+    """Cosmetic tag used while `ideology` rules `tag` (see nations.LOOKS)."""
+    return f"{tag}_{ideology.upper()}"
 
 
 def write(path, text, bom=False, crlf=False):
@@ -503,21 +509,21 @@ def main():
             "\telection_frequency = 48",
             "\telections_allowed = no",
             "}",
+            # every country starts with an equal mix of the five ideologies (author)
             "set_popularities = {",
-            "\tdemocratic = 25",
-            "\tfascism = 10",
-            "\tcommunism = 10",
-            "\tneutrality = 55",
+            *[f"\t{i} = {100 // len(IDEOLOGIES)}" for i in IDEOLOGIES],
             "}",
             *nations.HISTORY.get(tag, []),
             ""]))
         # flags: the author's source/flags/TAG.png (and TAG_<ideology>.png for a flag
         # used only while that ideology rules), else a placeholder in the map colour
-        variants = {tag: None}
-        variants.update({f"{tag}_{i}": None for i in IDEOLOGIES
+        variants = {tag: FLAGS / f"{tag}.png"}
+        variants.update({f"{tag}_{i}": FLAGS / f"{tag}_{i}.png" for i in IDEOLOGIES
                          if (FLAGS / f"{tag}_{i}.png").exists()})
-        for name in variants:
-            src = FLAGS / f"{name}.png"
+        # cosmetic tags (map colour per government) use the same ideology flags
+        variants.update({cosmetic(tag, i): FLAGS / f"{tag}_{i}.png" for i in nations.LOOKS.get(tag, {})
+                         if (FLAGS / f"{tag}_{i}.png").exists()})
+        for name, src in variants.items():
             if src.exists():
                 big = Image.open(src).convert("RGBA")
             else:
@@ -552,7 +558,20 @@ def main():
     # ---------------------------------------------------------------- vanilla switches
     # Folders we replace must still contain a valid file.
     write("events/valsora_events.txt", "add_namespace = valsora\n")
-    write("common/on_actions/valsora_on_actions.txt", "on_actions = {\n}\n")
+    # a country with LOOKS changes map colour (cosmetic tag) with its government
+    looks = []
+    for tag, per in nations.LOOKS.items():
+        branches = [f"\t\t\t\t{'if' if k == 0 else 'else_if'} = {{ limit = {{ has_government = {i} }} "
+                    f"set_cosmetic_tag = {cosmetic(tag, i)} }}" for k, i in enumerate(per)]
+        looks += ["\t\t\tif = {", f"\t\t\t\tlimit = {{ tag = {tag} }}", *branches,
+                  "\t\t\t\telse = { drop_cosmetic_tag = yes }", "\t\t\t}"]
+    write("common/on_actions/valsora_on_actions.txt", "\n".join([
+        "on_actions = {", "\ton_ruling_party_change = {", "\t\teffect = {", *looks,
+        "\t\t}", "\t}", "}", ""]))
+    write("common/countries/cosmetic.txt", "".join(
+        f"{cosmetic(tag, i)} = {{\n\tcolor = rgb {{ {r} {g} {b} }}\n\tcolor_ui = rgb {{ {r} {g} {b} }}\n}}\n"
+        for tag, per in nations.LOOKS.items() for i, (r, g, b) in per.items()))
+    ideologies.write_files(write, OUT)
     for d in ("common/decisions", "common/ai_strategy", "common/ai_strategy_plans",
               "history/units", "history/general"):
         write(f"{d}/valsora_placeholder.txt", "# Intentionally empty: vanilla content is switched off.\n")
@@ -572,7 +591,7 @@ def main():
         tag, name, adj, _ = COUNTRIES[c]
         formal = nations.FORMAL_NAMES.get(tag, name)
         loc += [f' {tag}:0 "{name}"', f' {tag}_DEF:0 "{formal}"', f' {tag}_ADJ:0 "{adj}"']
-        for ideo in ("democratic", "fascism", "communism", "neutrality"):
+        for ideo in IDEOLOGIES:
             i_name, i_def, i_adj = nations.IDEOLOGY_NAMES.get(tag, {}).get(ideo, (name, formal, adj))
             loc += [f' {tag}_{ideo}:0 "{i_name}"', f' {tag}_{ideo}_DEF:0 "{i_def}"',
                     f' {tag}_{ideo}_ADJ:0 "{i_adj}"']
@@ -583,6 +602,16 @@ def main():
             ' VALSORA_BOOKMARK_DESC:0 "Placeholder map of Valsora: square provinces, one country per continent."',
             ' VALSORA_PLACEHOLDER_DESC:0 "A placeholder country, until the real ones are drawn."']
     loc += nations.LOCALISATION
+    # cosmetic tags need their own names, for every ideology
+    for c in present:
+        tag, name, adj, _ = COUNTRIES[c]
+        for look in nations.LOOKS.get(tag, {}):
+            cos = cosmetic(tag, look)
+            n0, d0, a0 = nations.IDEOLOGY_NAMES.get(tag, {}).get(look, (name, name, adj))
+            loc += [f' {cos}:0 "{n0}"', f' {cos}_DEF:0 "{d0}"', f' {cos}_ADJ:0 "{a0}"']
+            for ideo in IDEOLOGIES:
+                n1, d1, a1 = nations.IDEOLOGY_NAMES.get(tag, {}).get(ideo, (n0, d0, a0))
+                loc += [f' {cos}_{ideo}:0 "{n1}"', f' {cos}_{ideo}_DEF:0 "{d1}"', f' {cos}_{ideo}_ADJ:0 "{a1}"']
     loc += superevents.write_files(write, OUT)
     write("localisation/english/valsora_l_english.yml", "\n".join(loc) + "\n", bom=True)
     nations.write_files(write, OUT)

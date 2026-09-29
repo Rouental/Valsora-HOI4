@@ -492,6 +492,38 @@ def main(mod):
         if t not in tags:
             err(f"a war goal or effect targets {t}, which is not a country in the mod")
 
+    # ------------------------------------------------------------ ideologies
+    ideo_text = strip((mod / "common/ideologies/00_ideologies.txt").read_text())
+    body = ideo_text[ideo_text.index("{") + 1:]
+    ideos, subs, depth, cur = set(), set(), 0, None
+    for tok in re.findall(r"\w+\s*=\s*\{|\{|\}", body):
+        if tok == "}":
+            depth -= 1
+            continue
+        name = tok.split("=")[0].strip() if "=" in tok else None
+        if depth == 0 and name:
+            ideos.add(name)
+            cur = name
+        elif depth == 2 and name and cur and name not in ("color",):
+            subs.add(name)
+        depth += 1
+    everything = scripted + "".join(f.read_text() for f in (mod / "history/countries").glob("*.txt"))
+    everything += "".join(f.read_text() for f in (mod / "common/on_actions").glob("*.txt"))
+    for block in re.findall(r"set_popularities\s*=\s*\{([^}]*)\}", everything):
+        vals = dict((k, int(v)) for k, v in re.findall(r"(\w+)\s*=\s*(\d+)", block))
+        if set(vals) - ideos:
+            err(f"set_popularities names unknown ideologies {sorted(set(vals) - ideos)}")
+        if sum(vals.values()) != 100:
+            err(f"set_popularities sums to {sum(vals.values())}, not 100: {vals}")
+    for kw in ("ruling_party", "has_government"):
+        for v in set(re.findall(rf"{kw}\s*=\s*(\w+)", everything)):
+            if v not in ideos:
+                err(f"{kw} = {v} is not an ideology")
+    for f in (mod / "common/characters").glob("*.txt"):
+        for v in re.findall(r"\bideology\s*=\s*(\w+)", f.read_text()):
+            if v not in subs:
+                err(f"{f.name}: sub-ideology {v} is not in 00_ideologies.txt")
+
     # ------------------------------------------------------------ descriptors
     desc = (mod / "descriptor.mod").read_text()
     rps = re.findall(r'replace_path="([^"]+)"', desc)

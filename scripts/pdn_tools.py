@@ -3,6 +3,9 @@
     python3 scripts/pdn_tools.py navigable X,Y [X,Y ...]
         Turn the lakes containing these pixels into sea (Terrain layer), each in a new
         sea region of its own (Strategic Regions layer). HOI4 ships can use sea, not lakes.
+    python3 scripts/pdn_tools.py recolour LAYER R,G,B=R,G,B [...]
+        Swap exact colours on a layer, e.g. a country's colour on "Countries" after it
+        changed in common.COUNTRIES (the build matches countries by exact colour).
     python3 scripts/pdn_tools.py sea_zones [CELL]
         Regroup all sea provinces into larger sea regions (about CELL px across, default
         1536), and recolour the Strategic Regions layer so sea regions are blues and land
@@ -162,11 +165,24 @@ def sea_zones(names, L, cell):
     print(f"{len(live)} sea regions (were {len(np.unique(R[sea]))}), {len(land_cols)} land regions recoloured")
 
 
+def recolour(names, L, layer, pairs):
+    C = code(L[layer][..., :3])
+    painted = L[layer][..., 3] > 0
+    for old, new in pairs:
+        m = painted & (C == code(np.array(old)))
+        L[layer][m, :3] = new
+        print(f"{layer}: {old} -> {new}, {m.sum()} px")
+
+
 def main():
     cmd = sys.argv[1]
     names, L = load()
     if cmd == "navigable":
         navigable(names, L, [tuple(int(v) for v in a.split(",")) for a in sys.argv[2:]])
+    elif cmd == "recolour":
+        pairs = [tuple(tuple(int(v) for v in side.split(",")) for side in a.split("="))
+                 for a in sys.argv[3:]]
+        recolour(names, L, sys.argv[2], pairs)
     elif cmd == "sea_zones":
         sea_zones(names, L, int(sys.argv[2]) if len(sys.argv) > 2 else 1536)
     else:

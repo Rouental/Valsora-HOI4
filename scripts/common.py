@@ -35,15 +35,15 @@ COUNTRIES = {
     "usnistan": ("USN", "Usnistan", "Usnistani", (184, 172, 100)),
     "orientalis": ("ORI", "Orientalis", "Orientalian", (236, 160, 70)),
     # real countries drawn by the author (tags checked against vanilla's country_tags)
-    "rouental": ("ROU", "Rouental", "Rouentaise", (215, 174, 95)),
-    "seigne": ("SGN", "Seigne", "Seignois", (122, 92, 164)),
-    "evriches": ("EVR", "Evriches", "Evrichois", (64, 128, 112)),
+    "rouental": ("ROU", "Rouental", "Rouentaise", (54, 106, 64)),
+    "seigne": ("SGN", "Seigne", "Seignois", (240, 240, 240)),
+    "evriches": ("EVR", "Evriches", "Evrichois", (240, 208, 64)),
     "hollier": ("HLR", "Hollier", "Hollierois", (158, 98, 58)),
-    "selgrave": ("SGV", "Selgrave", "Selgravian", (86, 108, 164)),
-    "lustiana": ("LST", "Lustiana", "Lustianan", (200, 118, 152)),
-    "lanzerac": ("LZC", "Lanzerac", "Lanzeracois", (128, 162, 76)),
-    "guedelon": ("GDN", "Guedelon", "Guedelonnais", (58, 88, 138)),
-    "cardonia": ("CRD", "Cardonia", "Cardonian", (193, 77, 184)),
+    "selgrave": ("SGV", "Selgrave", "Selgravian", (112, 16, 32)),
+    "lustiana": ("LST", "Lustiana", "Lustianan", (28, 28, 28)),
+    "lanzerac": ("LZC", "Lanzerac", "Lanzeracois", (168, 130, 36)),
+    "guedelon": ("GDN", "Guedelon", "Guedelonnais", (230, 170, 20)),
+    "cardonia": ("CRD", "Cardonia", "Cardonian", (84, 28, 120)),
 }
 # The placeholder countries, one per continent, are the recommended starts in the
 # bookmark; the rest are playable but not listed there.

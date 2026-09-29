@@ -15,7 +15,9 @@ HISTORY = {
     # recruited at game start too; he waits as communist party leader until "Explode"
     "AIS": ["recruit_character = AIS_merlovich", "recruit_character = AIS_communist_merlovich"],
     # Roland leads the ruling non-aligned party at start; Serelle leads the fascists
+    # Mahaut VI waits as theocratic party leader until "Accept Reality"
     "ROU": ["recruit_character = ROU_roland_cahun", "recruit_character = ROU_serelle_cahun",
+            "recruit_character = ROU_mahaut_vi",
             # Rouental leads the Association of Reibonnaise States from the start
             "create_faction_from_template = faction_template_reibonnaise_association",
             *[f"add_to_faction = {t}" for t in ("GDN", "LST", "EVR", "HLR", "SGV", "LZC", "SGN")]],
@@ -32,7 +34,17 @@ IDEOLOGY_NAMES = {
                       "Rouentaise"),
         "neutrality": ("Perfect Rouental", "The Serene and Beautiful Feudal Realm of Rouental",
                        "Rouentaise"),
+        "theocracy": ("Holy Rouental", "The Holy Principality of Rouental", "Rouentaise"),
     },
+}
+
+# Map colour per government, for countries whose colour changes with it: tag ->
+# ideology -> colour. Ideologies left out use the country's own colour. Each becomes a
+# cosmetic tag TAG_<IDEOLOGY> (flag source/flags/TAG_<ideology>.png), set by an
+# on_ruling_party_change on_action.
+LOOKS = {
+    # Rouental: monarchist and authoritarian keep the royal green (author)
+    "ROU": {"democratic": (215, 174, 95), "communism": (190, 24, 24), "theocracy": (212, 175, 55)},
 }
 
 # Formal names (TAG_DEF, used in phrases like "war against ..."), from the author's
@@ -50,6 +62,9 @@ FORMAL_NAMES = {
 }
 
 LOCALISATION = [
+    ' ROU_mahaut_vi:0 "Mahaut VI"',
+    ' ROU_accept_reality:0 "Accept Reality"',
+    ' ROU_accept_reality_desc:0 "The Cahuns bicker; the faithful pray. Mahaut VI answers the prayers."',
     ' VAL_reibonnaise_association:0 "The Association of Reibonnaise States"',
     ' ROU_plans_for_cardonia:0 "Plans for Cardonia"',
     ' ROU_plans_for_cardonia_desc:0 "A war goal against Cardonia, for testing."',
@@ -76,6 +91,19 @@ LOCALISATION = [
 ]
 
 ROU_CHARACTERS = """characters = {
+	ROU_mahaut_vi = {
+		name = ROU_mahaut_vi
+		portraits = {
+			civilian = {
+				large = GFX_portrait_ROU_mahaut_vi
+			}
+		}
+		country_leader = {
+			ideology = theocrat
+			expire = "1965.1.1.1"
+			id = -1
+		}
+	}
 	ROU_roland_cahun = {
 		name = ROU_roland_cahun
 		portraits = {
@@ -197,6 +225,7 @@ FOCUS_TREE = """focus_tree = {
 				fascism = 0
 				communism = 100
 				neutrality = 0
+				theocracy = 0
 			}
 			set_politics = {
 				ruling_party = communism
@@ -235,7 +264,7 @@ ROU_FOCUS_TREE = """focus_tree = {
 		x = 0
 		y = 0
 		cost = 10
-		mutually_exclusive = { focus = ROU_kick_out_brother focus = ROU_parasites_rude focus = ROU_steady_as_she_goes }
+		mutually_exclusive = { focus = ROU_kick_out_brother focus = ROU_steady_as_she_goes focus = ROU_parasites_rude focus = ROU_accept_reality }
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
 			hidden_effect = { valsora_superevent_rou_polite = yes }
@@ -244,6 +273,7 @@ ROU_FOCUS_TREE = """focus_tree = {
 				fascism = 0
 				communism = 0
 				neutrality = 0
+				theocracy = 0
 			}
 			set_politics = {
 				ruling_party = democratic
@@ -260,7 +290,7 @@ ROU_FOCUS_TREE = """focus_tree = {
 		x = 2
 		y = 0
 		cost = 10
-		mutually_exclusive = { focus = ROU_parasites_polite focus = ROU_parasites_rude focus = ROU_steady_as_she_goes }
+		mutually_exclusive = { focus = ROU_parasites_polite focus = ROU_steady_as_she_goes focus = ROU_parasites_rude focus = ROU_accept_reality }
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
 			hidden_effect = { valsora_superevent_rou_brother = yes }
@@ -269,6 +299,7 @@ ROU_FOCUS_TREE = """focus_tree = {
 				fascism = 100
 				communism = 0
 				neutrality = 0
+				theocracy = 0
 			}
 			set_politics = {
 				ruling_party = fascism
@@ -285,7 +316,7 @@ ROU_FOCUS_TREE = """focus_tree = {
 		x = 6
 		y = 0
 		cost = 10
-		mutually_exclusive = { focus = ROU_parasites_polite focus = ROU_kick_out_brother focus = ROU_steady_as_she_goes }
+		mutually_exclusive = { focus = ROU_parasites_polite focus = ROU_kick_out_brother focus = ROU_steady_as_she_goes focus = ROU_accept_reality }
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
 			hidden_effect = { valsora_superevent_rou_rude = yes }
@@ -294,6 +325,7 @@ ROU_FOCUS_TREE = """focus_tree = {
 				fascism = 0
 				communism = 100
 				neutrality = 0
+				theocracy = 0
 			}
 			set_politics = {
 				ruling_party = communism
@@ -304,11 +336,39 @@ ROU_FOCUS_TREE = """focus_tree = {
 		}
 	}
 
+	# the fifth path: Mahaut VI takes the throne in the name of the church
+	focus = {
+		id = ROU_accept_reality
+		icon = GFX_focus_generic_pope
+		x = 8
+		y = 0
+		cost = 10
+		mutually_exclusive = { focus = ROU_parasites_polite focus = ROU_kick_out_brother focus = ROU_steady_as_she_goes focus = ROU_parasites_rude }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			hidden_effect = { valsora_superevent_rou_reality = yes }
+			set_popularities = {
+				democratic = 0
+				fascism = 0
+				communism = 0
+				neutrality = 0
+				theocracy = 100
+			}
+			set_politics = {
+				ruling_party = theocracy
+				elections_allowed = no
+			}
+			promote_character = ROU_mahaut_vi
+			retire_character = ROU_roland_cahun
+			retire_character = ROU_serelle_cahun
+		}
+	}
+
 	# for testing wars: a war goal on Cardonia without justifying one
 	focus = {
 		id = ROU_plans_for_cardonia
 		icon = GFX_goal_generic_major_war
-		x = 8
+		x = 11
 		y = 0
 		cost = 1
 		search_filters = { FOCUS_FILTER_POLITICAL }
@@ -327,7 +387,7 @@ ROU_FOCUS_TREE = """focus_tree = {
 		x = 4
 		y = 0
 		cost = 10
-		mutually_exclusive = { focus = ROU_parasites_polite focus = ROU_parasites_rude focus = ROU_kick_out_brother }
+		mutually_exclusive = { focus = ROU_parasites_polite focus = ROU_kick_out_brother focus = ROU_parasites_rude focus = ROU_accept_reality }
 		search_filters = { FOCUS_FILTER_POLITICAL }
 		completion_reward = {
 			hidden_effect = { valsora_superevent_rou_steady = yes }
@@ -336,6 +396,7 @@ ROU_FOCUS_TREE = """focus_tree = {
 				fascism = 0
 				communism = 0
 				neutrality = 100
+				theocracy = 0
 			}
 			set_politics = {
 				ruling_party = neutrality
@@ -371,6 +432,7 @@ FACTION_TEMPLATES = """faction_template_reibonnaise_association = {
 # recolour). The crop keeps HOI4's 156x210 shape and is scaled down to it; each one
 # becomes gfx/leaders/VAL/<name>.dds plus a GFX_portrait_<name> sprite.
 PORTRAITS = {
+    "ROU_mahaut_vi": ("source/portraits/mahaut_vi.jpg", 210, 40, 1000, None),
     "AIS_merlovich": ("source/portraits/merlovich_emu.png", 0, 95, 300, None),
     "AIS_communist_merlovich": ("source/portraits/merlovich_emu.png", 0, 95, 300, "red"),
     "ROU_serelle_cahun": ("source/portraits/serelle_cahun.png", 260, 90, 900, None),

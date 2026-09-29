@@ -106,6 +106,7 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `nations.py` | hand-written per-nation content (leaders, portraits, focus trees), used by `build_mod.py` |
 | `superevents.py` | TNO-style superevent windows, their texts, picture and music |
 | `cultures.py` | generic portraits, name lists and graphical culture per continent / country |
+| `ideologies.py` | the five ideologies: ideology file, renamed localisation, theocracy icon |
 | `check_mod.py` | re-reads the built files and checks every rule below |
 | `export_canvas.py` | previews in `dist/` |
 | `package.py` | `dist/valsora_test.zip` |
@@ -177,6 +178,10 @@ mismatch, missing localisation) and catches all of them.
   - One placeholder per continent: NSC ARS AIS SLT YAS USN ORI (`SOL` is a vanilla
     tag, so Solitas is `SLT`). They are `common.PLACEHOLDERS`, the only countries the
     bookmark recommends (author's wish, to keep the start menu short).
+  - Colours follow the flags (author): Rouental royal green, Guedelon gold, Seigne white,
+    Evriches yellow, Lustiana black, Selgrave dark maroon, Lanzerac dark gold, Cardonia
+    deep purple. Hollier is unchanged. `pdn_tools.py recolour Countries OLD=NEW` keeps
+    the `.pdn` in step.
   - Real countries the author drew: Rouental ROU, Seigne SGN, Evriches EVR, Hollier
     HLR, Selgrave SGV, Lustiana LST, Lanzerac LZC, Guedelon GDN, Cardonia CRD. All tags were checked
     against vanilla `common/country_tags`; new tags must be too.
@@ -228,7 +233,11 @@ Aislada is the worked example of a built-out nation:
     - Kick Out the Parasites (Rudely): communist, both Cahuns retired.
     - Left to right: Polite, Brother, Steady, Rudely.
   - The democratic and communist parties have no defined leader, so the game generates one.
-  - **Plans for Cardonia** (x = 8, cost 1, not exclusive) creates an `annex_everything`
+  - **Accept Reality** (x = 8) is the fifth mutually exclusive path. It makes Rouental
+    theocratic under **Mahaut VI** (`theocrat`; portrait from
+    `source/portraits/mahaut_vi.jpg`; recruited in history as theocratic party leader),
+    retires both Cahuns and plays superevent `rou_reality`.
+  - **Plans for Cardonia** (x = 11, cost 1, not exclusive) creates an `annex_everything`
     war goal on CRD. It is for testing wars without justifying.
   - **Faction.** ROU starts as leader of "The Association of Reibonnaise States",
     together with GDN, LST, EVR, HLR, SGV, LZC and SGN.
@@ -249,6 +258,39 @@ Aislada is the worked example of a built-out nation:
   their map colour.
 - **Formal names** (`nations.FORMAL_NAMES`, e.g. "the County of Evriches") feed
   `TAG_DEF` and the per-ideology `_DEF` keys that have no `IDEOLOGY_NAMES` entry.
+
+## Ideologies (`ideologies.py`)
+
+The author's five ideologies. The internal keys stay vanilla's so vanilla script keeps
+working; names come from `localisation/english/replace/`:
+- `democratic` Democratic and `communism` Communist are unchanged.
+- `fascism` is Authoritarian, coloured black (20,20,20).
+- `neutrality` is Monarchist, coloured purple (128,48,168).
+- `theocracy` Theocratic is **new**, coloured white (238,238,238). Its sub-ideologies are
+  `theocrat` and `clerical_monarchism`, and its party icon is a generated
+  `GFX_ideology_theocracy_group`.
+
+How it's built:
+- `common/ideologies/00_ideologies.txt` overrides vanilla. It is vanilla's file
+  (`source/ideologies/`) with the colours changed and a theocracy block modelled on
+  neutrality.
+- Every country starts at 20% for each ideology; every `set_popularities` lists all five.
+- `check_mod.py` checks that popularities name real ideologies and sum to 100, that
+  every `ruling_party` / `has_government` is an ideology, and that character
+  sub-ideologies exist.
+
+**Map colour per government** (`nations.LOOKS`) uses cosmetic tags `TAG_<IDEOLOGY>`,
+defined in `common/countries/cosmetic.txt`. An `on_ruling_party_change` on_action sets
+them, or drops them for ideologies with no entry, so every route to power recolours the
+country. Their flags reuse `source/flags/TAG_<ideology>.png`, and their names are
+localised for every ideology. Rouental:
+
+| Government | Map colour | Flag |
+|---|---|---|
+| Monarchist, Authoritarian | royal green | banner of arms |
+| Democratic | tan | tricolour |
+| Communist | red | plain red |
+| Theocratic | gold | sword and fleurs quarter of the banner |
 
 ## Cultures (`cultures.py`): generic portraits, names, graphical culture
 
@@ -303,8 +345,8 @@ white via `§W…§!` in their localisation (the typewriter fonts draw dark). Ho
 - **Background.** `GFX_tiled_window_transparent` is see-through (vanilla's event window
   gets its look from separate header/footer images), so the window has its own
   generated background, `superevent_bg.dds`: dark, with gold frames.
-- **Current set.** Five superevents: one per Rouental focus and one for AIS "Fucking
-  Explode". The quotes are Claude-written, and all use the author's anime picture.
+- **Current set.** Six superevents: one per Rouental leadership focus (five) and one for
+  AIS "Fucking Explode". The quotes are Claude-written, and all use the author's anime picture.
 - **Checks.** `check_mod.py` checks scripted effects and events that are used, songs
   and their files, scripted localisation keys, and GUI window, element, sprite and
   button-text references (mutation-tested).

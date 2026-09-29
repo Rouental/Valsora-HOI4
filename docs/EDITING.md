@@ -171,15 +171,15 @@ with no land left is simply left out of the game.
 | Yastreovakia | YAS | 96, 190, 150 |
 | Usnistan | USN | 184, 172, 100 |
 | Orientalis | ORI | 236, 160, 70 |
-| Rouental | ROU | 215, 174, 95 |
-| Seigne | SGN | 122, 92, 164 |
-| Evriches | EVR | 64, 128, 112 |
+| Rouental | ROU | 54, 106, 64 |
+| Seigne | SGN | 240, 240, 240 |
+| Evriches | EVR | 240, 208, 64 |
 | Hollier | HLR | 158, 98, 58 |
-| Selgrave | SGV | 86, 108, 164 |
-| Lustiana | LST | 200, 118, 152 |
-| Lanzerac | LZC | 128, 162, 76 |
-| Guedelon | GDN | 58, 88, 138 |
-| Cardonia | CRD | 193, 77, 184 |
+| Selgrave | SGV | 112, 16, 32 |
+| Lustiana | LST | 28, 28, 28 |
+| Lanzerac | LZC | 168, 130, 36 |
+| Guedelon | GDN | 230, 170, 20 |
+| Cardonia | CRD | 84, 28, 120 |
 
 The first seven are the placeholders, one per continent, and the only ones the start
 menu recommends. Brand-new countries need a line of code as well (tag, name and colour

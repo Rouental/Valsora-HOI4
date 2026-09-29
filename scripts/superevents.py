@@ -51,6 +51,12 @@ SUPEREVENTS = [
                "window. Rouental is now a workers' state, with one fewer window.",
          author="Red Workers' Committee of Rouental, Communique No. 1",
          picture="hair_ruffle.png", song="valsora_gladiators"),
+    dict(id="rou_reality",
+         title="The Veiled Throne",
+         quote="Rouental asked Heaven for a firm hand. Heaven, in its wisdom, has sent a gloved "
+               "one. Kneel, and you will find it gentle.",
+         author="Mahaut VI, Holy Princess of Rouental",
+         picture="hair_ruffle.png", song="valsora_gladiators"),
     dict(id="ais_explode",
          title="Merlovich Has Exploded",
          quote="Our beloved leader has become many smaller leaders, now scattered across a wide "
