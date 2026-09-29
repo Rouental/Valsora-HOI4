@@ -174,11 +174,11 @@ with no land left is simply left out of the game.
 | Rouental | ROU | 54, 106, 64 |
 | Seigne | SGN | 240, 240, 240 |
 | Evriches | EVR | 240, 208, 64 |
-| Hollier | HLR | 158, 98, 58 |
+| Hollier | HLR | 185, 53, 52 |
 | Selgrave | SGV | 112, 16, 32 |
 | Lustiana | LST | 28, 28, 28 |
 | Lanzerac | LZC | 168, 130, 36 |
-| Guedelon | GDN | 230, 170, 20 |
+| Guedelon | GDN | 7, 76, 130 |
 | Cardonia | CRD | 84, 28, 120 |
 
 The first seven are the placeholders, one per continent, and the only ones the start

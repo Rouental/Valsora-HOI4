@@ -186,9 +186,9 @@ mismatch, missing localisation) and catches all of them.
   - One placeholder per continent: NSC ARS AIS SLT YAS USN ORI (`SOL` is a vanilla
     tag, so Solitas is `SLT`). They are `common.PLACEHOLDERS`, the only countries the
     bookmark recommends (author's wish, to keep the start menu short).
-  - Colours follow the flags (author): Rouental royal green, Guedelon gold, Seigne white,
+  - Colours follow the flags (author): Rouental royal green, Guedelon blue, Hollier red, Seigne white,
     Evriches yellow, Lustiana black, Selgrave dark maroon, Lanzerac dark gold, Cardonia
-    deep purple. Hollier is unchanged. `pdn_tools.py recolour Countries OLD=NEW` keeps
+    deep purple. Guedelon's blue and Hollier's red are their flags' main colours. `pdn_tools.py recolour Countries OLD=NEW` keeps
     the `.pdn` in step.
   - Real countries the author drew: Rouental ROU, Seigne SGN, Evriches EVR, Hollier
     HLR, Selgrave SGV, Lustiana LST, Lanzerac LZC, Guedelon GDN, Cardonia CRD. All tags were checked

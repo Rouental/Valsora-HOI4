@@ -38,11 +38,11 @@ COUNTRIES = {
     "rouental": ("ROU", "Rouental", "Rouentaise", (54, 106, 64)),
     "seigne": ("SGN", "Seigne", "Seignois", (240, 240, 240)),
     "evriches": ("EVR", "Evriches", "Evrichois", (240, 208, 64)),
-    "hollier": ("HLR", "Hollier", "Hollierois", (158, 98, 58)),
+    "hollier": ("HLR", "Hollier", "Hollierois", (185, 53, 52)),
     "selgrave": ("SGV", "Selgrave", "Selgravian", (112, 16, 32)),
     "lustiana": ("LST", "Lustiana", "Lustianan", (28, 28, 28)),
     "lanzerac": ("LZC", "Lanzerac", "Lanzeracois", (168, 130, 36)),
-    "guedelon": ("GDN", "Guedelon", "Guedelonnais", (230, 170, 20)),
+    "guedelon": ("GDN", "Guedelon", "Guedelonnais", (7, 76, 130)),
     "cardonia": ("CRD", "Cardonia", "Cardonian", (84, 28, 120)),
 }
 # The placeholder countries, one per continent, are the recommended starts in the
