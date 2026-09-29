@@ -1,13 +1,12 @@
-"""Turn outlines drawn on "HOI4 Mod Map.pdn" into provinces, states and countries.
+"""Turn outlines drawn on "HOI4 Mod Map.pdn" into states, provinces and countries.
 
 The author draws 1-px lines on two layers:
     Borders              country borders
-    Necessary Provinces  borders inside a country that must be province borders
-Every patch of land enclosed by those lines becomes a province (patches over
-SPLIT_AREA px are cut into several). OWNERS names the country of each patch by one
-pixel inside it; every other enclosed patch goes to DEFAULT_OWNER. Each non-default
-country becomes one state; the default owner's patches are grouped into states of
-about STATE_AREA px, with exclaves and islands as states of their own.
+    Necessary Provinces  state borders inside a country (the layer name is historical)
+Every patch of land enclosed by those lines becomes a state; patches over STATE_MAX px
+are cut into several states that fill the same shape. Every state is cut into
+provinces of about PROVINCE_AREA px, for a granular map. OWNERS names the country of
+each patch by one pixel inside it; every other enclosed patch goes to DEFAULT_OWNER.
 
 The script rewrites the Provinces, States, Countries and Strategic Regions layers of
 the decoded .pdn (work/pdn_new) and saves the result as source/HOI4 Mod Map.pdn, using
@@ -26,7 +25,6 @@ from scipy import ndimage as ndi
 from skimage.measure import label as sklabel
 
 from common import COUNTRIES, MAP_W as W, MAP_H as H, MIN_PROVINCE
-from provinces import adjacency
 from writepdn import write_pdn
 
 SRC = Path("work/pdn_new")
@@ -48,9 +46,9 @@ OWNERS = {
     # has no outline, so it is named here to be included
     "rouental": [(829, 765), (798, 792), (823, 803), (811, 906)],
 }
-SPLIT_AREA = 2000   # enclosed patches bigger than this are cut into ~1100 px provinces
-PROVINCE_AREA = 1100
-STATE_AREA = 3500   # target size of the default owner's states
+STATE_MAX = 1000     # patches bigger than this become several states ...
+STATE_AREA = 650     # ... of about this size
+PROVINCE_AREA = 150  # target province size inside the outlines (placeholders: 1024)
 MIN_LEFTOVER = 300  # smaller remains of a cut placeholder province join a neighbour
 
 
@@ -80,14 +78,44 @@ class Colours:
 
 
 def kmeans_split(ys, xs, k, seed=0):
-    """Split a patch's pixels into k compact, connected pieces."""
+    """Split pixels into k compact pieces, each one 4-connected."""
+    if k <= 1:
+        return np.zeros(len(ys), int)
     pts = np.stack([ys, xs], 1).astype(float)
     rng = np.random.default_rng(seed)
-    cent = pts[rng.choice(len(pts), k, replace=False)]
+    # spread-out start: farthest-point seeding
+    cent = [pts[rng.integers(len(pts))]]
+    for _ in range(k - 1):
+        d = np.min([((pts - c) ** 2).sum(1) for c in cent], 0)
+        cent.append(pts[int(np.argmax(d))])
+    cent = np.array(cent)
     for _ in range(30):
         a = np.argmin(((pts[:, None] - cent[None]) ** 2).sum(-1), 1)
         cent = np.array([pts[a == j].mean(0) if (a == j).any() else cent[j] for j in range(k)])
-    return a
+    # make every piece connected: stray bits join the piece they touch most
+    y0, x0 = ys.min(), xs.min()
+    grid = np.full((ys.max() - y0 + 1, xs.max() - x0 + 1), -1)
+    grid[ys - y0, xs - x0] = a
+    cross = np.array([[0, 1, 0], [1, 1, 1], [0, 1, 0]])
+    for _ in range(20):
+        changed = False
+        for j in range(k):
+            comp = sklabel(grid == j, connectivity=1)
+            sizes = np.bincount(comp.ravel())[1:]
+            if len(sizes) <= 1:
+                continue
+            keep = int(np.argmax(sizes)) + 1
+            for q in range(1, len(sizes) + 1):
+                if q == keep:
+                    continue
+                m = comp == q
+                ring = ndi.binary_dilation(m, cross) & ~m & (grid >= 0) & (grid != j)
+                if ring.any():
+                    grid[m] = Counter(grid[ring].tolist()).most_common(1)[0][0]
+                    changed = True
+        if not changed:
+            break
+    return grid[ys - y0, xs - x0]
 
 
 def main():
@@ -127,16 +155,24 @@ def main():
     pcols = Colours(P, 1)
     newP = P.copy()
     prov_owner = {}   # new province colour -> owner
-    prov_cell = {}    # new province colour -> patch id
+    prov_state = {}   # new province colour -> (patch id, state number in the patch)
     for i in chosen:
         ys, xs = np.nonzero(cells == i)
-        k = max(1, round(len(ys) / PROVINCE_AREA)) if len(ys) > SPLIT_AREA else 1
-        parts = kmeans_split(ys, xs, k, seed=int(i)) if k > 1 else np.zeros(len(ys), int)
-        for j in range(k):
-            c = pcols.new()
-            newP[ys[parts == j], xs[parts == j]] = c
-            prov_owner[c] = owner_of[int(i)]
-            prov_cell[c] = int(i)
+        ks = max(1, round(len(ys) / STATE_AREA)) if len(ys) > STATE_MAX else 1
+        st = kmeans_split(ys, xs, ks, seed=int(i))
+        for j in range(ks):
+            sy, sx = ys[st == j], xs[st == j]
+            if len(sy) == 0:
+                continue
+            kp = min(max(1, round(len(sy) / PROVINCE_AREA)), len(sy) // MIN_PROVINCE or 1)
+            parts = kmeans_split(sy, sx, kp, seed=int(i) * 31 + j)
+            for q in range(kp):
+                if not (parts == q).any():
+                    continue
+                c = pcols.new()
+                newP[sy[parts == q], sx[parts == q]] = c
+                prov_owner[c] = owner_of[int(i)]
+                prov_state[c] = (int(i), j)
 
     # ------------------------------------------------ leftovers of cut provinces
     # Every province near the outlines must end up one connected piece of a decent
@@ -172,8 +208,10 @@ def main():
                 nb = Counter(v for v in win[ring].tolist() if v != c)
                 if not nb:
                     continue
-                pref = [v for v in nb if (prov_owner.get(v) == prov_owner.get(int(c)))]
-                target = max(pref or nb, key=lambda v: nb[v])
+                # a new province's scrap stays in its state, an old one's outside
+                same_state = [v for v in nb if prov_state.get(v) == prov_state.get(int(c))]
+                same_owner = [v for v in nb if prov_owner.get(v) == prov_owner.get(int(c))]
+                target = max(same_state or same_owner or nb, key=lambda v: nb[v])
                 win[pm] = target
                 merged += 1
                 changed = True
@@ -181,7 +219,7 @@ def main():
             break
     alive = set(np.unique(win).tolist())
     for c in [c for c in prov_owner if c not in alive]:  # tiny outlined patches merged away
-        del prov_owner[c]
+        del prov_owner[c], prov_state[c]
     print(f"{len(cut)} placeholder provinces were cut; {merged} scraps joined a neighbour, "
           f"{split} extra pieces became provinces")
 
@@ -189,72 +227,20 @@ def main():
     S = np.where(L["States"][..., 3] > 0, code(L["States"][..., :3]), -1)
     scols = Colours(S[S >= 0], 2)
     newS = S.copy()
-    # group the new provinces: one state per non-default country, default owner by size
+    # one state per (patch, piece), as drawn
+    groups = defaultdict(list)
+    for c, key in prov_state.items():
+        groups[key].append(c)
     by_owner = defaultdict(list)
-    for c, t in prov_owner.items():
-        by_owner[t].append(c)
-    labP = np.unique(newP, return_inverse=True)[1].reshape(H, W)
-    colour_of_lab = np.unique(newP)
-    a, b, _ = adjacency(labP, wrap=True)
-    nbrs = defaultdict(set)
-    for x, y in zip(colour_of_lab[a], colour_of_lab[b]):
-        nbrs[int(x)].add(int(y))
-        nbrs[int(y)].add(int(x))
-    psize = {int(c): int(n) for c, n in zip(colour_of_lab, np.bincount(labP.ravel()))}
-    cent = {}
-    for c in prov_owner:
-        ys, xs = np.nonzero(newP == c)
-        cent[c] = (ys.mean(), xs.mean())
     state_groups = []  # (owner, [province colours])
-    for t, provs in sorted(by_owner.items()):
-        # connected pieces of this owner's provinces
-        left, pieces = set(provs), []
-        while left:
-            st, seen = [left.pop()], []
-            while st:
-                u = st.pop()
-                seen.append(u)
-                for v in nbrs[u]:
-                    if v in left:
-                        left.remove(v)
-                        st.append(v)
-            pieces.append(seen)
-        for piece in pieces:
-            tot = sum(psize[c] for c in piece)
-            k = max(1, round(tot / STATE_AREA)) if t == DEFAULT_OWNER else 1
-            if k == 1:
-                state_groups.append((t, piece))
-                continue
-            # grow k states from spread-out seeds, always adding the next nearest province
-            order = sorted(piece, key=lambda c: cent[c])
-            seeds = [order[round(j * (len(order) - 1) / (k - 1))] for j in range(k)]
-            owner = {s: j for j, s in enumerate(seeds)}
-            grow = [psize[s] for s in seeds]
-            while len(owner) < len(piece):
-                best = None
-                for c in piece:
-                    if c in owner:
-                        continue
-                    for v in nbrs[c]:
-                        if v in owner:
-                            j = owner[v]
-                            key = (grow[j], np.hypot(*np.subtract(cent[c], cent[seeds[j]])))
-                            if best is None or key < best[0]:
-                                best = (key, c, j)
-                if best is None:
-                    break
-                _, c, j = best
-                owner[c] = j
-                grow[j] += psize[c]
-            for j in range(k):
-                g = [c for c in piece if owner.get(c) == j]
-                if g:
-                    state_groups.append((t, g))
+    for key in sorted(groups):
+        g = groups[key]
+        state_groups.append((prov_owner[g[0]], g))
+        by_owner[prov_owner[g[0]]].append(key)
     new_states = []
     for t, g in state_groups:
         sc = scols.new()
-        for c in g:
-            newS[newP == c] = sc
+        newS[np.isin(newP, g)] = sc
         new_states.append((t, sc, g))
     newS[~land] = -1
     fresh = {sc for _, sc, _ in new_states}  # old scraps must not join these

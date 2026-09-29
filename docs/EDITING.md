@@ -222,36 +222,15 @@ province with the Paint Bucket.
 
 **Make mountains.** Terrain layer: mountain colour. Heightmap: paint brighter greys.
 
-**Draw new countries and provinces as outlines.** This is how Rouental and its
+**Draw new countries and states as outlines.** This is how Rouental and its
 neighbours were made:
 1. On a layer called **Borders**, draw country borders as 1-pixel Pencil lines.
 2. On a layer called **Necessary Provinces**, draw the lines inside a country that
-   must become province borders.
-3. Every closed-off patch of land becomes a province. Leave no gaps in the lines, or
-   the patch will leak into its neighbour.
+   divide it into **states**.
+3. Every closed-off patch of land becomes a state; a large patch becomes several
+   states that together fill its shape. Every state is then cut into small provinces
+   (about 12 × 12 pixels). Leave no gaps in the lines, or the patch will leak into its
+   neighbour.
 4. Write each country's name in or next to its patches on any layer, e.g. "Names".
 5. Upload and ask. A script (`scripts/apply_outlines.py`) turns the patches into
-   provinces, states and owners on the real layers, and makes new countries.
-
----
-
-## 4. Checking your work
-
-1. Save in paint.net (keep the `.pdn` format and the same file name).
-2. Upload it to `source/` on GitHub, replacing the old file, and ask for a rebuild.
-   (If you run the build yourself, it is `sh scripts/run_all.sh`.)
-3. If something is wrong, the build stops with a numbered list:
-
-```
-2 problem(s) in the .pdn; fix these and rebuild:
-  1. Province colour (37,11,249) is in 2 separate pieces (each province must be one
-     connected area; diagonal touching doesn't count), e.g. at (100, 100), (812, 305)
-  2. A province has only 5 pixels (HOI4 needs at least 8) at (2480, 226)
-```
-
-Go to those pixel positions in paint.net (watch the numbers at the bottom), fix them
-and try again. Lines starting with `note:` are not errors. They tell you what the build
-filled in or tidied up for you, so you can check it's what you meant.
-
-After a successful build, install the new `dist/valsora_test.zip` as usual and start the
-game with `-debug`.
+   states, provinces and owners on the real layers, and makes new countries.

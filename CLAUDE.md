@@ -57,16 +57,17 @@ lines, see below). Unknown layer names are ignored, so the author keeps their ow
   - widths: major 7→9, minor 4→5 (7+ is a large river).
   The exact-palette "Rivers" layer wins where set, and river pixels on water are
   dropped. `check_mod.py` checks the result with `rivers.problems`.
-- **Outlines → provinces** (`apply_outlines.py`, run by hand, not by `run_all.sh`).
-  The author draws 1-px country borders on "Borders" and province lines on "Necessary
-  Provinces".
-  - Every enclosed patch becomes a province; patches over 2,000 px would be k-means
-    split.
+- **Outlines → states** (`apply_outlines.py`, run by hand, not by `run_all.sh`).
+  The author draws 1-px country borders on "Borders" and state lines on "Necessary
+  Provinces" (the author's layer name; they are **states**, author's correction).
+  - Every enclosed patch becomes a state. Patches over 1,000 px are k-means split into
+    ~650 px states that fill the same shape.
+  - Every state is cut into ~150 px provinces for a granular map (placeholder bricks
+    elsewhere are 1,024 px). Pieces are forced 4-connected.
   - `OWNERS` names patches by seed pixel; the rest go to `DEFAULT_OWNER`.
-  - Each other country is one state; the default owner's states are grown to about
-    3,500 px, with exclaves and islands separate.
-  - Cut placeholder provinces and states are cleaned up iteratively: scraps join
-    neighbours, never a new state, and states are forced into one region.
+  - Cut placeholder provinces and states are cleaned up iteratively: scraps join a
+    neighbour (a new province's scrap stays in its state), never a new state, and
+    states are forced into one region.
   - It rewrites Provinces / States / Countries / Strategic Regions and saves
     `source/HOI4 Mod Map.pdn`, using the author's upload as the template;
     `writepdn` copies the object graph verbatim when the size is unchanged.
@@ -278,9 +279,10 @@ Left loaded on purpose, and noisy in `error.log`:
 
 ## Current state
 
-- 5,192 provinces (4,509 land, 614 sea, 69 lakes), 564 states, 127 strategic regions,
-  15 countries. Rouental and its seven neighbours are real (the author's outlines, 54
-  patches); everything else is still placeholder bricks. Two rivers in Rouental.
+- 5,312 provinces (4,629 land, 614 sea, 69 lakes), 603 states, 127 strategic regions,
+  15 countries. Rouental and its seven neighbours are real: the author's 54 outlined
+  patches became 56 states and about 175 provinces. Everything else is still
+  placeholder bricks. Two rivers in Rouental.
 - **Loads in-game without crashing** (first build, confirmed by the author). Its
   `error.log` was vanilla-reference noise (decisions, missions, ai_faction_theaters
   region ids) plus the rivers.bmp palette warning above, which the biClrUsed fix
