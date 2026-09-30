@@ -326,7 +326,8 @@ def main():
             if seen != members:
                 errors.append(f"A sea region is split into separate pieces (sea regions must be "
                               f"connected), at {where(ys, xs, 1)}")
-        regions.append(dict(kind="sea" if ks == {0} else "land", provinces=sorted(int(i) for i in g)))
+        regions.append(dict(kind="sea" if ks == {0} else "land", provinces=sorted(int(i) for i in g),
+                            colour=f"{int(r_of[g[0]]):06x}"))
     region_of = np.full(n, -1)
     for r, rg in enumerate(regions):
         region_of[rg["provinces"]] = r

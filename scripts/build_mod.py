@@ -5,6 +5,7 @@ Writes build/valsora_test/ (the mod folder) and build/valsora_test.mod (the
 launcher's outer descriptor).
 """
 import json
+import os
 import math
 import shutil
 from collections import Counter, defaultdict
@@ -374,6 +375,9 @@ def main():
 
     # ---------------------------------------------------------------- strategic regions
     region_name = []
+    # names by region colour, from strategic_regions.py (a repainted region falls back)
+    names_by_colour = json.load(open("source/region_names.json", encoding="utf-8")) \
+        if os.path.exists("source/region_names.json") else {}
     land_count = defaultdict(int)
     sea_count = 0
     for r, rg in enumerate(regions):
@@ -382,10 +386,10 @@ def main():
             c = Counter(owners[s] for s in rg["states"]).most_common(1)[0][0] \
                 if rg["states"] else CONTINENTS[int(cont[provs[0]]) - 1]
             land_count[c] += 1
-            region_name.append(f"{COUNTRIES[c][1]} Region {land_count[c]}")
+            region_name.append(names_by_colour.get(rg.get("colour"), f"{COUNTRIES[c][1]} Region {land_count[c]}"))
         else:
             sea_count += 1
-            region_name.append(f"Sea Zone {sea_count}")
+            region_name.append(names_by_colour.get(rg.get("colour"), f"Sea Zone {sea_count}"))
         cy = np.average([reg["centre"][i][0] for i in provs], weights=[size[i] for i in provs])
         lat = (cy - H / 2) / (H / 2)
         body = [

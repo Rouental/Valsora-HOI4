@@ -69,6 +69,15 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## Map problems found while building
 
+**Strategic regions from the author's ocean map landed in the wrong oceans** (2026-09-30)
+- Cause: the reference maps (`ref_oceans.webp`, `ref_continents.webp`) show an older
+  arrangement of the continents than the drawing, so they can't be laid straight over
+  the game map. Averaging each continent's mapped position then put open water in
+  unrelated oceans (a "Northern Friedlich" region mid-map).
+- Fix: each continent's shift was fitted separately (Nonscio and Araseos too), and the
+  continents vote for the ocean. Names of oceans running all the way round were
+  scrambled by the map's wrap; they are now read left to right.
+
 **The author's `.pdn` was older than the current one** (2026-09-30)
 - Cause: the upload predated the sea zones and colour changes; applying it would have
   undone them.
