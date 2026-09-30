@@ -120,9 +120,11 @@ The build converts them into HOI4's fussy format for you:
 
 The build prints how many pixels it drew. Ask to see a close-up if you want to check.
 
-Rivers matter in combat when they lie **between** two provinces: HOI4 counts a river
-crossing when the line between two province centres crosses a river. A river running
-through the middle of provinces still looks right but slows fewer attacks.
+Rivers matter in combat only where they lie **between** two provinces; a river
+through the middle of a province is just scenery. You don't have to draw provinces
+along them: after you add or move rivers, ask, and a script
+(`scripts/river_provinces.py`) re-cuts the provinces of every state a river crosses so
+the river becomes their border. States stay as they are.
 
 **The exact way: the Rivers layer.** Anything painted here is used as it is, in HOI4's
 own colours, and wins over the Major/Minor layers where both have a pixel:

@@ -57,6 +57,14 @@ lines, see below). Unknown layer names are ignored, so the author keeps their ow
   - widths: major 7→9, minor 4→5 (7+ is a large river).
   The exact-palette "Rivers" layer wins where set, and river pixels on water are
   dropped. `check_mod.py` checks the result with `rivers.problems`.
+- **Provinces follow rivers** (`river_provinces.py`, by hand, author's request
+  2026-09-30). HOI4's river penalty only applies to a river *between* the provinces of
+  an attack. After a build, the script takes the drawn rivers from `work/world.npz`,
+  splits each crossed state's land into banks, cuts each bank into ~150 px organic
+  provinces, gives river pixels to the province beside them, then merges stray bits.
+  States do not change. First run: 37 states, 113 provinces became 111; river pixels on
+  a province border went from 77 % to 90 % (the rest are corner pixels of diagonal
+  steps, still along the border). Rerun it whenever rivers or outlines change.
 - **Outlines → states** (`apply_outlines.py`, run by hand, not by `run_all.sh`).
   The author draws 1-px country borders on "Borders" and state lines on "Necessary
   Provinces" (the author's layer name; they are **states**, author's correction).
@@ -112,6 +120,7 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `make_game_pdn.py` / `writepdn.py` | turn a placeholder build into a fresh `HOI4 Mod Map.pdn` |
 | `apply_outlines.py` | by hand: the author's outline layers → provinces, states, countries in the `.pdn` |
 | `pdn_tools.py` | by hand: `navigable` (lake → sea with its own region), `sea_zones` (regroup and recolour regions), `give` (whole states to a country), `recolour` |
+| `river_provinces.py` | by hand, after a build: re-cuts the provinces of every state a river crosses so rivers run between provinces |
 | `organic.py` | organic splitting (seeded watershed over noise), used by `apply_outlines.py` |
 | `rivers.py` | plain river lines → HOI4 rivers.bmp format, and the river rules check |
 | `build_mod.py` | every mod file |
@@ -448,7 +457,7 @@ Left loaded on purpose, and noisy in `error.log`:
 
 ## Current state
 
-- 6,005 provinces (5,322 land, 645 sea, 38 lakes), 782 states, 97 strategic regions (17 sea),
+- 6,003 provinces (5,320 land, 645 sea, 38 lakes), 782 states, 97 strategic regions (17 sea),
   19 countries. 2026-09-30 added Romanoddle (90 states, with the islands the author's
   Names layer labels RO), Linterre (24, plus three LT islands), Selto (7: its outline
   plus five coastal Linterre states, author's correction from the Notes layer's older
