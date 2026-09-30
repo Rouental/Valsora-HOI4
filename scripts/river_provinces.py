@@ -82,8 +82,13 @@ def main():
     sl = np.s_[max(ys.min() - 2, 0):ys.max() + 3, max(xs.min() - 2, 0):xs.max() + 3]
     win, wl = P[sl], land[sl]
     fixed = 0
-    for c in np.unique(win[np.isin(St[sl], touched) & wl]):
-        comp = label((win == c) & wl, connectivity=1)
+    for c in np.unique(win[wl]):  # neighbours too: a province may straddle states
+        ys, xs = np.nonzero((win == c) & wl)
+        if ys.min() == 0 or xs.min() == 0 or ys.max() == win.shape[0] - 1 or xs.max() == win.shape[1] - 1:
+            continue  # reaches past the window: can't be judged here
+        box = np.s_[ys.min():ys.max() + 2, xs.min():xs.max() + 2]
+        comp = np.zeros(win.shape, np.int32)
+        comp[box] = label((win[box] == c) & wl[box], connectivity=1)
         sizes = np.bincount(comp.ravel())[1:]
         keep = sizes.argmax() + 1
         for j in range(1, len(sizes) + 1):

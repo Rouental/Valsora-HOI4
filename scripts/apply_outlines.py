@@ -54,11 +54,21 @@ OCEAN, LAKES = (8, 31, 130), (55, 90, 220)
 # Afterwards (pdn_tools.py give) five Linterre states along the Piscary coast went to
 # Selto, matching the author's older drawing (Notes layer), and the island at (300, 785)
 # was cut off from Romanoddle's island by reopening its strait, as Nonscio's.
-DEFAULT_OWNER = "linterre"
+# (config was: DEFAULT_OWNER "linterre"; romanoddle (350, 1000), (323, 835), (481, 829),
+# (447, 807), (438, 813), (514, 822); selto (600, 965); linterre (559, 734), (556, 760),
+# (532, 802).)
+# 2026-09-30, second map: Rastava, Volinovia, Placeholdria, Estande and Coraliza south of
+# Romanoddle and Selto, with the islands the author's Names layer labels ES / PC / RO.
+DEFAULT_OWNER = "estande"
 OWNERS = {
-    "romanoddle": [(350, 1000), (323, 835), (481, 829), (447, 807), (438, 813), (514, 822)],
-    "selto": [(600, 965)],
-    "linterre": [(559, 734), (556, 760), (532, 802)],
+    "rastava": [(602, 1030)],
+    "volinovia": [(527, 1085)],
+    "placeholdria": [(417, 1157), (392, 1069), (364, 1081), (384, 1091), (323, 1104),
+                     (321, 1182), (323, 1199), (350, 1208)],
+    "estande": [(635, 1165), (756, 933), (780, 924), (793, 935), (687, 971), (747, 1006),
+                (760, 1037), (569, 1214), (533, 1229), (599, 1227), (582, 1242), (602, 1262)],
+    "coraliza": [(440, 1231)],
+    "romanoddle": [(270, 1113), (283, 1123), (219, 1135)],
 }
 MIN_STATE = 150      # smaller patches (islets) join the nearest state of their country
 STATE_MAX = 1000     # patches bigger than this become several states ...
@@ -210,6 +220,10 @@ def main():
     print(f"{before - len(chosen)} patches were outlined by an earlier run and are kept as they are; "
           f"{len(recut)} are cut again because new lines split their states")
     for i in chosen:
+        if int(i) not in owner_of:
+            ys, xs = np.nonzero(cells == i)
+            print(f"  patch at ({int(xs.mean())}, {int(ys.mean())}), {size[i]} px: no seed, "
+                  f"goes to {DEFAULT_OWNER}")
         owner_of.setdefault(int(i), DEFAULT_OWNER)
     # line pixels on land go to the nearest patch (inside or out)
     idx = ndi.distance_transform_edt(cells == 0, return_distances=False, return_indices=True)

@@ -540,7 +540,14 @@ def main(mod):
         for v in re.findall(r"\bideology\s*=\s*(\w+)", f.read_text()):
             if v not in subs:
                 err(f"{f.name}: sub-ideology {v} is not in 00_ideologies.txt")
-
+    for v in set(re.findall(r"set_country_leader_ideology\s*=\s*(\w+)", everything)):
+        if v not in subs:
+            err(f"set_country_leader_ideology = {v} is not a sub-ideology")
+    # every sub-ideology of ours has a name (vanilla's hidden ones keep vanilla's)
+    import ideologies
+    for v in (k for lst in ideologies.SUBTYPES.values() for k, _, _ in lst):
+        if v not in keys:
+            err(f"sub-ideology {v} has no localisation")
     # ------------------------------------------------------------ descriptors
     desc = (mod / "descriptor.mod").read_text()
     rps = re.findall(r'replace_path="([^"]+)"', desc)

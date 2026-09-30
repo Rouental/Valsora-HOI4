@@ -80,6 +80,9 @@ TAG_CULTURE = {
     # the Reibonnaise states: French for now (author, 2026-09-29)
     **{t: _FRENCH for t in ("ROU", "SGN", "EVR", "HLR", "SGV", "LST", "LZC", "GDN")},
     "LNT": _FRENCH,  # author, 2026-09-30
+    # Portuguese (author, 2026-09-30): vanilla has no Iberian generic portraits
+    **{t: dict(names="POR", portraits="europe", gfx="western_european")
+       for t in ("RST", "VLN", "ESD", "CRZ", "PLH")},
 }
 
 

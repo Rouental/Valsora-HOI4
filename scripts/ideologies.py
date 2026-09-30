@@ -26,15 +26,7 @@ SRC = Path("source/ideologies/vanilla_00_ideologies.txt")
 THEOCRACY = """
 	theocracy = {
 
-		types = {
-
-			theocrat = {
-			}
-
-			clerical_monarchism = {
-			}
-
-		}
+		TYPES
 
 		dynamic_faction_names = {
 			"FACTION_NAME_THEOCRATIC_1"
@@ -71,6 +63,73 @@ THEOCRACY = """
 	}
 """
 
+# Subtypes (sub-ideologies), the author's set of 2026-09-30: ideology -> [(key, name,
+# description)]. Keys of vanilla subtypes are kept where one is only renamed, so vanilla
+# script and characters still find them.
+SUBTYPES = {
+    "democratic": [
+        ("conservatism", "Conservatism", "Order, tradition and gradual change, chosen at the ballot box."),
+        ("liberalism", "Liberalism", "Free markets, free speech and limited government."),
+        ("socialism", "Social Democracy", "Reform, welfare and workers' rights within a democracy."),
+        ("populism", "Populism", "The common people against the elites, by the vote."),
+        ("agrarianism", "Agrarianism", "The farmers' and peasants' parties, for the land and those who work it."),
+        ("constitutional_monarchism", "Constitutional Monarchy",
+         "A crowned democracy: the prince reigns, parliament governs."),
+    ],
+    "communism": [
+        ("marxism", "Orthodox Marxism", "The classless society, by the letter of the theory."),
+        ("leninism", "Vanguardism", "A revolutionary party leads the workers to power."),
+        ("stalinism", "Party Centralism", "One party, one leader, one plan."),
+        ("council_communism", "Council Communism", "Power to the workers' councils, not to a party."),
+        ("anarchist_communism", "Anarcho-Communism", "No state, no masters, common ownership of everything."),
+        ("agrarian_socialism", "Agrarian Socialism", "The revolution of the peasants and the villages."),
+    ],
+    "fascism": [
+        ("military_junta", "Military Junta", "The generals have taken charge."),
+        ("fascism_ideology", "Fascism", "A mass movement of the nation, united behind its leader."),
+        ("corporatism", "Corporatism", "The state organises the nation's guilds and industries."),
+        ("strongman_rule", "Strongman Rule", "One man's will is the law of the land."),
+        ("technocracy", "Technocracy", "Experts and administrators rule, without the bother of politics."),
+        ("revanchism", "Revanchism", "A regime built on taking back what was lost."),
+    ],
+    "neutrality": [
+        ("despotism", "Absolute Monarchy", "The monarch rules alone and answers to no one."),
+        ("oligarchism", "Oligarchy", "A few great houses hold the real power."),
+        ("feudalism", "Feudalism", "Lords and vassals, bound by oaths of fealty."),
+        ("enlightened_absolutism", "Enlightened Absolutism", "An absolute monarch who reforms from above."),
+        ("elective_monarchy", "Elective Monarchy", "The nobles choose who wears the crown."),
+        ("legitimism", "Legitimism", "The rightful dynasty, restored to its throne."),
+    ],
+    "theocracy": [
+        ("theocrat", "Hierocracy", "The clergy rule in the name of the divine."),
+        ("clerical_monarchism", "Clerical Monarchism", "A ruler whose right to rule comes from the church."),
+        ("holy_order", "Holy Order", "A military religious order holds the state."),
+        ("synodal_rule", "Synodal Rule", "A council of bishops or elders governs."),
+        ("prophetic_rule", "Prophetic Rule", "A chosen, messianic leader speaks for the divine."),
+    ],
+}
+# vanilla's Earth-bound subtypes: kept, since vanilla files name them, but never given to
+# generated leaders
+HIDDEN = {
+    "communism": ["anti_revisionism", "buddhist_socialism"],
+    "fascism": ["nazism", "gen_nazism", "falangism", "rexism", "emperor_fascism"],
+    "neutrality": ["anarchism", "moderatism", "centrism", "japan_militarism_ideology"],
+}
+
+
+def types_block(ideo):
+    out = ["types = {", ""]
+    for key, _, _ in SUBTYPES[ideo]:
+        out += [f"\t\t\t{key} = {{", "\t\t\t}", ""]
+    for key in HIDDEN.get(ideo, []):
+        out += [f"\t\t\t{key} = {{", "\t\t\t\tcan_be_randomly_selected = no", "\t\t\t}", ""]
+    return "\n".join(out) + "\t\t}"
+
+
+def subtypes():
+    return {key for v in SUBTYPES.values() for key, _, _ in v} | {k for v in HIDDEN.values() for k in v}
+
+
 # replaces vanilla's names (localisation/english/replace/, so they win)
 LOCALISATION = [
     ' fascism:0 "Authoritarian"',
@@ -84,13 +143,10 @@ LOCALISATION = [
     ' theocracy_desc:0 "Theocratic State"',
     ' theocracy_drift:0 "Theocratic Drift"',
     ' theocracy_acceptance:0 "Theocratic Acceptance"',
-    ' theocrat:0 "Theocrat"',
-    ' theocrat_desc:0 "Theocracy is a form of government in which the clergy rule in the name of God."',
-    ' clerical_monarchism:0 "Clerical Monarchism"',
-    ' clerical_monarchism_desc:0 "A monarchy that draws its right to rule from the church."',
     ' FACTION_NAME_THEOCRATIC_1:0 "The Holy League"',
     ' FACTION_NAME_THEOCRATIC_2:0 "The Covenant of the Faithful"',
-]
+] + [f' {key}:0 "{name}"\n {key}_desc:0 "{desc}"'
+     for v in SUBTYPES.values() for key, name, desc in v]
 
 
 def ideology_file():
@@ -102,8 +158,20 @@ def ideology_file():
         start = text.index(f"\t{ideo} = {{")
         m = re.compile(r"color = \{[^}]*\}").search(text, start)
         text = text[:m.start()] + f"color = {{ {r} {g} {b} }}" + text[m.end():]
+    for ideo in SUBTYPES:
+        if ideo == "theocracy":
+            continue
+        start = text.index(f"\t{ideo} = {{")
+        a = text.index("types = {", start)
+        depth, i = 0, text.index("{", a)
+        while True:  # the matching closing brace
+            depth += {"{": 1, "}": -1}.get(text[i], 0)
+            if depth == 0:
+                break
+            i += 1
+        text = text[:a] + types_block(ideo) + text[i + 1:]
     r, g, b = COLOURS["theocracy"]
-    block = THEOCRACY.replace("COLOUR", f"{r} {g} {b}")
+    block = THEOCRACY.replace("COLOUR", f"{r} {g} {b}").replace("TYPES", types_block("theocracy"))
     end = text.rstrip().rindex("}")  # the file's closing brace
     return text[:end] + block + "}\n"
 

@@ -185,6 +185,11 @@ with no land left is simply left out of the game.
 | Romanoddle | RMD | 46, 139, 150 |
 | Selto | STO | 214, 120, 40 |
 | Linterre | LNT | 190, 150, 200 |
+| Rastava | RST | 184, 160, 72 |
+| Volinovia | VLN | 70, 100, 170 |
+| Estande | ESD | 20, 90, 36 |
+| Coraliza | CRZ | 240, 122, 92 |
+| Placeholdria | PLH | 238, 196, 222 |
 
 The first seven are the placeholders, one per continent, and the only ones the start
 menu recommends. Brand-new countries need a line of code as well (tag, name and colour

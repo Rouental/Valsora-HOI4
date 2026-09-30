@@ -27,12 +27,25 @@ HISTORY = {
 # name, adjective). Ideologies left out use the placeholder name from build_mod.py.
 IDEOLOGY_NAMES = {
     "ROU": {  # author, 2026-09-30: "Rouental" on the map for every government
-        "democratic": ("Rouental", "The Republic of Rouental", "Rouentaise"),
+        "democratic": ("Rouental", "The Principality of Rouental", "Rouentaise"),
         "fascism": ("Rouental", "The Grand Principality of Rouental", "Rouentaise"),
         "communism": ("Rouental", "The People's Republic of Rouental", "Rouentaise"),
         "neutrality": ("Rouental", "The Sacred Principality of Rouental", "Rouentaise"),
         "theocracy": ("Rouental", "The Most Seran State of Rouental", "Rouentaise"),
     },
+}
+
+# Leader subtype per government, for leaders the game generates (Rouental's democrats
+# and communists have no character of their own): tag -> ideology -> subtype. Set when
+# the government changes (on_ruling_party_change) and in the focuses that change it.
+LEADER_SUBTYPES = {
+    "ROU": {"democratic": "constitutional_monarchism", "communism": "leninism"},  # author
+}
+
+# Starting government other than Monarchist: tag -> (ideology, leader subtype); the
+# subtype is set on_startup, when the game has generated the leader.
+START_GOVERNMENT = {
+    "PLH": ("theocracy", "prophetic_rule"),  # the Chosen Land, under messianic rule (author)
 }
 
 # Map colour per government, for countries whose colour changes with it: tag ->
@@ -56,6 +69,14 @@ FORMAL_NAMES = {
     "HLR": "the Principality of Hollier",
     "ROU": "The Sacred Principality of Rouental",
     "CRD": "the Cardonian Kingdom",
+    # the author's, 2026-09-30
+    "LNT": "the Republic of Linterre",
+    "STO": "the Empire of Selto-Hamborn",
+    "RMD": "the Romanoddlian Republic",
+    "VLN": "the Republic of Volinovia",
+    "ESD": "the Kingdom of Estande",
+    "CRZ": "the Principality of Coraliza",
+    "PLH": "the Chosen Land of Placeholdria",
 }
 
 LOCALISATION = [
@@ -109,7 +130,7 @@ ROU_CHARACTERS = """characters = {
 			}
 		}
 		country_leader = {
-			ideology = despotism
+			ideology = feudalism
 			expire = "1965.1.1.1"
 			id = -1
 		}
@@ -122,7 +143,7 @@ ROU_CHARACTERS = """characters = {
 			}
 		}
 		country_leader = {
-			ideology = fascism_ideology
+			ideology = strongman_rule
 			expire = "1965.1.1.1"
 			id = -1
 		}
@@ -153,7 +174,7 @@ CHARACTERS = """characters = {
 			}
 		}
 		country_leader = {
-			ideology = marxism
+			ideology = anarchist_communism
 			expire = "1965.1.1.1"
 			id = -1
 		}
@@ -278,6 +299,7 @@ ROU_FOCUS_TREE = """focus_tree = {
 			}
 			retire_character = ROU_roland_cahun
 			retire_character = ROU_serelle_cahun
+			set_country_leader_ideology = constitutional_monarchism
 		}
 	}
 
@@ -330,6 +352,7 @@ ROU_FOCUS_TREE = """focus_tree = {
 			}
 			retire_character = ROU_roland_cahun
 			retire_character = ROU_serelle_cahun
+			set_country_leader_ideology = leninism
 		}
 	}
 

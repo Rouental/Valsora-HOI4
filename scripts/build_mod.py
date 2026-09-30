@@ -519,7 +519,7 @@ def main():
             "set_stability = 0.6",
             "set_war_support = 0.3",
             "set_politics = {",
-            "\truling_party = neutrality",
+            f"\truling_party = {nations.START_GOVERNMENT.get(tag, ('neutrality',))[0]}",
             '\tlast_election = "1932.1.1"',
             "\telection_frequency = 48",
             "\telections_allowed = no",
@@ -580,8 +580,14 @@ def main():
                     f"set_cosmetic_tag = {cosmetic(tag, i)} }}" for k, i in enumerate(per)]
         looks += ["\t\t\tif = {", f"\t\t\t\tlimit = {{ tag = {tag} }}", *branches,
                   "\t\t\t\telse = { drop_cosmetic_tag = yes }", "\t\t\t}"]
+    for tag, per in nations.LEADER_SUBTYPES.items():
+        looks += [f"\t\t\tif = {{ limit = {{ tag = {tag} has_government = {i} }} "
+                  f"set_country_leader_ideology = {sub} }}" for i, sub in per.items()]
+    start = [f"\t\t\tif = {{ limit = {{ country_exists = {tag} }} {tag} = {{ set_country_leader_ideology = {sub} }} }}"
+             for tag, (_, sub) in nations.START_GOVERNMENT.items()]
     write("common/on_actions/valsora_on_actions.txt", "\n".join([
         "on_actions = {", "\ton_ruling_party_change = {", "\t\teffect = {", *looks,
+        "\t\t}", "\t}", "\ton_startup = {", "\t\teffect = {", *start,
         "\t\t}", "\t}", "}", ""]))
     # the map colour comes from colors.txt, not the country file: tags missing there get
     # generated colours (in-game, 2026-09-29), so ours replaces vanilla's

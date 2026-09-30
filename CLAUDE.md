@@ -205,7 +205,11 @@ mismatch, missing localisation) and catches all of them.
     the `.pdn` in step.
   - Real countries the author drew: Rouental ROU, Seigne SGN, Evriches EVR, Hollier
     HLR, Selgrave SGV, Lustiana LST, Lanzerac LZC, Guedelon GDN, Cardonia CRD,
-    Romanoddle RMD, Selto STO, Linterre LNT (a placeholder nation, author).
+    Romanoddle RMD, Selto STO, Linterre LNT (a placeholder nation, author), and
+    (second map of 2026-09-30, all Portuguese: POR names, European portraits) Rastava
+    RST, Volinovia VLN, Estande ESD (flag `source/flags/ESD.png`, map colour its green),
+    Coraliza CRZ, Placeholdria PLH (theocratic, prophetic rule). Formal names are the
+    author's; Selto's "Empire of Seito-Hamborn" was read as Selto-Hamborn.
     The new three's colours and adjectives are Claude's picks. All tags were checked
     against vanilla `common/country_tags`; new tags must be too.
   - The adjectives of the neighbours are guesses; the author may rename them.
@@ -297,8 +301,26 @@ working; names come from `localisation/english/replace/`:
 - `democratic` Democratic and `communism` Communist are unchanged.
 - `fascism` is Authoritarian, coloured black (20,20,20).
 - `neutrality` is Monarchist, coloured purple (128,48,168).
-- `theocracy` Theocratic is **new**, coloured white (238,238,238). Its sub-ideologies are
-  `theocrat` and `clerical_monarchism`. Its party icon `GFX_ideology_theocracy_group` is
+- `theocracy` Theocratic is **new**, coloured white (238,238,238).
+- **Subtypes** (sub-ideologies) are the author's set of 2026-09-30, in
+  `ideologies.SUBTYPES` (key, name, description); a renamed vanilla subtype keeps its
+  key (e.g. `despotism` is "Absolute Monarchy", `leninism` "Vanguardism", `theocrat`
+  "Hierocracy"). Democratic: Conservatism, Liberalism, Social Democracy, Populism,
+  Agrarianism, Constitutional Monarchy. Communist: Orthodox Marxism, Vanguardism, Party
+  Centralism, Council Communism, Anarcho-Communism, Agrarian Socialism. Authoritarian:
+  Military Junta, Fascism, Corporatism, Strongman Rule, Technocracy, Revanchism.
+  Monarchist: Absolute Monarchy, Oligarchy, Feudalism, Enlightened Absolutism, Elective
+  Monarchy, Legitimism. Theocratic: Hierocracy, Clerical Monarchism, Holy Order, Synodal
+  Rule, Prophetic Rule. Vanilla's Earth-bound ones (`nazism`, `japan_militarism_ideology`
+  …, `ideologies.HIDDEN`) stay defined because vanilla's characters and focus files name
+  them, but are never given to generated leaders. The author wants no more for now.
+- **Leader subtypes.** Characters carry theirs (Roland feudalism, Serelle
+  strongman_rule, Mahaut theocrat, Communist Merlovich anarchist_communism). Generated
+  leaders get one by `set_country_leader_ideology`: `nations.LEADER_SUBTYPES` (ROU
+  democratic → constitutional_monarchism, communism → leninism) runs on
+  `on_ruling_party_change` and in the focuses; `nations.START_GOVERNMENT` gives a
+  starting government and subtype (PLH: theocracy, prophetic_rule, set `on_startup`).
+  Not yet confirmed in-game that the generated leader exists when these run. Its party icon `GFX_ideology_theocracy_group` is
   a placeholder, `source/ideologies/theocracy_placeholder.png` (the anime picture),
   centre-cropped to 64×64. The author and a friend will draw the real icons.
 - **Party list.** Vanilla's politics view fits four 16 px party rows. `interface/countrypoliticsview.gui`
@@ -350,7 +372,9 @@ don't exist here. That was the cause of "Failed to generate a portrait / name" a
     Yastreovakia POL. Usnistan is PER with Arab + African portraits and middle_eastern
     gfx; Orientalis is JAP with Asian portraits and asian gfx.
   - Overrides are in `TAG_CULTURE`: the Reibonnaise states (ROU SGN EVR HLR SGV LST LZC
-    GDN) and Linterre (LNT) use FRA names and France portraits (author: French for now).
+    GDN) and Linterre (LNT) use FRA names and France portraits (author: French for now);
+    RST VLN ESD CRZ PLH use POR names (added to `source/names/vanilla_names.txt` from
+    vanilla) and Europe portraits.
 - **Scientists and operatives** have no blocks yet. Vanilla's scientist file format
   (`998_scientist_portraits.txt`) couldn't be fetched, so "failed to generate a
   portrait … scientist" may remain.
@@ -457,8 +481,12 @@ Left loaded on purpose, and noisy in `error.log`:
 
 ## Current state
 
-- 6,003 provinces (5,320 land, 645 sea, 38 lakes), 782 states, 97 strategic regions (17 sea),
-  19 countries. 2026-09-30 added Romanoddle (90 states, with the islands the author's
+- 6,441 provinces (5,758 land, 645 sea, 38 lakes), 899 states, 97 strategic regions (17 sea),
+  24 countries. Second map of 2026-09-30: Estande 62 states (with 11 ES islands), Placeholdria
+  28 (7 PC islands), Volinovia 16, Rastava 13, Coraliza 6, three RO islets to
+  Romanoddle; a 1-2 px state-line nudge in Rouental (14 px moved by hand, too small for
+  the split detection) and river edits (provinces re-cut: 47 states, 89 % of river
+  pixels on a border). First map of 2026-09-30 added Romanoddle (90 states, with the islands the author's
   Names layer labels RO), Linterre (24, plus three LT islands), Selto (7: its outline
   plus five coastal Linterre states, author's correction from the Notes layer's older
   drawing), 13 re-cut Rouental states and new rivers in Rouental and Linterre. The
