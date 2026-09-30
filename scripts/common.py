@@ -44,6 +44,10 @@ COUNTRIES = {
     "lanzerac": ("LZC", "Lanzerac", "Lanzeracois", (168, 130, 36)),
     "guedelon": ("GDN", "Guedelon", "Guedelonnais", (7, 76, 130)),
     "cardonia": ("CRD", "Cardonia", "Cardonian", (84, 28, 120)),
+    # 2026-09-30, south-west of Rouental; Linterre is a placeholder nation (author)
+    "romanoddle": ("RMD", "Romanoddle", "Romanoddlian", (46, 139, 150)),
+    "selto": ("STO", "Selto", "Seltan", (214, 120, 40)),
+    "linterre": ("LNT", "Linterre", "Linterrois", (190, 150, 200)),
 }
 # The placeholder countries, one per continent, are the recommended starts in the
 # bookmark; the rest are playable but not listed there.

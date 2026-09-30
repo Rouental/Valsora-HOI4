@@ -180,6 +180,9 @@ with no land left is simply left out of the game.
 | Lanzerac | LZC | 168, 130, 36 |
 | Guedelon | GDN | 7, 76, 130 |
 | Cardonia | CRD | 84, 28, 120 |
+| Romanoddle | RMD | 46, 139, 150 |
+| Selto | STO | 214, 120, 40 |
+| Linterre | LNT | 190, 150, 200 |
 
 The first seven are the placeholders, one per continent, and the only ones the start
 menu recommends. Brand-new countries need a line of code as well (tag, name and colour
@@ -249,5 +252,6 @@ neighbours were made:
 5. Islands you want included but can't outline, just mention (or colour them on a
    reference layer).
 6. Upload and ask. Areas that already belong to a real country are left alone, so
-   you can outline one region at a time. A script (`scripts/apply_outlines.py`) turns the patches into
+   you can outline one region at a time. To split an existing state, draw a line
+   through it on Necessary Provinces: only the states you cut are redone. A script (`scripts/apply_outlines.py`) turns the patches into
    states, provinces and owners on the real layers, and makes new countries.

@@ -43,11 +43,16 @@ OCEAN, LAKES = (8, 31, 130), (55, 90, 220)
 # seigne (811, 818), guedelon (748, 871); rouental exclaves (829, 765), (798, 792),
 # (823, 803) and the lake island (811, 906), which has no outline.
 # 2026-09-29, Cardonia north of Rouental: every new patch, plus the islands the
-# author's References layer colours Cardonian (they have no outlines).
-DEFAULT_OWNER = "cardonia"
+# author's References layer colours Cardonian (they have no outlines): (873, 630),
+# (905, 593), (920, 548), (605, 646), (598, 726), (698, 536), (618, 549), (593, 562),
+# (689, 580).
+# 2026-09-30, Romanoddle, Selto and Linterre south-west of Rouental: DEFAULT_OWNER
+# "linterre"; the islands are the ones the author's Names layer labels RO / LT.
+DEFAULT_OWNER = "linterre"
 OWNERS = {
-    "cardonia": [(873, 630), (905, 593), (920, 548), (605, 646), (598, 726),
-                 (698, 536), (618, 549), (593, 562), (689, 580)],
+    "romanoddle": [(350, 1000), (323, 835), (481, 829), (447, 807), (438, 813), (514, 822)],
+    "selto": [(600, 965)],
+    "linterre": [(559, 734), (556, 760), (532, 802)],
 }
 MIN_STATE = 150      # smaller patches (islets) join the nearest state of their country
 STATE_MAX = 1000     # patches bigger than this become several states ...
@@ -165,20 +170,45 @@ def main():
     chosen = [i for i in np.nonzero(touch)[0] if i != outside] + \
         [i for i in owner_of if not touch[i]]
     chosen = sorted(set(chosen))
-    # skip patches an earlier run already turned into a real country
+    # skip patches an earlier run already turned into a real country, unless a new line
+    # cuts through one of their states: those are cut again and keep their country
     K0 = code(L["Countries"][..., :3])
-    real = [code(np.array(COUNTRIES[c][3])) for c in COUNTRIES if c not in PLACEHOLDERS]
-    done = np.isin(K0, real) & land
+    real_col = {code(np.array(COUNTRIES[c][3])): c for c in COUNTRIES if c not in PLACEHOLDERS}
+    done = np.isin(K0, list(real_col)) & land
     dsum = np.bincount(cells[done], minlength=len(size))
+    S0 = np.where(L["States"][..., 3] > 0, code(L["States"][..., :3]), -1)
+
+    def cut_by_lines(sc):
+        """True if the lines split state sc into more pieces than it has anyway
+        (islets across water are fine)."""
+        ys, xs = np.nonzero(S0 == sc)
+        sl = np.s_[ys.min():ys.max() + 1, xs.min():xs.max() + 1]
+        m = S0[sl] == sc
+        whole = np.bincount(sklabel(m, connectivity=1).ravel())[1:]
+        parts = np.bincount(sklabel(m & ~lines[sl], connectivity=1).ravel())[1:]
+        return (parts >= 8).sum() > (whole >= 8).sum()
+
     before = len(chosen)
-    chosen = [i for i in chosen if dsum[i] * 2 < size[i]]
-    print(f"{before - len(chosen)} patches were outlined by an earlier run and are kept as they are")
+    kept, recut = [], []
+    for i in chosen:
+        if dsum[i] * 2 < size[i]:
+            kept.append(i)
+            continue
+        ys, xs = np.nonzero(cells == i)
+        if not any(cut_by_lines(sc) for sc in np.unique(S0[ys, xs]) if sc >= 0):
+            continue
+        kept.append(i)
+        recut.append(i)
+        owner_of[int(i)] = real_col[Counter(K0[ys, xs].tolist()).most_common(1)[0][0]]
+    chosen = kept
+    print(f"{before - len(chosen)} patches were outlined by an earlier run and are kept as they are; "
+          f"{len(recut)} are cut again because new lines split their states")
     for i in chosen:
         owner_of.setdefault(int(i), DEFAULT_OWNER)
     # line pixels on land go to the nearest patch (inside or out)
     idx = ndi.distance_transform_edt(cells == 0, return_distances=False, return_indices=True)
     cells = np.where(land & (cells == 0), cells[idx[0], idx[1]], cells)
-    area = np.isin(cells, chosen) & ~done
+    area = np.isin(cells, chosen) & (~done | np.isin(cells, recut))
     print(f"{len(chosen)} outlined patches, {area.sum()} px, outside patch {outside}")
 
     P = code(L["Provinces"][..., :3])
@@ -265,7 +295,7 @@ def main():
         cent[c] = (ys.mean(), xs.mean())
     patch_size = {i: int(size[i]) for i in chosen}
     for c, key in list(prov_state.items()):
-        if patch_size[key[0]] >= MIN_STATE:
+        if patch_size[key[0]] >= MIN_STATE or key[0] in recut:  # a drawn split is kept
             continue
         best = min((k for k in prov_state if patch_size[prov_state[k][0]] >= MIN_STATE
                     and prov_owner[k] == prov_owner[c]),

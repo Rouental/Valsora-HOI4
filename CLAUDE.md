@@ -73,7 +73,11 @@ lines, see below). Unknown layer names are ignored, so the author keeps their ow
     touch borders up by hand, rather than re-cutting what exists.
   - `OWNERS` names patches by seed pixel; the rest go to `DEFAULT_OWNER`. Each run only
     needs the new region: patches already painted in a real (non-placeholder) country
-    colour are skipped, and past runs' seeds are kept as comments. The script decodes
+    colour are skipped, and past runs' seeds are kept as comments.
+  - **Split states are re-cut.** A done patch is cut again (organic, keeping its
+    country) only when a new line splits one of its states (more pieces across lines
+    than the state has anyway, so islets across water don't count). These drawn pieces
+    stay states even under `MIN_STATE`. First used 2026-09-30: 13 Rouental pieces. The script decodes
     its input `.pdn` itself (`work/pdn_outlines`).
   - Islets under 150 px join the nearest state of their country instead of becoming
     states.
@@ -191,7 +195,9 @@ mismatch, missing localisation) and catches all of them.
     deep purple. Guedelon's blue and Hollier's red are their flags' main colours. `pdn_tools.py recolour Countries OLD=NEW` keeps
     the `.pdn` in step.
   - Real countries the author drew: Rouental ROU, Seigne SGN, Evriches EVR, Hollier
-    HLR, Selgrave SGV, Lustiana LST, Lanzerac LZC, Guedelon GDN, Cardonia CRD. All tags were checked
+    HLR, Selgrave SGV, Lustiana LST, Lanzerac LZC, Guedelon GDN, Cardonia CRD,
+    Romanoddle RMD, Selto STO, Linterre LNT (a placeholder nation, author).
+    The new three's colours and adjectives are Claude's picks. All tags were checked
     against vanilla `common/country_tags`; new tags must be too.
   - The adjectives of the neighbours are guesses; the author may rename them.
 - **Localisation keys are our own** (`VAL_STATE_n`, `VAL_REGION_n`), so vanilla's
@@ -434,8 +440,10 @@ Left loaded on purpose, and noisy in `error.log`:
 
 ## Current state
 
-- 5,564 provinces (4,881 land, 644 sea, 39 lakes), 663 states, 97 strategic regions (17 sea),
-  16 countries. Real: Rouental and its seven neighbours (56 states, about 175
+- 6,004 provinces (5,321 land, 644 sea, 39 lakes), 781 states, 97 strategic regions (17 sea),
+  19 countries. 2026-09-30 added Romanoddle (90 states, with the islands the author's
+  Names layer labels RO), Linterre (29, plus three LT islands), Selto (2), 13 re-cut
+  Rouental states and new rivers in Rouental and Linterre. Earlier: Real: Rouental and its seven neighbours (56 states, about 175
   provinces), and Cardonia to the north (67 states, about 300 provinces). Cardonia is
   17 outlined patches plus nine islands the author's References layer colours
   Cardonian (seeded by hand). Everything else is still placeholder bricks. Two rivers
@@ -462,6 +470,12 @@ Left loaded on purpose, and noisy in `error.log`:
    Generic portraits and name lists exist (see Cultures), but not yet for scientists.
 
 ## Working with the author
+
+**Every time the author sends a `.pdn`, send `source/HOI4 Mod Map.pdn` back when done**
+(author, 2026-09-30), so their copy has every edit. Their upload may be based on an
+older version (the 2026-09-30 one predated the sea zones and recolours): diff its game
+layers against `source/` first, and merge, keeping the current game layers and taking
+their own layers (outlines, rivers, names, references) from the upload.
 
 The author tests in-game and reports crashes and `error.log`. They cannot see the
 pipeline, so always say which files changed and how to install:
