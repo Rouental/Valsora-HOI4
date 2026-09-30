@@ -111,7 +111,7 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `regions.py` | placeholder mode only: states, strategic regions |
 | `make_game_pdn.py` / `writepdn.py` | turn a placeholder build into a fresh `HOI4 Mod Map.pdn` |
 | `apply_outlines.py` | by hand: the author's outline layers → provinces, states, countries in the `.pdn` |
-| `pdn_tools.py` | by hand: `navigable` (lake → sea with its own region), `sea_zones` (regroup and recolour regions) |
+| `pdn_tools.py` | by hand: `navigable` (lake → sea with its own region), `sea_zones` (regroup and recolour regions), `give` (whole states to a country), `recolour` |
 | `organic.py` | organic splitting (seeded watershed over noise), used by `apply_outlines.py` |
 | `rivers.py` | plain river lines → HOI4 rivers.bmp format, and the river rules check |
 | `build_mod.py` | every mod file |
@@ -233,9 +233,17 @@ Aislada is the worked example of a built-out nation:
   `build_mod.py` stops if a named id is no longer a victory point.
 - **Rouental (ROU)** is the country the author outlined inside Nonscio. Everything
   first built for NSC moved to it, with `NSC_` renamed `ROU_`; NSC is plain "Nonscio"
-  again. `nations.IDEOLOGY_NAMES["ROU"]` gives the per-ideology names from the author's
-  localisation file (Perfect / Powerful / Boring / Shitty Rouental, adjective
-  Rouentaise).
+  again. `nations.IDEOLOGY_NAMES["ROU"]`: "Rouental" on the map for every government,
+  with the author's formal names (2026-09-30): Monarchist "The Sacred Principality",
+  Authoritarian "The Grand Principality", Theocratic "The Most Seran State",
+  Democratic "The Republic", Communist "The People's Republic" (all "… of Rouental");
+  adjective Rouentaise. (The first names, Perfect / Powerful / Boring / Shitty
+  Rouental, were dropped.)
+  - **Capital: Rêverie**, the one-province state the author drew at (660, 805)
+    ("Rouental 27" in that build), set by `nations.CAPITALS` (tag → pixel, since state
+    ids shift). Neighbours' capitals are named by `CITY_NAMES` "capital:TAG": Guedelon,
+    Evriches, Argent-sur-Seigne (SGN), Grande Hollier, Lanzerac, Villerose (SGV),
+    Tanière (LST).
   - Leaders are in `common/characters/ROU.txt`: Roland Cahun (`despotism`, leads at
     start) and Serelle Cahun (`fascism_ideology`, fascist party leader).
   - Portraits come from `source/portraits/roland_cahun.png` and `serelle_cahun.png`.
@@ -333,7 +341,7 @@ don't exist here. That was the cause of "Failed to generate a portrait / name" a
     Yastreovakia POL. Usnistan is PER with Arab + African portraits and middle_eastern
     gfx; Orientalis is JAP with Asian portraits and asian gfx.
   - Overrides are in `TAG_CULTURE`: the Reibonnaise states (ROU SGN EVR HLR SGV LST LZC
-    GDN) use FRA names and France portraits (author: French for now).
+    GDN) and Linterre (LNT) use FRA names and France portraits (author: French for now).
 - **Scientists and operatives** have no blocks yet. Vanilla's scientist file format
   (`998_scientist_portraits.txt`) couldn't be fetched, so "failed to generate a
   portrait … scientist" may remain.
@@ -440,10 +448,14 @@ Left loaded on purpose, and noisy in `error.log`:
 
 ## Current state
 
-- 6,004 provinces (5,321 land, 644 sea, 39 lakes), 781 states, 97 strategic regions (17 sea),
+- 6,005 provinces (5,322 land, 645 sea, 38 lakes), 782 states, 97 strategic regions (17 sea),
   19 countries. 2026-09-30 added Romanoddle (90 states, with the islands the author's
-  Names layer labels RO), Linterre (29, plus three LT islands), Selto (2), 13 re-cut
-  Rouental states and new rivers in Rouental and Linterre. Earlier: Real: Rouental and its seven neighbours (56 states, about 175
+  Names layer labels RO), Linterre (24, plus three LT islands), Selto (7: its outline
+  plus five coastal Linterre states, author's correction from the Notes layer's older
+  drawing), 13 re-cut Rouental states and new rivers in Rouental and Linterre. The
+  island at (300, 785) was fused to Romanoddle's by 2-4 px land bridges that closed its
+  strait into a lake; the strait was reopened (sea, its neighbour's sea region) and the
+  island is Nonscio's own state (author). Earlier: Real: Rouental and its seven neighbours (56 states, about 175
   provinces), and Cardonia to the north (67 states, about 300 provinces). Cardonia is
   17 outlined patches plus nine islands the author's References layer colours
   Cardonian (seeded by hand). Everything else is still placeholder bricks. Two rivers

@@ -6,6 +6,9 @@
     python3 scripts/pdn_tools.py recolour LAYER R,G,B=R,G,B [...]
         Swap exact colours on a layer, e.g. a country's colour on "Countries" after it
         changed in common.COUNTRIES (the build matches countries by exact colour).
+    python3 scripts/pdn_tools.py give COUNTRY X,Y [X,Y ...]
+        Give the whole states containing these pixels to COUNTRY (a common.COUNTRIES key),
+        on the Countries layer.
     python3 scripts/pdn_tools.py sea_zones [CELL]
         Regroup all sea provinces into larger sea regions (about CELL px across, default
         1536), and recolour the Strategic Regions layer so sea regions are blues and land
@@ -165,6 +168,17 @@ def sea_zones(names, L, cell):
     print(f"{len(live)} sea regions (were {len(np.unique(R[sea]))}), {len(land_cols)} land regions recoloured")
 
 
+def give(names, L, country, seeds):
+    from common import COUNTRIES
+    St = code(L["States"][..., :3])
+    painted = L["States"][..., 3] > 0
+    for x, y in seeds:
+        m = painted & (St == St[y, x])
+        L["Countries"][m, :3] = COUNTRIES[country][3]
+        L["Countries"][m, 3] = 255
+        print(f"state at ({x}, {y}): {m.sum()} px -> {country}")
+
+
 def recolour(names, L, layer, pairs):
     C = code(L[layer][..., :3])
     painted = L[layer][..., 3] > 0
@@ -183,6 +197,8 @@ def main():
         pairs = [tuple(tuple(int(v) for v in side.split(",")) for side in a.split("="))
                  for a in sys.argv[3:]]
         recolour(names, L, sys.argv[2], pairs)
+    elif cmd == "give":
+        give(names, L, sys.argv[2], [tuple(int(v) for v in a.split(",")) for a in sys.argv[3:]])
     elif cmd == "sea_zones":
         sea_zones(names, L, int(sys.argv[2]) if len(sys.argv) > 2 else 1536)
     else:

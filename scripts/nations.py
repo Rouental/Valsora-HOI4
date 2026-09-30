@@ -26,15 +26,12 @@ HISTORY = {
 # Country names while a given ideology rules: tag -> ideology -> (name, formal
 # name, adjective). Ideologies left out use the placeholder name from build_mod.py.
 IDEOLOGY_NAMES = {
-    "ROU": {
-        "democratic": ("Boring Rouental", "The Liberal and Functional Republic of Rouental",
-                       "Rouentaise"),
-        "fascism": ("Powerful Rouental", "The Absolute Iron Rouentaise Monarchy", "Rouentaise"),
-        "communism": ("Shitty Rouental", "The Red Workers' Peoples' Republic of Rouental",
-                      "Rouentaise"),
-        "neutrality": ("Perfect Rouental", "The Serene and Beautiful Feudal Realm of Rouental",
-                       "Rouentaise"),
-        "theocracy": ("Holy Rouental", "The Holy Principality of Rouental", "Rouentaise"),
+    "ROU": {  # author, 2026-09-30: "Rouental" on the map for every government
+        "democratic": ("Rouental", "The Republic of Rouental", "Rouentaise"),
+        "fascism": ("Rouental", "The Grand Principality of Rouental", "Rouentaise"),
+        "communism": ("Rouental", "The People's Republic of Rouental", "Rouentaise"),
+        "neutrality": ("Rouental", "The Sacred Principality of Rouental", "Rouentaise"),
+        "theocracy": ("Rouental", "The Most Seran State of Rouental", "Rouentaise"),
     },
 }
 
@@ -57,7 +54,7 @@ FORMAL_NAMES = {
     "LST": "the Duchy of Lustiana",
     "SGV": "the Duchy of Selgrave",
     "HLR": "the Principality of Hollier",
-    "ROU": "the Holy Principality of Rouental",
+    "ROU": "The Sacred Principality of Rouental",
     "CRD": "the Cardonian Kingdom",
 }
 
@@ -444,6 +441,21 @@ PORTRAITS = {
 # capital city, which stays correct across rebuilds.
 CITY_NAMES = {
     "capital:AIS": "The Great and Noble City of Merlovia",
+    # the author's capitals, 2026-09-30
+    "capital:ROU": "Rêverie",
+    "capital:GDN": "Guedelon",
+    "capital:EVR": "Evriches",
+    "capital:SGN": "Argent-sur-Seigne",
+    "capital:HLR": "Grande Hollier",
+    "capital:LZC": "Lanzerac",
+    "capital:SGV": "Villerose",
+    "capital:LST": "Tanière",
+}
+
+# Capitals chosen by the author, as a pixel (x, y) inside the capital state; other
+# countries get the sizeable state nearest the middle of their land.
+CAPITALS = {
+    "ROU": (660, 805),  # Rêverie, the small state the author drew for it ("Rouental 27")
 }
 
 

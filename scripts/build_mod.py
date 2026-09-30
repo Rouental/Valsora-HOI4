@@ -328,6 +328,13 @@ def main():
         big = [s for s in members if len(states[s]) >= 4] or members
         capital_state[c] = min(big, key=lambda s: np.hypot(*(np.mean(
             [reg["centre"][i] for i in states[s]], axis=0) - (cy, cx))))
+    # capitals the author chose, by a map pixel (state ids shift when the map changes)
+    for tag, (x, y) in nations.CAPITALS.items():
+        c = next(k for k in COUNTRIES if COUNTRIES[k][0] == tag)
+        s = int(state_of[lab[y, x]])
+        if c not in capital_state or s < 0 or owners[s] != c:
+            raise SystemExit(f"nations.CAPITALS: ({x}, {y}) is not in a state of {tag}")
+        capital_state[c] = s
     for s, g in enumerate(states):
         c = owners[s]
         tag = COUNTRIES[c][0]

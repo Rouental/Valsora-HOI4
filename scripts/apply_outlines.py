@@ -48,6 +48,12 @@ OCEAN, LAKES = (8, 31, 130), (55, 90, 220)
 # (689, 580).
 # 2026-09-30, Romanoddle, Selto and Linterre south-west of Rouental: DEFAULT_OWNER
 # "linterre"; the islands are the ones the author's Names layer labels RO / LT.
+# Afterwards (pdn_tools.py give) five Linterre states along the Piscary coast went to
+# Selto, matching the author's older drawing (Notes layer), and the island at (300, 785)
+# was cut off from Romanoddle's island by reopening its strait, as Nonscio's.
+# Afterwards (pdn_tools.py give) five Linterre states along the Piscary coast went to
+# Selto, matching the author's older drawing (Notes layer), and the island at (300, 785)
+# was cut off from Romanoddle's island by reopening its strait, as Nonscio's.
 DEFAULT_OWNER = "linterre"
 OWNERS = {
     "romanoddle": [(350, 1000), (323, 835), (481, 829), (447, 807), (438, 813), (514, 822)],

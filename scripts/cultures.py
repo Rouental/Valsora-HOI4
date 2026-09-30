@@ -79,6 +79,7 @@ _FRENCH = dict(names="FRA", portraits="france", gfx="western_european")
 TAG_CULTURE = {
     # the Reibonnaise states: French for now (author, 2026-09-29)
     **{t: _FRENCH for t in ("ROU", "SGN", "EVR", "HLR", "SGV", "LST", "LZC", "GDN")},
+    "LNT": _FRENCH,  # author, 2026-09-30
 }
 
 
