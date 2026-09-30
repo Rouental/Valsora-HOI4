@@ -322,10 +322,10 @@ working; names come from `localisation/english/replace/`:
   `nations.LEADERS` gives each tag its subtypes; the first leads the country, and the
   country starts under that subtype's ideology (elections on if democratic).
   `cultures.leaders` makes the characters (`common/characters/valsora_leaders.txt`,
-  id `TAG_<subtype>`): a name from the culture's list (famous surnames skipped, full
+  id `TAG_leader_<subtype>`, never `TAG_<subtype>`, which the game reads as the country's name under that subtype): a name from the culture's list (famous surnames skipped, full
   names unique map-wide) and a generic politician portrait of the culture, seeded by
   tag. Hand-made rulers (`HAND_MADE`: ROU, AIS) keep theirs; Rouental also gets
-  `ROU_constitutional_monarchism` and `ROU_leninism`, promoted by the Polite and Rudely
+  `ROU_leader_constitutional_monarchism` and `ROU_leader_leninism`, promoted by the Polite and Rudely
   focuses. Author's picks: CRD Enlightened Absolutism; EVR, SGN Feudalism; HLR, STO
   Absolute Monarchy; LST Elective Monarchy; SGV Oligarchy; LZC, GDN Lordly Republic;
   LNT Conservatism; RMD Social Democracy; RST Revanchism; VLN Liberalism; ESD, CRZ
@@ -532,6 +532,9 @@ Left loaded on purpose, and noisy in `error.log`:
    Generic portraits and name lists exist (see Cultures), but not yet for scientists.
 
 ## Working with the author
+
+**Keep `docs/PROBLEM_LOG.md` up to date** (author, 2026-09-30): every error or problem,
+its cause and its fix, newest first.
 
 **Every time the author sends a `.pdn`, send `source/HOI4 Mod Map.pdn` back when done**
 (author, 2026-09-30), so their copy has every edit. Their upload may be based on an

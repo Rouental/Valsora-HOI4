@@ -172,7 +172,9 @@ def leaders(tag, continent, subtypes, ideology_of, used):
     rng = np.random.default_rng(zlib.crc32(tag.encode()))
     blocks, loc, ids = [], [], []
     for sub in subtypes:
-        cid = f"{tag}_{sub}"
+        # not TAG_<subtype>: the game reads that key as the country's name under that
+        # subtype (vanilla's GER_nazism), so every country showed its leader's name
+        cid = f"{tag}_leader_{sub}"
         # any politician of the culture (a single ideology's list is one or two faces)
         pool = sorted({p for v in REGIONS[c["portraits"]]["political"].values() for p in v})
         while True:  # no two leaders share a full name (`used` spans every country)

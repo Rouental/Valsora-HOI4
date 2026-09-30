@@ -401,6 +401,16 @@ def main(mod):
         for spr in re.findall(r"large\s*=\s*(GFX_\w+)", f.read_text()):
             if spr not in sprites and spr not in vanilla_generic:
                 err(f"portrait sprite {spr} is neither ours (interface/) nor a vanilla generic one")
+    # no localisation key may be TAG_<ideology or subtype> unless it is meant as that
+    # country's name: the game looks names up that way (a leader's name once showed as
+    # every country's name)
+    import ideologies
+    govs = set(ideologies.IDEOLOGIES) | set(ideologies.ideology_of())
+    tags = {f.name[:3] for f in (mod / "history/countries").glob("*.txt")}
+    for f in (mod / "common/characters").glob("*.txt"):
+        for cid in re.findall(r"^\t(\w+) = \{", f.read_text(), re.M):
+            if cid[:3] in tags and cid[4:] in govs:
+                err(f"character {cid} would name country {cid[:3]} (TAG_<government> is a country-name key)")
     # every country is led by a character of its ruling ideology (author: no generated
     # leaders, so no subtype is left to chance)
     sub_ideo = {}

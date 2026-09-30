@@ -315,7 +315,7 @@ ROU_FOCUS_TREE = """focus_tree = {
 			}
 			retire_character = ROU_roland_cahun
 			retire_character = ROU_serelle_cahun
-			promote_character = ROU_constitutional_monarchism
+			promote_character = ROU_leader_constitutional_monarchism
 		}
 	}
 
@@ -368,7 +368,7 @@ ROU_FOCUS_TREE = """focus_tree = {
 			}
 			retire_character = ROU_roland_cahun
 			retire_character = ROU_serelle_cahun
-			promote_character = ROU_leninism
+			promote_character = ROU_leader_leninism
 		}
 	}
 
