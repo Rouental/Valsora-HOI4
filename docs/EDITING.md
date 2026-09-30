@@ -187,7 +187,7 @@ with no land left is simply left out of the game.
 | Linterre | LNT | 190, 150, 200 |
 | Rastava | RST | 184, 160, 72 |
 | Volinovia | VLN | 70, 100, 170 |
-| Estande | ESD | 20, 90, 36 |
+| Estande | ESD | 153, 0, 0 |
 | Coraliza | CRZ | 240, 122, 92 |
 | Placeholdria | PLH | 238, 196, 222 |
 

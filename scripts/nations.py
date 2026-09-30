@@ -35,18 +35,34 @@ IDEOLOGY_NAMES = {
     },
 }
 
-# Leader subtype per government, for leaders the game generates (Rouental's democrats
-# and communists have no character of their own): tag -> ideology -> subtype. Set when
-# the government changes (on_ruling_party_change) and in the focuses that change it.
-LEADER_SUBTYPES = {
-    "ROU": {"democratic": "constitutional_monarchism", "communism": "leninism"},  # author
+# Leaders with a generic portrait and a name from their culture's name list, so no
+# leader's subtype is left to chance (author, 2026-09-30): tag -> subtypes. The first
+# leads the country, which starts under that subtype's ideology; the rest lead other
+# parties. Tags whose ruler is a hand-made character (HAND_MADE) only get party leaders.
+LEADERS = {
+    # the author's choices, 2026-09-30
+    "CRD": ["enlightened_absolutism"],
+    "EVR": ["feudalism"],
+    "SGN": ["feudalism"],
+    "HLR": ["despotism"],              # Absolute Monarchy
+    "LST": ["elective_monarchy"],
+    "SGV": ["oligarchism"],            # Oligarchy
+    "LZC": ["lordly_republic"],
+    "GDN": ["lordly_republic"],
+    "LNT": ["conservatism"],
+    "RMD": ["socialism"],              # Social Democracy
+    "RST": ["revanchism"],
+    "VLN": ["liberalism"],
+    "ESD": ["constitutional_monarchism"],
+    "CRZ": ["constitutional_monarchism"],
+    "STO": ["despotism"],
+    "PLH": ["prophetic_rule"],         # the Chosen Land, under messianic rule
+    # Rouental's democrats and communists, promoted by their focuses
+    "ROU": ["constitutional_monarchism", "leninism"],
+    # the continent placeholders: not chosen by the author, Monarchist as before
+    **{t: ["despotism"] for t in ("NSC", "ARS", "SLT", "YAS", "USN", "ORI")},
 }
-
-# Starting government other than Monarchist: tag -> (ideology, leader subtype); the
-# subtype is set on_startup, when the game has generated the leader.
-START_GOVERNMENT = {
-    "PLH": ("theocracy", "prophetic_rule"),  # the Chosen Land, under messianic rule (author)
-}
+HAND_MADE = {"ROU", "AIS"}  # rulers defined in the character files below
 
 # Map colour per government, for countries whose colour changes with it: tag ->
 # ideology -> colour. Ideologies left out use the country's own colour. Each becomes a
@@ -62,7 +78,7 @@ LOOKS = {
 FORMAL_NAMES = {
     "GDN": "the Free City of Guedelon",
     "EVR": "the County of Evriches",
-    "SGN": "the County of Seigne",
+    "SGN": "the County of the Seigne",
     "LZC": "the Republic of Lanzerac",
     "LST": "the Duchy of Lustiana",
     "SGV": "the Duchy of Selgrave",
@@ -299,7 +315,7 @@ ROU_FOCUS_TREE = """focus_tree = {
 			}
 			retire_character = ROU_roland_cahun
 			retire_character = ROU_serelle_cahun
-			set_country_leader_ideology = constitutional_monarchism
+			promote_character = ROU_constitutional_monarchism
 		}
 	}
 
@@ -352,7 +368,7 @@ ROU_FOCUS_TREE = """focus_tree = {
 			}
 			retire_character = ROU_roland_cahun
 			retire_character = ROU_serelle_cahun
-			set_country_leader_ideology = leninism
+			promote_character = ROU_leninism
 		}
 	}
 

@@ -395,10 +395,26 @@ def main(mod):
                 err(f"{f.name} recruits unknown character {c}")
             if c not in keys:
                 err(f"character {c} has no localisation")
+    vanilla_generic = set(l.strip() for l in open("source/names/vanilla_portrait_sprites.txt")
+                          if l.startswith("GFX_"))
     for f in (mod / "common/characters").glob("*.txt"):
         for spr in re.findall(r"large\s*=\s*(GFX_\w+)", f.read_text()):
-            if spr not in sprites:
-                err(f"portrait sprite {spr} is not defined in interface/")
+            if spr not in sprites and spr not in vanilla_generic:
+                err(f"portrait sprite {spr} is neither ours (interface/) nor a vanilla generic one")
+    # every country is led by a character of its ruling ideology (author: no generated
+    # leaders, so no subtype is left to chance)
+    sub_ideo = {}
+    for f in (mod / "common/characters").glob("*.txt"):
+        for cid, sub in re.findall(r"^\t(\w+) = \{.*?country_leader = \{\s*ideology = (\w+)", f.read_text(), re.S | re.M):
+            sub_ideo[cid] = sub
+    import ideologies
+    io = {**ideologies.ideology_of(), **{k: i for i, v in ideologies.HIDDEN.items() for k in v}}
+    for f in (mod / "history/countries").glob("*.txt"):
+        t = f.read_text()
+        rp = re.search(r"ruling_party\s*=\s*(\w+)", t).group(1)
+        leads = [c for c in re.findall(r"recruit_character\s*=\s*(\w+)", t) if io.get(sub_ideo.get(c)) == rp]
+        if not leads:
+            err(f"{f.name}: no recruited character leads its ruling party ({rp})")
     for f in (mod / "common/national_focus").glob("*.txt"):
         text = strip(f.read_text())
         ids = re.findall(r"\bfocus\s*=\s*\{\s*id\s*=\s*(\w+)", text)

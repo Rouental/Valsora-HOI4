@@ -207,7 +207,8 @@ mismatch, missing localisation) and catches all of them.
     HLR, Selgrave SGV, Lustiana LST, Lanzerac LZC, Guedelon GDN, Cardonia CRD,
     Romanoddle RMD, Selto STO, Linterre LNT (a placeholder nation, author), and
     (second map of 2026-09-30, all Portuguese: POR names, European portraits) Rastava
-    RST, Volinovia VLN, Estande ESD (flag `source/flags/ESD.png`, map colour its green),
+    RST, Volinovia VLN, Estande ESD (flag `source/flags/ESD.png`, map colour the flag's red (153,0,0): the
+    green blended with Rouental),
     Coraliza CRZ, Placeholdria PLH (theocratic, prophetic rule). Formal names are the
     author's; Selto's "Empire of Seito-Hamborn" was read as Selto-Hamborn.
     The new three's colours and adjectives are Claude's picks. All tags were checked
@@ -314,13 +315,25 @@ working; names come from `localisation/english/replace/`:
   Rule, Prophetic Rule. Vanilla's Earth-bound ones (`nazism`, `japan_militarism_ideology`
   …, `ideologies.HIDDEN`) stay defined because vanilla's characters and focus files name
   them, but are never given to generated leaders. The author wants no more for now.
-- **Leader subtypes.** Characters carry theirs (Roland feudalism, Serelle
-  strongman_rule, Mahaut theocrat, Communist Merlovich anarchist_communism). Generated
-  leaders get one by `set_country_leader_ideology`: `nations.LEADER_SUBTYPES` (ROU
-  democratic → constitutional_monarchism, communism → leninism) runs on
-  `on_ruling_party_change` and in the focuses; `nations.START_GOVERNMENT` gives a
-  starting government and subtype (PLH: theocracy, prophetic_rule, set `on_startup`).
-  Not yet confirmed in-game that the generated leader exists when these run. Its party icon `GFX_ideology_theocracy_group` is
+- Subtype descriptions start with the subtype's name ("Feudalism: …"), so it shows on
+  mouse-over (author). `lordly_republic` "Lordly Republic" (democratic) is the author's
+  own: a republic in which the nobility and clergy retain significant power.
+- **Every ruler is a set character** (author, 2026-09-30: no subtype left to chance).
+  `nations.LEADERS` gives each tag its subtypes; the first leads the country, and the
+  country starts under that subtype's ideology (elections on if democratic).
+  `cultures.leaders` makes the characters (`common/characters/valsora_leaders.txt`,
+  id `TAG_<subtype>`): a name from the culture's list (famous surnames skipped, full
+  names unique map-wide) and a generic politician portrait of the culture, seeded by
+  tag. Hand-made rulers (`HAND_MADE`: ROU, AIS) keep theirs; Rouental also gets
+  `ROU_constitutional_monarchism` and `ROU_leninism`, promoted by the Polite and Rudely
+  focuses. Author's picks: CRD Enlightened Absolutism; EVR, SGN Feudalism; HLR, STO
+  Absolute Monarchy; LST Elective Monarchy; SGV Oligarchy; LZC, GDN Lordly Republic;
+  LNT Conservatism; RMD Social Democracy; RST Revanchism; VLN Liberalism; ESD, CRZ
+  Constitutional Monarchy; PLH Prophetic Rule. The six continent placeholders were not
+  chosen and default to Absolute Monarchy. Characters: Roland feudalism, Serelle
+  strongman_rule, Mahaut theocrat, Communist Merlovich anarchist_communism.
+  `check_mod.py` checks every country has a recruited leader of its ruling ideology
+  (mutation-tested). Its party icon `GFX_ideology_theocracy_group` is
   a placeholder, `source/ideologies/theocracy_placeholder.png` (the anime picture),
   centre-cropped to 64×64. The author and a friend will draw the real icons.
 - **Party list.** Vanilla's politics view fits four 16 px party rows. `interface/countrypoliticsview.gui`

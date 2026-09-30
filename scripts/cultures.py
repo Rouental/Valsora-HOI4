@@ -63,6 +63,13 @@ REGIONS = {
                        theocracy=["GFX_Portrait_Asia_Generic_3"])),
 }
 
+# Portuguese: Europe's generals, and South America's politicians with Europe's
+REGIONS["iberia"] = dict(
+    army=REGIONS["europe"]["army"], navy=REGIONS["europe"]["navy"],
+    political={i: ["GFX_Portrait_Europe_Generic_1", "GFX_Portrait_Europe_Generic_2",
+                   "GFX_Portrait_Europe_Generic_3"] + _seq("GFX_Portrait_South_America_Generic", 3)
+               for i in REGIONS["europe"]["political"]})
+
 # continent -> culture: vanilla name block, portrait region, graphical culture
 CONTINENT_CULTURE = {
     "nonscio": dict(names="ENG", portraits="europe", gfx="western_european"),
@@ -81,7 +88,7 @@ TAG_CULTURE = {
     **{t: _FRENCH for t in ("ROU", "SGN", "EVR", "HLR", "SGV", "LST", "LZC", "GDN")},
     "LNT": _FRENCH,  # author, 2026-09-30
     # Portuguese (author, 2026-09-30): vanilla has no Iberian generic portraits
-    **{t: dict(names="POR", portraits="europe", gfx="western_european")
+    **{t: dict(names="POR", portraits="iberia", gfx="western_european")
        for t in ("RST", "VLN", "ESD", "CRZ", "PLH")},
 }
 
@@ -134,3 +141,59 @@ def sprites_used():
         for v in r["political"].values():
             s |= set(v)
     return s
+
+
+# famous surnames a made-up leader should not carry
+NOT_SURNAMES = {"Petain", "Foch", "Joffre", "Salazar", "Napoléon", "Murat", "Davout",
+                "d'Orleans", "Franchet d'Espèrey", "Churchill", "Mussolini", "Hirohito", "Tojo", "Piłsudski"}
+
+
+def _tokens(block):
+    return [a or b for a, b in re.findall(r'"([^"]+)"|([^\s{}"]+)', block)]
+
+
+def _names(culture):
+    src = NAMES_SRC.read_text(encoding="utf-8")
+    b = re.search(rf"^{culture} = \{{(.*?)^\}}", src, re.S | re.M).group(1)
+    male = re.search(r"male\s*=\s*\{\s*names\s*=\s*\{(.*?)\}", b, re.S).group(1)
+    sur = re.search(r"surnames\s*=\s*\{(.*?)\}", b, re.S).group(1)
+    return ([n for n in _tokens(male) if n not in NOT_SURNAMES],
+            [n for n in _tokens(sur) if n not in NOT_SURNAMES])
+
+
+def leaders(tag, continent, subtypes, ideology_of, used):
+    """Characters for a country's leaders: a name from its culture's list and a generic
+    portrait of its culture, per subtype. Returns (character blocks, loc lines, ids).
+    Deterministic: the same tag always gets the same people."""
+    import zlib
+    import numpy as np
+    c = culture(tag, continent)
+    first, last = _names(c["names"])
+    rng = np.random.default_rng(zlib.crc32(tag.encode()))
+    blocks, loc, ids = [], [], []
+    for sub in subtypes:
+        cid = f"{tag}_{sub}"
+        # any politician of the culture (a single ideology's list is one or two faces)
+        pool = sorted({p for v in REGIONS[c["portraits"]]["political"].values() for p in v})
+        while True:  # no two leaders share a full name (`used` spans every country)
+            name = f"{first[rng.integers(len(first))]} {last[rng.integers(len(last))]}"
+            if name not in used:
+                used.add(name)
+                break
+        blocks.append(f"""\t{cid} = {{
+\t\tname = {cid}
+\t\tportraits = {{
+\t\t\tcivilian = {{
+\t\t\t\tlarge = {pool[rng.integers(len(pool))]}
+\t\t\t}}
+\t\t}}
+\t\tcountry_leader = {{
+\t\t\tideology = {sub}
+\t\t\texpire = "1965.1.1.1"
+\t\t\tid = -1
+\t\t}}
+\t}}
+""")
+        loc.append(f' {cid}:0 "{name}"')
+        ids.append(cid)
+    return blocks, loc, ids

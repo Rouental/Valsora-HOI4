@@ -49,10 +49,10 @@ COUNTRIES = {
     "selto": ("STO", "Selto", "Seltan", (214, 120, 40)),
     "linterre": ("LNT", "Linterre", "Linterrois", (190, 150, 200)),
     # 2026-09-30, south of Romanoddle and Selto; all Portuguese (author). Estande's
-    # colour is the green of its flag; the rest are Claude's picks
+    # colour is the red of its flag (author: the green blended with Rouental); the rest are Claude's picks
     "rastava": ("RST", "Rastava", "Rastavan", (184, 160, 72)),
     "volinovia": ("VLN", "Volinovia", "Volinovian", (70, 100, 170)),
-    "estande": ("ESD", "Estande", "Estandese", (20, 90, 36)),
+    "estande": ("ESD", "Estande", "Estandese", (153, 0, 0)),
     "coraliza": ("CRZ", "Coraliza", "Coralizan", (240, 122, 92)),
     "placeholdria": ("PLH", "Placeholdria", "Placeholdrian", (238, 196, 222)),
 }

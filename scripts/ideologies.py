@@ -75,6 +75,8 @@ SUBTYPES = {
         ("agrarianism", "Agrarianism", "The farmers' and peasants' parties, for the land and those who work it."),
         ("constitutional_monarchism", "Constitutional Monarchy",
          "A crowned democracy: the prince reigns, parliament governs."),
+        ("lordly_republic", "Lordly Republic",  # the author's, 2026-09-30
+         "A republic in which the nobility and clergy retain significant power."),
     ],
     "communism": [
         ("marxism", "Orthodox Marxism", "The classless society, by the letter of the theory."),
@@ -126,6 +128,11 @@ def types_block(ideo):
     return "\n".join(out) + "\t\t}"
 
 
+def ideology_of():
+    """subtype -> its ideology"""
+    return {key: ideo for ideo, v in SUBTYPES.items() for key, _, _ in v}
+
+
 def subtypes():
     return {key for v in SUBTYPES.values() for key, _, _ in v} | {k for v in HIDDEN.values() for k in v}
 
@@ -145,7 +152,7 @@ LOCALISATION = [
     ' theocracy_acceptance:0 "Theocratic Acceptance"',
     ' FACTION_NAME_THEOCRATIC_1:0 "The Holy League"',
     ' FACTION_NAME_THEOCRATIC_2:0 "The Covenant of the Faithful"',
-] + [f' {key}:0 "{name}"\n {key}_desc:0 "{desc}"'
+] + [f' {key}:0 "{name}"\n {key}_desc:0 "{name}: {desc}"'
      for v in SUBTYPES.values() for key, name, desc in v]
 
 
