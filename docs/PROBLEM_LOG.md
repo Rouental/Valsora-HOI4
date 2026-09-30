@@ -69,6 +69,13 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## Map problems found while building
 
+**Regions cut up and land regions redrawn without being asked** (2026-09-30)
+- The author asked for the oceans of their map "split up as needed"; I also regrouped
+  every land region and cut the oceans into ~350k px pieces. The author wanted the land
+  left alone and each ocean whole, to edit themselves.
+- Fix: land regions restored exactly (pixel for pixel), each ocean is one region.
+  Lesson: change only what was asked; when "as needed" is vague, do the minimum.
+
 **Strategic regions from the author's ocean map landed in the wrong oceans** (2026-09-30)
 - Cause: the reference maps (`ref_oceans.webp`, `ref_continents.webp`) show an older
   arrangement of the continents than the drawing, so they can't be laid straight over

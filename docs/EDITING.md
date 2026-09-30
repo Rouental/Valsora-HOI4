@@ -204,10 +204,9 @@ that ideology rules, like Rouental's tricolour.
 
 ### Strategic Regions
 
-The regions were generated from your ocean and continent maps; their names (e.g.
-"West-Central Northern Ocean", "Rouental") are tied to each region's colour. Repaint a
-region with a new colour and it gets a plain name like "Sea Zone 3" until names are
-regenerated; recolouring nothing keeps every name.
+The sea regions are the oceans of your ocean map, one region each, and are named after
+them. Names are tied to each region's colour: paint part of an ocean in a new blue and
+the new region gets a plain name like "Sea Zone 3" until names are added for it.
 
 One colour per region. Weather, air zones and naval zones work per region. **Sea zones
 are painted in blues, land regions in anything but blue**, so they are easy to tell

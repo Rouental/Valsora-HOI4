@@ -1,20 +1,18 @@
-"""Regenerate every strategic region from the author's ocean and continent maps (by hand).
+"""Sea regions from the author's ocean map (by hand): one region per ocean, unsplit.
 
     python3 scripts/strategic_regions.py        # edits source/HOI4 Mod Map.pdn in place
 
-Sea: each sea province takes the ocean it lies in on source/ref_oceans.webp, and each
-ocean is cut into connected regions of about SEA_AREA px, named after it ("Western North
-Demetric"). The author's reference maps use an older arrangement of the continents than
-the drawing, so a game position is mapped back continent by continent: game -> drawing
-through the layout (work/layout.json, the shift SHIFT), drawing -> reference map through
-a per-continent shift fitted by overlap (REF_SHIFT); open water blends the continents
-nearby. Enclosed seas (the navigable inland seas) keep their own region.
+Each sea province takes the ocean it lies in on source/ref_oceans.webp, and every ocean
+becomes one strategic region, as big as the map shows it (author, 2026-09-30: "leave it
+as a massive unaltered region, so we can edit it later"). Only where HOI4 forces it is
+an ocean in more than one region: a sea region must be one connected body of water, so
+an ocean the land cuts apart gets a region per piece. The navigable inland seas (Piscary,
+Norlany) keep one each. Land regions are not touched.
 
-Land: the states of each continent are grouped into connected regions of about
-LAND_AREA px (whole states, as HOI4 needs); lakes join the land region they border most.
-A region at least half in one real country is named after it, otherwise after its
-continent; several of one name get Western / Central / Eastern (along their length) or
-compass points.
+The author's reference maps use an older arrangement of the continents than the drawing,
+so a game position is mapped back continent by continent: game -> drawing through the
+layout (work/layout.json, the shift SHIFT), drawing -> reference map through a
+per-continent shift fitted by overlap (REF_SHIFT); each nearby continent votes.
 
 Region names go to source/region_names.json (colour -> name), read by build_mod.py.
 """
@@ -26,14 +24,12 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 from scipy import ndimage as ndi
-from scipy.cluster.vq import kmeans2
 
 import pdn_tools as T
 from common import COUNTRIES, CONTINENTS, MAP_W as W, MAP_H as H, PLACEHOLDERS
 
 NAMES = Path("source/region_names.json")
-SEA_AREA = 350_000   # px per sea region (about 590 px across)
-LAND_AREA = 45_000   # px per land region (about 210 px across, like vanilla's)
+STRAY = 0.15  # a piece of an ocean under this share of its main body is mapping noise
 SHIFT = (36, 16)     # (dy, dx) compose.py centred the land by, recovered by overlap
 # reference map (2000 x 933) = drawing / 7 + this, per layout block (fitted by overlap)
 REF_SHIFT = {0: (-93, -6), 1: (10, -130), 2: (101, -216), 3: (-20, 136), 4: (-16, -165),
@@ -174,45 +170,6 @@ def place_names(centres, base):
     return names
 
 
-def split(members, cy, cx, area, target, adj, seed):
-    """Split connected `members` (provinces or states) into about sum(area)/target
-    connected groups: weighted k-means, then stray pieces and tiny groups join the
-    neighbouring group they touch most."""
-    members = list(members)
-    total = sum(area[m] for m in members)
-    k = min(len(members), max(1, round(total / target)))
-    if k == 1:
-        return [members]
-    pts = np.array([[cy[m], cx[m]] for m in members], float)
-    wts = np.array([area[m] for m in members], float)
-    rep = np.repeat(np.arange(len(members)), np.maximum(1, (wts / wts.mean() * 3).round().astype(int)))
-    cent, _ = kmeans2(pts[rep], k, minit="++", seed=np.random.default_rng(seed))
-    group = {m: int(g) for m, g in zip(members, np.argmin(((pts[:, None] - cent[None]) ** 2).sum(-1), 1))}
-    items = set(members)
-    for _ in range(50):
-        changed = False
-        # every group one connected piece: the smaller pieces move to a neighbour
-        by_g = defaultdict(list)
-        for piece in _pieces(items, lambda u, v: group[u] == group[v], adj):
-            by_g[group[piece[0]]].append(piece)
-        for g, ps in by_g.items():
-            gsize = sum(area[m] for p in ps for m in p)
-            ps.sort(key=lambda p: -sum(area[m] for m in p))
-            movers = ps[1:] if len(ps) > 1 else (ps if gsize < target / 6 and len(by_g) > 1 else [])
-            for p in movers:
-                c = Counter(group[v] for u in p for v in adj[u] if v in items and group[v] != g)
-                if c:
-                    for u in p:
-                        group[u] = c.most_common(1)[0][0]
-                    changed = True
-        if not changed:
-            break
-    out = defaultdict(list)
-    for m, g in group.items():
-        out[g].append(m)
-    return list(out.values())
-
-
 def main():
     names, L = T.load()
     code = T.code
@@ -254,6 +211,12 @@ def main():
         if maj[i] < 0:  # too small for the 1/4 grid: its centre decides
             maj[i] = oidx[min(int(cy[i]) // 4, oidx.shape[0] - 1), min(int(cx[i]) // 4, oidx.shape[1] - 1)]
         ocean_of[int(i)] = onames[maj[i]]
+    # on the reference map the top edge is all Northern Ocean and the bottom edge all
+    # Arctic Ocean; the mapping let South Demetric reach the bottom and cut the Arctic
+    for row, name in ((0, "Northern Ocean"), (H - 1, "Arctic Ocean")):
+        for i in np.unique(lab[row]):
+            if kind[i] == 0:
+                ocean_of[int(i)] = name
     # enclosed seas (the navigable inland ones) keep their own region
     wcomp, _ = ndi.label(sea_px, CROSS)
     for name, (x, y) in INLAND.items():
@@ -264,73 +227,28 @@ def main():
     by_ocean = defaultdict(list)
     for i, o in ocean_of.items():
         by_ocean[o].append(int(i))
+    # one region per ocean, as the reference map shows it (author, 2026-09-30). HOI4
+    # needs a sea region to be one connected body of water, so an ocean the land cuts
+    # in two becomes two regions; stray bits (mapping noise along coasts) join the
+    # region they touch most.
     sea_groups = []
     for o, members in sorted(by_ocean.items()):
-        # oceans across the seam: measure x from the far side
-        # an ocean across the seam is unrolled at its widest empty gap in x (an ocean
-        # with no gap, all the way round, is left as it is)
-        bins = np.zeros(W // 64, bool)
-        bins[(np.array([cx[m] for m in members]) // 64).astype(int)] = True
-        ux = cx.copy()
-        if not bins.all():
-            empty = np.nonzero(~bins)[0]
-            run = best = start = best_start = 0
-            for b_ in np.concatenate([np.arange(len(bins)), np.arange(len(bins))]):
-                if not bins[b_]:
-                    run += 1
-                    if run == 1:
-                        start = b_
-                    if run > best:
-                        best, best_start = run, start
-                else:
-                    run = 0
-            cut = ((best_start + best // 2) % len(bins)) * 64
-            for m in members:
-                if cx[m] < cut:
-                    ux[m] = cx[m] + W
-        # an ocean may be in pieces (islands, seam): split each connected piece
-        comp, seen = [], set()
-        mem = set(members)
-        for m in members:
-            if m in seen:
-                continue
-            stack, piece = [m], []
-            seen.add(m)
-            while stack:
-                u = stack.pop()
-                piece.append(u)
-                for v in adj[u]:
-                    if v in mem and v not in seen:
-                        seen.add(v)
-                        stack.append(v)
-            comp.append(piece)
-        # compass names are relative to the whole ocean, all its pieces together
-        oy = np.average([cy[m] for m in members], weights=[size[m] for m in members])
-        ox_ = np.average([ux[m] for m in members], weights=[size[m] for m in members])
-        span = max(np.ptp([cy[m] for m in members]), np.ptp([ux[m] for m in members]), 1)
-        groups = [g for piece in comp
-                  for g in split(piece, cy, ux, size, SEA_AREA, adj, seed=len(sea_groups) + 1)]
-        # names read left to right as the map is seen, unless the ocean really straddles
-        # the seam (a Friedlich sea): then across it
-        nx = cx if bins.mean() > 0.6 else ux
-
-        def wmedian(v, w):  # a region across the seam counts where most of it lies
-            o = np.argsort(v)
-            return float(np.array(v)[o][np.searchsorted(np.cumsum(np.array(w)[o]), sum(w) / 2)])
-        cen = [(np.average([cy[m] for m in g], weights=[size[m] for m in g]),
-                wmedian([nx[m] for m in g], [size[m] for m in g])) for g in groups]
-        for g, name in zip(groups, place_names(cen, o)):
-            sea_groups.append((name, g))
-    # a stray bit of an ocean too small to be a region joins the region it touches most
+        for piece in _pieces(set(members), lambda u, v: True, adj):
+            sea_groups.append([o, piece])
     while True:
         area = [sum(size[m] for m in g) for _, g in sea_groups]
         owner = {m: k for k, (_, g) in enumerate(sea_groups) for m in g}
-        small = [k for k in range(len(sea_groups)) if area[k] < SEA_AREA / 6
-                 and not sea_groups[k][0] in INLAND]
+        biggest = {}
+        for k, (o, g) in enumerate(sea_groups):
+            if o not in biggest or area[k] > area[biggest[o]]:
+                biggest[o] = k
+        # a piece is a stray if it is small next to its ocean's main body
+        stray = [k for k, (o, g) in enumerate(sea_groups) if o not in INLAND and k != biggest[o]
+                 and area[k] < STRAY * area[biggest[o]]]
         moved = False
-        for k in sorted(small, key=lambda k: area[k]):
-            c = Counter(owner[v] for m in sea_groups[k][1] for v in adj[m] if v in owner and owner[v] != k
-                        and sea_groups[owner[v]][0] not in INLAND)
+        for k in sorted(stray, key=lambda k: area[k]):
+            c = Counter(owner[v] for m in sea_groups[k][1] for v in adj[m]
+                        if v in owner and owner[v] != k and sea_groups[owner[v]][0] not in INLAND)
             if c:
                 t = c.most_common(1)[0][0]
                 sea_groups[t][1].extend(sea_groups[k][1])
@@ -339,158 +257,34 @@ def main():
                 break
         if not moved:
             break
+    # an ocean still in several pieces: West / East (or compass) names
+    named = []
+    by_o = defaultdict(list)
+    for o, g in sea_groups:
+        by_o[o].append(g)
+    for o, gs in by_o.items():
+        cen = [(np.average([cy[m] for m in g], weights=[size[m] for m in g]),
+                np.average([cx[m] for m in g], weights=[size[m] for m in g])) for g in gs]
+        for g, nm in zip(gs, place_names(cen, o)):
+            named.append((nm, g))
 
-    # ------------------------------------------------ land
-    St = np.where(L["States"][..., 3] > 0, code(L["States"][..., :3]), -1)
-    K = code(L["Countries"][..., :3])
-    land_provs = np.nonzero(kind == 1)[0]
-    st_maj = majority(St, lab, n)
-    co_maj = majority(Co, lab, n)
-    k_maj = majority(K, lab, n)
-    state_of = {int(i): int(st_maj[i]) for i in land_provs if st_maj[i] >= 0}
-    # per state: continent, owner, area, centre
-    st_members = defaultdict(list)
-    for i, s in state_of.items():
-        st_members[s].append(i)
-    col_cont = {code(np.array(COUNTRIES[c][3])): c for c in CONTINENTS}
-    col_country = {code(np.array(v[3])): k for k, v in COUNTRIES.items()}
-    s_area, s_cy, s_cx, s_cont, s_owner = {}, {}, {}, {}, {}
-    for s, ps in st_members.items():
-        s_area[s] = sum(size[p] for p in ps)
-        s_cy[s] = np.average([cy[p] for p in ps], weights=[size[p] for p in ps])
-        s_cx[s] = np.average([cx[p] for p in ps], weights=[size[p] for p in ps])
-        cc, ow = Counter(), Counter()
-        for p in ps:
-            cc[int(co_maj[p])] += size[p]
-            ow[int(k_maj[p])] += size[p]
-        s_cont[s] = col_cont.get(cc.most_common(1)[0][0], "?")
-        s_owner[s] = col_country.get(ow.most_common(1)[0][0], "?")
-    s_adj = defaultdict(set)
-    for u, vs in adj.items():
-        if u in state_of:
-            for v in vs:
-                if v in state_of and state_of[u] != state_of[v]:
-                    s_adj[state_of[u]].add(state_of[v])
-    def regions_of(members, seed):
-        """Split states into connected regions of about LAND_AREA; islands too small
-        for a region join the nearest piece."""
-        mem = set(members)
-        comps, seen = [], set()
-        for m in sorted(members, key=lambda s: -s_area[s]):
-            if m in seen:
-                continue
-            stack, piece = [m], []
-            seen.add(m)
-            while stack:
-                u = stack.pop()
-                piece.append(u)
-                for v in s_adj[u]:
-                    if v in mem and v not in seen:
-                        seen.add(v)
-                        stack.append(v)
-            comps.append(piece)
-        big = [c for c in comps if sum(s_area[s] for s in c) >= LAND_AREA / 4] or [max(comps, key=len)]
-        for c in comps:
-            if c in big:
-                continue
-            cyc, cxc = np.mean([s_cy[s] for s in c]), np.mean([s_cx[s] for s in c])
-            tgt = min(big, key=lambda b: min(np.hypot(s_cy[s] - cyc, s_cx[s] - cxc) for s in b))
-            tgt.extend(c)
-            for s in c:  # adjacent for splitting purposes
-                s_adj[s].add(tgt[0])
-                s_adj[tgt[0]].add(s)
-        return [g for piece in big for g in split(piece, s_cy, s_cx, s_area, LAND_AREA, s_adj, seed)]
-
-    land_groups = []
-    for cont in CONTINENTS:
-        members = [s for s in st_members if s_cont[s] == cont]
-        if not members:
-            continue
-        # real countries big enough get regions of their own; small ones join the big
-        # country they border most, so regions follow the borders of drawn countries
-        area_of = Counter()
-        for s in members:
-            area_of[s_owner[s]] += s_area[s]
-        anchors = {c for c, a in area_of.items() if c not in PLACEHOLDERS and c != "?" and a >= LAND_AREA / 4}
-        home = {s: s_owner[s] for s in members if s_owner[s] in anchors}
-        for c in [c for c in area_of if c not in anchors and c not in PLACEHOLDERS and c != "?"]:
-            touch = Counter(s_owner[v] for s in members if s_owner[s] == c for v in s_adj[s]
-                            if v in s_owner and s_owner[v] in anchors)
-            if touch:
-                for s in members:
-                    if s_owner[s] == c:
-                        home[s] = touch.most_common(1)[0][0]
-        units = defaultdict(list)
-        for s in members:
-            units[home.get(s, None)].append(s)
-        for country, sts in units.items():
-            for g in regions_of(sts, seed=len(land_groups) + 7):
-                gy_ = np.average([s_cy[s] for s in g], weights=[s_area[s] for s in g])
-                gx_ = np.average([s_cx[s] for s in g], weights=[s_area[s] for s in g])
-                own = Counter()
-                for s in g:
-                    own[s_owner[s]] += s_area[s]
-                real = [(c, a) for c, a in own.most_common() if c not in PLACEHOLDERS and c != "?"]
-                if country:
-                    base = COUNTRIES[country][1]
-                elif real and real[0][1] >= 0.5 * sum(own.values()):
-                    base = COUNTRIES[real[0][0]][1]
-                else:
-                    base = cont.capitalize()
-                land_groups.append((base, gy_, gx_, g))
-    # names: a base used once stands alone; otherwise compass words around its centre
-    by_base = defaultdict(list)
-    for base, gy_, gx_, g in land_groups:
-        by_base[base].append((gy_, gx_, g))
-    land_named = []
-    for base, items in by_base.items():
-        if len(items) == 1:
-            land_named.append((base, items[0][2]))
-            continue
-        for (y, x, g), name in zip(items, place_names([(y, x) for y, x, _ in items], base)):
-            land_named.append((name, g))
-
-    # unique names: number repeats
-    def uniq(pairs):
-        count = Counter(n for n, _ in pairs)
-        seen = Counter()
-        out = []
-        for nm, g in pairs:
-            if count[nm] > 1:
-                seen[nm] += 1
-                nm = f"{nm} {seen[nm]}" if seen[nm] > 1 else nm
-            out.append((nm, g))
-        return out
-    sea_groups = uniq(sea_groups)
-    land_named = uniq(land_named)
-
-    # ------------------------------------------------ colours and write
-    blues = T.palette(len(sea_groups), True, 21)
-    others = T.palette(len(land_named), False, 22, set(blues))
-    newR = np.zeros((H, W), np.int64)
+    # ------------------------------------------------ write: sea provinces only
+    R = code(L["Strategic Regions"][..., :3])
+    land_cols = set(np.unique(R[~sea_px]).tolist())
+    blues = T.palette(len(named), True, 21, land_cols)
+    prov_col = np.full(n, -1, np.int64)
     names_out = {}
-    prov_col = np.zeros(n, np.int64)
-    for (nm, g), c in zip(sea_groups, blues):
+    for (nm, g), c in zip(named, blues):
         prov_col[g] = c
         names_out[f"{c:06x}"] = nm
-    for (nm, g), c in zip(land_named, others):
-        provs = [p for s in g for p in st_members[s]]
-        prov_col[provs] = c
-        names_out[f"{c:06x}"] = nm
-    # lakes join the land region they border most
-    for i in np.nonzero(kind == 2)[0]:
-        c = Counter(prov_col[v] for v in adj[i] if kind[v] == 1 and prov_col[v])
-        prov_col[i] = c.most_common(1)[0][0] if c else others[0]
-    # anything left (a land province with no state) takes its neighbours' region
-    for i in np.nonzero(prov_col == 0)[0]:
-        c = Counter(prov_col[v] for v in adj[i] if prov_col[v] and kind[v] == kind[i])
-        if c:
-            prov_col[i] = c.most_common(1)[0][0]
-    newR = prov_col[lab]
-    T.put(L["Strategic Regions"], newR, np.ones((H, W), bool))
-    L["Strategic Regions"][..., 3] = 255
+    new = prov_col[lab]
+    m = new >= 0
+    R[m] = new[m]
+    T.put(L["Strategic Regions"], R, m)
     NAMES.write_text(json.dumps(names_out, indent=1, ensure_ascii=False) + "\n", encoding="utf-8")
-    print(f"{len(sea_groups)} sea regions, {len(land_named)} land regions; names in {NAMES}")
+    for nm, g in sorted(named):
+        print(f"  {nm}: {len(g)} sea provinces")
+    print(f"{len(named)} sea regions; land regions untouched; names in {NAMES}")
     T.save(names, L)
 
 

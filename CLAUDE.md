@@ -120,7 +120,7 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `make_game_pdn.py` / `writepdn.py` | turn a placeholder build into a fresh `HOI4 Mod Map.pdn` |
 | `apply_outlines.py` | by hand: the author's outline layers → provinces, states, countries in the `.pdn` |
 | `pdn_tools.py` | by hand: `navigable` (lake → sea with its own region), `sea_zones` (regroup and recolour regions), `give` (whole states to a country), `recolour` |
-| `strategic_regions.py` | by hand: every strategic region from the author's ocean / continent maps, with names (`source/region_names.json`) |
+| `strategic_regions.py` | by hand: sea regions = the author's oceans, one each, with names (`source/region_names.json`); land untouched |
 | `river_provinces.py` | by hand, after a build: re-cuts the provinces of every state a river crosses so rivers run between provinces |
 | `organic.py` | organic splitting (seeded watershed over noise), used by `apply_outlines.py` |
 | `rivers.py` | plain river lines → HOI4 rivers.bmp format, and the river rules check |
@@ -186,26 +186,24 @@ mismatch, missing localisation) and catches all of them.
     a sea region of its own: Nonscio's, south of Rouental, and Yastreovakia's northern
     one. They were made with `pdn_tools.py navigable`.
   - Other lakes stay lakes.
-- **Strategic regions follow the author's maps** (`strategic_regions.py`, 2026-09-30;
-  replaced the earlier 17 big grid sea zones and the grid land regions).
-  - Sea: each sea province takes its ocean from `source/ref_oceans.webp` (Northern
-    Ocean, North/South Demetric, North/South Menotius, Northern/Southern Friedlich,
-    Midtierre Sea, Arctic Ocean; the lilac is split north/south). Each ocean is cut into
-    connected regions of ~350,000 px, named along their length ("West-Central Northern
-    Ocean") or by compass. The navigable Piscary and Norlany seas keep a region each.
-    30 sea regions.
+- **Sea regions are the author's oceans, unsplit** (`strategic_regions.py`, 2026-09-30).
+  Each sea province takes its ocean from `source/ref_oceans.webp` and each ocean is ONE
+  region, as big as the map shows it: the author will edit them later. Split only where
+  HOI4 forces it (a sea region must be connected); none needed it. 11 sea regions:
+  Northern Ocean, North / South Demetric, North / South Menotius, Northern / Southern
+  Friedlich, Midtierre Sea, Arctic Ocean, plus the navigable Piscary and Norlany seas.
   - The reference maps use an **older arrangement of the continents** than the drawing,
     so positions are mapped per continent: game → drawing through `work/layout.json`
     and the recovered centring shift (36, 16); drawing → reference by a per-continent
     shift fitted by overlap (Nonscio and Araseos fitted apart). Each continent votes
-    for an ocean, weighted 1/(distance+20)², since averaging positions put open water
-    in unrelated oceans.
-  - Land: states grouped per continent into ~45,000 px regions. Real countries of at
-    least a quarter of that get their own (Rouental, Cardonia, Romanoddle, Linterre,
-    Estande, Placeholdria), small ones join the one they border most; named after the
-    country, else continent + direction. 86 land regions.
-  - Names are keyed by region colour in `source/region_names.json`; a region the author
-    repaints falls back to a generic name.
+    for an ocean, weighted 1/(distance+20)²; stray bits join their neighbour; the top
+    edge is forced to Northern Ocean and the bottom to Arctic (the mapping cut the
+    Arctic in two).
+  - An earlier version also regrouped land regions and cut oceans into ~350k px pieces;
+    **the author rejected it**: land regions stay as they were (the grid ones), and
+    oceans stay whole.
+  - Sea names are keyed by region colour in `source/region_names.json`; land regions
+    keep their generic names.
 - **Region colours.** Sea regions are always blues (hue 0.53–0.70). Land regions are
   never blue, cyan or indigo (hue 0.42–0.82 is excluded), so the author can tell them
   apart on the layer.
@@ -512,7 +510,7 @@ Left loaded on purpose, and noisy in `error.log`:
 
 ## Current state
 
-- 6,441 provinces (5,758 land, 645 sea, 38 lakes), 899 states, 116 strategic regions (30 sea),
+- 6,441 provinces (5,758 land, 645 sea, 38 lakes), 899 states, 91 strategic regions (11 sea),
   24 countries. Second map of 2026-09-30: Estande 62 states (with 11 ES islands), Placeholdria
   28 (7 PC islands), Volinovia 16, Rastava 13, Coraliza 6, three RO islets to
   Romanoddle; a 1-2 px state-line nudge in Rouental (14 px moved by hand, too small for
