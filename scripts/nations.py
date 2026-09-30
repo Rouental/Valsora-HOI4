@@ -88,7 +88,7 @@ FORMAL_NAMES = {
     # the author's, 2026-09-30
     "LNT": "the Republic of Linterre",
     "STO": "the Empire of Selto-Hamborn",
-    "RMD": "the Romanoddlian Republic",
+    "RMD": "the Romanoddilan Federation",  # author, 2026-09-30
     "VLN": "the Republic of Volinovia",
     "ESD": "the Kingdom of Estande",
     "CRZ": "the Principality of Coraliza",

@@ -205,7 +205,7 @@ mismatch, missing localisation) and catches all of them.
     the `.pdn` in step.
   - Real countries the author drew: Rouental ROU, Seigne SGN, Evriches EVR, Hollier
     HLR, Selgrave SGV, Lustiana LST, Lanzerac LZC, Guedelon GDN, Cardonia CRD,
-    Romanoddle RMD, Selto STO, Linterre LNT (a placeholder nation, author), and
+    Romanoddle RMD ("the Romanoddilan Federation", author's spelling), Selto STO, Linterre LNT (a placeholder nation, author), and
     (second map of 2026-09-30, all Portuguese: POR names, European portraits) Rastava
     RST, Volinovia VLN, Estande ESD (flag `source/flags/ESD.png`, map colour the flag's red (153,0,0): the
     green blended with Rouental),
