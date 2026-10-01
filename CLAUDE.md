@@ -29,7 +29,8 @@ and "Notes (ignored by the build)". **The author's editing layers are named "Nec
 (from 2026-10-01): Necessary Borders (country lines), Necessary States (state lines; it
 was called "Necessary Provinces" before), Necessary Names (labels; a short line points
 to an island), Necessary Major / Minor Rivers (plain river lines; the old "Major Rivers"
-/ "Minor Rivers" still work). Necessary Provinces and Necessary Terrain are reserved for
+/ "Minor Rivers" still work), Necessary Cities (from 2026-10-01: a dot of any colour
+but black per city, its name written beside it in black). Necessary Provinces and Necessary Terrain are reserved for
 later detail and not read yet. "… Reference" layers and "Background" (white) are only
 for the author. Unknown layer names are ignored.
 - **Provinces**: one colour per province, which is also its provinces.bmp colour. Ids
@@ -47,6 +48,14 @@ for the author. Unknown layer names are ignored.
 - **Errors and notes.** Real errors (split or tiny provinces, black or transparent
   pixels, mixed or split regions, a state in two regions) stop the build with a numbered
   list of (x, y) pixel positions. X-crossings are repaired automatically.
+- **Cities** (`read_layers.read_cities`): each dot is a city in the land province under
+  it (or the nearest). The names are pixels, so they are typed into
+  `source/city_names.json` ("x,y" of the dot → name; a dot moved up to 12 px keeps its
+  name). An unnamed dot, two in one province, or a repeated name stops the build. In
+  `build_mod.py` the first city of a state becomes its victory point (worth `CITY_VP` =
+  5, or 10 as the capital), and further ones are extra victory points. Capitals are not
+  moved to cities. First nine: Winterthorn, Vair, Carcarelle, Rêverie, Venezzo, Alqira,
+  Malin, Prestozza, Monte Gnolia.
 - **Heightmap**: clamped to 94 / 96 on the wrong side of sea level.
 - **Rivers** (`rivers.py`). HOI4 needs rivers 1 px wide, edge-connected only, with
   exactly one green source per system and red flow-ins where tributaries join (vanilla
@@ -128,6 +137,7 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `pdn_tools.py` | by hand: `navigable` (lake → sea with its own region), `sea_zones` (regroup and recolour regions), `give` (whole states to a country), `recolour` |
 | `strategic_regions.py` | by hand: sea regions = the author's oceans, one each, with names (`source/region_names.json`); land untouched |
 | `river_provinces.py` | by hand, after a build: re-cuts the provinces of every state a river crosses so rivers run between provinces |
+| `redraw_flags.py` | by hand: flags redrawn for 82×52 (KIL from the author's original, FRX from scratch) |
 | `organic.py` | organic splitting (seeded watershed over noise), used by `apply_outlines.py` |
 | `rivers.py` | plain river lines → HOI4 rivers.bmp format, and the river rules check |
 | `build_mod.py` | every mod file |
@@ -235,7 +245,15 @@ mismatch, missing localisation) and catches all of them.
     Estande, Italian names: Claude's guess) Illiricium ILR (map name "Senatorial
     Illiricium", flag `ILR.png`), Côtefer CTF, Entroterra ETR, Mezzogiorno MZG (the three
     Bleacherist republics) and Royalist Illiricium KIL (its island; flag `KIL.png`, the
-    transparent gaps filled with the flag's blue). File names are ASCII (`Cotefer`). Formal names are the
+    transparent gaps filled with the flag's blue; redrawn at 82:52 by
+    `redraw_flags.py`, original in `source/flags/originals/`), and (2026-10-01, later,
+    east of Selgrave and Hollier) Kurikia KRK (conservatism, flag `KRK.png`, its navy
+    as map colour) and Fraxhemark FRX (social democracy, capital Fraternal City; map
+    colour raspberry because its flag red would vanish next to Hollier; flag drawn by
+    `redraw_flags.py` until the author's own file arrives). Their cultures are Claude's
+    guesses from the flags: SOV names for Kurikia, YUG for Fraxhemark, Europe portraits,
+    eastern European gfx. The unnamed peninsula with the bay east of Fraxhemark is
+    outlined but left as NSC (`LEAVE`). File names are ASCII (`Cotefer`). Formal names are the
     author's; Selto's "Empire of Seito-Hamborn" was read as Selto-Hamborn.
     The new three's colours and adjectives are Claude's picks. All tags were checked
     against vanilla `common/country_tags`; new tags must be too.
@@ -522,8 +540,11 @@ Left loaded on purpose, and noisy in `error.log`:
 
 ## Current state
 
-- 6,580 provinces (5,897 land, 645 sea, 38 lakes), 936 states, 91 strategic regions (11 sea),
-  29 countries. 2026-10-01: Illiricium 18 states, Entroterra 9, Côtefer 5, Mezzogiorno 5,
+- 7,648 provinces (6,965 land, 645 sea, 38 lakes), 1,208 states, 91 strategic regions (11 sea),
+  31 countries. 2026-10-01, later: Kurikia 143 states, Fraxhemark 149; six Cardonian
+  and two Royalist Illiricium states re-cut where new state lines split them; rivers
+  edited (72 states re-cut along rivers, 92 % of river pixels on a province border);
+  the first nine cities. 2026-10-01: Illiricium 18 states, Entroterra 9, Côtefer 5, Mezzogiorno 5,
   Royalist Illiricium 1, Rouental's islets 1; sea provinces recoloured blue on the
   Provinces layer (`pdn_tools.py blue_seas`). Second map of 2026-09-30: Estande 62 states (with 11 ES islands), Placeholdria
   28 (7 PC islands), Volinovia 16, Rastava 13, Coraliza 6, three RO islets to

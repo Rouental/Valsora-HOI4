@@ -40,10 +40,15 @@ SRC = Path(sys.argv[1] if len(sys.argv) > 1 else "work/pdn_game")
 LAYERS = ["Heightmap", "Terrain", "Rivers", "Continents", "Provinces", "Strategic Regions",
           "States", "Countries"]
 # rivers drawn as plain lines, converted by rivers.py
-OPTIONAL = ["Major Rivers", "Minor Rivers"]
+OPTIONAL = ["Major Rivers", "Minor Rivers", "Cities"]
 # the author's layer names (2026-10-01: their editing layers are "Necessary …"); the
 # older names still work
-ALIASES = {"Major Rivers": "Necessary Major Rivers", "Minor Rivers": "Necessary Minor Rivers"}
+ALIASES = {"Major Rivers": "Necessary Major Rivers", "Minor Rivers": "Necessary Minor Rivers",
+           "Cities": "Necessary Cities"}
+# the names written next to the dots on the Cities layer, typed up by hand (the layer's
+# text is pixels): "x,y" of the dot -> name; a dot moved up to CITY_SNAP px keeps its name
+CITY_NAMES = Path("source/city_names.json")
+CITY_SNAP = 12
 MIN_PIXELS = 8
 
 errors, notes = [], []
@@ -68,6 +73,45 @@ def load():
                 break
     if out["Provinces"].shape[:2] != (H, W):
         sys.exit(f"The .pdn must be {W}x{H} pixels.")
+    return out
+
+
+def read_cities(L, lab, kind, state_of):
+    """Cities: each dot (any colour but black, which is the label text) is a city in the
+    land province under it, or the nearest one. Returns [province, name, x, y]."""
+    if "Cities" not in L:
+        return []
+    c = L["Cities"]
+    dots = sklabel((c[..., 3] > 0) & (c[..., :3].max(-1) > 64), connectivity=2)
+    known = json.loads(CITY_NAMES.read_text(encoding="utf-8")) if CITY_NAMES.exists() else {}
+    known = {tuple(map(int, k.split(","))): v for k, v in known.items()}
+    land = kind[lab] == 1
+    idx = ndi.distance_transform_edt(~land, return_distances=False, return_indices=True)
+    out = []
+    for sl in ndi.find_objects(dots):
+        x, y = (sl[1].start + sl[1].stop - 1) // 2, (sl[0].start + sl[0].stop - 1) // 2
+        near = min(known, key=lambda k: np.hypot(k[0] - x, k[1] - y), default=None)
+        if near is None or np.hypot(near[0] - x, near[1] - y) > CITY_SNAP:
+            errors.append(f"A city on the Cities layer has no name in {CITY_NAMES}, at ({x}, {y})")
+            continue
+        ly, lx = idx[0][y, x], idx[1][y, x]
+        if np.hypot(lx - x, ly - y) > 20:
+            errors.append(f"City {known[near]} is not on land, at ({x}, {y})")
+            continue
+        p = int(lab[ly, lx])
+        if state_of[p] < 0:
+            errors.append(f"City {known[near]} is in a province with no state, at ({x}, {y})")
+            continue
+        out.append([p, known[near], x, y])
+    names = [o[1] for o in out]
+    for nm in sorted({m for m in names if names.count(m) > 1}):
+        errors.append(f"Two dots on the Cities layer are both named {nm}")
+    provs = [o[0] for o in out]
+    for o in out:
+        if provs.count(o[0]) > 1:
+            errors.append(f"Two cities fall in the same province, at ({o[2]}, {o[3]})")
+    if out:
+        print(f"note: {len(out)} cities on the Cities layer")
     return out
 
 
@@ -348,6 +392,7 @@ def main():
     # ---------------------------------------------------------------- report
     for m in notes:
         print("note:", m)
+    cities = read_cities(L, lab, kind, state_of)
     if errors:
         print(f"\n{len(errors)} problem(s) in the .pdn; fix these and rebuild:")
         for k, m in enumerate(errors[:40], 1):
@@ -390,7 +435,7 @@ def main():
     anchor, centre, size = anchors(lab, n)
     np.savez_compressed("work/regions.npz", anchor=anchor, centre=centre, size=size,
                         state_of=state_of, region_of=region_of)
-    json.dump(dict(states=states, regions=regions, owners=owners,
+    json.dump(dict(states=states, regions=regions, owners=owners, cities=cities,
                    adjacency=[[int(x), int(y), int(c)] for x, y, c in zip(a, b, cnt)]),
               open("work/regions.json", "w"))
     print(f"read {n} provinces ({(kind == 1).sum()} land, {(kind == 0).sum()} sea, "

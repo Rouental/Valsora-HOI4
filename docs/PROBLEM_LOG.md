@@ -6,6 +6,12 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**Royalist Illiricium's flag looked squashed and noisy** (2026-10-01)
+- Cause: the flag is about 2:1 with fine gold filigree. The game's flag is 82×52
+  (1.58:1), so it was squeezed sideways, and the filigree turned to noise at that size.
+- Fix: redrawn at 82:52 with the same layout, the filigree simplified and the arms
+  enlarged (`scripts/redraw_flags.py`). The original is kept in `source/flags/originals/`.
+
 **Every country showed its leader's name on the map** (2026-09-30)
 - Cause: the new leader characters were named `TAG_<subtype>` (e.g. `NSC_despotism`).
   HOI4 looks a country's name up as `TAG_<subtype>` before `TAG` (that is how vanilla
@@ -68,6 +74,11 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 - Fix: no trailing newline.
 
 ## Map problems found while building
+
+**A new country bigger than the rest of its continent was nearly skipped** (2026-10-01)
+- Cause: `apply_outlines.py` treated the biggest patch touching a line as "the rest of
+  the continent" and left it alone. Fraxhemark (96k px) was the biggest.
+- Fix: patches with a seed, on the LEAVE list, or already done can't be "the rest".
 
 **Regions cut up and land regions redrawn without being asked** (2026-09-30)
 - The author asked for the oceans of their map "split up as needed"; I also regrouped

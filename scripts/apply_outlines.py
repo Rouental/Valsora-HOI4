@@ -68,18 +68,19 @@ OCEAN, LAKES = (8, 31, 130), (55, 90, 220)
 # (602, 1262); coraliza (440, 1231); romanoddle (270, 1113), (283, 1123), (219, 1135).)
 # 2026-10-01: Illiricium and its Bleacherist republics east of Estande, Royalist
 # Illiricium's island, and two islets off Solitas the author labelled ROU.
-DEFAULT_OWNER = "illiricium"
+# (config was: DEFAULT_OWNER "illiricium"; illiricium (841, 1084); cotefer (803, 995);
+# mezzogiorno (857, 1129); entroterra (802, 1176); k_illiricium (922, 1157); rouental
+# (1716, 2010), (1728, 2019).)
+# 2026-10-01, later: Kurikia and Fraxhemark east of Selgrave and Hollier.
+DEFAULT_OWNER = "fraxhemark"
 OWNERS = {
-    "illiricium": [(841, 1084)],
-    "cotefer": [(803, 995)],
-    "mezzogiorno": [(857, 1129)],
-    "entroterra": [(802, 1176)],
-    "k_illiricium": [(922, 1157)],
-    "rouental": [(1716, 2010), (1728, 2019)],
+    "kurikia": [(1135, 740)],
+    "fraxhemark": [(1000, 990)],
 }
 # patches the lines happen to close off that are not meant as anything yet: left as they
-# are (2026-10-01: the land south of Entroterra and Estande)
-LEAVE = [(791, 1345)]
+# are (2026-10-01: the land south of Entroterra and Estande; the unnamed peninsula with
+# the bay east of Fraxhemark)
+LEAVE = [(791, 1345), (1180, 980)]
 MIN_STATE = 150      # smaller patches (islets) join the nearest state of their country
 ISLET_REACH = 300    # ... if within this many px; farther islets make a state of their own
 STATE_MAX = 1000     # patches bigger than this become several states ...
@@ -192,20 +193,24 @@ def main():
     near = ndi.binary_dilation(lines, np.array([[0, 1, 0], [1, 1, 1], [0, 1, 0]]))
     touch[np.unique(cells[near])] = True
     touch[0] = False
-    outside = int(np.argmax(np.where(touch, size, 0)))  # the rest of the continent
     owner_of = {}
     for tag, pts in OWNERS.items():
         for x, y in pts:
             owner_of[int(cells[y, x])] = tag
+    K0 = code(L["Countries"][..., :3])
+    real_col = {code(np.array(COUNTRIES[c][3])): c for c in COUNTRIES if c not in PLACEHOLDERS}
+    done = np.isin(K0, list(real_col)) & land
+    dsum = np.bincount(cells[done], minlength=len(size))
+    # the rest of the continent: the biggest patch touching a line that is not seeded,
+    # left alone or done (a new country can be bigger than what remains of the placeholder)
+    free = touch & (dsum * 2 < size)
+    free[list(owner_of) + [int(cells[y, x]) for x, y in LEAVE]] = False
+    outside = int(np.argmax(np.where(free, size, 0))) if free.any() else -1
     chosen = [i for i in np.nonzero(touch)[0] if i != outside] + \
         [i for i in owner_of if not touch[i]]
     chosen = sorted(set(chosen))
     # skip patches an earlier run already turned into a real country, unless a new line
     # cuts through one of their states: those are cut again and keep their country
-    K0 = code(L["Countries"][..., :3])
-    real_col = {code(np.array(COUNTRIES[c][3])): c for c in COUNTRIES if c not in PLACEHOLDERS}
-    done = np.isin(K0, list(real_col)) & land
-    dsum = np.bincount(cells[done], minlength=len(size))
     S0 = np.where(L["States"][..., 3] > 0, code(L["States"][..., :3]), -1)
 
     def cut_by_lines(sc):

@@ -63,6 +63,8 @@ LEADERS = {
     "ETR": ["bleacherism"],
     "MZG": ["bleacherism"],
     "KIL": ["legitimism"],
+    "KRK": ["conservatism"],
+    "FRX": ["socialism"],             # Social Democracy
     # Rouental's democrats and communists, promoted by their focuses
     "ROU": ["constitutional_monarchism", "leninism"],
     # the continent placeholders: not chosen by the author, Monarchist as before
@@ -501,6 +503,7 @@ CITY_NAMES = {
     "capital:LZC": "Lanzerac",
     "capital:SGV": "Villerose",
     "capital:LST": "Tanière",
+    "capital:FRX": "Fraternal City",  # 2026-10-01
 }
 
 # Capitals chosen by the author, as a pixel (x, y) inside the capital state; other

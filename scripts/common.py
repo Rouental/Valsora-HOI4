@@ -63,6 +63,10 @@ COUNTRIES = {
     "entroterra": ("ETR", "Entroterra", "Entroterran", (150, 160, 215)),
     "mezzogiorno": ("MZG", "Mezzogiorno", "Mezzogiornese", (110, 80, 165)),
     "k_illiricium": ("KIL", "Royalist Illiricium", "Illirician", (212, 178, 60)),
+    # 2026-10-01, the author's, east of Selgrave and Hollier. Kurikia's navy is its
+    # flag's; Fraxhemark's flag red would vanish next to Hollier, so raspberry (Claude's)
+    "kurikia": ("KRK", "Kurikia", "Kurikian", (34, 62, 96)),
+    "fraxhemark": ("FRX", "Fraxhemark", "Fraxhemarkish", (200, 60, 110)),
 }
 # The placeholder countries, one per continent, are the recommended starts in the
 # bookmark; the rest are playable but not listed there.

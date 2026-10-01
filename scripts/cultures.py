@@ -94,6 +94,10 @@ TAG_CULTURE = {
     # Entroterra; the author has not said)
     **{t: dict(names="ITA", portraits="europe", gfx="western_european")
        for t in ("ILR", "CTF", "ETR", "MZG", "KIL")},
+    # Claude's guesses from the flags (2026-10-01): Kurikia's Russian-style eagle and
+    # Fraxhemark's Montenegrin arms
+    "KRK": dict(names="SOV", portraits="europe", gfx="eastern_european"),
+    "FRX": dict(names="YUG", portraits="europe", gfx="eastern_european"),
 }
 
 

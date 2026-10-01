@@ -51,9 +51,10 @@ files and so on). The build writes all of them.
 | **Countries** | who owns each state at the start | No: blanks are filled in |
 | **Notes (ignored by the build)** | nothing: the old drawing's country colours, for reference | – |
 | **Necessary Major Rivers**, **Necessary Minor Rivers** | rivers, drawn as simple lines | No: the build tidies them |
+| **Necessary Cities** | named cities (victory points) | No: the dot only needs to be close |
 
 Your own layers: everything named **Necessary …** is what you edit for me to add to the
-mod (Necessary Borders, States, Names, Major / Minor Rivers; Necessary Provinces and
+mod (Necessary Borders, States, Names, Cities, Major / Minor Rivers; Necessary Provinces and
 Necessary Terrain are kept for later province and terrain detail). Anything with
 "Reference" in its name, and **Background** (plain white, for seeing better), is only
 for you. The build ignores every layer whose name it doesn't know.
@@ -142,6 +143,19 @@ own colours, and wins over the Major/Minor layers where both have a pixel:
 | splits off | 255, 252, 0 |
 | narrowest → widest | 0, 225, 255 · 0, 200, 255 · 0, 150, 255 · 0, 100, 255 · 0, 0, 255 · 0, 0, 225 · 0, 0, 200 · 0, 0, 150 · 0, 0, 100 |
 
+### Cities
+
+On **Necessary Cities**, put a small dot of any colour except black where a city is,
+with its name written beside it in black (exactly as you've been doing). Each dot becomes
+a victory point named after the city, in the province under the dot (or the nearest
+land province). The dot doesn't have to be exact, since the provinces aren't known
+when you draw. A city is worth 5 victory points; a country's capital keeps 10.
+
+The build can't read the written names (they are just pixels), so I type them into
+`source/city_names.json` when you send the file. Moving a dot a few pixels keeps its name.
+A new or far-moved dot stops the build until I've added its name. Two cities in the same
+province, or two dots with the same name, also stop it. Cities in the same state are fine.
+
 ### Continents
 
 One colour per continent. It only matters for a few game rules, and blank land takes the
@@ -207,6 +221,11 @@ Flags are PNG pictures in `source/flags/`, named by tag: `ROU.png`, `EVR.png`…
 size works; the build shrinks them to the game's sizes. A flag named
 `TAG_democratic.png` (or `_fascism`, `_communism`, `_neutrality`, `_theocracy`) is shown only while
 that ideology rules, like Rouental's tricolour.
+
+In the game a flag is only 82×52 pixels (a 1.58:1 rectangle), and much smaller on the
+map. A flag of another shape gets squashed, and fine detail turns to noise. The best
+flags are about that shape, with bold shapes. Royalist Illiricium's flag was redrawn
+that way (`scripts/redraw_flags.py`; your original is in `source/flags/originals/`).
 
 ### Strategic Regions
 

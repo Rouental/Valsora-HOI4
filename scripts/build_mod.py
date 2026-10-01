@@ -29,6 +29,7 @@ PAL = Path("source/palettes")
 FLAGS = Path("source/flags")
 IDEOLOGIES = ideologies.IDEOLOGIES
 CRLF = "\r\n"
+CITY_VP = 5  # victory points of a named city from the Cities layer (a capital has 10)
 
 REPLACE_PATHS = [
     "history/states", "history/countries", "history/units", "history/general",
@@ -323,6 +324,16 @@ def main():
         cont_count[c] += 1
         state_name.append(f"{COUNTRIES[c][1]} {cont_count[c]}")
     state_capital = [max(g, key=lambda i: (size[i], -i)) for g in states]
+    # the author's cities (Cities layer): the first in a state becomes its victory point,
+    # any others extra ones; all named, worth CITY_VP unless the country's capital
+    city_of = {int(p): name for p, name, _, _ in rj.get("cities", [])}
+    extra_vps = defaultdict(list)
+    for p in city_of:
+        s = int(state_of[p])
+        if state_capital[s] in city_of and state_capital[s] != p:
+            extra_vps[s].append(p)
+        else:
+            state_capital[s] = p
     state_coastal = [any(coastal[i] for i in g) for g in states]
     # country capital: the sizeable state nearest the centre of the country's land
     capital_state = {}
@@ -366,7 +377,8 @@ def main():
             "\thistory = {",
             f"\t\towner = {tag}",
             f"\t\tadd_core_of = {tag}",
-            f"\t\tvictory_points = {{ {pid[cap]} {10 if is_cap else 1} }}",
+            f"\t\tvictory_points = {{ {pid[cap]} {10 if is_cap else CITY_VP if cap in city_of else 1} }}",
+            *[f"\t\tvictory_points = {{ {pid[e]} {CITY_VP} }}" for e in extra_vps[s]],
             "\t\tbuildings = {",
             *bl,
             "\t\t}",
@@ -662,21 +674,24 @@ def main():
     loc += superevents.write_files(write, OUT)
     write("localisation/english/valsora_l_english.yml", "\n".join(loc) + "\n", bom=True)
     nations.write_files(write, OUT)
-    vp_ids = {int(pid[c]) for c in state_capital}
-    city_names = {}
+    vp_ids = {int(pid[c]) for c in state_capital} | {int(pid[e]) for v in extra_vps.values() for e in v}
+    city_names = {int(pid[p]): name for p, name in city_of.items()}
     for key, name in nations.CITY_NAMES.items():
         if isinstance(key, str) and key.startswith("capital:"):
             c = by_tag[key[8:]]
             if c not in capital_state:
                 continue  # that country owns no land at the moment
             key = int(pid[state_capital[capital_state[c]]])
+        if city_names.get(key, name) != name:
+            raise SystemExit(f"nations.CITY_NAMES calls {city_names[key]} {name}")
         city_names[key] = name
     stale = sorted(set(city_names) - vp_ids)
     if stale:
         raise SystemExit(f"nations.CITY_NAMES names provinces that are not victory points: {stale}")
     # victory point names share vanilla's keys, so they go in replace/ to win over Earth names
     vp = ["l_english:"] + [f' VICTORY_POINTS_{pid[c]}:0 "{city_names.get(int(pid[c]), state_name[s] + " City")}"'
-                           for s, c in enumerate(state_capital)]
+                           for s, c in enumerate(state_capital)] + \
+        [f' VICTORY_POINTS_{pid[e]}:0 "{city_names[int(pid[e])]}"' for v in extra_vps.values() for e in v]
     write("localisation/english/replace/valsora_victory_points_l_english.yml", "\n".join(vp) + "\n",
           bom=True)
 
