@@ -21,8 +21,9 @@ HISTORY = {
             # Rouental leads the Association of Reibonnaise States from the start
             "create_faction_from_template = faction_template_reibonnaise_association",
             *[f"add_to_faction = {t}" for t in ("GDN", "LST", "EVR", "HLR", "SGV", "LZC", "SGN")],
-            # a non-aggression pact with the Kingdom of Illiricium (author, 2026-10-01)
-            "diplomatic_relation = { country = KIL relation = non_aggression_pact active = yes }"],
+            # Rouental guarantees the Kingdom of Illiricium's independence (author,
+            # 2026-10-01; it was a non-aggression pact at first)
+            "diplomatic_relation = { country = KIL relation = guarantee active = yes }"],
     # the Bleacherist republics start as Illiricium's puppets (author, 2026-10-01)
     "ILR": [f"set_autonomy = {{ target = {t} autonomous_state = autonomy_puppet }}"
             for t in ("CTF", "ETR", "MZG")],

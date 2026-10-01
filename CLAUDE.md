@@ -256,8 +256,9 @@ mismatch, missing localisation) and catches all of them.
     Bleacherist republics, shades of blue, Illiricium's puppets from the start) and
     Royalist Illiricium KIL (its island; white on the map so it stands out against the
     blue republics, author 2026-10-01; flag `KIL.png`, the author's original with the
-    transparent gaps filled with the flag's blue; a redraw at 82:52 was rejected; a
-    non-aggression pact with Rouental from the start), and (2026-10-01, later,
+    transparent gaps filled with the flag's blue; a redraw at 82:52 was rejected;
+    Rouental guarantees its independence from the start, which replaced a
+    non-aggression pact), and (2026-10-01, later,
     east of Selgrave and Hollier) Kurikia KRK (conservatism, flag `KRK.png`, its navy
     as map colour) and Fraxhemark FRX (social democracy, capital Fraternal City; map
     colour raspberry because its flag red would vanish next to Hollier; flag
