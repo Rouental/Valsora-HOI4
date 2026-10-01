@@ -149,6 +149,7 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `check_mod.py` | re-reads the built files and checks every rule below |
 | `export_canvas.py` | previews in `dist/` |
 | `package.py` | `dist/valsora_test.zip` |
+| `cartographic.py` | the "Valsora: Cartographic Map" submod, `dist/valsora_cartographic.zip`, and `dist/preview_cartographic.png` |
 
 **A clean `check_mod.py` run is the bar for shipping a build.** It was mutation-tested
 (CRLF, X-crossing, missing building row, state split across regions, descriptor
@@ -539,6 +540,22 @@ Left loaded on purpose, and noisy in `error.log`:
 - National focus: it holds the generic tree our countries use.
 - Ideas, MIOs, scripted effects and triggers, ai_areas, operations and achievements. They
   reference vanilla ids, which the previous build showed the game tolerates.
+
+## Cartographic submod (`cartographic.py`)
+
+The author asked for a flat, old-atlas look like HOI3's (reference: a vanilla mod with
+filled pastel countries, a grey-blue sea with a grid and serif names). It is a separate
+mod, `valsora_cartographic`, with `dependencies = { "Valsora (test map)" }`, so it loads
+after the main mod and only swaps graphics:
+- `GRADIENT_BORDERS_THICKNESS_COUNTRY_LOW/HIGH` = 2000 px (vanilla 5 / 25), so the
+  country colour fills whole countries instead of fading out from the borders.
+  (`GRADIENT_BORDERS_CAMERA_DISTANCE_OVERRIDE_COUNTRY` was left alone: its meaning is
+  unclear.)
+- `world_normal.bmp` is flat, so there is no relief shading. The heightmap is kept,
+  since buildings and units are placed by it.
+- The land colormap is a muted khaki (118, 110, 88); the sea is a flat grey-blue
+  (72, 90, 106) with a 15° graticule (92, 110, 124) on the land and water colormaps.
+- Untested in-game as of 2026-10-01. The map-name font is the engine's and not changed.
 
 ## Current state
 
