@@ -204,12 +204,19 @@ with no land left is simply left out of the game.
 | Cardonia | CRD | 84, 28, 120 |
 | Romanoddle | RMD | 46, 139, 150 |
 | Selto | STO | 214, 120, 40 |
-| Linterre | LNT | 190, 150, 200 |
+| Placeholdros (was Linterre) | LNT | 190, 150, 200 |
 | Rastava | RST | 184, 160, 72 |
 | Volinovia | VLN | 70, 100, 170 |
 | Estande | ESD | 153, 0, 0 |
 | Coraliza | CRZ | 240, 122, 92 |
 | Placeholdria | PLH | 238, 196, 222 |
+| Senatorial Illiricium | ILR | 32, 44, 140 |
+| Côtefer | CTF | 70, 150, 190 |
+| Entroterra | ETR | 140, 185, 235 |
+| Mezzogiorno | MZG | 60, 105, 190 |
+| Royalist Illiricium | KIL | 212, 178, 60 |
+| Kurikia | KRK | 34, 62, 96 |
+| Fraxhemark | FRX | 200, 60, 110 |
 
 The first seven are the placeholders, one per continent, and the only ones the start
 menu recommends. Brand-new countries need a line of code as well (tag, name and colour
@@ -224,8 +231,7 @@ that ideology rules, like Rouental's tricolour.
 
 In the game a flag is only 82×52 pixels (a 1.58:1 rectangle), and much smaller on the
 map. A flag of another shape gets squashed, and fine detail turns to noise. The best
-flags are about that shape, with bold shapes. Royalist Illiricium's flag was redrawn
-that way (`scripts/redraw_flags.py`; your original is in `source/flags/originals/`).
+flags are about that shape, with bold shapes.
 
 ### Strategic Regions
 

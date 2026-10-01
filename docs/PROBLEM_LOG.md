@@ -6,11 +6,27 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**Some new rivers were missing, and some minor rivers came out major** (2026-10-01)
+- Causes, in `rivers.py`:
+  - A whole river got one size, from the majority of its pixels, so a minor stretch
+    drawn onto a mostly major river (the Prestozza branch) became major.
+  - Where the main river takes a diagonal step it gets a corner pixel. When that
+    corner was exactly where a tributary joined (the Gallyo river), the tributary was
+    taken for part of the main river and skipped.
+  - A tributary ending next to a 45° stretch of its river can't join it with one
+    pixel without making the river two pixels thick (the Ossilia river), so it was
+    dropped.
+- Fix: each pixel's size follows the layer it was drawn on; branches off a corner
+  pixel are followed; a tributary that stops short is joined by the shortest clean
+  path of up to 6 pixels. Every drawn line is now traced.
+
+**Royalist Illiricium's redrawn flag** (2026-10-01)
+- The author preferred their original; it is back, as sent.
+
 **Royalist Illiricium's flag looked squashed and noisy** (2026-10-01)
 - Cause: the flag is about 2:1 with fine gold filigree. The game's flag is 82×52
   (1.58:1), so it was squeezed sideways, and the filigree turned to noise at that size.
-- Fix: redrawn at 82:52 with the same layout, the filigree simplified and the arms
-  enlarged (`scripts/redraw_flags.py`). The original is kept in `source/flags/originals/`.
+- A redraw at 82:52 was tried and rejected by the author (see above).
 
 **Every country showed its leader's name on the map** (2026-09-30)
 - Cause: the new leader characters were named `TAG_<subtype>` (e.g. `NSC_despotism`).

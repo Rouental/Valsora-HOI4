@@ -1,9 +1,5 @@
 """Flags redrawn for HOI4's 82×52 (run by hand; writes source/flags/<TAG>.png).
 
-    KIL  the author's flag (source/flags/originals/KIL.png) is about 2:1 with fine gold
-         filigree; squeezed into 82×52 it came out as noise. Redrawn at 82:52 with the
-         same layout (framed arms on the left, six gold-edged bars on the right), the
-         filigree left out and the arms enlarged.
     FRX  the only picture was rotated and waved, so drawn from scratch: a red-white-blue
          tricolour with a stylised Montenegrin double-headed eagle.
 
@@ -16,39 +12,6 @@ from PIL import Image, ImageDraw
 
 FLAGS = Path("source/flags")
 W, H = 820, 520  # 10× the game's flag
-
-
-def kil():
-    src = Image.open(FLAGS / "originals/KIL.png").convert("RGB")
-    blue, gold, white, black = (41, 45, 129), (253, 212, 76), (255, 255, 255), (0, 0, 0)
-    im = Image.new("RGB", (W, H), blue)
-    d = ImageDraw.Draw(im)
-    cw = 470  # the canton (framed arms), full height
-    d.rectangle([12, 12, cw - 12, H - 13], outline=gold, width=10)
-    fr = 62   # frame: blue band with white rosettes at the corners and midpoints
-    for x, y in [(37, 37), (cw - 37, 37), (37, H - 38), (cw - 37, H - 38), (cw // 2, 37),
-                 (cw // 2, H - 38), (37, H // 2), (cw - 37, H // 2)]:
-        d.rectangle([x - 20, y - 20, x + 20, y + 20], fill=black)
-        d.ellipse([x - 15, y - 15, x + 15, y + 15], fill=white)
-        d.ellipse([x - 5, y - 5, x + 5, y + 5], fill=gold)
-    d.rectangle([fr, fr, cw - fr, H - fr - 1], fill=gold)
-    # the arms on their tricolour field, cropped from the author's flag
-    inner = src.crop((90, 100, 597, 522))
-    iw, ih = cw - 2 * fr - 16, H - 2 * fr - 17
-    im.paste(inner.resize((iw, ih), Image.LANCZOS), (fr + 8, fr + 8))
-    # six bars on the right
-    x0, x1 = cw + 22, W - 14
-    gap = (H - 24) / 6
-    for i in range(6):
-        y0 = 12 + i * gap + 9
-        y1 = 12 + (i + 1) * gap - 9
-        d.rectangle([x0, y0, x1, y1], outline=gold, width=9)
-        cx, cy = (x0 + x1) / 2, (y0 + y1) / 2
-        d.ellipse([cx - 22, cy - 22, cx + 22, cy + 22], fill=black, outline=gold, width=4)
-        d.ellipse([cx - 14, cy - 14, cx + 14, cy + 14], fill=white)
-        for s in (-1, 1):  # a plain gold stroke for the filigree
-            d.line([cx + s * 32, cy, cx + s * ((x1 - x0) / 2 - 22), cy], fill=gold, width=7)
-    im.save(FLAGS / "KIL.png")
 
 
 def eagle(d, cx, cy, s, gold, dark):
@@ -98,9 +61,8 @@ def frx():
 
 
 if __name__ == "__main__":
-    kil()
     frx()
-    for t in ("KIL", "FRX"):
+    for t in ("FRX",):
         big = Image.open(FLAGS / f"{t}.png")
         prev = Image.fromarray(np.hstack([np.asarray(big.resize((82, 52), Image.LANCZOS).resize((328, 208), Image.NEAREST)),
                                           np.asarray(big.resize((328, 208), Image.LANCZOS))]))

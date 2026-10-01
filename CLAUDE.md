@@ -54,7 +54,7 @@ for the author. Unknown layer names are ignored.
   name). An unnamed dot, two in one province, or a repeated name stops the build. In
   `build_mod.py` the first city of a state becomes its victory point (worth `CITY_VP` =
   5, or 10 as the capital), and further ones are extra victory points. Capitals are
-  set by `nations.CAPITALS` (the dot's pixel): Venezzo CTF, Alqira ILR, Malin MZG,
+  set by `nations.CAPITALS` (the dot's pixel): Winterthorn CRD, Venezzo CTF, Alqira ILR, Malin MZG,
   Prestozza ETR, Monte Gnolia KIL (author, 2026-10-01), besides Rêverie ROU. First nine: Winterthorn, Vair, Carcarelle, Rêverie, Venezzo, Alqira,
   Malin, Prestozza, Monte Gnolia.
 - **Heightmap**: clamped to 94 / 96 on the wrong side of sea level.
@@ -68,7 +68,12 @@ for the author. Unknown layer names are ignored.
     become tributaries, recursively;
   - diagonal steps get corners, and loops/U-turns are shortcut;
   - branches under 6 px are dropped;
-  - widths: major 7→9, minor 4→5 (7+ is a large river).
+  - widths: major 7→9, minor 4→5 (7+ is a large river), per pixel by the layer it was
+    drawn on, so a river can change size along its course;
+  - a tributary that stops short of its river (or ends next to a 45° staircase, which
+    no single pixel can join without a 2×2 block) is linked by the shortest clean path
+    of up to 6 pixels, from its end or up to 4 pixels back; branches joining at a
+    corner pixel the main river gained are followed too (2026-10-01 fixes).
   The exact-palette "Rivers" layer wins where set, and river pixels on water are
   dropped. `check_mod.py` checks the result with `rivers.problems`.
 - **Provinces follow rivers** (`river_provinces.py`, by hand, author's request
@@ -138,7 +143,8 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `pdn_tools.py` | by hand: `navigable` (lake → sea with its own region), `sea_zones` (regroup and recolour regions), `give` (whole states to a country), `recolour` |
 | `strategic_regions.py` | by hand: sea regions = the author's oceans, one each, with names (`source/region_names.json`); land untouched |
 | `river_provinces.py` | by hand, after a build: re-cuts the provinces of every state a river crosses so rivers run between provinces |
-| `redraw_flags.py` | by hand: flags redrawn for 82×52 (KIL from the author's original, FRX from scratch) |
+| `redraw_flags.py` | by hand: Fraxhemark's stand-in flag, drawn from scratch until the author's file arrives |
+| `state_map.py` | by hand, after a build: a numbered map of some countries' states (`dist/state_numbers_<name>.png` + `.json`, number → tag and pixel), for the author to name them |
 | `organic.py` | organic splitting (seeded watershed over noise), used by `apply_outlines.py` |
 | `rivers.py` | plain river lines → HOI4 rivers.bmp format, and the river rules check |
 | `build_mod.py` | every mod file |
@@ -238,16 +244,19 @@ mismatch, missing localisation) and catches all of them.
     the `.pdn` in step.
   - Real countries the author drew: Rouental ROU, Seigne SGN, Evriches EVR, Hollier
     HLR, Selgrave SGV, Lustiana LST, Lanzerac LZC, Guedelon GDN, Cardonia CRD,
-    Romanoddle RMD ("the Romanoddlian Federation"), Selto STO, Linterre LNT (a placeholder nation, author), and
+    Romanoddle RMD ("the Romanoddlian Federation"), Selto STO, Placeholdros LNT (a
+    placeholder nation, author; called Linterre until 2026-10-01, the key in
+    `COUNTRIES` is still `linterre`), and
     (second map of 2026-09-30, all Portuguese: POR names, European portraits) Rastava
     RST, Volinovia VLN, Estande ESD (flag `source/flags/ESD.png`, map colour the flag's red (153,0,0): the
     green blended with Rouental),
     Coraliza CRZ, Placeholdria PLH (theocratic, prophetic rule), and (2026-10-01, east of
     Estande, Italian names: Claude's guess) Illiricium ILR (map name "Senatorial
     Illiricium", flag `ILR.png`), Côtefer CTF, Entroterra ETR, Mezzogiorno MZG (the three
-    Bleacherist republics) and Royalist Illiricium KIL (its island; flag `KIL.png`, the
-    transparent gaps filled with the flag's blue; redrawn at 82:52 by
-    `redraw_flags.py`, original in `source/flags/originals/`), and (2026-10-01, later,
+    Bleacherist republics, shades of blue, Illiricium's puppets from the start) and
+    Royalist Illiricium KIL (its island; flag `KIL.png`, the author's original with the
+    transparent gaps filled with the flag's blue; a redraw at 82:52 was rejected; a
+    non-aggression pact with Rouental from the start), and (2026-10-01, later,
     east of Selgrave and Hollier) Kurikia KRK (conservatism, flag `KRK.png`, its navy
     as map colour) and Fraxhemark FRX (social democracy, capital Fraternal City; map
     colour raspberry because its flag red would vanish next to Hollier; flag drawn by
@@ -433,7 +442,7 @@ don't exist here. That was the cause of "Failed to generate a portrait / name" a
     Yastreovakia POL. Usnistan is PER with Arab + African portraits and middle_eastern
     gfx; Orientalis is JAP with Asian portraits and asian gfx.
   - Overrides are in `TAG_CULTURE`: the Reibonnaise states (ROU SGN EVR HLR SGV LST LZC
-    GDN) and Linterre (LNT) use FRA names and France portraits (author: French for now);
+    GDN) and Placeholdros (LNT) use FRA names and France portraits (author: French for now);
     RST VLN ESD CRZ PLH use POR names (added to `source/names/vanilla_names.txt` from
     vanilla) and Europe portraits.
 - **Scientists and operatives** have no blocks yet. Vanilla's scientist file format

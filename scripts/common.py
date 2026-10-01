@@ -44,10 +44,11 @@ COUNTRIES = {
     "lanzerac": ("LZC", "Lanzerac", "Lanzeracois", (168, 130, 36)),
     "guedelon": ("GDN", "Guedelon", "Guedelonnais", (7, 76, 130)),
     "cardonia": ("CRD", "Cardonia", "Cardonian", (84, 28, 120)),
-    # 2026-09-30, south-west of Rouental; Linterre is a placeholder nation (author)
+    # 2026-09-30, south-west of Rouental; a placeholder nation (author), first called
+    # Linterre, renamed Placeholdros on 2026-10-01
     "romanoddle": ("RMD", "Romanoddle", "Romanoddlian", (46, 139, 150)),
     "selto": ("STO", "Selto", "Seltan", (214, 120, 40)),
-    "linterre": ("LNT", "Linterre", "Linterrois", (190, 150, 200)),
+    "linterre": ("LNT", "Placeholdros", "Placeholdrosian", (190, 150, 200)),
     # 2026-09-30, south of Romanoddle and Selto; all Portuguese (author). Estande's
     # colour is the red of its flag (author: the green blended with Rouental); the rest are Claude's picks
     "rastava": ("RST", "Rastava", "Rastavan", (184, 160, 72)),
@@ -57,11 +58,12 @@ COUNTRIES = {
     "placeholdria": ("PLH", "Placeholdria", "Placeholdrian", (238, 196, 222)),
     # 2026-10-01, east of Estande: Illiricium (map name "Senatorial Illiricium", the
     # author's), its Bleacherist republics, and Royalist Illiricium on its island.
-    # Colours and adjectives are Claude's picks; Illiricium's blue is its flag's
+    # Colours and adjectives are Claude's picks; Illiricium's blue is its flag's, and its
+    # Bleacherist puppets are shades of blue (author, 2026-10-01)
     "illiricium": ("ILR", "Senatorial Illiricium", "Illirician", (32, 44, 140)),
     "cotefer": ("CTF", "Côtefer", "Côteferan", (70, 150, 190)),
-    "entroterra": ("ETR", "Entroterra", "Entroterran", (150, 160, 215)),
-    "mezzogiorno": ("MZG", "Mezzogiorno", "Mezzogiornese", (110, 80, 165)),
+    "entroterra": ("ETR", "Entroterra", "Entroterran", (140, 185, 235)),
+    "mezzogiorno": ("MZG", "Mezzogiorno", "Mezzogiornese", (60, 105, 190)),
     "k_illiricium": ("KIL", "Royalist Illiricium", "Illirician", (212, 178, 60)),
     # 2026-10-01, the author's, east of Selgrave and Hollier. Kurikia's navy is its
     # flag's; Fraxhemark's flag red would vanish next to Hollier, so raspberry (Claude's)

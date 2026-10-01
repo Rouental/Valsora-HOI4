@@ -20,7 +20,12 @@ HISTORY = {
             "recruit_character = ROU_mahaut_vi",
             # Rouental leads the Association of Reibonnaise States from the start
             "create_faction_from_template = faction_template_reibonnaise_association",
-            *[f"add_to_faction = {t}" for t in ("GDN", "LST", "EVR", "HLR", "SGV", "LZC", "SGN")]],
+            *[f"add_to_faction = {t}" for t in ("GDN", "LST", "EVR", "HLR", "SGV", "LZC", "SGN")],
+            # a non-aggression pact with the Kingdom of Illiricium (author, 2026-10-01)
+            "diplomatic_relation = { country = KIL relation = non_aggression_pact active = yes }"],
+    # the Bleacherist republics start as Illiricium's puppets (author, 2026-10-01)
+    "ILR": [f"set_autonomy = {{ target = {t} autonomous_state = autonomy_puppet }}"
+            for t in ("CTF", "ETR", "MZG")],
 }
 
 # Country names while a given ideology rules: tag -> ideology -> (name, formal
@@ -94,7 +99,7 @@ FORMAL_NAMES = {
     "ROU": "The Sacred Principality of Rouental",
     "CRD": "the Cardonian Kingdom",
     # the author's, 2026-09-30
-    "LNT": "the Republic of Linterre",
+    "LNT": "the Republic of Placeholdros",
     "STO": "the Empire of Selto-Hamborn",
     "RMD": "the Romanoddlian Federation",  # author, 2026-09-30
     "VLN": "the Republic of Volinovia",
@@ -510,6 +515,7 @@ CITY_NAMES = {
 # countries get the sizeable state nearest the middle of their land.
 CAPITALS = {
     "ROU": (660, 805),  # Rêverie, the small state the author drew for it ("Rouental 27")
+    "CRD": (805, 670),  # Winterthorn (author, 2026-10-01)
     # the author's cities, made capitals (2026-10-01): the dots on Necessary Cities
     "CTF": (791, 1004),  # Venezzo
     "ILR": (868, 1084),  # Alqira

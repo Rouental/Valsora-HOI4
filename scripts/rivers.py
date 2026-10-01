@@ -10,8 +10,9 @@ the rest:
   * the main stem runs from the mouth to the farthest end, preferring major pixels;
     every side branch is a tributary, recursively;
   * diagonal steps get a corner pixel;
-  * major rivers widen from index 7 to 9 towards the mouth (HOI4 counts 7+ as large
-    rivers), minor ones from 4 to 5 (small rivers).
+  * each pixel is major or minor after the layer it was drawn on (a river can change
+    size along its course); major stretches widen from index 7 to 9 towards the mouth
+    (HOI4 counts 7+ as large rivers), minor ones from 4 to 5 (small rivers).
 """
 from collections import deque
 
@@ -83,17 +84,47 @@ def trace(major, minor, land):
             k += 1
         return res
 
-    def paint(path, big, marker_first, marker_last):
-        """path runs upstream -> downstream."""
+    def paint(path, marker_first, marker_last):
+        """path runs upstream -> downstream; each pixel's size is the layer it was drawn on."""
         m = len(path)
         for k, p in enumerate(path):
             f = k / max(m - 1, 1)
-            out[p] = (7 + min(int(f * 3), 2)) if big else (4 + min(int(f * 2), 1))
+            out[p] = (7 + min(int(f * 3), 2)) if is_major[p] else (4 + min(int(f * 2), 1))
             placed[p] = True
         if marker_first is not None:
             out[path[0]] = marker_first
         if marker_last is not None:
             out[path[-1]] = marker_last
+
+    def link_up(trib):
+        """A tributary that stops just short of its river: join it by the shortest clean
+        path (up to 6 new pixels), from its end or up to 4 pixels back up it."""
+        for back in range(min(5, len(trib) - 1)):
+            base = trib[:len(trib) - back]
+            prev = {base[-1]: None}
+            dq = deque([(base[-1], 0)])
+            while dq:
+                q, d = dq.popleft()
+                if d >= 6:
+                    continue
+                for dy, dx in N4:
+                    c = (q[0] + dy, q[1] + dx)
+                    if not (0 <= c[0] < h and 0 <= c[1] < w) or c in prev or c in base:
+                        continue
+                    if not land[c] or placed[c]:
+                        continue
+                    path, r = [c], q
+                    while r != base[-1]:
+                        path.append(r)
+                        r = prev[r]
+                    path.reverse()
+                    if makes_block(c, base + path[:-1]):
+                        continue
+                    prev[c] = q
+                    if touches(c, set(base) | set(path)):
+                        return base + path
+                    dq.append((c, d + 1))
+        return trib
 
     for comp in range(1, n + 1):
         pts = pixels[comp]
@@ -150,20 +181,28 @@ def trace(major, minor, land):
                     ext.append(q)
             stem = stem + ext
         stem = orthogonal(stem)
-        big = sum(is_major[p] for p in stem) * 2 >= len(stem)
-        paint(stem, big, 0, None)
+        paint(stem, 0, None)
         on_path = set(raw) | set(stem)
         # tributaries: every side branch off a painted river, nearest the mouth first
         queue = deque([raw])  # drawn (skeleton) paths, to find the branches off them
         while queue:
             river = queue.popleft()
 
-            for p in reversed(river):  # from the mouth up
-                if p not in parent:
+            raw_set = set(river)
+            for p0 in reversed(river):  # from the mouth up
+                if p0 not in parent:
                     continue
-                for c in children[p]:
-                    if c in on_path:
+                # a corner pixel added to the parent river may be where a branch joins:
+                # its other children are branches too, joining at the corner
+                joins = []
+                for c in children[p0]:
+                    if c in raw_set:
                         continue
+                    if c in on_path:
+                        joins += [(c, cc) for cc in children[c] if cc not in on_path]
+                    else:
+                        joins.append((p0, c))
+                for p, c in joins:
                     raw_trib = path_down(best[c][1], p)
                     trib = raw_trib + [p]
                     trib = orthogonal(trib)[:-1]  # the join pixel belongs to the parent
@@ -175,15 +214,10 @@ def trace(major, minor, land):
                     if len(trib) >= 2 and makes_block(trib[-1], trib):
                         trib = trib[:-1]  # joining there would make the river 2 px thick
                     if trib and not touches(trib[-1], set(trib)):
-                        q = trib[-1]
-                        link = [c for c in ((q[0] + dy, q[1] + dx) for dy, dx in N4)
-                                if land[c] and not placed[c] and c not in trib
-                                and touches(c, set(trib)) and not makes_block(c, trib)]
-                        trib = trib + link[:1]
+                        trib = link_up(trib)
                     if len(trib) < MIN_BRANCH or not touches(trib[-1], set(trib)):
                         continue  # loops and specks in the drawing, not real branches
-                    tbig = sum(is_major[q] for q in trib) * 2 >= len(trib)
-                    paint(trib, tbig, None, 1)
+                    paint(trib, None, 1)
                     on_path |= set(raw_trib) | set(trib)
                     queue.append(raw_trib)
     return out
