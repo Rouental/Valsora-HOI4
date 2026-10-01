@@ -57,6 +57,12 @@ LEADERS = {
     "CRZ": ["constitutional_monarchism"],
     "STO": ["despotism"],
     "PLH": ["prophetic_rule"],         # the Chosen Land, under messianic rule
+    # 2026-10-01: Bleacherism (the author's new Authoritarian subtype); the royalists
+    "ILR": ["bleacherism"],
+    "CTF": ["bleacherism"],
+    "ETR": ["bleacherism"],
+    "MZG": ["bleacherism"],
+    "KIL": ["legitimism"],
     # Rouental's democrats and communists, promoted by their focuses
     "ROU": ["constitutional_monarchism", "leninism"],
     # the continent placeholders: not chosen by the author, Monarchist as before
@@ -93,6 +99,12 @@ FORMAL_NAMES = {
     "ESD": "the Kingdom of Estande",
     "CRZ": "the Principality of Coraliza",
     "PLH": "the Chosen Land of Placeholdria",
+    # the author's, 2026-10-01
+    "ILR": "the Senatorial Republic of Illiricium",
+    "CTF": "the Bleacherist Republic of Côtefer",
+    "ETR": "the Bleacherist Republic of Entroterra",
+    "MZG": "the Bleacherist Republic of Mezzogiorno",
+    "KIL": "the Kingdom of Illiricium",
 }
 
 LOCALISATION = [

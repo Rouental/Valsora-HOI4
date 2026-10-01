@@ -9,6 +9,9 @@
     python3 scripts/pdn_tools.py give COUNTRY X,Y [X,Y ...]
         Give the whole states containing these pixels to COUNTRY (a common.COUNTRIES key),
         on the Countries layer.
+    python3 scripts/pdn_tools.py blue_seas
+        Recolour every sea province on the Provinces layer in its own blue (the author
+        wants the sea easy to tell from land there). Colours only: nothing else changes.
     python3 scripts/pdn_tools.py sea_zones [CELL]
         Regroup all sea provinces into larger sea regions (about CELL px across, default
         1536), and recolour the Strategic Regions layer so sea regions are blues and land
@@ -179,6 +182,21 @@ def give(names, L, country, seeds):
         print(f"state at ({x}, {y}): {m.sum()} px -> {country}")
 
 
+def blue_seas(names, L):
+    P = code(L["Provinces"][..., :3])
+    sea = code(L["Terrain"][..., :3]) == code(np.array(OCEAN))
+    cols, lab = np.unique(P, return_inverse=True)
+    lab = lab.reshape(P.shape)
+    size = np.bincount(lab.ravel())
+    is_sea = np.bincount(lab.ravel(), sea.ravel()) * 2 > size
+    land_cols = set(cols[~is_sea].tolist())
+    blues = palette(int(is_sea.sum()), True, 31, land_cols)
+    new = cols.copy()
+    new[np.nonzero(is_sea)[0]] = blues
+    put(L["Provinces"], new[lab], is_sea[lab])
+    print(f"{is_sea.sum()} sea provinces recoloured blue")
+
+
 def recolour(names, L, layer, pairs):
     C = code(L[layer][..., :3])
     painted = L[layer][..., 3] > 0
@@ -199,6 +217,8 @@ def main():
         recolour(names, L, sys.argv[2], pairs)
     elif cmd == "give":
         give(names, L, sys.argv[2], [tuple(int(v) for v in a.split(",")) for a in sys.argv[3:]])
+    elif cmd == "blue_seas":
+        blue_seas(names, L)
     elif cmd == "sea_zones":
         sea_zones(names, L, int(sys.argv[2]) if len(sys.argv) > 2 else 1536)
     else:

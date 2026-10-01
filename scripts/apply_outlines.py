@@ -31,7 +31,9 @@ from writepdn import write_pdn
 
 SRC = Path("work/pdn_outlines")  # the input .pdn, decoded here first
 OUT = Path("source/HOI4 Mod Map.pdn")
-LINE_LAYERS = ["Borders", "Necessary Provinces"]
+# country borders and state lines; the author renamed them on 2026-10-01 ("Necessary
+# Provinces" is now kept for province-level detail, not read here)
+LINE_LAYERS = [("Necessary Borders", "Borders"), ("Necessary States",)]
 OCEAN, LAKES = (8, 31, 130), (55, 90, 220)
 
 # Who gets the newly outlined patches. Patches already painted in a real (non-
@@ -59,18 +61,27 @@ OCEAN, LAKES = (8, 31, 130), (55, 90, 220)
 # (532, 802).)
 # 2026-09-30, second map: Rastava, Volinovia, Placeholdria, Estande and Coraliza south of
 # Romanoddle and Selto, with the islands the author's Names layer labels ES / PC / RO.
-DEFAULT_OWNER = "estande"
+# (config was: DEFAULT_OWNER "estande"; rastava (602, 1030); volinovia (527, 1085);
+# placeholdria (417, 1157), (392, 1069), (364, 1081), (384, 1091), (323, 1104), (321, 1182),
+# (323, 1199), (350, 1208); estande (635, 1165), (756, 933), (780, 924), (793, 935),
+# (687, 971), (747, 1006), (760, 1037), (569, 1214), (533, 1229), (599, 1227), (582, 1242),
+# (602, 1262); coraliza (440, 1231); romanoddle (270, 1113), (283, 1123), (219, 1135).)
+# 2026-10-01: Illiricium and its Bleacherist republics east of Estande, Royalist
+# Illiricium's island, and two islets off Solitas the author labelled ROU.
+DEFAULT_OWNER = "illiricium"
 OWNERS = {
-    "rastava": [(602, 1030)],
-    "volinovia": [(527, 1085)],
-    "placeholdria": [(417, 1157), (392, 1069), (364, 1081), (384, 1091), (323, 1104),
-                     (321, 1182), (323, 1199), (350, 1208)],
-    "estande": [(635, 1165), (756, 933), (780, 924), (793, 935), (687, 971), (747, 1006),
-                (760, 1037), (569, 1214), (533, 1229), (599, 1227), (582, 1242), (602, 1262)],
-    "coraliza": [(440, 1231)],
-    "romanoddle": [(270, 1113), (283, 1123), (219, 1135)],
+    "illiricium": [(841, 1084)],
+    "cotefer": [(803, 995)],
+    "mezzogiorno": [(857, 1129)],
+    "entroterra": [(802, 1176)],
+    "k_illiricium": [(922, 1157)],
+    "rouental": [(1716, 2010), (1728, 2019)],
 }
+# patches the lines happen to close off that are not meant as anything yet: left as they
+# are (2026-10-01: the land south of Entroterra and Estande)
+LEAVE = [(791, 1345)]
 MIN_STATE = 150      # smaller patches (islets) join the nearest state of their country
+ISLET_REACH = 300    # ... if within this many px; farther islets make a state of their own
 STATE_MAX = 1000     # patches bigger than this become several states ...
 STATE_AREA = 650     # ... of about this size
 PROVINCE_AREA = 150  # target province size inside the outlines (placeholders: 1024)
@@ -168,7 +179,10 @@ def main():
     terr = code(L["Terrain"][..., :3])
     land = (terr != code(np.array(OCEAN))) & (terr != code(np.array(LAKES)))
     lines = np.zeros((H, W), bool)
-    for nm in LINE_LAYERS:
+    for choices in LINE_LAYERS:
+        nm = next((c for c in choices if c in L), None)
+        if nm is None:
+            sys.exit(f"The .pdn has no layer named {choices[0]!r}")
         lines |= L[nm][..., 3] > 0
 
     # ------------------------------------------------ enclosed patches -> new provinces
@@ -219,6 +233,8 @@ def main():
     chosen = kept
     print(f"{before - len(chosen)} patches were outlined by an earlier run and are kept as they are; "
           f"{len(recut)} are cut again because new lines split their states")
+    leave = {int(cells[y, x]) for x, y in LEAVE}
+    chosen = [i for i in chosen if int(i) not in leave]
     for i in chosen:
         if int(i) not in owner_of:
             ys, xs = np.nonzero(cells == i)
@@ -321,8 +337,17 @@ def main():
                     and prov_owner[k] == prov_owner[c]),
                    key=lambda k: np.hypot(cent[k][0] - cent[c][0], cent[k][1] - cent[c][1]),
                    default=None)
-        if best is not None:
+        far = best is None or np.hypot(cent[best][0] - cent[c][0], cent[best][1] - cent[c][1]) > ISLET_REACH
+        if not far:
             prov_state[c] = prov_state[best]
+            continue
+        # far from the rest of its country (Rouental's islets off Solitas): islets of
+        # one country near each other share a state of their own
+        for k, kk in list(prov_state.items()):
+            if k != c and prov_owner[k] == prov_owner[c] and patch_size[kk[0]] < MIN_STATE and \
+                    np.hypot(cent[k][0] - cent[c][0], cent[k][1] - cent[c][1]) <= ISLET_REACH:
+                prov_state[c] = kk
+                break
     # one state per (patch, piece), as drawn
     groups = defaultdict(list)
     for c, key in prov_state.items():

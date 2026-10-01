@@ -50,9 +50,15 @@ files and so on). The build writes all of them.
 | **States** | states: what a country owns, and where factories go | No: blanks are filled in |
 | **Countries** | who owns each state at the start | No: blanks are filled in |
 | **Notes (ignored by the build)** | nothing: the old drawing's country colours, for reference | – |
-| **Major Rivers**, **Minor Rivers** (optional) | rivers, drawn as simple lines | No: the build tidies them |
+| **Necessary Major Rivers**, **Necessary Minor Rivers** | rivers, drawn as simple lines | No: the build tidies them |
 
-Any other layer (your references, names, sketches) is ignored by the build.
+Your own layers: everything named **Necessary …** is what you edit for me to add to the
+mod (Necessary Borders, States, Names, Major / Minor Rivers; Necessary Provinces and
+Necessary Terrain are kept for later province and terrain detail). Anything with
+"Reference" in its name, and **Background** (plain white, for seeing better), is only
+for you. The build ignores every layer whose name it doesn't know.
+
+On the **Provinces** layer the sea provinces are blues, so sea is easy to tell from land.
 
 "Blanks are filled in" means: if you leave a spot transparent, it joins whatever is
 painted nearest to it, and the build tells you where it did that.
@@ -106,7 +112,7 @@ looks; the terrain *type* comes from the Terrain layer.
 
 ### Rivers
 
-**The easy way: the Major Rivers and Minor Rivers layers.** Draw each river as a
+**The easy way: the Necessary Major Rivers and Necessary Minor Rivers layers.** Draw each river as a
 1-pixel line with the Pencil, in any colour, on land. Major rivers count as large
 rivers in the game (a bigger attack penalty to cross), minor ones as small rivers.
 The build converts them into HOI4's fussy format for you:
@@ -252,17 +258,19 @@ province with the Paint Bucket.
 
 **Draw new countries and states as outlines.** This is how Rouental and its
 neighbours were made:
-1. On a layer called **Borders**, draw country borders as 1-pixel Pencil lines.
-2. On a layer called **Necessary Provinces**, draw the lines inside a country that
+1. On **Necessary Borders**, draw country borders as 1-pixel Pencil lines.
+2. On **Necessary States**, draw the lines inside a country that
    divide it into **states**.
 3. Every closed-off patch of land becomes a state; a large patch becomes several
    states that together fill its shape. Every state is then cut into small provinces
    (about 12 × 12 pixels). Leave no gaps in the lines, or the patch will leak into its
    neighbour.
-4. Write each country's name in or next to its patches on any layer, e.g. "Names".
+4. Write each country's name in or next to its patches on **Necessary Names**; a short
+   line from a label points to an island it belongs to.
 5. Islands you want included but can't outline, just mention (or colour them on a
    reference layer).
 6. Upload and ask. Areas that already belong to a real country are left alone, so
    you can outline one region at a time. To split an existing state, draw a line
-   through it on Necessary Provinces: only the states you cut are redone. A script (`scripts/apply_outlines.py`) turns the patches into
+   through it on Necessary States: only the states you cut are redone. If new lines
+   close off an area you don't mean as a country yet, say so and it is left alone. A script (`scripts/apply_outlines.py`) turns the patches into
    states, provinces and owners on the real layers, and makes new countries.

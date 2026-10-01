@@ -25,9 +25,13 @@ The author edits this file from now on; `docs/EDITING.md` is their guide (keep i
 step with `read_layers.py`). It is exactly game size (5120×2560, one pixel = one map
 pixel), and each layer is one kind of game data, found **by name**. Bottom to top:
 Heightmap, Terrain, Rivers, Continents, Provinces, Strategic Regions, States, Countries,
-and "Notes (ignored by the build)". Optional: "Major Rivers" / "Minor Rivers" (plain
-lines, see below). Unknown layer names are ignored, so the author keeps their own
-(References, Names, Borders, Necessary Provinces…).
+and "Notes (ignored by the build)". **The author's editing layers are named "Necessary …"**
+(from 2026-10-01): Necessary Borders (country lines), Necessary States (state lines; it
+was called "Necessary Provinces" before), Necessary Names (labels; a short line points
+to an island), Necessary Major / Minor Rivers (plain river lines; the old "Major Rivers"
+/ "Minor Rivers" still work). Necessary Provinces and Necessary Terrain are reserved for
+later detail and not read yet. "… Reference" layers and "Background" (white) are only
+for the author. Unknown layer names are ignored.
 - **Provinces**: one colour per province, which is also its provinces.bmp colour. Ids
   are assigned in reading order (first pixel, row by row), so they shift when provinces
   change. Refer to places by `capital:TAG`, never by id.
@@ -87,8 +91,10 @@ lines, see below). Unknown layer names are ignored, so the author keeps their ow
     than the state has anyway, so islets across water don't count). These drawn pieces
     stay states even under `MIN_STATE`. First used 2026-09-30: 13 Rouental pieces. The script decodes
     its input `.pdn` itself (`work/pdn_outlines`).
-  - Islets under 150 px join the nearest state of their country instead of becoming
-    states.
+  - Islets under 150 px join the nearest state of their country within 300 px
+    (`ISLET_REACH`); farther ones (Rouental's two islets off Solitas) share a state of
+    their own. `LEAVE` lists patches the lines close off by accident (the land south
+    of Entroterra and Estande), which stay as they are.
   - Cut placeholder provinces and states are cleaned up iteratively: scraps join a
     neighbour (a new province's scrap stays in its state), never a new state, and
     states are forced into one region.
@@ -225,7 +231,11 @@ mismatch, missing localisation) and catches all of them.
     (second map of 2026-09-30, all Portuguese: POR names, European portraits) Rastava
     RST, Volinovia VLN, Estande ESD (flag `source/flags/ESD.png`, map colour the flag's red (153,0,0): the
     green blended with Rouental),
-    Coraliza CRZ, Placeholdria PLH (theocratic, prophetic rule). Formal names are the
+    Coraliza CRZ, Placeholdria PLH (theocratic, prophetic rule), and (2026-10-01, east of
+    Estande, Italian names: Claude's guess) Illiricium ILR (map name "Senatorial
+    Illiricium", flag `ILR.png`), Côtefer CTF, Entroterra ETR, Mezzogiorno MZG (the three
+    Bleacherist republics) and Royalist Illiricium KIL (its island; flag `KIL.png`, the
+    transparent gaps filled with the flag's blue). File names are ASCII (`Cotefer`). Formal names are the
     author's; Selto's "Empire of Seito-Hamborn" was read as Selto-Hamborn.
     The new three's colours and adjectives are Claude's picks. All tags were checked
     against vanilla `common/country_tags`; new tags must be too.
@@ -327,7 +337,9 @@ working; names come from `localisation/english/replace/`:
   Centralism, Council Communism, Anarcho-Communism, Agrarian Socialism. Authoritarian:
   Military Junta, Fascism, Corporatism, Strongman Rule, Technocracy, Revanchism.
   Monarchist: Absolute Monarchy, Oligarchy, Feudalism, Enlightened Absolutism, Elective
-  Monarchy, Legitimism. Theocratic: Hierocracy, Clerical Monarchism, Holy Order, Synodal
+  Monarchy, Legitimism. Authoritarian also has the author's **Bleacherism** (Alban
+  supremacy; officially a senatorial republic under a strongman): ILR CTF ETR MZG;
+  KIL is Legitimism. Theocratic: Hierocracy, Clerical Monarchism, Holy Order, Synodal
   Rule, Prophetic Rule. Vanilla's Earth-bound ones (`nazism`, `japan_militarism_ideology`
   …, `ideologies.HIDDEN`) stay defined because vanilla's characters and focus files name
   them, but are never given to generated leaders. The author wants no more for now.
@@ -510,8 +522,10 @@ Left loaded on purpose, and noisy in `error.log`:
 
 ## Current state
 
-- 6,441 provinces (5,758 land, 645 sea, 38 lakes), 899 states, 91 strategic regions (11 sea),
-  24 countries. Second map of 2026-09-30: Estande 62 states (with 11 ES islands), Placeholdria
+- 6,580 provinces (5,897 land, 645 sea, 38 lakes), 936 states, 91 strategic regions (11 sea),
+  29 countries. 2026-10-01: Illiricium 18 states, Entroterra 9, Côtefer 5, Mezzogiorno 5,
+  Royalist Illiricium 1, Rouental's islets 1; sea provinces recoloured blue on the
+  Provinces layer (`pdn_tools.py blue_seas`). Second map of 2026-09-30: Estande 62 states (with 11 ES islands), Placeholdria
   28 (7 PC islands), Volinovia 16, Rastava 13, Coraliza 6, three RO islets to
   Romanoddle; a 1-2 px state-line nudge in Rouental (14 px moved by hand, too small for
   the split detection) and river edits (provinces re-cut: 47 states, 89 % of river

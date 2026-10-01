@@ -93,6 +93,9 @@ SUBTYPES = {
         ("strongman_rule", "Strongman Rule", "One man's will is the law of the land."),
         ("technocracy", "Technocracy", "Experts and administrators rule, without the bother of politics."),
         ("revanchism", "Revanchism", "A regime built on taking back what was lost."),
+        ("bleacherism", "Bleacherism",  # the author's, 2026-10-01
+         "Promotes the superiority of the Alban race. Officially a senatorial republic, but a "
+         "central strongman figure wields vast authority over the nation."),
     ],
     "neutrality": [
         ("despotism", "Absolute Monarchy", "The monarch rules alone and answers to no one."),

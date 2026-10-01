@@ -90,6 +90,10 @@ TAG_CULTURE = {
     # Portuguese (author, 2026-09-30): vanilla has no Iberian generic portraits
     **{t: dict(names="POR", portraits="iberia", gfx="western_european")
        for t in ("RST", "VLN", "ESD", "CRZ", "PLH")},
+    # Illiricium and its republics: Italian names (Claude's guess from Mezzogiorno and
+    # Entroterra; the author has not said)
+    **{t: dict(names="ITA", portraits="europe", gfx="western_european")
+       for t in ("ILR", "CTF", "ETR", "MZG", "KIL")},
 }
 
 

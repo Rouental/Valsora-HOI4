@@ -41,6 +41,9 @@ LAYERS = ["Heightmap", "Terrain", "Rivers", "Continents", "Provinces", "Strategi
           "States", "Countries"]
 # rivers drawn as plain lines, converted by rivers.py
 OPTIONAL = ["Major Rivers", "Minor Rivers"]
+# the author's layer names (2026-10-01: their editing layers are "Necessary …"); the
+# older names still work
+ALIASES = {"Major Rivers": "Necessary Major Rivers", "Minor Rivers": "Necessary Minor Rivers"}
 MIN_PIXELS = 8
 
 errors, notes = [], []
@@ -59,8 +62,10 @@ def load():
             sys.exit(f'The .pdn has no layer named "{want}". Layers found: {names}')
         out[want] = np.load(SRC / f"layer{names.index(want)}.npy")
     for opt in OPTIONAL:
-        if opt in names:
-            out[opt] = np.load(SRC / f"layer{names.index(opt)}.npy")
+        for nm in (ALIASES.get(opt), opt):
+            if nm in names:
+                out[opt] = np.load(SRC / f"layer{names.index(nm)}.npy")
+                break
     if out["Provinces"].shape[:2] != (H, W):
         sys.exit(f"The .pdn must be {W}x{H} pixels.")
     return out

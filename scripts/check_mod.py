@@ -78,6 +78,8 @@ def main(mod):
         if k in seen:
             err(f"{f.relative_to(mod)} and {seen[k]} are the same file on Windows (case)")
         seen[k] = f.relative_to(mod)
+        if not str(f.relative_to(mod)).isascii():
+            err(f"{f.relative_to(mod)}: file names must be ASCII (accents are a risk in mod paths)")
 
     # ------------------------------------------------------------ provinces.bmp
     pb = read_bmp(mod / "map/provinces.bmp")

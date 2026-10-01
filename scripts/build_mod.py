@@ -5,6 +5,7 @@ Writes build/valsora_test/ (the mod folder) and build/valsora_test.mod (the
 launcher's outer descriptor).
 """
 import json
+import unicodedata
 import os
 import math
 import shutil
@@ -46,6 +47,11 @@ COASTAL_BUILDINGS = ["naval_headquarters", "naval_supply_hub", "coastal_bunker"]
 # Unit stack types vanilla provinces carry (measured in vanilla-derived maps).
 LAND_STACKS = [0, 1, 9, 10, 21, 22, 38]
 SEA_STACKS = [0, 1, 2, 9, 10, 11, 12, 21, 22, 23, 30, 31, 38]
+
+
+def ascii_name(name):
+    """File names stay ASCII (Côtefer -> Cotefer): accents in mod paths are a risk."""
+    return unicodedata.normalize("NFKD", name).encode("ascii", "ignore").decode()
 
 
 def ui_colour(rgb):
@@ -527,11 +533,12 @@ def main():
           + "".join(leader_blocks) + "}\n")
     for c in present:
         tag, name, adj, col = COUNTRIES[c]
-        write(f"common/countries/Valsora {name}.txt",
+        fname = ascii_name(name)
+        write(f"common/countries/Valsora {fname}.txt",
               f"graphical_culture = {gfx[tag]}_gfx\n"
               f"graphical_culture_2d = {gfx[tag]}_2d\n"
               f"color = rgb {{ {col[0]} {col[1]} {col[2]} }}\n")
-        write(f"history/countries/{tag} - {name}.txt", "\n".join([
+        write(f"history/countries/{tag} - {fname}.txt", "\n".join([
             f"capital = {capital_state[c] + 1}",
             "set_research_slots = 3",
             "set_stability = 0.6",
@@ -571,7 +578,7 @@ def main():
                 (OUT / f"gfx/flags/{path}").mkdir(parents=True, exist_ok=True)
                 write_tga(OUT / f"gfx/flags/{path}{name}.tga", img)
     write("common/country_tags/valsora_countries.txt",
-          "".join(f'{COUNTRIES[c][0]} = "countries/Valsora {COUNTRIES[c][1]}.txt"\n' for c in present))
+          "".join(f'{COUNTRIES[c][0]} = "countries/Valsora {ascii_name(COUNTRIES[c][1])}.txt"\n' for c in present))
 
     write("common/bookmarks/valsora.txt", "\n".join([
         "bookmarks = {",

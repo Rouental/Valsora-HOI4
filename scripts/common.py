@@ -55,6 +55,14 @@ COUNTRIES = {
     "estande": ("ESD", "Estande", "Estandese", (153, 0, 0)),
     "coraliza": ("CRZ", "Coraliza", "Coralizan", (240, 122, 92)),
     "placeholdria": ("PLH", "Placeholdria", "Placeholdrian", (238, 196, 222)),
+    # 2026-10-01, east of Estande: Illiricium (map name "Senatorial Illiricium", the
+    # author's), its Bleacherist republics, and Royalist Illiricium on its island.
+    # Colours and adjectives are Claude's picks; Illiricium's blue is its flag's
+    "illiricium": ("ILR", "Senatorial Illiricium", "Illirician", (32, 44, 140)),
+    "cotefer": ("CTF", "Côtefer", "Côteferan", (70, 150, 190)),
+    "entroterra": ("ETR", "Entroterra", "Entroterran", (150, 160, 215)),
+    "mezzogiorno": ("MZG", "Mezzogiorno", "Mezzogiornese", (110, 80, 165)),
+    "k_illiricium": ("KIL", "Royalist Illiricium", "Illirician", (212, 178, 60)),
 }
 # The placeholder countries, one per continent, are the recommended starts in the
 # bookmark; the rest are playable but not listed there.
