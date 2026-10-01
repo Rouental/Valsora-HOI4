@@ -24,4 +24,3 @@ python3 scripts/build_mod.py     # every mod file
 python3 scripts/check_mod.py     # verify against HOI4's rules
 python3 scripts/export_canvas.py # previews
 python3 scripts/package.py       # dist/valsora_test.zip
-python3 scripts/cartographic.py  # the cartographic submod, dist/valsora_cartographic.zip
