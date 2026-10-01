@@ -323,6 +323,19 @@ def main():
         c = owners[s]
         cont_count[c] += 1
         state_name.append(f"{COUNTRIES[c][1]} {cont_count[c]}")
+    # the author's state names, by a pixel inside the state (state ids shift); numbered
+    # for them by scripts/state_map.py
+    names_file = Path("source/state_names.json")
+    named = {}
+    for key, nm in (json.loads(names_file.read_text(encoding="utf-8")) if names_file.exists() else {}).items():
+        x, y = map(int, key.split(","))
+        s = int(state_of[lab[y, x]])
+        if s < 0:
+            raise SystemExit(f"source/state_names.json: ({x}, {y}) {nm} is not in a state")
+        if s in named:
+            raise SystemExit(f"source/state_names.json: {named[s]} and {nm} name the same state")
+        named[s] = nm
+        state_name[s] = nm
     state_capital = [max(g, key=lambda i: (size[i], -i)) for g in states]
     # the author's cities (Cities layer): the first in a state becomes its victory point,
     # any others extra ones; all named, worth CITY_VP unless the country's capital

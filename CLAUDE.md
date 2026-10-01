@@ -271,6 +271,11 @@ mismatch, missing localisation) and catches all of them.
     The new three's colours and adjectives are Claude's picks. All tags were checked
     against vanilla `common/country_tags`; new tags must be too.
   - The adjectives of the neighbours are guesses; the author may rename them.
+- **State names** are the author's, in `source/state_names.json` ("x,y" of a pixel
+  inside the state → name, since ids shift; `build_mod.py` stops if a pixel is in no
+  state or two name one state). Unnamed states are "Country N". First set (2026-10-01):
+  Rouental's 54 and its seven neighbours', numbered by `state_map.py`; 21 and 22 are
+  both "Cournin" as given. Rouental's islet state off Solitas is still unnamed.
 - **Localisation keys are our own** (`VAL_STATE_n`, `VAL_REGION_n`), so vanilla's
   `STATE_n` / `STRATEGICREGION_n` Earth names never show. Victory point names have to
   reuse vanilla's `VICTORY_POINTS_<id>` keys, so they live in `localisation/english/replace/`.
@@ -324,6 +329,10 @@ Aislada is the worked example of a built-out nation:
     - Steady As She Goes (the author's; Habsburg icon): non-aligned, Roland promoted,
       Serelle retired.
     - Kick Out the Parasites (Rudely): communist, both Cahuns retired.
+      - **Execute the Prince** (under it, x = 6, y = 1): plays superevent
+        `rou_civil_war` (the author's photo `source/superevents/rou_civil_war.jpg`,
+        Claude's draft text) and sets country flag `ROU_civil_war`. The Rouentaise civil
+        war starts here; the author will detail how it goes (2026-10-01).
     - Left to right: Polite, Brother, Steady, Rudely.
   - The democratic and communist parties have no defined leader, so the game generates one.
   - **Accept Reality** (x = 8) is the fifth mutually exclusive path. It makes Rouental
@@ -480,8 +489,10 @@ white via `§W…§!` in their localisation (the typewriter fonts draw dark). Ho
 - **Background.** `GFX_tiled_window_transparent` is see-through (vanilla's event window
   gets its look from separate header/footer images), so the window has its own
   generated background, `superevent_bg.dds`: dark, with gold frames.
-- **Current set.** Six superevents: one per Rouental leadership focus (five) and one for
-  AIS "Fucking Explode". The quotes are Claude-written, and all use the author's anime picture.
+- **Current set.** Seven superevents: one per Rouental leadership focus (five), the
+  Rouentaise civil war (Execute the Prince; the author's soldier photo) and AIS
+  "Fucking Explode". The quotes are Claude-written; all but the civil war use the
+  author's anime picture, and all use the one song (Entry of the Gladiators).
 - **Checks.** `check_mod.py` checks scripted effects and events that are used, songs
   and their files, scripted localisation keys, and GUI window, element, sprite and
   button-text references (mutation-tested).

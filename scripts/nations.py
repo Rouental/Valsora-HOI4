@@ -131,6 +131,8 @@ LOCALISATION = [
     ' ROU_kick_out_brother_desc:0 "Serelle has waited long enough. Roland has not."',
     ' ROU_parasites_rude:0 "Kick Out the Parasites (Rudely)"',
     ' ROU_parasites_rude_desc:0 "The Cahuns are shown the door. Then the window."',
+    ' ROU_execute_the_prince:0 "Execute the Prince"',
+    ' ROU_execute_the_prince_desc:0 "The committee has voted. Roland Cahun will not see another spring, and neither, perhaps, will the peace."',
     ' ROU_steady_as_she_goes:0 "Steady As She Goes"',
     ' ROU_steady_as_she_goes_desc:0 "The Cahuns stay. Roland stays. Everything stays."',
     ' AIS_merlovich:0 "Merlovich"',
@@ -389,6 +391,22 @@ ROU_FOCUS_TREE = """focus_tree = {
 			retire_character = ROU_roland_cahun
 			retire_character = ROU_serelle_cahun
 			promote_character = ROU_leader_leninism
+		}
+	}
+
+	# the communist path: the Prince is executed and the civil war begins (author,
+	# 2026-10-01; how the war goes is still to come). ROU_civil_war marks it for later
+	focus = {
+		id = ROU_execute_the_prince
+		icon = GFX_focus_spr_the_anti_fascist_workers_revolution
+		x = 6
+		y = 1
+		cost = 10
+		prerequisite = { focus = ROU_parasites_rude }
+		search_filters = { FOCUS_FILTER_POLITICAL }
+		completion_reward = {
+			hidden_effect = { valsora_superevent_rou_civil_war = yes }
+			set_country_flag = ROU_civil_war
 		}
 	}
 

@@ -57,6 +57,14 @@ SUPEREVENTS = [
                "one. Kneel, and you will find it gentle.",
          author="Mahaut VI, Holy Princess of Rouental",
          picture="hair_ruffle.png", song="valsora_gladiators"),
+    # the Rouentaise civil war, after the Prince's execution on the communist path
+    # (author's picture, 2026-10-01; text is Claude's first draft)
+    dict(id="rou_civil_war",
+         title="The Rouentaise Civil War",
+         quote="They promised us the Prince's death would end the old Rouental. It did. By "
+               "morning there were two Rouentals, and both of them were armed.",
+         author="A Red Guard, in a letter home from Rêverie",
+         picture="rou_civil_war.jpg", song="valsora_gladiators"),
     dict(id="ais_explode",
          title="Merlovich Has Exploded",
          quote="Our beloved leader has become many smaller leaders, now scattered across a wide "
