@@ -510,6 +510,12 @@ CITY_NAMES = {
 # countries get the sizeable state nearest the middle of their land.
 CAPITALS = {
     "ROU": (660, 805),  # Rêverie, the small state the author drew for it ("Rouental 27")
+    # the author's cities, made capitals (2026-10-01): the dots on Necessary Cities
+    "CTF": (791, 1004),  # Venezzo
+    "ILR": (868, 1084),  # Alqira
+    "MZG": (894, 1153),  # Malin
+    "ETR": (813, 1165),  # Prestozza
+    "KIL": (920, 1165),  # Monte Gnolia
 }
 
 

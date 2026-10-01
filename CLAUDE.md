@@ -53,8 +53,9 @@ for the author. Unknown layer names are ignored.
   `source/city_names.json` ("x,y" of the dot → name; a dot moved up to 12 px keeps its
   name). An unnamed dot, two in one province, or a repeated name stops the build. In
   `build_mod.py` the first city of a state becomes its victory point (worth `CITY_VP` =
-  5, or 10 as the capital), and further ones are extra victory points. Capitals are not
-  moved to cities. First nine: Winterthorn, Vair, Carcarelle, Rêverie, Venezzo, Alqira,
+  5, or 10 as the capital), and further ones are extra victory points. Capitals are
+  set by `nations.CAPITALS` (the dot's pixel): Venezzo CTF, Alqira ILR, Malin MZG,
+  Prestozza ETR, Monte Gnolia KIL (author, 2026-10-01), besides Rêverie ROU. First nine: Winterthorn, Vair, Carcarelle, Rêverie, Venezzo, Alqira,
   Malin, Prestozza, Monte Gnolia.
 - **Heightmap**: clamped to 94 / 96 on the wrong side of sea level.
 - **Rivers** (`rivers.py`). HOI4 needs rivers 1 px wide, edge-connected only, with
