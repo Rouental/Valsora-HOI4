@@ -251,9 +251,10 @@ mismatch, missing localisation) and catches all of them.
     east of Selgrave and Hollier) Kurikia KRK (conservatism, flag `KRK.png`, its navy
     as map colour) and Fraxhemark FRX (social democracy, capital Fraternal City; map
     colour raspberry because its flag red would vanish next to Hollier; flag drawn by
-    `redraw_flags.py` until the author's own file arrives). Their cultures are Claude's
-    guesses from the flags: SOV names for Kurikia, YUG for Fraxhemark, Europe portraits,
-    eastern European gfx. The unnamed peninsula with the bay east of Fraxhemark is
+    `redraw_flags.py` until the author's own file arrives). Kurikia's culture is Claude's
+    guess from its flag (SOV names, Europe portraits, eastern European gfx); Fraxhemark is
+    American (author): USA names, US generals and admirals, Europe politicians (vanilla
+    has no US generic politicians), western European gfx. The unnamed peninsula with the bay east of Fraxhemark is
     outlined but left as NSC (`LEAVE`). File names are ASCII (`Cotefer`). Formal names are the
     author's; Selto's "Empire of Seito-Hamborn" was read as Selto-Hamborn.
     The new three's colours and adjectives are Claude's picks. All tags were checked

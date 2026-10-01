@@ -70,6 +70,11 @@ REGIONS["iberia"] = dict(
                    "GFX_Portrait_Europe_Generic_3"] + _seq("GFX_Portrait_South_America_Generic", 3)
                for i in REGIONS["europe"]["political"]})
 
+# American (Fraxhemark): vanilla has US generals and admirals but no US politicians
+REGIONS["usa"] = dict(
+    army=_seq("GFX_Portrait_USA_Generic_land", 9), navy=_seq("GFX_Portrait_USA_Generic_navy", 3),
+    political=REGIONS["europe"]["political"])
+
 # continent -> culture: vanilla name block, portrait region, graphical culture
 CONTINENT_CULTURE = {
     "nonscio": dict(names="ENG", portraits="europe", gfx="western_european"),
@@ -94,10 +99,9 @@ TAG_CULTURE = {
     # Entroterra; the author has not said)
     **{t: dict(names="ITA", portraits="europe", gfx="western_european")
        for t in ("ILR", "CTF", "ETR", "MZG", "KIL")},
-    # Claude's guesses from the flags (2026-10-01): Kurikia's Russian-style eagle and
-    # Fraxhemark's Montenegrin arms
+    # Kurikia: Claude's guess from its Russian-style eagle (2026-10-01)
     "KRK": dict(names="SOV", portraits="europe", gfx="eastern_european"),
-    "FRX": dict(names="YUG", portraits="europe", gfx="eastern_european"),
+    "FRX": dict(names="USA", portraits="usa", gfx="western_european"),  # author: American
 }
 
 
