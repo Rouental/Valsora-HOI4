@@ -143,7 +143,7 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `pdn_tools.py` | by hand: `navigable` (lake → sea with its own region), `sea_zones` (regroup and recolour regions), `give` (whole states to a country), `recolour` |
 | `strategic_regions.py` | by hand: sea regions = the author's oceans, one each, with names (`source/region_names.json`); land untouched |
 | `river_provinces.py` | by hand, after a build: re-cuts the provinces of every state a river crosses so rivers run between provinces |
-| `redraw_flags.py` | by hand: Fraxhemark's stand-in flag, drawn from scratch until the author's file arrives |
+| `redraw_flags.py` | unused: Fraxhemark's stand-in flag (writes `work/FRX_standin.png`); the author's own `FRX.png` replaced it |
 | `state_map.py` | by hand, after a build: a numbered map of some countries' states (`dist/state_numbers_<name>.png` + `.json`, number → tag and pixel), for the author to name them |
 | `organic.py` | organic splitting (seeded watershed over noise), used by `apply_outlines.py` |
 | `rivers.py` | plain river lines → HOI4 rivers.bmp format, and the river rules check |
@@ -254,13 +254,14 @@ mismatch, missing localisation) and catches all of them.
     Estande, Italian names: Claude's guess) Illiricium ILR (map name "Senatorial
     Illiricium", flag `ILR.png`), Côtefer CTF, Entroterra ETR, Mezzogiorno MZG (the three
     Bleacherist republics, shades of blue, Illiricium's puppets from the start) and
-    Royalist Illiricium KIL (its island; flag `KIL.png`, the author's original with the
+    Royalist Illiricium KIL (its island; white on the map so it stands out against the
+    blue republics, author 2026-10-01; flag `KIL.png`, the author's original with the
     transparent gaps filled with the flag's blue; a redraw at 82:52 was rejected; a
     non-aggression pact with Rouental from the start), and (2026-10-01, later,
     east of Selgrave and Hollier) Kurikia KRK (conservatism, flag `KRK.png`, its navy
     as map colour) and Fraxhemark FRX (social democracy, capital Fraternal City; map
-    colour raspberry because its flag red would vanish next to Hollier; flag drawn by
-    `redraw_flags.py` until the author's own file arrives). Kurikia's culture is Claude's
+    colour raspberry because its flag red would vanish next to Hollier; flag
+    `FRX.png`, the author's own, 2026-10-01). Kurikia's culture is Claude's
     guess from its flag (SOV names, Europe portraits, eastern European gfx); Fraxhemark is
     American (author): USA names, US generals and admirals, Europe politicians (vanilla
     has no US generic politicians), western European gfx. The unnamed peninsula with the bay east of Fraxhemark is

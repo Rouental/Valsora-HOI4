@@ -1,4 +1,7 @@
-"""Flags redrawn for HOI4's 82×52 (run by hand; writes source/flags/<TAG>.png).
+"""Fraxhemark's stand-in flag, kept for reference (run by hand; writes work/FRX_standin.png).
+
+The author sent their own flag on 2026-10-01 (source/flags/FRX.png), so this no longer
+writes into source/flags.
 
     FRX  the only picture was rotated and waved, so drawn from scratch: a red-white-blue
          tricolour with a stylised Montenegrin double-headed eagle.
@@ -57,13 +60,13 @@ def frx():
     for i, c in enumerate([(171, 28, 40), (255, 255, 255), (34, 69, 139)]):
         d.rectangle([0, i * H * 2 // 3, W * 2, (i + 1) * H * 2 // 3], fill=c)
     eagle(d, W, H * 1.08, 125, (222, 178, 60), (120, 80, 20))
-    im.resize((W, H), Image.LANCZOS).save(FLAGS / "FRX.png")
+    im.resize((W, H), Image.LANCZOS).save("work/FRX_standin.png")
 
 
 if __name__ == "__main__":
     frx()
     for t in ("FRX",):
-        big = Image.open(FLAGS / f"{t}.png")
+        big = Image.open("work/FRX_standin.png")
         prev = Image.fromarray(np.hstack([np.asarray(big.resize((82, 52), Image.LANCZOS).resize((328, 208), Image.NEAREST)),
                                           np.asarray(big.resize((328, 208), Image.LANCZOS))]))
         prev.save(f"work/flag_{t}.png")

@@ -84,12 +84,12 @@ def main():
             cx, cy = px * SCALE + SCALE // 2, py * SCALE + SCALE // 2
             d.text((cx, cy), str(n), fill=(0, 0, 0), font=font, anchor="mm",
                    stroke_width=3, stroke_fill=(255, 255, 255))
-    # legend: country names
+    # legend: country names, bottom left (author)
     lf = ImageFont.truetype(FONT, 22)
     for k, t in enumerate(tags):
         nm = next(v[1] for v in COUNTRIES.values() if v[0] == t)
         nums = [i for i, v in key.items() if v["tag"] == t]
-        d.text((10, 10 + 28 * k), f"{nm}: {min(nums)}" + (f"–{max(nums)}" if len(nums) > 1 else ""), fill=tuple(int(c * 0.6) for c in col[t]),
+        d.text((10, im.height - 10 - 28 * (len(tags) - k)), f"{nm}: {min(nums)}" + (f"–{max(nums)}" if len(nums) > 1 else ""), fill=tuple(int(c * 0.6) for c in col[t]),
                font=lf, stroke_width=3, stroke_fill=(255, 255, 255))
     Path("dist").mkdir(exist_ok=True)
     im.save(f"dist/state_numbers_{name}.png")

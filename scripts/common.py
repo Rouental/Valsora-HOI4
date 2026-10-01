@@ -64,7 +64,7 @@ COUNTRIES = {
     "cotefer": ("CTF", "Côtefer", "Côteferan", (70, 150, 190)),
     "entroterra": ("ETR", "Entroterra", "Entroterran", (140, 185, 235)),
     "mezzogiorno": ("MZG", "Mezzogiorno", "Mezzogiornese", (60, 105, 190)),
-    "k_illiricium": ("KIL", "Royalist Illiricium", "Illirician", (212, 178, 60)),
+    "k_illiricium": ("KIL", "Royalist Illiricium", "Illirician", (255, 255, 255)),  # white (author, 2026-10-01)
     # 2026-10-01, the author's, east of Selgrave and Hollier. Kurikia's navy is its
     # flag's; Fraxhemark's flag red would vanish next to Hollier, so raspberry (Claude's)
     "kurikia": ("KRK", "Kurikia", "Kurikian", (34, 62, 96)),

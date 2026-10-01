@@ -214,7 +214,7 @@ with no land left is simply left out of the game.
 | Côtefer | CTF | 70, 150, 190 |
 | Entroterra | ETR | 140, 185, 235 |
 | Mezzogiorno | MZG | 60, 105, 190 |
-| Royalist Illiricium | KIL | 212, 178, 60 |
+| Royalist Illiricium | KIL | 255, 255, 255 |
 | Kurikia | KRK | 34, 62, 96 |
 | Fraxhemark | FRX | 200, 60, 110 |
 
