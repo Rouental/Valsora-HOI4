@@ -247,6 +247,8 @@ def main(mod):
         if kind[i] == 1 and i + 1 not in state_of:
             err(f"land province {i + 1} is in no state")
     for tag, cap in hist.items():
+        if tag not in owner.values():
+            continue  # released later (civil war factions): it owns nothing yet
         if owner.get(cap) != tag:
             err(f"{tag}'s capital state {cap} is not owned by it")
 

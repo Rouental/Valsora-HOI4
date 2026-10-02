@@ -251,8 +251,8 @@ mismatch, missing localisation) and catches all of them.
     RST, Volinovia VLN, Estande ESD (flag `source/flags/ESD.png`, map colour the flag's red (153,0,0): the
     green blended with Rouental),
     Coraliza CRZ, Placeholdria PLH (theocratic, prophetic rule), and (2026-10-01, east of
-    Estande, Italian names: Claude's guess) Illiricium ILR (map name "Senatorial
-    Illiricium", flag `ILR.png`), Côtefer CTF, Entroterra ETR, Mezzogiorno MZG (the three
+    Estande, Italian names: Claude's guess) Illiricium ILR (map name "Republican
+    Illiricium", "Senatorial" until 2026-10-02; flag `ILR.png`), Côtefer CTF, Entroterra ETR, Mezzogiorno MZG (the three
     Bleacherist republics, shades of blue, Illiricium's puppets from the start) and
     Royalist Illiricium KIL (its island; white on the map so it stands out against the
     blue republics, author 2026-10-01; flag `KIL.png`, the author's original with the
@@ -331,11 +331,30 @@ Aislada is the worked example of a built-out nation:
     - Steady As She Goes (the author's; Habsburg icon): non-aligned, Roland promoted,
       Serelle retired.
     - Kick Out the Parasites (Rudely): communist, both Cahuns retired.
+      Rudely also moves the capital to Carcarelle (`set_capital`, author 2026-10-02).
       - **Execute the Prince** (under it, x = 6, y = 1): plays superevent
         `rou_civil_war` (the author's photo `source/superevents/rou_civil_war.jpg`, the
-        author's quote and song, "Monsieur d'Elbée", a Vendéen royalist song) and sets
-        country flag `ROU_civil_war`. The Rouentaise civil
-        war starts here; the author will detail how it goes (2026-10-01).
+        author's quote and song, "Monsieur d'Elbée", a Vendéen royalist song), sets
+        country flag `ROU_civil_war` and starts the **Rouentaise civil war**
+        (author, 2026-10-02; `nations.CIVIL_WAR`, `civil_war_effects`):
+        - Rouental becomes the Reibonne (cosmetic tag `ROU_REIBONNE`, "The People's
+          Republic of the Reibonne", flag `ROU_REIBONNE.png`, communist maroon), and
+          leaves the Association (dismantled if it leads it), which re-forms under
+          Hollier (Claude's pick) with its other members and the Alliance of the East,
+          and stays out of the war.
+        - Eight countries that own nothing at the start (cores on their states from
+          the start) are `release`d; all but AOE declare war (`annex_everything`):
+          Brillagne BRL (the Holy State of Brillagne; theocratic Rouental's ruler, a
+          copy `BRL_mahaut_vi`, and flag); Crépuscule CRP (Principality; Absolute
+          Monarchy); Reliette RLT (Grand Duchy; Feudalism); The Marches MRC (Alliance
+          of the Marcher Lords; Oligarchy); Rouental RLA (Her Majesty's Most Loyal
+          Army; Strongman Rule, `RLA_serelle_cahun`; flag the fox quarter of `ROU.png`,
+          which is also `ROU_fascism.png`); Alliance of the East AOE (Oligarchy; not at
+          war, joins the Association); Vair VAI (Duchy; Feudalism); The Faithful FTH
+          (the Faithful Children of the Goddess and Her Saint; Holy Order). States
+          are named in `CIVIL_WAR` (first = capital); the focus file writes
+          `@STATE:<name>@`, which `nations.fill` turns into ids. Two countries may
+          share a name (RLA and ROU): their country files get the tag appended.
     - Left to right: Polite, Brother, Steady, Rudely.
   - The democratic and communist parties have no defined leader, so the game generates one.
   - **Accept Reality** (x = 8) is the fifth mutually exclusive path. It makes Rouental

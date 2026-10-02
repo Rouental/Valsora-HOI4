@@ -60,7 +60,7 @@ COUNTRIES = {
     # author's), its Bleacherist republics, and Royalist Illiricium on its island.
     # Colours and adjectives are Claude's picks; Illiricium's blue is its flag's, and its
     # Bleacherist puppets are shades of blue (author, 2026-10-01)
-    "illiricium": ("ILR", "Senatorial Illiricium", "Illirician", (32, 44, 140)),
+    "illiricium": ("ILR", "Republican Illiricium", "Illirician", (32, 44, 140)),  # "Senatorial" until 2026-10-02
     "cotefer": ("CTF", "Côtefer", "Côteferan", (70, 150, 190)),
     "entroterra": ("ETR", "Entroterra", "Entroterran", (140, 185, 235)),
     "mezzogiorno": ("MZG", "Mezzogiorno", "Mezzogiornese", (60, 105, 190)),
@@ -69,6 +69,17 @@ COUNTRIES = {
     # flag's; Fraxhemark's flag red would vanish next to Hollier, so raspberry (Claude's)
     "kurikia": ("KRK", "Kurikia", "Kurikian", (34, 62, 96)),
     "fraxhemark": ("FRX", "Fraxhemark", "Fraxhemarkish", (200, 60, 110)),
+    # 2026-10-02: the factions of the Rouentaise civil war, which own nothing at the
+    # start and are released when the Prince is executed (nations.CIVIL_WAR). Names are
+    # the author's; adjectives and colours Claude's
+    "brillagne": ("BRL", "Brillagne", "Brillagnais", (225, 190, 70)),
+    "crepuscule": ("CRP", "Crépuscule", "Crépusculaire", (75, 72, 85)),
+    "reliette": ("RLT", "Reliette", "Reliettois", (175, 45, 55)),
+    "marches": ("MRC", "The Marches", "Marcher", (85, 85, 115)),
+    "loyal_army": ("RLA", "Rouental", "Rouentaise", (40, 95, 55)),
+    "east_alliance": ("AOE", "Alliance of the East", "Eastern", (115, 145, 60)),
+    "vair": ("VAI", "Vair", "Vairois", (15, 105, 150)),
+    "faithful": ("FTH", "The Faithful", "Faithful", (240, 190, 80)),
 }
 # The placeholder countries, one per continent, are the recommended starts in the
 # bookmark; the rest are playable but not listed there.

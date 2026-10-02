@@ -91,6 +91,8 @@ _FRENCH = dict(names="FRA", portraits="france", gfx="western_european")
 TAG_CULTURE = {
     # the Reibonnaise states: French for now (author, 2026-09-29)
     **{t: _FRENCH for t in ("ROU", "SGN", "EVR", "HLR", "SGV", "LST", "LZC", "GDN")},
+    # the civil war factions are Rouentaise too
+    **{t: _FRENCH for t in ("BRL", "CRP", "RLT", "MRC", "RLA", "AOE", "VAI", "FTH")},
     "LNT": _FRENCH,  # author, 2026-09-30
     # Portuguese (author, 2026-09-30): vanilla has no Iberian generic portraits
     **{t: dict(names="POR", portraits="iberia", gfx="western_european")

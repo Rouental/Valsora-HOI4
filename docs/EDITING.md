@@ -210,13 +210,21 @@ with no land left is simply left out of the game.
 | Estande | ESD | 153, 0, 0 |
 | Coraliza | CRZ | 240, 122, 92 |
 | Placeholdria | PLH | 238, 196, 222 |
-| Senatorial Illiricium | ILR | 32, 44, 140 |
+| Republican Illiricium | ILR | 32, 44, 140 |
 | Côtefer | CTF | 70, 150, 190 |
 | Entroterra | ETR | 140, 185, 235 |
 | Mezzogiorno | MZG | 60, 105, 190 |
 | Royalist Illiricium | KIL | 255, 255, 255 |
 | Kurikia | KRK | 34, 62, 96 |
 | Fraxhemark | FRX | 200, 60, 110 |
+| Brillagne (civil war; owns nothing at the start) | BRL | 225, 190, 70 |
+| Crépuscule (civil war; owns nothing at the start) | CRP | 75, 72, 85 |
+| Reliette (civil war; owns nothing at the start) | RLT | 175, 45, 55 |
+| The Marches (civil war; owns nothing at the start) | MRC | 85, 85, 115 |
+| Rouental (civil war; owns nothing at the start) | RLA | 40, 95, 55 |
+| Alliance of the East (civil war; owns nothing at the start) | AOE | 115, 145, 60 |
+| Vair (civil war; owns nothing at the start) | VAI | 15, 105, 150 |
+| The Faithful (civil war; owns nothing at the start) | FTH | 240, 190, 80 |
 
 The first seven are the placeholders, one per continent, and the only ones the start
 menu recommends. Brand-new countries need a line of code as well (tag, name and colour

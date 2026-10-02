@@ -4,6 +4,8 @@ Aislada is the worked example: a leader with a custom portrait and its own focus
 Rouental (ROU) has per-ideology names, the Cahun leaders and its own focus tree.
 build_mod.py calls these hooks; add further nations the same way.
 """
+import re
+
 import numpy as np
 from PIL import Image
 
@@ -24,6 +26,10 @@ HISTORY = {
             # Rouental guarantees the Kingdom of Illiricium's independence (author,
             # 2026-10-01; it was a non-aggression pact at first)
             "diplomatic_relation = { country = KIL relation = guarantee active = yes }"],
+    # the civil war: Brillagne and the Loyal Army are led by copies of Rouental's own
+    # theocratic and authoritarian rulers (one character can't serve two countries)
+    "BRL": ["recruit_character = BRL_mahaut_vi"],
+    "RLA": ["recruit_character = RLA_serelle_cahun"],
     # the Bleacherist republics start as Illiricium's puppets (author, 2026-10-01)
     "ILR": [f"set_autonomy = {{ target = {t} autonomous_state = autonomy_puppet }}"
             for t in ("CTF", "ETR", "MZG")],
@@ -70,13 +76,46 @@ LEADERS = {
     "MZG": ["bleacherism"],
     "KIL": ["legitimism"],
     "KRK": ["conservatism"],
+    # the Rouentaise civil war factions (author, 2026-10-02)
+    "CRP": ["despotism"],              # Absolute Monarchy
+    "RLT": ["feudalism"],
+    "MRC": ["oligarchism"],
+    "AOE": ["oligarchism"],
+    "VAI": ["feudalism"],
+    "FTH": ["holy_order"],
     "FRX": ["socialism"],             # Social Democracy
     # Rouental's democrats and communists, promoted by their focuses
     "ROU": ["constitutional_monarchism", "leninism"],
     # the continent placeholders: not chosen by the author, Monarchist as before
     **{t: ["despotism"] for t in ("NSC", "ARS", "SLT", "YAS", "USN", "ORI")},
 }
-HAND_MADE = {"ROU", "AIS"}  # rulers defined in the character files below
+HAND_MADE = {"ROU", "AIS", "BRL", "RLA"}  # rulers defined in the character files below
+# the ruling ideology of hand-made rulers' countries, if not Monarchist
+RULING = {"BRL": "theocracy", "RLA": "fascism"}
+
+# The Rouentaise civil war (author, 2026-10-02). When Rouental's communists execute the
+# Prince (focus ROU_execute_the_prince) these countries are released from the states
+# named here (they hold cores on them from the start; the first is the capital), and
+# all but the Alliance of the East declare war on Rouental.
+CIVIL_WAR = {
+    "BRL": ["Brillagne"],
+    "CRP": ["Crépuscule", "Ténèbres", "Lyrié et Rivielle"],
+    "RLT": ["Reliette", "Aureimontes", "Tuilerie", "Vinterre"],
+    "MRC": ["Cylône", "Osgrande", "Aurillac-de-Ciel", "Coffrefort"],
+    "RLA": ["Rêverie", "Rouental", "Saintiers", "Cournin", "Vendée"],
+    "AOE": ["Maïeul", "Serpette", "Chirac"],
+    "VAI": ["Vair", "Pavois", "Caux-Gautier"],
+    "FTH": ["Hevique", "Avarre"],
+}
+NOT_AT_WAR = {"AOE"}  # joins the Association of Reibonnaise States instead
+
+# Extra cosmetic tags (name, formal name, adjective, map colour, flag in source/flags),
+# set by script rather than by the ruling party
+COSMETICS = {
+    # communist Rouental after the Prince's execution (author, 2026-10-02)
+    "ROU_REIBONNE": ("Reibonne", "The People's Republic of the Reibonne", "Reibonnaise",
+                     (128, 16, 16), "ROU_REIBONNE.png"),
+}
 
 # Map colour per government, for countries whose colour changes with it: tag ->
 # ideology -> colour. Ideologies left out use the country's own colour. Each becomes a
@@ -98,6 +137,15 @@ FORMAL_NAMES = {
     "SGV": "the Duchy of Selgrave",
     "HLR": "the Principality of Hollier",
     "ROU": "The Sacred Principality of Rouental",
+    # the civil war factions (author, 2026-10-02)
+    "BRL": "the Holy State of Brillagne",
+    "CRP": "the Principality of Crépuscule",
+    "RLT": "the Grand Duchy of Reliette",
+    "MRC": "the Alliance of the Marcher Lords",
+    "RLA": "Her Majesty's Most Loyal Army",
+    "AOE": "the Alliance of the East",
+    "VAI": "the Duchy of Vair",
+    "FTH": "the Faithful Children of the Goddess and Her Saint",
     "CRD": "the Cardonian Kingdom",
     # the author's, 2026-09-30
     "LNT": "the Republic of Placeholdros",
@@ -123,6 +171,8 @@ LOCALISATION = [
     ' ROU_plans_for_cardonia:0 "Plans for Cardonia"',
     ' ROU_plans_for_cardonia_desc:0 "A war goal against Cardonia, for testing."',
     ' ROU_serelle_cahun:0 "Serelle Cahun"',
+    ' BRL_mahaut_vi:0 "Mahaut VI"',
+    ' RLA_serelle_cahun:0 "Serelle Cahun"',
     ' ROU_roland_cahun:0 "Roland Cahun"',
     ' ROU_focus:0 "Rouentaise Focus Tree"',
     ' ROU_parasites_polite:0 "Kick Out the Parasites (Polite)"',
@@ -175,6 +225,33 @@ ROU_CHARACTERS = """characters = {
 	}
 	ROU_serelle_cahun = {
 		name = ROU_serelle_cahun
+		portraits = {
+			civilian = {
+				large = GFX_portrait_ROU_serelle_cahun
+			}
+		}
+		country_leader = {
+			ideology = strongman_rule
+			expire = "1965.1.1.1"
+			id = -1
+		}
+	}
+	# the same two women at the head of civil war factions
+	BRL_mahaut_vi = {
+		name = BRL_mahaut_vi
+		portraits = {
+			civilian = {
+				large = GFX_portrait_ROU_mahaut_vi
+			}
+		}
+		country_leader = {
+			ideology = theocrat
+			expire = "1965.1.1.1"
+			id = -1
+		}
+	}
+	RLA_serelle_cahun = {
+		name = RLA_serelle_cahun
 		portraits = {
 			civilian = {
 				large = GFX_portrait_ROU_serelle_cahun
@@ -391,6 +468,8 @@ ROU_FOCUS_TREE = """focus_tree = {
 			retire_character = ROU_roland_cahun
 			retire_character = ROU_serelle_cahun
 			promote_character = ROU_leader_leninism
+			# the communists move the capital to Carcarelle (author, 2026-10-02)
+			set_capital = { state = @STATE:Carcarelle@ }
 		}
 	}
 
@@ -407,6 +486,9 @@ ROU_FOCUS_TREE = """focus_tree = {
 		completion_reward = {
 			hidden_effect = { valsora_superevent_rou_civil_war = yes }
 			set_country_flag = ROU_civil_war
+			# the nation becomes the Reibonne (author, 2026-10-02)
+			set_cosmetic_tag = ROU_REIBONNE
+@CIVIL_WAR@
 		}
 	}
 
@@ -559,12 +641,42 @@ def redden(rgba):
     return np.dstack([red.round().astype(np.uint8), rgba[..., 3]])
 
 
-def write_files(write, out):
-    """Write every nation-specific file into the mod folder."""
+def civil_war_effects():
+    """Execute the Prince: the factions break away, and the Association of Reibonnaise
+    States casts Rouental out and re-forms under Hollier, with the Alliance of the East,
+    staying out of the war."""
+    members = ("GDN", "LST", "EVR", "SGV", "LZC", "SGN")
+    t = "\t\t\t"
+    lines = [f"{t}# the Association of Reibonnaise States casts Rouental out",
+             f"{t}if = {{ limit = {{ is_faction_leader = yes }} dismantle_faction = yes }}",
+             f"{t}else_if = {{ limit = {{ is_in_faction = yes }} leave_faction = yes }}",
+             f"{t}# the factions break away"]
+    lines += [f"{t}release = {tag}" for tag in CIVIL_WAR]
+    lines += [f"{t}{tag} = {{ declare_war_on = {{ target = ROU type = annex_everything }} }}"
+              for tag in CIVIL_WAR if tag not in NOT_AT_WAR]
+    lines += [f"{t}HLR = {{",
+              f"{t}\tcreate_faction_from_template = faction_template_reibonnaise_association",
+              *[f"{t}\tif = {{ limit = {{ country_exists = {m} }} add_to_faction = {m} }}"
+                for m in members + tuple(NOT_AT_WAR)],
+              f"{t}}}"]
+    return "\n".join(lines)
+
+
+def fill(text, state_ids):
+    """Focus files name states as @STATE:<name>@ (ids shift when the map changes)."""
+    def sub(m):
+        if m.group(1) not in state_ids:
+            raise SystemExit(f"nations: no state named {m.group(1)!r}")
+        return str(state_ids[m.group(1)])
+    return re.sub(r"@STATE:([^@]+)@", sub, text.replace("@CIVIL_WAR@", civil_war_effects()))
+
+
+def write_files(write, out, state_ids):
+    """Write every nation-specific file into the mod folder. state_ids: state name -> id."""
     write("common/factions/templates/valsora_factions.txt", FACTION_TEMPLATES)
     write("common/characters/AIS.txt", CHARACTERS)
     write("common/characters/ROU.txt", ROU_CHARACTERS)
-    write("common/national_focus/rouental.txt", ROU_FOCUS_TREE)
+    write("common/national_focus/rouental.txt", fill(ROU_FOCUS_TREE, state_ids))
     write("common/national_focus/aislada.txt", FOCUS_TREE)
     sprites = []
     for name, (src, x0, y0, w, tint) in PORTRAITS.items():
