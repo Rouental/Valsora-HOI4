@@ -6,6 +6,18 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**Rouental's divisions started with next to no manpower** (2026-10-02)
+- Cause: an OOB division without `start_manpower_factor` takes its manpower from the
+  country's pool, and the Feudal Army (−80 % recruitable population) leaves that tiny.
+- Fix: every OOB division sets `start_manpower_factor = 1.0`.
+
+**Lanzerac and Guedelon left the Association (and the Alliance of the Vale) at once** (2026-10-02)
+- Cause, most likely: they are the only democratic members of a monarchist-led
+  faction, with 20 % monarchist support; vanilla needs 30 % for the leader's ideology
+  (`IDEOLOGY_JOIN_FACTION_MIN_LEVEL`). Not yet confirmed in game.
+- Fix: they start with 30 % monarchists. The Reibonnaise nations also get +20 opinion
+  of each other and an AI alliance strategy.
+
 **The fief overlay sorted fiefs into the wrong kind of vassal** (2026-10-02)
 - Cause: the 14 headings of `rouental_fiefs.txt` were read as vassals. They are cultural
   groups: every fief is a vassal of the Crown, and the governorates have no power.

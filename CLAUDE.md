@@ -330,7 +330,11 @@ Aislada is the worked example of a built-out nation:
     Evriches, Argent-sur-Seigne (SGN), Grande Hollier, Lanzerac, Villerose (SGV),
     Tanière (LST).
   - Leaders are in `common/characters/ROU.txt`: Roland Cahun (`despotism`, leads at
-    start) and Serelle Cahun (`fascism_ideology`, fascist party leader).
+    start) and Serelle Cahun (`fascism_ideology`, fascist party leader). Serelle is also
+    a general from the start (corps commander, skill 4, armor officer; HMMLA's copy
+    too). Polite, Steady and Accept Reality only remove her party role
+    (`remove_country_leader_role`), so she stays a general; Rudely (communist) retires
+    her outright (author, 2026-10-02).
   - Portraits come from `source/portraits/roland_cahun.png` and `serelle_cahun.png`.
   - `common/national_focus/rouental.txt` has four mutually exclusive focuses in one row:
     - Kick Out the Parasites (Polite): democratic, elections on, both Cahuns retired.
@@ -381,11 +385,30 @@ Aislada is the worked example of a built-out nation:
     war goal on CRD. It is for testing wars without justifying.
   - **Faction.** ROU starts as leader of "The Association of Reibonnaise States",
     together with GDN, LST, EVR, HLR, SGV, LZC and SGN.
+    - **Reibonnaise opinions** (author, 2026-10-02; `nations.REIBONNAISE`): +20
+      `valsora_reibonnaise_ties` between them, none while either is communist, and −20
+      `valsora_against_communism` towards every communist country. The scripted effect
+      `valsora_reibonnaise_opinions` re-sets them on `on_startup` and every
+      `on_ruling_party_change`. `common/ai_strategy/valsora_reibonnaise.txt` makes the
+      AI want them as allies (alliance 200, befriend 100) while neither is communist.
+    - Lanzerac and Guedelon (Lordly Republics, democratic) left the Association at
+      once. Likely cause: a member needs 30 % support for the leader's ideology
+      (`IDEOLOGY_JOIN_FACTION_MIN_LEVEL`) and they had 20 % monarchists. They now start
+      democratic 40, monarchist 30, the rest 10 (`nations.POPULARITIES`).
     - Its template, `faction_template_reibonnaise_association` in
       `common/factions/templates/valsora_factions.txt`, uses vanilla's generic manifest,
       goal, rules and icon.
     - ROU's history does `create_faction_from_template` + `add_to_faction`, the way
       vanilla ENG does in 1.19.
+- **Starting armies** (author, 2026-10-02): every country owning land but Rouental gets
+  `history/units/<TAG>_1936.txt` (`nations.generic_oob`): "Infantry Division" (8
+  infantry, 1 artillery, engineers, recon), about one per six states, 2 to 24, at the
+  victory points of its states (capital first), plus the techs for them. Every OOB
+  division sets `start_manpower_factor = 1.0`: unset, its manpower is taken from the
+  country's pool, which left Rouental's host nearly empty under the Feudal Army.
+- **Named generated rulers**: `nations.NAMED_LEADERS` gives a generated ruler the
+  author's name and portrait: Illiricium's is **Ema Milize**
+  (`source/portraits/ema_milize.png`).
 - **Nation names** come from `COUNTRIES` in `build_mod.py`: name and adjective feed
   `TAG`, `TAG_DEF`, `TAG_ADJ`, the per-ideology variants (`TAG_communism` etc.) and the
   continent key.

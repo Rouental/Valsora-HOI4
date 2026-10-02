@@ -92,7 +92,9 @@ def rouental_oob(state_vp):
             k += 1
             out += ["\tdivision = {", f"\t\tdivision_name = {{ is_name_ordered = yes name_order = {k} }}",
                     f"\t\tlocation = {state_vp[state]}", f'\t\tdivision_template = "{name}"',
-                    "\t\tstart_experience_factor = 0.6", "\t\tstart_equipment_factor = 1.0", "\t}"]
+                    "\t\tstart_experience_factor = 0.6", "\t\tstart_equipment_factor = 1.0",
+                    # unset, the manpower comes out of the pool, which the Feudal Army keeps tiny
+                    "\t\tstart_manpower_factor = 1.0", "\t}"]
     return "\n".join(out + ["}", ""])
 
 
@@ -178,6 +180,12 @@ LEADERS = {
     **{t: ["despotism"] for t in ("NSC", "ARS", "SLT", "YAS", "USN", "ORI")},
 }
 HAND_MADE = {"ROU", "AIS", "BRL", "RLA"}  # rulers defined in the character files below
+
+# Generated rulers the author has named and drawn: character id -> (name, portrait sprite);
+# the portraits are in PORTRAITS
+NAMED_LEADERS = {
+    "ILR_leader_bleacherism": ("Ema Milize", "GFX_portrait_ILR_ema_milize"),  # author, 2026-10-02
+}
 # the ruling ideology of hand-made rulers' countries, if not Monarchist
 RULING = {"BRL": "theocracy", "RLA": "fascism"}
 
@@ -202,6 +210,84 @@ CIVIL_WAR_ONLY = {"FTH", "RLA"}
 ASSOCIATION = ("GDN", "LST", "EVR", "HLR", "SGV", "LZC", "SGN")
 ANNEX = {"LST": ["Maïeul", "Serpette"], "HLR": ["Chirac"],
          "SGV": ["Moelle"]}  # Moelle, the north of the old Maïeul (2026-10-02)
+
+# The Reibonnaise nations (author, 2026-10-02): +20 opinion of each other for their
+# historical ties, except while one of them is communist, and -20 opinion of every
+# communist country ("it's against their religion"). Opinions are re-set at game start
+# and on every change of government, by the scripted effect below.
+REIBONNAISE = ("ROU",) + ASSOCIATION
+_IS_REIB = "OR = { " + " ".join(f"tag = {t}" for t in REIBONNAISE) + " }"
+OPINION_MODIFIERS = """opinion_modifiers = {
+	valsora_reibonnaise_ties = {
+		value = 20
+	}
+	valsora_against_communism = {
+		value = -20
+	}
+}
+"""
+OPINION_EFFECTS = f"""# Re-sets the Reibonnaise opinion modifiers (nations.REIBONNAISE) for every pair
+valsora_reibonnaise_opinions = {{
+	every_country = {{
+		limit = {{ {_IS_REIB} }}
+		every_other_country = {{
+			PREV = {{
+				remove_opinion_modifier = {{ target = PREV modifier = valsora_reibonnaise_ties }}
+				remove_opinion_modifier = {{ target = PREV modifier = valsora_against_communism }}
+			}}
+			if = {{
+				limit = {{ PREV = {{ NOT = {{ has_government = communism }} }} }}
+				if = {{
+					limit = {{ has_government = communism }}
+					PREV = {{ add_opinion_modifier = {{ target = PREV modifier = valsora_against_communism }} }}
+				}}
+				else_if = {{
+					limit = {{ {_IS_REIB} }}
+					PREV = {{ add_opinion_modifier = {{ target = PREV modifier = valsora_reibonnaise_ties }} }}
+				}}
+			}}
+		}}
+	}}
+}}
+"""
+# The AI wants to stay allied with its Reibonnaise neighbours while neither is communist
+# (Lanzerac and Guedelon left the Association at once, 2026-10-02)
+AI_STRATEGY = "".join(f"""VAL_reibonnaise_{a}_{b} = {{
+	allowed = {{ original_tag = {a} }}
+	enable = {{ country_exists = {b} NOT = {{ has_government = communism }} {b} = {{ NOT = {{ has_government = communism }} }} }}
+	abort = {{ OR = {{ NOT = {{ country_exists = {b} }} has_government = communism {b} = {{ has_government = communism }} }} }}
+	ai_strategy = {{ type = alliance id = "{b}" value = 200 }}
+	ai_strategy = {{ type = befriend id = "{b}" value = 100 }}
+}}
+""" for a in REIBONNAISE for b in REIBONNAISE if a != b)
+
+# Starting popularities other than the even mix. A faction member needs 30 % support
+# for its leader's ideology (IDEOLOGY_JOIN_FACTION_MIN_LEVEL), so the two Lordly
+# Republics in the monarchist Association keep their monarchists strong
+POPULARITIES = {t: {"democratic": 40, "neutrality": 30, "fascism": 10, "communism": 10, "theocracy": 10}
+                for t in ("LZC", "GDN")}
+
+# Every other country's starting army (author, 2026-10-02: "something according to their
+# size"): infantry divisions, about one per six states, 2 to 24
+GENERIC_ARMY_TECH = ("set_technology = { infantry_weapons = 1 tech_support = 1 tech_engineers = 1 "
+                     "tech_recon = 1 gw_artillery = 1 }")
+
+
+def generic_oob(tag, vps):
+    """history/units/<tag>_1936.txt: vps are the victory point provinces of the
+    country's states, capital first."""
+    n = max(2, min(24, round(len(vps) / 6) + 2))
+    out = ["division_template = {", '\tname = "Infantry Division"', "\tregiments = {",
+           *[f"\t\tinfantry = {{ x = {x} y = {y} }}" for x in range(3) for y in range(3) if (x, y) != (2, 2)],
+           "\t\tartillery_brigade = { x = 3 y = 0 }", "\t}",
+           "\tsupport = {", "\t\tengineer = { x = 0 y = 0 }", "\t\trecon = { x = 0 y = 1 }", "\t}", "}", "",
+           "units = {"]
+    for k in range(n):
+        out += ["\tdivision = {", f"\t\tdivision_name = {{ is_name_ordered = yes name_order = {k + 1} }}",
+                f"\t\tlocation = {vps[k % len(vps)]}", '\t\tdivision_template = "Infantry Division"',
+                "\t\tstart_experience_factor = 0.2", "\t\tstart_equipment_factor = 1.0",
+                "\t\tstart_manpower_factor = 1.0", "\t}"]
+    return "\n".join(out + ["}", ""])
 
 # Extra cosmetic tags (name, formal name, adjective, map colour, flag in source/flags),
 # set by script rather than by the ruling party
@@ -326,11 +412,23 @@ ROU_CHARACTERS = """characters = {
 			civilian = {
 				large = GFX_portrait_ROU_serelle_cahun
 			}
+			army = {
+				large = GFX_portrait_ROU_serelle_cahun
+			}
 		}
 		country_leader = {
 			ideology = strongman_rule
 			expire = "1965.1.1.1"
 			id = -1
+		}
+		# a general from the start (author, 2026-10-02); the communist path retires her
+		corps_commander = {
+			traits = { armor_officer }
+			skill = 4
+			attack_skill = 4
+			defense_skill = 2
+			planning_skill = 3
+			logistics_skill = 3
 		}
 	}
 	# the same two women at the head of civil war factions
@@ -353,11 +451,23 @@ ROU_CHARACTERS = """characters = {
 			civilian = {
 				large = GFX_portrait_ROU_serelle_cahun
 			}
+			army = {
+				large = GFX_portrait_ROU_serelle_cahun
+			}
 		}
 		country_leader = {
 			ideology = strongman_rule
 			expire = "1965.1.1.1"
 			id = -1
+		}
+		# a general from the start (author, 2026-10-02); the communist path retires her
+		corps_commander = {
+			traits = { armor_officer }
+			skill = 4
+			attack_skill = 4
+			defense_skill = 2
+			planning_skill = 3
+			logistics_skill = 3
 		}
 	}
 }
@@ -510,7 +620,7 @@ ROU_FOCUS_TREE = """focus_tree = {
 				elections_allowed = yes
 			}
 			retire_character = ROU_roland_cahun
-			retire_character = ROU_serelle_cahun
+			remove_country_leader_role = { character = ROU_serelle_cahun ideology = strongman_rule }  # stays a general
 			promote_character = ROU_leader_constitutional_monarchism
 		}
 	}
@@ -614,7 +724,7 @@ ROU_FOCUS_TREE = """focus_tree = {
 			}
 			promote_character = ROU_mahaut_vi
 			retire_character = ROU_roland_cahun
-			retire_character = ROU_serelle_cahun
+			remove_country_leader_role = { character = ROU_serelle_cahun ideology = strongman_rule }  # stays a general
 		}
 	}
 
@@ -657,7 +767,7 @@ ROU_FOCUS_TREE = """focus_tree = {
 				elections_allowed = no
 			}
 			promote_character = ROU_roland_cahun
-			retire_character = ROU_serelle_cahun
+			remove_country_leader_role = { character = ROU_serelle_cahun ideology = strongman_rule }  # stays a general
 		}
 	}
 }
@@ -706,6 +816,7 @@ PORTRAITS = {
     "AIS_communist_merlovich": ("source/portraits/merlovich_emu.png", 0, 95, 300, "red"),
     "ROU_serelle_cahun": ("source/portraits/serelle_cahun.png", 260, 90, 900, None),
     "ROU_roland_cahun": ("source/portraits/roland_cahun.png", 340, 200, 1100, None),
+    "ILR_ema_milize": ("source/portraits/ema_milize.png", 2, 0, 237, None),
 }
 
 # Hand-picked victory point names. Key either a province id (ids follow the placeholder
@@ -837,6 +948,9 @@ def write_files(write, out, state_ids, state_vp):
     write("common/units/names_divisions/ROU_names_divisions.txt", rouental_division_names(), bom=True)
     write("history/units/ROU_1936.txt", rouental_oob(state_vp), bom=True)
     write("common/ideas/valsora_ideas.txt", FEUDAL_ARMY)
+    write("common/opinion_modifiers/valsora_opinion_modifiers.txt", OPINION_MODIFIERS)
+    write("common/scripted_effects/valsora_opinion_effects.txt", OPINION_EFFECTS)
+    write("common/ai_strategy/valsora_reibonnaise.txt", AI_STRATEGY)
     pic = Image.open("source/ideologies/theocracy_placeholder.png").convert("RGBA")
     side = min(pic.size)
     pic = pic.crop(((pic.width - side) // 2, (pic.height - side) // 2,

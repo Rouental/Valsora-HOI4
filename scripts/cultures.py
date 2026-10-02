@@ -212,10 +212,12 @@ def _names(culture):
             [n for n in _tokens(sur) if n not in NOT_SURNAMES])
 
 
-def leaders(tag, continent, subtypes, ideology_of, used):
+def leaders(tag, continent, subtypes, ideology_of, used, named=None):
     """Characters for a country's leaders: a name from its culture's list and a generic
     portrait of its culture, per subtype. Returns (character blocks, loc lines, ids).
-    Deterministic: the same tag always gets the same people."""
+    Deterministic: the same tag always gets the same people. `named` maps a character
+    id to the author's (name, portrait sprite) for that leader instead."""
+    named = named or {}
     import zlib
     import numpy as np
     c = culture(tag, continent)
@@ -233,11 +235,15 @@ def leaders(tag, continent, subtypes, ideology_of, used):
             if name not in used:
                 used.add(name)
                 break
+        face = pool[rng.integers(len(pool))]
+        if cid in named:  # drawn after the random ones, so other leaders don't change
+            name, face = named[cid]
+            used.add(name)
         blocks.append(f"""\t{cid} = {{
 \t\tname = {cid}
 \t\tportraits = {{
 \t\t\tcivilian = {{
-\t\t\t\tlarge = {pool[rng.integers(len(pool))]}
+\t\t\t\tlarge = {face}
 \t\t\t}}
 \t\t}}
 \t\tcountry_leader = {{
