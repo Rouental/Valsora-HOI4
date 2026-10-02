@@ -9,8 +9,10 @@ themselves are not.
 
 ## Already in the mod
 
-- **Names.** The author's list of vassals and fiefs is `source/names/rouental_fiefs.txt`:
-  14 vassal groups and 393 fiefs.
+- **Names.** The author's list of fiefs is `source/names/rouental_fiefs.txt`: 393 fiefs
+  under 14 cultural groups. **Every fief is a vassal of the Crown** (author, 2026-10-02);
+  the groups are cultural, and the governorates between vassals and Crown have no power.
+  The author will give each fief its title.
   - Rouental's generated generals and admirals now carry noble names ("de Beaufort",
     "d'Aurifort") as well as ordinary French ones.
   - Division names come in two groups (`common/units/names_divisions/ROU_names_divisions.txt`):
@@ -28,8 +30,8 @@ themselves are not.
   maintenance, and field hospitals in support. Stationed around Rouental, Saintiers,
   Cournin, Rêverie, Charmas, Rochemont and Vendée. Rouental starts with the techs, a
   "Char Royal" tank design (both with and without No Step Back) and a stockpile.
-- **Which states each vassal holds**: `docs/ROUENTAL_FIEFS.md` and
-  `source/rouental_vassals.json`, from overlaying the fief map on the game's states.
+- **Which state each fief (vassal) lies in**: `docs/ROUENTAL_FIEFS.md` and
+  `source/rouental_fiefs_by_state.json`, from overlaying the fief map on the game's states.
 
 ## Recommended design (all vanilla mechanics)
 
@@ -47,15 +49,14 @@ themselves are not.
    Focuses or reforms could later soften it ("Standing Army Reform").
 
 3. **Levies come by decision.** Add a decision category, "Call the Banners", with one
-   decision per vassal (Carcasonnaise, Conflans, Northmarch…). Each decision:
+   decision per vassal or, with 393 of them, per state, calling the vassals in it. Each decision:
    - costs political power, and lowers that vassal's **loyalty** (a variable per
      vassal, shown in the decision's tooltip);
    - spawns that vassal's levy with `load_oob = "ROU_levy_<vassal>"`. The OOB file
      defines a **locked template** (`is_locked = yes`, so the player can't redesign it)
      and divisions that start under-equipped (`start_equipment_factor = 0.3`) with
      old kit, which is the "less control over equipment";
-   - places the divisions in the vassal's own land. That needs the province-level map
-     (your detailed map) to say which states belong to which vassal.
+   - places the divisions in the vassal's own state (`source/rouental_fiefs_by_state.json`).
 
 4. **Levies are temporary.** A timed decision or mission (`days_remove = 180`) sends
    them home with `delete_unit_template_and_units` (to verify in-game). Keeping them
@@ -65,23 +66,25 @@ themselves are not.
    (PP, a state, a title) or rebels. That ties straight into the civil war: the
    revolting tags could be the disloyal vassals (`docs/CIVIL_WAR_NOTES.md`).
 
-## Levy quality (proposal, 2026-10-02)
+## Levy quality (proposal, 2026-10-02; to redo per fief once the titles exist)
 
-Each levy is a `create_unit` in the vassal's main state, as vanilla focuses do
+The first draft below gave tiers per cultural group, mistaking the groups for vassals.
+Tiers belong to each fief; the groups could at most be a default.
+
+Each levy is a `create_unit` in the vassal's state, as vanilla focuses do
 (`start_experience_factor`, `start_equipment_factor`, `start_manpower_factor`), with a
 template the player can't edit. Quality comes from four knobs: the template, experience,
 how full its equipment is, and how many divisions come.
 
 | Tier | Template | Experience | Equipment | Example |
 |---|---|---|---|---|
-| Elite | infantry + artillery, full support | 0.5 | 100 % | Chatois (Reliette): the martial vassal |
-| Good | line infantry + artillery | 0.3 | 70 % | Northmarch, Southmarch (border wardens) |
-| Levy | infantry, little support | 0.1 | 40 % | Conflans, Carcasonnaise, Recolt, Nataine |
-| Militia | small infantry brigade | 0 | 25 % | Piscan, Lyrién, Oscarl, Crépuscule, Helvetican, Lustianaise |
+| Elite | infantry + artillery, full support | 0.5 | 100 % | Reliette: a primary martial vassal |
+| Good | line infantry + artillery | 0.3 | 70 % | to be chosen |
+| Levy | infantry, little support | 0.1 | 40 % | to be chosen |
+| Militia | small infantry brigade | 0 | 25 % | to be chosen |
 | Ceremonial | one battalion | 0 | 10 % | single fiefs, e.g. Tal's "Arbalétriers de Tal" |
 
-- How many divisions: by fief count. Conflans holds 151 fiefs, so many poor divisions;
-  Chatois 18, so a few good ones.
+- How many divisions: by the vassal's title and tier.
 - Ceremonial units are flavour. Tal's crossbowmen, "granted guns to fulfil the
   obligation", would be one under-strength battalion with a joke name.
 - **For the author to decide**: each vassal's tier, which fiefs get their own flavour
@@ -96,5 +99,5 @@ almost no army of their own. It is better kept for the civil war.
 
 ## What's needed to build it
 
-- Each vassal's tier (table above) and any flavour units.
+- Each fief's title (author, coming), then its tier and any flavour units.
 - How harsh the loyalty costs should be, and how long levies serve.

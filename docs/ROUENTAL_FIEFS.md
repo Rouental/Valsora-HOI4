@@ -3,12 +3,16 @@
 Made 2026-10-02 by overlaying the author's fief map (`Rouental_Map_TEMP_2.pdn`) on the game's
 states (`dist/rouental_fiefs_overlay.png`). Each fief label was read, matched to
 `source/names/rouental_fiefs.txt` and placed in the state under most of its area. The data is
-`source/rouental_vassals.json` (state → main vassal and every fief in it): **edit that file to correct
-a state's vassal**; the levies will read it.
+`source/rouental_fiefs_by_state.json` (state → its fiefs, by cultural group).
 
-## Vassals and their states
+**Every fief is a vassal of the Crown** (author, 2026-10-02). The 14 headings of the fief list
+(Carcasonnaise, Conflans, Northmarch…) are cultural groups, not vassals; the governorates
+above the vassals have no power. The colours on the overlay are those cultural groups.
+Each fief's title is still to come from the author.
 
-| Vassal | Fiefs placed | Main vassal of | Also holds fiefs in |
+## Cultural groups and their states
+
+| Cultural group | Fiefs placed | Most fiefs in | Also fiefs in |
 |---|---|---|---|
 | Carcasonnaise | 42 of 42 | Carcarelle, Caux-Gautier, Hyères | Tuilerie (2) |
 | Nataine | 20 of 20 | Aureimontes | Hyères (3), Marais Verte (3), Tuilerie (1), Vinterre (1) |
@@ -27,7 +31,7 @@ a state's vassal**; the levies will read it.
 
 ## States
 
-| State | Main vassal | Fiefs |
+| State | Main group | Fiefs (vassals) |
 |---|---|---|
 | Aureimontes | Nataine | Nataine: Aureimontes, Fidelitus, Flumamnis, Hastelum, Moenia, Oramlitus, Ostrinus, Piscisinum, Regiovia, Reliquae, Sanctus, Turrimarx; Chatois: Anselmis, Rubeus |
 | Aurillac-de-Ciel | Northmarch | Northmarch: Abroix, Aurillac-de-Ciel, Davouil, Monteaux |

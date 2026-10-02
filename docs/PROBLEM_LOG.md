@@ -6,6 +6,13 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**The fief overlay sorted fiefs into the wrong kind of vassal** (2026-10-02)
+- Cause: the 14 headings of `rouental_fiefs.txt` were read as vassals. They are cultural
+  groups: every fief is a vassal of the Crown, and the governorates have no power.
+- Fix: the docs and data now call them cultural groups
+  (`source/rouental_fiefs_by_state.json`, renamed from `rouental_vassals.json`). The
+  fief → state placement stands; levy tiers wait for each fief's title.
+
 **Rempart and Tocsin didn't touch, though the drawing has them touching** (2026-10-02)
 - Cause: the author's lines leave a corridor 2–3 px wide from Rempart up to Tocsin. A
   state is the majority of each province, and the corridor's pixels belonged to a

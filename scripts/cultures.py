@@ -108,14 +108,14 @@ TAG_CULTURE = {
 }
 
 
-# Rouental's vassals and their fiefs (the author's list, 2026-10-02): "<Vassal>
+# Rouental's fiefs (each a vassal of the Crown) by cultural group (the author's list, 2026-10-02): "<Group>
 # Provinces:" headings (or "Royal Fiefs:"), one fief per line; "(XX)" is a map
 # abbreviation and is dropped
 FIEFS_SRC = Path("source/names/rouental_fiefs.txt")
 
 
 def fiefs():
-    """vassal -> fiefs, in the author's order, without repeats."""
+    """cultural group -> fiefs, in the author's order, without repeats."""
     out, cur, seen = {}, None, set()
     for line in FIEFS_SRC.read_text(encoding="utf-8").splitlines():
         line = line.strip()

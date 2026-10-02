@@ -1,6 +1,6 @@
 {
  "Aureimontes": {
-  "vassal": "Nataine",
+  "main_group": "Nataine",
   "fiefs": {
    "Nataine": [
     "Aureimontes",
@@ -23,7 +23,7 @@
   }
  },
  "Aurillac-de-Ciel": {
-  "vassal": "Northmarch",
+  "main_group": "Northmarch",
   "fiefs": {
    "Northmarch": [
     "Abroix",
@@ -34,7 +34,7 @@
   }
  },
  "Avarre": {
-  "vassal": "Piscan",
+  "main_group": "Piscan",
   "fiefs": {
    "Piscan": [
     "Avarre"
@@ -45,7 +45,7 @@
   }
  },
  "Baie de Torres": {
-  "vassal": "Piscan",
+  "main_group": "Piscan",
   "fiefs": {
    "Piscan": [
     "Baie de Torres"
@@ -56,7 +56,7 @@
   }
  },
  "Belleplaine-sur-Mer": {
-  "vassal": "Piscan",
+  "main_group": "Piscan",
   "fiefs": {
    "Piscan": [
     "Belleplaine-sur-Mer",
@@ -68,7 +68,7 @@
   }
  },
  "Carcarelle": {
-  "vassal": "Carcasonnaise",
+  "main_group": "Carcasonnaise",
   "fiefs": {
    "Carcasonnaise": [
     "Beffroi",
@@ -94,7 +94,7 @@
   }
  },
  "Carune la Cœur": {
-  "vassal": "Conflans",
+  "main_group": "Conflans",
   "fiefs": {
    "Conflans": [
     "Carune la Cœur",
@@ -104,7 +104,7 @@
   }
  },
  "Caux-Gautier": {
-  "vassal": "Carcasonnaise",
+  "main_group": "Carcasonnaise",
   "fiefs": {
    "Carcasonnaise": [
     "Bannière",
@@ -128,7 +128,7 @@
   }
  },
  "Charmas": {
-  "vassal": "Conflans",
+  "main_group": "Conflans",
   "fiefs": {
    "Conflans": [
     "Bernier",
@@ -149,7 +149,7 @@
   }
  },
  "Chirac": {
-  "vassal": "Lustianaise",
+  "main_group": "Lustianaise",
   "fiefs": {
    "Lustianaise": [
     "Chirac"
@@ -157,7 +157,7 @@
   }
  },
  "Chouan": {
-  "vassal": "Conflans",
+  "main_group": "Conflans",
   "fiefs": {
    "Conflans": [
     "Cathelineau",
@@ -167,7 +167,7 @@
   }
  },
  "Coffrefort": {
-  "vassal": "Northmarch",
+  "main_group": "Northmarch",
   "fiefs": {
    "Northmarch": [
     "Astre",
@@ -178,7 +178,7 @@
   }
  },
  "Cournin": {
-  "vassal": "Royal Fiefs",
+  "main_group": "Royal Fiefs",
   "fiefs": {
    "Royal Fiefs": [
     "Brassard",
@@ -191,7 +191,7 @@
   }
  },
  "Crépuscule": {
-  "vassal": "Crépuscule",
+  "main_group": "Crépuscule",
   "fiefs": {
    "Crépuscule": [
     "Aube"
@@ -199,7 +199,7 @@
   }
  },
  "Cylône": {
-  "vassal": "Northmarch",
+  "main_group": "Northmarch",
   "fiefs": {
    "Northmarch": [
     "Baïonnette",
@@ -211,7 +211,7 @@
   }
  },
  "Everlon": {
-  "vassal": "Southmarch",
+  "main_group": "Southmarch",
   "fiefs": {
    "Southmarch": [
     "Agier",
@@ -230,7 +230,7 @@
   }
  },
  "Fleurastre": {
-  "vassal": "Recolt",
+  "main_group": "Recolt",
   "fiefs": {
    "Recolt": [
     "Battlaire",
@@ -250,7 +250,7 @@
   }
  },
  "Fourier": {
-  "vassal": "Recolt",
+  "main_group": "Recolt",
   "fiefs": {
    "Recolt": [
     "Arcy",
@@ -266,7 +266,7 @@
   }
  },
  "Ganelonne": {
-  "vassal": "Conflans",
+  "main_group": "Conflans",
   "fiefs": {
    "Conflans": [
     "Farbante",
@@ -278,7 +278,7 @@
   }
  },
  "Ghessone": {
-  "vassal": "Conflans",
+  "main_group": "Conflans",
   "fiefs": {
    "Conflans": [
     "Archambelle",
@@ -295,7 +295,7 @@
   }
  },
  "Glacierre": {
-  "vassal": "Conflans",
+  "main_group": "Conflans",
   "fiefs": {
    "Conflans": [
     "Antuille",
@@ -319,7 +319,7 @@
   }
  },
  "Graisivaudan": {
-  "vassal": "Piscan",
+  "main_group": "Piscan",
   "fiefs": {
    "Piscan": [
     "Freinet",
@@ -331,7 +331,7 @@
   }
  },
  "Hevique": {
-  "vassal": "Helvetican",
+  "main_group": "Helvetican",
   "fiefs": {
    "Helvetican": [
     "Hevique"
@@ -339,7 +339,7 @@
   }
  },
  "Hyères": {
-  "vassal": "Carcasonnaise",
+  "main_group": "Carcasonnaise",
   "fiefs": {
    "Carcasonnaise": [
     "Agence",
@@ -362,7 +362,7 @@
   }
  },
  "Kové": {
-  "vassal": "Conflans",
+  "main_group": "Conflans",
   "fiefs": {
    "Conflans": [
     "Berrige",
@@ -382,7 +382,7 @@
   }
  },
  "La Recolt": {
-  "vassal": "Recolt",
+  "main_group": "Recolt",
   "fiefs": {
    "Recolt": [
     "Kinzeau",
@@ -391,7 +391,7 @@
   }
  },
  "Leclerc": {
-  "vassal": "Conflans",
+  "main_group": "Conflans",
   "fiefs": {
    "Conflans": [
     "Besançon",
@@ -421,7 +421,7 @@
   }
  },
  "Lyrié et Rivielle": {
-  "vassal": "Lyrién",
+  "main_group": "Lyrién",
   "fiefs": {
    "Lyrién": [
     "Aedaire",
@@ -444,7 +444,7 @@
   }
  },
  "Marais Verte": {
-  "vassal": "Conflans",
+  "main_group": "Conflans",
   "fiefs": {
    "Conflans": [
     "Crionique",
@@ -475,7 +475,7 @@
   }
  },
  "Maïeul": {
-  "vassal": "Lustianaise",
+  "main_group": "Lustianaise",
   "fiefs": {
    "Lustianaise": [
     "Maïeul"
@@ -483,7 +483,7 @@
   }
  },
  "Nerié": {
-  "vassal": "Conflans",
+  "main_group": "Conflans",
   "fiefs": {
    "Conflans": [
     "Albi",
@@ -523,7 +523,7 @@
   }
  },
  "Oriflamme": {
-  "vassal": "Northmarch",
+  "main_group": "Northmarch",
   "fiefs": {
    "Northmarch": [
     "Auberly",
@@ -542,7 +542,7 @@
   }
  },
  "Osgrande": {
-  "vassal": "Northmarch",
+  "main_group": "Northmarch",
   "fiefs": {
    "Northmarch": [
     "Belleterre",
@@ -557,7 +557,7 @@
   }
  },
  "Pavois": {
-  "vassal": "Conflans",
+  "main_group": "Conflans",
   "fiefs": {
    "Conflans": [
     "Charaise",
@@ -574,7 +574,7 @@
   }
  },
  "Reliette": {
-  "vassal": "Chatois",
+  "main_group": "Chatois",
   "fiefs": {
    "Chatois": [
     "Grise",
@@ -586,7 +586,7 @@
   }
  },
  "Rempart": {
-  "vassal": "Southmarch",
+  "main_group": "Southmarch",
   "fiefs": {
    "Southmarch": [
     "Chantelein",
@@ -601,7 +601,7 @@
   }
  },
  "Rochemont": {
-  "vassal": "Royal Fiefs",
+  "main_group": "Royal Fiefs",
   "fiefs": {
    "Royal Fiefs": [
     "Rochemont"
@@ -609,7 +609,7 @@
   }
  },
  "Rolantelle": {
-  "vassal": "Conflans",
+  "main_group": "Conflans",
   "fiefs": {
    "Conflans": [
     "Callentroix",
@@ -626,7 +626,7 @@
   }
  },
  "Rouental": {
-  "vassal": "Royal Fiefs",
+  "main_group": "Royal Fiefs",
   "fiefs": {
    "Royal Fiefs": [
     "Rouental"
@@ -634,7 +634,7 @@
   }
  },
  "Réveillé": {
-  "vassal": "Recolt",
+  "main_group": "Recolt",
   "fiefs": {
    "Recolt": [
     "Reveille"
@@ -642,7 +642,7 @@
   }
  },
  "Saintiers": {
-  "vassal": "Royal Fiefs",
+  "main_group": "Royal Fiefs",
   "fiefs": {
    "Royal Fiefs": [
     "Saintiers"
@@ -650,7 +650,7 @@
   }
  },
  "Sangterre": {
-  "vassal": "Northmarch",
+  "main_group": "Northmarch",
   "fiefs": {
    "Northmarch": [
     "Orcinde",
@@ -660,7 +660,7 @@
   }
  },
  "Serie": {
-  "vassal": "Conflans",
+  "main_group": "Conflans",
   "fiefs": {
    "Conflans": [
     "Belau",
@@ -680,7 +680,7 @@
   }
  },
  "Serpette": {
-  "vassal": "Lustianaise",
+  "main_group": "Lustianaise",
   "fiefs": {
    "Lustianaise": [
     "Serpette",
@@ -692,7 +692,7 @@
   }
  },
  "Tethié": {
-  "vassal": "Royal Fiefs",
+  "main_group": "Royal Fiefs",
   "fiefs": {
    "Royal Fiefs": [
     "Bérault",
@@ -704,7 +704,7 @@
   }
  },
  "Tocsin": {
-  "vassal": "Southmarch",
+  "main_group": "Southmarch",
   "fiefs": {
    "Southmarch": [
     "Chelris",
@@ -719,7 +719,7 @@
   }
  },
  "Tuilerie": {
-  "vassal": "Chatois",
+  "main_group": "Chatois",
   "fiefs": {
    "Chatois": [
     "Ainselle",
@@ -748,7 +748,7 @@
   }
  },
  "Ténèbres": {
-  "vassal": "Crépuscule",
+  "main_group": "Crépuscule",
   "fiefs": {
    "Crépuscule": [
     "Crépuscule",
@@ -761,7 +761,7 @@
   }
  },
  "Vair": {
-  "vassal": "Conflans",
+  "main_group": "Conflans",
   "fiefs": {
    "Conflans": [
     "Coulante",
@@ -772,7 +772,7 @@
   }
  },
  "Vendée": {
-  "vassal": "Conflans",
+  "main_group": "Conflans",
   "fiefs": {
    "Conflans": [
     "Royrand",
@@ -781,7 +781,7 @@
   }
  },
  "Verdoyantes": {
-  "vassal": "Recolt",
+  "main_group": "Recolt",
   "fiefs": {
    "Recolt": [
     "Jeriche",
@@ -791,7 +791,7 @@
   }
  },
  "Vinterre": {
-  "vassal": "Conflans",
+  "main_group": "Conflans",
   "fiefs": {
    "Conflans": [
     "Briges",
@@ -812,7 +812,7 @@
   }
  },
  "Rêverie": {
-  "vassal": "Royal Fiefs",
+  "main_group": "Royal Fiefs",
   "fiefs": {},
   "note": "the capital; no fief label on the map"
  }

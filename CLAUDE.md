@@ -390,8 +390,11 @@ Aislada is the worked example of a built-out nation:
   `TAG`, `TAG_DEF`, `TAG_ADJ`, the per-ideology variants (`TAG_communism` etc.) and the
   continent key.
 
-- **Rouental's names** (2026-10-02): the author's vassals and fiefs are
-  `source/names/rouental_fiefs.txt` (14 vassals, 393 fiefs; `cultures.fiefs`). They give
+- **Rouental's names** (2026-10-02): the author's fiefs are
+  `source/names/rouental_fiefs.txt` (393 fiefs under 14 headings; `cultures.fiefs`).
+  **Every fief is a vassal of the Crown; the headings are cultural groups, not vassals**
+  (author's correction), and the governorates between vassals and Crown have no power.
+  The author will give each fief its title; per-fief levies wait for that. They give
   Rouental's name list noble surnames ("de Beaufort", "d'Aurifort") and its division
   names: "The Royal Host" (Garde Royale, Ost de <royal fief>) and "Vassal Levies"
   (Levée de <fief>, numbered "%de" as vanilla requires), in
@@ -405,8 +408,7 @@ Aislada is the worked example of a built-out nation:
     `work/pdn_rmap`) was overlaid on the game's states (axis-aligned fit, IoU 0.885;
     game x = 0.0396 fx + 572.1, y = 0.0379 fy + 747.4). Every label was read and placed:
     `docs/ROUENTAL_FIEFS.md`, `dist/rouental_fiefs_overlay.png` and
-    `source/rouental_vassals.json` (state name → main vassal and its fiefs; the author
-    may correct it, and the levies will read it).
+    `source/rouental_fiefs_by_state.json` (state name → its fiefs by cultural group).
 - **Flags** are `source/flags/TAG.png`, any size (HOI4 gets 82×52, 41×26 and 10×7
   32-bit TGAs, bottom-left origin). `TAG_<ideology>.png` is used only while that
   ideology rules: Rouental's banner of arms is `ROU.png` and its blue-white-gold
