@@ -6,6 +6,7 @@ so names given by number can be stored by pixel, which survives rebuilds, unlike
 Run after a build:
 
     python3 scripts/state_map.py reibonnaise ROU SGN EVR HLR SGV LST LZC GDN
+    python3 scripts/state_map.py --names rouental ROU   # the names from source/state_names.json
 """
 import json
 import re
@@ -23,7 +24,11 @@ FONT = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
 
 
 def main():
-    name, tags = sys.argv[1], sys.argv[2:]
+    args = sys.argv[1:]
+    show_names = "--names" in args
+    args = [a for a in args if a != "--names"]
+    name, tags = args[0], args[1:]
+    scale = 7 if show_names else SCALE
     p = np.load("work/provinces.npz")
     prov, kind = p["prov"], p["kind"]
     # states and owners as the game sees them (province id = index + 1)
@@ -54,9 +59,9 @@ def main():
     img = np.where(land[..., None], 225.0, 0.0) + np.where(land[..., None], 0, np.array([170, 195, 225]))
     for t in tags:
         img[O == t] = col[t] * 0.45 + 255 * 0.55
-    img = np.repeat(np.repeat(img, SCALE, 0), SCALE, 1)
-    Sb = np.repeat(np.repeat(S, SCALE, 0), SCALE, 1)
-    Ob = np.repeat(np.repeat(O, SCALE, 0), SCALE, 1)
+    img = np.repeat(np.repeat(img, scale, 0), scale, 1)
+    Sb = np.repeat(np.repeat(S, scale, 0), scale, 1)
+    Ob = np.repeat(np.repeat(O, scale, 0), scale, 1)
 
     def edges(a):
         e = np.zeros(a.shape, bool)
@@ -68,6 +73,12 @@ def main():
     im = Image.fromarray(img.clip(0, 255).astype(np.uint8))
     d = ImageDraw.Draw(im)
     font = ImageFont.truetype(FONT, 18)
+    small = ImageFont.truetype(FONT, 14)
+    state_names = {}
+    if show_names:
+        for k, nm in json.loads(Path("source/state_names.json").read_text(encoding="utf-8")).items():
+            x, y = map(int, k.split(","))
+            state_names[int(st[y, x])] = nm
     key, n = {}, 0
     for t in tags:
         sts = [s for s in mine if owner[s] == t and (S == s).any()]
@@ -81,21 +92,34 @@ def main():
             n += 1
             py, px = pts[s]
             key[n] = dict(tag=t, x=int(px + x0), y=int(py + y0), state=s)
-            cx, cy = px * SCALE + SCALE // 2, py * SCALE + SCALE // 2
-            d.text((cx, cy), str(n), fill=(0, 0, 0), font=font, anchor="mm",
-                   stroke_width=3, stroke_fill=(255, 255, 255))
+            cx, cy = px * scale + scale // 2, py * scale + scale // 2
+            if show_names:
+                label = state_names.get(s, f"({n}: no name)")
+                words = label.split(" ")  # long names on two lines
+                if len(label) > 11 and len(words) > 1:
+                    half = (len(words) + 1) // 2
+                    label = " ".join(words[:half]) + "\n" + " ".join(words[half:])
+                d.multiline_text((cx, cy), label, fill=(0, 0, 0), font=small, anchor="mm",
+                                 align="center", stroke_width=2, stroke_fill=(255, 255, 255))
+            else:
+                d.text((cx, cy), str(n), fill=(0, 0, 0), font=font, anchor="mm",
+                       stroke_width=3, stroke_fill=(255, 255, 255))
     # legend: country names, bottom left (author)
     lf = ImageFont.truetype(FONT, 22)
-    for k, t in enumerate(tags):
+    for k, t in enumerate([] if show_names else tags):
         nm = next(v[1] for v in COUNTRIES.values() if v[0] == t)
         nums = [i for i, v in key.items() if v["tag"] == t]
         d.text((10, im.height - 10 - 28 * (len(tags) - k)), f"{nm}: {min(nums)}" + (f"–{max(nums)}" if len(nums) > 1 else ""), fill=tuple(int(c * 0.6) for c in col[t]),
                font=lf, stroke_width=3, stroke_fill=(255, 255, 255))
     Path("dist").mkdir(exist_ok=True)
-    im.save(f"dist/state_numbers_{name}.png")
-    json.dump(key, open(f"dist/state_numbers_{name}.json", "w"), indent=1)
+    if show_names:
+        im.save(f"dist/state_names_{name}.png")
+    else:
+        im.save(f"dist/state_numbers_{name}.png")
+        json.dump(key, open(f"dist/state_numbers_{name}.json", "w"), indent=1)
     out = sorted({owner[s] + f" state {s}" for s in mine} - {v["tag"] + f" state {v['state']}" for v in key.values()})
-    print(f"{n} states: dist/state_numbers_{name}.png, {im.size}; outside the frame: {out}")
+    kind_ = "names" if show_names else "numbers"
+    print(f"{n} states: dist/state_{kind_}_{name}.png, {im.size}; outside the frame: {out}")
 
 
 if __name__ == "__main__":

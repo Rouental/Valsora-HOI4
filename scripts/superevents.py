@@ -58,13 +58,14 @@ SUPEREVENTS = [
          author="Mahaut VI, Holy Princess of Rouental",
          picture="hair_ruffle.png", song="valsora_gladiators"),
     # the Rouentaise civil war, after the Prince's execution on the communist path
-    # (author's picture, 2026-10-01; text is Claude's first draft)
+    # (author's picture, quote and song, 2026-10-02; title and attribution Claude's)
     dict(id="rou_civil_war",
          title="The Rouentaise Civil War",
-         quote="They promised us the Prince's death would end the old Rouental. It did. By "
-               "morning there were two Rouentals, and both of them were armed.",
+         quote="They promised us the Prince's death would end the old Rouental, and it did. By "
+               "morning there were a hundred Rouentals, all of them armed, and all of them "
+               "furious.",
          author="A Red Guard, in a letter home from Rêverie",
-         picture="rou_civil_war.jpg", song="valsora_gladiators"),
+         picture="rou_civil_war.jpg", song="valsora_elbee"),
     dict(id="ais_explode",
          title="Merlovich Has Exploded",
          quote="Our beloved leader has become many smaller leaders, now scattered across a wide "
@@ -74,8 +75,11 @@ SUPEREVENTS = [
 ]
 
 # song name -> audio file in source/superevents (Ogg Vorbis, like vanilla music)
-SONGS = {"valsora_gladiators": "entry_of_the_gladiators.ogg"}
-SONG_TITLES = {"valsora_gladiators": "Julius Fucik - Entry of the Gladiators"}
+# (each the first 45 s of the author's file, faded out over the last 4 s)
+SONGS = {"valsora_gladiators": "entry_of_the_gladiators.ogg",
+         "valsora_elbee": "monsieur_d_elbee.ogg"}
+SONG_TITLES = {"valsora_gladiators": "Julius Fucik - Entry of the Gladiators",
+               "valsora_elbee": "Monsieur d'Elbée (Vendéen royalist song)"}
 STATION = "valsora"  # music station the songs live in
 
 

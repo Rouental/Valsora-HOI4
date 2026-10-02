@@ -19,7 +19,7 @@
  "700,805": "Tethié",
  "710,792": "Vendée",
  "717,776": "Aurillac-de-Ciel",
- "723,804": "Cournin",
+ "723,804": "Chouan",
  "731,793": "Cournin",
  "739,784": "Sangterre",
  "745,806": "Charmas",
@@ -29,7 +29,6 @@
  "822,805": "Chirac",
  "593,815": "Reliette",
  "649,843": "Everlon",
- "650,828": "Rolantelle",
  "672,848": "Tocsin",
  "679,827": "Leclerc",
  "687,814": "Saintiers",
@@ -60,5 +59,8 @@
  "861,761": "Selgrave",
  "835,781": "Lustiana",
  "851,784": "Lanzerac",
- "748,872": "Guedelon"
+ "748,872": "Guedelon",
+ "648,827": "Ghessone",
+ "665,839": "Rolantelle",
+ "1716,2010": "Concorde et Volonté"
 }

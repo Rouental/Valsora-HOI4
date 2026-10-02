@@ -144,7 +144,7 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `strategic_regions.py` | by hand: sea regions = the author's oceans, one each, with names (`source/region_names.json`); land untouched |
 | `river_provinces.py` | by hand, after a build: re-cuts the provinces of every state a river crosses so rivers run between provinces |
 | `redraw_flags.py` | unused: Fraxhemark's stand-in flag (writes `work/FRX_standin.png`); the author's own `FRX.png` replaced it |
-| `state_map.py` | by hand, after a build: a numbered map of some countries' states (`dist/state_numbers_<name>.png` + `.json`, number → tag and pixel), for the author to name them |
+| `state_map.py` | by hand, after a build: a numbered map of some countries' states (`dist/state_numbers_<name>.png` + `.json`, number → tag and pixel), for the author to name them; `--names` labels them with their names instead |
 | `organic.py` | organic splitting (seeded watershed over noise), used by `apply_outlines.py` |
 | `rivers.py` | plain river lines → HOI4 rivers.bmp format, and the river rules check |
 | `build_mod.py` | every mod file |
@@ -274,8 +274,10 @@ mismatch, missing localisation) and catches all of them.
 - **State names** are the author's, in `source/state_names.json` ("x,y" of a pixel
   inside the state → name, since ids shift; `build_mod.py` stops if a pixel is in no
   state or two name one state). Unnamed states are "Country N". First set (2026-10-01):
-  Rouental's 54 and its seven neighbours', numbered by `state_map.py`; 21 and 22 are
-  both "Cournin" as given. Rouental's islet state off Solitas is still unnamed.
+  Rouental's 54 and its seven neighbours', numbered by `state_map.py`; then (2026-10-02)
+  21 Chouan, the islets off Solitas Concorde et Volonté, and Rolantelle split by a new
+  state line into Ghessone (west) and Rolantelle (east). `state_map.py --names` draws a
+  country's states with their names (`dist/state_names_<name>.png`).
 - **Localisation keys are our own** (`VAL_STATE_n`, `VAL_REGION_n`), so vanilla's
   `STATE_n` / `STRATEGICREGION_n` Earth names never show. Victory point names have to
   reuse vanilla's `VICTORY_POINTS_<id>` keys, so they live in `localisation/english/replace/`.
@@ -330,8 +332,9 @@ Aislada is the worked example of a built-out nation:
       Serelle retired.
     - Kick Out the Parasites (Rudely): communist, both Cahuns retired.
       - **Execute the Prince** (under it, x = 6, y = 1): plays superevent
-        `rou_civil_war` (the author's photo `source/superevents/rou_civil_war.jpg`,
-        Claude's draft text) and sets country flag `ROU_civil_war`. The Rouentaise civil
+        `rou_civil_war` (the author's photo `source/superevents/rou_civil_war.jpg`, the
+        author's quote and song, "Monsieur d'Elbée", a Vendéen royalist song) and sets
+        country flag `ROU_civil_war`. The Rouentaise civil
         war starts here; the author will detail how it goes (2026-10-01).
     - Left to right: Polite, Brother, Steady, Rudely.
   - The democratic and communist parties have no defined leader, so the game generates one.
@@ -475,8 +478,8 @@ white via `§W…§!` in their localisation (the typewriter fonts draw dark). Ho
   visible while that flag is set. Title, quote and author come from scripted
   localisation keyed on the global flags. There is one picture icon per distinct image,
   shown via `<element>_visible` triggers. The close button's `_click` clears the flag.
-- **Assets.** The music is `source/superevents/entry_of_the_gladiators.ogg`: the first
-  45 s of the author's MP3 with a 4 s fade, Vorbis like vanilla music.
+- **Assets.** The music is `source/superevents/*.ogg`: the first 45 s of the author's
+  MP3s with a 4 s fade, Vorbis like vanilla music (`SONGS` in `superevents.py`).
 - **Songs must belong to a music station**, or `play_song` logs "Song doesnt exist" (the
   first build had only an `.asset`).
   - Layout, from the Music Mod Creation Tool's HOI4 template: `music/valsora/` holds the
@@ -491,8 +494,11 @@ white via `§W…§!` in their localisation (the typewriter fonts draw dark). Ho
   generated background, `superevent_bg.dds`: dark, with gold frames.
 - **Current set.** Seven superevents: one per Rouental leadership focus (five), the
   Rouentaise civil war (Execute the Prince; the author's soldier photo) and AIS
-  "Fucking Explode". The quotes are Claude-written; all but the civil war use the
-  author's anime picture, and all use the one song (Entry of the Gladiators).
+  "Fucking Explode". The quotes are Claude-written except the civil war's (the
+  author's); all but the civil war use the author's anime picture and Entry of the
+  Gladiators. The civil war has "Monsieur d'Elbée" (`valsora_elbee`,
+  `monsieur_d_elbee.ogg`, made with the ffmpeg bundled in the `imageio_ffmpeg` Python
+  package: first 45 s, 4 s fade, Vorbis 160k).
 - **Checks.** `check_mod.py` checks scripted effects and events that are used, songs
   and their files, scripted localisation keys, and GUI window, element, sprite and
   button-text references (mutation-tested).
