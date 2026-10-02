@@ -78,6 +78,8 @@ COUNTRIES = {
     "marches": ("MRC", "The Marches", "Marcher", (85, 85, 115)),
     "loyal_army": ("RLA", "HMMLA", "Rouentaise", (40, 95, 55)),  # author's map name
     "vair": ("VAI", "Vair", "Vairois", (15, 105, 150)),
+    # 2026-10-02, the author's, inside Fraxhemark around its lake; colour Claude's
+    "locus": ("LCF", "Locus", "Locan", (230, 100, 30)),
     "faithful": ("FTH", "The Faithful", "Faithful", (240, 190, 80)),
 }
 # The placeholder countries, one per continent, are the recommended starts in the

@@ -81,6 +81,7 @@ LEADERS = {
     "RLT": ["feudalism"],
     "MRC": ["oligarchism"],
     "VAI": ["feudalism"],
+    "LCF": ["council_communism"],
     "FTH": ["holy_order"],
     "FRX": ["socialism"],             # Social Democracy
     # Rouental's democrats and communists, promoted by their focuses
@@ -111,7 +112,8 @@ CIVIL_WAR_ONLY = {"FTH", "RLA"}
 # the Association's members other than Rouental, and what its neighbours take when the
 # Prince is executed (author, 2026-10-02: "a more credible threat to the player")
 ASSOCIATION = ("GDN", "LST", "EVR", "HLR", "SGV", "LZC", "SGN")
-ANNEX = {"LST": ["Maïeul", "Serpette"], "HLR": ["Chirac"]}
+ANNEX = {"LST": ["Maïeul", "Serpette"], "HLR": ["Chirac"],
+         "SGV": ["Moelle"]}  # Moelle, the north of the old Maïeul (2026-10-02)
 
 # Extra cosmetic tags (name, formal name, adjective, map colour, flag in source/flags),
 # set by script rather than by the ruling party
@@ -148,6 +150,7 @@ FORMAL_NAMES = {
     "MRC": "the Alliance of the Marcher Lords",
     "RLA": "Her Majesty's Most Loyal Army",
     "VAI": "the Duchy of Vair",
+    "LCF": "the Worker's Republic of Locus Felicitatis",
     "FTH": "the Faithful Children of the Goddess and Her Saint",
     "CRD": "the Cardonian Kingdom",
     # the author's, 2026-09-30
@@ -710,6 +713,27 @@ def fill(text, state_ids):
     return re.sub(r"@STATE:([^@]+)@", sub, text)
 
 
+def rouental_division_names():
+    """Rouental's division names (author's fief list, 2026-10-02): the Royal Host after
+    the royal fiefs, the vassals' levies after their own fiefs."""
+    import cultures
+    f = cultures.fiefs()
+    royal = f.pop("Royal Fiefs")
+    host = ["Garde Royale"] + [f"Ost {cultures.noble(x)}" for x in royal]
+    levies = [f"Levée {cultures.noble(x)}" for fs in f.values() for x in fs]
+
+    def group(key, name, types, fallback, names):
+        return "\n".join([f"{key} = {{", f'\tname = "{name}"', "\tfor_countries = { ROU }",
+                          "\tcan_use = { always = yes }",
+                          "\tdivision_types = { " + " ".join(f'"{t}"' for t in types) + " }",
+                          f'\tfallback_name = "{fallback}"', "\tordered = {",
+                          *[f'\t\t{i} = {{ "{n}" }}' for i, n in enumerate(names, 1)], "\t}", "}", ""])
+    return (group("ROU_ROYAL_HOST", "The Royal Host", ["infantry", "cavalry", "light_armor", "medium_armor"],
+                  "%d Compagnie d'Ordonnance", host)
+            + group("ROU_LEVIES", "Vassal Levies", ["infantry", "cavalry", "motorized", "mountaineers"],
+                    "%d Levée Féodale", levies))
+
+
 def write_files(write, out, state_ids):
     """Write every nation-specific file into the mod folder. state_ids: state name -> id."""
     write("common/factions/templates/valsora_factions.txt", FACTION_TEMPLATES)
@@ -717,6 +741,7 @@ def write_files(write, out, state_ids):
     write("common/characters/ROU.txt", ROU_CHARACTERS)
     write("common/national_focus/rouental.txt", fill(ROU_FOCUS_TREE, state_ids))
     write("common/national_focus/aislada.txt", FOCUS_TREE)
+    write("common/units/names_divisions/ROU_names_divisions.txt", rouental_division_names())
     sprites = []
     for name, (src, x0, y0, w, tint) in PORTRAITS.items():
         rgba = portrait(src, x0, y0, w)

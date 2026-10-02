@@ -266,7 +266,12 @@ mismatch, missing localisation) and catches all of them.
     its north the author's Names layer labels KU (2026-10-02, four states). Kurikia's culture is Claude's
     guess from its flag (SOV names, Europe portraits, eastern European gfx); Fraxhemark is
     American (author): USA names, US generals and admirals, Europe politicians (vanilla
-    has no US generic politicians), western European gfx. The unnamed peninsula with the bay east of Fraxhemark is
+    has no US generic politicians), western European gfx. Locus LCF (2026-10-02; the
+    Worker's Republic of Locus Felicitatis; Council Communism; 3 states around
+    Fraxhemark's lake; colour, culture (American, like Fraxhemark) and the stand-in
+    flag are Claude's): outlined inside Fraxhemark, so `apply_outlines` seeded it
+    (`OWNERS` now wins over a re-cut patch's old country) and left the rest of
+    Fraxhemark alone (`LEAVE`). The unnamed peninsula with the bay east of Fraxhemark is
     outlined but left as NSC (`LEAVE`). File names are ASCII (`Cotefer`). Formal names are the
     author's; Selto's "Empire of Seito-Hamborn" was read as Selto-Hamborn.
     The new three's colours and adjectives are Claude's picks. All tags were checked
@@ -277,7 +282,8 @@ mismatch, missing localisation) and catches all of them.
   state or two name one state). Unnamed states are "Country N". First set (2026-10-01):
   Rouental's 54 and its seven neighbours', numbered by `state_map.py`; then (2026-10-02)
   21 Chouan, the islets off Solitas Concorde et Volonté, and Rolantelle split by a new
-  state line into Ghessone (west) and Rolantelle (east). `state_map.py --names` draws a
+  state line into Ghessone (west) and Rolantelle (east); Maïeul split into Moelle
+  (north; Selgrave takes it in the civil war) and Maïeul (south). `state_map.py --names` draws a
   country's states with their names (`dist/state_names_<name>.png`).
 - **Localisation keys are our own** (`VAL_STATE_n`, `VAL_REGION_n`), so vanilla's
   `STATE_n` / `STRATEGICREGION_n` Earth names never show. Victory point names have to
@@ -343,7 +349,8 @@ Aislada is the worked example of a built-out nation:
         (author, 2026-10-02; `nations.CIVIL_WAR`, `civil_war_effects`):
         - Rouental becomes the Reibonne (cosmetic tag `ROU_REIBONNE`, "The People's
           Republic of the Reibonne", flag `ROU_REIBONNE.png`, communist maroon).
-        - Lustiana takes Maïeul and Serpette, Hollier takes Chirac (`ANNEX`), and the
+        - Lustiana takes Maïeul and Serpette, Hollier takes Chirac, Selgrave takes
+          Moelle (`ANNEX`), and the
           Association becomes "The Alliance of the Vale": there is no effect to rename a
           faction, so Hollier dismantles it and founds one from
           `faction_template_alliance_of_the_vale` with the same members.
@@ -383,6 +390,14 @@ Aislada is the worked example of a built-out nation:
   `TAG`, `TAG_DEF`, `TAG_ADJ`, the per-ideology variants (`TAG_communism` etc.) and the
   continent key.
 
+- **Rouental's names** (2026-10-02): the author's vassals and fiefs are
+  `source/names/rouental_fiefs.txt` (14 vassals, 393 fiefs; `cultures.fiefs`). They give
+  Rouental's name list noble surnames ("de Beaufort", "d'Aurifort") and its division
+  names: "The Royal Host" (Garde Royale, Ost de <royal fief>) and "Vassal Levies"
+  (Levée de <fief>), in `common/units/names_divisions/ROU_names_divisions.txt`. The
+  levy-army design (royal host plus vassal levies by decision) is proposed in
+  `docs/ROUENTAL_ARMY.md`, not built. The author's detailed fief map
+  (`Rouental_Map_TEMP_2.pdn`, 8000×4471, fiefs and governorates) is reference only.
 - **Flags** are `source/flags/TAG.png`, any size (HOI4 gets 82×52, 41×26 and 10×7
   32-bit TGAs, bottom-left origin). `TAG_<ideology>.png` is used only while that
   ideology rules: Rouental's banner of arms is `ROU.png` and its blue-white-gold

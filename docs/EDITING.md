@@ -224,6 +224,7 @@ with no land left is simply left out of the game.
 | HMMLA (civil war; owns nothing at the start) | RLA | 40, 95, 55 |
 | Vair (civil war; owns nothing at the start) | VAI | 15, 105, 150 |
 | The Faithful (civil war; owns nothing at the start) | FTH | 240, 190, 80 |
+| Locus | LCF | 230, 100, 30 |
 
 The first seven are the placeholders, one per continent, and the only ones the start
 menu recommends. Brand-new countries need a line of code as well (tag, name and colour

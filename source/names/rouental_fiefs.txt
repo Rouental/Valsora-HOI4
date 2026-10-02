@@ -1,0 +1,426 @@
+Carcasonnaise (RENAMED CARCARELLE) Provinces:
+Carcarelle:
+Beaufort:
+Lexíng:
+Haute Couronne:
+Périale:
+Talbaine:
+Bannière:
+Faine:
+Feraime:
+Côtière:
+Rouge:
+Château:
+Ligue Merséatique (LM):
+Nauve:
+Rainne:
+Rorien:
+Leonis:
+Sacré-Cœur:
+Caux-Gautier:
+Nerice:
+Hautain:
+Rhys:
+Paron:
+Sarenne:
+Orgueilleux:
+Fenne:
+Bergerac:
+Ténor:
+Cloches:
+Flèche:
+Noces (NO):
+Beffroi (BF):
+Carrefour:
+Nef:
+Hyères:
+Bordeleau:
+Agence:
+Clairval:
+Solle:
+Liévin:
+Faste (FA):
+Pairne (PR):
+
+Nataine Provinces:
+Oramlitus:
+Aureimontes:
+Piscisinum:
+Sanctus:
+Flumamnis:
+Deflusial:
+Turrimarx:
+Regiovia:
+Ostrinus:
+Hastelum:
+Reliquae:
+Moenia:
+Fidelitus:
+Ariminum:
+Focislar:
+Ostia:
+Confloenta:
+Vesontio:
+Iader:
+Siscia:
+
+Conflans Provinces:
+Vair:
+Couverture:
+Coulante:
+Malheur:
+Espoir:
+Hernne:
+Charaise:
+Draveil:
+Cholet:
+Fleurent:
+Doure:
+Jacinthe:
+Palier:
+Hazebrouck:
+Nerié du Nord:
+Nerié du Sud (NS):
+Alès:
+Reberge-sur-Torres:
+Douai (DO):
+Vitre:
+Arcenciel:
+Vallée-en-Rose:
+Montebrise:
+Luneclair:
+Rive-de-Lune (RL):
+Maréebleue:
+Albi:
+Jouvignac:
+Forbach:
+Soleilbrillant:
+Sarne:
+Oullins:
+Rocheciel:
+Rochenuage:
+Chantelleux:
+Côte d'Ambre:
+Vendée:
+Royrand:
+Sadé:
+Rouërie:
+Lafaye:
+Charet:
+Stofflet:
+Elbée:
+Cathelineau:
+Lescure:
+Chouan (CH):
+Bernier (BE):
+Verrie (VE):
+Contrie:
+Clovis:
+Marque:
+Vinterre:
+Plaiserre:
+Courin:
+Montremerci:
+Avignalle:
+Arduécu:
+Thermidor:
+Dortaine:
+Varichol:
+Fel:
+Briges:
+Parschendales:
+Riceau:
+Ghesonne:
+Tethié (TE):
+Archambelle:
+Buclai:
+Crionique (CR):
+Reigny:
+Ruesse:
+Epernay:
+Saubre:
+Sartres:
+Farbante:
+Streille:
+Ganelonne:
+Etichone:
+Cocorico:
+Chattanay (CY):
+Terleans:
+Orseinne:
+Taracourt:
+Vareinne:
+Thiollier:
+Darantes:
+Carnaux:
+Ligneux (LI):
+Puciennes:
+Dertois:
+Glacierre:
+Augiers:
+Rolantelle:
+Trézelles:
+Ruisseauville:
+Varenne:
+Antuille:
+Marais Verts (MV):
+Frélogne:
+Valenmont:
+Callentroix:
+Gironte:
+Verlayne:
+Valdélise:
+Fleurmarais (FM):
+Fleurdoux:
+Parac:
+Calême:
+Châteaublanche:
+Courrac:
+Roalès:
+Logiers:
+Marluire:
+Nanfort:
+Mausier:
+Camasse:
+Poifort:
+Istres:
+Échirolles:
+Orvers:
+Collinerouge:
+Perret:
+Levallois:
+Besançon:
+Orvault:
+Épiluire:
+Sallen:
+Rivage-d'Argent:
+Sumonde:
+Leclerc:
+Ivaine (IV)
+Daubey:
+Berrige:
+Rapproche:
+Transiger:
+Delac:
+Bleu:
+Carune la Cœur:
+Javelot:
+Sentagne:
+Marias:
+Seteffe:
+Noiétoile:
+Loquinne:
+Clameur:
+Chineau:
+Releau:
+Belau:
+Saneau:
+Grandeau:
+
+Recolt Provinces:
+La Recolt:
+Quebelle:
+Ligue des Cités Libres (LCL):
+Fourier:
+Lugunica:
+Crusche:
+Randohal:
+Rhume:
+Serie:
+Friere:
+Himelle:
+Leval:
+Miremont:
+Chabot:
+Daubey:
+Jeriche:
+Arcy:
+Fleurastre:
+Pâturage:
+Verdoyantres:
+Usironne:
+Reveille:
+Battlaire:
+Kinzeau:
+
+Northmarch Provinces:
+Pavois:
+Alvanie:
+Erdoine:
+Brochets:
+Cylône:
+Paron:
+Tal:
+Élan:
+Baïonnette:
+Belleterre:
+Osgrande:
+Bouclier:
+Parer:
+Pateaux:
+Calvert:
+Tourépée:
+Mayreux:
+Seignon:
+Hevesliet:
+Davouil:
+Coidron:
+Monteaux (MO):
+Abroix (AB):
+Bassons:
+Granae:
+Varrdevet (VA):
+Orcinde:
+Oriflamme (OF):
+Bastione:
+Auberly:
+Raocourt:
+Dunne:
+Lillon:
+Colsir:
+Épinal:
+Rundaire:
+Aurillac-de-Ciel:
+Hères:
+Marre:
+Arrare:
+Coffrefort:
+Astre:
+Vedette
+Sangterre:
+
+Southmarch Provinces:
+Tocsin:
+Fournier (FO):
+Keau:
+Agier:
+Merrac:
+Domrémy:
+Anjais:
+Reins (RN):
+Mabrenne:
+Satris:
+Merabeau:
+Montserrat:
+Prèsloin:
+Reins:
+Therau (TH):
+Harseyne (HA):
+Darnerre:
+Lotte:
+Chelris:
+Falaise (FA):
+Piton:
+Verniaux:
+Sabrette:
+Tréfonds:
+Teintures:
+Guirlande (GU):
+Rempart (RE):
+Chantelein:
+Poitevallée:
+Serrié:
+Ronnaire (RO):
+Culotte (CU):
+Dynant:
+Travante:
+Hardatre:
+Herseille:
+Tollen:
+Otherys: 
+Auberre:
+
+Crépuscule Provinces:
+Crépuscule:
+Petit Crépuscule:
+Pénombre:
+Ténèbres:
+Ombragé:
+Aube:
+Noirceur:
+Ébauche:
+
+Lyrién Provinces:
+Lyrié et Rivielle (LR):
+Temerre:
+Rendanne:
+Sorrelle:
+Kové:
+Povaise:
+Brouge:
+Povaise:
+Aedaire:
+Toussaint:
+Beauclaire:
+Vedette:
+
+Piscan Provinces:
+Côte d'Ambre:
+Baie de Torres:
+Belleplaine-sur-Mer:
+Rathaine
+Osterix:
+Bravette:
+Négligeable:
+Graisivaudan:
+Nouveau Brume:
+Terres Disputées (TD)
+Grand Brume:
+Freinet:
+Avarre:
+
+Chatois Provinces:
+Reliette (RE):
+Mière:
+Touerre:
+Grise:
+Kourou:
+Tuilerie:
+Férolles:
+Chécy:
+Dranlot:
+Gourdelle (GO):
+Anselmis:
+Rubeus:
+Ainselle:
+Sézanne:
+Crancé:
+Matz:
+Shalquoir:
+Minette:
+
+Oscarl Provinces:
+Spreivald:
+Tennhauser:
+Håt:
+Stean:
+Messer:
+Buagott
+Wejt:
+Gewiss (GW):
+Domän:
+Scheldt:
+Bauerschaft: 
+
+Lustianaise Provinces:
+Chirac
+Serpette
+Corseque:
+Voulge:
+Maïeul: 
+
+Helvetican Provinces:
+Hevique
+Antraine
+
+Royal Fiefs:
+Rouental:
+Saintiers:
+Cournin:
+Jourdain et Motere:
+Aurifort:
+Éislek (ÉS):
+Charmas:
+Rochemont:
+Bérault:
+Brassard:

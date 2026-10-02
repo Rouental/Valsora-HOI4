@@ -74,14 +74,18 @@ OCEAN, LAKES = (8, 31, 130), (55, 90, 220)
 # 2026-10-01, later: Kurikia and Fraxhemark east of Selgrave and Hollier.
 # (config was: DEFAULT_OWNER "fraxhemark"; kurikia (1135, 740); fraxhemark (1000, 990).)
 # 2026-10-02: the five islands north of Kurikia the author's Names layer labels KU.
-DEFAULT_OWNER = "kurikia"
+# (config was: DEFAULT_OWNER "kurikia"; kurikia (952, 509), (929, 524), (957, 545),
+# (937, 576), (952, 600).)
+# 2026-10-02, later: Locus, outlined inside Fraxhemark around its lake; the rest of
+# Fraxhemark is left alone (LEAVE) rather than re-cut.
+DEFAULT_OWNER = "locus"
 OWNERS = {
-    "kurikia": [(952, 509), (929, 524), (957, 545), (937, 576), (952, 600)],
+    "locus": [(990, 910)],
 }
 # patches the lines happen to close off that are not meant as anything yet: left as they
 # are (2026-10-01: the land south of Entroterra and Estande; the unnamed peninsula with
 # the bay east of Fraxhemark)
-LEAVE = [(791, 1345), (1180, 980)]
+LEAVE = [(791, 1345), (1180, 980), (1000, 990)]
 MIN_STATE = 150      # smaller patches (islets) join the nearest state of their country
 ISLET_REACH = 300    # ... if within this many px; farther islets make a state of their own
 STATE_MAX = 1000     # patches bigger than this become several states ...
@@ -235,7 +239,9 @@ def main():
             continue
         kept.append(i)
         recut.append(i)
-        owner_of[int(i)] = real_col[Counter(K0[ys, xs].tolist()).most_common(1)[0][0]]
+        # keeps its country, unless OWNERS seeds it for another (a new country outlined
+        # inside an old one)
+        owner_of.setdefault(int(i), real_col[Counter(K0[ys, xs].tolist()).most_common(1)[0][0]])
     chosen = kept
     print(f"{before - len(chosen)} patches were outlined by an earlier run and are kept as they are; "
           f"{len(recut)} are cut again because new lines split their states")
