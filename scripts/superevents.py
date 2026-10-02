@@ -58,14 +58,15 @@ SUPEREVENTS = [
          author="Mahaut VI, Holy Princess of Rouental",
          picture="hair_ruffle.png", song="valsora_gladiators"),
     # the Rouentaise civil war, after the Prince's execution on the communist path
-    # (author's picture, quote and song, 2026-10-02; title and attribution Claude's)
+    # (author's picture, quote and song, 2026-10-02, the song replaced the same day;
+    # title and attribution Claude's)
     dict(id="rou_civil_war",
          title="The Rouentaise Civil War",
          quote="They promised us the Prince's death would end the old Rouental, and it did. By "
                "morning there were a hundred Rouentals, all of them armed, and all of them "
                "furious.",
          author="A Red Guard, in a letter home from Rêverie",
-         picture="rou_civil_war.jpg", song="valsora_elbee"),
+         picture="rou_civil_war.jpg", song="valsora_organ"),
     dict(id="ais_explode",
          title="Merlovich Has Exploded",
          quote="Our beloved leader has become many smaller leaders, now scattered across a wide "
@@ -77,9 +78,9 @@ SUPEREVENTS = [
 # song name -> audio file in source/superevents (Ogg Vorbis, like vanilla music)
 # (each the first 45 s of the author's file, faded out over the last 4 s)
 SONGS = {"valsora_gladiators": "entry_of_the_gladiators.ogg",
-         "valsora_elbee": "monsieur_d_elbee.ogg"}
+         "valsora_organ": "epic_church_organ.ogg"}
 SONG_TITLES = {"valsora_gladiators": "Julius Fucik - Entry of the Gladiators",
-               "valsora_elbee": "Monsieur d'Elbée (Vendéen royalist song)"}
+               "valsora_organ": "Rafael Krux - Epic Church Organ"}
 STATION = "valsora"  # music station the songs live in
 
 

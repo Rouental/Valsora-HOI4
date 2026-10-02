@@ -221,7 +221,7 @@ with no land left is simply left out of the game.
 | Crépuscule (civil war; owns nothing at the start) | CRP | 75, 72, 85 |
 | Reliette (civil war; owns nothing at the start) | RLT | 175, 45, 55 |
 | The Marches (civil war; owns nothing at the start) | MRC | 85, 85, 115 |
-| Rouental (civil war; owns nothing at the start) | RLA | 40, 95, 55 |
+| HMMLA (civil war; owns nothing at the start) | RLA | 40, 95, 55 |
 | Alliance of the East (civil war; owns nothing at the start) | AOE | 115, 145, 60 |
 | Vair (civil war; owns nothing at the start) | VAI | 15, 105, 150 |
 | The Faithful (civil war; owns nothing at the start) | FTH | 240, 190, 80 |

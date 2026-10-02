@@ -262,7 +262,8 @@ mismatch, missing localisation) and catches all of them.
     east of Selgrave and Hollier) Kurikia KRK (conservatism, flag `KRK.png`, its navy
     as map colour) and Fraxhemark FRX (social democracy, capital Fraternal City; map
     colour raspberry because its flag red would vanish next to Hollier; flag
-    `FRX.png`, the author's own, 2026-10-01). Kurikia's culture is Claude's
+    `FRX.png`, the author's own, 2026-10-01). Kurikia also holds the five islands to
+    its north the author's Names layer labels KU (2026-10-02, four states). Kurikia's culture is Claude's
     guess from its flag (SOV names, Europe portraits, eastern European gfx); Fraxhemark is
     American (author): USA names, US generals and admirals, Europe politicians (vanilla
     has no US generic politicians), western European gfx. The unnamed peninsula with the bay east of Fraxhemark is
@@ -334,7 +335,7 @@ Aislada is the worked example of a built-out nation:
       Rudely also moves the capital to Carcarelle (`set_capital`, author 2026-10-02).
       - **Execute the Prince** (under it, x = 6, y = 1): plays superevent
         `rou_civil_war` (the author's photo `source/superevents/rou_civil_war.jpg`, the
-        author's quote and song, "Monsieur d'Elbée", a Vendéen royalist song), sets
+        author's quote and song, Rafael Krux's "Epic Church Organ"), sets
         country flag `ROU_civil_war` and starts the **Rouentaise civil war**
         (author, 2026-10-02; `nations.CIVIL_WAR`, `civil_war_effects`):
         - Rouental becomes the Reibonne (cosmetic tag `ROU_REIBONNE`, "The People's
@@ -342,19 +343,21 @@ Aislada is the worked example of a built-out nation:
           leaves the Association (dismantled if it leads it), which re-forms under
           Hollier (Claude's pick) with its other members and the Alliance of the East,
           and stays out of the war.
-        - Eight countries that own nothing at the start (cores on their states from
-          the start) are `release`d; all but AOE declare war (`annex_everything`):
+        - Eight countries that own nothing at the start are `release`d; all but AOE
+          declare war (`annex_everything`). They have cores on their states from the
+          start, except `CIVIL_WAR_ONLY` (FTH, AOE, RLA: the author wants them to exist
+          only through the war), whose cores are added by the focus just before:
           Brillagne BRL (the Holy State of Brillagne; theocratic Rouental's ruler, a
           copy `BRL_mahaut_vi`, and flag); Crépuscule CRP (Principality; Absolute
           Monarchy); Reliette RLT (Grand Duchy; Feudalism); The Marches MRC (Alliance
-          of the Marcher Lords; Oligarchy); Rouental RLA (Her Majesty's Most Loyal
-          Army; Strongman Rule, `RLA_serelle_cahun`; flag the fox quarter of `ROU.png`,
+          of the Marcher Lords; Oligarchy); HMMLA RLA (Her Majesty's Most Loyal
+          Army; map name HMMLA, the author's, 2026-10-02; Strongman Rule, `RLA_serelle_cahun`; flag the fox quarter of `ROU.png`,
           which is also `ROU_fascism.png`); Alliance of the East AOE (Oligarchy; not at
           war, joins the Association); Vair VAI (Duchy; Feudalism); The Faithful FTH
           (the Faithful Children of the Goddess and Her Saint; Holy Order). States
           are named in `CIVIL_WAR` (first = capital); the focus file writes
           `@STATE:<name>@`, which `nations.fill` turns into ids. Two countries may
-          share a name (RLA and ROU): their country files get the tag appended.
+          share a name: their country files get the tag appended.
     - Left to right: Polite, Brother, Steady, Rudely.
   - The democratic and communist parties have no defined leader, so the game generates one.
   - **Accept Reality** (x = 8) is the fifth mutually exclusive path. It makes Rouental
@@ -515,9 +518,10 @@ white via `§W…§!` in their localisation (the typewriter fonts draw dark). Ho
   Rouentaise civil war (Execute the Prince; the author's soldier photo) and AIS
   "Fucking Explode". The quotes are Claude-written except the civil war's (the
   author's); all but the civil war use the author's anime picture and Entry of the
-  Gladiators. The civil war has "Monsieur d'Elbée" (`valsora_elbee`,
-  `monsieur_d_elbee.ogg`, made with the ffmpeg bundled in the `imageio_ffmpeg` Python
-  package: first 45 s, 4 s fade, Vorbis 160k).
+  Gladiators. The civil war has Rafael Krux's "Epic Church Organ" (`valsora_organ`,
+  `epic_church_organ.ogg`, made with the ffmpeg bundled in the `imageio_ffmpeg` Python
+  package: first 45 s, 4 s fade, Vorbis 160k); it replaced "Monsieur d'Elbée", which
+  the author didn't like.
 - **Checks.** `check_mod.py` checks scripted effects and events that are used, songs
   and their files, scripted localisation keys, and GUI window, element, sprite and
   button-text references (mutation-tested).

@@ -76,7 +76,7 @@ COUNTRIES = {
     "crepuscule": ("CRP", "Crépuscule", "Crépusculaire", (75, 72, 85)),
     "reliette": ("RLT", "Reliette", "Reliettois", (175, 45, 55)),
     "marches": ("MRC", "The Marches", "Marcher", (85, 85, 115)),
-    "loyal_army": ("RLA", "Rouental", "Rouentaise", (40, 95, 55)),
+    "loyal_army": ("RLA", "HMMLA", "Rouentaise", (40, 95, 55)),  # author's map name
     "east_alliance": ("AOE", "Alliance of the East", "Eastern", (115, 145, 60)),
     "vair": ("VAI", "Vair", "Vairois", (15, 105, 150)),
     "faithful": ("FTH", "The Faithful", "Faithful", (240, 190, 80)),

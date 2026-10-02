@@ -72,10 +72,11 @@ OCEAN, LAKES = (8, 31, 130), (55, 90, 220)
 # mezzogiorno (857, 1129); entroterra (802, 1176); k_illiricium (922, 1157); rouental
 # (1716, 2010), (1728, 2019).)
 # 2026-10-01, later: Kurikia and Fraxhemark east of Selgrave and Hollier.
-DEFAULT_OWNER = "fraxhemark"
+# (config was: DEFAULT_OWNER "fraxhemark"; kurikia (1135, 740); fraxhemark (1000, 990).)
+# 2026-10-02: the five islands north of Kurikia the author's Names layer labels KU.
+DEFAULT_OWNER = "kurikia"
 OWNERS = {
-    "kurikia": [(1135, 740)],
-    "fraxhemark": [(1000, 990)],
+    "kurikia": [(952, 509), (929, 524), (957, 545), (937, 576), (952, 600)],
 }
 # patches the lines happen to close off that are not meant as anything yet: left as they
 # are (2026-10-01: the land south of Entroterra and Estande; the unnamed peninsula with

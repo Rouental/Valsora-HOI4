@@ -353,7 +353,8 @@ def main():
         for nm in names:
             if nm not in state_by_name:
                 raise SystemExit(f"nations.CIVIL_WAR: no state named {nm!r} for {tag}")
-            extra_cores[state_by_name[nm]].append(tag)
+            if tag not in nations.CIVIL_WAR_ONLY:  # those get their cores in the focus
+                extra_cores[state_by_name[nm]].append(tag)
     state_capital = [max(g, key=lambda i: (size[i], -i)) for g in states]
     # the author's cities (Cities layer): the first in a state becomes its victory point,
     # any others extra ones; all named, worth CITY_VP unless the country's capital

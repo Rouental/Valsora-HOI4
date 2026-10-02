@@ -108,6 +108,9 @@ CIVIL_WAR = {
     "FTH": ["Hevique", "Avarre"],
 }
 NOT_AT_WAR = {"AOE"}  # joins the Association of Reibonnaise States instead
+# exist only through the civil war (author): no cores until the Prince is executed, so
+# they can't be released any other way
+CIVIL_WAR_ONLY = {"FTH", "AOE", "RLA"}
 
 # Extra cosmetic tags (name, formal name, adjective, map colour, flag in source/flags),
 # set by script rather than by the ruling party
@@ -651,6 +654,8 @@ def civil_war_effects():
              f"{t}if = {{ limit = {{ is_faction_leader = yes }} dismantle_faction = yes }}",
              f"{t}else_if = {{ limit = {{ is_in_faction = yes }} leave_faction = yes }}",
              f"{t}# the factions break away"]
+    lines += [f"{t}@STATE:{nm}@ = {{ add_core_of = {tag} }}"
+              for tag in CIVIL_WAR if tag in CIVIL_WAR_ONLY for nm in CIVIL_WAR[tag]]
     lines += [f"{t}release = {tag}" for tag in CIVIL_WAR]
     lines += [f"{t}{tag} = {{ declare_war_on = {{ target = ROU type = annex_everything }} }}"
               for tag in CIVIL_WAR if tag not in NOT_AT_WAR]
