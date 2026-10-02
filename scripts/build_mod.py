@@ -717,7 +717,8 @@ def main():
     loc += leader_loc
     loc += superevents.write_files(write, OUT)
     write("localisation/english/valsora_l_english.yml", "\n".join(loc) + "\n", bom=True)
-    nations.write_files(write, OUT, {nm: s + 1 for nm, s in state_by_name.items()})
+    nations.write_files(write, OUT, {nm: s + 1 for nm, s in state_by_name.items()},
+                        {nm: int(pid[state_capital[s]]) for nm, s in state_by_name.items()})
     vp_ids = {int(pid[c]) for c in state_capital} | {int(pid[e]) for v in extra_vps.values() for e in v}
     city_names = {int(pid[p]): name for p, name in city_of.items()}
     for key, name in nations.CITY_NAMES.items():

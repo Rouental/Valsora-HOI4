@@ -11,6 +11,91 @@ from PIL import Image
 
 from imgio import write_dds
 
+# Rouental's Royal Host (author, 2026-10-02): a few armoured and mechanised divisions
+# and more motorised ones, veteran, fully equipped, with plenty of support. Technology
+# names, tank modules and equipment were checked against vanilla 1.19's common files;
+# tank designs exist twice, for the No Step Back tank designer and without it.
+ROU_ARMY_HISTORY = [
+    "set_technology = { infantry_weapons = 1 infantry_weapons1 = 1 tech_support = 1 tech_engineers = 1 "
+    "tech_recon = 1 tech_maintenance_company = 1 tech_logistics_company = 1 tech_field_hospital = 1 "
+    "tech_signal_company = 1 tech_trucks = 1 motorised_infantry = 1 mechanised_infantry = 1 "
+    "gw_artillery = 1 interwar_artillery = 1 interwar_antiair = 1 radio = 1 }",
+    'if = { limit = { NOT = { has_dlc = "No Step Back" } } '
+    "set_technology = { gwtank = 1 basic_light_tank = 1 basic_medium_tank = 1 } }",
+    'if = { limit = { has_dlc = "No Step Back" } '
+    "set_technology = { gwtank_chassis = 1 basic_light_tank_chassis = 1 basic_medium_tank_chassis = 1 "
+    "armor_tech_1 = 1 engine_tech_1 = 1 } "
+    'create_equipment_variant = { name = "Char Royal" type = medium_tank_chassis_1 parent_version = 0 '
+    "modules = { main_armament_slot = tank_small_cannon turret_type_slot = tank_medium_three_man_tank_turret "
+    "suspension_type_slot = tank_bogie_suspension armor_type_slot = tank_riveted_armor "
+    "engine_type_slot = tank_gasoline_engine special_type_slot_1 = tank_radio_1 } } }",
+    # well supplied: a stockpile behind the host
+    *[f"add_equipment_to_stockpile = {{ type = {e} amount = {n} producer = ROU }}" for e, n in (
+        ("infantry_equipment_1", 3000), ("support_equipment_1", 600), ("motorized_equipment_1", 1500),
+        ("mechanized_equipment_1", 400), ("artillery_equipment_1", 500), ("anti_air_equipment_1", 300))],
+    # last, once the techs and the tank design exist
+    'set_oob = "ROU_1936"',
+]
+
+# The Royal Host's order of battle: (template, division count, state name to stand in)
+ROU_TEMPLATES = {
+    "Division Blindée de la Garde": dict(
+        regiments=[["medium_armor", "medium_armor"], ["medium_armor", "medium_armor"], ["mechanized", "mechanized"]],
+        support=["engineer", "recon", "maintenance_company", "signal_company", "field_hospital"]),
+    "Division Mécanisée Royale": dict(
+        regiments=[["mechanized", "mechanized"], ["mechanized", "mechanized"], ["medium_armor", "medium_armor"]],
+        support=["engineer", "recon", "anti_air", "signal_company", "logistics_company"]),
+    "Division Motorisée Royale": dict(
+        regiments=[["motorized", "motorized", "motorized"], ["motorized", "motorized", "motorized"]],
+        support=["engineer", "recon", "artillery", "anti_air", "logistics_company"]),
+}
+ROU_HOST = [("Division Blindée de la Garde", 2, "Rouental"),
+            ("Division Mécanisée Royale", 1, "Saintiers"), ("Division Mécanisée Royale", 1, "Cournin"),
+            ("Division Motorisée Royale", 2, "Rêverie"), ("Division Motorisée Royale", 2, "Charmas"),
+            ("Division Motorisée Royale", 2, "Rochemont"), ("Division Motorisée Royale", 2, "Vendée")]
+
+# The Feudal Army national spirit (author, 2026-10-02; harshness not final): the price
+# of the levy system (docs/ROUENTAL_ARMY.md), with the author's placeholder picture
+FEUDAL_ARMY = """ideas = {
+	country = {
+		ROU_feudal_army = {
+			picture = ROU_feudal_army
+			allowed = { always = no }
+			removal_cost = -1
+			modifier = {
+				conscription_factor = -0.8
+				training_time_factor = 1.0
+				political_power_factor = -0.1
+				stability_factor = -0.05
+			}
+		}
+	}
+}
+"""
+
+
+def rouental_oob(state_vp):
+    """history/units/ROU_1936.txt: the templates, then the divisions, named from the
+    Royal Host's division names. state_vp: state name -> province id to stand in."""
+    out = []
+    for name, t in ROU_TEMPLATES.items():
+        regs = [f"\t\t{u} = {{ x = {x} y = {y} }}" for x, col in enumerate(t["regiments"]) for y, u in enumerate(col)]
+        sup = [f"\t\t{u} = {{ x = 0 y = {y} }}" for y, u in enumerate(t["support"])]
+        out += ["division_template = {", f'\tname = "{name}"', "\tdivision_names_group = ROU_ROYAL_HOST",
+                "\tregiments = {", *regs, "\t}", "\tsupport = {", *sup, "\t}", "}", ""]
+    out += ["units = {"]
+    k = 0
+    for name, n, state in ROU_HOST:
+        if state not in state_vp:
+            raise SystemExit(f"nations.ROU_HOST: no state named {state!r}")
+        for _ in range(n):
+            k += 1
+            out += ["\tdivision = {", f"\t\tdivision_name = {{ is_name_ordered = yes name_order = {k} }}",
+                    f"\t\tlocation = {state_vp[state]}", f'\t\tdivision_template = "{name}"',
+                    "\t\tstart_experience_factor = 0.6", "\t\tstart_equipment_factor = 1.0", "\t}"]
+    return "\n".join(out + ["}", ""])
+
+
 # extra lines appended to history/countries/<TAG> - <Name>.txt
 HISTORY = {
     # recruit_character only works in history files, so Communist Merlovich is
@@ -23,6 +108,9 @@ HISTORY = {
             # Rouental leads the Association of Reibonnaise States from the start
             "create_faction_from_template = faction_template_reibonnaise_association",
             *[f"add_to_faction = {t}" for t in ("GDN", "LST", "EVR", "HLR", "SGV", "LZC", "SGN")],
+            # the Feudal Army and the Royal Host (author, 2026-10-02; docs/ROUENTAL_ARMY.md)
+            "add_ideas = ROU_feudal_army",
+            *ROU_ARMY_HISTORY,
             # Rouental guarantees the Kingdom of Illiricium's independence (author,
             # 2026-10-01; it was a non-aggression pact at first)
             "diplomatic_relation = { country = KIL relation = guarantee active = yes }"],
@@ -179,6 +267,8 @@ LOCALISATION = [
     ' ROU_plans_for_cardonia_desc:0 "A war goal against Cardonia, for testing."',
     ' ROU_serelle_cahun:0 "Serelle Cahun"',
     ' BRL_mahaut_vi:0 "Mahaut VI"',
+    ' ROU_feudal_army:0 "Feudal Army"',
+    ' ROU_feudal_army_desc:0 "Rouental fights as it always has: a small, superbly equipped royal host, swelled in war by the levies its vassals owe the crown. Few men answer a recruiting sergeant here, and none train quickly; but the banners can be called."',
     ' RLA_serelle_cahun:0 "Serelle Cahun"',
     ' ROU_roland_cahun:0 "Roland Cahun"',
     ' ROU_focus:0 "Rouentaise Focus Tree"',
@@ -715,12 +805,13 @@ def fill(text, state_ids):
 
 def rouental_division_names():
     """Rouental's division names (author's fief list, 2026-10-02): the Royal Host after
-    the royal fiefs, the vassals' levies after their own fiefs."""
+    the royal fiefs, the vassals' levies after their own fiefs. Every ordered name
+    must hold %d (vanilla's rule), so they read "3e Levée de Beaufort"."""
     import cultures
     f = cultures.fiefs()
     royal = f.pop("Royal Fiefs")
-    host = ["Garde Royale"] + [f"Ost {cultures.noble(x)}" for x in royal]
-    levies = [f"Levée {cultures.noble(x)}" for fs in f.values() for x in fs]
+    host = ["%de Garde Royale"] + [f"%de Ost {cultures.noble(x)}" for x in royal]
+    levies = [f"%de Levée {cultures.noble(x)}" for fs in f.values() for x in fs]
 
     def group(key, name, types, fallback, names):
         return "\n".join([f"{key} = {{", f'\tname = "{name}"', "\tfor_countries = { ROU }",
@@ -729,19 +820,32 @@ def rouental_division_names():
                           f'\tfallback_name = "{fallback}"', "\tordered = {",
                           *[f'\t\t{i} = {{ "{n}" }}' for i, n in enumerate(names, 1)], "\t}", "}", ""])
     return (group("ROU_ROYAL_HOST", "The Royal Host", ["infantry", "cavalry", "light_armor", "medium_armor"],
-                  "%d Compagnie d'Ordonnance", host)
+                  "%de Compagnie d'Ordonnance", host)
             + group("ROU_LEVIES", "Vassal Levies", ["infantry", "cavalry", "motorized", "mountaineers"],
-                    "%d Levée Féodale", levies))
+                    "%de Levée Féodale", levies))
 
 
-def write_files(write, out, state_ids):
-    """Write every nation-specific file into the mod folder. state_ids: state name -> id."""
+def write_files(write, out, state_ids, state_vp):
+    """Write every nation-specific file into the mod folder. state_ids: state name -> id;
+    state_vp: state name -> its victory point province."""
     write("common/factions/templates/valsora_factions.txt", FACTION_TEMPLATES)
     write("common/characters/AIS.txt", CHARACTERS)
     write("common/characters/ROU.txt", ROU_CHARACTERS)
     write("common/national_focus/rouental.txt", fill(ROU_FOCUS_TREE, state_ids))
     write("common/national_focus/aislada.txt", FOCUS_TREE)
-    write("common/units/names_divisions/ROU_names_divisions.txt", rouental_division_names())
+    # UTF-8 with BOM, like vanilla's files of these kinds (the names have accents)
+    write("common/units/names_divisions/ROU_names_divisions.txt", rouental_division_names(), bom=True)
+    write("history/units/ROU_1936.txt", rouental_oob(state_vp), bom=True)
+    write("common/ideas/valsora_ideas.txt", FEUDAL_ARMY)
+    pic = Image.open("source/ideologies/theocracy_placeholder.png").convert("RGBA")
+    side = min(pic.size)
+    pic = pic.crop(((pic.width - side) // 2, (pic.height - side) // 2,
+                    (pic.width + side) // 2, (pic.height + side) // 2)).resize((64, 64), Image.LANCZOS)
+    path = out / "gfx/interface/ideas/ROU_feudal_army.dds"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    write_dds(path, np.asarray(pic))
+    write("interface/valsora_ideas.gfx", 'spriteTypes = {\n\tspriteType = {\n\t\tname = "GFX_idea_ROU_feudal_army"\n'
+          '\t\ttexturefile = "gfx/interface/ideas/ROU_feudal_army.dds"\n\t}\n}\n')
     sprites = []
     for name, (src, x0, y0, w, tint) in PORTRAITS.items():
         rgba = portrait(src, x0, y0, w)
