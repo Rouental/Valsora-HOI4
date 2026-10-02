@@ -80,7 +80,6 @@ LEADERS = {
     "CRP": ["despotism"],              # Absolute Monarchy
     "RLT": ["feudalism"],
     "MRC": ["oligarchism"],
-    "AOE": ["oligarchism"],
     "VAI": ["feudalism"],
     "FTH": ["holy_order"],
     "FRX": ["socialism"],             # Social Democracy
@@ -103,14 +102,16 @@ CIVIL_WAR = {
     "RLT": ["Reliette", "Aureimontes", "Tuilerie", "Vinterre"],
     "MRC": ["Cylône", "Osgrande", "Aurillac-de-Ciel", "Coffrefort"],
     "RLA": ["Rêverie", "Rouental", "Saintiers", "Cournin", "Vendée"],
-    "AOE": ["Maïeul", "Serpette", "Chirac"],
     "VAI": ["Vair", "Pavois", "Caux-Gautier"],
     "FTH": ["Hevique", "Avarre"],
 }
-NOT_AT_WAR = {"AOE"}  # joins the Association of Reibonnaise States instead
 # exist only through the civil war (author): no cores until the Prince is executed, so
 # they can't be released any other way
-CIVIL_WAR_ONLY = {"FTH", "AOE", "RLA"}
+CIVIL_WAR_ONLY = {"FTH", "RLA"}
+# the Association's members other than Rouental, and what its neighbours take when the
+# Prince is executed (author, 2026-10-02: "a more credible threat to the player")
+ASSOCIATION = ("GDN", "LST", "EVR", "HLR", "SGV", "LZC", "SGN")
+ANNEX = {"LST": ["Maïeul", "Serpette"], "HLR": ["Chirac"]}
 
 # Extra cosmetic tags (name, formal name, adjective, map colour, flag in source/flags),
 # set by script rather than by the ruling party
@@ -146,7 +147,6 @@ FORMAL_NAMES = {
     "RLT": "the Grand Duchy of Reliette",
     "MRC": "the Alliance of the Marcher Lords",
     "RLA": "Her Majesty's Most Loyal Army",
-    "AOE": "the Alliance of the East",
     "VAI": "the Duchy of Vair",
     "FTH": "the Faithful Children of the Goddess and Her Saint",
     "CRD": "the Cardonian Kingdom",
@@ -171,6 +171,7 @@ LOCALISATION = [
     ' ROU_accept_reality:0 "Accept Reality"',
     ' ROU_accept_reality_desc:0 "The Cahuns bicker; the faithful pray. Mahaut VI answers the prayers."',
     ' VAL_reibonnaise_association:0 "The Association of Reibonnaise States"',
+    ' VAL_alliance_of_the_vale:0 "The Alliance of the Vale"',
     ' ROU_plans_for_cardonia:0 "Plans for Cardonia"',
     ' ROU_plans_for_cardonia_desc:0 "A war goal against Cardonia, for testing."',
     ' ROU_serelle_cahun:0 "Serelle Cahun"',
@@ -473,6 +474,7 @@ ROU_FOCUS_TREE = """focus_tree = {
 			promote_character = ROU_leader_leninism
 			# the communists move the capital to Carcarelle (author, 2026-10-02)
 			set_capital = { state = @STATE:Carcarelle@ }
+@RUDELY@
 		}
 	}
 
@@ -570,7 +572,22 @@ ROU_FOCUS_TREE = """focus_tree = {
 
 # Factions that exist at game start, created from these templates in the leader's
 # history. Goals, rules, manifest and icon are vanilla's (as in its generic template).
-FACTION_TEMPLATES = """faction_template_reibonnaise_association = {
+FACTION_TEMPLATES = """faction_template_alliance_of_the_vale = {
+	name = VAL_alliance_of_the_vale
+	manifest = faction_manifest_strength_in_unity
+	icon = GFX_faction_logo_generic
+	visible = {
+		always = no
+	}
+	goals = {
+		faction_goal_a_military_base
+	}
+	default_rules = {
+		joining_rule_neighbors_only
+		change_leader_rule_manpower
+	}
+}
+faction_template_reibonnaise_association = {
 	name = VAL_reibonnaise_association
 	manifest = faction_manifest_strength_in_unity
 	icon = GFX_faction_logo_generic
@@ -644,26 +661,42 @@ def redden(rgba):
     return np.dstack([red.round().astype(np.uint8), rgba[..., 3]])
 
 
-def civil_war_effects():
-    """Execute the Prince: the factions break away, and the Association of Reibonnaise
-    States casts Rouental out and re-forms under Hollier, with the Alliance of the East,
-    staying out of the war."""
-    members = ("GDN", "LST", "EVR", "SGV", "LZC", "SGN")
+def reform(template, leader="HLR"):
+    """The Association's members (without Rouental) in a faction led by Hollier."""
     t = "\t\t\t"
-    lines = [f"{t}# the Association of Reibonnaise States casts Rouental out",
-             f"{t}if = {{ limit = {{ is_faction_leader = yes }} dismantle_faction = yes }}",
-             f"{t}else_if = {{ limit = {{ is_in_faction = yes }} leave_faction = yes }}",
-             f"{t}# the factions break away"]
+    return [f"{t}{leader} = {{",
+            f"{t}\tcreate_faction_from_template = {template}",
+            *[f"{t}\tif = {{ limit = {{ country_exists = {m} }} add_to_faction = {m} }}"
+              for m in ASSOCIATION if m != leader],
+            f"{t}}}"]
+
+
+def rudely_effects():
+    """The communists take power: the Association of Reibonnaise States casts Rouental
+    out at once and re-forms under Hollier (author, 2026-10-02)."""
+    t = "\t\t\t"
+    return "\n".join([f"{t}# the Association of Reibonnaise States casts Rouental out",
+                      f"{t}if = {{ limit = {{ is_faction_leader = yes }} dismantle_faction = yes }}",
+                      f"{t}else_if = {{ limit = {{ is_in_faction = yes }} leave_faction = yes }}",
+                      *reform("faction_template_reibonnaise_association")])
+
+
+def civil_war_effects():
+    """Execute the Prince: the factions break away; Lustiana and Hollier take the east,
+    and the Association becomes the Alliance of the Vale (there is no effect to rename a
+    faction, so Hollier dismantles it and founds the new one with the same members)."""
+    t = "\t\t\t"
+    lines = [f"{t}# Lustiana and Hollier take the east"]
+    lines += [f"{t}{tag} = {{ transfer_state = @STATE:{nm}@ }}" for tag, names in ANNEX.items() for nm in names]
+    lines += [f"{t}# the factions break away"]
     lines += [f"{t}@STATE:{nm}@ = {{ add_core_of = {tag} }}"
               for tag in CIVIL_WAR if tag in CIVIL_WAR_ONLY for nm in CIVIL_WAR[tag]]
     lines += [f"{t}release = {tag}" for tag in CIVIL_WAR]
     lines += [f"{t}{tag} = {{ declare_war_on = {{ target = ROU type = annex_everything }} }}"
-              for tag in CIVIL_WAR if tag not in NOT_AT_WAR]
-    lines += [f"{t}HLR = {{",
-              f"{t}\tcreate_faction_from_template = faction_template_reibonnaise_association",
-              *[f"{t}\tif = {{ limit = {{ country_exists = {m} }} add_to_faction = {m} }}"
-                for m in members + tuple(NOT_AT_WAR)],
-              f"{t}}}"]
+              for tag in CIVIL_WAR]
+    lines += [f"{t}# the Association becomes the Alliance of the Vale",
+              f"{t}HLR = {{ if = {{ limit = {{ is_faction_leader = yes }} dismantle_faction = yes }} }}"]
+    lines += reform("faction_template_alliance_of_the_vale")
     return "\n".join(lines)
 
 
@@ -673,7 +706,8 @@ def fill(text, state_ids):
         if m.group(1) not in state_ids:
             raise SystemExit(f"nations: no state named {m.group(1)!r}")
         return str(state_ids[m.group(1)])
-    return re.sub(r"@STATE:([^@]+)@", sub, text.replace("@CIVIL_WAR@", civil_war_effects()))
+    text = text.replace("@CIVIL_WAR@", civil_war_effects()).replace("@RUDELY@", rudely_effects())
+    return re.sub(r"@STATE:([^@]+)@", sub, text)
 
 
 def write_files(write, out, state_ids):

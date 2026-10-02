@@ -332,28 +332,34 @@ Aislada is the worked example of a built-out nation:
     - Steady As She Goes (the author's; Habsburg icon): non-aligned, Roland promoted,
       Serelle retired.
     - Kick Out the Parasites (Rudely): communist, both Cahuns retired.
-      Rudely also moves the capital to Carcarelle (`set_capital`, author 2026-10-02).
+      Rudely also moves the capital to Carcarelle (`set_capital`, author 2026-10-02)
+      and gets Rouental cast out of the Association at once (`rudely_effects`: dismantled,
+      re-formed under Hollier with the other six). The communist flag
+      (`ROU_communism.png`) is the author's Liberté flag, as is the Reibonne's.
       - **Execute the Prince** (under it, x = 6, y = 1): plays superevent
         `rou_civil_war` (the author's photo `source/superevents/rou_civil_war.jpg`, the
         author's quote and song, Rafael Krux's "Epic Church Organ"), sets
         country flag `ROU_civil_war` and starts the **Rouentaise civil war**
         (author, 2026-10-02; `nations.CIVIL_WAR`, `civil_war_effects`):
         - Rouental becomes the Reibonne (cosmetic tag `ROU_REIBONNE`, "The People's
-          Republic of the Reibonne", flag `ROU_REIBONNE.png`, communist maroon), and
-          leaves the Association (dismantled if it leads it), which re-forms under
-          Hollier (Claude's pick) with its other members and the Alliance of the East,
-          and stays out of the war.
-        - Eight countries that own nothing at the start are `release`d; all but AOE
-          declare war (`annex_everything`). They have cores on their states from the
-          start, except `CIVIL_WAR_ONLY` (FTH, AOE, RLA: the author wants them to exist
-          only through the war), whose cores are added by the focus just before:
+          Republic of the Reibonne", flag `ROU_REIBONNE.png`, communist maroon).
+        - Lustiana takes Maïeul and Serpette, Hollier takes Chirac (`ANNEX`), and the
+          Association becomes "The Alliance of the Vale": there is no effect to rename a
+          faction, so Hollier dismantles it and founds one from
+          `faction_template_alliance_of_the_vale` with the same members.
+        - Seven countries that own nothing at the start are `release`d and declare war
+          (`annex_everything`). They have cores on their states from the start,
+          except `CIVIL_WAR_ONLY` (FTH, RLA: the author wants them to exist only
+          through the war), whose cores are added by the focus just before. (An
+          Alliance of the East, AOE, was dropped on 2026-10-02 for the annexations.)
+          The author's plans for the war (events, rival factions) are in
+          `docs/CIVIL_WAR_NOTES.md`:
           Brillagne BRL (the Holy State of Brillagne; theocratic Rouental's ruler, a
           copy `BRL_mahaut_vi`, and flag); Crépuscule CRP (Principality; Absolute
           Monarchy); Reliette RLT (Grand Duchy; Feudalism); The Marches MRC (Alliance
           of the Marcher Lords; Oligarchy); HMMLA RLA (Her Majesty's Most Loyal
           Army; map name HMMLA, the author's, 2026-10-02; Strongman Rule, `RLA_serelle_cahun`; flag the fox quarter of `ROU.png`,
-          which is also `ROU_fascism.png`); Alliance of the East AOE (Oligarchy; not at
-          war, joins the Association); Vair VAI (Duchy; Feudalism); The Faithful FTH
+          which is also `ROU_fascism.png`); Vair VAI (Duchy; Feudalism); The Faithful FTH
           (the Faithful Children of the Goddess and Her Saint; Holy Order). States
           are named in `CIVIL_WAR` (first = capital); the focus file writes
           `@STATE:<name>@`, which `nations.fill` turns into ids. Two countries may
@@ -456,7 +462,7 @@ localised for every ideology. Rouental:
 |---|---|---|
 | Monarchist, Authoritarian | royal green | banner of arms |
 | Democratic | tan | tricolour |
-| Communist | maroon (128, 16, 16) | plain maroon |
+| Communist | maroon (128, 16, 16) | the author's Liberté flag (was plain maroon) |
 | Theocratic | gold | sword and fleurs quarter of the banner |
 
 ## Cultures (`cultures.py`): generic portraits, names, graphical culture
