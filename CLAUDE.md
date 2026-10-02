@@ -394,10 +394,19 @@ Aislada is the worked example of a built-out nation:
   `source/names/rouental_fiefs.txt` (14 vassals, 393 fiefs; `cultures.fiefs`). They give
   Rouental's name list noble surnames ("de Beaufort", "d'Aurifort") and its division
   names: "The Royal Host" (Garde Royale, Ost de <royal fief>) and "Vassal Levies"
-  (Levée de <fief>), in `common/units/names_divisions/ROU_names_divisions.txt`. The
-  levy-army design (royal host plus vassal levies by decision) is proposed in
-  `docs/ROUENTAL_ARMY.md`, not built. The author's detailed fief map
-  (`Rouental_Map_TEMP_2.pdn`, 8000×4471, fiefs and governorates) is reference only.
+  (Levée de <fief>, numbered "%de" as vanilla requires), in
+  `common/units/names_divisions/ROU_names_divisions.txt`. The levy-army design is in
+  `docs/ROUENTAL_ARMY.md`. Built: the **Feudal Army** spirit (`ROU_feudal_army`:
+  recruitable population −80 %, training ×2, PP −10 %, stability −5 %; anime placeholder
+  icon) and the **royal host** (`history/units/ROU_1936.txt`: 2 armoured, 2 mechanised,
+  8 motorised divisions, full support, plus techs, a "Char Royal" tank and a stockpile).
+  The levies themselves are not built: tiers and costs await the author.
+  - The author's detailed fief map (`Rouental_Map_TEMP_2.pdn`, 8000×4471, decoded in
+    `work/pdn_rmap`) was overlaid on the game's states (axis-aligned fit, IoU 0.885;
+    game x = 0.0396 fx + 572.1, y = 0.0379 fy + 747.4). Every label was read and placed:
+    `docs/ROUENTAL_FIEFS.md`, `dist/rouental_fiefs_overlay.png` and
+    `source/rouental_vassals.json` (state name → main vassal and its fiefs; the author
+    may correct it, and the levies will read it).
 - **Flags** are `source/flags/TAG.png`, any size (HOI4 gets 82×52, 41×26 and 10×7
   32-bit TGAs, bottom-left origin). `TAG_<ideology>.png` is used only while that
   ideology rules: Rouental's banner of arms is `ROU.png` and its blue-white-gold

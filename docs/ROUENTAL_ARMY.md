@@ -4,7 +4,8 @@ The author's idea (2026-10-02): Rouental is a very dysfunctional feudal state. B
 an army the normal HOI4 way should be very hard. Instead the crown starts with a
 **small, superbly equipped army** and grows it with **levies from its vassals**, whose
 equipment it controls much less. This note suggests how to build that in HOI4 1.19.
-Nothing here is built yet except the names.
+Built so far: the names, the Feudal Army spirit and the royal host (below); the levies
+themselves are not.
 
 ## Already in the mod
 
@@ -17,6 +18,18 @@ Nothing here is built yet except the names.
       after the royal fiefs.
     - **Vassal Levies:** "Levée de Carcarelle", "Levée de Beaufort"… after every
       vassal fief, in the list's order.
+
+- **Feudal Army** (`ROU_feudal_army`, author 2026-10-02; placeholder icon, the anime
+  picture): recruitable population −80 %, training time ×2, political power −10 %,
+  stability −5 %. Its description says it opens the levies.
+- **The royal host** (`history/units/ROU_1936.txt`): 2 armoured ("Division Blindée de la
+  Garde": 4 medium tank + 2 mechanised), 2 mechanised and 8 motorised divisions, all at
+  full equipment and 0.6 experience, with engineers, recon, AA, signals, logistics or
+  maintenance, and field hospitals in support. Stationed around Rouental, Saintiers,
+  Cournin, Rêverie, Charmas, Rochemont and Vendée. Rouental starts with the techs, a
+  "Char Royal" tank design (both with and without No Step Back) and a stockpile.
+- **Which states each vassal holds**: `docs/ROUENTAL_FIEFS.md` and
+  `source/rouental_vassals.json`, from overlaying the fief map on the game's states.
 
 ## Recommended design (all vanilla mechanics)
 
@@ -52,6 +65,28 @@ Nothing here is built yet except the names.
    (PP, a state, a title) or rebels. That ties straight into the civil war: the
    revolting tags could be the disloyal vassals (`docs/CIVIL_WAR_NOTES.md`).
 
+## Levy quality (proposal, 2026-10-02)
+
+Each levy is a `create_unit` in the vassal's main state, as vanilla focuses do
+(`start_experience_factor`, `start_equipment_factor`, `start_manpower_factor`), with a
+template the player can't edit. Quality comes from four knobs: the template, experience,
+how full its equipment is, and how many divisions come.
+
+| Tier | Template | Experience | Equipment | Example |
+|---|---|---|---|---|
+| Elite | infantry + artillery, full support | 0.5 | 100 % | Chatois (Reliette): the martial vassal |
+| Good | line infantry + artillery | 0.3 | 70 % | Northmarch, Southmarch (border wardens) |
+| Levy | infantry, little support | 0.1 | 40 % | Conflans, Carcasonnaise, Recolt, Nataine |
+| Militia | small infantry brigade | 0 | 25 % | Piscan, Lyrién, Oscarl, Crépuscule, Helvetican, Lustianaise |
+| Ceremonial | one battalion | 0 | 10 % | single fiefs, e.g. Tal's "Arbalétriers de Tal" |
+
+- How many divisions: by fief count. Conflans holds 151 fiefs, so many poor divisions;
+  Chatois 18, so a few good ones.
+- Ceremonial units are flavour. Tal's crossbowmen, "granted guns to fulfil the
+  obligation", would be one under-strength battalion with a joke name.
+- **For the author to decide**: each vassal's tier, which fiefs get their own flavour
+  units, and how harsh the costs are (PP, loyalty, how long levies stay).
+
 ## Alternative: vassals as real subject countries
 
 Each vassal could be a subject country with a custom "Vassal" autonomy, its own army and
@@ -61,7 +96,5 @@ almost no army of their own. It is better kept for the civil war.
 
 ## What's needed to build it
 
-- Which **states** each vassal holds. The fief list is at province level, which the
-  map doesn't have yet; a state-to-vassal list would be enough to start.
-- The royal host's size and kit (how many divisions, of what).
-- How harsh the penalty and the loyalty costs should be.
+- Each vassal's tier (table above) and any flavour units.
+- How harsh the loyalty costs should be, and how long levies serve.

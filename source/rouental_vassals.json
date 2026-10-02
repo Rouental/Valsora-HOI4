@@ -1,0 +1,819 @@
+{
+ "Aureimontes": {
+  "vassal": "Nataine",
+  "fiefs": {
+   "Nataine": [
+    "Aureimontes",
+    "Fidelitus",
+    "Flumamnis",
+    "Hastelum",
+    "Moenia",
+    "Oramlitus",
+    "Ostrinus",
+    "Piscisinum",
+    "Regiovia",
+    "Reliquae",
+    "Sanctus",
+    "Turrimarx"
+   ],
+   "Chatois": [
+    "Anselmis",
+    "Rubeus"
+   ]
+  }
+ },
+ "Aurillac-de-Ciel": {
+  "vassal": "Northmarch",
+  "fiefs": {
+   "Northmarch": [
+    "Abroix",
+    "Aurillac-de-Ciel",
+    "Davouil",
+    "Monteaux"
+   ]
+  }
+ },
+ "Avarre": {
+  "vassal": "Piscan",
+  "fiefs": {
+   "Piscan": [
+    "Avarre"
+   ],
+   "Helvetican": [
+    "Antraine"
+   ]
+  }
+ },
+ "Baie de Torres": {
+  "vassal": "Piscan",
+  "fiefs": {
+   "Piscan": [
+    "Baie de Torres"
+   ],
+   "Conflans": [
+    "Côte d'Ambre"
+   ]
+  }
+ },
+ "Belleplaine-sur-Mer": {
+  "vassal": "Piscan",
+  "fiefs": {
+   "Piscan": [
+    "Belleplaine-sur-Mer",
+    "Bravette",
+    "Négligeable",
+    "Osterix",
+    "Rathaine"
+   ]
+  }
+ },
+ "Carcarelle": {
+  "vassal": "Carcasonnaise",
+  "fiefs": {
+   "Carcasonnaise": [
+    "Beffroi",
+    "Bergerac",
+    "Bordeleau",
+    "Carcarelle",
+    "Carrefour",
+    "Cloches",
+    "Fenne",
+    "Flèche",
+    "Hyères",
+    "Nauve",
+    "Nef",
+    "Noces",
+    "Orgueilleux",
+    "Paron",
+    "Rainne",
+    "Rhys",
+    "Rorien",
+    "Sarenne",
+    "Ténor"
+   ]
+  }
+ },
+ "Carune la Cœur": {
+  "vassal": "Conflans",
+  "fiefs": {
+   "Conflans": [
+    "Carune la Cœur",
+    "Noiétoile",
+    "Transiger"
+   ]
+  }
+ },
+ "Caux-Gautier": {
+  "vassal": "Carcasonnaise",
+  "fiefs": {
+   "Carcasonnaise": [
+    "Bannière",
+    "Beaufort",
+    "Caux-Gautier",
+    "Château",
+    "Côtière",
+    "Faine",
+    "Feraime",
+    "Hautain",
+    "Haute Couronne",
+    "Leonis",
+    "Lexíng",
+    "Ligue Merséatique",
+    "Nerice",
+    "Périale",
+    "Rouge",
+    "Sacré-Cœur",
+    "Talbaine"
+   ]
+  }
+ },
+ "Charmas": {
+  "vassal": "Conflans",
+  "fiefs": {
+   "Conflans": [
+    "Bernier",
+    "Charet",
+    "Chouan",
+    "Cocorico",
+    "Contrie",
+    "Etichone",
+    "Lafaye",
+    "Stofflet",
+    "Verrie"
+   ],
+   "Royal Fiefs": [
+    "Aurifort",
+    "Charmas",
+    "Jourdain et Motere"
+   ]
+  }
+ },
+ "Chirac": {
+  "vassal": "Lustianaise",
+  "fiefs": {
+   "Lustianaise": [
+    "Chirac"
+   ]
+  }
+ },
+ "Chouan": {
+  "vassal": "Conflans",
+  "fiefs": {
+   "Conflans": [
+    "Cathelineau",
+    "Elbée",
+    "Lescure"
+   ]
+  }
+ },
+ "Coffrefort": {
+  "vassal": "Northmarch",
+  "fiefs": {
+   "Northmarch": [
+    "Astre",
+    "Hères",
+    "Parer",
+    "Vedette"
+   ]
+  }
+ },
+ "Cournin": {
+  "vassal": "Royal Fiefs",
+  "fiefs": {
+   "Royal Fiefs": [
+    "Brassard",
+    "Cournin"
+   ],
+   "Conflans": [
+    "Rouërie",
+    "Sadé"
+   ]
+  }
+ },
+ "Crépuscule": {
+  "vassal": "Crépuscule",
+  "fiefs": {
+   "Crépuscule": [
+    "Aube"
+   ]
+  }
+ },
+ "Cylône": {
+  "vassal": "Northmarch",
+  "fiefs": {
+   "Northmarch": [
+    "Baïonnette",
+    "Brochets",
+    "Cylône",
+    "Erdoine",
+    "Élan"
+   ]
+  }
+ },
+ "Everlon": {
+  "vassal": "Southmarch",
+  "fiefs": {
+   "Southmarch": [
+    "Agier",
+    "Anjais",
+    "Domrémy",
+    "Dynant",
+    "Fournier",
+    "Keau",
+    "Mabrenne",
+    "Merabeau",
+    "Montserrat",
+    "Reins",
+    "Satris",
+    "Tocsin"
+   ]
+  }
+ },
+ "Fleurastre": {
+  "vassal": "Recolt",
+  "fiefs": {
+   "Recolt": [
+    "Battlaire",
+    "Chabot",
+    "Fleurastre",
+    "Leval",
+    "Ligue des Cités Libres",
+    "Miremont",
+    "Usironne"
+   ],
+   "Conflans": [
+    "Daubey"
+   ],
+   "Oscarl": [
+    "Gewiss"
+   ]
+  }
+ },
+ "Fourier": {
+  "vassal": "Recolt",
+  "fiefs": {
+   "Recolt": [
+    "Arcy",
+    "Crusche",
+    "Fourier",
+    "Lugunica",
+    "Randohal",
+    "Rhume"
+   ],
+   "Conflans": [
+    "Marias"
+   ]
+  }
+ },
+ "Ganelonne": {
+  "vassal": "Conflans",
+  "fiefs": {
+   "Conflans": [
+    "Farbante",
+    "Ganelonne",
+    "Sartres",
+    "Saubre",
+    "Streille"
+   ]
+  }
+ },
+ "Ghessone": {
+  "vassal": "Conflans",
+  "fiefs": {
+   "Conflans": [
+    "Archambelle",
+    "Buclai",
+    "Calême",
+    "Fleurdoux",
+    "Ghesonne"
+   ],
+   "Southmarch": [
+    "Culotte",
+    "Ronnaire",
+    "Travante"
+   ]
+  }
+ },
+ "Glacierre": {
+  "vassal": "Conflans",
+  "fiefs": {
+   "Conflans": [
+    "Antuille",
+    "Augiers",
+    "Darantes",
+    "Glacierre",
+    "Ligneux",
+    "Puciennes",
+    "Trézelles",
+    "Varenne"
+   ],
+   "Northmarch": [
+    "Arrare",
+    "Colsir",
+    "Dunne",
+    "Lillon",
+    "Marre",
+    "Rundaire",
+    "Épinal"
+   ]
+  }
+ },
+ "Graisivaudan": {
+  "vassal": "Piscan",
+  "fiefs": {
+   "Piscan": [
+    "Freinet",
+    "Graisivaudan",
+    "Grand Brume",
+    "Nouveau Brume",
+    "Terres Disputées"
+   ]
+  }
+ },
+ "Hevique": {
+  "vassal": "Helvetican",
+  "fiefs": {
+   "Helvetican": [
+    "Hevique"
+   ]
+  }
+ },
+ "Hyères": {
+  "vassal": "Carcasonnaise",
+  "fiefs": {
+   "Carcasonnaise": [
+    "Agence",
+    "Clairval",
+    "Liévin",
+    "Solle"
+   ],
+   "Nataine": [
+    "Focislar",
+    "Iader",
+    "Ostia"
+   ],
+   "Conflans": [
+    "Parschendales",
+    "Riceau"
+   ],
+   "Southmarch": [
+    "Auberre"
+   ]
+  }
+ },
+ "Kové": {
+  "vassal": "Conflans",
+  "fiefs": {
+   "Conflans": [
+    "Berrige",
+    "Bleu",
+    "Delac",
+    "Ivaine",
+    "Javelot",
+    "Leclerc",
+    "Rapproche",
+    "Sentagne",
+    "Seteffe",
+    "Sumonde"
+   ],
+   "Oscarl": [
+    "Wejt"
+   ]
+  }
+ },
+ "La Recolt": {
+  "vassal": "Recolt",
+  "fiefs": {
+   "Recolt": [
+    "Kinzeau",
+    "La Recolt"
+   ]
+  }
+ },
+ "Leclerc": {
+  "vassal": "Conflans",
+  "fiefs": {
+   "Conflans": [
+    "Besançon",
+    "Camasse",
+    "Carnaux",
+    "Châteaublanche",
+    "Collinerouge",
+    "Courrac",
+    "Levallois",
+    "Logiers",
+    "Marluire",
+    "Nanfort",
+    "Orvault",
+    "Orvers",
+    "Parac",
+    "Perret",
+    "Rivage-d'Argent",
+    "Roalès",
+    "Rolantelle",
+    "Ruisseauville",
+    "Sallen",
+    "Valdélise",
+    "Verlayne",
+    "Échirolles",
+    "Épiluire"
+   ]
+  }
+ },
+ "Lyrié et Rivielle": {
+  "vassal": "Lyrién",
+  "fiefs": {
+   "Lyrién": [
+    "Aedaire",
+    "Beauclaire",
+    "Brouge",
+    "Kové",
+    "Lyrié et Rivielle",
+    "Povaise",
+    "Rendanne",
+    "Sorrelle",
+    "Temerre",
+    "Toussaint"
+   ],
+   "Southmarch": [
+    "Verniaux"
+   ],
+   "Crépuscule": [
+    "Ébauche"
+   ]
+  }
+ },
+ "Marais Verte": {
+  "vassal": "Conflans",
+  "fiefs": {
+   "Conflans": [
+    "Crionique",
+    "Epernay",
+    "Frélogne",
+    "Gironte",
+    "Marais Verts",
+    "Mausier",
+    "Reigny",
+    "Ruesse",
+    "Valenmont"
+   ],
+   "Oscarl": [
+    "Håt",
+    "Messer",
+    "Spreivald",
+    "Stean",
+    "Tennhauser"
+   ],
+   "Nataine": [
+    "Confloenta",
+    "Siscia",
+    "Vesontio"
+   ],
+   "Chatois": [
+    "Minette"
+   ]
+  }
+ },
+ "Maïeul": {
+  "vassal": "Lustianaise",
+  "fiefs": {
+   "Lustianaise": [
+    "Maïeul"
+   ]
+  }
+ },
+ "Nerié": {
+  "vassal": "Conflans",
+  "fiefs": {
+   "Conflans": [
+    "Albi",
+    "Alès",
+    "Arcenciel",
+    "Chantelleux",
+    "Chattanay",
+    "Douai",
+    "Doure",
+    "Forbach",
+    "Hazebrouck",
+    "Jacinthe",
+    "Jouvignac",
+    "Luneclair",
+    "Maréebleue",
+    "Montebrise",
+    "Nerié du Nord",
+    "Nerié du Sud",
+    "Orseinne",
+    "Oullins",
+    "Palier",
+    "Reberge-sur-Torres",
+    "Rive-de-Lune",
+    "Rocheciel",
+    "Rochenuage",
+    "Sarne",
+    "Soleilbrillant",
+    "Taracourt",
+    "Terleans",
+    "Vallée-en-Rose",
+    "Vareinne",
+    "Vitre"
+   ],
+   "Northmarch": [
+    "Tal"
+   ]
+  }
+ },
+ "Oriflamme": {
+  "vassal": "Northmarch",
+  "fiefs": {
+   "Northmarch": [
+    "Auberly",
+    "Bassons",
+    "Bastione",
+    "Bouclier",
+    "Granae",
+    "Oriflamme",
+    "Raocourt"
+   ],
+   "Conflans": [
+    "Clovis",
+    "Dertois",
+    "Thiollier"
+   ]
+  }
+ },
+ "Osgrande": {
+  "vassal": "Northmarch",
+  "fiefs": {
+   "Northmarch": [
+    "Belleterre",
+    "Calvert",
+    "Coidron",
+    "Hevesliet",
+    "Mayreux",
+    "Osgrande",
+    "Pateaux",
+    "Tourépée"
+   ]
+  }
+ },
+ "Pavois": {
+  "vassal": "Conflans",
+  "fiefs": {
+   "Conflans": [
+    "Charaise",
+    "Cholet",
+    "Draveil",
+    "Espoir",
+    "Fleurent",
+    "Malheur"
+   ],
+   "Northmarch": [
+    "Alvanie",
+    "Pavois"
+   ]
+  }
+ },
+ "Reliette": {
+  "vassal": "Chatois",
+  "fiefs": {
+   "Chatois": [
+    "Grise",
+    "Kourou",
+    "Mière",
+    "Reliette",
+    "Touerre"
+   ]
+  }
+ },
+ "Rempart": {
+  "vassal": "Southmarch",
+  "fiefs": {
+   "Southmarch": [
+    "Chantelein",
+    "Guirlande",
+    "Piton",
+    "Rempart",
+    "Sabrette",
+    "Serrié",
+    "Teintures",
+    "Tréfonds"
+   ]
+  }
+ },
+ "Rochemont": {
+  "vassal": "Royal Fiefs",
+  "fiefs": {
+   "Royal Fiefs": [
+    "Rochemont"
+   ]
+  }
+ },
+ "Rolantelle": {
+  "vassal": "Conflans",
+  "fiefs": {
+   "Conflans": [
+    "Callentroix",
+    "Fleurmarais",
+    "Istres",
+    "Poifort"
+   ],
+   "Southmarch": [
+    "Hardatre",
+    "Herseille",
+    "Otherys",
+    "Tollen"
+   ]
+  }
+ },
+ "Rouental": {
+  "vassal": "Royal Fiefs",
+  "fiefs": {
+   "Royal Fiefs": [
+    "Rouental"
+   ]
+  }
+ },
+ "Réveillé": {
+  "vassal": "Recolt",
+  "fiefs": {
+   "Recolt": [
+    "Reveille"
+   ]
+  }
+ },
+ "Saintiers": {
+  "vassal": "Royal Fiefs",
+  "fiefs": {
+   "Royal Fiefs": [
+    "Saintiers"
+   ]
+  }
+ },
+ "Sangterre": {
+  "vassal": "Northmarch",
+  "fiefs": {
+   "Northmarch": [
+    "Orcinde",
+    "Sangterre",
+    "Varrdevet"
+   ]
+  }
+ },
+ "Serie": {
+  "vassal": "Conflans",
+  "fiefs": {
+   "Conflans": [
+    "Belau",
+    "Chineau",
+    "Clameur",
+    "Grandeau",
+    "Loquinne",
+    "Releau",
+    "Saneau"
+   ],
+   "Recolt": [
+    "Friere",
+    "Himelle",
+    "Quebelle",
+    "Serie"
+   ]
+  }
+ },
+ "Serpette": {
+  "vassal": "Lustianaise",
+  "fiefs": {
+   "Lustianaise": [
+    "Serpette",
+    "Voulge"
+   ],
+   "Oscarl": [
+    "Bauerschaft"
+   ]
+  }
+ },
+ "Tethié": {
+  "vassal": "Royal Fiefs",
+  "fiefs": {
+   "Royal Fiefs": [
+    "Bérault",
+    "Éislek"
+   ],
+   "Conflans": [
+    "Tethié"
+   ]
+  }
+ },
+ "Tocsin": {
+  "vassal": "Southmarch",
+  "fiefs": {
+   "Southmarch": [
+    "Chelris",
+    "Darnerre",
+    "Falaise",
+    "Harseyne",
+    "Lotte",
+    "Poitevallée",
+    "Prèsloin",
+    "Therau"
+   ]
+  }
+ },
+ "Tuilerie": {
+  "vassal": "Chatois",
+  "fiefs": {
+   "Chatois": [
+    "Ainselle",
+    "Chécy",
+    "Dranlot",
+    "Férolles",
+    "Gourdelle",
+    "Sézanne",
+    "Tuilerie"
+   ],
+   "Conflans": [
+    "Arduécu",
+    "Avignalle",
+    "Courin",
+    "Marque",
+    "Montremerci",
+    "Vinterre"
+   ],
+   "Carcasonnaise": [
+    "Faste",
+    "Pairne"
+   ],
+   "Nataine": [
+    "Deflusial"
+   ]
+  }
+ },
+ "Ténèbres": {
+  "vassal": "Crépuscule",
+  "fiefs": {
+   "Crépuscule": [
+    "Crépuscule",
+    "Noirceur",
+    "Ombragé",
+    "Petit Crépuscule",
+    "Pénombre",
+    "Ténèbres"
+   ]
+  }
+ },
+ "Vair": {
+  "vassal": "Conflans",
+  "fiefs": {
+   "Conflans": [
+    "Coulante",
+    "Couverture",
+    "Hernne",
+    "Vair"
+   ]
+  }
+ },
+ "Vendée": {
+  "vassal": "Conflans",
+  "fiefs": {
+   "Conflans": [
+    "Royrand",
+    "Vendée"
+   ]
+  }
+ },
+ "Verdoyantes": {
+  "vassal": "Recolt",
+  "fiefs": {
+   "Recolt": [
+    "Jeriche",
+    "Pâturage",
+    "Verdoyantres"
+   ]
+  }
+ },
+ "Vinterre": {
+  "vassal": "Conflans",
+  "fiefs": {
+   "Conflans": [
+    "Briges",
+    "Dortaine",
+    "Fel",
+    "Plaiserre",
+    "Thermidor",
+    "Varichol"
+   ],
+   "Chatois": [
+    "Crancé",
+    "Matz",
+    "Shalquoir"
+   ],
+   "Nataine": [
+    "Ariminum"
+   ]
+  }
+ },
+ "Rêverie": {
+  "vassal": "Royal Fiefs",
+  "fiefs": {},
+  "note": "the capital; no fief label on the map"
+ }
+}
