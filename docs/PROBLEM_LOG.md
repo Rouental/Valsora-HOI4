@@ -6,6 +6,14 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**Rempart and Tocsin didn't touch, though the drawing has them touching** (2026-10-02)
+- Cause: the author's lines leave a corridor 2–3 px wide from Rempart up to Tocsin. A
+  state is the majority of each province, and the corridor's pixels belonged to a
+  province lying mostly in the neighbouring state, so the corridor went with it.
+- Fix: the 17 corridor pixels were given to Rempart's nearest province on the
+  Provinces layer (two 1 px leftovers joined their neighbour). Very narrow drawn
+  pieces can lose out this way; a scan found a few other spots worth a look.
+
 **Some new rivers were missing, and some minor rivers came out major** (2026-10-01)
 - Causes, in `rivers.py`:
   - A whole river got one size, from the majority of its pixels, so a minor stretch
