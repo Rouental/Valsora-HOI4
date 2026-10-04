@@ -184,6 +184,13 @@ LEADERS = {
     "DRM": ["despotism"],             # Absolute Monarchy
     "SSA": ["council_communism"],
     "GRD": ["enlightened_absolutism"],
+    # 2026-10-04, later (author)
+    "WRS": ["revanchism"],
+    "TRC": ["liberalism"],
+    "CSC": ["anarchist_communism"],   # Anarcho-Communism
+    "SCZ": ["constitutional_monarchism"],
+    "DNL": ["elective_monarchy"],
+    "THD": ["megacorporation"],
     # Rouental's democrats and communists, promoted by their focuses
     "ROU": ["constitutional_monarchism", "leninism"],
     # the continent placeholders: not chosen by the author, Monarchist as before
@@ -359,6 +366,12 @@ FORMAL_NAMES = {
     "DRM": "the Pangolin Empire of Dremaur",
     "SSA": "the People's Republic of San Sierra",
     "GRD": "the Duchy of Guardana",
+    "WRS": "the Republic of Wersh",
+    "TRC": "the Democratic Republic of Troc",
+    "CSC": "the United Forests of Cascadia",
+    "SCZ": "the Kingdom of Sicilianzo",
+    "DNL": "the Kingdom of Danelaw-Scandinavia",
+    "THD": "Thorian Dynamics",
 }
 
 LOCALISATION = [
@@ -386,7 +399,7 @@ LOCALISATION = [
     ' ROU_execute_the_prince_desc:0 "The committee has voted. Roland Cahun will not see another spring, and neither, perhaps, will the peace."',
     ' ROU_steady_as_she_goes:0 "Steady As She Goes"',
     ' ROU_steady_as_she_goes_desc:0 "The Cahuns stay. Roland stays. Everything stays."',
-    ' AIS_merlovich:0 "Merlovich"',
+    ' AIS_merlovich:0 "The Great Merlovich"',  # author, 2026-10-04
     ' AIS_communist_merlovich:0 "Communist Merlovich"',
     ' AIS_focus:0 "Aisladan Focus Tree"',
     ' AIS_nationstates_account:0 "Make a NationStates Account"',
@@ -869,6 +882,9 @@ CAPITALS = {
     # 2026-10-04: Sanhueza, and Hirane inside the circle the author drew on Aislada
     "SSA": (928, 1249),
     "AIS": (1838, 1313),
+    # 2026-10-04, later: Markovograd (author) and Fraternal City, now dots on the map
+    "KRK": (1156, 692),
+    "FRX": (1024, 1130),
 }
 
 

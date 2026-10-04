@@ -116,6 +116,10 @@ TAG_CULTURE = {
     **{t: dict(names="MEX", portraits="latin_america", gfx="southamerican") for t in ("NPL", "SPL")},
     **{t: dict(names="ENG", portraits="europe", gfx="western_european") for t in ("AGL", "NRM")},
     "DRM": dict(names="HOL", portraits="europe", gfx="western_european"),  # Dutch
+    # 2026-10-04, later: Claude's guesses from the names (the author hasn't said)
+    "DNL": dict(names="SWE", portraits="europe", gfx="western_european"),  # Scandinavia
+    "SCZ": dict(names="ITA", portraits="europe", gfx="western_european"),
+    **{t: dict(names="USA", portraits="usa", gfx="western_european") for t in ("CSC", "THD")},
 }
 
 

@@ -6,6 +6,22 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**Drawn states cut into many small ones** (2026-10-04, author: "I want to cut back on the number of states")
+- Cause: `apply_outlines.py` cut every drawn area over 1,000 px into ~650 px states,
+  even where the author had drawn the states themselves.
+- Fix: `regroup_states.py` makes each drawn area one state wherever a country has its
+  own state lines; blank countries get ~1,300 px states. 1,346 states became 1,208.
+
+**The Marches had the wrong flag** (2026-10-04)
+- Cause: the three-lozenge flag was taken for The Marches; the author's flag file names
+  it "Duchy of the Mountains" and The Marches' is the diagonal sword ("Marchers").
+- Fix: flags now come from the author's flag file by layer name (`import_flags.py`).
+
+**Country names written on the border layer** (2026-10-04)
+- Cause: "Sicilianzo" and "Danelaw" were on Necessary Borders, so their letters closed
+  off tiny patches.
+- Fix: the letters were moved to Necessary Names.
+
 **Two more islands fused to the land next to them** (2026-10-04, author)
 - Cause: in the original drawing these islands touch their neighbours only at a corner
   pixel or through 1-2 px channels, so the strait tracing of 2026-09-28 saw one landmass

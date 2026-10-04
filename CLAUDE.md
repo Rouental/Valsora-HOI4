@@ -87,8 +87,16 @@ for the author. Unknown layer names are ignored.
 - **Outlines → states** (`apply_outlines.py`, run by hand, not by `run_all.sh`).
   The author draws 1-px country borders on "Borders" and state lines on "Necessary
   Provinces" (the author's layer name; they are **states**, author's correction).
-  - Every enclosed patch becomes a state. Patches over 1,000 px are k-means split into
-    ~650 px states that fill the same shape.
+  - Every enclosed patch becomes a state. Patches over 2,000 px are k-means split into
+    ~1,300 px states that fill the same shape (1,000 / 650 until 2026-10-04: the author
+    wants fewer states). This only happens where the author left a country's state
+    lines blank.
+  - **The author's own state lines are kept as drawn** (2026-10-04: "do not split any
+    states that I have created"). `regroup_states.py` makes every drawn area one state
+    in each country that has state lines inside it (two of its areas sharing at least
+    8 px of line, both 150+ px): first run CRD 22, KRK 11 (+ islands), LNT 10, ROU 54,
+    SSA 7 (+ islands), STO 4. `apply_outlines.py` no longer re-cuts a finished country
+    (`RECUT_DONE = False`) unless `OWNERS` seeds a new country inside it.
   - Every state is cut into ~150 px provinces for a granular map (placeholder bricks
     elsewhere are 1,024 px). Pieces are forced 4-connected.
   - **Borders are organic** (`organic.py`, from 2026-09-29 on). k-means places the
@@ -150,6 +158,8 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `redraw_flags.py` | unused: Fraxhemark's stand-in flag (writes `work/FRX_standin.png`); the author's own `FRX.png` replaced it |
 | `state_map.py` | by hand, after a build: a numbered map of some countries' states (`dist/state_numbers_<name>.png` + `.json`, number → tag and pixel), for the author to name them; `--names` labels them with their names instead |
 | `usnistan_prototype.py` | by hand, a prototype not in the game: a fully generated Usnistan (relief, climate terrain, rivers, ~800 provinces, states, 6 placeholder countries, cities) into `work/usnistan/` and `dist/usnistan_*.png` (author asked for an example, 2026-10-02) |
+| `regroup_states.py` | by hand, after `apply_outlines.py`: in every country with state lines of its own, each drawn area becomes exactly one state (provinces kept, split only where a line crosses them) |
+| `import_flags.py` | by hand: the author's flag `.pdn` (one layer per flag, named after the nation) → `source/flags/TAG.png` |
 | `organic.py` | organic splitting (seeded watershed over noise), used by `apply_outlines.py` |
 | `rivers.py` | plain river lines → HOI4 rivers.bmp format, and the river rules check |
 | `build_mod.py` | every mod file |
@@ -291,6 +301,17 @@ mismatch, missing localisation) and catches all of them.
     Cultures (author): SSA GRD Spanish, NPL SPL Latin American (MEX names, vanilla's South
     American portraits, `southamerican` gfx), AGL NRM English, DRM Dutch (HOL names). The
     land between Anglost and San Sierra is undecided (author) and stays a placeholder.
+    2026-10-04, later (the author's names, governments and formal names; colours Claude's):
+    in Nonscio's west Wersh WRS (Revanchism, "the Republic of Wersh"), Troc TRC
+    (Liberalism, flag `TRC.png`) and Cascadia CSC (Anarcho-Communism, "the United
+    Forests of Cascadia", with every CS island); between Anglost and San Sierra
+    Sicilianzo SCZ (Constitutional Monarchy, flag `SCZ.png`) and Danelaw DNL ("the
+    Kingdom of Danelaw-Scandinavia", Elective Monarchy, Sweden's flag drawn as a stand-in);
+    inside Fraxhemark Thorian Dynamics THD (the author's new **Megacorporation**
+    sub-ideology, flag `THD.png`). Cultures are Claude's guesses: DNL Swedish, SCZ
+    Italian, CSC and THD American, WRS TRC the continent's (English). The author wrote
+    "Sicilianzo" and "Danelaw" on Necessary Borders; the letters were moved to Necessary
+    Names. Capitals: Kurikia Markovograd, Fraxhemark Fraternal City (dots now).
     All tags were checked against vanilla `common/country_tags`; new tags must be too.
   - The adjectives of the neighbours are guesses; the author may rename them.
 - **State names** are the author's, in `source/state_names.json` ("x,y" of a pixel
@@ -308,7 +329,7 @@ mismatch, missing localisation) and catches all of them.
 ## Nation content (`nations.py`)
 
 Aislada is the worked example of a built-out nation:
-- **Leader.** Merlovich (`AIS_merlovich`) is defined in `common/characters/AIS.txt` as a
+- **Leader.** The Great Merlovich (`AIS_merlovich`; "Merlovich" until 2026-10-04) is defined in `common/characters/AIS.txt` as a
   neutrality (`despotism`) country leader and recruited from the country history.
 - **Portrait.** Referenced as a sprite (`GFX_portrait_AIS_merlovich`, declared in
   `interface/valsora_portraits.gfx`), the way vanilla does it. The image is a 156×210 DDS
@@ -548,6 +569,9 @@ don't exist here. That was the cause of "Failed to generate a portrait / name" a
     noted: Nonscio ENG, Araseos ITA, Aislada AST (commonwealth gfx), Solitas SWE,
     Yastreovakia POL. Usnistan is PER with Arab + African portraits and middle_eastern
     gfx; Orientalis is JAP with Asian portraits and asian gfx.
+  - The author's flags can come as one `.pdn` with a layer per flag
+    (`import_flags.py`; 2026-10-04: its "Marchers" layer showed The Marches had been
+    given the three-lozenge flag, which is its "Duchy of the Mountains"; fixed).
   - Overrides are in `TAG_CULTURE`: the Reibonnaise states (ROU SGN EVR HLR SGV LST LZC
     GDN) and Placeholdros (LNT) use FRA names and France portraits (author: French for now);
     RST VLN ESD CRZ PLH use POR names (added to `source/names/vanilla_names.txt` from
@@ -672,8 +696,11 @@ in git history (commit d2d6cd8, `scripts/cartographic.py`). It used
 
 ## Current state
 
-- 8,316 provinces (7,633 land, 645 sea, 38 lakes), 1,346 states, 91 strategic regions (11 sea),
-  46 countries. 2026-10-04: the seven nations south of Estande (San Sierra 60 states,
+- 9,209 provinces (8,526 land, 645 sea, 38 lakes), 1,208 states, 91 strategic regions (11 sea),
+  52 countries. 2026-10-04, later: six more nations (Cascadia 37 states, Wersh 21, Troc
+  15, Sicilianzo 14, Danelaw 20, Thorian 4) and the author's state lines kept as drawn
+  (`regroup_states.py`): 1,346 states became 1,208. La Recolt and Réveillé became one
+  state ("La Recolt"; the author's lines join them). 2026-10-04: the seven nations south of Estande (San Sierra 60 states,
   Anglost 55, Guardana 8, Normania 5, the Pollanas and Dremaur 1 each), Aislada's 13 drawn
   states with its rivers and 14 cities (capital Hirane, which replaced the joke name
   "The Great and Noble City of Merlovia"), four more Rouental cities (Seraine, Saintiers,

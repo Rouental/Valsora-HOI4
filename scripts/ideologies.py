@@ -96,6 +96,8 @@ SUBTYPES = {
         ("bleacherism", "Bleacherism",  # the author's, 2026-10-01
          "Promotes the superiority of the Alban race. Officially a senatorial republic, but a "
          "central strongman figure wields vast authority over the nation."),
+        ("megacorporation", "Megacorporation",  # the author's, 2026-10-04 (Thorian Dynamics)
+         "A corporation has become the state: the board governs, and citizens are its employees."),
     ],
     "neutrality": [
         ("despotism", "Absolute Monarchy", "The monarch rules alone and answers to no one."),

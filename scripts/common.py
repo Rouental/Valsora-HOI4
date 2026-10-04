@@ -90,6 +90,14 @@ COUNTRIES = {
     "n_pollana": ("NPL", "North Pollana", "Pollanan", (190, 30, 45)),
     "s_pollana": ("SPL", "South Pollana", "South Pollanan", (45, 150, 145)),
     "dremaur": ("DRM", "Dremaur", "Dremauri", (115, 5, 5)),            # flag maroon
+    # 2026-10-04, later: Nonscio's west (Wersh, Troc, Cascadia), between Anglost and San
+    # Sierra (Sicilianzo, Danelaw), inside Fraxhemark (Thorian); colours Claude's
+    "wersh": ("WRS", "Wersh", "Wershian", (130, 90, 50)),
+    "troc": ("TRC", "Troc", "Trocian", (20, 80, 30)),                    # flag green
+    "cascadia": ("CSC", "Cascadia", "Cascadian", (40, 130, 100)),
+    "sicilianzo": ("SCZ", "Sicilianzo", "Sicilianzan", (195, 15, 50)),   # flag crimson
+    "danelaw": ("DNL", "Danelaw", "Danelawan", (0, 106, 167)),           # Sweden's blue for now
+    "thorian": ("THD", "Thorian Dynamics", "Thorian", (95, 95, 100)),
 }
 # The placeholder countries, one per continent, are the recommended starts in the
 # bookmark; the rest are playable but not listed there.

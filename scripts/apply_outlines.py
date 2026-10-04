@@ -82,8 +82,21 @@ OCEAN, LAKES = (8, 31, 130), (55, 90, 220)
 # 2026-10-04: seven nations south of Estande, and Aislada's state lines (the author drew
 # them on Necessary Provinces by mistake; moved to Necessary States). Seeds are the
 # author's Names labels (AN, SS) and the islands their pointer lines end on.
-DEFAULT_OWNER = "aislada"
+# (config was: DEFAULT_OWNER "aislada", and the OWNERS_0410 below.)
+# 2026-10-04, later: Wersh, Troc, Cascadia (with the islands labelled CS) in Nonscio's
+# west, Sicilianzo and Danelaw between Anglost and San Sierra, Thorian inside Fraxhemark.
+DEFAULT_OWNER = "cascadia"
 OWNERS = {
+    "wersh": [(462, 684)],
+    "troc": [(458, 560)],
+    # the mainland and every island labelled CS
+    "cascadia": [(299, 724), (515, 437), (256, 492), (198, 558), (130, 631), (217, 637),
+                 (147, 692), (302, 779), (425, 790), (497, 779)],
+    "sicilianzo": [(687, 1271)],
+    "danelaw": [(733, 1400)],
+    "thorian": [(1105, 1046)],
+}
+OWNERS_0410 = {
     "anglost": [(528, 1283), (607, 1287), (509, 1335), (436, 1342), (506, 1363), (474, 1379),
                 (516, 1386), (563, 1388), (626, 1425), (583, 1428), (654, 1430), (658, 1421),
                 (555, 1468), (916, 1564), (918, 1637), (976, 1666), (823, 1535), (823, 1550)],
@@ -105,7 +118,14 @@ OWNERS = {
 # between Anglost and San Sierra, the author undecided, and the land south of Anglost's
 # westernmost island). The land south of Entroterra and Estande, left here from
 # 2026-10-01, became San Sierra on 2026-10-04.
-LEAVE = [(1180, 980), (1000, 990), (748, 1207), (403, 1359), (847, 1402), (769, 1354)]
+LEAVE = [(1180, 980), (403, 1359), (847, 1402), (769, 1354),
+         # Aislada, outlined on 2026-10-04 (still the placeholder's colour)
+         (2016, 1235), (1853, 1370), (1869, 1216), (2089, 1205), (1887, 1334), (1830, 1288),
+         (1930, 1272), (1863, 1238), (1840, 1313)]
+# Patches an earlier run made into a country are cut again only when OWNERS seeds them
+# (a new country inside an old one): from 2026-10-04 the author's own state lines are
+# kept as drawn (regroup_states.py), never re-cut into k-means pieces here.
+RECUT_DONE = False
 # countries whose drawn regions are their states, one per city (author, 2026-10-04: the
 # Aislada lines are state borders): a patch is cut into one state around each city dot
 # in it (source/city_names.json), following any line that runs part-way into it, and
@@ -113,8 +133,8 @@ LEAVE = [(1180, 980), (1000, 990), (748, 1207), (403, 1359), (847, 1402), (769, 
 CITY_STATES = {"aislada"}
 MIN_STATE = 150      # smaller patches (islets) join the nearest state of their country
 ISLET_REACH = 300    # ... if within this many px; farther islets make a state of their own
-STATE_MAX = 1000     # patches bigger than this become several states ...
-STATE_AREA = 650     # ... of about this size
+STATE_MAX = 2000     # patches bigger than this become several states ...
+STATE_AREA = 1300    # ... of about this size (650 until 2026-10-04: the author wants fewer states)
 PROVINCE_AREA = 150  # target province size inside the outlines (placeholders: 1024)
 MIN_LEFTOVER = 300  # smaller remains of a cut placeholder province join a neighbour
 
@@ -258,6 +278,8 @@ def main():
     for i in chosen:
         if dsum[i] * 2 < size[i]:
             kept.append(i)
+            continue
+        if not RECUT_DONE and int(i) not in owner_of:
             continue
         ys, xs = np.nonzero(cells == i)
         if not any(cut_by_lines(sc) for sc in np.unique(S0[ys, xs]) if sc >= 0):
