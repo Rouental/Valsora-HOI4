@@ -12,6 +12,11 @@
     python3 scripts/pdn_tools.py blue_seas
         Recolour every sea province on the Provinces layer in its own blue (the author
         wants the sea easy to tell from land there). Colours only: nothing else changes.
+    python3 scripts/pdn_tools.py channel X1,Y1,X2,Y2 [...]
+        Reopen a strait that closed when the world was scaled down: the cheapest
+        4-connected path from the water at (X1, Y1) to the water at (X2, Y2), counting
+        land pixels, becomes sea in the nearest sea province and region. Land provinces it
+        cuts apart are split (pieces of 16+ px) or merged into a neighbour.
     python3 scripts/pdn_tools.py sea_zones [CELL]
         Regroup all sea provinces into larger sea regions (about CELL px across, default
         1536), and recolour the Strategic Regions layer so sea regions are blues and land
@@ -206,6 +211,83 @@ def recolour(names, L, layer, pairs):
         print(f"{layer}: {old} -> {new}, {m.sum()} px")
 
 
+def channel(names, L, pairs):
+    import heapq
+    from skimage.measure import label as sklabel
+    terr = code(L["Terrain"][..., :3])
+    sea = terr == code(np.array(OCEAN))
+    land = ~sea & (terr != code(np.array(LAKES)))
+    for x1, y1, x2, y2 in pairs:
+        if not (sea[y1, x1] and sea[y2, x2]):
+            sys.exit(f"channel {x1},{y1} {x2},{y2}: both ends must be sea")
+        m = 8
+        bx0, by0 = min(x1, x2) - m, min(y1, y2) - m
+        bx1, by1 = max(x1, x2) + m + 1, max(y1, y2) + m + 1
+        cost = land[by0:by1, bx0:bx1].astype(int)
+        start, goal = (y1 - by0, x1 - bx0), (y2 - by0, x2 - bx0)
+        dist, prev, pq = {start: 0}, {}, [(0, start)]
+        while pq:
+            d, u = heapq.heappop(pq)
+            if u == goal:
+                break
+            if d > dist[u]:
+                continue
+            for dy, dx in ((0, 1), (1, 0), (0, -1), (-1, 0)):
+                v = (u[0] + dy, u[1] + dx)
+                if 0 <= v[0] < cost.shape[0] and 0 <= v[1] < cost.shape[1]:
+                    nd = d + cost[v] * 1000 + 1  # fewest land pixels, then shortest
+                    if nd < dist.get(v, 1 << 60):
+                        dist[v], prev[v] = nd, u
+                        heapq.heappush(pq, (nd, v))
+        path, u = [], goal
+        while u != start:
+            path.append(u)
+            u = prev[u]
+        cut = np.zeros((H, W), bool)
+        for py, px in path:
+            if land[py + by0, px + bx0]:
+                cut[py + by0, px + bx0] = True
+        before = sklabel(land[by0:by1, bx0:bx1], connectivity=1).max()
+        # the carved pixels join the nearest sea province and region
+        P = code(L["Provinces"][..., :3])
+        R = code(L["Strategic Regions"][..., :3])
+        sl = np.s_[by0 - 20:by1 + 20, bx0 - 20:bx1 + 20]
+        idx = ndi.distance_transform_edt(~sea[sl], return_distances=False, return_indices=True)
+        c = cut[sl]
+        for nm, val in (("Provinces", P[sl][idx[0], idx[1]]), ("Strategic Regions", R[sl][idx[0], idx[1]])):
+            arr = L[nm][sl]
+            arr[c, 0], arr[c, 1], arr[c, 2] = val[c] >> 16, (val[c] >> 8) & 255, val[c] & 255
+        L["Terrain"][cut, :3] = OCEAN
+        L["Heightmap"][cut, :3] = 93
+        for nm in ("Continents", "States", "Countries", "Rivers"):
+            L[nm][cut, 3] = 0
+        sea |= cut
+        land &= ~cut
+        # land provinces cut apart: pieces of 16+ px become provinces, scraps join a neighbour
+        P = code(L["Provinces"][..., :3])
+        used = set(np.unique(P).tolist())
+        rng = np.random.default_rng(x1 * 7 + y1)
+        for pc in set(np.unique(P[ndi.binary_dilation(cut, CROSS) & land]).tolist()):
+            comp = sklabel((P == pc) & land, connectivity=1)
+            sizes = np.bincount(comp.ravel())[1:]
+            for j in np.argsort(-sizes)[1:] + 1:
+                piece = comp == j
+                if sizes[j - 1] >= 16:
+                    while True:
+                        nc = int(rng.integers(1 << 20, 1 << 24))
+                        if nc not in used:
+                            used.add(nc)
+                            break
+                else:
+                    ring = ndi.binary_dilation(piece, CROSS) & land & ~piece
+                    nc = Counter(P[ring].tolist()).most_common(1)[0][0]
+                L["Provinces"][piece, :3] = [nc >> 16, (nc >> 8) & 255, nc & 255]
+                P[piece] = nc
+        after = sklabel(land[by0:by1, bx0:bx1], connectivity=1).max()
+        print(f"channel {x1},{y1} -> {x2},{y2}: {cut.sum()} land px became sea; "
+              f"landmasses nearby {before} -> {after}")
+
+
 def main():
     cmd = sys.argv[1]
     names, L = load()
@@ -219,6 +301,8 @@ def main():
         give(names, L, sys.argv[2], [tuple(int(v) for v in a.split(",")) for a in sys.argv[3:]])
     elif cmd == "blue_seas":
         blue_seas(names, L)
+    elif cmd == "channel":
+        channel(names, L, [tuple(int(v) for v in a.split(",")) for a in sys.argv[2:]])
     elif cmd == "sea_zones":
         sea_zones(names, L, int(sys.argv[2]) if len(sys.argv) > 2 else 1536)
     else:

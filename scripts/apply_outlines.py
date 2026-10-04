@@ -78,14 +78,39 @@ OCEAN, LAKES = (8, 31, 130), (55, 90, 220)
 # (937, 576), (952, 600).)
 # 2026-10-02, later: Locus, outlined inside Fraxhemark around its lake; the rest of
 # Fraxhemark is left alone (LEAVE) rather than re-cut.
-DEFAULT_OWNER = "locus"
+# (config was: DEFAULT_OWNER "locus"; locus (990, 910).)
+# 2026-10-04: seven nations south of Estande, and Aislada's state lines (the author drew
+# them on Necessary Provinces by mistake; moved to Necessary States). Seeds are the
+# author's Names labels (AN, SS) and the islands their pointer lines end on.
+DEFAULT_OWNER = "aislada"
 OWNERS = {
-    "locus": [(990, 910)],
+    "anglost": [(528, 1283), (607, 1287), (509, 1335), (436, 1342), (506, 1363), (474, 1379),
+                (516, 1386), (563, 1388), (626, 1425), (583, 1428), (654, 1430), (658, 1421),
+                (555, 1468), (916, 1564), (918, 1637), (976, 1666), (823, 1535), (823, 1550)],
+    "san_sierra": [(877, 1297), (897, 1184), (936, 1206), (903, 1220), (893, 1247),
+                   (1099, 1230), (1134, 1228), (1052, 1243), (1107, 1248), (1051, 1252),
+                   (1042, 1256), (1086, 1263), (1053, 1260), (1035, 1269), (1061, 1279),
+                   (1071, 1272), (1062, 1291), (1113, 1285), (1031, 1295), (1031, 1313),
+                   (1057, 1311)],
+    "n_pollana": [(1001, 1322)],
+    "s_pollana": [(975, 1340)],
+    "guardana": [(941, 1372)],
+    "dremaur": [(1110, 1325)],
+    "normania": [(783, 1484)],
+    "aislada": [(1954, 1163), (1793, 1320), (1905, 1174), (2051, 1140), (1852, 1297),
+                (1791, 1257), (1865, 1239), (1823, 1208), (1837, 1309)],
 }
 # patches the lines happen to close off that are not meant as anything yet: left as they
-# are (2026-10-01: the land south of Entroterra and Estande; the unnamed peninsula with
-# the bay east of Fraxhemark)
-LEAVE = [(791, 1345), (1180, 980), (1000, 990)]
+# are (the unnamed peninsula with the bay east of Fraxhemark; 2026-10-04: the land
+# between Anglost and San Sierra, the author undecided, and the land south of Anglost's
+# westernmost island). The land south of Entroterra and Estande, left here from
+# 2026-10-01, became San Sierra on 2026-10-04.
+LEAVE = [(1180, 980), (1000, 990), (748, 1207), (403, 1359), (847, 1402), (769, 1354)]
+# countries whose drawn regions are their states, one per city (author, 2026-10-04: the
+# Aislada lines are state borders): a patch is cut into one state around each city dot
+# in it (source/city_names.json), following any line that runs part-way into it, and
+# kept even when small; patches with no city are cut as usual
+CITY_STATES = {"aislada"}
 MIN_STATE = 150      # smaller patches (islets) join the nearest state of their country
 ISLET_REACH = 300    # ... if within this many px; farther islets make a state of their own
 STATE_MAX = 1000     # patches bigger than this become several states ...
@@ -265,10 +290,20 @@ def main():
     newP = P.copy()
     prov_owner = {}   # new province colour -> owner
     prov_state = {}   # new province colour -> (patch id, state number in the patch)
+    import json
+    cities = [tuple(map(int, k.split(","))) for k in
+              json.loads(Path("source/city_names.json").read_text(encoding="utf-8"))]
+    city_patch = set()
     for i in chosen:
         ys, xs = np.nonzero(cells == i)
-        ks = max(1, round(len(ys) / STATE_AREA)) if len(ys) > STATE_MAX else 1
-        st = organic_split(ys, xs, ks, seed=int(i))
+        inside = [(y, x) for x, y in cities if cells[y, x] == i] if owner_of[int(i)] in CITY_STATES else []
+        if inside:
+            ks = len(inside)
+            st = organic.split(ys, xs, inside, seed=int(i))
+            city_patch.add(int(i))
+        else:
+            ks = max(1, round(len(ys) / STATE_AREA)) if len(ys) > STATE_MAX else 1
+            st = organic_split(ys, xs, ks, seed=int(i))
         for j in range(ks):
             sy, sx = ys[st == j], xs[st == j]
             if len(sy) == 0:
@@ -343,7 +378,7 @@ def main():
         cent[c] = (ys.mean(), xs.mean())
     patch_size = {i: int(size[i]) for i in chosen}
     for c, key in list(prov_state.items()):
-        if patch_size[key[0]] >= MIN_STATE or key[0] in recut:  # a drawn split is kept
+        if patch_size[key[0]] >= MIN_STATE or key[0] in recut or key[0] in city_patch:  # drawn: kept
             continue
         best = min((k for k in prov_state if patch_size[prov_state[k][0]] >= MIN_STATE
                     and prov_owner[k] == prov_owner[c]),

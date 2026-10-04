@@ -120,6 +120,8 @@ HISTORY = {
     # theocratic and authoritarian rulers (one character can't serve two countries)
     "BRL": ["recruit_character = BRL_mahaut_vi"],
     "RLA": ["recruit_character = RLA_serelle_cahun"],
+    # Normania is Anglost's dominion (author, 2026-10-04)
+    "AGL": ["set_autonomy = { target = NRM autonomous_state = autonomy_dominion }"],
     # the Bleacherist republics start as Illiricium's puppets (author, 2026-10-01)
     "ILR": [f"set_autonomy = {{ target = {t} autonomous_state = autonomy_puppet }}"
             for t in ("CTF", "ETR", "MZG")],
@@ -174,6 +176,14 @@ LEADERS = {
     "LCF": ["council_communism"],
     "FTH": ["holy_order"],
     "FRX": ["socialism"],             # Social Democracy
+    # south of Estande (author, 2026-10-04)
+    "NPL": ["stalinism"],             # Party Centralism
+    "SPL": ["liberalism"],
+    "AGL": ["constitutional_monarchism"],
+    "NRM": ["constitutional_monarchism"],
+    "DRM": ["despotism"],             # Absolute Monarchy
+    "SSA": ["council_communism"],
+    "GRD": ["enlightened_absolutism"],
     # Rouental's democrats and communists, promoted by their focuses
     "ROU": ["constitutional_monarchism", "leninism"],
     # the continent placeholders: not chosen by the author, Monarchist as before
@@ -341,6 +351,14 @@ FORMAL_NAMES = {
     "ETR": "the Bleacherist Republic of Entroterra",
     "MZG": "the Bleacherist Republic of Mezzogiorno",
     "KIL": "the Kingdom of Illiricium",
+    # 2026-10-04, the author's
+    "NPL": "the Worker's State of Pollana",
+    "SPL": "the Most Serene Republic of South Pollana",
+    "AGL": "the Kingdom of Anglost",
+    "NRM": "the Principality of Normania",
+    "DRM": "the Pangolin Empire of Dremaur",
+    "SSA": "the People's Republic of San Sierra",
+    "GRD": "the Duchy of Guardana",
 }
 
 LOCALISATION = [
@@ -823,7 +841,8 @@ PORTRAITS = {
 # provinces and shift when the map is rebuilt) or "capital:TAG" for a country's
 # capital city, which stays correct across rebuilds.
 CITY_NAMES = {
-    "capital:AIS": "The Great and Noble City of Merlovia",
+    # "capital:AIS" was "The Great and Noble City of Merlovia" until the author named
+    # Aislada's capital Hirane on the Cities layer (2026-10-04)
     # the author's capitals, 2026-09-30
     "capital:ROU": "Rêverie",
     "capital:GDN": "Guedelon",
@@ -847,6 +866,9 @@ CAPITALS = {
     "MZG": (894, 1153),  # Malin
     "ETR": (813, 1165),  # Prestozza
     "KIL": (920, 1165),  # Monte Gnolia
+    # 2026-10-04: Sanhueza, and Hirane inside the circle the author drew on Aislada
+    "SSA": (928, 1249),
+    "AIS": (1838, 1313),
 }
 
 

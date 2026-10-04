@@ -70,6 +70,12 @@ REGIONS["iberia"] = dict(
                    "GFX_Portrait_Europe_Generic_3"] + _seq("GFX_Portrait_South_America_Generic", 3)
                for i in REGIONS["europe"]["political"]})
 
+# Latin American (the Pollanas): vanilla's South American generic portraits
+REGIONS["latin_america"] = dict(
+    army=_seq("GFX_Portrait_South_America_Generic_land", 3),
+    navy=_seq("GFX_Portrait_South_America_Generic_navy", 3),
+    political={i: _seq("GFX_Portrait_South_America_Generic", 3) for i in REGIONS["europe"]["political"]})
+
 # American (Fraxhemark): vanilla has US generals and admirals but no US politicians
 REGIONS["usa"] = dict(
     army=_seq("GFX_Portrait_USA_Generic_land", 9), navy=_seq("GFX_Portrait_USA_Generic_navy", 3),
@@ -105,6 +111,11 @@ TAG_CULTURE = {
     "KRK": dict(names="SOV", portraits="europe", gfx="eastern_european"),
     "FRX": dict(names="USA", portraits="usa", gfx="western_european"),  # author: American
     "LCF": dict(names="USA", portraits="usa", gfx="western_european"),  # Claude: inside Fraxhemark
+    # south of Estande (author, 2026-10-04)
+    **{t: dict(names="SPR", portraits="iberia", gfx="western_european") for t in ("SSA", "GRD")},
+    **{t: dict(names="MEX", portraits="latin_america", gfx="southamerican") for t in ("NPL", "SPL")},
+    **{t: dict(names="ENG", portraits="europe", gfx="western_european") for t in ("AGL", "NRM")},
+    "DRM": dict(names="HOL", portraits="europe", gfx="western_european"),  # Dutch
 }
 
 

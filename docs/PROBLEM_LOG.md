@@ -6,6 +6,25 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**Two more islands fused to the land next to them** (2026-10-04, author)
+- Cause: in the original drawing these islands touch their neighbours only at a corner
+  pixel or through 1-2 px channels, so the strait tracing of 2026-09-28 saw one landmass
+  and shrinking closed the channel.
+- Fix: `pdn_tools.py channel` cuts the cheapest water-to-water path (fewest land pixels)
+  between two sea pixels: the AN island at (654, 1430) and the larger island south of it
+  (11 px), and a 2 px bridge at (932, 1492).
+
+**The author's .pdn had lost Locus and the Moelle/Maïeul split** (2026-10-04)
+- Cause: the upload was edited from a copy made before 2026-10-02, so its game layers
+  (Provinces, States, Countries) were older in the north-east.
+- Fix: as the working rules say, the current game layers were kept and only the
+  author's own layers (outlines, names, rivers, cities) taken from the upload.
+
+**San Sierra was skipped by apply_outlines** (2026-10-04)
+- Cause: `LEAVE` still held a pixel of "the land south of Entroterra and Estande" from
+  2026-10-01, which is San Sierra.
+- Fix: that entry was removed.
+
 **Rouental's divisions started with next to no manpower** (2026-10-02)
 - Cause: an OOB division without `start_manpower_factor` takes its manpower from the
   country's pool, and the Feudal Army (−80 % recruitable population) leaves that tiny.

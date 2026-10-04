@@ -106,6 +106,10 @@ for the author. Unknown layer names are ignored.
     than the state has anyway, so islets across water don't count). These drawn pieces
     stay states even under `MIN_STATE`. First used 2026-09-30: 13 Rouental pieces. The script decodes
     its input `.pdn` itself (`work/pdn_outlines`).
+  - **Countries in `CITY_STATES` (Aislada) take their drawn regions as states, one per
+    city** (author, 2026-10-04: "the Aislada lines are state borders"): a patch is cut
+    around each city dot in it, following lines that stop part-way, and kept even when
+    small (the circle around Hirane). Aislada: 13 states.
   - Islets under 150 px join the nearest state of their country within 300 px
     (`ISLET_REACH`); farther ones (Rouental's two islets off Solitas) share a state of
     their own. `LEAVE` lists patches the lines close off by accident (the land south
@@ -140,7 +144,7 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `regions.py` | placeholder mode only: states, strategic regions |
 | `make_game_pdn.py` / `writepdn.py` | turn a placeholder build into a fresh `HOI4 Mod Map.pdn` |
 | `apply_outlines.py` | by hand: the author's outline layers → provinces, states, countries in the `.pdn` |
-| `pdn_tools.py` | by hand: `navigable` (lake → sea with its own region), `sea_zones` (regroup and recolour regions), `give` (whole states to a country), `recolour` |
+| `pdn_tools.py` | by hand: `navigable` (lake → sea with its own region), `sea_zones` (regroup and recolour regions), `give` (whole states to a country), `recolour`, `channel` (reopen a strait: the cheapest water-to-water path between two sea pixels becomes sea) |
 | `strategic_regions.py` | by hand: sea regions = the author's oceans, one each, with names (`source/region_names.json`); land untouched |
 | `river_provinces.py` | by hand, after a build: re-cuts the provinces of every state a river crosses so rivers run between provinces |
 | `redraw_flags.py` | unused: Fraxhemark's stand-in flag (writes `work/FRX_standin.png`); the author's own `FRX.png` replaced it |
@@ -275,8 +279,19 @@ mismatch, missing localisation) and catches all of them.
     Fraxhemark alone (`LEAVE`). The unnamed peninsula with the bay east of Fraxhemark is
     outlined but left as NSC (`LEAVE`). File names are ASCII (`Cotefer`). Formal names are the
     author's; Selto's "Empire of Seito-Hamborn" was read as Selto-Hamborn.
-    The new three's colours and adjectives are Claude's picks. All tags were checked
-    against vanilla `common/country_tags`; new tags must be too.
+    The new three's colours and adjectives are Claude's picks.
+    2026-10-04, south of Estande (the author's names, governments and formal names;
+    colours and adjectives Claude's): San Sierra SSA (Council Communism, flag `SSA.png`,
+    capital Sanhueza, with the SS islands and the archipelago its label points to),
+    Anglost AGL (Constitutional Monarchy, flag `AGL.png`, with every AN island), Normania
+    NRM (Constitutional Monarchy, Anglost's dominion: `autonomy_dominion`), Guardana GRD
+    (Enlightened Absolutism), North Pollana NPL ("the Worker's State of Pollana", Party
+    Centralism; the north tip of S. Pollana's island), South Pollana SPL (Liberalism) and
+    Dremaur DRM ("the Pangolin Empire of Dremaur", Absolute Monarchy, flag `DRM.png`).
+    Cultures (author): SSA GRD Spanish, NPL SPL Latin American (MEX names, vanilla's South
+    American portraits, `southamerican` gfx), AGL NRM English, DRM Dutch (HOL names). The
+    land between Anglost and San Sierra is undecided (author) and stays a placeholder.
+    All tags were checked against vanilla `common/country_tags`; new tags must be too.
   - The adjectives of the neighbours are guesses; the author may rename them.
 - **State names** are the author's, in `source/state_names.json` ("x,y" of a pixel
   inside the state → name, since ids shift; `build_mod.py` stops if a pixel is in no
@@ -314,7 +329,7 @@ Aislada is the worked example of a built-out nation:
   (source, crop box, optional red tint). Each becomes `gfx/leaders/VAL/<name>.dds` and a
   `GFX_portrait_<name>` sprite.
 - **City names**: `nations.CITY_NAMES` overrides victory point names, keyed by
-  `"capital:TAG"` (e.g. Aislada's capital is "The Great and Noble City of Merlovia") or
+  `"capital:TAG"` (e.g. Rouental's capital is "Rêverie") or
   by province id. Ids shift whenever the map is rebuilt, so prefer the capital key;
   `build_mod.py` stops if a named id is no longer a victory point.
 - **Rouental (ROU)** is the country the author outlined inside Nonscio. Everything
@@ -657,8 +672,16 @@ in git history (commit d2d6cd8, `scripts/cartographic.py`). It used
 
 ## Current state
 
-- 7,648 provinces (6,965 land, 645 sea, 38 lakes), 1,208 states, 91 strategic regions (11 sea),
-  31 countries. 2026-10-01, later: Kurikia 143 states, Fraxhemark 149; six Cardonian
+- 8,316 provinces (7,633 land, 645 sea, 38 lakes), 1,346 states, 91 strategic regions (11 sea),
+  46 countries. 2026-10-04: the seven nations south of Estande (San Sierra 60 states,
+  Anglost 55, Guardana 8, Normania 5, the Pollanas and Dremaur 1 each), Aislada's 13 drawn
+  states with its rivers and 14 cities (capital Hirane, which replaced the joke name
+  "The Great and Noble City of Merlovia"), four more Rouental cities (Seraine, Saintiers,
+  Grande Rebette, Torres), and two more fused islands cut free (`pdn_tools.py channel`:
+  the AN island at (654, 1430) and its neighbour, and a bridge at (932, 1492)). The
+  author's upload had older game layers in the north-east (no Locus, no Moelle); the
+  current ones were kept and only their own layers taken (author: Locus stays).
+  2026-10-01, later: Kurikia 143 states, Fraxhemark 149; six Cardonian
   and two Royalist Illiricium states re-cut where new state lines split them; rivers
   edited (72 states re-cut along rivers, 92 % of river pixels on a province border);
   the first nine cities. 2026-10-01: Illiricium 18 states, Entroterra 9, Côtefer 5, Mezzogiorno 5,

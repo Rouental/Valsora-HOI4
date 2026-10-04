@@ -81,6 +81,15 @@ COUNTRIES = {
     # 2026-10-02, the author's, inside Fraxhemark around its lake; colour Claude's
     "locus": ("LCF", "Locus", "Locan", (230, 100, 30)),
     "faithful": ("FTH", "The Faithful", "Faithful", (240, 190, 80)),
+    # 2026-10-04, south of Estande (the author's names; colours and adjectives Claude's,
+    # from the flags where there is one)
+    "san_sierra": ("SSA", "San Sierra", "San Sierran", (250, 125, 40)),  # flag orange
+    "anglost": ("AGL", "Anglost", "Anglostian", (22, 48, 92)),           # flag navy
+    "normania": ("NRM", "Normania", "Normanian", (45, 90, 140)),         # Anglost's dominion
+    "guardana": ("GRD", "Guardana", "Guardanan", (205, 175, 70)),
+    "n_pollana": ("NPL", "North Pollana", "Pollanan", (190, 30, 45)),
+    "s_pollana": ("SPL", "South Pollana", "South Pollanan", (45, 150, 145)),
+    "dremaur": ("DRM", "Dremaur", "Dremauri", (115, 5, 5)),            # flag maroon
 }
 # The placeholder countries, one per continent, are the recommended starts in the
 # bookmark; the rest are playable but not listed there.
