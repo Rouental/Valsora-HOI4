@@ -92,10 +92,10 @@ COUNTRIES = {
     "dremaur": ("DRM", "Dremaur", "Dremauri", (115, 5, 5)),            # flag maroon
     # 2026-10-04, later: Nonscio's west (Wersh, Troc, Cascadia), between Anglost and San
     # Sierra (Sicilianzo, Danelaw), inside Fraxhemark (Thorian); colours Claude's
-    "wersh": ("WRS", "Wersh", "Wershian", (130, 90, 50)),
-    "troc": ("TRC", "Troc", "Trocian", (20, 80, 30)),                    # flag green
-    "cascadia": ("CSC", "Cascadia", "Cascadian", (40, 130, 100)),
-    "sicilianzo": ("SCZ", "Sicilianzo", "Sicilianzan", (195, 15, 50)),   # flag crimson
+    "wersh": ("WRS", "Wersh", "Wershian", (25, 35, 110)),               # dark blue (author)
+    "troc": ("TRC", "Troc", "Trocian", (170, 25, 25)),                   # red (author)
+    "cascadia": ("CSC", "Cascadia", "Cascadian", (15, 75, 40)),           # dark green (author)
+    "sicilianzo": ("SCZ", "Sicilianzo", "Sicilianzan", (228, 228, 222)),  # white (author)
     "danelaw": ("DNL", "Danelaw", "Danelawan", (0, 106, 167)),           # Sweden's blue for now
     "thorian": ("THD", "Thorian Dynamics", "Thorian", (95, 95, 100)),
 }

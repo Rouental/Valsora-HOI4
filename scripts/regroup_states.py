@@ -41,6 +41,9 @@ WORK = Path("work/pdn_regroup")
 OCEAN, LAKES = (8, 31, 130), (55, 90, 220)
 LINE_LAYERS = ["Necessary Borders", "Necessary States"]
 SLIVER = 40
+# placeholder countries whose states the author has drawn (Aislada, 2026-10-04: one
+# state per drawn region, not one per city)
+DRAWN_PLACEHOLDERS = {"AIS"}
 MIN_LINE, MIN_AREA = 8, 150  # a state line: at least this long, between areas this big
 CROSS = np.array([[0, 1, 0], [1, 1, 1], [0, 1, 0]])
 
@@ -71,7 +74,8 @@ def main():
     S = np.where(L["States"][..., 3] > 0, code(L["States"][..., :3]), -1)
     P = code(L["Provinces"][..., :3])
     R = code(L["Strategic Regions"][..., :3])
-    tag_of = {code(np.array(v[3])): v[0] for k, v in COUNTRIES.items() if k not in PLACEHOLDERS}
+    tag_of = {code(np.array(v[3])): v[0] for k, v in COUNTRIES.items()
+              if k not in PLACEHOLDERS or v[0] in DRAWN_PLACEHOLDERS}
 
     # ------------------------------------------------ the drawn areas
     cells = sklabel(land & ~lines, connectivity=1)

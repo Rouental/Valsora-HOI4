@@ -6,6 +6,14 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**Aislada's drawn states were split, and Kurikia's eastern island was missed** (2026-10-04, author)
+- Cause: Aislada's regions were cut into one state per city, so regions with two cities
+  became two states; the island east of Kurikia has no outline, so nothing seeded it.
+- Fix: Aislada's regions are one state each (`regroup_states.py`, `DRAWN_PLACEHOLDERS`);
+  the island was given to Kurikia as one state.
+
+**A city name misread** (2026-10-04): "Grande Rebette" is Grande Reliette.
+
 **Drawn states cut into many small ones** (2026-10-04, author: "I want to cut back on the number of states")
 - Cause: `apply_outlines.py` cut every drawn area over 1,000 px into ~650 px states,
   even where the author had drawn the states themselves.

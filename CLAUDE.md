@@ -114,10 +114,10 @@ for the author. Unknown layer names are ignored.
     than the state has anyway, so islets across water don't count). These drawn pieces
     stay states even under `MIN_STATE`. First used 2026-09-30: 13 Rouental pieces. The script decodes
     its input `.pdn` itself (`work/pdn_outlines`).
-  - **Countries in `CITY_STATES` (Aislada) take their drawn regions as states, one per
-    city** (author, 2026-10-04: "the Aislada lines are state borders"): a patch is cut
-    around each city dot in it, following lines that stop part-way, and kept even when
-    small (the circle around Hirane). Aislada: 13 states.
+  - `CITY_STATES` (cut a patch into one state per city dot) was used once for Aislada
+    and **rejected by the author** (2026-10-04, later: it split their drawn states).
+    Aislada's drawn regions are now one state each through `regroup_states.py`
+    (`DRAWN_PLACEHOLDERS`): 9 states plus 6 islands; the circle around Hirane is one.
   - Islets under 150 px join the nearest state of their country within 300 px
     (`ISLET_REACH`); farther ones (Rouental's two islets off Solitas) share a state of
     their own. `LEAVE` lists patches the lines close off by accident (the land south
@@ -312,6 +312,10 @@ mismatch, missing localisation) and catches all of them.
     Italian, CSC and THD American, WRS TRC the continent's (English). The author wrote
     "Sicilianzo" and "Danelaw" on Necessary Borders; the letters were moved to Necessary
     Names. Capitals: Kurikia Markovograd, Fraxhemark Fraternal City (dots now).
+    Map colours by the author (2026-10-04, later): Wersh dark blue, Troc red, Cascadia
+    dark green, Sicilianzo white (an off-white, since Royalist Illiricium is pure white).
+    Kurikia also holds the island off its east coast at (1409, 925), one state (the
+    author's Notes layer colours it Kurikian).
     All tags were checked against vanilla `common/country_tags`; new tags must be too.
   - The adjectives of the neighbours are guesses; the author may rename them.
 - **State names** are the author's, in `source/state_names.json` ("x,y" of a pixel
@@ -704,7 +708,7 @@ in git history (commit d2d6cd8, `scripts/cartographic.py`). It used
   Anglost 55, Guardana 8, Normania 5, the Pollanas and Dremaur 1 each), Aislada's 13 drawn
   states with its rivers and 14 cities (capital Hirane, which replaced the joke name
   "The Great and Noble City of Merlovia"), four more Rouental cities (Seraine, Saintiers,
-  Grande Rebette, Torres), and two more fused islands cut free (`pdn_tools.py channel`:
+  Grande Reliette (misread as "Rebette" at first), Torres), and two more fused islands cut free (`pdn_tools.py channel`:
   the AN island at (654, 1430) and its neighbour, and a bridge at (932, 1492)). The
   author's upload had older game layers in the north-east (no Locus, no Moelle); the
   current ones were kept and only their own layers taken (author: Locus stays).

@@ -130,7 +130,7 @@ RECUT_DONE = False
 # Aislada lines are state borders): a patch is cut into one state around each city dot
 # in it (source/city_names.json), following any line that runs part-way into it, and
 # kept even when small; patches with no city are cut as usual
-CITY_STATES = {"aislada"}
+CITY_STATES = set()  # was {"aislada"}; the author wants one state per drawn region (regroup_states.py)
 MIN_STATE = 150      # smaller patches (islets) join the nearest state of their country
 ISLET_REACH = 300    # ... if within this many px; farther islets make a state of their own
 STATE_MAX = 2000     # patches bigger than this become several states ...
