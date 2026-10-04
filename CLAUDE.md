@@ -444,9 +444,14 @@ Aislada is the worked example of a built-out nation:
 - **Starting armies** (author, 2026-10-02): every country owning land but Rouental gets
   `history/units/<TAG>_1936.txt` (`nations.generic_oob`): "Infantry Division" (8
   infantry, 1 artillery, engineers, recon), about one per six states, 2 to 24, at the
-  victory points of its states (capital first), plus the techs for them. Every OOB
-  division sets `start_manpower_factor = 1.0`: unset, its manpower is taken from the
-  country's pool, which left Rouental's host nearly empty under the Feudal Army.
+  victory points of its states (capital first), plus the techs for them. An OOB
+  division takes its men out of the country's pool; `start_manpower_factor = 1.0` did
+  not stop that (in game, 2026-10-04: every army started empty), so each country's
+  history does `add_manpower` (12,000 per division; Rouental 150,000) just before
+  `set_oob`. State population is 300 per map pixel (`build_mod.POP_PER_PX`; 20 until
+  2026-10-04, when the whole world held 75 million and Seigne 7,000).
+- **Opinion modifier names**: `valsora_reibonnaise_ties` is "Seran Ties" and
+  `valsora_against_communism` "Seran Biases" (author, 2026-10-04).
 - **Named generated rulers**: `nations.NAMED_LEADERS` gives a generated ruler the
   author's name and portrait: Illiricium's is **Ema Milize**
   (`source/portraits/ema_milize.png`).

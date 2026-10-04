@@ -6,6 +6,14 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**Every army started with no manpower; opinion modifiers showed their raw keys** (2026-10-04, author)
+- Cause: an OOB division takes its men from the country's manpower pool, and the pools
+  were tiny: state population was 20 per map pixel (75 million people in the world,
+  7,000 in Seigne). `start_manpower_factor` didn't prevent it. The opinion modifiers
+  had no localisation, so the game showed `valsora_against_communism`.
+- Fix: population is 300 per pixel; each country gets `add_manpower` for its starting
+  divisions before `set_oob`; the modifiers are named "Seran Ties" and "Seran Biases".
+
 **Aislada's drawn states were split, and Kurikia's eastern island was missed** (2026-10-04, author)
 - Cause: Aislada's regions were cut into one state per city, so regions with two cities
   became two states; the island east of Kurikia has no outline, so nothing seeded it.

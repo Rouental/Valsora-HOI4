@@ -34,6 +34,8 @@ ROU_ARMY_HISTORY = [
         ("infantry_equipment_1", 3000), ("support_equipment_1", 600), ("motorized_equipment_1", 1500),
         ("mechanized_equipment_1", 400), ("artillery_equipment_1", 500), ("anti_air_equipment_1", 300))],
     # last, once the techs and the tank design exist
+    # the royal host's men come on top of the (tiny, Feudal Army) pool: see oob_manpower
+    "add_manpower = 150000",
     'set_oob = "ROU_1936"',
 ]
 
@@ -290,10 +292,23 @@ GENERIC_ARMY_TECH = ("set_technology = { infantry_weapons = 1 tech_support = 1 t
                      "tech_recon = 1 gw_artillery = 1 }")
 
 
+def generic_divisions(n_states):
+    """How many starting divisions a country of n_states gets."""
+    return max(2, min(24, round(n_states / 6) + 2))
+
+
+def oob_manpower(n_divisions):
+    """History lines that give a country the men for its starting divisions: an OOB
+    division takes its manpower out of the country's pool (start_manpower_factor did not
+    stop that in game, 2026-10-04), and small countries' pools could not fill them.
+    About 10,000 men per division, with room to spare."""
+    return [f"add_manpower = {12000 * n_divisions}"]
+
+
 def generic_oob(tag, vps):
     """history/units/<tag>_1936.txt: vps are the victory point provinces of the
     country's states, capital first."""
-    n = max(2, min(24, round(len(vps) / 6) + 2))
+    n = generic_divisions(len(vps))
     out = ["division_template = {", '\tname = "Infantry Division"', "\tregiments = {",
            *[f"\t\tinfantry = {{ x = {x} y = {y} }}" for x in range(3) for y in range(3) if (x, y) != (2, 2)],
            "\t\tartillery_brigade = { x = 3 y = 0 }", "\t}",
@@ -400,6 +415,9 @@ LOCALISATION = [
     ' ROU_steady_as_she_goes:0 "Steady As She Goes"',
     ' ROU_steady_as_she_goes_desc:0 "The Cahuns stay. Roland stays. Everything stays."',
     ' AIS_merlovich:0 "The Great Merlovich"',  # author, 2026-10-04
+    # the Reibonnaise opinion modifiers' names (author, 2026-10-04)
+    ' valsora_reibonnaise_ties:0 "Seran Ties"',
+    ' valsora_against_communism:0 "Seran Biases"',
     ' AIS_communist_merlovich:0 "Communist Merlovich"',
     ' AIS_focus:0 "Aisladan Focus Tree"',
     ' AIS_nationstates_account:0 "Make a NationStates Account"',

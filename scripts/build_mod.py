@@ -27,6 +27,7 @@ W, H = MAP_W, MAP_H
 OUT = Path("build") / MOD_DIR_NAME
 PAL = Path("source/palettes")
 FLAGS = Path("source/flags")
+POP_PER_PX = 300  # state population per map pixel
 IDEOLOGIES = ideologies.IDEOLOGIES
 CRLF = "\r\n"
 CITY_VP = 5  # victory points of a named city from the Cities layer (a capital has 10)
@@ -407,7 +408,9 @@ def main():
             "state = {",
             f"\tid = {s + 1}",
             f'\tname = "VAL_STATE_{s + 1}"',
-            f"\tmanpower = {max(1000, px * 20)}",
+            # 300 people per map pixel (20 until 2026-10-04: the world held 75 million and
+            # no country could man its starting army)
+            f"\tmanpower = {max(15000, px * POP_PER_PX)}",
             f"\tstate_category = {cat}",
             "\thistory = {",
             f"\t\towner = {tag}",
@@ -592,7 +595,8 @@ def main():
             continue
         mine.sort(key=lambda s: (s != capital_state[c], -len(states[s]), s))
         write(f"history/units/{tag}_1936.txt", nations.generic_oob(tag, [int(pid[state_capital[s]]) for s in mine]))
-        army[tag] = [nations.GENERIC_ARMY_TECH, f'set_oob = "{tag}_1936"']
+        army[tag] = [nations.GENERIC_ARMY_TECH, *nations.oob_manpower(nations.generic_divisions(len(mine))),
+                     f'set_oob = "{tag}_1936"']
     for c in present:
         tag, name, adj, col = COUNTRIES[c]
         fname = country_file(c)
