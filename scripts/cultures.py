@@ -99,6 +99,8 @@ TAG_CULTURE = {
     **{t: _FRENCH for t in ("ROU", "SGN", "EVR", "HLR", "SGV", "LST", "LZC", "GDN")},
     # the civil war factions are Rouentaise too
     **{t: _FRENCH for t in ("BRL", "CRP", "RLT", "MRC", "RLA", "VAI", "FTH")},
+    # ... and so are the nations it can release
+    **{t: _FRENCH for t in ("CRL", "MTN", "ORF", "GHS", "RVR", "PSC")},
     "LNT": _FRENCH,  # author, 2026-09-30
     # Portuguese (author, 2026-09-30): vanilla has no Iberian generic portraits
     **{t: dict(names="POR", portraits="iberia", gfx="western_european")

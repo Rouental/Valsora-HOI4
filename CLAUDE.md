@@ -342,8 +342,8 @@ mismatch, missing localisation) and catches all of them.
     **Malvekia** (tag GRD kept); in Araseos' south-west Terrabis-Seran TBS (Social
     Democracy, "the Commonwealth of Terrabis-Seran", English, flag `TBS.png`, with the TS
     islands), Gaellia GAE (Absolute Monarchy, "the Kingdom of Gaellia", Irish),
-    Kilkire-Battania KKB (Elective Monarchy, "the High Kingdom of Kilkire-Battania",
-    Irish; the map label reads "Kilkire-Foraois", the message's name was used) and
+    Kilkire-Foraois KKB (Elective Monarchy, "the High Kingdom of Kilkire-Foraois",
+    Irish; the author's message said "Kilkire-Battania" at first) and
     Harwick HWK (Party Centralism, "the People's Rule Over Harwick", Welsh, Vineta's
     puppet), with Vineta VNT (Party Centralism, "the People's Rule Over Vineta", Welsh,
     flag `VNT.png`) on the VI islands off them; the Garfield Republics GFR (Fascism, "the
@@ -356,10 +356,23 @@ mismatch, missing localisation) and catches all of them.
     (`pdn_tools.py merge_small sicilianzo 400`), leaving it 3 states. The tip of
     Danelaw's eastern peninsula, cut off by a new line and labelled GR, is Garfield's
     (the "GR" was written on Necessary Borders; moved to Necessary Names).
-    `regroup_states.NOT_DRAWN` keeps Gaellia's states organic: its west border forks at
-    the coast, which otherwise reads as a state line of its own. Welsh (WLS) and Irish (IRE) names were added to
-    `source/names/vanilla_names.txt` from vanilla. The peninsula east of Thorian, now
-    split and labelled TS / CA, is still Nonscio (not in the message).
+    The bit of coast Gaellia's forked west border closes off at (596, 2222) is
+    **another nation's, later** (author): it stays Araseos (`LEAVE`). Welsh (WLS) and Irish (IRE) names were added to
+    `source/names/vanilla_names.txt` from vanilla. The peninsula east of Thorian is two
+    **exclaves**: Terrabis-Seran's (TS, north) and Cardonia's (CA, south) (author).
+    San Sierra's state lines had two gaps (a pixel at (778, 1263); a line 4 px short of
+    the coast at (890, 1263–1266)), filled. **Rouental's releasables** (author,
+    2026-10-05; `nations.RELEASABLE`, cores from the start, owning nothing, so they can
+    be released by hand; **not** released by the civil war): the Kingdom of Carcarelle
+    CRL (Carcarelle, Nerié, Hyères), the Duchy of the Mountains MTN (Everlon, Tocsin,
+    Rolantelle, Rempart), the Oriflamme Alliance ORF (Oriflamme, Glacierre), the Free
+    State of Ghessone GHS, the Grand Duchy of the Riverraine RVR (Leclerc, Marais
+    Verte) and the Duchy of the Piscary PSC (Belleplaine-sur-Mer, Baie de Torres,
+    Graisivaudan); the author's flags, French culture; governments and colours are
+    Claude's (Absolute Monarchy, Feudalism, Oligarchy, Liberalism, Feudalism,
+    Feudalism). Royalist Illiricium's ruler is **Beatrice di Alqiro** (`NAMED_LEADERS`,
+    `source/portraits/beatrice_di_alqiro.png`). New flags for Romanoddle and South
+    Pollana too.
     All tags were checked against vanilla `common/country_tags`; new tags must be too.
   - The adjectives of the neighbours are guesses; the author may rename them.
 - **State names** are the author's, in `source/state_names.json` ("x,y" of a pixel

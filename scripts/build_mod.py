@@ -225,7 +225,7 @@ def main():
     owners = [by_tag[t] for t in rj["owners"]] if "owners" in rj else \
         [CONTINENTS[int(cont[g[0]]) - 1] for g in states]
     # countries that own a state, plus those released later (they own nothing at start)
-    later = {by_tag[t] for t in nations.CIVIL_WAR}
+    later = {by_tag[t] for t in (*nations.CIVIL_WAR, *nations.RELEASABLE)}
     present = [c for c in COUNTRIES if c in owners or c in later]
     n = len(kind)
     pid = np.arange(n) + 1  # HOI4 province ids start at 1
@@ -350,10 +350,10 @@ def main():
     state_by_name = {nm: s for s, nm in named.items()}
     # cores of countries released later (nations.CIVIL_WAR), by state name
     extra_cores = defaultdict(list)
-    for tag, names in nations.CIVIL_WAR.items():
+    for tag, names in (*nations.CIVIL_WAR.items(), *nations.RELEASABLE.items()):
         for nm in names:
             if nm not in state_by_name:
-                raise SystemExit(f"nations.CIVIL_WAR: no state named {nm!r} for {tag}")
+                raise SystemExit(f"nations.CIVIL_WAR / RELEASABLE: no state named {nm!r} for {tag}")
             if tag not in nations.CIVIL_WAR_ONLY:  # those get their cores in the focus
                 extra_cores[state_by_name[nm]].append(tag)
     state_capital = [max(g, key=lambda i: (size[i], -i)) for g in states]
@@ -373,7 +373,8 @@ def main():
     for c in present:
         members = [s for s in range(len(states)) if owners[s] == c]
         if not members:  # released later: its first named state
-            capital_state[c] = state_by_name[nations.CIVIL_WAR[COUNTRIES[c][0]][0]]
+            t = COUNTRIES[c][0]
+            capital_state[c] = state_by_name[(nations.CIVIL_WAR.get(t) or nations.RELEASABLE[t])[0]]
             continue
         cy = np.average([reg["centre"][i][0] for s in members for i in states[s]],
                         weights=[size[i] for s in members for i in states[s]])

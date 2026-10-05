@@ -97,12 +97,11 @@ OCEAN, LAKES = (8, 31, 130), (55, 90, 220)
 DEFAULT_OWNER = "terrabis_seran"
 OWNERS = {
     "terrabis_seran": [(666, 1993), (214, 1997), (211, 2013), (241, 2030), (307, 2037),
-                       (303, 2046), (336, 2051)],
+                       (303, 2046), (336, 2051), (1200, 955)],
     "vineta": [(345, 2060), (312, 2107), (285, 2104), (222, 2129), (283, 2116), (328, 2129),
                (313, 2155), (273, 2146), (258, 2150), (251, 2166), (277, 2160), (281, 2195),
                (260, 2179)],
-    # with the bit of coast its west line closes off at (596, 2222)
-    "gaellia": [(673, 2192), (596, 2222)],
+    "gaellia": [(673, 2192)],
     "kilkire": [(739, 2202)],
     "harwick": [(734, 2329)],
     # the islands, and the tip of Danelaw's eastern peninsula the author cut off for it
@@ -114,6 +113,9 @@ OWNERS = {
     "cascadia": [(479, 403), (277, 493), (174, 511), (208, 562), (203, 564), (151, 606),
                  (218, 605), (172, 606), (166, 624), (68, 640), (150, 659), (233, 662),
                  (122, 708)],
+    # 2026-10-05, the author's answers: the peninsula east of Thorian is two exclaves,
+    # Terrabis-Seran's (TS, north; in its list above) and Cardonia's (CA, south)
+    "cardonia": [(1180, 980)],
 }
 OWNERS_0410 = {
     "anglost": [(528, 1283), (607, 1287), (509, 1335), (436, 1342), (506, 1363), (474, 1379),
@@ -137,7 +139,7 @@ OWNERS_0410 = {
 # between Anglost and San Sierra, the author undecided, and the land south of Anglost's
 # westernmost island). The land south of Entroterra and Estande, left here from
 # 2026-10-01, became San Sierra on 2026-10-04.
-LEAVE = [(1180, 980), (1200, 955),  # the peninsula east of Thorian, now labelled TS / CA
+LEAVE = [(596, 2222),  # the bit of coast west of Gaellia: another nation's, later (author)
          (1618, 1798), (2323, 1884), (1757, 1894),  # Solitas placeholder land the friend's nations left
          (403, 1359), (847, 1402), (769, 1354),
          # Aislada, outlined on 2026-10-04 (still the placeholder's colour)

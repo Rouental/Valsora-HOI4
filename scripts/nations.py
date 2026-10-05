@@ -210,6 +210,13 @@ LEADERS = {
     "GAE": ["despotism"],
     "KKB": ["elective_monarchy"],
     "GFR": ["fascism_ideology"],
+    # Rouental's releasables: Claude's guesses from their titles
+    "CRL": ["despotism"],
+    "MTN": ["feudalism"],
+    "ORF": ["oligarchism"],
+    "GHS": ["liberalism"],
+    "RVR": ["feudalism"],
+    "PSC": ["feudalism"],
     # Rouental's democrats and communists, promoted by their focuses
     "ROU": ["constitutional_monarchism", "leninism"],
     # the continent placeholders: not chosen by the author, Monarchist as before
@@ -221,6 +228,7 @@ HAND_MADE = {"ROU", "AIS", "BRL", "RLA"}  # rulers defined in the character file
 # the portraits are in PORTRAITS
 NAMED_LEADERS = {
     "ILR_leader_bleacherism": ("Ema Milize", "GFX_portrait_ILR_ema_milize"),  # author, 2026-10-02
+    "KIL_leader_legitimism": ("Beatrice di Alqiro", "GFX_portrait_KIL_beatrice_di_alqiro"),  # author, 2026-10-05
     # 2026-10-05, the author's friend's sessions (base-game portraits)
     "HOA_leader_constitutional_monarchism": ("George Tupou VII the Generous", "GFX_Portrait_Europe_Generic_2"),
     "ARV_leader_constitutional_monarchism": ("Daniel Maurício", "GFX_Portrait_South_America_Generic_2"),
@@ -250,6 +258,17 @@ CIVIL_WAR = {
     "RLA": ["Rêverie", "Rouental", "Saintiers", "Cournin", "Vendée"],
     "VAI": ["Vair", "Pavois", "Caux-Gautier"],
     "FTH": ["Hevique", "Avarre"],
+}
+# Nations Rouental can release (author, 2026-10-05): they own nothing at the start and
+# hold cores on these states (the first is the capital), so they show in Rouental's
+# list of releasable nations
+RELEASABLE = {
+    "CRL": ["Carcarelle", "Nerié", "Hyères"],
+    "MTN": ["Everlon", "Tocsin", "Rolantelle", "Rempart"],
+    "ORF": ["Oriflamme", "Glacierre"],
+    "GHS": ["Ghessone"],
+    "RVR": ["Leclerc", "Marais Verte"],
+    "PSC": ["Belleplaine-sur-Mer", "Baie de Torres", "Graisivaudan"],
 }
 # exist only through the civil war (author): no cores until the Prince is executed, so
 # they can't be released any other way
@@ -430,8 +449,15 @@ FORMAL_NAMES = {
     "VNT": "the People's Rule Over Vineta",
     "HWK": "the People's Rule Over Harwick",
     "GAE": "the Kingdom of Gaellia",
-    "KKB": "the High Kingdom of Kilkire-Battania",
+    "KKB": "the High Kingdom of Kilkire-Foraois",
     "GFR": "the United Greater Garfield Republics",
+    # Rouental's releasables (author, 2026-10-05)
+    "CRL": "the Kingdom of Carcarelle",
+    "MTN": "the Duchy of the Mountains",
+    "ORF": "the Oriflamme Alliance",
+    "GHS": "the Free State of Ghessone",
+    "RVR": "the Grand Duchy of the Riverraine",
+    "PSC": "the Duchy of the Piscary",
 }
 
 LOCALISATION = [
@@ -913,6 +939,7 @@ PORTRAITS = {
     "ROU_serelle_cahun": ("source/portraits/serelle_cahun.png", 260, 90, 900, None),
     "ROU_roland_cahun": ("source/portraits/roland_cahun.png", 340, 200, 1100, None),
     "ILR_ema_milize": ("source/portraits/ema_milize.png", 2, 0, 237, None),
+    "KIL_beatrice_di_alqiro": ("source/portraits/beatrice_di_alqiro.png", 0, 0, 223, None),
 }
 
 # Hand-picked victory point names. Key either a province id (ids follow the placeholder

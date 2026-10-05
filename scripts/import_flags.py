@@ -25,6 +25,9 @@ ALIASES = {
     "communist rouental": "ROU_communism",
     "marchers": "MRC",
     "garfield": "GFR",
+    "gheso": "GHS",
+    "riverrain": "RVR",
+    "s. pollana": "SPL",
 }
 
 

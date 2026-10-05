@@ -169,6 +169,15 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## Map problems found while building
 
+**A 5 px province in Kurikia stopped the build; San Sierra's state lines leaked** (2026-10-05)
+- Cause: re-running `regroup_states.py` over every drawn country left a 5 px scrap at
+  (1242, 856). Separately, two of the author's San Sierra state lines had gaps, so
+  neighbouring areas ran together into one state: one missing pixel, and one line
+  stopping 4 px short of the coast.
+- Fix: the scrap joined its neighbour in the same state, and the gaps were filled. To
+  find dead-end line pixels, look for line pixels with at most one line neighbour that
+  are not next to water.
+
 **`apply_outlines.py` ran for hours, and nearly gave Solitas land to Terrabis-Seran** (2026-10-05)
 - Cause: the clean-up of cut provinces compared every province against the whole
   window around the new outlines. This time the window ran from Cascadia to Harwick,

@@ -116,9 +116,17 @@ COUNTRIES = {
     "vineta": ("VNT", "Vineta", "Vinetan", (165, 0, 25)),                       # flag red
     "harwick": ("HWK", "Harwick", "Harwicker", (215, 95, 85)),                  # Vineta's vassal
     "gaellia": ("GAE", "Gaellia", "Gaellic", (35, 130, 65)),
-    "kilkire": ("KKB", "Kilkire-Battania", "Kilkiran", (215, 135, 45)),
+    "kilkire": ("KKB", "Kilkire-Foraois", "Kilkiran", (215, 135, 45)),  # author, 2026-10-05
     "garfield": ("GFR", "Garfield Republics", "Garfieldian", (45, 35, 35)),     # flag black
     "devlon": ("DVL", "Devlon", "Devlonian", (150, 160, 70)),
+    # 2026-10-05, later: nations Rouental can release (nations.RELEASABLE; the author's
+    # names and flags, colours from the flags, Claude's)
+    "carcarelle": ("CRL", "Carcarelle", "Carcarellois", (150, 70, 130)),          # bells on plum
+    "mountains": ("MTN", "Duchy of the Mountains", "Montagnard", (200, 155, 60)),  # gold chevrons
+    "oriflamme": ("ORF", "Oriflamme", "Oriflammois", (205, 85, 45)),              # flame red
+    "ghessone": ("GHS", "Ghessone", "Ghessonais", (60, 150, 60)),                 # green
+    "riverraine": ("RVR", "Riverraine", "Riverrain", (30, 120, 120)),             # waves
+    "piscary": ("PSC", "Piscary", "Piscarien", (70, 130, 190)),                   # scales
 }
 # The placeholder countries, one per continent, are the recommended starts in the
 # bookmark; the rest are playable but not listed there.
