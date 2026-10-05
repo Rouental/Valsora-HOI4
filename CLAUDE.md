@@ -372,7 +372,11 @@ mismatch, missing localisation) and catches all of them.
     Claude's (Absolute Monarchy, Feudalism, Oligarchy, Liberalism, Feudalism,
     Feudalism). Royalist Illiricium's ruler is **Beatrice di Alqiro** (`NAMED_LEADERS`,
     `source/portraits/beatrice_di_alqiro.png`). New flags for Romanoddle and South
-    Pollana too.
+    Pollana too. The **Holy See** VAT ("the Kingdom of the Church", Theocratic,
+    Hierocracy; author, 2026-10-05) holds San Sierra's island state 1 at (896, 1184),
+    given with `pdn_tools.py give holy_see`; its flag `VAT.png` is a stand-in Papal
+    States bicolour with keys and tiara drawn by Claude; Italian culture and the pale
+    gold colour are Claude's.
     All tags were checked against vanilla `common/country_tags`; new tags must be too.
   - The adjectives of the neighbours are guesses; the author may rename them.
 - **State names** are the author's, in `source/state_names.json` ("x,y" of a pixel
@@ -767,8 +771,8 @@ in git history (commit d2d6cd8, `scripts/cartographic.py`). It used
 
 ## Current state
 
-- 10,644 provinces (9,961 land, 645 sea, 38 lakes), 1,375 states, 91 strategic regions (11 sea),
-  65 countries. 2026-10-05, later: Terrabis-Seran 76 states, Kilkire-Battania 28, Garfield 10,
+- 10,644 provinces (9,961 land, 645 sea, 38 lakes), 1,377 states, 91 strategic regions (11 sea),
+  72 countries (with Rouental's six releasables and the Holy See). 2026-10-05, later: Terrabis-Seran 76 states, Kilkire-Battania 28, Garfield 10,
   Gaellia 7, Vineta 7, Harwick 1, Devlon 1 (`dist/state_numbers_araseos_southwest.png`,
   `state_numbers_garfield.png`, `state_numbers_san_sierra.png`). Before: 1,271 states (Llainfair's three became one),
   58 countries (2026-10-05, with the friend's Merlovich, Hoalepa and five nations south of

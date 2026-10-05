@@ -217,6 +217,7 @@ LEADERS = {
     "GHS": ["liberalism"],
     "RVR": ["feudalism"],
     "PSC": ["feudalism"],
+    "VAT": ["theocrat"],  # Hierocracy (author)
     # Rouental's democrats and communists, promoted by their focuses
     "ROU": ["constitutional_monarchism", "leninism"],
     # the continent placeholders: not chosen by the author, Monarchist as before
@@ -458,6 +459,7 @@ FORMAL_NAMES = {
     "GHS": "the Free State of Ghessone",
     "RVR": "the Grand Duchy of the Riverraine",
     "PSC": "the Duchy of the Piscary",
+    "VAT": "the Kingdom of the Church",
 }
 
 LOCALISATION = [
