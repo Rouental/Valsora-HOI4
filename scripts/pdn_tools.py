@@ -9,6 +9,14 @@
     python3 scripts/pdn_tools.py give COUNTRY X,Y [X,Y ...]
         Give the whole states containing these pixels to COUNTRY (a common.COUNTRIES key),
         on the Countries layer.
+    python3 scripts/pdn_tools.py border COUNTRY X,Y [X,Y ...]
+        Give COUNTRY all the land enclosed by Necessary Borders lines around these pixels
+        (the line pixels too), on the Countries layer: a border the author moved. Run
+        regroup_states.py afterwards so the states follow the lines.
+    python3 scripts/pdn_tools.py merge_small COUNTRY MIN_PX
+        Merge COUNTRY's states smaller than MIN_PX into the neighbouring state of the same
+        country they share most border with (States layer), e.g. the slivers a moved
+        border leaves behind. Provinces stay as they are.
     python3 scripts/pdn_tools.py blue_seas
         Recolour every sea province on the Provinces layer in its own blue (the author
         wants the sea easy to tell from land there). Colours only: nothing else changes.
@@ -187,6 +195,49 @@ def give(names, L, country, seeds):
         print(f"state at ({x}, {y}): {m.sum()} px -> {country}")
 
 
+def border(names, L, country, seeds):
+    from common import COUNTRIES
+    from skimage.measure import label as sklabel
+    t = L["Terrain"][..., :3]
+    land = ~((t == (8, 31, 130)).all(-1) | (t == (55, 90, 220)).all(-1))
+    lines = L["Necessary Borders"][..., 3] > 0
+    cells = sklabel(land & ~lines, connectivity=1)
+    idx = ndi.distance_transform_edt(cells == 0, return_distances=False, return_indices=True)
+    cells = np.where(land & (cells == 0), cells[idx[0], idx[1]], cells)
+    for x, y in seeds:
+        m = cells == cells[y, x]
+        moved = m & (code(L["Countries"][..., :3]) != code(np.array(COUNTRIES[country][3])))
+        L["Countries"][m, :3] = COUNTRIES[country][3]
+        L["Countries"][m, 3] = 255
+        print(f"area at ({x}, {y}): {m.sum()} px, {moved.sum()} of them newly {country}")
+
+
+def merge_small(names, L, country, min_px):
+    from common import COUNTRIES
+    t = L["Terrain"][..., :3]
+    land = ~((t == (8, 31, 130)).all(-1) | (t == (55, 90, 220)).all(-1))
+    mine = land & (code(L["Countries"][..., :3]) == code(np.array(COUNTRIES[country][3])))
+    while True:
+        St = np.where(L["States"][..., 3] > 0, code(L["States"][..., :3]), -1)
+        sizes = Counter(St[mine].tolist())
+        small = [s for s, n in sizes.items() if n < min_px and s >= 0]
+        done = False
+        for sc in sorted(small, key=lambda s: sizes[s]):
+            m = (St == sc) & land
+            ring = ndi.binary_dilation(m, CROSS) & ~m & mine
+            nb = Counter(v for v in St[ring].tolist() if v >= 0 and v != sc)
+            if not nb:
+                continue
+            to = nb.most_common(1)[0][0]
+            ys, xs = np.nonzero(m)
+            print(f"state at ({int(xs.mean())}, {int(ys.mean())}), {m.sum()} px -> its neighbour")
+            L["States"][m, :3] = [(to >> 16) & 255, (to >> 8) & 255, to & 255]
+            done = True
+            break
+        if not done:
+            return
+
+
 def blue_seas(names, L):
     P = code(L["Provinces"][..., :3])
     sea = code(L["Terrain"][..., :3]) == code(np.array(OCEAN))
@@ -299,6 +350,10 @@ def main():
         recolour(names, L, sys.argv[2], pairs)
     elif cmd == "give":
         give(names, L, sys.argv[2], [tuple(int(v) for v in a.split(",")) for a in sys.argv[3:]])
+    elif cmd == "border":
+        border(names, L, sys.argv[2], [tuple(int(v) for v in a.split(",")) for a in sys.argv[3:]])
+    elif cmd == "merge_small":
+        merge_small(names, L, sys.argv[2], int(sys.argv[3]))
     elif cmd == "blue_seas":
         blue_seas(names, L)
     elif cmd == "channel":

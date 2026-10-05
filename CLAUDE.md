@@ -152,7 +152,7 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `regions.py` | placeholder mode only: states, strategic regions |
 | `make_game_pdn.py` / `writepdn.py` | turn a placeholder build into a fresh `HOI4 Mod Map.pdn` |
 | `apply_outlines.py` | by hand: the author's outline layers → provinces, states, countries in the `.pdn` |
-| `pdn_tools.py` | by hand: `navigable` (lake → sea with its own region), `sea_zones` (regroup and recolour regions), `give` (whole states to a country), `recolour`, `channel` (reopen a strait: the cheapest water-to-water path between two sea pixels becomes sea) |
+| `pdn_tools.py` | by hand: `navigable` (lake → sea with its own region), `sea_zones` (regroup and recolour regions), `give` (whole states to a country), `recolour`, `channel` (reopen a strait: the cheapest water-to-water path between two sea pixels becomes sea), `border` (the land a moved Necessary Borders line encloses → a country), `merge_small` (a country's sliver states join a neighbour) |
 | `strategic_regions.py` | by hand: sea regions = the author's oceans, one each, with names (`source/region_names.json`); land untouched |
 | `river_provinces.py` | by hand, after a build: re-cuts the provinces of every state a river crosses so rivers run between provinces |
 | `redraw_flags.py` | unused: Fraxhemark's stand-in flag (writes `work/FRX_standin.png`); the author's own `FRX.png` replaced it |
@@ -337,6 +337,29 @@ mismatch, missing localisation) and catches all of them.
     originals weren't sent). The friend also swapped some of the author's Merlovich
     rivers between Major and Minor (author: fine) and split two leftover placeholder
     states at Corales along the paint.
+    2026-10-05, later (the author's names, governments, formal names and cultures; colours,
+    adjectives and the Welsh/Irish name lists' source Claude's): Guardana renamed
+    **Malvekia** (tag GRD kept); in Araseos' south-west Terrabis-Seran TBS (Social
+    Democracy, "the Commonwealth of Terrabis-Seran", English, flag `TBS.png`, with the TS
+    islands), Gaellia GAE (Absolute Monarchy, "the Kingdom of Gaellia", Irish),
+    Kilkire-Battania KKB (Elective Monarchy, "the High Kingdom of Kilkire-Battania",
+    Irish; the map label reads "Kilkire-Foraois", the message's name was used) and
+    Harwick HWK (Party Centralism, "the People's Rule Over Harwick", Welsh, Vineta's
+    puppet), with Vineta VNT (Party Centralism, "the People's Rule Over Vineta", Welsh,
+    flag `VNT.png`) on the VI islands off them; the Garfield Republics GFR (Fascism, "the
+    United Greater Garfield Republics", Spanish, flag `GFR.png`) on the GR islands south
+    of Malvekia; Devlon DVL (Agrarianism, "the Free State of Devlon", American) on the
+    28 px islet its label sits on, off Fraxhemark. Thorian got the two islets labelled
+    TD, Cascadia every islet labelled CS. San Sierra's border with Sicilianzo moved west
+    (`pdn_tools.py border`): San Sierra took most of Sicilianzo, its state lines
+    continued into it; the slivers left of Sicilianzo's old states were merged
+    (`pdn_tools.py merge_small sicilianzo 400`), leaving it 3 states. The tip of
+    Danelaw's eastern peninsula, cut off by a new line and labelled GR, is Garfield's
+    (the "GR" was written on Necessary Borders; moved to Necessary Names).
+    `regroup_states.NOT_DRAWN` keeps Gaellia's states organic: its west border forks at
+    the coast, which otherwise reads as a state line of its own. Welsh (WLS) and Irish (IRE) names were added to
+    `source/names/vanilla_names.txt` from vanilla. The peninsula east of Thorian, now
+    split and labelled TS / CA, is still Nonscio (not in the message).
     All tags were checked against vanilla `common/country_tags`; new tags must be too.
   - The adjectives of the neighbours are guesses; the author may rename them.
 - **State names** are the author's, in `source/state_names.json` ("x,y" of a pixel
@@ -604,6 +627,9 @@ don't exist here. That was the cause of "Failed to generate a portrait / name" a
   - The author's flags can come as one `.pdn` with a layer per flag
     (`import_flags.py`; 2026-10-04: its "Marchers" layer showed The Marches had been
     given the three-lozenge flag, which is its "Duchy of the Mountains"; fixed).
+    2026-10-05: **the author swapped the Marches' flag to the three lozenges** after
+    all ("the sword didn't read well"; the sword flag is now the file's "Spare" layer),
+    and redrew Fraxhemark's.
   - Overrides are in `TAG_CULTURE`: the Reibonnaise states (ROU SGN EVR HLR SGV LST LZC
     GDN) and Placeholdros (LNT) use FRA names and France portraits (author: French for now);
     RST VLN ESD CRZ PLH use POR names (added to `source/names/vanilla_names.txt` from
@@ -728,7 +754,10 @@ in git history (commit d2d6cd8, `scripts/cartographic.py`). It used
 
 ## Current state
 
-- 9,713 provinces (9,030 land, 645 sea, 38 lakes), 1,271 states (Llainfair's three became one), 91 strategic regions (11 sea),
+- 10,644 provinces (9,961 land, 645 sea, 38 lakes), 1,375 states, 91 strategic regions (11 sea),
+  65 countries. 2026-10-05, later: Terrabis-Seran 76 states, Kilkire-Battania 28, Garfield 10,
+  Gaellia 7, Vineta 7, Harwick 1, Devlon 1 (`dist/state_numbers_araseos_southwest.png`,
+  `state_numbers_garfield.png`, `state_numbers_san_sierra.png`). Before: 1,271 states (Llainfair's three became one),
   58 countries (2026-10-05, with the friend's Merlovich, Hoalepa and five nations south of
   Solitas). 2026-10-04, later: six more nations (Cascadia 37 states, Wersh 21, Troc
   15, Sicilianzo 14, Danelaw 20, Thorian 4) and the author's state lines kept as drawn

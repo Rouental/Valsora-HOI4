@@ -169,6 +169,15 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## Map problems found while building
 
+**`apply_outlines.py` ran for hours, and nearly gave Solitas land to Terrabis-Seran** (2026-10-05)
+- Cause: the clean-up of cut provinces compared every province against the whole
+  window around the new outlines. This time the window ran from Cascadia to Harwick,
+  about 1,900 × 1,200 px with thousands of provinces. Separately, three Solitas patches
+  that the friend's outlines had closed off were unseeded, so they would have gone to
+  `DEFAULT_OWNER`.
+- Fix: each province is now checked inside its own bounding box. The three patches are
+  on `LEAVE`. The script lists unseeded patches before writing; read that list.
+
 **A new country bigger than the rest of its continent was nearly skipped** (2026-10-01)
 - Cause: `apply_outlines.py` treated the biggest patch touching a line as "the rest of
   the continent" and left it alone. Fraxhemark (96k px) was the biggest.

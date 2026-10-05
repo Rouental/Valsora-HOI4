@@ -125,6 +125,12 @@ TAG_CULTURE = {
     "ARV": dict(names="POR", portraits="iberia", gfx="western_european"),
     **{t: dict(names="SPR", portraits="iberia", gfx="western_european") for t in ("ATR", "SVM", "PNC")},
     "USS": dict(names="USA", portraits="usa", gfx="western_european"),
+    # 2026-10-05, later (author)
+    "DVL": dict(names="USA", portraits="usa", gfx="western_european"),
+    "TBS": dict(names="ENG", portraits="europe", gfx="western_european"),
+    **{t: dict(names="WLS", portraits="europe", gfx="western_european") for t in ("VNT", "HWK")},
+    **{t: dict(names="IRE", portraits="europe", gfx="western_european") for t in ("GAE", "KKB")},
+    "GFR": dict(names="SPR", portraits="iberia", gfx="western_european"),
 }
 
 

@@ -44,6 +44,9 @@ SLIVER = 40
 # placeholder countries whose states the author has drawn (Aislada, 2026-10-04: one
 # state per drawn region, not one per city)
 DRAWN_PLACEHOLDERS = {"AIS"}
+# countries whose only "state line" is a stray: Gaellia's west border forks where it
+# meets the coast, closing off a bit of coast at (596, 2222) that went to Gaellia
+NOT_DRAWN = {"GAE"}
 MIN_LINE, MIN_AREA = 8, 150  # a state line: at least this long, between areas this big
 CROSS = np.array([[0, 1, 0], [1, 1, 1], [0, 1, 0]])
 
@@ -102,7 +105,7 @@ def main():
     inner = set()
     for (x, y), k_ in shared.items():
         if k_ >= MIN_LINE and min(size[x], size[y]) >= MIN_AREA and country[x] >= 0 \
-                and country[x] == country[y]:
+                and country[x] == country[y] and tag_of[int(country[x])] not in NOT_DRAWN:
             inner.add(int(country[x]))
     print("countries with their own state lines: " + ", ".join(sorted(tag_of[c] for c in inner)))
     # slivers the lines close off join their same-country neighbour

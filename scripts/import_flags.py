@@ -24,6 +24,7 @@ WORK = Path("work/pdn_flags")
 ALIASES = {
     "communist rouental": "ROU_communism",
     "marchers": "MRC",
+    "garfield": "GFR",
 }
 
 

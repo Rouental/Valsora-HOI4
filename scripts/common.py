@@ -88,7 +88,7 @@ COUNTRIES = {
     "san_sierra": ("SSA", "San Sierra", "San Sierran", (250, 125, 40)),  # flag orange
     "anglost": ("AGL", "Anglost", "Anglostian", (22, 48, 92)),           # flag navy
     "normania": ("NRM", "Normania", "Normanian", (45, 90, 140)),         # Anglost's dominion
-    "guardana": ("GRD", "Guardana", "Guardanan", (205, 175, 70)),
+    "guardana": ("GRD", "Malvekia", "Malvekian", (205, 175, 70)),  # Guardana until 2026-10-05
     "n_pollana": ("NPL", "North Pollana", "Pollanan", (190, 30, 45)),
     "s_pollana": ("SPL", "South Pollana", "South Pollanan", (45, 150, 145)),
     "dremaur": ("DRM", "Dremaur", "Dremauri", (115, 5, 5)),            # flag maroon
@@ -108,6 +108,17 @@ COUNTRIES = {
     "us_solitas": ("USS", "United States of Solitas", "American", (140, 60, 190)),
     "silvamar": ("SVM", "Silvamar", "Silvestran", (20, 120, 50)),
     "ponchomagnifico": ("PNC", "Ponchomagnifico", "Ponchomagnifico", (255, 204, 0)),
+    # 2026-10-05, later (the author's names, governments and formal names; colours and
+    # adjectives Claude's, from the flags where there is one): the south-west of Araseos
+    # with its islands, the Garfield islands south of Malvekia, Devlon's islet off
+    # Fraxhemark
+    "terrabis_seran": ("TBS", "Terrabis-Seran", "Terrabian", (140, 55, 105)),  # flag plum
+    "vineta": ("VNT", "Vineta", "Vinetan", (165, 0, 25)),                       # flag red
+    "harwick": ("HWK", "Harwick", "Harwicker", (215, 95, 85)),                  # Vineta's vassal
+    "gaellia": ("GAE", "Gaellia", "Gaellic", (35, 130, 65)),
+    "kilkire": ("KKB", "Kilkire-Battania", "Kilkiran", (215, 135, 45)),
+    "garfield": ("GFR", "Garfield Republics", "Garfieldian", (45, 35, 35)),     # flag black
+    "devlon": ("DVL", "Devlon", "Devlonian", (150, 160, 70)),
 }
 # The placeholder countries, one per continent, are the recommended starts in the
 # bookmark; the rest are playable but not listed there.

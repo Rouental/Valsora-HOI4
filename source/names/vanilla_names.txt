@@ -1272,3 +1272,41 @@ HOL = {
 		Boers "'t Mannetje" Best "Bischoff van Heemskerk" "de Visser" "den Hollander" "den Ouden" "Jacometti" "van den Bent" "van den Briel" "van den Hof" "van der Bijl" "van Helsdingen" "van Liempd" "van Setten" "van Voorst tot Voorst" "van Zinnicq Bergmann" "Wittert van Hoogland" Bosch Bruggink Bruinier Buijs Buurman Carstens "den Breejen" Elias Folmer Giesen Ham Harberts Hilberdink Hoogewerff Hoving Jaapies Janssen Jolles Kaak Kraak Krouwel Kuiper Landzaat Leegstra Lukkien Maas Migchelbrink Reijnierse Rijnders Roelofsen Sandberg Scherpenhuijzen Schippers Steen Tebrunsvelt Varwijk Verhoef Visscher Vos Winkelman Viking
 	  }
 }
+
+IRE = {
+	male = {
+		names = { Alexander Arthur Brian Cathal Christopher Con Daniel Denis Desmond Éamon
+			Edward Ernes Fionán Frank George Harry Jack James John Joseph
+			Kevin Liam Michael Patrick Peter Richard Robert Séan Thomas William
+		  }
+	}
+	female = {
+		names = {
+			Ablach Affraic Euphemia Eva Aileann Agnes Catherine Christina Eleanor Eithne Eithne
+			Eva Euginia Eugenia Finneacht Mary Lucia Lucia Martha Martha Mauda Matilda Mildred Margaret Mona
+			}
+	}
+	surnames = {
+		Aiken Ashe Breen Brugha Collins Connolly Cosgrave Craig "de Valera" Donnelly
+		FitzGerald Griffith Kelly Larkin Lynch Mallin McCartan McCullough McGarry McGuinness
+		Mulcahy O'Brien O'Connor O'Doherty O'Higgins O'Leary O'Mara Pearse Plunket White
+	}
+	callsigns = { }
+}
+
+WLS = {
+	male = {
+		names = {
+			Aled Alun Aneurin Billy Bryn Dai David Emrys Esyr Gareth George Glyn Gwynfor Harry Huw Ianto Idris Idwal Iorwerth James John Morgan Osian Owen Rhodri Rhys Roy Thomas Trevor Tudor Vaughan William Wyn
+		}
+	}
+	female = {
+		names = {
+			Carys Enid Gwen Mair Megan Nia Sian Vivian
+		}
+	}
+	surnames = {
+		Bevan Bowen Collins Davies Driscoll Edwards Ellis Evans Griffiths Harris Howell Hughes Ifans James Jenkins Jones Lewis Lloyd Morgan Moss Owen Owens Phillips Price Rees Roberts Smith Thomas Williams
+	}
+	callsigns = { }
+}

@@ -127,6 +127,8 @@ HISTORY = {
     # the Bleacherist republics start as Illiricium's puppets (author, 2026-10-01)
     "ILR": [f"set_autonomy = {{ target = {t} autonomous_state = autonomy_puppet }}"
             for t in ("CTF", "ETR", "MZG")],
+    # Harwick starts as Vineta's vassal (author, 2026-10-05)
+    "VNT": ["set_autonomy = { target = HWK autonomous_state = autonomy_puppet }"],
 }
 
 # Country names while a given ideology rules: tag -> ideology -> (name, formal
@@ -200,6 +202,14 @@ LEADERS = {
     "USS": ["liberalism"],
     "SVM": ["liberalism"],
     "PNC": ["strongman_rule"],
+    # 2026-10-05, later (author)
+    "DVL": ["agrarianism"],
+    "TBS": ["socialism"],
+    "VNT": ["stalinism"],
+    "HWK": ["stalinism"],
+    "GAE": ["despotism"],
+    "KKB": ["elective_monarchy"],
+    "GFR": ["fascism_ideology"],
     # Rouental's democrats and communists, promoted by their focuses
     "ROU": ["constitutional_monarchism", "leninism"],
     # the continent placeholders: not chosen by the author, Monarchist as before
@@ -400,7 +410,7 @@ FORMAL_NAMES = {
     "NRM": "the Principality of Normania",
     "DRM": "the Pangolin Empire of Dremaur",
     "SSA": "the People's Republic of San Sierra",
-    "GRD": "the Duchy of Guardana",
+    "GRD": "the Duchy of Malvekia",
     "WRS": "the Republic of Wersh",
     "TRC": "the Democratic Republic of Troc",
     "CSC": "the United Forests of Cascadia",
@@ -414,6 +424,14 @@ FORMAL_NAMES = {
     "ATR": "the Republic of Atrocha",
     "SVM": "the New Republic of Silvamar",
     "PNC": "the Community of Ponchomagnifico",
+    # 2026-10-05, later
+    "DVL": "the Free State of Devlon",
+    "TBS": "the Commonwealth of Terrabis-Seran",
+    "VNT": "the People's Rule Over Vineta",
+    "HWK": "the People's Rule Over Harwick",
+    "GAE": "the Kingdom of Gaellia",
+    "KKB": "the High Kingdom of Kilkire-Battania",
+    "GFR": "the United Greater Garfield Republics",
 }
 
 LOCALISATION = [

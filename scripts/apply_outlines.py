@@ -85,16 +85,35 @@ OCEAN, LAKES = (8, 31, 130), (55, 90, 220)
 # (config was: DEFAULT_OWNER "aislada", and the OWNERS_0410 below.)
 # 2026-10-04, later: Wersh, Troc, Cascadia (with the islands labelled CS) in Nonscio's
 # west, Sicilianzo and Danelaw between Anglost and San Sierra, Thorian inside Fraxhemark.
-DEFAULT_OWNER = "cascadia"
+# (config was: DEFAULT_OWNER "cascadia"; wersh (462, 684); troc (458, 560); cascadia (299, 724),
+# (515, 437), (256, 492), (198, 558), (130, 631), (217, 637), (147, 692), (302, 779),
+# (425, 790), (497, 779); sicilianzo (687, 1271); danelaw (733, 1400); thorian (1105, 1046).)
+# 2026-10-05, later: Terrabis-Seran, Gaellia, Kilkire-Battania and Harwick in Araseos'
+# south-west, Vineta's islands (VI) and Terrabis-Seran's (TS) off it, the Garfield
+# islands (GR) south of Malvekia, Devlon's islet off Fraxhemark, two islets for Thorian
+# (TD) and the islets the author's Names layer now labels CS. Seeds are the islands
+# the labels sit on. San Sierra's new border with Sicilianzo is done separately
+# (pdn_tools.py border san_sierra 700,1290) before regroup_states.py.
+DEFAULT_OWNER = "terrabis_seran"
 OWNERS = {
-    "wersh": [(462, 684)],
-    "troc": [(458, 560)],
-    # the mainland and every island labelled CS
-    "cascadia": [(299, 724), (515, 437), (256, 492), (198, 558), (130, 631), (217, 637),
-                 (147, 692), (302, 779), (425, 790), (497, 779)],
-    "sicilianzo": [(687, 1271)],
-    "danelaw": [(733, 1400)],
-    "thorian": [(1105, 1046)],
+    "terrabis_seran": [(666, 1993), (214, 1997), (211, 2013), (241, 2030), (307, 2037),
+                       (303, 2046), (336, 2051)],
+    "vineta": [(345, 2060), (312, 2107), (285, 2104), (222, 2129), (283, 2116), (328, 2129),
+               (313, 2155), (273, 2146), (258, 2150), (251, 2166), (277, 2160), (281, 2195),
+               (260, 2179)],
+    # with the bit of coast its west line closes off at (596, 2222)
+    "gaellia": [(673, 2192), (596, 2222)],
+    "kilkire": [(739, 2202)],
+    "harwick": [(734, 2329)],
+    # the islands, and the tip of Danelaw's eastern peninsula the author cut off for it
+    # (the "GR" written on Necessary Borders there was moved to Necessary Names)
+    "garfield": [(890, 1434), (923, 1393), (1000, 1465), (926, 1440), (977, 1469), (935, 1461),
+                 (935, 1505)],
+    "devlon": [(1028, 1145)],
+    "thorian": [(1219, 1074), (1142, 1176)],
+    "cascadia": [(479, 403), (277, 493), (174, 511), (208, 562), (203, 564), (151, 606),
+                 (218, 605), (172, 606), (166, 624), (68, 640), (150, 659), (233, 662),
+                 (122, 708)],
 }
 OWNERS_0410 = {
     "anglost": [(528, 1283), (607, 1287), (509, 1335), (436, 1342), (506, 1363), (474, 1379),
@@ -118,7 +137,9 @@ OWNERS_0410 = {
 # between Anglost and San Sierra, the author undecided, and the land south of Anglost's
 # westernmost island). The land south of Entroterra and Estande, left here from
 # 2026-10-01, became San Sierra on 2026-10-04.
-LEAVE = [(1180, 980), (403, 1359), (847, 1402), (769, 1354),
+LEAVE = [(1180, 980), (1200, 955),  # the peninsula east of Thorian, now labelled TS / CA
+         (1618, 1798), (2323, 1884), (1757, 1894),  # Solitas placeholder land the friend's nations left
+         (403, 1359), (847, 1402), (769, 1354),
          # Aislada, outlined on 2026-10-04 (still the placeholder's colour)
          (2016, 1235), (1853, 1370), (1869, 1216), (2089, 1205), (1887, 1334), (1830, 1288),
          (1930, 1272), (1863, 1238), (1840, 1313)]
@@ -354,8 +375,20 @@ def main():
     merged = split = 0
     for _ in range(20):
         changed = False
-        for c in np.unique(win[wland]):
-            m = (win == c) & wland
+        # each province is looked at inside its own bounding box (one more pixel each
+        # way, for its ring); a box gone stale by a merge is caught on the next pass
+        ucols, inv = np.unique(np.where(wland, win, -1), return_inverse=True)
+        inv = inv.reshape(win.shape)
+        boxes = ndi.find_objects(inv + 1)
+        for k, c in enumerate(ucols):
+            if c < 0 or boxes[k] is None:
+                continue
+            by, bx = boxes[k]
+            sl = np.s_[max(by.start - 1, 0):by.stop + 1, max(bx.start - 1, 0):bx.stop + 1]
+            bw, bland = win[sl], wland[sl]  # views
+            m = (bw == c) & bland
+            if not m.any():  # merged away earlier in this pass
+                continue
             comp = sklabel(m, connectivity=1)
             sizes = np.bincount(comp.ravel())[1:]
             keep = int(np.argmax(sizes)) + 1
@@ -366,19 +399,19 @@ def main():
                     continue
                 pm = comp == j
                 if sz >= limit:  # a big extra piece: its own province
-                    win[pm] = pcols.new()
+                    bw[pm] = pcols.new()
                     split += 1
                     changed = True
                     continue
-                ring = ndi.binary_dilation(pm, cross) & ~pm & wland
-                nb = Counter(v for v in win[ring].tolist() if v != c)
+                ring = ndi.binary_dilation(pm, cross) & ~pm & bland
+                nb = Counter(v for v in bw[ring].tolist() if v != c)
                 if not nb:
                     continue
                 # a new province's scrap stays in its state, an old one's outside
                 same_state = [v for v in nb if prov_state.get(v) == prov_state.get(int(c))]
                 same_owner = [v for v in nb if prov_owner.get(v) == prov_owner.get(int(c))]
                 target = max(same_state or same_owner or nb, key=lambda v: nb[v])
-                win[pm] = target
+                bw[pm] = target
                 merged += 1
                 changed = True
         if not changed:
