@@ -345,7 +345,9 @@ mismatch, missing localisation) and catches all of them.
   Rouental's 54 and its seven neighbours', numbered by `state_map.py`; then (2026-10-02)
   21 Chouan, the islets off Solitas Concorde et Volonté, and Rolantelle split by a new
   state line into Ghessone (west) and Rolantelle (east); Maïeul split into Moelle
-  (north; Selgrave takes it in the civil war) and Maïeul (south). `state_map.py --names` draws a
+  (north; Selgrave takes it in the civil war) and Maïeul (south). 2026-10-05: Cardonia's 27
+  (from `dist/state_numbers_cardonia.png`; numbers 6, 11 and 12 merged into Llainfair, the
+  island east of Coreilia). `state_map.py --names` draws a
   country's states with their names (`dist/state_names_<name>.png`).
 - **Localisation keys are our own** (`VAL_STATE_n`, `VAL_REGION_n`), so vanilla's
   `STATE_n` / `STRATEGICREGION_n` Earth names never show. Victory point names have to
@@ -726,7 +728,7 @@ in git history (commit d2d6cd8, `scripts/cartographic.py`). It used
 
 ## Current state
 
-- 9,713 provinces (9,030 land, 645 sea, 38 lakes), 1,273 states, 91 strategic regions (11 sea),
+- 9,713 provinces (9,030 land, 645 sea, 38 lakes), 1,271 states (Llainfair's three became one), 91 strategic regions (11 sea),
   58 countries (2026-10-05, with the friend's Merlovich, Hoalepa and five nations south of
   Solitas). 2026-10-04, later: six more nations (Cascadia 37 states, Wersh 21, Troc
   15, Sicilianzo 14, Danelaw 20, Thorian 4) and the author's state lines kept as drawn
