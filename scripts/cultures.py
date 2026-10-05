@@ -120,6 +120,11 @@ TAG_CULTURE = {
     "DNL": dict(names="SWE", portraits="europe", gfx="western_european"),  # Scandinavia
     "SCZ": dict(names="ITA", portraits="europe", gfx="western_european"),
     **{t: dict(names="USA", portraits="usa", gfx="western_european") for t in ("CSC", "THD")},
+    # 2026-10-05, the author's friend's sessions
+    "HOA": dict(names="AST", portraits="europe", gfx="commonwealth"),
+    "ARV": dict(names="POR", portraits="iberia", gfx="western_european"),
+    **{t: dict(names="SPR", portraits="iberia", gfx="western_european") for t in ("ATR", "SVM", "PNC")},
+    "USS": dict(names="USA", portraits="usa", gfx="western_european"),
 }
 
 

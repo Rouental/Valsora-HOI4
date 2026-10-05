@@ -29,7 +29,9 @@ CONTINENTS = ["nonscio", "araseos", "aislada", "solitas", "yastreovakia", "usnis
 COUNTRIES = {
     "nonscio": ("NSC", "Nonscio", "Nonscian", (216, 84, 84)),
     "araseos": ("ARS", "Araseos", "Araseosi", (116, 152, 206)),
-    "aislada": ("AIS", "Aislada", "Aisladan", (70, 170, 70)),
+    # Merlovich, the Aislada placeholder built out by the author's friend (2026-10-05); the
+    # colour is the .pdn's paint, its map colour is nations.DISPLAY_COLOUR
+    "aislada": ("AIS", "Merlovich", "Merlovian", (70, 170, 70)),
     "solitas": ("SLT", "Solitas", "Solitan", (214, 110, 214)),
     "yastreovakia": ("YAS", "Yastreovakia", "Yastreovakian", (96, 190, 150)),
     "usnistan": ("USN", "Usnistan", "Usnistani", (184, 172, 100)),
@@ -98,6 +100,14 @@ COUNTRIES = {
     "sicilianzo": ("SCZ", "Sicilianzo", "Sicilianzan", (228, 228, 222)),  # white (author)
     "danelaw": ("DNL", "Danelaw", "Danelawan", (0, 106, 167)),           # Sweden's blue for now
     "thorian": ("THD", "Thorian Dynamics", "Thorian", (95, 95, 100)),
+    # 2026-10-05, the author's friend's sessions: Hoalepa on two islands north-west of
+    # Solitas, and five nations in the land south of Solitas (the author's paint)
+    "hoalepa": ("HOA", "Hoalepa", "Hoalepan", (216, 150, 170)),
+    "arvorenia": ("ARV", "Arvorenia", "Arovian", (18, 94, 42)),
+    "atrocha": ("ATR", "Atrocha", "Atrochan", (225, 20, 20)),
+    "us_solitas": ("USS", "United States of Solitas", "American", (140, 60, 190)),
+    "silvamar": ("SVM", "Silvamar", "Silvestran", (20, 120, 50)),
+    "ponchomagnifico": ("PNC", "Ponchomagnifico", "Ponchomagnifico", (255, 204, 0)),
 }
 # The placeholder countries, one per continent, are the recommended starts in the
 # bookmark; the rest are playable but not listed there.

@@ -603,7 +603,7 @@ def main():
         write(f"common/countries/Valsora {fname}.txt",
               f"graphical_culture = {gfx[tag]}_gfx\n"
               f"graphical_culture_2d = {gfx[tag]}_2d\n"
-              f"color = rgb {{ {col[0]} {col[1]} {col[2]} }}\n")
+              "color = rgb {{ {} {} {} }}\n".format(*nations.DISPLAY_COLOUR.get(tag, col)))
         write(f"history/countries/{tag} - {fname}.txt", "\n".join([
             f"capital = {capital_state[c] + 1}",
             "set_research_slots = 3",
@@ -687,7 +687,7 @@ def main():
     # generated colours (in-game, 2026-09-29), so ours replaces vanilla's
     write("common/countries/colors.txt", "#reload countrycolors\n\n" + "".join(
         f"{COUNTRIES[c][0]} = {{\n\tcolor = rgb {{ {r} {g} {b} }}\n\tcolor_ui = rgb {{ {' '.join(map(str, ui_colour((r, g, b))))} }}\n}}\n"
-        for c in present for r, g, b in [COUNTRIES[c][3]]))
+        for c in present for r, g, b in [nations.DISPLAY_COLOUR.get(COUNTRIES[c][0], COUNTRIES[c][3])]))
     write("common/countries/cosmetic.txt", "".join(
         f"{cosmetic(tag, i)} = {{\n\tcolor = rgb {{ {r} {g} {b} }}\n\tcolor_ui = rgb {{ {' '.join(map(str, ui_colour((r, g, b))))} }}\n}}\n"
         for tag, per in nations.LOOKS.items() for i, (r, g, b) in per.items())

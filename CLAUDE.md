@@ -316,6 +316,27 @@ mismatch, missing localisation) and catches all of them.
     dark green, Sicilianzo white (an off-white, since Royalist Illiricium is pure white).
     Kurikia also holds the island off its east coast at (1409, 925), one state (the
     author's Notes layer colours it Kurikian).
+    2026-10-05, **the author's friend's two sessions**, merged from their build and
+    `.pdn` (no code came with them; our scripts were given the same settings and the
+    build matched theirs file for file, except image encodings): Aislada became
+    **Merlovich** ("the Federation of Merlovich", Merlovian, Liberalism: `RULING`, the
+    character's ideology; its leader is named "PLACEHOLDER" for now, with the author's
+    portrait `source/portraits/merlovich_leader.png`; Communist Merlovich keeps the emu;
+    flag `AIS.png`; state names and 17 more cities; more rivers). Its paint stays the
+    placeholder green (70,170,70); `nations.DISPLAY_COLOUR` shows #2D694F in game.
+    New nations: Hoalepa HOA (two islands north-west of Solitas; Constitutional
+    Monarchy; "the Exteriorem Kingdom of Hoalepa"; George Tupou VII the Generous;
+    capital Nuku'alofa; Australian names, commonwealth gfx) and, south of Solitas,
+    Arvorenia ARV (Constitutional Monarchy, "the United Kingdom of Éden, Santo Domingo,
+    and Arovia", Arovian, Portuguese, capital São Francisco), Atrocha ATR (Liberalism,
+    capital Corales), the United States of Solitas USS (Liberalism, American, capital
+    Tallahassee), Silvamar SVM (Liberalism, "the New Republic of Silvamar", Silvestran,
+    capital Marcanova) and Ponchomagnifico PNC (Strongman Rule, "the Community of
+    Ponchomagnifico", capital Rosas); ATR SVM PNC Spanish. Leaders' names and portraits
+    are in `NAMED_LEADERS`. Their flags were taken from the build at 82×52 (the
+    originals weren't sent). The friend also swapped some of the author's Merlovich
+    rivers between Major and Minor (author: fine) and split two leftover placeholder
+    states at Corales along the paint.
     All tags were checked against vanilla `common/country_tags`; new tags must be too.
   - The adjectives of the neighbours are guesses; the author may rename them.
 - **State names** are the author's, in `source/state_names.json` ("x,y" of a pixel
@@ -705,8 +726,9 @@ in git history (commit d2d6cd8, `scripts/cartographic.py`). It used
 
 ## Current state
 
-- 9,209 provinces (8,526 land, 645 sea, 38 lakes), 1,208 states, 91 strategic regions (11 sea),
-  52 countries. 2026-10-04, later: six more nations (Cascadia 37 states, Wersh 21, Troc
+- 9,713 provinces (9,030 land, 645 sea, 38 lakes), 1,273 states, 91 strategic regions (11 sea),
+  58 countries (2026-10-05, with the friend's Merlovich, Hoalepa and five nations south of
+  Solitas). 2026-10-04, later: six more nations (Cascadia 37 states, Wersh 21, Troc
   15, Sicilianzo 14, Danelaw 20, Thorian 4) and the author's state lines kept as drawn
   (`regroup_states.py`): 1,346 states became 1,208. La Recolt and Réveillé became one
   state ("La Recolt"; the author's lines join them). 2026-10-04: the seven nations south of Estande (San Sierra 60 states,

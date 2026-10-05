@@ -193,6 +193,13 @@ LEADERS = {
     "SCZ": ["constitutional_monarchism"],
     "DNL": ["elective_monarchy"],
     "THD": ["megacorporation"],
+    # 2026-10-05, the author's friend's sessions
+    "HOA": ["constitutional_monarchism"],
+    "ARV": ["constitutional_monarchism"],
+    "ATR": ["liberalism"],
+    "USS": ["liberalism"],
+    "SVM": ["liberalism"],
+    "PNC": ["strongman_rule"],
     # Rouental's democrats and communists, promoted by their focuses
     "ROU": ["constitutional_monarchism", "leninism"],
     # the continent placeholders: not chosen by the author, Monarchist as before
@@ -204,9 +211,22 @@ HAND_MADE = {"ROU", "AIS", "BRL", "RLA"}  # rulers defined in the character file
 # the portraits are in PORTRAITS
 NAMED_LEADERS = {
     "ILR_leader_bleacherism": ("Ema Milize", "GFX_portrait_ILR_ema_milize"),  # author, 2026-10-02
+    # 2026-10-05, the author's friend's sessions (base-game portraits)
+    "HOA_leader_constitutional_monarchism": ("George Tupou VII the Generous", "GFX_Portrait_Europe_Generic_2"),
+    "ARV_leader_constitutional_monarchism": ("Daniel Maurício", "GFX_Portrait_South_America_Generic_2"),
+    "ATR_leader_liberalism": ("Astrid Bethancourt", "GFX_Portrait_South_America_Generic_1"),
+    "USS_leader_liberalism": ("Aaron Miller", "GFX_Portrait_Europe_Generic_2"),
+    "SVM_leader_liberalism": ("Elias Garcovixa", "GFX_Portrait_South_America_Generic_3"),
+    "PNC_leader_strongman_rule": ("Mauricio Gómez", "GFX_Portrait_Europe_Generic_1"),
 }
 # the ruling ideology of hand-made rulers' countries, if not Monarchist
-RULING = {"BRL": "theocracy", "RLA": "fascism"}
+# Map colours that differ from the .pdn paint (common.COUNTRIES), which ownership is
+# matched by: Merlovich keeps the placeholder's green on the .pdn (the author's friend,
+# 2026-10-05) but shows deep green #2D694F in game
+DISPLAY_COLOUR = {"AIS": (45, 105, 79)}
+
+RULING = {"BRL": "theocracy", "RLA": "fascism",
+          "AIS": "democratic"}  # Merlovich: Liberalism (the author's friend, 2026-10-05)
 
 # The Rouentaise civil war (author, 2026-10-02). When Rouental's communists execute the
 # Prince (focus ROU_execute_the_prince) these countries are released from the states
@@ -387,6 +407,13 @@ FORMAL_NAMES = {
     "SCZ": "the Kingdom of Sicilianzo",
     "DNL": "the Kingdom of Danelaw-Scandinavia",
     "THD": "Thorian Dynamics",
+    # 2026-10-05
+    "AIS": "the Federation of Merlovich",
+    "HOA": "the Exteriorem Kingdom of Hoalepa",
+    "ARV": "the United Kingdom of Éden, Santo Domingo, and Arovia",
+    "ATR": "the Republic of Atrocha",
+    "SVM": "the New Republic of Silvamar",
+    "PNC": "the Community of Ponchomagnifico",
 }
 
 LOCALISATION = [
@@ -414,7 +441,7 @@ LOCALISATION = [
     ' ROU_execute_the_prince_desc:0 "The committee has voted. Roland Cahun will not see another spring, and neither, perhaps, will the peace."',
     ' ROU_steady_as_she_goes:0 "Steady As She Goes"',
     ' ROU_steady_as_she_goes_desc:0 "The Cahuns stay. Roland stays. Everything stays."',
-    ' AIS_merlovich:0 "The Great Merlovich"',  # author, 2026-10-04
+    ' AIS_merlovich:0 "PLACEHOLDER"',  # the author's temporary name (2026-10-05; was "The Great Merlovich")
     # the Reibonnaise opinion modifiers' names (author, 2026-10-04)
     ' valsora_reibonnaise_ties:0 "Seran Ties"',
     ' valsora_against_communism:0 "Seran Biases"',
@@ -531,7 +558,7 @@ CHARACTERS = """characters = {
 			}
 		}
 		country_leader = {
-			ideology = despotism
+			ideology = liberalism
 			expire = "1965.1.1.1"
 			id = -1
 		}
@@ -861,7 +888,9 @@ faction_template_reibonnaise_association = {
 # becomes gfx/leaders/VAL/<name>.dds plus a GFX_portrait_<name> sprite.
 PORTRAITS = {
     "ROU_mahaut_vi": ("source/portraits/mahaut_vi.jpg", 210, 40, 1000, None),
-    "AIS_merlovich": ("source/portraits/merlovich_emu.png", 0, 95, 300, None),
+    # the author's portrait (2026-10-05, a ready-made 156x210 .dds from the friend's build);
+    # the emu stays as Communist Merlovich (author)
+    "AIS_merlovich": ("source/portraits/merlovich_leader.png", 0, 0, 156, None),
     "AIS_communist_merlovich": ("source/portraits/merlovich_emu.png", 0, 95, 300, "red"),
     "ROU_serelle_cahun": ("source/portraits/serelle_cahun.png", 260, 90, 900, None),
     "ROU_roland_cahun": ("source/portraits/roland_cahun.png", 340, 200, 1100, None),
@@ -903,6 +932,13 @@ CAPITALS = {
     # 2026-10-04, later: Markovograd (author) and Fraternal City, now dots on the map
     "KRK": (1156, 692),
     "FRX": (1024, 1130),
+    # 2026-10-05 (the author's city dots)
+    "HOA": (2159, 1545),  # Nuku'alofa
+    "ARV": (2088, 1896),  # São Francisco
+    "ATR": (2061, 1913),  # Corales
+    "USS": (2152, 1651),  # Tallahassee
+    "SVM": (2437, 1846),  # Marcanova
+    "PNC": (1721, 1651),  # Rosas
 }
 
 
