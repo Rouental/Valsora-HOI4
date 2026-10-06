@@ -372,11 +372,11 @@ mismatch, missing localisation) and catches all of them.
     Claude's (Absolute Monarchy, Feudalism, Oligarchy, Liberalism, Feudalism,
     Feudalism). Royalist Illiricium's ruler is **Beatrice di Alqiro** (`NAMED_LEADERS`,
     `source/portraits/beatrice_di_alqiro.png`). New flags for Romanoddle and South
-    Pollana too. The **Holy See** VAT ("the Kingdom of the Church", Theocratic,
-    Hierocracy; author, 2026-10-05) holds San Sierra's island state 1 at (896, 1184),
-    given with `pdn_tools.py give holy_see`; its flag `VAT.png` is a stand-in Papal
-    States bicolour with keys and tiara drawn by Claude; Italian culture and the pale
-    gold colour are Claude's.
+    Pollana too. The **Holy See** SEE ("the Kingdom of the Church", Theocratic,
+    Hierocracy; author, 2026-10-05; tag SEE by the author's choice, VAT at first) holds
+    San Sierra's island state 1 at (896, 1184), given with `pdn_tools.py give holy_see`;
+    flag `SEE.png` is the author's ("Kingdom of God" layer of the flag file; it replaced
+    a stand-in Claude drew); Italian culture and the pale gold colour are Claude's.
     All tags were checked against vanilla `common/country_tags`; new tags must be too.
   - The adjectives of the neighbours are guesses; the author may rename them.
 - **State names** are the author's, in `source/state_names.json` ("x,y" of a pixel

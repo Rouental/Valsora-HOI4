@@ -28,6 +28,7 @@ ALIASES = {
     "gheso": "GHS",
     "riverrain": "RVR",
     "s. pollana": "SPL",
+    "kingdom of god": "SEE",
 }
 
 

@@ -128,7 +128,7 @@ COUNTRIES = {
     "riverraine": ("RVR", "Riverraine", "Riverrain", (30, 120, 120)),             # waves
     "piscary": ("PSC", "Piscary", "Piscarien", (70, 130, 190)),                   # scales
     # 2026-10-05, later: San Sierra's island state 1 (author); colour, adjective Claude's
-    "holy_see": ("VAT", "Holy See", "Papal", (245, 225, 120)),                    # flag gold
+    "holy_see": ("SEE", "Holy See", "Papal", (245, 225, 120)),                    # flag gold
 }
 # The placeholder countries, one per continent, are the recommended starts in the
 # bookmark; the rest are playable but not listed there.
