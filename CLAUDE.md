@@ -761,6 +761,25 @@ Left loaded on purpose, and noisy in `error.log`:
 - Ideas, MIOs, scripted effects and triggers, ai_areas, operations and achievements. They
   reference vanilla ids, which the previous build showed the game tolerates.
 
+## Victorianization patch (`victorianization_patch.py`)
+
+The author wants the look of **Victorianization (Universal Compatibility)** (Steam
+Workshop 3807649245; sent 2026-10-06): a Victoria 3-style map, with pastel country
+fills on graph paper, a gridded grey-blue sea, painted borders, a period map font and
+no relief. Its shaders (`pdxmap`, `pdxwater`, `river`), border and terrain textures,
+fonts and graphics defines are all size-independent (the shaders use the engine's
+`MAP_SIZE_X/Y`). Its colour maps are graph paper with no geography, drawn at the base
+game's 2816×1024, and its `world_normal.bmp` is a flat 12×12.
+- So the player subscribes to Victorianization itself, and `dist/valsora_victorianization.zip`
+  is a small patch submod that depends on both mods (so it loads after them).
+- The patch supplies the four colour maps at Valsora's size, in the same style but
+  drawn by our script: grain, 16 px squares and 256 px folds at half resolution, so 10
+  folds across the map. It also supplies a flat `world_normal.bmp`.
+- None of Victorianization's files are copied (they are its author's). `run_all.sh`
+  rebuilds the patch, and `dist/preview_victorianization.png` is a rough mock-up.
+- Install: Victorianization from the Workshop, plus the zip unzipped into `mod/`, all
+  three enabled.
+
 ## Cartographic submod (removed)
 
 A flat, HOI3-style "Valsora: Cartographic Map" submod was tried on 2026-10-01 and
