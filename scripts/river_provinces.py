@@ -10,6 +10,9 @@ province beside them. States, countries and regions do not change.
 The river pixels are the ones the build draws (work/world.npz from the last run of
 run_all.sh), not the raw lines, so they sit exactly on the new borders. Rebuild first.
 
+Only states where under ALIGNED of the river pixels lie on a province border are cut
+(2026-10-06: Merlovich's and Hoalepa's rivers, drawn later, were 13-58 % on borders).
+
     python3 scripts/river_provinces.py        # edits source/HOI4 Mod Map.pdn in place
 """
 import numpy as np
@@ -21,6 +24,7 @@ from apply_outlines import Colours, organic_split, PROVINCE_AREA
 from common import MIN_PROVINCE
 
 CROSS = np.array([[0, 1, 0], [1, 1, 1], [0, 1, 0]])
+ALIGNED = 0.85  # a state is done when this share of its river pixels lies on a border
 
 
 def main():
@@ -35,6 +39,15 @@ def main():
     St = np.where(L["States"][..., 3] > 0, T.code(L["States"][..., :3]), -1)
     cols = Colours(P, 5)
     touched = np.unique(St[river & (St >= 0)])
+    # states whose rivers already run along province borders are left alone (re-cutting
+    # them would only reshuffle provinces): ALIGNED of their river pixels on a border
+    border = np.zeros(P.shape, bool)
+    for dy, dx in ((0, 1), (1, 0), (0, -1), (-1, 0)):
+        border |= np.roll(P, (dy, dx), (0, 1)) != P
+    ok = [sc for sc in touched
+          if (border & river & (St == sc)).sum() >= ALIGNED * (river & (St == sc)).sum()]
+    print(f"{len(ok)} of {len(touched)} states crossed by rivers already have them on borders")
+    touched = np.setdiff1d(touched, ok)
     old = new = 0
     for n, sc in enumerate(touched):
         ys, xs = np.nonzero((St == sc) & land)

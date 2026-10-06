@@ -68,8 +68,10 @@ for the author. Unknown layer names are ignored.
     become tributaries, recursively;
   - diagonal steps get corners, and loops/U-turns are shortcut;
   - branches under 6 px are dropped;
-  - widths: major 7→9, minor 4→5 (7+ is a large river), per pixel by the layer it was
-    drawn on, so a river can change size along its course;
+  - widths: major 7→8, minor 3→4 (7+ is a large river), per pixel by the layer it was
+    drawn on, so a river can change size along its course (`MAJOR_WIDTH`,
+    `MINOR_WIDTH`; 7→9 and 4→5 until 2026-10-06, far too wide beside Valsora's small
+    provinces in the author's screenshots);
   - a tributary that stops short of its river (or ends next to a 45° staircase, which
     no single pixel can join without a 2×2 block) is linked by the shortest clean path
     of up to 6 pixels, from its end or up to 4 pixels back; branches joining at a
@@ -83,7 +85,9 @@ for the author. Unknown layer names are ignored.
   provinces, gives river pixels to the province beside them, then merges stray bits.
   States do not change. First run: 37 states, 113 provinces became 111; river pixels on
   a province border went from 77 % to 90 % (the rest are corner pixels of diagonal
-  steps, still along the border). Rerun it whenever rivers or outlines change.
+  steps, still along the border). Rerun it whenever rivers or outlines change. It only
+  re-cuts states where under 85 % of the river pixels lie on a border (`ALIGNED`);
+  2026-10-06 it fixed Merlovich's and Hoalepa's rivers (13–58 % → 71–100 %; 91 % map-wide).
 - **Outlines → states** (`apply_outlines.py`, run by hand, not by `run_all.sh`).
   The author draws 1-px country borders on "Borders" and state lines on "Necessary
   Provinces" (the author's layer name; they are **states**, author's correction).

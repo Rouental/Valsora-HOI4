@@ -6,6 +6,18 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**Rivers looked odd up close** (2026-10-06, author's screenshots)
+- Cause: major rivers were drawn at widths 7–9 and minor ones at 4–5, which is far too
+  wide beside Valsora's small (~150 px) provinces. Also, Merlovich's and Hoalepa's
+  rivers, added later, had never had their provinces re-cut, so only 13–58 % of their
+  pixels lay on a province border: the rivers ran through provinces and borders crossed
+  them.
+- Fix: widths are now major 7–8 (still "large rivers") and minor 3–4. `river_provinces.py`
+  re-cut the 30 states whose rivers weren't on borders (now 91 % map-wide) and leaves
+  states that are already aligned alone.
+- Not fixed: a river running diagonally is a 1-pixel staircase (HOI4 requires
+  edge-connected river pixels), which the game draws with slightly wavy banks.
+
 **Every army started with no manpower; opinion modifiers showed their raw keys** (2026-10-04, author)
 - Cause: an OOB division takes its men from the country's manpower pool, and the pools
   were tiny: state population was 20 per map pixel (75 million people in the world,

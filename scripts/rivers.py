@@ -11,8 +11,8 @@ the rest:
     every side branch is a tributary, recursively;
   * diagonal steps get a corner pixel;
   * each pixel is major or minor after the layer it was drawn on (a river can change
-    size along its course); major stretches widen from index 7 to 9 towards the mouth
-    (HOI4 counts 7+ as large rivers), minor ones from 4 to 5 (small rivers).
+    size along its course); major stretches widen from index 7 to 8 towards the mouth
+    (HOI4 counts 7+ as large rivers), minor ones from 3 to 4 (small rivers).
 """
 from collections import deque
 
@@ -25,6 +25,10 @@ N4 = ((0, 1), (1, 0), (0, -1), (-1, 0))
 N8 = N4 + ((1, 1), (1, -1), (-1, 1), (-1, -1))
 MOUTH_REACH = 8  # a river ending this close to water is extended to reach it
 MIN_BRANCH = 6   # shorter side branches are drawing slips, not tributaries
+# width indices, widening by one towards the mouth: major 7-8 (HOI4 counts 7+ as large
+# rivers), minor 3-4. They were 7-9 and 4-5 until 2026-10-06, which looked far too wide
+# beside Valsora's small provinces (author's screenshots).
+MAJOR_WIDTH, MINOR_WIDTH = 7, 3
 
 
 def trace(major, minor, land):
@@ -89,7 +93,7 @@ def trace(major, minor, land):
         m = len(path)
         for k, p in enumerate(path):
             f = k / max(m - 1, 1)
-            out[p] = (7 + min(int(f * 3), 2)) if is_major[p] else (4 + min(int(f * 2), 1))
+            out[p] = (MAJOR_WIDTH + min(int(f * 2), 1)) if is_major[p] else (MINOR_WIDTH + min(int(f * 2), 1))
             placed[p] = True
         if marker_first is not None:
             out[path[0]] = marker_first
