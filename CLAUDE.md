@@ -412,7 +412,14 @@ mismatch, missing localisation) and catches all of them.
     Russian for Yastreovakia's. The borders of Sminishia, Gorbastan and Zukchiva were drawn
     on Necessary Names, and "PE" and "(TP)" were written on Necessary Borders: moved; a
     one-pixel gap south of Ostaria was closed. New flags: Illiricium's two (kingdom and
-    republic) replaced.
+    republic) replaced. Corrections the same day (author): the land north of Peatiktist's
+    exclave is **Transcainia's** (6 states; an old `LEAVE` pixel had kept it Araseos),
+    and four placeholder states changed hands with `pdn_tools.py give`: Araseos 3 →
+    Serentia (452, 1494), Nonscio 7 → Malvekia (1015, 1366), Nonscio 6 → San Sierra
+    (1006, 1239), Nonscio 3 → Kurikia (1257, 664). Leithanien's capital is Thielfurt.
+    Krionik's flag `KRI.png` is the author's, redrawn exactly from their picture (the
+    file didn't come through); its map colour stays green (the flag's maroon would merge
+    with Russovichia).
     All tags were checked against vanilla `common/country_tags`; new tags must be too.
   - The adjectives of the neighbours are guesses; the author may rename them.
 - **State names** are the author's, in `source/state_names.json` ("x,y" of a pixel
@@ -827,7 +834,7 @@ in git history (commit d2d6cd8, `scripts/cartographic.py`). It used
 
 ## Current state
 
-- 14,292 provinces (13,609 land, 645 sea, 38 lakes), 1,819 states, 91 strategic regions (11 sea),
+- 14,334 provinces (13,651 land, 645 sea, 38 lakes), 1,823 states, 91 strategic regions (11 sea),
   92 countries (2026-10-07: twenty new nations, 521 new states; `dist/preview_new_nations_*.png`).
   Before: 10,644 provinces, 1,377 states, 72 countries (with Rouental's six releasables and the Holy See). 2026-10-05, later: Terrabis-Seran 76 states, Kilkire-Battania 28, Garfield 10,
   Gaellia 7, Vineta 7, Harwick 1, Devlon 1 (`dist/state_numbers_araseos_southwest.png`,

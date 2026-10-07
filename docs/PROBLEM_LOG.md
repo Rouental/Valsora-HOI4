@@ -181,6 +181,16 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## Map problems found while building
 
+**Transcainia's land stayed Araseos** (2026-10-07, author's screenshot)
+- Cause: `apply_outlines.py` had an old `LEAVE` pixel, (403, 1359), from 2026-10-05.
+  The new lines put it inside Transcainia's patch, and `LEAVE` beat the seed, so the
+  patch was skipped silently. A first rerun with the full 2026-10-07 `OWNERS` also
+  re-cut Großlöwenburg (a seeded, finished country whose states regroup had joined
+  across lines); that was thrown away.
+- Fix: the old pixel was removed from `LEAVE`, and the rerun seeded only Transcainia
+  (6 new states). Lesson: rerun with only the new seeds, and check `LEAVE` pixels still
+  lie in the land they were meant for.
+
 **Borders on the wrong layers, a gap, and unlabelled patches** (2026-10-07)
 - Cause:
   - The borders of Sminishia, Gorbastan and Zukchiva were drawn on Necessary Names.

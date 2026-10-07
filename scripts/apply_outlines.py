@@ -123,7 +123,7 @@ OCEAN, LAKES = (8, 31, 130), (55, 90, 220)
 # The seeds were found from the author's labels: a name's bordered area, or the land
 # nearest an island label (one seed per patch the lines enclose).
 DEFAULT_OWNER = "krionik"
-OWNERS = {
+OWNERS_1007 = {
     "cascadia": [(523, 749)],
     "daravon": [(616, 1575)],
     "dumas": [(1323, 1907)],
@@ -158,6 +158,10 @@ OWNERS = {
     "transcainia": [(392, 1440), (420, 1414)],
     "zukchiva": [(2273, 492)],
 }
+# 2026-10-07, later (author): the patch north of Peatiktist's exclave is Transcainia's.
+# The run above left it because an old LEAVE pixel, (403, 1359), lay in it. Only this
+# patch is seeded: re-seeding a finished country re-cuts it (Grossloewenburg did).
+OWNERS = {"transcainia": [(420, 1414)]}
 OWNERS_0410 = {
     "anglost": [(528, 1283), (607, 1287), (509, 1335), (436, 1342), (506, 1363), (474, 1379),
                 (516, 1386), (563, 1388), (626, 1425), (583, 1428), (654, 1430), (658, 1421),
@@ -186,7 +190,7 @@ LEAVE = [  # (596, 2222), the bit of coast west of Gaellia, became Terreich's on
          # Araseos' south-west) and slivers of a few pixels
          (2553, 933), (4152, 1460), (554, 1814), (297, 1887), (2254, 405), (487, 1531), (334, 1844),
          (1618, 1798), (2323, 1884), (1757, 1894),  # Solitas placeholder land the friend's nations left
-         (403, 1359), (847, 1402), (769, 1354),
+         (847, 1402), (769, 1354),  # (403, 1359) is Transcainia's since 2026-10-07
          # Aislada, outlined on 2026-10-04 (still the placeholder's colour)
          (2016, 1235), (1853, 1370), (1869, 1216), (2089, 1205), (1887, 1334), (1830, 1288),
          (1930, 1272), (1863, 1238), (1840, 1313)]

@@ -1036,6 +1036,7 @@ CAPITALS = {
     "USS": (2152, 1651),  # Tallahassee
     "SVM": (2437, 1846),  # Marcanova
     "PNC": (1721, 1651),  # Rosas
+    "LTH": (412, 1555),   # Thielfurt (author, 2026-10-07)
 }
 
 
