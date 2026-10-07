@@ -94,28 +94,69 @@ OCEAN, LAKES = (8, 31, 130), (55, 90, 220)
 # (TD) and the islets the author's Names layer now labels CS. Seeds are the islands
 # the labels sit on. San Sierra's new border with Sicilianzo is done separately
 # (pdn_tools.py border san_sierra 700,1290) before regroup_states.py.
-DEFAULT_OWNER = "terrabis_seran"
+# (config of 2026-10-05, later; kept for reference)
+# DEFAULT_OWNER = "terrabis_seran"
+# OWNERS = {
+#     "terrabis_seran": [(666, 1993), (214, 1997), (211, 2013), (241, 2030), (307, 2037),
+#                        (303, 2046), (336, 2051), (1200, 955)],
+#     "vineta": [(345, 2060), (312, 2107), (285, 2104), (222, 2129), (283, 2116), (328, 2129),
+#                (313, 2155), (273, 2146), (258, 2150), (251, 2166), (277, 2160), (281, 2195),
+#                (260, 2179)],
+#     "gaellia": [(673, 2192)],
+#     "kilkire": [(739, 2202)],
+#     "harwick": [(734, 2329)],
+#     # the islands, and the tip of Danelaw's eastern peninsula the author cut off for it
+#     # (the "GR" written on Necessary Borders there was moved to Necessary Names)
+#     "garfield": [(890, 1434), (923, 1393), (1000, 1465), (926, 1440), (977, 1469), (935, 1461),
+#                  (935, 1505)],
+#     "devlon": [(1028, 1145)],
+#     "thorian": [(1219, 1074), (1142, 1176)],
+#     "cascadia": [(479, 403), (277, 493), (174, 511), (208, 562), (203, 564), (151, 606),
+#                  (218, 605), (172, 606), (166, 624), (68, 640), (150, 659), (233, 662),
+#                  (122, 708)],
+#     # 2026-10-05, the author's answers: the peninsula east of Thorian is two exclaves,
+#     # Terrabis-Seran's (TS, north; in its list above) and Cardonia's (CA, south)
+#     "cardonia": [(1180, 980)],
+# }
+# 2026-10-07: twenty nations in Araseos' south and west and in Yastreovakia, Merlgould
+# out of Vultuca, and islands the Names layer labels (KR, RU, PE, TP, ES = Estande, CS).
+# The seeds were found from the author's labels: a name's bordered area, or the land
+# nearest an island label (one seed per patch the lines enclose).
+DEFAULT_OWNER = "krionik"
 OWNERS = {
-    "terrabis_seran": [(666, 1993), (214, 1997), (211, 2013), (241, 2030), (307, 2037),
-                       (303, 2046), (336, 2051), (1200, 955)],
-    "vineta": [(345, 2060), (312, 2107), (285, 2104), (222, 2129), (283, 2116), (328, 2129),
-               (313, 2155), (273, 2146), (258, 2150), (251, 2166), (277, 2160), (281, 2195),
-               (260, 2179)],
-    "gaellia": [(673, 2192)],
-    "kilkire": [(739, 2202)],
-    "harwick": [(734, 2329)],
-    # the islands, and the tip of Danelaw's eastern peninsula the author cut off for it
-    # (the "GR" written on Necessary Borders there was moved to Necessary Names)
-    "garfield": [(890, 1434), (923, 1393), (1000, 1465), (926, 1440), (977, 1469), (935, 1461),
-                 (935, 1505)],
-    "devlon": [(1028, 1145)],
-    "thorian": [(1219, 1074), (1142, 1176)],
-    "cascadia": [(479, 403), (277, 493), (174, 511), (208, 562), (203, 564), (151, 606),
-                 (218, 605), (172, 606), (166, 624), (68, 640), (150, 659), (233, 662),
-                 (122, 708)],
-    # 2026-10-05, the author's answers: the peninsula east of Thorian is two exclaves,
-    # Terrabis-Seran's (TS, north; in its list above) and Cardonia's (CA, south)
-    "cardonia": [(1180, 980)],
+    "cascadia": [(523, 749)],
+    "daravon": [(616, 1575)],
+    "dumas": [(1323, 1907)],
+    "eschland": [(596, 1630)],
+    "estande": [(1076, 1686), (1108, 1762), (1215, 1658), (1240, 1689), (1240, 1799),
+                (1283, 1742), (1296, 1772)],
+    "gorbastan": [(2010, 551)],
+    "grossloewenburg": [(122, 1688), (470, 1717)],
+    "hwitland": [(489, 1617)],
+    "kampf": [(1002, 2065)],
+    "krionik": [(115, 1647), (131, 1648), (1935, 798), (1980, 882), (2224, 1020),
+                (2296, 898), (2299, 949), (2307, 677), (2325, 705), (2330, 971),
+                (2341, 735), (2355, 669), (2355, 844), (2356, 951), (2404, 769),
+                (2409, 933), (2415, 632), (2421, 797), (2428, 755), (2429, 621),
+                (2443, 1027), (2453, 996), (2516, 819), (2594, 734), (2651, 743),
+                (2672, 798), (2683, 828), (3996, 1567)],
+    "leithanien": [(362, 1541), (373, 1567), (416, 1555), (420, 1528), (426, 1550),
+                   (437, 1579), (480, 1559)],
+    "merlgould": [(403, 1109)],
+    "ostaria": [(503, 1540)],
+    "peatiktist": [(421, 1454), (638, 1644), (652, 1605), (695, 1589), (779, 1639),
+                   (891, 1596), (929, 1695)],
+    "russovichia": [(1973, 589), (1975, 607), (1997, 607), (1999, 592), (2056, 589)],
+    "schteirmark": [(671, 2070)],
+    "serentia": [(434, 1515), (515, 1495)],
+    "sminishia": [(2065, 439)],
+    "someriania": [(1071, 2245)],
+    "terrabis_seran": [(271, 1827), (372, 1475)],
+    "terreich": [(596, 2222), (632, 1670), (671, 1792), (717, 1767), (721, 1792),
+                 (758, 1859), (762, 1816), (773, 1910), (776, 1871), (848, 1824),
+                 (878, 1740), (918, 1902), (980, 1785), (1054, 1708)],
+    "transcainia": [(392, 1440), (420, 1414)],
+    "zukchiva": [(2273, 492)],
 }
 OWNERS_0410 = {
     "anglost": [(528, 1283), (607, 1287), (509, 1335), (436, 1342), (506, 1363), (474, 1379),
@@ -139,7 +180,11 @@ OWNERS_0410 = {
 # between Anglost and San Sierra, the author undecided, and the land south of Anglost's
 # westernmost island). The land south of Entroterra and Estande, left here from
 # 2026-10-01, became San Sierra on 2026-10-04.
-LEAVE = [(596, 2222),  # the bit of coast west of Gaellia: another nation's, later (author)
+LEAVE = [  # (596, 2222), the bit of coast west of Gaellia, became Terreich's on 2026-10-07
+         # 2026-10-07: unlabelled land the new lines close off, left as it is (south of
+         # Krionik's eastern part, Orientalis north of its new line, two patches in
+         # Araseos' south-west) and slivers of a few pixels
+         (2553, 933), (4152, 1460), (554, 1814), (297, 1887), (2254, 405), (487, 1531), (334, 1844),
          (1618, 1798), (2323, 1884), (1757, 1894),  # Solitas placeholder land the friend's nations left
          (403, 1359), (847, 1402), (769, 1354),
          # Aislada, outlined on 2026-10-04 (still the placeholder's colour)

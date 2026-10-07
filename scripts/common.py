@@ -50,14 +50,14 @@ COUNTRIES = {
     # Linterre, renamed Placeholdros on 2026-10-01
     "romanoddle": ("RMD", "Romanoddle", "Romanoddlian", (46, 139, 150)),
     "selto": ("STO", "Selto", "Seltan", (214, 120, 40)),
-    "linterre": ("LNT", "Placeholdros", "Placeholdrosian", (190, 150, 200)),
+    "linterre": ("LNT", "Placeholdaire", "Placeholdairien", (190, 150, 200)),  # Placeholdros until 2026-10-07
     # 2026-09-30, south of Romanoddle and Selto; all Portuguese (author). Estande's
     # colour is the red of its flag (author: the green blended with Rouental); the rest are Claude's picks
     "rastava": ("RST", "Rastava", "Rastavan", (184, 160, 72)),
     "volinovia": ("VLN", "Volinovia", "Volinovian", (70, 100, 170)),
     "estande": ("ESD", "Estande", "Estandese", (153, 0, 0)),
     "coraliza": ("CRZ", "Coraliza", "Coralizan", (240, 122, 92)),
-    "placeholdria": ("PLH", "Placeholdria", "Placeholdrian", (238, 196, 222)),
+    "placeholdria": ("PLH", "Vultuca", "Vultucan", (238, 196, 222)),  # Placeholdria until 2026-10-07
     # 2026-10-01, east of Estande: Illiricium (map name "Senatorial Illiricium", the
     # author's), its Bleacherist republics, and Royalist Illiricium on its island.
     # Colours and adjectives are Claude's picks; Illiricium's blue is its flag's, and its
@@ -129,6 +129,28 @@ COUNTRIES = {
     "piscary": ("PSC", "Piscary", "Piscarien", (70, 130, 190)),                   # scales
     # 2026-10-05, later: San Sierra's island state 1 (author); colour, adjective Claude's
     "holy_see": ("SEE", "Holy See", "Papal", (245, 225, 120)),                    # flag gold
+    # 2026-10-07 (the author's names, governments and formal names; colours from the
+    # flags where there is one, otherwise Claude's, as are the adjectives)
+    "merlgould": ("MGD", "Merlgould", "Merlgouldian", (120, 150, 90)),
+    "transcainia": ("TCN", "Transcainia", "Transcainian", (150, 110, 170)),
+    "peatiktist": ("PTK", "Peatiktist", "Peatiktist", (90, 120, 110)),
+    "serentia": ("SRN", "Serentia", "Serentian", (200, 40, 40)),                  # flag red
+    "leithanien": ("LTH", "Leithanien", "Leithanian", (30, 90, 160)),             # flag blue
+    "grossloewenburg": ("GLB", "Großlöwenburg", "Großlöwenburger", (235, 175, 70)),  # flag gold
+    "kampf": ("KPF", "Kampfian Empire", "Kampfian", (110, 110, 60)),
+    "dumas": ("DUM", "Dumas", "Dumasian", (235, 230, 200)),
+    "terreich": ("TUP", "Terreich und Preußen", "Terreichisch", (60, 50, 85)),    # flag slate
+    "schteirmark": ("STM", "Schteirmark", "Schteirmärkisch", (160, 90, 60)),
+    "daravon": ("DRV", "Daravon", "Daravonian", (180, 20, 30)),
+    "eschland": ("ESC", "Eschland", "Eschländisch", (205, 75, 75)),
+    "hwitland": ("HWT", "Hwitland", "Hwitländisch", (150, 30, 60)),
+    "someriania": ("SMR", "Someriania", "Somerianian", (210, 90, 40)),
+    "krionik": ("KRI", "Krionik", "Kriosnik", (60, 90, 60)),
+    "gorbastan": ("GOB", "Gorbastan", "Gorbastani", (200, 160, 90)),
+    "zukchiva": ("ZUK", "Zukchiva", "Zukchivan", (90, 160, 170)),
+    "sminishia": ("SMN", "Sminishia", "Sminishian", (210, 110, 150)),
+    "russovichia": ("RSV", "Russovichia", "Russovich", (140, 0, 0)),
+    "ostaria": ("OST", "Ostaria", "Ostarian", (230, 200, 30)),                    # flag yellow
 }
 # The placeholder countries, one per continent, are the recommended starts in the
 # bookmark; the rest are playable but not listed there.

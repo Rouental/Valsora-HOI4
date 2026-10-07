@@ -381,6 +381,38 @@ mismatch, missing localisation) and catches all of them.
     San Sierra's island state 1 at (896, 1184), given with `pdn_tools.py give holy_see`;
     flag `SEE.png` is the author's ("Kingdom of God" layer of the flag file; it replaced
     a stand-in Claude drew); Italian culture and the pale gold colour are Claude's.
+    **2026-10-07, the big update** (the author's names, governments and formal names;
+    tags, colours (from the flags where there is one), adjectives and cultures Claude's):
+    Placeholdros renamed **Placeholdaire**; Placeholdria became **Vultuca** PLH
+    (Constitutional Monarchy, "the United Kingdom of Vultuca", flag `PLH.png`); Volinovia
+    is "the Kingdom of Volinovia" (Enlightened Absolutism). New, in Araseos' south and
+    west: Merlgould MGD (the author's new **Personal Union** sub-ideology; "the Kingdom of
+    Merlgould" (written "Melgould"); carved out of Vultuca; Volinovia's puppet),
+    Transcainia TCN (Oligarchy), Peatiktist PTK (Strongman Rule, "the Constitutional
+    Dictatorship of Peatiktist", with the PE islands and an exclave by Transcainia),
+    Serentia SRN (Elective Monarchy, "the High Kingdom of Serentia", flag), Leithanien LTH
+    (Populism, flag; its own state lines: 7 states; cities Rostock, Litzstädt, Thielfurt,
+    Weißadel, Frundsstadt, Kaltsit, Veisheim), Ostaria OST (Absolute Monarchy, "the
+    Archcounty of Ostaria", flag), Großlöwenburg GLB (Feudalism, "the Efeuüberwuchterte
+    Steinsäule of Großlöwenburg", flag), the Kampfian Empire KPF (Absolute Monarchy, "the
+    Iron Empire of Kampf"), Dumas DUM (Holy Order, "the Order of Saint Dumas"), Terreich
+    und Preußen TUP (Social Democracy, "the Bundeskaiserreich of Terreich und Preußen",
+    flag, with the TP islands and the coast patch west of Gaellia), Schteirmark STM
+    (Feudalism, Terreich's puppet), Daravon DRV, Eschland ESC and Hwitland HWT (Orthodox
+    Marxism; Daravon leads **the Synthesist Internationale** with the other two,
+    `faction_template_synthesist_internationale`), Someriania SMR (Vanguardism; SOM is a
+    vanilla tag); in Yastreovakia: Krionik KRI (the author's new **Stratocracy**
+    sub-ideology, Democratic; "the Militariat Regency of the Kriosnika"; with every KR
+    island, the two KR islets west of Araseos and, on its label, a region of Orientalis),
+    Gorbastan GOB and Zukchiva ZUK (Liberalism), Sminishia SMN (Social Democracy, "the
+    Worker's Republic of Sminishia"), Russovichia RSV (Council Communism, with the RU
+    islands). The ES islands east of Terreich are **Estande's**, and the island labelled
+    CA (Cascadia's until then) is **Cardonia's** (author). Cultures (Claude's guesses):
+    German for the new Araseos nations, French for Dumas, Portuguese for Merlgould,
+    Russian for Yastreovakia's. The borders of Sminishia, Gorbastan and Zukchiva were drawn
+    on Necessary Names, and "PE" and "(TP)" were written on Necessary Borders: moved; a
+    one-pixel gap south of Ostaria was closed. New flags: Illiricium's two (kingdom and
+    republic) replaced.
     All tags were checked against vanilla `common/country_tags`; new tags must be too.
   - The adjectives of the neighbours are guesses; the author may rename them.
 - **State names** are the author's, in `source/state_names.json` ("x,y" of a pixel
@@ -570,7 +602,8 @@ working; names come from `localisation/english/replace/`:
   Centralism, Council Communism, Anarcho-Communism, Agrarian Socialism. Authoritarian:
   Military Junta, Fascism, Corporatism, Strongman Rule, Technocracy, Revanchism.
   Monarchist: Absolute Monarchy, Oligarchy, Feudalism, Enlightened Absolutism, Elective
-  Monarchy, Legitimism. Authoritarian also has the author's **Bleacherism** (Alban
+  Monarchy, Legitimism, and the author's **Personal Union** (2026-10-07, Merlgould);
+  Democratic also has the author's **Stratocracy** (2026-10-07, Krionik). Authoritarian also has the author's **Bleacherism** (Alban
   supremacy; officially a senatorial republic under a strongman): ILR CTF ETR MZG;
   KIL is Legitimism. Theocratic: Hierocracy, Clerical Monarchism, Holy Order, Synodal
   Rule, Prophetic Rule. Vanilla's Earth-bound ones (`nazism`, `japan_militarism_ideology`
@@ -794,8 +827,9 @@ in git history (commit d2d6cd8, `scripts/cartographic.py`). It used
 
 ## Current state
 
-- 10,644 provinces (9,961 land, 645 sea, 38 lakes), 1,377 states, 91 strategic regions (11 sea),
-  72 countries (with Rouental's six releasables and the Holy See). 2026-10-05, later: Terrabis-Seran 76 states, Kilkire-Battania 28, Garfield 10,
+- 14,292 provinces (13,609 land, 645 sea, 38 lakes), 1,819 states, 91 strategic regions (11 sea),
+  92 countries (2026-10-07: twenty new nations, 521 new states; `dist/preview_new_nations_*.png`).
+  Before: 10,644 provinces, 1,377 states, 72 countries (with Rouental's six releasables and the Holy See). 2026-10-05, later: Terrabis-Seran 76 states, Kilkire-Battania 28, Garfield 10,
   Gaellia 7, Vineta 7, Harwick 1, Devlon 1 (`dist/state_numbers_araseos_southwest.png`,
   `state_numbers_garfield.png`, `state_numbers_san_sierra.png`). Before: 1,271 states (Llainfair's three became one),
   58 countries (2026-10-05, with the friend's Merlovich, Hoalepa and five nations south of

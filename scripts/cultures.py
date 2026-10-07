@@ -103,6 +103,14 @@ TAG_CULTURE = {
     **{t: _FRENCH for t in ("CRL", "MTN", "ORF", "GHS", "RVR", "PSC")},
     # the Holy See: Italian, after the Papal States (Claude's guess)
     "SEE": dict(names="ITA", portraits="europe", gfx="western_european"),
+    # 2026-10-07: Claude's guesses from the names (the author hasn't said): German for
+    # the new nations of Araseos' south and west, French for Dumas, Russian in the north
+    **{t: dict(names="GER", portraits="europe", gfx="western_european")
+       for t in ("TCN", "PTK", "SRN", "LTH", "GLB", "KPF", "TUP", "STM", "DRV", "ESC", "HWT", "SMR", "OST")},
+    "DUM": _FRENCH,
+    "MGD": dict(names="POR", portraits="iberia", gfx="western_european"),  # like Volinovia
+    **{t: dict(names="SOV", portraits="europe", gfx="eastern_european")
+       for t in ("KRI", "GOB", "ZUK", "SMN", "RSV")},
     "LNT": _FRENCH,  # author, 2026-09-30
     # Portuguese (author, 2026-09-30): vanilla has no Iberian generic portraits
     **{t: dict(names="POR", portraits="iberia", gfx="western_european")

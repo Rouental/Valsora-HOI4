@@ -29,6 +29,10 @@ ALIASES = {
     "riverrain": "RVR",
     "s. pollana": "SPL",
     "kingdom of god": "SEE",
+    "illiricium (kingdom)": "KIL",
+    "illiricium (republic)": "ILR",
+    "terreich": "TUP",
+    "serantian": "SRN",
 }
 
 

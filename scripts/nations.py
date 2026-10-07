@@ -129,6 +129,12 @@ HISTORY = {
             for t in ("CTF", "ETR", "MZG")],
     # Harwick starts as Vineta's vassal (author, 2026-10-05)
     "VNT": ["set_autonomy = { target = HWK autonomous_state = autonomy_puppet }"],
+    # 2026-10-07 (author): Merlgould and Schteirmark start as vassals
+    "VLN": ["set_autonomy = { target = MGD autonomous_state = autonomy_puppet }"],
+    "TUP": ["set_autonomy = { target = STM autonomous_state = autonomy_puppet }"],
+    # Daravon leads the Synthesist Internationale with Eschland and Hwitland
+    "DRV": ["create_faction_from_template = faction_template_synthesist_internationale",
+            "add_to_faction = ESC", "add_to_faction = HWT"],
 }
 
 # Country names while a given ideology rules: tag -> ideology -> (name, formal
@@ -160,11 +166,11 @@ LEADERS = {
     "LNT": ["conservatism"],
     "RMD": ["socialism"],              # Social Democracy
     "RST": ["revanchism"],
-    "VLN": ["liberalism"],
+    "VLN": ["enlightened_absolutism"],  # a kingdom from 2026-10-07 (was Liberalism)
     "ESD": ["constitutional_monarchism"],
     "CRZ": ["constitutional_monarchism"],
     "STO": ["despotism"],
-    "PLH": ["prophetic_rule"],         # the Chosen Land, under messianic rule
+    "PLH": ["constitutional_monarchism"],  # Vultuca from 2026-10-07 (was Prophetic Rule)
     # 2026-10-01: Bleacherism (the author's new Authoritarian subtype); the royalists
     "ILR": ["bleacherism"],
     "CTF": ["bleacherism"],
@@ -217,7 +223,14 @@ LEADERS = {
     "GHS": ["liberalism"],
     "RVR": ["feudalism"],
     "PSC": ["feudalism"],
-    "SEE": ["theocrat"],  # Hierocracy (author)
+    "SEE": ["theocrat"],
+    # 2026-10-07 (author)
+    "MGD": ["personal_union"], "TCN": ["oligarchism"], "PTK": ["strongman_rule"],
+    "SRN": ["elective_monarchy"], "LTH": ["populism"], "GLB": ["feudalism"],
+    "KPF": ["despotism"], "DUM": ["holy_order"], "TUP": ["socialism"], "STM": ["feudalism"],
+    "DRV": ["marxism"], "ESC": ["marxism"], "HWT": ["marxism"], "SMR": ["leninism"],
+    "KRI": ["stratocracy"], "GOB": ["liberalism"], "ZUK": ["liberalism"], "SMN": ["socialism"],
+    "RSV": ["council_communism"], "OST": ["despotism"],  # Hierocracy (author)
     # Rouental's democrats and communists, promoted by their focuses
     "ROU": ["constitutional_monarchism", "leninism"],
     # the continent placeholders: not chosen by the author, Monarchist as before
@@ -410,13 +423,13 @@ FORMAL_NAMES = {
     "FTH": "the Faithful Children of the Goddess and Her Saint",
     "CRD": "the Cardonian Kingdom",
     # the author's, 2026-09-30
-    "LNT": "the Republic of Placeholdros",
+    "LNT": "the Republic of Placeholdaire",
     "STO": "the Empire of Selto-Hamborn",
     "RMD": "the Romanoddlian Federation",  # author, 2026-09-30
-    "VLN": "the Republic of Volinovia",
+    "VLN": "the Kingdom of Volinovia",
     "ESD": "the Kingdom of Estande",
     "CRZ": "the Principality of Coraliza",
-    "PLH": "the Chosen Land of Placeholdria",
+    "PLH": "the United Kingdom of Vultuca",
     # the author's, 2026-10-01
     "ILR": "the Senatorial Republic of Illiricium",
     "CTF": "the Bleacherist Republic of Côtefer",
@@ -460,6 +473,27 @@ FORMAL_NAMES = {
     "RVR": "the Grand Duchy of the Riverraine",
     "PSC": "the Duchy of the Piscary",
     "SEE": "the Kingdom of the Church",
+    # 2026-10-07 (author; Merlgould's was written "the Kingdom of Melgould")
+    "MGD": "the Kingdom of Merlgould",
+    "TCN": "the Kingdom of Transcainia",
+    "PTK": "the Constitutional Dictatorship of Peatiktist",
+    "SRN": "the High Kingdom of Serentia",
+    "LTH": "the Republic of Leithanien",
+    "GLB": "the Efeuüberwuchterte Steinsäule of Großlöwenburg",
+    "KPF": "the Iron Empire of Kampf",
+    "DUM": "the Order of Saint Dumas",
+    "TUP": "the Bundeskaiserreich of Terreich und Preußen",
+    "STM": "the Duchy of Schteirmark",
+    "DRV": "the Republik of Daravon",
+    "ESC": "the Wyrhterrepublik of Eschland",
+    "HWT": "the Republik of Hwitland",
+    "SMR": "the People's Republik of Someriania",
+    "KRI": "the Militariat Regency of the Kriosnika",
+    "GOB": "the Republic of Gorbastan",
+    "ZUK": "the Republic of Zukchiva",
+    "SMN": "the Worker's Republic of Sminishia",
+    "RSV": "the Soyuz Narodnykh Komissarov of Russovichia",
+    "OST": "the Archcounty of Ostaria",
 }
 
 LOCALISATION = [
@@ -467,6 +501,7 @@ LOCALISATION = [
     ' ROU_accept_reality:0 "Accept Reality"',
     ' ROU_accept_reality_desc:0 "The Cahuns bicker; the faithful pray. Mahaut VI answers the prayers."',
     ' VAL_reibonnaise_association:0 "The Association of Reibonnaise States"',
+    ' VAL_synthesist_internationale:0 "The Synthesist Internationale"',
     ' VAL_alliance_of_the_vale:0 "The Alliance of the Vale"',
     ' ROU_plans_for_cardonia:0 "Plans for Cardonia"',
     ' ROU_plans_for_cardonia_desc:0 "A war goal against Cardonia, for testing."',
@@ -897,7 +932,22 @@ ROU_FOCUS_TREE = """focus_tree = {
 
 # Factions that exist at game start, created from these templates in the leader's
 # history. Goals, rules, manifest and icon are vanilla's (as in its generic template).
-FACTION_TEMPLATES = """faction_template_alliance_of_the_vale = {
+FACTION_TEMPLATES = """faction_template_synthesist_internationale = {
+	name = VAL_synthesist_internationale
+	manifest = faction_manifest_strength_in_unity
+	icon = GFX_faction_logo_generic
+	visible = {
+		always = no
+	}
+	goals = {
+		faction_goal_a_military_base
+	}
+	default_rules = {
+		joining_rule_neighbors_only
+		change_leader_rule_manpower
+	}
+}
+faction_template_alliance_of_the_vale = {
 	name = VAL_alliance_of_the_vale
 	manifest = faction_manifest_strength_in_unity
 	icon = GFX_faction_logo_generic

@@ -181,6 +181,21 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## Map problems found while building
 
+**Borders on the wrong layers, a gap, and unlabelled patches** (2026-10-07)
+- Cause:
+  - The borders of Sminishia, Gorbastan and Zukchiva were drawn on Necessary Names.
+  - "PE" and "(TP)" were written on Necessary Borders.
+  - A one-pixel gap south of Ostaria joined Ostaria to Hwitland.
+  - Seven unlabelled patches the new lines enclosed went to `DEFAULT_OWNER`.
+- Fix:
+  - Line-shaped pieces on Names moved to Borders, and letter-sized pieces on Borders
+    moved to Names.
+  - The gap was found by listing loose line ends.
+  - The unlabelled patches are on `LEAVE`.
+  - Each nation's land was found from the author's labels: a name takes the bordered
+    area around it, an island label the land nearest it. A rendered proposal was
+    checked before `apply_outlines.py` ran.
+
 **A 5 px province in Kurikia stopped the build; San Sierra's state lines leaked** (2026-10-05)
 - Cause: re-running `regroup_states.py` over every drawn country left a 5 px scrap at
   (1242, 856). Separately, two of the author's San Sierra state lines had gaps, so

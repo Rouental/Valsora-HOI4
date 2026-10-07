@@ -109,6 +109,8 @@ def main():
     for k, t in enumerate([] if show_names else tags):
         nm = next(v[1] for v in COUNTRIES.values() if v[0] == t)
         nums = [i for i, v in key.items() if v["tag"] == t]
+        if not nums:  # all its states are outside the frame
+            continue
         d.text((10, im.height - 10 - 28 * (len(tags) - k)), f"{nm}: {min(nums)}" + (f"–{max(nums)}" if len(nums) > 1 else ""), fill=tuple(int(c * 0.6) for c in col[t]),
                font=lf, stroke_width=3, stroke_fill=(255, 255, 255))
     Path("dist").mkdir(exist_ok=True)

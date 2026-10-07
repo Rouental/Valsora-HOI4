@@ -77,6 +77,8 @@ SUBTYPES = {
          "A crowned democracy: the prince reigns, parliament governs."),
         ("lordly_republic", "Lordly Republic",  # the author's, 2026-09-30
          "A republic in which the nobility and clergy retain significant power."),
+        ("stratocracy", "Stratocracy",  # the author's, 2026-10-07 (Krionik)
+         "The armed forces govern as a regency, and citizenship is earned in service."),
     ],
     "communism": [
         ("marxism", "Orthodox Marxism", "The classless society, by the letter of the theory."),
@@ -106,6 +108,8 @@ SUBTYPES = {
         ("enlightened_absolutism", "Enlightened Absolutism", "An absolute monarch who reforms from above."),
         ("elective_monarchy", "Elective Monarchy", "The nobles choose who wears the crown."),
         ("legitimism", "Legitimism", "The rightful dynasty, restored to its throne."),
+        ("personal_union", "Personal Union",  # the author's, 2026-10-07 (Merlgould)
+         "Two crowns on one head: the realm keeps its own laws, but its monarch reigns elsewhere too."),
     ],
     "theocracy": [
         ("theocrat", "Hierocracy", "The clergy rule in the name of the divine."),
