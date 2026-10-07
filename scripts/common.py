@@ -158,6 +158,15 @@ COUNTRIES = {
     "sminishia": ("SMN", "Sminishia", "Sminishian", (210, 110, 150)),
     "russovichia": ("RSV", "Russovichia", "Russovich", (140, 0, 0)),
     "ostaria": ("OST", "Ostaria", "Ostarian", (230, 200, 30)),                    # flag yellow
+    # 2026-10-08 (the author's names, governments and formal names; tags, colours and
+    # adjectives Claude's; Tethia's colour from its flag)
+    "belekria": ("BLK", "Belekria", "Belekrian", (200, 62, 44)),
+    "tethia": ("TTH", "Tethia", "Tethian", (26, 84, 178)),             # flag blue
+    "merigo": ("MRG", "Merigo", "Merigan", (72, 150, 124)),
+    "zwintern": ("ZWT", "Zwintern", "Zwinterner", (96, 104, 124)),
+    "ostercoirasreich": ("OCR", "Ostercoirasreich", "Ostercoirasreicher", (186, 156, 82)),
+    "mahina": ("MAH", "Mahina", "Mahinan", (84, 178, 196)),
+    "ungar": ("UNG", "Ungar", "Ungarian", (150, 120, 70)),
 }
 # The placeholder countries, one per continent, are the recommended starts in the
 # bookmark; the rest are playable but not listed there.

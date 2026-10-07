@@ -132,6 +132,7 @@ HISTORY = {
     # 2026-10-07 (author): Merlgould and Schteirmark start as vassals
     "VLN": ["set_autonomy = { target = MGD autonomous_state = autonomy_puppet }"],
     "TUP": ["set_autonomy = { target = STM autonomous_state = autonomy_puppet }"],
+    "PTK": ["set_autonomy = { target = MRG autonomous_state = autonomy_puppet }"],  # author, 2026-10-08
     # Daravon leads the Synthesist Internationale with Eschland and Hwitland
     "DRV": ["create_faction_from_template = faction_template_synthesist_internationale",
             "add_to_faction = ESC", "add_to_faction = HWT"],
@@ -225,6 +226,10 @@ LEADERS = {
     "PSC": ["feudalism"],
     "AOE": ["oligarchism"], "RCL": ["despotism"], "SGT": ["feudalism"],
     "KOV": ["feudalism"], "HVQ": ["feudalism"], "SRE": ["feudalism"],
+    # 2026-10-08 (author)
+    "BLK": ["leninism"], "TTH": ["despotism"], "MRG": ["conservatism"],
+    "ZWT": ["technocracy"], "OCR": ["feudalism"], "MAH": ["liberalism"],
+    "UNG": ["feudalism"],  # a Grand Duchy (author); the subtype is Claude's
     "SEE": ["theocrat"],
     # 2026-10-07 (author)
     "MGD": ["personal_union"], "TCN": ["oligarchism"], "PTK": ["strongman_rule"],
@@ -293,6 +298,8 @@ RELEASABLE = {
     "KOV": ["Kové"],
     "HVQ": ["Hevique", "Avarre"],
     "SRE": ["Serie", "Verdoyantes"],
+    # 2026-10-08 (author): Tethia starts as part of Belekria
+    "TTH": ["Tethia"],
 }
 # exist only through the civil war (author): no cores until the Prince is executed, so
 # they can't be released any other way
@@ -488,6 +495,13 @@ FORMAL_NAMES = {
     "KOV": "the County of Kové",
     "HVQ": "the County of Hevique",
     "SRE": "the Duchy of Serie",
+    "BLK": "the Union of Belekrian Republics",
+    "TTH": "the Principality of Tethia",
+    "MRG": "the Republic of Merigo",
+    "ZWT": "the State of Zwintern",
+    "OCR": "the Kaiserinnreichfedderation of Ostercoirasreich",
+    "MAH": "the Republic of Mahina",
+    "UNG": "the Grand Duchy of Ungar",
     "SEE": "the Kingdom of the Church",
     # 2026-10-07 (author; Merlgould's was written "the Kingdom of Melgould")
     "MGD": "the Kingdom of Merlgould",

@@ -431,6 +431,25 @@ mismatch, missing localisation) and catches all of them.
     "Carcaraise", "Marcher Lords", "Rouental (Authoritarian)" etc. are `import_flags`
     aliases) replaced 23 flags, including Rouental's four government flags; the
     Reibonne's and HMMLA's were copied from the new communist and authoritarian ones.
+    **2026-10-08** (the author's names, governments and formal names; tags, colours,
+    adjectives and cultures Claude's unless noted): in Yastreovakia's north **Belekria**
+    BLK (Vanguardism, "the Union of Belekrian Republics", 44 states, with every BE island:
+    five off its coast, eleven north of Nonscio, two further east), whose region
+    **Tethia** is one state (named "Tethia") and a releasable, the Principality of
+    Tethia TTH (Absolute Monarchy, Polish (author), flag `TTH.png`, colour from it); the
+    box west of Tethia is one state too (both drawn with state lines). In Araseos' far
+    south-west **Merigo** MRG (Conservatism, "the Republic of Merigo", Peatiktist's
+    puppet, Italian), **Zwintern** ZWT (Technocracy, "the State of Zwintern", Dutch) and
+    **Ungar** UNG ("the Grand Duchy of Ungar"; Feudalism and German are Claude's: the
+    author named it later the same day); **Ostercoirasreich** OCR (Feudalism, "the
+    Kaiserinnreichfedderation of Ostercoirasreich", German) on the OS islets and
+    **Mahina** MAH (Liberalism, "the Republic of Mahina", Australian names like Hoalepa)
+    on the MA islets. Islets also went to Someriania (SO), Kilkire-Foraois (the west of
+    the SO island, cut off by a line), Kampfian Empire (KE) and Dumas (DU). The author
+    wrote most of those labels on Necessary Borders: moved to Necessary Names (88 marks;
+    only three new lines were real). Their upload predated the Transcainia fix and the
+    four state transfers, so the current game layers were kept. New flags for Hevique,
+    Riverraine, Vair and Fraxhemark came with the flag file.
     All tags were checked against vanilla `common/country_tags`; new tags must be too.
   - The adjectives of the neighbours are guesses; the author may rename them.
 - **State names** are the author's, in `source/state_names.json` ("x,y" of a pixel
@@ -842,7 +861,8 @@ in git history (commit d2d6cd8, `scripts/cartographic.py`). It used
 
 ## Current state
 
-- 14,334 provinces (13,651 land, 645 sea, 38 lakes), 1,823 states, 91 strategic regions (11 sea),
+- 14,810 provinces (14,127 land, 645 sea, 38 lakes), 1,866 states, 91 strategic regions (11 sea),
+  105 countries (2026-10-08: seven new; before: 14,334 provinces, 1,823 states,
   98 countries (with six more releasables, 2026-10-07, later; before: 92 (2026-10-07: twenty new nations, 521 new states; `dist/preview_new_nations_*.png`)).
   Before: 10,644 provinces, 1,377 states, 72 countries (with Rouental's six releasables and the Holy See). 2026-10-05, later: Terrabis-Seran 76 states, Kilkire-Battania 28, Garfield 10,
   Gaellia 7, Vineta 7, Harwick 1, Devlon 1 (`dist/state_numbers_araseos_southwest.png`,

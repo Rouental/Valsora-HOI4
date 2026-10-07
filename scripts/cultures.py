@@ -134,6 +134,14 @@ TAG_CULTURE = {
     **{t: dict(names="USA", portraits="usa", gfx="western_european") for t in ("CSC", "THD")},
     # 2026-10-05, the author's friend's sessions
     "HOA": dict(names="AST", portraits="europe", gfx="commonwealth"),
+    # 2026-10-08: Tethia Polish (author); the rest Claude's guesses from the names
+    "TTH": dict(names="POL", portraits="europe", gfx="eastern_european"),
+    "BLK": dict(names="SOV", portraits="europe", gfx="eastern_european"),
+    "MRG": dict(names="ITA", portraits="europe", gfx="western_european"),
+    "ZWT": dict(names="HOL", portraits="europe", gfx="western_european"),
+    "OCR": dict(names="GER", portraits="europe", gfx="western_european"),
+    "MAH": dict(names="AST", portraits="europe", gfx="commonwealth"),  # like Hoalepa
+    "UNG": dict(names="GER", portraits="europe", gfx="western_european"),
     "ARV": dict(names="POR", portraits="iberia", gfx="western_european"),
     **{t: dict(names="SPR", portraits="iberia", gfx="western_european") for t in ("ATR", "SVM", "PNC")},
     "USS": dict(names="USA", portraits="usa", gfx="western_european"),

@@ -206,6 +206,16 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## Map problems found while building
 
+**Labels on the Borders layer again, and another stale LEAVE pixel** (2026-10-08)
+- The author's island labels (SO, MA, KE, DU, "Mahina (MA)" ...) were written on
+  Necessary Borders: 88 small marks among three real new lines. As lines they would
+  have cut the islets into scraps. Fix: every new mark but the three lines (found as
+  8-connected pieces, checked by eye) moved to Necessary Names before apply_outlines.
+- `LEAVE` still held (297, 1887), which now lies in Zwintern's patch, and (554, 1814),
+  now Ungar: both would have stopped those patches being assigned, as happened with
+  Transcainia. Fix: removed; every `LEAVE` pixel is now checked against the seeded
+  patches before a run.
+
 **Transcainia's land stayed Araseos** (2026-10-07, author's screenshot)
 - Cause: `apply_outlines.py` had an old `LEAVE` pixel, (403, 1359), from 2026-10-05.
   The new lines put it inside Transcainia's patch, and `LEAVE` beat the seed, so the

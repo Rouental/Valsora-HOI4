@@ -161,7 +161,32 @@ OWNERS_1007 = {
 # 2026-10-07, later (author): the patch north of Peatiktist's exclave is Transcainia's.
 # The run above left it because an old LEAVE pixel, (403, 1359), lay in it. Only this
 # patch is seeded: re-seeding a finished country re-cuts it (Grossloewenburg did).
-OWNERS = {"transcainia": [(420, 1414)]}
+OWNERS_1007B = {"transcainia": [(420, 1414)]}
+# 2026-10-08: Belekria (its west, the middle box and Tethia, which starts as part of it),
+# Merigo and Zwintern, and the islands the labels name (BE, SO, KF, MA, OS, KE, DU). The
+# letters were written on Necessary Borders and were moved to Necessary Names first.
+OWNERS_0810 = {
+    "belekria": [(1915, 337), (2070, 350), (2169, 342),
+                 (1635, 274), (1470, 286), (1416, 303), (1471, 341), (1513, 357),
+                 (1042, 396), (1099, 405), (1138, 408), (1149, 414), (1066, 418),
+                 (1086, 423), (1211, 421), (1175, 434), (1238, 435), (1250, 435),
+                 (1159, 442), (1585, 717), (1514, 732)],
+    "merigo": [(305, 1818)],
+    "zwintern": [(291, 1951)],
+    "someriania": [(957, 2287), (985, 2312), (1007, 2308), (1090, 2310), (1049, 2329),
+                   (976, 2340), (1016, 2339), (998, 2348), (1053, 2355), (1035, 2353),
+                   (987, 2358), (1025, 2362)],
+    "kilkire": [(963, 2315)],  # the west of the island the KF line splits
+    "mahina": [(1454, 2375), (1547, 2377), (1474, 2381), (1494, 2385), (1466, 2382),
+               (1473, 2389), (1606, 2394), (1590, 2395), (1579, 2399), (1565, 2399),
+               (1656, 2413), (1673, 2419)],
+    "ostercoirasreich": [(134, 2223), (127, 2234), (629, 2305), (591, 2444), (1186, 2380)],
+    "kampf": [(1204, 2375), (1297, 2014), (1316, 2031)],
+    "dumas": [(1318, 1990)],
+}
+# 2026-10-08, later: Ungar, the Grand Duchy the author labelled east of Merigo (it was
+# left as Araseos until then: (554, 1814) in LEAVE)
+OWNERS = {"ungar": [(554, 1814)]}
 OWNERS_0410 = {
     "anglost": [(528, 1283), (607, 1287), (509, 1335), (436, 1342), (506, 1363), (474, 1379),
                 (516, 1386), (563, 1388), (626, 1425), (583, 1428), (654, 1430), (658, 1421),
@@ -187,8 +212,9 @@ OWNERS_0410 = {
 LEAVE = [  # (596, 2222), the bit of coast west of Gaellia, became Terreich's on 2026-10-07
          # 2026-10-07: unlabelled land the new lines close off, left as it is (south of
          # Krionik's eastern part, Orientalis north of its new line, two patches in
-         # Araseos' south-west) and slivers of a few pixels
-         (2553, 933), (4152, 1460), (554, 1814), (297, 1887), (2254, 405), (487, 1531), (334, 1844),
+         # Araseos' south-west) and slivers of a few pixels; (297, 1887) is Zwintern's
+         # and (554, 1814) Ungar's since 2026-10-08
+         (2553, 933), (4152, 1460), (2254, 405), (487, 1531), (334, 1844),
          (1618, 1798), (2323, 1884), (1757, 1894),  # Solitas placeholder land the friend's nations left
          (847, 1402), (769, 1354),  # (403, 1359) is Transcainia's since 2026-10-07
          # Aislada, outlined on 2026-10-04 (still the placeholder's colour)
