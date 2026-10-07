@@ -11,16 +11,16 @@ own files to start from):
 - Sea: pale blue-grey paper, engraved waterlines along every coast and lake shore, a
   15-degree graticule, each ocean's name lettered in spaced italic capitals, a compass
   rose and a title cartouche in the open ocean.
-- Relief: none. The heightmap is flattened (land on one level, the sea floor on
-  another) and world_normal.bmp is flat, so the world lies flat like a printed page.
+- Relief: no shading (world_normal.bmp is flat). The heightmap stays Valsora's.
 - Terrain tiles (map/terrain/atlas*.dds): paper fibre instead of grass and rock; mud,
   sea-floor and sky-reflection textures neutral, water gloss off.
 - Borders: country borders a dash-dot ink line, states dashed, provinces a faint dotted
   line, impassable borders hachured, sea borders faint; straits a dashed ferry line.
-- Victory points: atlas town symbols (star in a ring for capitals, ringed dots).
 - Map lettering: Cinzel (OFL), engraved Roman capitals, letter-spaced.
-- Defines: countries washed in their colour with a stronger band along the border,
-  province and state lines fade out when zoomed away, no bloom; post effects off.
+  (The zoomed-out flat map is drawn by shader code and isn't changed.)
+- Defines: map-mode colours let the terrain show through, province and state lines
+  fade out when zoomed away, no bloom; post effects off. Country fills and border
+  bands are the base game's (overriding them showed a grid of squares in game).
 - The model frame around the map: dark green book cloth.
 
 The sea artwork follows Valsora's coasts, so it is rebuilt with the main mod
@@ -754,65 +754,6 @@ def strait_texture():
     return np.dstack([np.broadcast_to(np.array([34, 30, 26], float), (64, 64, 3)), a * 230])
 
 
-# ---------------------------------------------------------------- victory points
-VP_COLOURS = [(130, 26, 22), (26, 48, 112), (30, 92, 42), (150, 110, 22), (28, 24, 20)]
-
-
-def star_points(cx, cy, r_out, r_in, n=5, rot=-math.pi / 2):
-    pts = []
-    for k in range(2 * n):
-        r = r_out if k % 2 == 0 else r_in
-        a = rot + k * math.pi / n
-        pts.append((cx + r * math.cos(a), cy + r * math.sin(a)))
-    return pts
-
-
-def vp_strip():
-    """20 frames of 29x27: capital, city, town, village (rows of the strip's order)
-    in five colours each, as atlas symbols with a paper halo."""
-    ss = 8
-    fw, fh = 29, 27
-    img = Image.new("RGBA", (fw * 20 * ss, fh * ss), (0, 0, 0, 0))
-    for tier in range(4):
-        for k, colr in enumerate(VP_COLOURS):
-            i = tier * 5 + k
-            cx, cy = (i * fw + fw / 2) * ss, fh / 2 * ss
-            halo = Image.new("L", img.size, 0)
-            ink = Image.new("L", img.size, 0)
-            hd, idr = ImageDraw.Draw(halo), ImageDraw.Draw(ink)
-
-            def circ(d, r, **kw):
-                d.ellipse([cx - r, cy - r, cx + r, cy + r], **kw)
-            if tier == 0:       # capital: a star inside a ring
-                circ(hd, 12.9 * ss, fill=255)
-                circ(idr, 12.0 * ss, outline=255, width=int(1.6 * ss))
-                idr.polygon(star_points(cx, cy, 9.0 * ss, 3.7 * ss), fill=255)
-            elif tier == 1:     # city: ringed dot
-                circ(hd, 8.3 * ss, fill=255)
-                circ(idr, 7.4 * ss, outline=255, width=int(1.6 * ss))
-                circ(idr, 3.6 * ss, fill=255)
-            elif tier == 2:     # town: open ring
-                circ(hd, 6.1 * ss, fill=255)
-                circ(idr, 5.2 * ss, outline=255, width=int(1.7 * ss))
-            else:               # village: dot
-                circ(hd, 4.2 * ss, fill=255)
-                circ(idr, 3.3 * ss, fill=255)
-            h = np.asarray(halo, np.float32) / 255
-            k_ = np.asarray(ink, np.float32) / 255
-            arr = np.asarray(img, np.float32).copy()
-            paper = np.array([244, 238, 222], float)
-            col = np.array(colr, float)
-            a_out = np.maximum(arr[..., 3] / 255, np.maximum(h * 0.55, k_))
-            rgb = np.where(k_[..., None] > 0, col * k_[..., None] + paper * (1 - k_[..., None]),
-                           np.where(h[..., None] > 0, paper, arr[..., :3]))
-            sel = (h > 0) | (k_ > 0)
-            arr[..., :3] = np.where(sel[..., None], rgb, arr[..., :3])
-            arr[..., 3] = np.where(sel, a_out * 255, arr[..., 3])
-            img = Image.fromarray(arr.astype(np.uint8), "RGBA")
-    small = img.resize((fw * 20, fh), Image.LANCZOS)
-    return np.asarray(small, np.float32)
-
-
 # ---------------------------------------------------------------- the map's frame
 def book_cloth(size=1024):
     """Dark green book cloth: a fine linen weave with some unevenness."""
@@ -897,20 +838,11 @@ def map_font(out_dir):
         lines.append(f"char id={code:<5d} x={px:<5d} y={py:<5d} width={gw:<5d} height={gh:<5d} "
                      f"xoffset={ox:<5d} yoffset={oy + base:<5d} xadvance={round(adv) + track:<5d} "
                      f"page=0  chnl=15")
-    # kerning between capitals and common pairs, from the font's own tables
-    have = [chr(g[0]) for g in glyphs if g[1] is not None]
-    letters = [c for c in have if c.isalpha() and ord(c) < 0x180]
-    kern = []
-    for a in letters:
-        la = fnt.getlength(a)
-        for b in letters:
-            k = round(fnt.getlength(a + b) - la - fnt.getlength(b))
-            if abs(k) >= 8:
-                kern.append((ord(a), ord(b), k))
-    lines.append(f"kernings count={len(kern)}")
-    lines += [f"kerning first={a:<4d} second={b:<4d} amount={k}" for a, b, k in kern]
+    # no kerning block: the base game's map font has none, and the first in-game test
+    # showed no country names at all, so the font is kept to what the game is known to
+    # read (only its letter spacing is widened)
     (out_dir / "hoi_mapfont4.fnt").write_bytes(("\r\n".join(lines) + "\r\n").encode("ascii"))
-    return len(glyphs), len(kern), (TW, TH)
+    return len(glyphs), (TW, TH)
 
 
 # ---------------------------------------------------------------- defines
@@ -920,12 +852,6 @@ DEFINES = """-- Valsora: Atlas. Graphics defines for a printed-atlas look.
 -- 2026-10-07, without these: flat grey sea, country colours over grey).
 NDefines_Graphics.NMapMode.MAP_MODE_TERRAIN_TRANSPARENCY = 1
 NDefines_Graphics.NMapMode.MAP_MODE_NAVAL_TERRAIN_TRANSPARENCY = 1
--- Countries: the whole country washed in its colour, with a narrow band inside the
--- border (a wide one is drawn on a coarse grid and shows steps).
-NDefines_Graphics.NGraphics.GRADIENT_BORDERS_FIELD_COUNTRY_LOW = 9000.0
-NDefines_Graphics.NGraphics.GRADIENT_BORDERS_FIELD_COUNTRY_HIGH = 9000.0
-NDefines_Graphics.NGraphics.GRADIENT_BORDERS_THICKNESS_COUNTRY_LOW = 2.0
-NDefines_Graphics.NGraphics.GRADIENT_BORDERS_THICKNESS_COUNTRY_HIGH = 9.0
 -- Province lines only up close, state lines a little further out, as an atlas shows
 -- smaller divisions only on its larger-scale plates.
 NDefines_Graphics.NGraphics.PROVINCE_BORDER_FADE_NEAR = 260
@@ -941,12 +867,6 @@ def descriptor(extra=()):
     return "\n".join(['version="1.0"', "tags={", '\t"Graphics"', '\t"Map"', "}",
                       f'name="{TITLE}"', 'supported_version="1.19.*"', 'picture="thumbnail.png"',
                       "dependencies={", f'\t"{MOD_NAME}"', "}", *extra]) + "\n"
-
-
-def flat_heightmap(kind):
-    """Land on one level and the sea floor on another: the world lies flat."""
-    h = np.where(kind == 1, 98, np.where(kind == 2, 92, 89)).astype(np.uint8)
-    return h
 
 
 # ---------------------------------------------------------------- build
@@ -1016,16 +936,14 @@ def main():
             write_dds(tdir / f"border_{name}_{i}.dds", border_texture(w, h, st), mips=False)
     write_dds(tdir / "strait.dds", strait_texture(), mips=False)
 
-    # relief: none
-    from imgio import palette_from_header
-    write_bmp(OUT / "map/heightmap.bmp", flat_heightmap(kind),
-              palette_from_header(Path("source/palettes/heightmap.bmp.header.bin")))
+    # relief: no shading. The heightmap stays Valsora's: flattening it (land 98, sea 89)
+    # made a cliff at every coast that the terrain mesh, coarser than the map's pixels,
+    # drew as stair steps and squares (in-game test, 2026-10-07)
     flat = np.zeros((HH, HW, 3), np.uint8)
     flat[...] = (128, 128, 255)
     write_bmp(OUT / "map/world_normal.bmp", flat)
 
     # symbols, the frame, the lettering
-    write_dds(OUT / "gfx/interface/onmap_victorypoints_strip.dds", vp_strip(), mips=False)
     cloth = book_cloth()
     write_dds(OUT / "gfx/models/map_border_d.dds", cloth)
     nrm = np.zeros((1024, 1024, 4), np.float32)
@@ -1034,8 +952,8 @@ def main():
     spec = np.zeros((1024, 1024, 4), np.float32)
     spec[...] = (0, 24, 24, 40)
     write_dds(OUT / "gfx/models/map_border_s.dds", spec, mips=False)
-    n_glyphs, n_kern, page = map_font(OUT / "gfx" / "fonts")
-    print(f"  map font: {n_glyphs} characters, {n_kern} kerning pairs, page {page[0]}x{page[1]}")
+    n_glyphs, page = map_font(OUT / "gfx" / "fonts")
+    print(f"  map font: {n_glyphs} characters, page {page[0]}x{page[1]}")
 
     # defines, post effects off, descriptor, licences
     (OUT / "common/defines").mkdir(parents=True)
@@ -1164,7 +1082,6 @@ EXPECTED = {  # path: (width, height), the sizes the base game's files have
     "map/terrain/border_country_2.dds": (64, 32), "map/terrain/border_state_0.dds": (128, 64),
     "map/terrain/border_state_1.dds": (256, 128), "map/terrain/border_state_2.dds": (256, 128),
     "map/terrain/border_sea_1.dds": (53, 32), "map/terrain/strait.dds": (64, 64),
-    "gfx/interface/onmap_victorypoints_strip.dds": (580, 27),
 }
 
 
@@ -1201,13 +1118,6 @@ def check():
             problems.append(f"font: character {cid} lies outside the page")
     if "\r\n" not in fnt.replace("\n", "\r\n") or not fnt.startswith("info "):
         problems.append("font: not a BMFont text file")
-    hm = read_bmp(OUT / "map/heightmap.bmp")
-    kind = load_world()
-    img = hm["img"]
-    if (hm["width"], hm["height"], hm["bpp"]) != (W, H, 8):
-        problems.append("heightmap.bmp: wrong size or depth")
-    elif (img[kind == 1] <= 95).any() or (img[kind != 1] >= 95).any():
-        problems.append("heightmap.bmp: land and water on the wrong side of sea level")
     wn = read_bmp(OUT / "map/world_normal.bmp")
     if (wn["width"], wn["height"], wn["bpp"]) != (HW, HH, 24):
         problems.append("world_normal.bmp: wrong size or depth")

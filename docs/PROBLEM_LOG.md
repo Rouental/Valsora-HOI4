@@ -6,6 +6,20 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**Atlas, second test: squares, no art, no country names** (2026-10-07, screenshot)
+- Squares and a stair-stepped coast: the flattened heightmap (land 98, sea 89) put a
+  cliff at every coast, and the terrain mesh is coarser than the map's pixels, so the
+  coast and the surface snapped to its grid. The coarse field of the
+  `GRADIENT_BORDERS_FIELD_COUNTRY_*` overrides may add to it. Fix: Valsora's own
+  heightmap, base-game gradient borders.
+- No art: the screenshots are at the zoom where HOI4 swaps the 3D terrain for its flat,
+  shader-drawn map; textures don't reach it. Only shader files can (needs vanilla
+  `gfx/FX` from the author's install).
+- No country names: unknown. The font texture decodes correctly with an independent
+  decoder; the kerning block (the base game's map font has none) was removed in case
+  the game rejects it. Asked whether names showed without the submod, and for error.log.
+- Also removed, as unverifiable: the victory-point symbol strip.
+
 **The Atlas submod looked murky and blocky** (2026-10-07, author's screenshot)
 - Causes: the political map mode draws an opaque colour over land and sea unless
   `NMapMode.MAP_MODE_TERRAIN_TRANSPARENCY` / `MAP_MODE_NAVAL_TERRAIN_TRANSPARENCY` are 1,

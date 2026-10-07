@@ -839,26 +839,33 @@ drawn by the script, and the lettering uses Cinzel and EB Garamond (SIL OFL;
   - **Terrain tiles** (`atlas0-2`): one quiet, strictly seamless paper tile in every
     slot (the game repeats it every few map pixels). Their normals and the world
     normal map are flat.
-  - **Heightmap flattened:** land 98, lakes 92, sea 89.
+  - **Heightmap: Valsora's own.** A flattened one (land 98, sea 89) made a cliff at
+    every coast, which the terrain mesh (coarser than the map's pixels) drew as stair
+    steps and a grid of squares (second in-game test).
   - **Water:** gloss off; the reflection cubemap and sea floor are the sea's own colour.
   - **Borders:** country a dash-dot ink line (solid when far), state dashed, province
     dotted, impassable hachured, sea region faintly dashed, sea none, strait a dashed
     ferry line.
-  - **Victory points:** atlas symbols in the strip's 20 frames (4 tiers × 5 colours):
-    star in a ring, ringed dot, ring, dot.
+  - **Victory points:** the base game's. An atlas-symbol strip was tried, but which of
+    its 20 frames the game uses for what couldn't be checked; its code is in git history.
   - **Map frame model:** dark green book cloth.
   - **Map font** `hoi_mapfont4` (the country names): Cinzel 600 at 256 px, letter-spaced
-    0.1 em, with the font's kerning. It is DXT3 with black colour and coverage in alpha,
+    0.1 em, no kerning block (the base game's has none). It is DXT3 with black colour and coverage in alpha,
     like the base game's, and covers Latin-1 and Latin Extended-A.
   - **Defines:** map modes' overlay made transparent (`MAP_MODE_TERRAIN_TRANSPARENCY`
-    and `MAP_MODE_NAVAL_TERRAIN_TRANSPARENCY` = 1, so the paper and sea artwork show);
-    a country wash everywhere with a narrow band inside borders (`GRADIENT_BORDERS_*`,
-    band 2 / 9 px), province and state lines fading out with distance, no bloom.
+    and `MAP_MODE_NAVAL_TERRAIN_TRANSPARENCY` = 1), province and state lines fading out
+    with distance, no bloom. Country fills and bands are the base game's again: the
+    `GRADIENT_BORDERS_FIELD/THICKNESS_COUNTRY_*` overrides drew a coarse grid.
+  - **The zoomed-out map is shader-drawn.** Past a zoom level HOI4 replaces the 3D
+    terrain with a flat map (flat sea, flat country colours) that no texture here
+    reaches; both in-game screenshots were at that level. Only shaders change it (what
+    Victorianization does): needs the author's vanilla `gfx/FX` files.
   - **First in-game test** (author, 2026-10-07): without the two transparency defines
     the political map hid all of it (flat grey sea, country colours over grey); the
     old 26 px band was drawn on a coarse grid and stepped; the paper tile (four seeds,
     chain lines that didn't divide 256) repeated as a grid of squares; the town
-    symbols' halos were white blobs zoomed out. All four fixed, not yet re-tested.
+    symbols' halos were white blobs zoomed out. Second test, same day: squares and art
+    still missing, no country names; see the next items.
   - **Post effects:** an empty `gfx/posteffect_volumes.txt` turns them off.
 - File names, formats and sizes follow the base game's: the slots were learned from
   the Victorianization zip's file list and headers, and none of its content was used.
