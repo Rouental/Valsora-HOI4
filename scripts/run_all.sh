@@ -24,4 +24,4 @@ python3 scripts/build_mod.py     # every mod file
 python3 scripts/check_mod.py     # verify against HOI4's rules
 python3 scripts/export_canvas.py # previews
 python3 scripts/package.py       # dist/valsora_test.zip
-python3 scripts/victorianization_patch.py  # dist/valsora_victorianization.zip (the Victorianization look)
+python3 scripts/atlas_mod.py      # dist/valsora_atlas.zip (the "Valsora: Atlas" graphics submod)
