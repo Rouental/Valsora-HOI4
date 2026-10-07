@@ -6,6 +6,17 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**The Atlas submod looked murky and blocky** (2026-10-07, author's screenshot)
+- Causes: the political map mode draws an opaque colour over land and sea unless
+  `NMapMode.MAP_MODE_TERRAIN_TRANSPARENCY` / `MAP_MODE_NAVAL_TERRAIN_TRANSPARENCY` are 1,
+  so none of the paper, waterlines or sea lettering showed (flat grey-blue sea, country
+  colours over grey); the 26 px country band is drawn on a coarse grid and stepped; the
+  paper tile had chain lines that didn't divide its 256 px and four differently seeded
+  copies, so it repeated as a grid of small squares; the town symbols' paper halos
+  showed as white blobs when zoomed out.
+- Fix: both defines at 1, band 2 / 9 px, one quiet seamless tile, smaller and fainter
+  halos. Not yet re-tested in game.
+
 **Rivers looked odd up close** (2026-10-06, author's screenshots)
 - Cause: major rivers were drawn at widths 7–9 and minor ones at 4–5, which is far too
   wide beside Valsora's small (~150 px) provinces. Also, Merlovich's and Hoalepa's

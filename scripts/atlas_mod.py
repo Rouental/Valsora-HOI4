@@ -172,16 +172,6 @@ def fibres(shape, seed, n=None, length=(6, 22)):
     return ndi.gaussian_filter(a, 0.6, mode="wrap")
 
 
-def laid_lines(shape, period, seed):
-    """The faint parallel 'laid' lines and wider chain lines of hand-made paper."""
-    h, w = shape
-    y = np.arange(h)[:, None].astype(np.float32)
-    x = np.arange(w)[None, :].astype(np.float32)
-    laid = np.cos(2 * np.pi * y / period) * 0.5
-    chain = np.exp(-((x % (period * 12)) - period * 6) ** 2 / (2 * 1.2 ** 2)) * 1.2
-    return (laid + chain).astype(np.float32)
-
-
 # ---------------------------------------------------------------- geography
 def load_world():
     w = np.load("work/world.npz")
@@ -661,11 +651,12 @@ def place_ornament(ink_cov, pap_cov, d_water, taken, ink, paper, rows=(0.0, 1.0)
 # ---------------------------------------------------------------- terrain tiles
 def paper_tile(seed, size=256):
     """One seamless tile of paper: grain, cloudiness, fibres and faint laid lines."""
-    grain = fractal((size, size), beta=0.6, seed=seed) * 2.2
-    cloud = fractal((size, size), beta=2.6, seed=seed + 1) * 3.0
-    fib = fibres((size, size), seed + 2, n=size * size // 70) * 7.0
-    laid = laid_lines((size, size), size / 32, seed) * 1.2
-    v = PAPER_TILE + grain + cloud + fib + laid
+    # quiet and strictly seamless: the game repeats this tile every few map pixels, so
+    # anything with a direction or a period of its own turns into a visible grid
+    # (the first in-game test, 2026-10-07)
+    grain = fractal((size, size), beta=0.6, seed=seed) * 1.4
+    fib = fibres((size, size), seed + 2, n=size * size // 110) * 3.0
+    v = PAPER_TILE + grain + fib
     rgb = np.dstack([v + 1.0, v + 0.5, v - 1.5])
     return np.clip(rgb, 0, 255)
 
@@ -673,10 +664,7 @@ def paper_tile(seed, size=256):
 def tile_atlas():
     """4x4 tiles of 256 px, every terrain type the same paper (different seeds, so the
     repetition doesn't show)."""
-    rows = []
-    for ty in range(4):
-        rows.append(np.concatenate([paper_tile(SEED + 100 + 10 * (ty * 4 + tx)) for tx in range(4)], 1))
-    a = np.concatenate(rows, 0)
+    a = np.tile(paper_tile(SEED + 100), (4, 4, 1))  # one tile everywhere: no patchwork
     return np.dstack([a, np.full(a.shape[:2], 80.0)])
 
 
@@ -796,25 +784,25 @@ def vp_strip():
             def circ(d, r, **kw):
                 d.ellipse([cx - r, cy - r, cx + r, cy + r], **kw)
             if tier == 0:       # capital: a star inside a ring
-                circ(hd, 13.2 * ss, fill=255)
+                circ(hd, 12.9 * ss, fill=255)
                 circ(idr, 12.0 * ss, outline=255, width=int(1.6 * ss))
                 idr.polygon(star_points(cx, cy, 9.0 * ss, 3.7 * ss), fill=255)
             elif tier == 1:     # city: ringed dot
-                circ(hd, 8.6 * ss, fill=255)
+                circ(hd, 8.3 * ss, fill=255)
                 circ(idr, 7.4 * ss, outline=255, width=int(1.6 * ss))
                 circ(idr, 3.6 * ss, fill=255)
             elif tier == 2:     # town: open ring
-                circ(hd, 6.4 * ss, fill=255)
+                circ(hd, 6.1 * ss, fill=255)
                 circ(idr, 5.2 * ss, outline=255, width=int(1.7 * ss))
             else:               # village: dot
-                circ(hd, 4.6 * ss, fill=255)
+                circ(hd, 4.2 * ss, fill=255)
                 circ(idr, 3.3 * ss, fill=255)
             h = np.asarray(halo, np.float32) / 255
             k_ = np.asarray(ink, np.float32) / 255
             arr = np.asarray(img, np.float32).copy()
             paper = np.array([244, 238, 222], float)
             col = np.array(colr, float)
-            a_out = np.maximum(arr[..., 3] / 255, np.maximum(h * 0.92, k_))
+            a_out = np.maximum(arr[..., 3] / 255, np.maximum(h * 0.55, k_))
             rgb = np.where(k_[..., None] > 0, col * k_[..., None] + paper * (1 - k_[..., None]),
                            np.where(h[..., None] > 0, paper, arr[..., :3]))
             sel = (h > 0) | (k_ > 0)
@@ -927,12 +915,17 @@ def map_font(out_dir):
 
 # ---------------------------------------------------------------- defines
 DEFINES = """-- Valsora: Atlas. Graphics defines for a printed-atlas look.
--- Countries: the whole country washed in its colour, with a stronger band inside the
--- border, at every zoom level (the field reaches everywhere; the band is in pixels).
+-- Map modes draw an opaque colour over the land and the sea; at 1 it is transparent,
+-- so the paper, the waterlines and the sea lettering show (the first in-game test,
+-- 2026-10-07, without these: flat grey sea, country colours over grey).
+NDefines_Graphics.NMapMode.MAP_MODE_TERRAIN_TRANSPARENCY = 1
+NDefines_Graphics.NMapMode.MAP_MODE_NAVAL_TERRAIN_TRANSPARENCY = 1
+-- Countries: the whole country washed in its colour, with a narrow band inside the
+-- border (a wide one is drawn on a coarse grid and shows steps).
 NDefines_Graphics.NGraphics.GRADIENT_BORDERS_FIELD_COUNTRY_LOW = 9000.0
 NDefines_Graphics.NGraphics.GRADIENT_BORDERS_FIELD_COUNTRY_HIGH = 9000.0
-NDefines_Graphics.NGraphics.GRADIENT_BORDERS_THICKNESS_COUNTRY_LOW = 6.0
-NDefines_Graphics.NGraphics.GRADIENT_BORDERS_THICKNESS_COUNTRY_HIGH = 26.0
+NDefines_Graphics.NGraphics.GRADIENT_BORDERS_THICKNESS_COUNTRY_LOW = 2.0
+NDefines_Graphics.NGraphics.GRADIENT_BORDERS_THICKNESS_COUNTRY_HIGH = 9.0
 -- Province lines only up close, state lines a little further out, as an atlas shows
 -- smaller divisions only on its larger-scale plates.
 NDefines_Graphics.NGraphics.PROVINCE_BORDER_FADE_NEAR = 260

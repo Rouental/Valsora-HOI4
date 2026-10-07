@@ -836,8 +836,9 @@ drawn by the script, and the lettering uses Cinzel and EB Garamond (SIL OFL;
     capitals on an arch (Piscary Sea has no room and is left out), a 32-point compass
     rose (upper half) and a "VALSORA" cartouche (lower half), placed where the open
     water is widest.
-  - **Terrain tiles** (`atlas0-2`): paper fibre in every slot. Their normals and the
-    world normal map are flat.
+  - **Terrain tiles** (`atlas0-2`): one quiet, strictly seamless paper tile in every
+    slot (the game repeats it every few map pixels). Their normals and the world
+    normal map are flat.
   - **Heightmap flattened:** land 98, lakes 92, sea 89.
   - **Water:** gloss off; the reflection cubemap and sea floor are the sea's own colour.
   - **Borders:** country a dash-dot ink line (solid when far), state dashed, province
@@ -849,8 +850,15 @@ drawn by the script, and the lettering uses Cinzel and EB Garamond (SIL OFL;
   - **Map font** `hoi_mapfont4` (the country names): Cinzel 600 at 256 px, letter-spaced
     0.1 em, with the font's kerning. It is DXT3 with black colour and coverage in alpha,
     like the base game's, and covers Latin-1 and Latin Extended-A.
-  - **Defines:** a country wash everywhere with a stronger band inside borders
-    (`GRADIENT_BORDERS_*`), province and state lines fading out with distance, no bloom.
+  - **Defines:** map modes' overlay made transparent (`MAP_MODE_TERRAIN_TRANSPARENCY`
+    and `MAP_MODE_NAVAL_TERRAIN_TRANSPARENCY` = 1, so the paper and sea artwork show);
+    a country wash everywhere with a narrow band inside borders (`GRADIENT_BORDERS_*`,
+    band 2 / 9 px), province and state lines fading out with distance, no bloom.
+  - **First in-game test** (author, 2026-10-07): without the two transparency defines
+    the political map hid all of it (flat grey sea, country colours over grey); the
+    old 26 px band was drawn on a coarse grid and stepped; the paper tile (four seeds,
+    chain lines that didn't divide 256) repeated as a grid of squares; the town
+    symbols' halos were white blobs zoomed out. All four fixed, not yet re-tested.
   - **Post effects:** an empty `gfx/posteffect_volumes.txt` turns them off.
 - File names, formats and sizes follow the base game's: the slots were learned from
   the Victorianization zip's file list and headers, and none of its content was used.
