@@ -223,6 +223,8 @@ LEADERS = {
     "GHS": ["liberalism"],
     "RVR": ["feudalism"],
     "PSC": ["feudalism"],
+    "AOE": ["oligarchism"], "RCL": ["despotism"], "SGT": ["feudalism"],
+    "KOV": ["feudalism"], "HVQ": ["feudalism"],
     "SEE": ["theocrat"],
     # 2026-10-07 (author)
     "MGD": ["personal_union"], "TCN": ["oligarchism"], "PTK": ["strongman_rule"],
@@ -283,6 +285,13 @@ RELEASABLE = {
     "GHS": ["Ghessone"],
     "RVR": ["Leclerc", "Marais Verte"],
     "PSC": ["Belleplaine-sur-Mer", "Baie de Torres", "Graisivaudan"],
+    # 2026-10-07, later (author). The Alliance of the East's states still go to Lustiana,
+    # Hollier and Selgrave in the civil war (ANNEX); it is only releasable by hand.
+    "AOE": ["Chirac", "Serpette", "Maïeul", "Moelle"],
+    "RCL": ["La Recolt", "Fleurastre", "Fourier"],
+    "SGT": ["Sangterre", "Carune la Cœur"],
+    "KOV": ["Kové"],
+    "HVQ": ["Hevique", "Avarre"],
 }
 # exist only through the civil war (author): no cores until the Prince is executed, so
 # they can't be released any other way
@@ -472,6 +481,11 @@ FORMAL_NAMES = {
     "GHS": "the Free State of Ghessone",
     "RVR": "the Grand Duchy of the Riverraine",
     "PSC": "the Duchy of the Piscary",
+    "AOE": "the Alliance of the East",
+    "RCL": "the Principality of the Recolt",
+    "SGT": "the Duchy of Sangterre",
+    "KOV": "the County of Kové",
+    "HVQ": "the County of Hevique",
     "SEE": "the Kingdom of the Church",
     # 2026-10-07 (author; Merlgould's was written "the Kingdom of Melgould")
     "MGD": "the Kingdom of Merlgould",

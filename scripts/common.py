@@ -127,6 +127,12 @@ COUNTRIES = {
     "ghessone": ("GHS", "Ghessone", "Ghessonais", (60, 150, 60)),                 # green
     "riverraine": ("RVR", "Riverraine", "Riverrain", (30, 120, 120)),             # waves
     "piscary": ("PSC", "Piscary", "Piscarien", (70, 130, 190)),                   # scales
+    # 2026-10-07, later (author): five more; colours from the flags (Claude's)
+    "east_alliance": ("AOE", "Alliance of the East", "Eastern", (115, 145, 60)),
+    "recolt": ("RCL", "Recolt", "Recoltois", (230, 180, 70)),        # wheat gold
+    "sangterre": ("SGT", "Sangterre", "Sangterrois", (150, 30, 45)),  # blood drops
+    "kove": ("KOV", "Kové", "Kovéen", (20, 100, 140)),                # blue
+    "hevique": ("HVQ", "Hevique", "Hevicois", (190, 55, 45)),        # red
     # 2026-10-05, later: San Sierra's island state 1 (author); colour, adjective Claude's
     "holy_see": ("SEE", "Holy See", "Papal", (245, 225, 120)),                    # flag gold
     # 2026-10-07 (the author's names, governments and formal names; colours from the

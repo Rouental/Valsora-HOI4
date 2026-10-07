@@ -420,6 +420,16 @@ mismatch, missing localisation) and catches all of them.
     Krionik's flag `KRI.png` is the author's, redrawn exactly from their picture (the
     file didn't come through); its map colour stays green (the flag's maroon would merge
     with Russovichia).
+    2026-10-07, later: **five more Rouental releasables** (author; same rules as above):
+    the Alliance of the East AOE (Chirac, Serpette, Maïeul, Moelle; Oligarchy, as when it
+    was a civil-war country; the civil war still gives those states to Lustiana, Hollier
+    and Selgrave), the Principality of the Recolt RCL (La Recolt, Fleurastre, Fourier),
+    the Duchy of Sangterre SGT (Sangterre, Carune la Cœur), the County of Kové KOV and
+    the County of Hevique HVQ (Hevique, Avarre). Governments, adjectives and colours
+    Claude's. The author's `New_Mod_Flags.pdn` (490×311, HOI4's 82:52 shape; layers
+    "Carcaraise", "Marcher Lords", "Rouental (Authoritarian)" etc. are `import_flags`
+    aliases) replaced 23 flags, including Rouental's four government flags; the
+    Reibonne's and HMMLA's were copied from the new communist and authoritarian ones.
     All tags were checked against vanilla `common/country_tags`; new tags must be too.
   - The adjectives of the neighbours are guesses; the author may rename them.
 - **State names** are the author's, in `source/state_names.json` ("x,y" of a pixel
@@ -835,7 +845,7 @@ in git history (commit d2d6cd8, `scripts/cartographic.py`). It used
 ## Current state
 
 - 14,334 provinces (13,651 land, 645 sea, 38 lakes), 1,823 states, 91 strategic regions (11 sea),
-  92 countries (2026-10-07: twenty new nations, 521 new states; `dist/preview_new_nations_*.png`).
+  97 countries (with five more releasables, 2026-10-07, later; before: 92 (2026-10-07: twenty new nations, 521 new states; `dist/preview_new_nations_*.png`)).
   Before: 10,644 provinces, 1,377 states, 72 countries (with Rouental's six releasables and the Holy See). 2026-10-05, later: Terrabis-Seran 76 states, Kilkire-Battania 28, Garfield 10,
   Gaellia 7, Vineta 7, Harwick 1, Devlon 1 (`dist/state_numbers_araseos_southwest.png`,
   `state_numbers_garfield.png`, `state_numbers_san_sierra.png`). Before: 1,271 states (Llainfair's three became one),

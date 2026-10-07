@@ -33,6 +33,13 @@ ALIASES = {
     "illiricium (republic)": "ILR",
     "terreich": "TUP",
     "serantian": "SRN",
+    # 2026-10-07, later (New_Mod_Flags.pdn)
+    "carcaraise": "CRL",
+    "marcher lords": "MRC",
+    "rouental (authoritarian)": "ROU_fascism",
+    "rouental (theocratic)": "ROU_theocracy",
+    "rouental (communist)": "ROU_communism",
+    "rouental (democratic)": "ROU_democratic",
 }
 
 
