@@ -174,7 +174,6 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `check_mod.py` | re-reads the built files and checks every rule below |
 | `export_canvas.py` | previews in `dist/` |
 | `package.py` | `dist/valsora_test.zip` |
-| `atlas_mod.py` | the "Valsora: Atlas" graphics submod, `dist/valsora_atlas.zip` (see below) |
 
 **A clean `check_mod.py` run is the bar for shipping a build.** It was mutation-tested
 (CRLF, X-crossing, missing building row, state split across regions, descriptor
@@ -817,70 +816,21 @@ Left loaded on purpose, and noisy in `error.log`:
 - Ideas, MIOs, scripted effects and triggers, ai_areas, operations and achievements. They
   reference vanilla ids, which the previous build showed the game tolerates.
 
-## Atlas submod (`atlas_mod.py`)
+## Atlas submod (removed)
 
-**"Valsora: Atlas"** (`dist/valsora_atlas.zip`, 2026-10-07) makes the map look like a
-printed atlas. The author asked for a submod of our own, with our own textures, rather
-than a patch for Victorianization (Workshop 3807649245), whose files aren't ours to
-use. It depends only on Valsora and copies nothing from any other mod: every texture is
-drawn by the script, and the lettering uses Cinzel and EB Garamond (SIL OFL;
-`source/atlas/fonts/`, licences shipped in the zip as `FONT_LICENSES.txt`).
-- **No shaders.** They can't be written without vanilla's `gfx/FX` files to start from.
-  If the author sends those from their install, the paper look could go further (water
-  waves, terrain blending). Everything else that sets the look is a texture or define:
-  - **Land colour map:** cream paper with tone, mottle and foxing, a 15° graticule, and
-    an inked coastline with a soft shadow.
-  - **Sea colour maps:** pale sea with a coastal wash and seven engraved waterlines along
-    every shore (from a slightly smoothed signed distance, so they don't step).
-  - **Sea ornaments:** each named sea region's name in letter-spaced EB Garamond italic
-    capitals on an arch (Piscary Sea has no room and is left out), a 32-point compass
-    rose (upper half) and a "VALSORA" cartouche (lower half), placed where the open
-    water is widest.
-  - **Terrain tiles** (`atlas0-2`): one quiet, strictly seamless paper tile in every
-    slot (the game repeats it every few map pixels). Their normals and the world
-    normal map are flat.
-  - **Heightmap: Valsora's own.** A flattened one (land 98, sea 89) made a cliff at
-    every coast, which the terrain mesh (coarser than the map's pixels) drew as stair
-    steps and a grid of squares (second in-game test).
-  - **Water:** gloss off; the reflection cubemap and sea floor are the sea's own colour.
-  - **Borders:** country a dash-dot ink line (solid when far), state dashed, province
-    dotted, impassable hachured, sea region faintly dashed, sea none, strait a dashed
-    ferry line.
-  - **Victory points:** the base game's. An atlas-symbol strip was tried, but which of
-    its 20 frames the game uses for what couldn't be checked; its code is in git history.
-  - **Map frame model:** dark green book cloth.
-  - **Map font** `hoi_mapfont4` (the country names): Cinzel 600 at 256 px, letter-spaced
-    0.1 em, no kerning block (the base game's has none). It is DXT3 with black colour and coverage in alpha,
-    like the base game's, and covers Latin-1 and Latin Extended-A.
-  - **Defines:** map modes' overlay made transparent (`MAP_MODE_TERRAIN_TRANSPARENCY`
-    and `MAP_MODE_NAVAL_TERRAIN_TRANSPARENCY` = 1), province and state lines fading out
-    with distance, no bloom. Country fills and bands are the base game's again: the
-    `GRADIENT_BORDERS_FIELD/THICKNESS_COUNTRY_*` overrides drew a coarse grid.
-  - **The zoomed-out map is shader-drawn.** Past a zoom level HOI4 replaces the 3D
-    terrain with a flat map (flat sea, flat country colours) that no texture here
-    reaches; both in-game screenshots were at that level. Only shaders change it (what
-    Victorianization does): needs the author's vanilla `gfx/FX` files.
-  - **First in-game test** (author, 2026-10-07): without the two transparency defines
-    the political map hid all of it (flat grey sea, country colours over grey); the
-    old 26 px band was drawn on a coarse grid and stepped; the paper tile (four seeds,
-    chain lines that didn't divide 256) repeated as a grid of squares; the town
-    symbols' halos were white blobs zoomed out. Second test, same day: squares and art
-    still missing, no country names; see the next items.
-  - **Post effects:** an empty `gfx/posteffect_volumes.txt` turns them off.
-- File names, formats and sizes follow the base game's: the slots were learned from
-  the Victorianization zip's file list and headers, and none of its content was used.
-- **Palette knobs** are the constants at the top of the script (`PAPER`, `PAPER_TILE`,
-  `SEA`, `SEA_COAST`, `SEA_INK`, ...). The colour map is assumed to be overlay-blended
-  over the tiles; `dist/preview_atlas.png` and its close-ups simulate that and are mock-ups.
-  **Not yet seen in game**: calibrate from the author's screenshots.
-- `check()` re-reads every file written: DDS headers and data lengths, sizes, font page
-  bounds, heightmap sea level, world normal size, dependency. Mutation-tested (truncated
-  DDS, land below sea level).
-- The sea artwork follows Valsora's coasts, so `run_all.sh` rebuilds it with the main
-  mod; ship both zips from the same build.
-- Install: unzip `valsora_atlas.zip` into `mod/` next to Valsora and enable both.
-- It replaced the **Victorianization patch** (2026-10-06: `victorianization_patch.py`,
-  graph-paper colour maps for Victorianization at Valsora's size; in git history).
+A "Valsora: Atlas" graphics submod (2026-10-07, `scripts/atlas_mod.py`, in git history,
+last at commit 8a03ebf) tried to make the map look like a printed atlas with our own
+textures: paper colour maps, engraved waterlines, sea lettering, compass rose and
+cartouche, paper terrain tiles, ink border strips, a Cinzel map font (OFL), defines.
+**Removed at the author's request after two in-game tests** ("maybe we'll come back to
+it later"). What the tests taught (see `docs/PROBLEM_LOG.md`):
+- Zoomed out, HOI4 draws a flat, shader-drawn map that no texture reaches; the look
+  needs shader changes, which need the author's vanilla `gfx/FX` files.
+- A flattened heightmap (a cliff at every coast) is drawn as stair steps and squares;
+  `GRADIENT_BORDERS_FIELD/THICKNESS_COUNTRY_*` overrides draw a coarse grid.
+- Country names didn't show with the replacement map font; the cause was never found.
+It replaced the 2026-10-06 **Victorianization patch** (`victorianization_patch.py`,
+graph-paper colour maps for Victorianization at Valsora's size; also in git history).
 
 ## Cartographic submod (removed)
 
