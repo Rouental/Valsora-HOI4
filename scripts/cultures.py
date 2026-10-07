@@ -115,8 +115,12 @@ TAG_CULTURE = {
        for t in ("TCN", "PTK", "SRN", "LTH", "GLB", "KPF", "TUP", "STM", "DRV", "ESC", "HWT", "SMR", "OST")},
     "DUM": _FRENCH,
     "MGD": dict(names="POR", portraits="iberia", gfx="western_european"),  # like Volinovia
-    **{t: dict(names="SOV", portraits="europe", gfx="eastern_european")
-       for t in ("KRI", "GOB", "ZUK", "SMN", "RSV")},
+    "RSV": dict(names="SOV", portraits="europe", gfx="eastern_european"),
+    # Balkan (author, 2026-10-08; which Balkan culture each gets is Claude's pick)
+    "KRI": dict(names="SER", portraits="europe", gfx="eastern_european"),  # Serbian
+    "SMN": dict(names="CRO", portraits="europe", gfx="eastern_european"),  # Croatian
+    "GOB": dict(names="ALB", portraits="europe", gfx="eastern_european"),  # Albanian (author)
+    "ZUK": dict(names="MAC", portraits="europe", gfx="eastern_european"),  # Macedonian
     "LNT": _FRENCH,  # author, 2026-09-30
     # Portuguese (author, 2026-09-30): vanilla has no Iberian generic portraits
     **{t: dict(names="POR", portraits="iberia", gfx="western_european")

@@ -456,6 +456,10 @@ mismatch, missing localisation) and catches all of them.
     list `PLY` is our own (Hawaiian, Maori, Samoan, Tongan, Tahitian names) in
     `source/names/custom_names.txt`, which `cultures.py` reads alongside the vanilla
     lists; portraits are South America's generic ones (vanilla has no Pacific ones).
+    Then (author) Krionik, Sminishia, Gorbastan and Zukchiva became Balkan: vanilla has
+    several Balkan name lists, so each gets one (copied into `vanilla_names.txt` from
+    vanilla's `00_names.txt`): Krionik Serbian SER, Sminishia Croatian CRO, Gorbastan
+    Albanian ALB (the author's pick; Bulgarian first), Zukchiva Macedonian MAC.
     All tags were checked against vanilla `common/country_tags`; new tags must be too.
   - The adjectives of the neighbours are guesses; the author may rename them.
 - **State names** are the author's, in `source/state_names.json` ("x,y" of a pixel

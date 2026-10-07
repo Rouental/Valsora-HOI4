@@ -31,7 +31,7 @@
 | GAE | Gaellia | the Kingdom of Gaellia | Monarchist | Absolute Monarchy | Irish | Patrick McCullough | 6 |  |
 | GFR | Garfield Republics | the United Greater Garfield Republics | Authoritarian | Fascism | Spanish | Jacobo Asensio | 10 |  |
 | GHS | Ghessone | the Free State of Ghessone | Democratic | Liberalism | French | Eugène Hamelin | 0 | no land at the start (releasable or civil war) |
-| GOB | Gorbastan | the Republic of Gorbastan | Democratic | Liberalism | Russian | Andrey Menshikov | 19 |  |
+| GOB | Gorbastan | the Republic of Gorbastan | Democratic | Liberalism | Albanian | Ali Bej Alizoti | 19 |  |
 | GLB | Großlöwenburg | the Efeuüberwuchterte Steinsäule of Großlöwenburg | Monarchist | Feudalism | German | Henri Kempel | 54 |  |
 | GDN | Guedelon | the Free City of Guedelon | Democratic | Lordly Republic | French | Jacques Anthoine | 1 |  |
 | RLA | HMMLA | Her Majesty's Most Loyal Army | Authoritarian | Strongman Rule | French | Serelle Cahun | 0 | no land at the start (releasable or civil war) |
@@ -44,7 +44,7 @@
 | KPF | Kampfian Empire | the Iron Empire of Kampf | Monarchist | Absolute Monarchy | German | Max Reimer | 94 |  |
 | KKB | Kilkire-Foraois | the High Kingdom of Kilkire-Foraois | Monarchist | Elective Monarchy | Irish | Peter O'Mara | 29 |  |
 | KOV | Kové | the County of Kové | Monarchist | Feudalism | French | Lucien Delay | 0 | no land at the start (releasable or civil war) |
-| KRI | Krionik | the Militariat Regency of the Kriosnika | Democratic | Stratocracy | Russian | Markian Klubkov | 157 |  |
+| KRI | Krionik | the Militariat Regency of the Kriosnika | Democratic | Stratocracy | Serbian | Pavle Kadijevic | 157 |  |
 | KRK | Kurikia | Kurikia | Democratic | Conservatism | Russian | Nikita Russian | 17 |  |
 | LZC | Lanzerac | the Republic of Lanzerac | Democratic | Lordly Republic | French | Aimable Dubois | 1 |  |
 | LTH | Leithanien | the Republic of Leithanien | Democratic | Populism | German | Samuel Edel | 7 |  |
@@ -86,7 +86,7 @@
 | SRE | Serie | the Duchy of Serie | Monarchist | Feudalism | French | Frédéric Hoche | 0 | no land at the start (releasable or civil war) |
 | SCZ | Sicilianzo | the Kingdom of Sicilianzo | Democratic | Constitutional Monarchy | Italian | Umberto di Savoia | 3 |  |
 | SVM | Silvamar | the New Republic of Silvamar | Democratic | Liberalism | Spanish | Elias Garcovixa | 6 |  |
-| SMN | Sminishia | the Worker's Republic of Sminishia | Democratic | Social Democracy | Russian | Iosif Chistyakov | 21 |  |
+| SMN | Sminishia | the Worker's Republic of Sminishia | Democratic | Social Democracy | Croatian | Dzivo Erdödy | 21 |  |
 | SLT | Solitas | Solitas | Monarchist | Absolute Monarchy | Swedish | Magnus Karlsson | 20 |  |
 | SMR | Someriania | the People's Republik of Someriania | Communist | Vanguardism | German | Franz Kniss | 12 |  |
 | SPL | South Pollana | the Most Serene Republic of South Pollana | Democratic | Liberalism | Latin American | Agustín Sarmaniego del Castillo | 1 |  |
@@ -107,5 +107,5 @@
 | PLH | Vultuca | the United Kingdom of Vultuca | Democratic | Constitutional Monarchy | Portuguese | Abel Ivens | 26 |  |
 | WRS | Wersh | the Republic of Wersh | Authoritarian | Revanchism | English | Stanley Beatty | 21 |  |
 | YAS | Yastreovakia | Yastreovakia | Monarchist | Absolute Monarchy | Polish | Tomasz Jankowski | 58 |  |
-| ZUK | Zukchiva | the Republic of Zukchiva | Democratic | Liberalism | Russian | Yegor Russian | 17 |  |
+| ZUK | Zukchiva | the Republic of Zukchiva | Democratic | Liberalism | Macedonian | Isidor Trajcevski | 17 |  |
 | ZWT | Zwintern | the State of Zwintern | Authoritarian | Technocracy | Dutch | Govert Roelofsen | 6 |  |
