@@ -1,0 +1,21 @@
+# Name lists of our own, for cultures vanilla HOI4 doesn't have. Same format as
+# vanilla_names.txt; read by scripts/cultures.py alongside it.
+
+# Polynesian (Mahina; author, 2026-10-08): Hawaiian, Maori, Samoan, Tongan and Tahitian
+# names, spelled without macrons
+PLY = {
+	male = {
+		names = {
+			Kalani Keoni Makoa Kaimana Ikaika Kekoa Kawika Keola Nainoa Kainoa Kamaka Kealii Rangi Tane Wiremu Hemi Rawiri Tamati Tipene Hone Rewi Manaia Tavita Sione Tevita Viliami Siaosi Semisi Malakai Iosefa Sefo Ioane Paora Matiu Teva Tamatoa Heimana Moana Tupou Lagi Fetu Pita Aperahama Tama Nikora
+		}
+	}
+	female = {
+		names = {
+			Leilani Kalena Noelani Makana Kailani Nalani Keala Malia Aroha Hine Mere Ngaio Kiri Marama Anahera Huia Losana Mele Salote Lupe Seini Sina Teuila Tiare Vaimiti Hinano Tehani Hina Leota Moana Kaimana Iolana Pualani Hokulani Ataahua
+		}
+	}
+	surnames = {
+		Kahananui Kealoha Kahale Kamakana Akana Kekumu Mahoe Nakoa Keawe Kalama Kaleo Kapule Ngata Parata Tamihana Rangihuna Tawhiao Horomona Taufa Fifita Vaipulu Lavaka Havili Fonua Latu Moala Afamasaga Tuilagi Leiataua Tuiasosopo Sapolu Pulefano Tevaga Temaru Teuira Tetuanui Mataitai Tauira Toomaru Faatoa Tapu Aumua Kaiwi Puhi
+	}
+	callsigns = { }
+}

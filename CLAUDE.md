@@ -174,6 +174,7 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `check_mod.py` | re-reads the built files and checks every rule below |
 | `export_canvas.py` | previews in `dist/` |
 | `package.py` | `dist/valsora_test.zip` |
+| `country_list.py` | by hand, after a build: `dist/world_map_labelled.png` (every country labelled) and `dist/countries.md` / `.csv` (name, full name, ideology, sub-ideology, culture, leader, states), read from the built mod |
 
 **A clean `check_mod.py` run is the bar for shipping a build.** It was mutation-tested
 (CRLF, X-crossing, missing building row, state split across regions, descriptor
@@ -449,7 +450,12 @@ mismatch, missing localisation) and catches all of them.
     wrote most of those labels on Necessary Borders: moved to Necessary Names (88 marks;
     only three new lines were real). Their upload predated the Transcainia fix and the
     four state transfers, so the current game layers were kept. New flags for Hevique,
-    Riverraine, Vair and Fraxhemark came with the flag file.
+    Riverraine, Vair and Fraxhemark came with the flag file. Later that day (author):
+    Merigo renamed **Merikaan** ("the Republic of Merikaan", Merikaans; key `merigo`, tag
+    MRG kept) and Dutch; Mahina **Polynesian**: vanilla has no such culture, so the name
+    list `PLY` is our own (Hawaiian, Maori, Samoan, Tongan, Tahitian names) in
+    `source/names/custom_names.txt`, which `cultures.py` reads alongside the vanilla
+    lists; portraits are South America's generic ones (vanilla has no Pacific ones).
     All tags were checked against vanilla `common/country_tags`; new tags must be too.
   - The adjectives of the neighbours are guesses; the author may rename them.
 - **State names** are the author's, in `source/state_names.json` ("x,y" of a pixel

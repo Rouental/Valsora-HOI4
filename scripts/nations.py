@@ -497,7 +497,7 @@ FORMAL_NAMES = {
     "SRE": "the Duchy of Serie",
     "BLK": "the Union of Belekrian Republics",
     "TTH": "the Principality of Tethia",
-    "MRG": "the Republic of Merigo",
+    "MRG": "the Republic of Merikaan",
     "ZWT": "the State of Zwintern",
     "OCR": "the Kaiserinnreichfedderation of Ostercoirasreich",
     "MAH": "the Republic of Mahina",

@@ -162,7 +162,7 @@ COUNTRIES = {
     # adjectives Claude's; Tethia's colour from its flag)
     "belekria": ("BLK", "Belekria", "Belekrian", (200, 62, 44)),
     "tethia": ("TTH", "Tethia", "Tethian", (26, 84, 178)),             # flag blue
-    "merigo": ("MRG", "Merigo", "Merigan", (72, 150, 124)),
+    "merigo": ("MRG", "Merikaan", "Merikaans", (72, 150, 124)),  # Merigo until 2026-10-08, later
     "zwintern": ("ZWT", "Zwintern", "Zwinterner", (96, 104, 124)),
     "ostercoirasreich": ("OCR", "Ostercoirasreich", "Ostercoirasreicher", (186, 156, 82)),
     "mahina": ("MAH", "Mahina", "Mahinan", (84, 178, 196)),
