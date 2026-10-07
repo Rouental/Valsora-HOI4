@@ -133,6 +133,7 @@ COUNTRIES = {
     "sangterre": ("SGT", "Sangterre", "Sangterrois", (150, 30, 45)),  # blood drops
     "kove": ("KOV", "Kové", "Kovéen", (20, 100, 140)),                # blue
     "hevique": ("HVQ", "Hevique", "Hevicois", (190, 55, 45)),        # red
+    "serie": ("SRE", "Serie", "Serien", (70, 70, 75)),               # charcoal field
     # 2026-10-05, later: San Sierra's island state 1 (author); colour, adjective Claude's
     "holy_see": ("SEE", "Holy See", "Papal", (245, 225, 120)),                    # flag gold
     # 2026-10-07 (the author's names, governments and formal names; colours from the

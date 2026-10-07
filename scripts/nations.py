@@ -224,7 +224,7 @@ LEADERS = {
     "RVR": ["feudalism"],
     "PSC": ["feudalism"],
     "AOE": ["oligarchism"], "RCL": ["despotism"], "SGT": ["feudalism"],
-    "KOV": ["feudalism"], "HVQ": ["feudalism"],
+    "KOV": ["feudalism"], "HVQ": ["feudalism"], "SRE": ["feudalism"],
     "SEE": ["theocrat"],
     # 2026-10-07 (author)
     "MGD": ["personal_union"], "TCN": ["oligarchism"], "PTK": ["strongman_rule"],
@@ -292,6 +292,7 @@ RELEASABLE = {
     "SGT": ["Sangterre", "Carune la Cœur"],
     "KOV": ["Kové"],
     "HVQ": ["Hevique", "Avarre"],
+    "SRE": ["Serie", "Verdoyantes"],
 }
 # exist only through the civil war (author): no cores until the Prince is executed, so
 # they can't be released any other way
@@ -486,6 +487,7 @@ FORMAL_NAMES = {
     "SGT": "the Duchy of Sangterre",
     "KOV": "the County of Kové",
     "HVQ": "the County of Hevique",
+    "SRE": "the Duchy of Serie",
     "SEE": "the Kingdom of the Church",
     # 2026-10-07 (author; Merlgould's was written "the Kingdom of Melgould")
     "MGD": "the Kingdom of Merlgould",
