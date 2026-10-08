@@ -175,6 +175,7 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `export_canvas.py` | previews in `dist/` |
 | `package.py` | `dist/valsora_test.zip` |
 | `country_list.py` | by hand, after a build: `dist/world_map_labelled.png` (every country labelled) and `dist/countries.md` / `.csv` (name, full name, ideology, sub-ideology, culture, leader, states), read from the built mod |
+| `collages.py` | by hand, after a build: `dist/flags_collage.png` (every custom flag, and the countries still on a placeholder stripe) and `dist/leaders_collage.png` (every custom leader: own portraits at 2×, named ones with base-game portraits as labelled tiles) |
 
 **A clean `check_mod.py` run is the bar for shipping a build.** It was mutation-tested
 (CRLF, X-crossing, missing building row, state split across regions, descriptor

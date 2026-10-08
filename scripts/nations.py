@@ -1092,16 +1092,17 @@ CAPITALS = {
 PORTRAIT_BG = (30, 30, 32)  # behind a portrait's transparent pixels and past its edges
 
 
-def portrait(src, x0, y0, w):
-    """Crop a 156:210 box and scale it to vanilla's 156x210 leader portrait size. Where the
-    picture is transparent, or the box reaches past it, PORTRAIT_BG shows."""
+def portrait(src, x0, y0, w, size=(156, 210)):
+    """Crop a 156:210 box and scale it to vanilla's 156x210 leader portrait size (or `size`,
+    for previews). Where the picture is transparent, or the box reaches past it,
+    PORTRAIT_BG shows."""
     im = Image.open(src).convert("RGBA")
     h = round(w * 210 / 156)
     crop = im.crop((x0, y0, x0 + w, y0 + h))
     flat = Image.new("RGB", crop.size, PORTRAIT_BG)
     flat.paste(crop, mask=crop.getchannel("A"))
-    flat = flat.resize((156, 210), Image.LANCZOS)
-    return np.dstack([np.asarray(flat), np.full((210, 156), 255, np.uint8)])
+    flat = flat.resize(size, Image.LANCZOS)
+    return np.dstack([np.asarray(flat), np.full(size[::-1], 255, np.uint8)])
 
 
 def redden(rgba):
