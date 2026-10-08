@@ -529,8 +529,13 @@ Aislada is the worked example of a built-out nation:
     ids shift). Neighbours' capitals are named by `CITY_NAMES` "capital:TAG": Guedelon,
     Evriches, Argent-sur-Seigne (SGN), Grande Hollier, Lanzerac, Villerose (SGV),
     Tanière (LST).
-  - Leaders are in `common/characters/ROU.txt`: Roland Cahun (`despotism`, leads at
-    start) and Serelle Cahun (`fascism_ideology`, fascist party leader). Serelle is also
+  - Leaders are in `common/characters/ROU.txt`: **Roland II Cahun** ("Roland Cahun"
+    until 2026-10-08; `despotism`, leads at start; his description, shown on his portrait,
+    is the author's list of his titles: `desc` in his leader role, after `ideology`, which
+    `check_mod.py` and `country_list.py` expect first) and Serelle Cahun
+    (`fascism_ideology`, fascist party leader; **Serelle VI Cahun** once she rules
+    Rouental by any route: `nations.REGNAL_NAMES`, renamed by `set_character_name` in the
+    on_ruling_party_change on_action; HMMLA's copy keeps her name). Serelle is also
     a general from the start (corps commander, skill 4, armor officer; HMMLA's copy
     too). Polite, Steady and Accept Reality only remove her party role
     (`remove_country_leader_role`), so she stays a general; Rudely (communist) retires
@@ -614,7 +619,9 @@ Aislada is the worked example of a built-out nation:
 - **Named generated rulers**: `nations.NAMED_LEADERS` gives a generated ruler the
   author's name and portrait: Illiricium's is **Ema Milize**
   (`source/portraits/ema_milize.png`); Krionik's is a council, the **Kriosaivak Council of
-  Marshals**, with its emblem as the portrait.
+  Marshals**, with its emblem as the portrait; Leithanien's is **Helmut Shulz**
+  (`helmut_shulz.png`) and Terreich's **Charlotte Gustoff** (`charlotte_gustoff.webp`,
+  cropped from a photo) (author, 2026-10-08).
 - **Nation names** come from `COUNTRIES` in `build_mod.py`: name and adjective feed
   `TAG`, `TAG_DEF`, `TAG_ADJ`, the per-ideology variants (`TAG_communism` etc.) and the
   continent key.

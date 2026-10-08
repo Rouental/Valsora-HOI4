@@ -37,13 +37,13 @@ SUPEREVENTS = [
          title="Blood Is Thinner Than Iron",
          quote="Roland always said the crown was too heavy for me. He was right. I have had it "
                "melted down into something more useful.",
-         author="Serelle Cahun, Queen of the Absolute Iron Monarchy",
+         author="Serelle VI Cahun, Queen of the Absolute Iron Monarchy",
          picture="hair_ruffle.png", song="valsora_gladiators"),
     dict(id="rou_steady",
          title="Nothing Happens in Rouental",
          quote="The Cahuns stay. The borders stay. The price of bread stays exactly where it is. "
                "To those of you hoping for a revolution: perhaps next year.",
-         author="Roland Cahun, New Year's Address",
+         author="Roland II Cahun, New Year's Address",
          picture="hair_ruffle.png", song="valsora_gladiators"),
     dict(id="rou_rude",
          title="Shown the Window",

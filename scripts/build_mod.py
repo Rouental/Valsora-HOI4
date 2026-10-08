@@ -677,8 +677,12 @@ def main():
                     f"set_cosmetic_tag = {cosmetic(tag, i)} }}" for k, i in enumerate(per)]
         looks += ["\t\t\tif = {", f"\t\t\t\tlimit = {{ tag = {tag} }}", *branches,
                   "\t\t\t\telse = { drop_cosmetic_tag = yes }", "\t\t\t}"]
+    # a character who comes to rule takes their regnal name (nations.REGNAL_NAMES)
+    regnal = [f"\t\t\tif = {{ limit = {{ tag = {tag} has_country_leader = {{ character = {c} ruling_only = yes }} }} "
+              f"set_character_name = {{ character = {c} name = {key} }} }}"
+              for c, (tag, key) in nations.REGNAL_NAMES.items()]
     write("common/on_actions/valsora_on_actions.txt", "\n".join([
-        "on_actions = {", "\ton_ruling_party_change = {", "\t\teffect = {", *looks,
+        "on_actions = {", "\ton_ruling_party_change = {", "\t\teffect = {", *looks, *regnal,
         # the Reibonnaise nations' opinions follow who is communist (nations.py)
         "\t\t\tvalsora_reibonnaise_opinions = yes",
         "\t\t}", "\t}",

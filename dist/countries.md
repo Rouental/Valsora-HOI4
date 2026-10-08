@@ -47,7 +47,7 @@
 | KRI | Krionik | the Militariat State of the Kriosnika | Democratic | Stratocracy | Serbian | Kriosaivak Council of Marshals | 157 |  |
 | KRK | Kurikia | Kurikia | Democratic | Conservatism | Russian | Nikita Russian | 17 |  |
 | LZC | Lanzerac | the Republic of Lanzerac | Democratic | Lordly Republic | French | Aimable Dubois | 1 |  |
-| LTH | Leithanien | the Republic of Leithanien | Democratic | Populism | German | Samuel Edel | 7 |  |
+| LTH | Leithanien | the Republic of Leithanien | Democratic | Populism | German | Helmut Shulz | 7 |  |
 | LCF | Locus | the Worker's Republic of Locus Felicitatis | Communist | Council Communism | American | Stonewall Cleburne | 3 |  |
 | LST | Lustiana | the Duchy of Lustiana | Monarchist | Elective Monarchy | French | Charles Bourbaki | 1 |  |
 | MAH | Mahina | the Republic of Mahina | Democratic | Liberalism | Polynesian | Wiremu Aumua | 1 |  |
@@ -73,7 +73,7 @@
 | ILR | Republican Illiricium | the Senatorial Republic of Illiricium | Authoritarian | Bleacherism | Italian | Ema Milize | 18 |  |
 | RVR | Riverraine | the Grand Duchy of the Riverraine | Monarchist | Feudalism | French | Denis Bourbaki | 0 | no land at the start (releasable or civil war) |
 | RMD | Romanoddle | the Romanoddlian Federation | Democratic | Social Democracy | English | Max Cockburn | 93 |  |
-| ROU | Rouental | The Sacred Principality of Rouental | Monarchist | Feudalism | French | Roland Cahun | 56 |  |
+| ROU | Rouental | The Sacred Principality of Rouental | Monarchist | Feudalism | French | Roland II Cahun | 56 |  |
 | KIL | Royalist Illiricium | the Kingdom of Illiricium | Monarchist | Legitimism | Italian | Beatrice di Alqiro | 2 |  |
 | RSV | Russovichia | the Soyuz Narodnykh Komissarov of Russovichia | Communist | Council Communism | Russian | Amayak Shvetsov | 2 |  |
 | SSA | San Sierra | the People's Republic of San Sierra | Communist | Council Communism | Spanish | Emilio Díaz | 21 |  |
@@ -91,7 +91,7 @@
 | SMR | Someriania | the People's Republik of Someriania | Communist | Vanguardism | German | Franz Kniss | 12 |  |
 | SPL | South Pollana | the Most Serene Republic of South Pollana | Democratic | Liberalism | Latin American | Agustín Sarmaniego del Castillo | 1 |  |
 | TBS | Terrabis-Seran | the Commonwealth of Terrabis-Seran | Democratic | Social Democracy | English | Lester Haig | 80 |  |
-| TUP | Terreich und Preußen | the Bundeskaiserreich of Terreich und Preußen | Democratic | Social Democracy | German | Arthur Kober | 82 |  |
+| TUP | Terreich und Preußen | the Bundeskaiserreich of Terreich und Preußen | Democratic | Social Democracy | German | Charlotte Gustoff | 82 |  |
 | TTH | Tethia | the Principality of Tethia | Monarchist | Absolute Monarchy | Polish | Jakub Kowalski | 0 | no land at the start (releasable or civil war) |
 | FTH | The Faithful | the Faithful Children of the Goddess and Her Saint | Theocratic | Holy Order | French | Jean Gouraud | 0 | no land at the start (releasable or civil war) |
 | MRC | The Marches | the Alliance of the Marcher Lords | Monarchist | Oligarchy | French | Louis Forey | 0 | no land at the start (releasable or civil war) |

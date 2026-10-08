@@ -259,6 +259,14 @@ NAMED_LEADERS = {
     "PNC_leader_strongman_rule": ("Mauricio Gómez", "GFX_Portrait_Europe_Generic_1"),
     # a council, not a person: its portrait is the council's emblem (author, 2026-10-08)
     "KRI_leader_stratocracy": ("Kriosaivak Council of Marshals", "GFX_portrait_KRI_council_of_marshals"),
+    "LTH_leader_populism": ("Helmut Shulz", "GFX_portrait_LTH_helmut_shulz"),  # author, 2026-10-08
+    "TUP_leader_socialism": ("Charlotte Gustoff", "GFX_portrait_TUP_charlotte_gustoff"),  # author, 2026-10-08
+}
+# Characters renamed once they rule their country (author, 2026-10-08): character ->
+# (tag, localisation key of the new name). The on_ruling_party_change on_action does it,
+# so every route to the throne counts; the name stays if they lose it again.
+REGNAL_NAMES = {
+    "ROU_serelle_cahun": ("ROU", "ROU_serelle_vi_cahun"),  # Serelle VI Cahun
 }
 # the ruling ideology of hand-made rulers' countries, if not Monarchist
 # Map colours that differ from the .pdn paint (common.COUNTRIES), which ownership is
@@ -538,11 +546,13 @@ LOCALISATION = [
     ' ROU_plans_for_cardonia:0 "Plans for Cardonia"',
     ' ROU_plans_for_cardonia_desc:0 "A war goal against Cardonia, for testing."',
     ' ROU_serelle_cahun:0 "Serelle Cahun"',
+    ' ROU_serelle_vi_cahun:0 "Serelle VI Cahun"',  # her name once she rules (REGNAL_NAMES)
     ' BRL_mahaut_vi:0 "Mahaut VI"',
     ' ROU_feudal_army:0 "Feudal Army"',
     ' ROU_feudal_army_desc:0 "Rouental fights as it always has: a small, superbly equipped royal host, swelled in war by the levies its vassals owe the crown. Few men answer a recruiting sergeant here, and none train quickly; but the banners can be called."',
     ' RLA_serelle_cahun:0 "Serelle Cahun"',
-    ' ROU_roland_cahun:0 "Roland Cahun"',
+    ' ROU_roland_cahun:0 "Roland II Cahun"',  # "Roland Cahun" until 2026-10-08 (author)
+    ' ROU_roland_cahun_desc:0 "By the Grace of the Goddess, His Majesty The Most Seran Duke Roland XI of Rouental and of Saintiers, Bérault, Cournin, Marquis of Jourdain et Moterre, Count of Éislek, Brassard, and Charmas, Viscount of Rochemont, and Lord of the Aurifort, Liege Lord of the Rivers, Vale, and Mountains of Reibonne, Defender of the Dispossessed and Shield of the True Faith, and other titles besides."',  # the author's
     ' ROU_focus:0 "Rouentaise Focus Tree"',
     ' ROU_parasites_polite:0 "Kick Out the Parasites (Polite)"',
     ' ROU_parasites_polite_desc:0 "The Cahuns are thanked for their service and shown the door."',
@@ -551,7 +561,7 @@ LOCALISATION = [
     ' ROU_parasites_rude:0 "Kick Out the Parasites (Rudely)"',
     ' ROU_parasites_rude_desc:0 "The Cahuns are shown the door. Then the window."',
     ' ROU_execute_the_prince:0 "Execute the Prince"',
-    ' ROU_execute_the_prince_desc:0 "The committee has voted. Roland Cahun will not see another spring, and neither, perhaps, will the peace."',
+    ' ROU_execute_the_prince_desc:0 "The committee has voted. Roland II Cahun will not see another spring, and neither, perhaps, will the peace."',
     ' ROU_steady_as_she_goes:0 "Steady As She Goes"',
     ' ROU_steady_as_she_goes_desc:0 "The Cahuns stay. Roland stays. Everything stays."',
     ' AIS_merlovich:0 "PLACEHOLDER"',  # the author's temporary name (2026-10-05; was "The Great Merlovich")
@@ -591,6 +601,7 @@ ROU_CHARACTERS = """characters = {
 		}
 		country_leader = {
 			ideology = feudalism
+			desc = "ROU_roland_cahun_desc"
 			expire = "1965.1.1.1"
 			id = -1
 		}
@@ -1027,6 +1038,9 @@ PORTRAITS = {
     # the author's round 3000x3000 emblem (2026-10-08): the box reaches past it on every
     # side, so it sits centred on PORTRAIT_BG, 92 % of the portrait's width
     "KRI_council_of_marshals": ("source/portraits/kri_council_of_marshals.png", -130, -694, 3260, None),
+    # the author's (2026-10-08): Leithanien's is already portrait-shaped; Terreich's a photo
+    "LTH_helmut_shulz": ("source/portraits/helmut_shulz.png", 0, 0, 267, None),
+    "TUP_charlotte_gustoff": ("source/portraits/charlotte_gustoff.webp", 180, 40, 740, None),
 }
 
 # Hand-picked victory point names. Key either a province id (ids follow the placeholder
