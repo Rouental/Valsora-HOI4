@@ -257,6 +257,8 @@ NAMED_LEADERS = {
     "USS_leader_liberalism": ("Aaron Miller", "GFX_Portrait_Europe_Generic_2"),
     "SVM_leader_liberalism": ("Elias Garcovixa", "GFX_Portrait_South_America_Generic_3"),
     "PNC_leader_strongman_rule": ("Mauricio Gómez", "GFX_Portrait_Europe_Generic_1"),
+    # a council, not a person: its portrait is the council's emblem (author, 2026-10-08)
+    "KRI_leader_stratocracy": ("Kriosaivak Council of Marshals", "GFX_portrait_KRI_council_of_marshals"),
 }
 # the ruling ideology of hand-made rulers' countries, if not Monarchist
 # Map colours that differ from the .pdn paint (common.COUNTRIES), which ownership is
@@ -518,7 +520,7 @@ FORMAL_NAMES = {
     "ESC": "the Wyrhterrepublik of Eschland",
     "HWT": "the Republik of Hwitland",
     "SMR": "the People's Republik of Someriania",
-    "KRI": "the Militariat Regency of the Kriosnika",
+    "KRI": "the Militariat State of the Kriosnika",  # "Regency" until 2026-10-08 (author)
     "GOB": "the Republic of Gorbastan",
     "ZUK": "the Republic of Zukchiva",
     "SMN": "the Worker's Republic of Sminishia",
@@ -1022,6 +1024,9 @@ PORTRAITS = {
     "ROU_roland_cahun": ("source/portraits/roland_cahun.png", 340, 200, 1100, None),
     "ILR_ema_milize": ("source/portraits/ema_milize.png", 2, 0, 237, None),
     "KIL_beatrice_di_alqiro": ("source/portraits/beatrice_di_alqiro.png", 0, 0, 223, None),
+    # the author's round 3000x3000 emblem (2026-10-08): the box reaches past it on every
+    # side, so it sits centred on PORTRAIT_BG, 92 % of the portrait's width
+    "KRI_council_of_marshals": ("source/portraits/kri_council_of_marshals.png", -130, -694, 3260, None),
 }
 
 # Hand-picked victory point names. Key either a province id (ids follow the placeholder
@@ -1070,12 +1075,19 @@ CAPITALS = {
 }
 
 
+PORTRAIT_BG = (30, 30, 32)  # behind a portrait's transparent pixels and past its edges
+
+
 def portrait(src, x0, y0, w):
-    """Crop a 156:210 box and scale it to vanilla's 156x210 leader portrait size."""
-    im = Image.open(src).convert("RGB")
+    """Crop a 156:210 box and scale it to vanilla's 156x210 leader portrait size. Where the
+    picture is transparent, or the box reaches past it, PORTRAIT_BG shows."""
+    im = Image.open(src).convert("RGBA")
     h = round(w * 210 / 156)
-    crop = im.crop((x0, y0, x0 + w, y0 + h)).resize((156, 210), Image.LANCZOS)
-    return np.dstack([np.asarray(crop), np.full((210, 156), 255, np.uint8)])
+    crop = im.crop((x0, y0, x0 + w, y0 + h))
+    flat = Image.new("RGB", crop.size, PORTRAIT_BG)
+    flat.paste(crop, mask=crop.getchannel("A"))
+    flat = flat.resize((156, 210), Image.LANCZOS)
+    return np.dstack([np.asarray(flat), np.full((210, 156), 255, np.uint8)])
 
 
 def redden(rgba):

@@ -44,7 +44,7 @@
 | KPF | Kampfian Empire | the Iron Empire of Kampf | Monarchist | Absolute Monarchy | German | Max Reimer | 94 |  |
 | KKB | Kilkire-Foraois | the High Kingdom of Kilkire-Foraois | Monarchist | Elective Monarchy | Irish | Peter O'Mara | 29 |  |
 | KOV | Kové | the County of Kové | Monarchist | Feudalism | French | Lucien Delay | 0 | no land at the start (releasable or civil war) |
-| KRI | Krionik | the Militariat Regency of the Kriosnika | Democratic | Stratocracy | Serbian | Pavle Kadijevic | 157 |  |
+| KRI | Krionik | the Militariat State of the Kriosnika | Democratic | Stratocracy | Serbian | Kriosaivak Council of Marshals | 157 |  |
 | KRK | Kurikia | Kurikia | Democratic | Conservatism | Russian | Nikita Russian | 17 |  |
 | LZC | Lanzerac | the Republic of Lanzerac | Democratic | Lordly Republic | French | Aimable Dubois | 1 |  |
 | LTH | Leithanien | the Republic of Leithanien | Democratic | Populism | German | Samuel Edel | 7 |  |

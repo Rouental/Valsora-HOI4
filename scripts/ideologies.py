@@ -78,7 +78,7 @@ SUBTYPES = {
         ("lordly_republic", "Lordly Republic",  # the author's, 2026-09-30
          "A republic in which the nobility and clergy retain significant power."),
         ("stratocracy", "Stratocracy",  # the author's, 2026-10-07 (Krionik)
-         "The armed forces govern as a regency, and citizenship is earned in service."),
+         "The armed forces govern, and citizenship is earned in service."),
     ],
     "communism": [
         ("marxism", "Orthodox Marxism", "The classless society, by the letter of the theory."),

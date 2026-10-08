@@ -403,12 +403,15 @@ mismatch, missing localisation) and catches all of them.
     Marxism; Daravon leads **the Synthesist Internationale** with the other two,
     `faction_template_synthesist_internationale`), Someriania SMR (Vanguardism; SOM is a
     vanilla tag); in Yastreovakia: Krionik KRI (the author's new **Stratocracy**
-    sub-ideology, Democratic; "the Militariat Regency of the Kriosnika"; with every KR
-    island, the two KR islets west of Araseos and, on its label, a region of Orientalis),
-    Gorbastan GOB and Zukchiva ZUK (Liberalism), Sminishia SMN (Social Democracy, "the
-    Worker's Republic of Sminishia"), Russovichia RSV (Council Communism, with the RU
-    islands). The ES islands east of Terreich are **Estande's**, and the island labelled
-    CA (Cascadia's until then) is **Cardonia's** (author). Cultures (Claude's guesses):
+    sub-ideology, Democratic; "the Militariat State of the Kriosnika", "Regency" until
+    2026-10-08; ruled by the **Kriosaivak Council of Marshals**, whose portrait is the
+    author's round emblem of the council (`source/portraits/kri_council_of_marshals.png`,
+    centred on a dark field); with every KR island, the two KR islets west of Araseos
+    and, on its label, a region of Orientalis), Gorbastan GOB and Zukchiva ZUK
+    (Liberalism), Sminishia SMN (Social Democracy, "the Worker's Republic of Sminishia"),
+    Russovichia RSV (Council Communism, with the RU islands). The ES islands east of
+    Terreich are **Estande's**, and the island labelled CA (Cascadia's until then) is
+    **Cardonia's** (author). Cultures (Claude's guesses):
     German for the new Araseos nations, French for Dumas, Portuguese for Merlgould,
     Russian for Yastreovakia's. The borders of Sminishia, Gorbastan and Zukchiva were drawn
     on Necessary Names, and "PE" and "(TP)" were written on Necessary Borders: moved; a
@@ -498,7 +501,8 @@ Aislada is the worked example of a built-out nation:
 - **Icons.** Vanilla icons only, checked against vanilla `interface/goals.gfx`.
 - **Portraits** live in `source/portraits/` and are registered in `nations.PORTRAITS`
   (source, crop box, optional red tint). Each becomes `gfx/leaders/VAL/<name>.dds` and a
-  `GFX_portrait_<name>` sprite.
+  `GFX_portrait_<name>` sprite. Transparent pixels, and a crop box reaching past the
+  picture (to fit a round emblem), show `nations.PORTRAIT_BG` (dark charcoal).
 - **City names**: `nations.CITY_NAMES` overrides victory point names, keyed by
   `"capital:TAG"` (e.g. Rouental's capital is "Rêverie") or
   by province id. Ids shift whenever the map is rebuilt, so prefer the capital key;
@@ -600,7 +604,8 @@ Aislada is the worked example of a built-out nation:
   `valsora_against_communism` "Seran Biases" (author, 2026-10-04).
 - **Named generated rulers**: `nations.NAMED_LEADERS` gives a generated ruler the
   author's name and portrait: Illiricium's is **Ema Milize**
-  (`source/portraits/ema_milize.png`).
+  (`source/portraits/ema_milize.png`); Krionik's is a council, the **Kriosaivak Council of
+  Marshals**, with its emblem as the portrait.
 - **Nation names** come from `COUNTRIES` in `build_mod.py`: name and adjective feed
   `TAG`, `TAG_DEF`, `TAG_ADJ`, the per-ideology variants (`TAG_communism` etc.) and the
   continent key.
