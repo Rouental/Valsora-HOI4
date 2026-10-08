@@ -206,6 +206,13 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## Map problems found while building
 
+**Harwick's flag had an empty top row; Kampf's layer matched no country** (2026-10-08)
+- Cause: in the author's flag file the top row of the Harwick layer is transparent (a
+  see-through line along the top of the flag in game), and the layer "Kampf Empire" is
+  not the country's name (the Kampfian Empire), so `import_flags.py` skipped it.
+- Fix: the row was filled from the one below it; "kampf empire" is an `import_flags`
+  alias.
+
 **Labels on the Borders layer again, and another stale LEAVE pixel** (2026-10-08)
 - The author's island labels (SO, MA, KE, DU, "Mahina (MA)" ...) were written on
   Necessary Borders: 88 small marks among three real new lines. As lines they would

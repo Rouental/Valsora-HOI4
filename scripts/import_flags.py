@@ -40,6 +40,8 @@ ALIASES = {
     "rouental (theocratic)": "ROU_theocracy",
     "rouental (communist)": "ROU_communism",
     "rouental (democratic)": "ROU_democratic",
+    # 2026-10-08
+    "kampf empire": "KPF",
 }
 
 

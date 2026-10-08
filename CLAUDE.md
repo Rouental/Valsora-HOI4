@@ -311,7 +311,8 @@ mismatch, missing localisation) and catches all of them.
     (Liberalism, flag `TRC.png`) and Cascadia CSC (Anarcho-Communism, "the United
     Forests of Cascadia", with every CS island); between Anglost and San Sierra
     Sicilianzo SCZ (Constitutional Monarchy, flag `SCZ.png`) and Danelaw DNL ("the
-    Kingdom of Danelaw-Scandinavia", Elective Monarchy, Sweden's flag drawn as a stand-in);
+    Kingdom of Danelaw-Scandinavia", Elective Monarchy; Sweden's flag drawn as a stand-in
+    until the author's own, 2026-10-08);
     inside Fraxhemark Thorian Dynamics THD (the author's new **Megacorporation**
     sub-ideology, flag `THD.png`). Cultures are Claude's guesses: DNL Swedish, SCZ
     Italian, CSC and THD American, WRS TRC the continent's (English). The author wrote
@@ -463,6 +464,14 @@ mismatch, missing localisation) and catches all of them.
     several Balkan name lists, so each gets one (copied into `vanilla_names.txt` from
     vanilla's `00_names.txt`): Krionik Serbian SER, Sminishia Croatian CRO, Gorbastan
     Albanian ALB (the author's pick; Bulgarian first), Zukchiva Macedonian MAC.
+    Then a new flag file (58 layers): 18 nations got their first flag (Belekria,
+    Daravon, Dumas, Eschland, Gorbastan, Harwick, Hwitland, the Kampfian Empire (layer
+    "Kampf Empire", an `import_flags` alias), Kilkire-Foraois, Malvekia, Merikaan,
+    Peatiktist, Sminishia, Someriania, Transcainia, Ungar, Zukchiva, Zwintern) and
+    eight were replaced (Danelaw's own for the Swedish stand-in, a new Ostaria, and
+    Vineta, Romanoddle, Terreich, Großlöwenburg, Serentia and Leithanien redrawn at
+    82:52). Harwick's empty top row was filled from the row below. Map colours were
+    not changed to match the new flags.
     All tags were checked against vanilla `common/country_tags`; new tags must be too.
   - The adjectives of the neighbours are guesses; the author may rename them.
 - **State names** are the author's, in `source/state_names.json` ("x,y" of a pixel
