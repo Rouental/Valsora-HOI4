@@ -167,6 +167,23 @@ COUNTRIES = {
     "ostercoirasreich": ("OCR", "Ostercoirasreich", "Ostercoirasreicher", (186, 156, 82)),
     "mahina": ("MAH", "Mahina", "Mahinan", (84, 178, 196)),
     "ungar": ("UNG", "Ungar", "Ungarian", (150, 120, 70)),
+    # 2026-10-09 (the author's names, governments and formal names; tags, colours and
+    # adjectives Claude's; Belka's colour from its flag): Yastreovakia's north-east,
+    # West Sminishia out of Sminishia, Skillia's island and Tenkyoku's in Orientalis
+    "belka": ("BKA", "Belka", "Belkan", (40, 40, 40)),                 # flag black
+    "w_sminishia": ("WSM", "West Sminishia", "West Sminishian", (176, 52, 96)),
+    "sanada": ("SNA", "Sanada", "Sanadan", (166, 88, 58)),
+    "kamyachyn": ("KMY", "Kamyachyn", "Kamyachynian", (96, 170, 96)),
+    "volstokn": ("VSK", "Volstokn", "Volstoknian", (56, 104, 168)),
+    "brethren": ("BRT", "Brethren", "Brethren", (226, 220, 236)),
+    "rysny": ("RYS", "Ryśny", "Ryśnian", (190, 40, 64)),
+    "pakitsk": ("PKT", "Pakitsk", "Pakitskian", (156, 148, 76)),
+    "kieska": ("KSK", "Kieska", "Kieskan", (128, 84, 160)),
+    "zoluzeme": ("ZLZ", "Zoluzeme", "Zoluzemian", (220, 180, 60)),
+    "vilna": ("VIL", "Vilna", "Vilnian", (40, 140, 90)),
+    "sombor": ("SMB", "Sombor", "Somborian", (236, 132, 52)),
+    "skillia": ("SKL", "Skillia", "Skillian", (226, 74, 74)),
+    "tenkyoku": ("TKY", "Tenkyoku", "Tenkyoku", (176, 22, 52)),
 }
 # The placeholder countries, one per continent, are the recommended starts in the
 # bookmark; the rest are playable but not listed there.

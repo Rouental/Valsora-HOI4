@@ -19,8 +19,9 @@
         lines of their own (border + regroup_states.py need those). Only FROM's pixels
         count, so open sea and other countries around it don't matter. Provinces a line
         crosses are split along it (a piece under 40 px joins a neighbour on its side);
-        the part a split state loses joins a neighbouring state that moved whole (or
-        becomes a state of its own if none touches it).
+        the part a split state loses becomes a state of its own if it has CEDED_STATE px
+        or more, and otherwise joins a neighbouring state that moved whole (or becomes a
+        state of its own if none touches it).
     python3 scripts/pdn_tools.py merge_small COUNTRY MIN_PX
         Merge COUNTRY's states smaller than MIN_PX into the neighbouring state of the same
         country they share most border with (States layer), e.g. the slivers a moved
@@ -58,6 +59,7 @@ PDN = Path("source/HOI4 Mod Map.pdn")
 WORK = Path("work/pdn_tools")
 OCEAN, LAKES = (8, 31, 130), (55, 90, 220)
 CROSS = np.array([[0, 1, 0], [1, 1, 1], [0, 1, 0]])
+CEDED_STATE = 600  # cede: a split state's ceded part this big is a state, not a sliver
 
 
 def code(rgb):
@@ -263,6 +265,13 @@ def cede(names, L, frm, to, seeds):
     whole = {sc for sc in np.unique(St[moved]).tolist() if not ((St == sc) & (side == 2)).any()}
     split = [sc for sc in np.unique(St[moved]).tolist() if sc not in whole]
     new_states = iter(palette(64, False, seeds[0][1] * 7919 + seeds[0][0], set(np.unique(St).tolist())))
+    for sc in list(split):  # 2026-10-09: West Sminishia's half of a state was not a sliver
+        part = (St == sc) & moved
+        if part.sum() >= CEDED_STATE:
+            St[part] = new = next(new_states)
+            whole.add(new)
+            split.remove(sc)
+            print(f"state {sc:06x}: its {part.sum()} px ceded become a state of their own")
     while split:  # a split state's ceded part joins a neighbouring state that moved whole
         for sc in split:
             part = (St == sc) & moved

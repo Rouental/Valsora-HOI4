@@ -27,7 +27,8 @@ CULTURE_NAMES = {
     "AST": "Australian", "POR": "Portuguese", "SOV": "Russian", "YUG": "Yugoslav",
     "USA": "American", "MEX": "Latin American", "HOL": "Dutch", "IRE": "Irish",
     "WLS": "Welsh", "PLY": "Polynesian", "SER": "Serbian", "CRO": "Croatian",
-    "ALB": "Albanian", "MAC": "Macedonian"}
+    "ALB": "Albanian", "MAC": "Macedonian", "UKR": "Ukrainian", "FIN": "Finnish",
+    "LAT": "Latvian", "LIT": "Lithuanian", "GRE": "Greek", "BYA": "Buryat"}
 
 
 def loc():
@@ -45,7 +46,8 @@ def name_blocks(path):
 
 def male_names(block):
     m = re.search(r"male\s*=\s*\{\s*names\s*=\s*\{(.*?)\}", block, re.S)
-    return m.group(1).split()[:12] if m else []
+    # every name, comments left out: vanilla's Belarusian list starts like the Russian one
+    return re.sub(r"#[^\n]*", "", m.group(1)).split() if m else []
 
 
 def rows():

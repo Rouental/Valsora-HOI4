@@ -163,6 +163,23 @@ TAG_CULTURE = {
     **{t: dict(names="WLS", portraits="europe", gfx="western_european") for t in ("VNT", "HWK")},
     **{t: dict(names="IRE", portraits="europe", gfx="western_european") for t in ("GAE", "KKB")},
     "GFR": dict(names="SPR", portraits="iberia", gfx="western_european"),
+    # 2026-10-09: Volstokn Finnish (author); the rest Claude's guesses from the names
+    "VSK": dict(names="FIN", portraits="europe", gfx="eastern_european"),
+    # Russian, like its flag's colours (vanilla's Belarusian list is a part of the Russian one)
+    "BKA": dict(names="SOV", portraits="europe", gfx="eastern_european"),
+    "WSM": dict(names="CRO", portraits="europe", gfx="eastern_european"),  # like Sminishia
+    # Buryat, a Mongolic people: vanilla's Mongolian list is 14 Chinese names
+    "SNA": dict(names="BYA", portraits="asia", gfx="asian"),
+    "KMY": dict(names="UKR", portraits="europe", gfx="eastern_european"),
+    "BRT": dict(names="GER", portraits="europe", gfx="eastern_european"),  # Brethren colonists
+    "RYS": dict(names="POL", portraits="europe", gfx="eastern_european"),  # voivodes
+    "PKT": dict(names="SOV", portraits="europe", gfx="eastern_european"),
+    "KSK": dict(names="POL", portraits="europe", gfx="eastern_european"),  # a Polish word
+    "ZLZ": dict(names="LAT", portraits="europe", gfx="eastern_european"),  # "zeme", land
+    "VIL": dict(names="LIT", portraits="europe", gfx="eastern_european"),  # Vilna, Vilnius
+    "SMB": dict(names="SER", portraits="europe", gfx="eastern_european"),  # a Serbian city
+    "SKL": dict(names="GRE", portraits="europe", gfx="eastern_european"),
+    "TKY": dict(names="JAP", portraits="asia", gfx="asian"),
 }
 
 

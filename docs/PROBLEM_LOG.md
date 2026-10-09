@@ -206,6 +206,30 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## Map problems found while building
 
+**Provinces outside a new outline were changed** (2026-10-09)
+- Cause: `apply_outlines.py` tidies the provinces in a box reaching 64 px past the
+  outlined area. Old provinces the box's edge clipped looked split there, and their
+  pieces under 300 px were merged into neighbours: 77 px of 11 provinces in Belekria,
+  Sminishia and Krionik that no outline touched, some into another state. Earlier runs
+  likely did the same along their boxes' edges.
+- Fix: only provinces the outlines made or cut are tidied; the run was redone, and the
+  map file now differs from the upload only inside the new nations.
+
+**Half a state cut off by a new line became part of another state** (2026-10-09)
+- Cause: West Sminishia's new line cut one of Sminishia's states nearly in two.
+  `pdn_tools.py cede` joined every part a split state loses to a neighbouring state that
+  moved whole, which suits slivers, so West Sminishia came out as one state of 2,484 px,
+  twice a usual state.
+- Fix: a lost part of 600 px or more (`CEDED_STATE`) is now a state of its own; West
+  Sminishia has two states.
+
+**Vanilla's Mongolian and Belarusian name lists** (2026-10-09)
+- Cause: vanilla's MON list is 14 Chinese and Manchu names, and its BLR list is part of
+  the Russian one (`country_list.py` even called a Russian-named country Belarusian,
+  since it matched cultures on the first dozen male names).
+- Fix: Sanada uses the Buryat list (BYA, a Mongolic people) and Belka the Russian one;
+  `country_list.py` matches on every male name.
+
 **A moved border between countries without state lines** (2026-10-09)
 - Cause: the author's new line between Hwitland (now Scealand) and Eschland (now Artzen)
   fitted no tool. `pdn_tools.py border` gives away a whole line-enclosed area, but

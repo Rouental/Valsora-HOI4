@@ -133,6 +133,7 @@ HISTORY = {
     "VLN": ["set_autonomy = { target = MGD autonomous_state = autonomy_puppet }"],
     "TUP": ["set_autonomy = { target = STM autonomous_state = autonomy_puppet }"],
     "PTK": ["set_autonomy = { target = MRG autonomous_state = autonomy_puppet }"],  # author, 2026-10-08
+    "BLK": ["set_autonomy = { target = WSM autonomous_state = autonomy_puppet }"],  # author, 2026-10-09
     # Daravon leads the Synthesist Internationale with Artzen and Scealand
     "DRV": ["create_faction_from_template = faction_template_synthesist_internationale",
             "add_to_faction = ESC", "add_to_faction = HWT"],
@@ -230,6 +231,12 @@ LEADERS = {
     "BLK": ["leninism"], "TTH": ["despotism"], "MRG": ["conservatism"],
     "ZWT": ["technocracy"], "OCR": ["feudalism"], "MAH": ["liberalism"],
     "UNG": ["feudalism"],  # a Grand Duchy (author); the subtype is Claude's
+    # 2026-10-09 (author); Khanate and Radical Republicanism are the author's new subtypes
+    "BKA": ["fascism_ideology"], "WSM": ["leninism"], "SNA": ["khanate"],
+    "KMY": ["liberalism"], "VSK": ["enlightened_absolutism"], "BRT": ["synodal_rule"],
+    "RYS": ["agrarianism"], "PKT": ["strongman_rule"], "KSK": ["oligarchism"],
+    "ZLZ": ["despotism"], "VIL": ["radical_republicanism"], "SMB": ["lordly_republic"],
+    "SKL": ["agrarian_socialism"], "TKY": ["prophetic_rule"],
     "SEE": ["theocrat"],
     # 2026-10-07 (author)
     "MGD": ["personal_union"], "TCN": ["oligarchism"], "PTK": ["strongman_rule"],
@@ -534,6 +541,21 @@ FORMAL_NAMES = {
     "SMN": "the Worker's Republic of Sminishia",
     "RSV": "the Soyuz Narodnykh Komissarov of Russovichia",
     "OST": "the Archcounty of Ostaria",
+    # 2026-10-09 (author)
+    "BKA": "the Most Serene State of Belka",
+    "WSM": "the Autonomous Region of Western Sminishia",
+    "SNA": "the United Sanadan Clans",
+    "KMY": "the Republic of Kamyachyn",
+    "VSK": "the Tsaral Realm of Volstokn",
+    "BRT": "the Great Congregation of Brethren",
+    "RYS": "the United Voivodes of Ryśny",
+    "PKT": "the Republic of Pakitsk",
+    "KSK": "the Confederated Kingdoms of Kieska",
+    "ZLZ": "the Kingdom of Zoluzeme",
+    "VIL": "the Free Republic of Vilna",
+    "SMB": "the Free City of Sombor",
+    "SKL": "the Republic of Skillia",
+    "TKY": "the Remnant of Tenkyoku",
 }
 
 LOCALISATION = [

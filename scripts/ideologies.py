@@ -79,6 +79,9 @@ SUBTYPES = {
          "A republic in which the nobility and clergy retain significant power."),
         ("stratocracy", "Stratocracy",  # the author's, 2026-10-07 (Krionik)
          "The armed forces govern, and citizenship is earned in service."),
+        ("radical_republicanism", "Radical Republicanism",  # the author's, 2026-10-09 (Vilna)
+         "A republic without compromise: no crowns, no privileges of birth, a secular state "
+         "and the people's assembly above all."),
     ],
     "communism": [
         ("marxism", "Orthodox Marxism", "The classless society, by the letter of the theory."),
@@ -110,6 +113,9 @@ SUBTYPES = {
         ("legitimism", "Legitimism", "The rightful dynasty, restored to its throne."),
         ("personal_union", "Personal Union",  # the author's, 2026-10-07 (Merlgould)
          "Two crowns on one head: the realm keeps its own laws, but its monarch reigns elsewhere too."),
+        ("khanate", "Khanate",  # the author's, 2026-10-09 (Sanada)
+         "The clans swear to one khan, raised up by their chiefs in council, who leads them in "
+         "war and peace."),
     ],
     "theocracy": [
         ("theocrat", "Hierocracy", "The clergy rule in the name of the divine."),

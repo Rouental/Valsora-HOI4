@@ -186,7 +186,31 @@ OWNERS_0810 = {
 }
 # 2026-10-08, later: Ungar, the Grand Duchy the author labelled east of Merigo (it was
 # left as Araseos until then: (554, 1814) in LEAVE)
-OWNERS = {"ungar": [(554, 1814)]}
+OWNERS_0810B = {"ungar": [(554, 1814)]}
+# 2026-10-09: Yastreovakia's north-east, all of it now outlined, with the islands its
+# labels name (BK, SA, VO, BT, SK); Tenkyoku's island in Orientalis (its label sits on
+# it; the peninsula beside it stays in LEAVE) and the islands labelled ES near it, which
+# are Estande's. One seed per patch the lines enclose, found from the author's labels.
+# West Sminishia, cut out of Sminishia by a new line, is done afterwards with
+# pdn_tools.py cede (Sminishia has no state lines of its own).
+OWNERS = {
+    "belka": [(2356, 318), (2271, 176), (2304, 364), (2350, 376), (2383, 385), (2312, 393),
+              (2361, 430), (2385, 444), (2465, 486)],
+    "sanada": [(2823, 257), (3416, 145), (3393, 161), (2592, 178), (3215, 176), (3379, 183),
+               (3242, 190), (3251, 200), (3318, 195), (3207, 202)],
+    "kamyachyn": [(2792, 349)],
+    "brethren": [(3178, 384), (3264, 430)],
+    "pakitsk": [(2520, 386)],
+    "volstokn": [(2845, 440), (3162, 549), (3195, 555), (3209, 596)],
+    "rysny": [(3084, 438)],
+    "zoluzeme": [(2795, 483)],
+    "vilna": [(2880, 499)],
+    "kieska": [(2746, 523)],
+    "sombor": [(2697, 579)],
+    "skillia": [(2821, 824), (2777, 792)],
+    "tenkyoku": [(4197, 1446)],
+    "estande": [(3998, 1438), (3916, 1439), (4072, 1469), (4051, 1476), (3990, 1490)],
+}
 OWNERS_0410 = {
     "anglost": [(528, 1283), (607, 1287), (509, 1335), (436, 1342), (506, 1363), (474, 1379),
                 (516, 1386), (563, 1388), (626, 1425), (583, 1428), (654, 1430), (658, 1421),
@@ -450,6 +474,7 @@ def main():
     wland = land[y0:y1, x0:x1]
     cross = np.array([[0, 1, 0], [1, 1, 1], [0, 1, 0]])
     merged = split = 0
+    extra = set()  # provinces made from big extra pieces below
     for _ in range(20):
         changed = False
         # each province is looked at inside its own bounding box (one more pixel each
@@ -459,6 +484,10 @@ def main():
         boxes = ndi.find_objects(inv + 1)
         for k, c in enumerate(ucols):
             if c < 0 or boxes[k] is None:
+                continue
+            if int(c) not in prov_owner and int(c) not in cut and int(c) not in extra:
+                # untouched by the outlines (2026-10-09: ones the window's edge clips
+                # looked split, and 77 px of them were merged away)
                 continue
             by, bx = boxes[k]
             sl = np.s_[max(by.start - 1, 0):by.stop + 1, max(bx.start - 1, 0):bx.stop + 1]
@@ -476,7 +505,8 @@ def main():
                     continue
                 pm = comp == j
                 if sz >= limit:  # a big extra piece: its own province
-                    bw[pm] = pcols.new()
+                    bw[pm] = nc = pcols.new()
+                    extra.add(nc)
                     split += 1
                     changed = True
                     continue

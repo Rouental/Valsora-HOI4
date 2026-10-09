@@ -128,7 +128,8 @@ for the author. Unknown layer names are ignored.
     of Entroterra and Estande), which stay as they are.
   - Cut placeholder provinces and states are cleaned up iteratively: scraps join a
     neighbour (a new province's scrap stays in its state), never a new state, and
-    states are forced into one region.
+    states are forced into one region. Only provinces the outlines made or cut are
+    tidied (2026-10-09: untouched ones the tidy-up box clipped had pieces merged away).
   - It rewrites Provinces / States / Countries / Strategic Regions and saves
     `source/HOI4 Mod Map.pdn`, using the author's upload as the template;
     `writepdn` copies the object graph verbatim when the size is unchanged.
@@ -156,7 +157,7 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `regions.py` | placeholder mode only: states, strategic regions |
 | `make_game_pdn.py` / `writepdn.py` | turn a placeholder build into a fresh `HOI4 Mod Map.pdn` |
 | `apply_outlines.py` | by hand: the author's outline layers → provinces, states, countries in the `.pdn` |
-| `pdn_tools.py` | by hand: `navigable` (lake → sea with its own region), `sea_zones` (regroup and recolour regions), `give` (whole states to a country), `recolour`, `channel` (reopen a strait: the cheapest water-to-water path between two sea pixels becomes sea), `border` (the land a moved Necessary Borders line encloses → a country), `cede` (the land of one country a moved line cuts off → another, for countries without state lines: only the first country's pixels count, provinces are split along the line, the slivers of split states join a state that moved whole), `merge_small` (a country's sliver states join a neighbour) |
+| `pdn_tools.py` | by hand: `navigable` (lake → sea with its own region), `sea_zones` (regroup and recolour regions), `give` (whole states to a country), `recolour`, `channel` (reopen a strait: the cheapest water-to-water path between two sea pixels becomes sea), `border` (the land a moved Necessary Borders line encloses → a country), `cede` (the land of one country a moved line cuts off → another, for countries without state lines: only the first country's pixels count, provinces are split along the line; what a split state loses is a state of its own from 600 px (`CEDED_STATE`), smaller slivers join a state that moved whole), `merge_small` (a country's sliver states join a neighbour) |
 | `strategic_regions.py` | by hand: sea regions = the author's oceans, one each, with names (`source/region_names.json`); land untouched |
 | `river_provinces.py` | by hand, after a build: re-cuts the provinces of every state a river crosses so rivers run between provinces |
 | `redraw_flags.py` | unused: Fraxhemark's stand-in flag (writes `work/FRX_standin.png`); the author's own `FRX.png` replaced it |
@@ -486,6 +487,36 @@ mismatch, missing localisation) and catches all of them.
     Lanzerac (now purple, white and gold) and Hollier. Lanzerac's map colour followed
     (author): the flag's own plum purple (145,58,106), since a bluer purple would read as
     Cardonia's a few pixels north.
+    **2026-10-09, later** (the author's names, governments and formal names; tags,
+    colours (Belka's from its flag), adjectives and cultures Claude's, but Volstokn's
+    Finnish): Yastreovakia's north-east, now all outlined, and two islands off it.
+    Belka BKA (Fascism, "the Most Serene State of Belka", flag `BKA.png`, black like its
+    flag's top band; with every BK island), West Sminishia WSM (Vanguardism, "the
+    Autonomous Region of Western Sminishia", Belekria's puppet; cut out of Sminishia by a
+    new line: `pdn_tools.py cede sminishia w_sminishia 1919,414`), Sanada SNA (the
+    author's new **Khanate** sub-ideology, "the United Sanadan Clans", with every SA
+    island), Kamyachyn KMY (Liberalism), Volstokn VSK (Enlightened Absolutism, "the Tsaral
+    Realm of Volstokn", with the VO islands), Brethren BRT (Synodal Rule, "the Great
+    Congregation of Brethren", with the BT island), Ryśny RYS (Agrarianism, "the United
+    Voivodes of Ryśny"), Pakitsk PKT (Strongman Rule), Kieska KSK (Oligarchy, "the
+    Confederated Kingdoms of Kieska"), Zoluzeme ZLZ (Absolute Monarchy), Vilna VIL (the
+    author's new **Radical Republicanism** sub-ideology, Democratic; "the Free Republic of
+    Vilna"), Sombor SMB (Lordly Republic, "the Free City of Sombor"), Skillia SKL
+    (Agrarian Socialism; its island south-east of Krionik and the SK islet) and, in
+    Orientalis, Tenkyoku TKY (Prophetic Rule, "the Remnant of Tenkyoku"; the island its
+    label sits on, while the peninsula beside it stays Orientalis, `LEAVE`). The islands
+    labelled ES south-west of Tenkyoku are Estande's (6 states). Cultures: Russian (Belka,
+    Pakitsk), Croatian (West Sminishia), Buryat (Sanada: vanilla's Mongolian list is 14
+    Chinese names, and Buryat is Mongolic), Ukrainian (Kamyachyn), German (Brethren),
+    Polish (Ryśny, Kieska), Latvian (Zoluzeme), Lithuanian (Vilna), Serbian (Sombor), Greek
+    (Skillia), Japanese (Tenkyoku); UKR, FIN, LAT, LIT, GRE and BYA were copied into
+    `vanilla_names.txt` from vanilla (its BLR list is part of SOV's, so it was not used).
+    States: Sanada 84, Volstokn 61, Belka 39, Brethren 20, Kieska 13, Pakitsk 9, Ryśny 8,
+    Kamyachyn 5, Skillia 4, Vilna 3, Zoluzeme 2, West Sminishia 2, Sombor 1, Tenkyoku 1
+    (`dist/preview_new_nations_yastreovakia_northeast.png`, `..._orientalis.png`). Left
+    for the author: the ES on Orientalis' north coast at (4178, 793) has no line around
+    it, and four unlabelled islets off the new coasts stay Yastreovakia's. The same day's
+    flag file brought Belka's flag and redrawn Artzen and Daravon flags.
     All tags were checked against vanilla `common/country_tags`; new tags must be too.
   - The adjectives of the neighbours are guesses; the author may rename them.
 - **State names** are the author's, in `source/state_names.json` ("x,y" of a pixel
@@ -684,8 +715,9 @@ working; names come from `localisation/english/replace/`:
   Centralism, Council Communism, Anarcho-Communism, Agrarian Socialism. Authoritarian:
   Military Junta, Fascism, Corporatism, Strongman Rule, Technocracy, Revanchism.
   Monarchist: Absolute Monarchy, Oligarchy, Feudalism, Enlightened Absolutism, Elective
-  Monarchy, Legitimism, and the author's **Personal Union** (2026-10-07, Merlgould);
-  Democratic also has the author's **Stratocracy** (2026-10-07, Krionik). Authoritarian also has the author's **Bleacherism** (Alban
+  Monarchy, Legitimism, and the author's **Personal Union** (2026-10-07, Merlgould) and
+  **Khanate** (2026-10-09, Sanada); Democratic also has the author's **Stratocracy**
+  (2026-10-07, Krionik) and **Radical Republicanism** (2026-10-09, Vilna). Authoritarian also has the author's **Bleacherism** (Alban
   supremacy; officially a senatorial republic under a strongman): ILR CTF ETR MZG;
   KIL is Legitimism. Theocratic: Hierocracy, Clerical Monarchism, Holy Order, Synodal
   Rule, Prophetic Rule. Vanilla's Earth-bound ones (`nazism`, `japan_militarism_ideology`
@@ -906,8 +938,9 @@ in git history (commit d2d6cd8, `scripts/cartographic.py`). It used
 
 ## Current state
 
-- 14,812 provinces (14,129 land, 645 sea, 38 lakes; two more from the Scealand line,
-  2026-10-09), 1,866 states, 91 strategic regions (11 sea),
+- 16,625 provinces (15,942 land, 645 sea, 38 lakes), 2,073 states, 91 strategic regions
+  (11 sea), 119 countries (2026-10-09, later: fourteen new; before: 14,812 provinces
+  (two more from the Scealand line, 2026-10-09), 1,866 states,
   105 countries (2026-10-08: seven new; before: 14,334 provinces, 1,823 states,
   98 countries (with six more releasables, 2026-10-07, later; before: 92 (2026-10-07: twenty new nations, 521 new states; `dist/preview_new_nations_*.png`)).
   Before: 10,644 provinces, 1,377 states, 72 countries (with Rouental's six releasables and the Holy See). 2026-10-05, later: Terrabis-Seran 76 states, Kilkire-Battania 28, Garfield 10,
