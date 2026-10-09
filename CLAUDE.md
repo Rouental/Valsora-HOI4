@@ -164,7 +164,7 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `state_map.py` | by hand, after a build: a numbered map of some countries' states (`dist/state_numbers_<name>.png` + `.json`, number → tag and pixel), for the author to name them; `--names` labels them with their names instead |
 | `usnistan_prototype.py` | by hand, a prototype not in the game: a fully generated Usnistan (relief, climate terrain, rivers, ~800 provinces, states, 6 placeholder countries, cities) into `work/usnistan/` and `dist/usnistan_*.png` (author asked for an example, 2026-10-02) |
 | `regroup_states.py` | by hand, after `apply_outlines.py`: in every country with state lines of its own, each drawn area becomes exactly one state (provinces kept, split only where a line crosses them) |
-| `import_flags.py` | by hand: the author's flag `.pdn` (one layer per flag, named after the nation) → `source/flags/TAG.png` |
+| `import_flags.py` | by hand: the author's flag `.pdn` (one layer per flag, named after the nation) → `source/flags/TAG.png`; a stored flag is replaced when any pixel differs at the same size, or by more than resampling would at another size (`changed`, 2026-10-09); see-through pixels are filled from the nearest solid one first (`opaque`), since the game shows them as holes |
 | `organic.py` | organic splitting (seeded watershed over noise), used by `apply_outlines.py` |
 | `rivers.py` | plain river lines → HOI4 rivers.bmp format, and the river rules check |
 | `build_mod.py` | every mod file |
@@ -424,8 +424,8 @@ mismatch, missing localisation) and catches all of them.
     and four placeholder states changed hands with `pdn_tools.py give`: Araseos 3 →
     Serentia (452, 1494), Nonscio 7 → Malvekia (1015, 1366), Nonscio 6 → San Sierra
     (1006, 1239), Nonscio 3 → Kurikia (1257, 664). Leithanien's capital is Thielfurt.
-    Krionik's flag `KRI.png` is the author's, redrawn exactly from their picture (the
-    file didn't come through); its map colour stays green (the flag's maroon would merge
+    Krionik's flag `KRI.png` was redrawn from the author's picture (the file didn't come
+    through) until 2026-10-09, when their flag file's own replaced it; its map colour stays green (the flag's maroon would merge
     with Russovichia).
     2026-10-07, later: **five more Rouental releasables** (author; same rules as above):
     the Alliance of the East AOE (Chirac, Serpette, Maïeul, Moelle; Oligarchy, as when it
@@ -516,7 +516,15 @@ mismatch, missing localisation) and catches all of them.
     (`dist/preview_new_nations_yastreovakia_northeast.png`, `..._orientalis.png`). Left
     for the author: the ES on Orientalis' north coast at (4178, 793) has no line around
     it, and four unlabelled islets off the new coasts stay Yastreovakia's. The same day's
-    flag file brought Belka's flag and redrawn Artzen and Daravon flags.
+    flag file brought Belka's flag and redrawn Artzen and Daravon flags. Its update to
+    Serie's (four gold anchors in the corners) was missed at first: `import_flags.py`
+    called a flag unchanged under a mean difference of 3. With the new test, Krionik
+    also got the author's own flag in place of the redraw, and Garfield, Troc and
+    Terrabis-Seran the file's 82:52 copies of the same pictures (the old ones were
+    490×327); Rouental keeps its 1180×700 original. See-through pixels, which show as
+    holes in game, are now filled on import: Belka's emblem edge, a 1-px frame around
+    Riverraine's and Belekria's flags, a faint row in Garfield's (and, by hand, the top
+    row of Ponchomagnifico's, taken from the friend's build).
     All tags were checked against vanilla `common/country_tags`; new tags must be too.
   - The adjectives of the neighbours are guesses; the author may rename them.
 - **State names** are the author's, in `source/state_names.json` ("x,y" of a pixel

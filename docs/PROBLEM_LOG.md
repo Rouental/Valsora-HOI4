@@ -206,6 +206,25 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## Map problems found while building
 
+**A flag update was missed** (2026-10-09)
+- Cause: `import_flags.py` called a flag unchanged when its mean difference from the
+  stored one was under 3, a test meant for resampled copies of the same picture.
+  Serie's four new corner anchors cover 4 % of the flag (a mean difference of 2.65), so
+  they were skipped (the author noticed). The same test had kept Claude's redraw of
+  Krionik's flag once the author's own file had it.
+- Fix: at the same size any visible pixel counts; at another size both are compared at
+  164×104, and more than 0.5 % of pixels off by over 40 counts. Re-imported: Serie,
+  Krionik, and the file's 82:52 copies of Garfield, Troc and Terrabis-Seran (the same
+  pictures; the stored ones were 490×327). Rouental's 1180×700 original is kept. The
+  older flag files were checked too: nothing else was missed.
+- Also found: see-through pixels, which the game shows as holes in a flag (Harwick's
+  top row and Royalist Illiricium's gaps were filled by hand before). Belka's emblem had
+  a soft see-through edge, Riverraine's and Belekria's flags a 1-px see-through frame,
+  Garfield's one faint row. `import_flags.py` now lays every see-through pixel over the
+  nearest solid one before comparing and saving (`opaque`), so a re-import can't bring
+  a hole back; Ponchomagnifico's faint top row (from the friend's build) was filled the
+  same way. No flag in the build has see-through pixels now.
+
 **Provinces outside a new outline were changed** (2026-10-09)
 - Cause: `apply_outlines.py` tidies the provinces in a box reaching 64 px past the
   outlined area. Old provinces the box's edge clipped looked split there, and their
