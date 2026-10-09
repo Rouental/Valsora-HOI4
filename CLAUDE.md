@@ -260,8 +260,8 @@ mismatch, missing localisation) and catches all of them.
     tag, so Solitas is `SLT`). They are `common.PLACEHOLDERS`, the only countries the
     bookmark recommends (author's wish, to keep the start menu short).
   - Colours follow the flags (author): Rouental royal green, Guedelon blue, Hollier red, Seigne white,
-    Evriches yellow, Lustiana black, Selgrave dark maroon, Lanzerac dark gold, Cardonia
-    deep purple. Guedelon's blue and Hollier's red are their flags' main colours. `pdn_tools.py recolour Countries OLD=NEW` keeps
+    Evriches yellow, Lustiana black, Selgrave dark maroon, Lanzerac purple (its new flag's,
+    2026-10-09; dark gold before), Cardonia deep purple. Guedelon's blue and Hollier's red are their flags' main colours. `pdn_tools.py recolour Countries OLD=NEW` keeps
     the `.pdn` in step.
   - Real countries the author drew: Rouental ROU, Seigne SGN, Evriches EVR, Hollier
     HLR, Selgrave SGV, Lustiana LST, Lanzerac LZC, Guedelon GDN, Cardonia CRD,
@@ -483,8 +483,9 @@ mismatch, missing localisation) and catches all of them.
     was the author's previous file plus these edits, so its game layers predated the
     2026-10-08 changes; only their own edits were taken (the Necessary Borders and Names
     pixels where it differed from that previous file). New flags for Lustiana, Evriches,
-    Lanzerac (now purple, white and gold; its map colour is still the old flag's dark
-    gold) and Hollier.
+    Lanzerac (now purple, white and gold) and Hollier. Lanzerac's map colour followed
+    (author): the flag's own plum purple (145,58,106), since a bluer purple would read as
+    Cardonia's a few pixels north.
     All tags were checked against vanilla `common/country_tags`; new tags must be too.
   - The adjectives of the neighbours are guesses; the author may rename them.
 - **State names** are the author's, in `source/state_names.json` ("x,y" of a pixel

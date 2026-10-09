@@ -43,7 +43,7 @@ COUNTRIES = {
     "hollier": ("HLR", "Hollier", "Hollierois", (185, 53, 52)),
     "selgrave": ("SGV", "Selgrave", "Selgravian", (112, 16, 32)),
     "lustiana": ("LST", "Lustiana", "Lustianan", (28, 28, 28)),
-    "lanzerac": ("LZC", "Lanzerac", "Lanzeracois", (168, 130, 36)),
+    "lanzerac": ("LZC", "Lanzerac", "Lanzeracois", (145, 58, 106)),  # the flag's purple (dark gold until 2026-10-09)
     "guedelon": ("GDN", "Guedelon", "Guedelonnais", (7, 76, 130)),
     "cardonia": ("CRD", "Cardonia", "Cardonian", (84, 28, 120)),
     # 2026-09-30, south-west of Rouental; a placeholder nation (author), first called

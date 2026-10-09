@@ -84,7 +84,7 @@ def flags(L):
         im.paste(tile.convert("RGB"), (x, y))
         d.rectangle([x - 1, y - 1, x + FW, y + FH], outline=FRAME)
         for k, line in enumerate(wrap(d, label, small, FW)[:2]):
-            d.text((x + FW / 2, y + FH + 8 + 16 * k), line, font=small, fill=INK, anchor="mt")
+            d.text((x + FW / 2, y + FH + 8 + 16 * k), line, font=small, fill=INK, anchor="ma")  # the font's ascender line, so every label sits level
     y = top + rows * ch + 16
     for line in foot:
         d.text((pad, y), line, font=font(REGULAR, 16), fill=DIM)
