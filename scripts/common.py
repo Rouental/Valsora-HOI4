@@ -149,8 +149,8 @@ COUNTRIES = {
     "terreich": ("TUP", "Terreich und Preußen", "Terreichisch", (60, 50, 85)),    # flag slate
     "schteirmark": ("STM", "Schteirmark", "Schteirmärkisch", (160, 90, 60)),
     "daravon": ("DRV", "Daravon", "Daravonian", (180, 20, 30)),
-    "eschland": ("ESC", "Eschland", "Eschländisch", (205, 75, 75)),
-    "hwitland": ("HWT", "Hwitland", "Hwitländisch", (150, 30, 60)),
+    "eschland": ("ESC", "Artzen", "Artzener", (205, 75, 75)),          # Eschland until 2026-10-09
+    "hwitland": ("HWT", "Scealand", "Scealändisch", (150, 30, 60)),    # Hwitland until 2026-10-09
     "someriania": ("SMR", "Someriania", "Somerianian", (210, 90, 40)),
     "krionik": ("KRI", "Krionik", "Kriosnik", (60, 90, 60)),
     "gorbastan": ("GOB", "Gorbastan", "Gorbastani", (200, 160, 90)),

@@ -133,7 +133,7 @@ HISTORY = {
     "VLN": ["set_autonomy = { target = MGD autonomous_state = autonomy_puppet }"],
     "TUP": ["set_autonomy = { target = STM autonomous_state = autonomy_puppet }"],
     "PTK": ["set_autonomy = { target = MRG autonomous_state = autonomy_puppet }"],  # author, 2026-10-08
-    # Daravon leads the Synthesist Internationale with Eschland and Hwitland
+    # Daravon leads the Synthesist Internationale with Artzen and Scealand
     "DRV": ["create_faction_from_template = faction_template_synthesist_internationale",
             "add_to_faction = ESC", "add_to_faction = HWT"],
 }
@@ -525,8 +525,8 @@ FORMAL_NAMES = {
     "TUP": "the Bundeskaiserreich of Terreich und Preußen",
     "STM": "the Duchy of Schteirmark",
     "DRV": "the Republik of Daravon",
-    "ESC": "the Wyrhterrepublik of Eschland",
-    "HWT": "the Republik of Hwitland",
+    "ESC": "the Wyrhterrepublik of Artzen",  # Eschland until 2026-10-09
+    "HWT": "the Republik of Scealand",       # Hwitland until 2026-10-09
     "SMR": "the People's Republik of Someriania",
     "KRI": "the Militariat State of the Kriosnika",  # "Regency" until 2026-10-08 (author)
     "GOB": "the Republic of Gorbastan",

@@ -206,6 +206,23 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## Map problems found while building
 
+**A moved border between countries without state lines** (2026-10-09)
+- Cause: the author's new line between Hwitland (now Scealand) and Eschland (now Artzen)
+  fitted no tool. `pdn_tools.py border` gives away a whole line-enclosed area, but
+  Eschland's coast has no line, so that area ran on into the sea around Daravon's
+  island; `regroup_states.py` only redraws countries with state lines of their own; and
+  two of Eschland's states and three provinces straddled the line, so repainting the
+  land alone would not have moved the border (each state goes whole to the country
+  covering most of it).
+- Fix: `pdn_tools.py cede FROM TO X,Y`. Only FROM's pixels are cut by the lines, the
+  provinces are split along the line, and the part a split state loses joins a
+  neighbouring state that moved whole. One sliver touched only another sliver, so they
+  merge in turn (the first try stopped there, before saving).
+- Also: the upload was the author's previous file plus their edits, so its game layers
+  predated the 2026-10-08 changes; only their own edits were merged.
+- The decoded copies of four maps filled the session's temporary disk (1.2 GB each); the
+  check was redone by comparing the built files instead.
+
 **Harwick's flag had an empty top row; Kampf's layer matched no country** (2026-10-08)
 - Cause: in the author's flag file the top row of the Harwick layer is transparent (a
   see-through line along the top of the flag in game), and the layer "Kampf Empire" is

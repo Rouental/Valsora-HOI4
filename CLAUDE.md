@@ -156,7 +156,7 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `regions.py` | placeholder mode only: states, strategic regions |
 | `make_game_pdn.py` / `writepdn.py` | turn a placeholder build into a fresh `HOI4 Mod Map.pdn` |
 | `apply_outlines.py` | by hand: the author's outline layers → provinces, states, countries in the `.pdn` |
-| `pdn_tools.py` | by hand: `navigable` (lake → sea with its own region), `sea_zones` (regroup and recolour regions), `give` (whole states to a country), `recolour`, `channel` (reopen a strait: the cheapest water-to-water path between two sea pixels becomes sea), `border` (the land a moved Necessary Borders line encloses → a country), `merge_small` (a country's sliver states join a neighbour) |
+| `pdn_tools.py` | by hand: `navigable` (lake → sea with its own region), `sea_zones` (regroup and recolour regions), `give` (whole states to a country), `recolour`, `channel` (reopen a strait: the cheapest water-to-water path between two sea pixels becomes sea), `border` (the land a moved Necessary Borders line encloses → a country), `cede` (the land of one country a moved line cuts off → another, for countries without state lines: only the first country's pixels count, provinces are split along the line, the slivers of split states join a state that moved whole), `merge_small` (a country's sliver states join a neighbour) |
 | `strategic_regions.py` | by hand: sea regions = the author's oceans, one each, with names (`source/region_names.json`); land untouched |
 | `river_provinces.py` | by hand, after a build: re-cuts the provinces of every state a river crosses so rivers run between provinces |
 | `redraw_flags.py` | unused: Fraxhemark's stand-in flag (writes `work/FRX_standin.png`); the author's own `FRX.png` replaced it |
@@ -473,6 +473,18 @@ mismatch, missing localisation) and catches all of them.
     Vineta, Romanoddle, Terreich, Großlöwenburg, Serentia and Leithanien redrawn at
     82:52). Harwick's empty top row was filled from the row below. Map colours were
     not changed to match the new flags.
+    **2026-10-09** (author): the Synthesist Internationale redrawn. Hwitland is renamed
+    **Scealand** (HWT and the key `hwitland` kept; "the Republik of Scealand",
+    Scealändisch) and Eschland **Artzen** (ESC, key `eschland`; "the Wyrhterrepublik of
+    Artzen", Artzener): the formal names follow the new names, the adjectives are
+    Claude's. A new line gives Scealand Eschland's land north of it (`pdn_tools.py cede
+    eschland hwitland 551,1582`: 2 states whole, the north slivers of 2 more joined one
+    of them, 3 provinces split along the line): Scealand 6 states, Artzen 5. The upload
+    was the author's previous file plus these edits, so its game layers predated the
+    2026-10-08 changes; only their own edits were taken (the Necessary Borders and Names
+    pixels where it differed from that previous file). New flags for Lustiana, Evriches,
+    Lanzerac (now purple, white and gold; its map colour is still the old flag's dark
+    gold) and Hollier.
     All tags were checked against vanilla `common/country_tags`; new tags must be too.
   - The adjectives of the neighbours are guesses; the author may rename them.
 - **State names** are the author's, in `source/state_names.json` ("x,y" of a pixel
@@ -893,7 +905,8 @@ in git history (commit d2d6cd8, `scripts/cartographic.py`). It used
 
 ## Current state
 
-- 14,810 provinces (14,127 land, 645 sea, 38 lakes), 1,866 states, 91 strategic regions (11 sea),
+- 14,812 provinces (14,129 land, 645 sea, 38 lakes; two more from the Scealand line,
+  2026-10-09), 1,866 states, 91 strategic regions (11 sea),
   105 countries (2026-10-08: seven new; before: 14,334 provinces, 1,823 states,
   98 countries (with six more releasables, 2026-10-07, later; before: 92 (2026-10-07: twenty new nations, 521 new states; `dist/preview_new_nations_*.png`)).
   Before: 10,644 provinces, 1,377 states, 72 countries (with Rouental's six releasables and the Holy See). 2026-10-05, later: Terrabis-Seran 76 states, Kilkire-Battania 28, Garfield 10,

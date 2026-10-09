@@ -13,6 +13,14 @@
         Give COUNTRY all the land enclosed by Necessary Borders lines around these pixels
         (the line pixels too), on the Countries layer: a border the author moved. Run
         regroup_states.py afterwards so the states follow the lines.
+    python3 scripts/pdn_tools.py cede FROM TO X,Y [X,Y ...]
+        Give TO the land of FROM (common.COUNTRIES keys) that Necessary Borders lines cut
+        off around these pixels, for a moved border between countries without state
+        lines of their own (border + regroup_states.py need those). Only FROM's pixels
+        count, so open sea and other countries around it don't matter. Provinces a line
+        crosses are split along it (a piece under 40 px joins a neighbour on its side);
+        the part a split state loses joins a neighbouring state that moved whole (or
+        becomes a state of its own if none touches it).
     python3 scripts/pdn_tools.py merge_small COUNTRY MIN_PX
         Merge COUNTRY's states smaller than MIN_PX into the neighbouring state of the same
         country they share most border with (States layer), e.g. the slivers a moved
@@ -212,6 +220,73 @@ def border(names, L, country, seeds):
         print(f"area at ({x}, {y}): {m.sum()} px, {moved.sum()} of them newly {country}")
 
 
+def cede(names, L, frm, to, seeds):
+    from common import COUNTRIES
+    lines = L["Necessary Borders"][..., 3] > 0
+    mine = code(L["Countries"][..., :3]) == code(np.array(COUNTRIES[frm][3]))
+    lab, _ = ndi.label(mine & ~lines, CROSS)
+    gone = np.isin(lab, [lab[y, x] for x, y in seeds if lab[y, x]]) & (lab > 0)
+    stay = mine & ~lines & ~gone
+    print(f"{frm}: {gone.sum()} px cut off, {stay.sum()} px stay (line pixels follow their province)")
+    P = code(L["Provinces"][..., :3])
+    side = np.zeros(P.shape, np.int8)  # 1 ceded, 2 kept, for every pixel of FROM
+    for pc in np.unique(P[mine]):
+        m = P == pc
+        if not (m & stay).any():
+            side[m] = 1
+        elif not (m & gone).any():
+            side[m] = 2
+        else:  # line pixels take the side of the nearest pixel of the same province
+            known = np.where(m & gone, 1, np.where(m & stay, 2, 0))
+            idx = ndi.distance_transform_edt(known == 0, return_distances=False, return_indices=True)
+            side[m] = known[idx[0], idx[1]][m]
+    fresh = iter(palette(256, False, seeds[0][0] * 7919 + seeds[0][1], set(np.unique(P).tolist())))
+    for pc in np.unique(P[mine]):
+        m = P == pc
+        if len(np.unique(side[m])) < 2:
+            continue
+        for sd in (1, 2):
+            piece = m & (side == sd)
+            ring = ndi.binary_dilation(piece, CROSS) & ~m & (side == sd)
+            if piece.sum() < 40 and ring.any():
+                to_p = Counter(P[ring].tolist()).most_common(1)[0][0]
+                P[piece] = to_p
+                print(f"province {pc:06x}: its {piece.sum()} px {'ceded' if sd == 1 else 'kept'} piece joins {to_p:06x}")
+            elif sd == 1:
+                P[piece] = next(fresh)
+                print(f"province {pc:06x}: split along the line, {piece.sum()} px ceded as a new province")
+    put(L["Provinces"], P, mine)
+    moved = side == 1
+    L["Countries"][moved, :3] = COUNTRIES[to][3]
+    St = code(L["States"][..., :3])
+    R = code(L["Strategic Regions"][..., :3])
+    whole = {sc for sc in np.unique(St[moved]).tolist() if not ((St == sc) & (side == 2)).any()}
+    split = [sc for sc in np.unique(St[moved]).tolist() if sc not in whole]
+    new_states = iter(palette(64, False, seeds[0][1] * 7919 + seeds[0][0], set(np.unique(St).tolist())))
+    while split:  # a split state's ceded part joins a neighbouring state that moved whole
+        for sc in split:
+            part = (St == sc) & moved
+            ring = ndi.binary_dilation(part, CROSS) & ~part & moved
+            nb = Counter(v for v in St[ring].tolist() if v in whole)
+            if nb:
+                to_s = nb.most_common(1)[0][0]
+                R[part] = Counter(R[St == to_s].tolist()).most_common(1)[0][0]
+                St[part] = to_s
+                print(f"state {sc:06x}: its {part.sum()} px ceded join state {to_s:06x}")
+                split.remove(sc)
+                break
+        else:  # none touches a state that moved whole: the biggest part becomes a state
+            sc = max(split, key=lambda s: ((St == s) & moved).sum())
+            part = (St == sc) & moved
+            St[part] = new = next(new_states)
+            whole.add(new)
+            split.remove(sc)
+            print(f"state {sc:06x}: its {part.sum()} px ceded become a state of their own")
+    put(L["States"], St, moved)
+    put(L["Strategic Regions"], R, moved)
+    print(f"{moved.sum()} px -> {to}; states that moved whole: {len(whole)}")
+
+
 def merge_small(names, L, country, min_px):
     from common import COUNTRIES
     t = L["Terrain"][..., :3]
@@ -352,6 +427,8 @@ def main():
         give(names, L, sys.argv[2], [tuple(int(v) for v in a.split(",")) for a in sys.argv[3:]])
     elif cmd == "border":
         border(names, L, sys.argv[2], [tuple(int(v) for v in a.split(",")) for a in sys.argv[3:]])
+    elif cmd == "cede":
+        cede(names, L, sys.argv[2], sys.argv[3], [tuple(int(v) for v in a.split(",")) for a in sys.argv[4:]])
     elif cmd == "merge_small":
         merge_small(names, L, sys.argv[2], int(sys.argv[3]))
     elif cmd == "blue_seas":

@@ -7,6 +7,7 @@
 | AOE | Alliance of the East | the Alliance of the East | Monarchist | Oligarchy | French | Louis Canrobert | 0 | no land at the start (releasable or civil war) |
 | AGL | Anglost | the Kingdom of Anglost | Democratic | Constitutional Monarchy | English | Russell Collin | 55 |  |
 | ARS | Araseos | Araseos | Monarchist | Absolute Monarchy | Italian | Alessandro Govone | 1 |  |
+| ESC | Artzen | the Wyrhterrepublik of Artzen | Communist | Orthodox Marxism | German | Johann Will | 5 |  |
 | ARV | Arvorenia | the United Kingdom of Éden, Santo Domingo, and Arovia | Democratic | Constitutional Monarchy | Portuguese | Daniel Maurício | 32 |  |
 | ATR | Atrocha | the Republic of Atrocha | Democratic | Liberalism | Spanish | Astrid Bethancourt | 14 |  |
 | BLK | Belekria | the Union of Belekrian Republics | Communist | Vanguardism | Russian | Roman Voroshilov | 44 |  |
@@ -24,7 +25,6 @@
 | MTN | Duchy of the Mountains | the Duchy of the Mountains | Monarchist | Feudalism | French | Aurelien Duchêne | 0 | no land at the start (releasable or civil war) |
 | DUM | Dumas | the Order of Saint Dumas | Theocratic | Holy Order | French | Joseph Gallieni | 8 |  |
 | ETR | Entroterra | the Bleacherist Republic of Entroterra | Authoritarian | Bleacherism | Italian | Emilio Albricci | 9 | puppet of Republican Illiricium |
-| ESC | Eschland | the Wyrhterrepublik of Eschland | Communist | Orthodox Marxism | German | Johann Will | 7 |  |
 | ESD | Estande | the Kingdom of Estande | Democratic | Constitutional Monarchy | Portuguese | Fernando Ivens | 71 |  |
 | EVR | Evriches | the County of Evriches | Monarchist | Feudalism | French | Adolphe Duchêne | 1 |  |
 | FRX | Fraxhemark | Fraxhemark | Democratic | Social Democracy | American | Jerome Wharton | 141 |  |
@@ -40,7 +40,6 @@
 | HOA | Hoalepa | the Exteriorem Kingdom of Hoalepa | Democratic | Constitutional Monarchy | Australian | George Tupou VII the Generous | 2 |  |
 | HLR | Hollier | the Principality of Hollier | Monarchist | Absolute Monarchy | French | Leroy Dupetit-Thouars | 2 |  |
 | SEE | Holy See | the Kingdom of the Church | Theocratic | Hierocracy | Italian | Camillo Cadorna | 1 |  |
-| HWT | Hwitland | the Republik of Hwitland | Communist | Orthodox Marxism | German | Ralph Kleiber | 4 |  |
 | KPF | Kampfian Empire | the Iron Empire of Kampf | Monarchist | Absolute Monarchy | German | Max Reimer | 94 |  |
 | KKB | Kilkire-Foraois | the High Kingdom of Kilkire-Foraois | Monarchist | Elective Monarchy | Irish | Peter O'Mara | 29 |  |
 | KOV | Kové | the County of Kové | Monarchist | Feudalism | French | Lucien Delay | 0 | no land at the start (releasable or civil war) |
@@ -78,6 +77,7 @@
 | RSV | Russovichia | the Soyuz Narodnykh Komissarov of Russovichia | Communist | Council Communism | Russian | Amayak Shvetsov | 2 |  |
 | SSA | San Sierra | the People's Republic of San Sierra | Communist | Council Communism | Spanish | Emilio Díaz | 21 |  |
 | SGT | Sangterre | the Duchy of Sangterre | Monarchist | Feudalism | French | Lucien Anthoine | 0 | no land at the start (releasable or civil war) |
+| HWT | Scealand | the Republik of Scealand | Communist | Orthodox Marxism | German | Ralph Kleiber | 6 |  |
 | STM | Schteirmark | the Duchy of Schteirmark | Monarchist | Feudalism | German | Werner Winkler | 4 | puppet of Terreich und Preußen |
 | SGN | Seigne | the County of the Seigne | Monarchist | Feudalism | French | Armand Delay | 1 |  |
 | SGV | Selgrave | the Duchy of Selgrave | Monarchist | Oligarchy | French | Pierre Boué de Lapeyrère | 1 |  |
