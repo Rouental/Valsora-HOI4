@@ -153,7 +153,7 @@ TAG_CULTURE = {
     # Polynesian (author, 2026-10-08): our own name list (vanilla has none); vanilla has no
     # Pacific portraits either, so South America's generic ones are the nearest
     "MAH": dict(names="PLY", portraits="latin_america", gfx="commonwealth"),
-    "UNG": dict(names="GER", portraits="europe", gfx="western_european"),
+    "UNG": dict(names="HUN", portraits="europe", gfx="eastern_european"),  # Hungarian (author, 2026-10-09)
     "ARV": dict(names="POR", portraits="iberia", gfx="western_european"),
     **{t: dict(names="SPR", portraits="iberia", gfx="western_european") for t in ("ATR", "SVM", "PNC")},
     "USS": dict(names="USA", portraits="usa", gfx="western_european"),

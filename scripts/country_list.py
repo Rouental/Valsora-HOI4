@@ -28,7 +28,7 @@ CULTURE_NAMES = {
     "USA": "American", "MEX": "Latin American", "HOL": "Dutch", "IRE": "Irish",
     "WLS": "Welsh", "PLY": "Polynesian", "SER": "Serbian", "CRO": "Croatian",
     "ALB": "Albanian", "MAC": "Macedonian", "UKR": "Ukrainian", "FIN": "Finnish",
-    "LAT": "Latvian", "LIT": "Lithuanian", "GRE": "Greek", "BYA": "Buryat"}
+    "LAT": "Latvian", "LIT": "Lithuanian", "GRE": "Greek", "BYA": "Buryat", "HUN": "Hungarian"}
 
 
 def loc():

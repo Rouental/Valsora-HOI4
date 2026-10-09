@@ -157,7 +157,7 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `regions.py` | placeholder mode only: states, strategic regions |
 | `make_game_pdn.py` / `writepdn.py` | turn a placeholder build into a fresh `HOI4 Mod Map.pdn` |
 | `apply_outlines.py` | by hand: the author's outline layers → provinces, states, countries in the `.pdn` |
-| `pdn_tools.py` | by hand: `navigable` (lake → sea with its own region), `sea_zones` (regroup and recolour regions), `give` (whole states to a country), `recolour`, `channel` (reopen a strait: the cheapest water-to-water path between two sea pixels becomes sea), `border` (the land a moved Necessary Borders line encloses → a country), `cede` (the land of one country a moved line cuts off → another, for countries without state lines: only the first country's pixels count, provinces are split along the line; what a split state loses is a state of its own from 600 px (`CEDED_STATE`), smaller slivers join a state that moved whole), `merge_small` (a country's sliver states join a neighbour) |
+| `pdn_tools.py` | by hand: `navigable` (lake → sea with its own region), `sea_zones` (regroup and recolour regions), `give` (whole states to a country), `recolour`, `channel` (reopen a strait: the cheapest water-to-water path between two sea pixels becomes sea), `border` (the land a moved Necessary Borders line encloses → a country), `cede` (the land of one country a moved line cuts off → another, for countries without state lines: only the first country's pixels count, provinces are split along the line; what a split state loses is a state of its own from 600 px (`CEDED_STATE`), smaller slivers join a state that moved whole), `merge_small` (a country's sliver states join a neighbour), `attach` (a state goes to a country and joins its nearest state, regions too: for an islet or sliver too small to be a state) |
 | `strategic_regions.py` | by hand: sea regions = the author's oceans, one each, with names (`source/region_names.json`); land untouched |
 | `river_provinces.py` | by hand, after a build: re-cuts the provinces of every state a river crosses so rivers run between provinces |
 | `redraw_flags.py` | unused: Fraxhemark's stand-in flag (writes `work/FRX_standin.png`); the author's own `FRX.png` replaced it |
@@ -258,7 +258,8 @@ mismatch, missing localisation) and catches all of them.
   grid and must stay contiguous. Lakes go into the land region they border most.
 - **Countries**:
   - One placeholder per continent: NSC ARS AIS SLT YAS USN ORI (`SOL` is a vanilla
-    tag, so Solitas is `SLT`). They are `common.PLACEHOLDERS`, the only countries the
+    tag, so Solitas is `SLT`); Araseos has no land left since 2026-10-09, so ARS is left
+    out of the mod. They are `common.PLACEHOLDERS`, the only countries the
     bookmark recommends (author's wish, to keep the start menu short).
   - Colours follow the flags (author): Rouental royal green, Guedelon blue, Hollier red, Seigne white,
     Evriches yellow, Lustiana black, Selgrave dark maroon, Lanzerac purple (its new flag's,
@@ -447,8 +448,8 @@ mismatch, missing localisation) and catches all of them.
     box west of Tethia is one state too (both drawn with state lines). In Araseos' far
     south-west **Merigo** MRG (Conservatism, "the Republic of Merigo", Peatiktist's
     puppet, Italian), **Zwintern** ZWT (Technocracy, "the State of Zwintern", Dutch) and
-    **Ungar** UNG ("the Grand Duchy of Ungar"; Feudalism and German are Claude's: the
-    author named it later the same day); **Ostercoirasreich** OCR (Feudalism, "the
+    **Ungar** UNG ("the Grand Duchy of Ungar"; Feudalism is Claude's: the author named
+    it later the same day; Hungarian, the author's, 2026-10-09, German at first); **Ostercoirasreich** OCR (Feudalism, "the
     Kaiserinnreichfedderation of Ostercoirasreich", German) on the OS islets and
     **Mahina** MAH (Liberalism, "the Republic of Mahina", Australian names like Hoalepa)
     on the MA islets. Islets also went to Someriania (SO), Kilkire-Foraois (the west of
@@ -535,7 +536,11 @@ mismatch, missing localisation) and catches all of them.
     (Coraliza, Volinovia, Merlgould, Rastava, North Pollana, Gaellia, Schteirmark, Mahina,
     Russovichia, and West Sminishia, Pakitsk, Sanada, Brethren, Ryśny, Sombor, Kamyachyn,
     Kieska, Zoluzeme, Vilna, Skillia) and four redrawn ones (Estande, South Pollana,
-    Dremaur, Sminishia); map colours were not changed to match.
+    Dremaur, Sminishia); map colours were not changed to match. Then (author) "Araseos
+    1", a 19 px islet off Terreich's coast and the Araseos placeholder's last land, went
+    to Terreich, joining its nearest state (`pdn_tools.py attach terreich 935,1862`), so
+    ARS is no longer in the mod; and Ungar became Hungarian (HUN names, copied into
+    `vanilla_names.txt` from vanilla).
     All tags were checked against vanilla `common/country_tags`; new tags must be too.
   - The adjectives of the neighbours are guesses; the author may rename them.
 - **State names** are the author's, in `source/state_names.json` ("x,y" of a pixel
@@ -957,9 +962,10 @@ in git history (commit d2d6cd8, `scripts/cartographic.py`). It used
 
 ## Current state
 
-- 16,646 provinces (15,963 land, 645 sea, 38 lakes), 2,074 states, 91 strategic regions
-  (11 sea), 120 countries (2026-10-09, later still: the Oriental Territories, and the
-  Midtierre isles re-cut for Peatiktist; before: 16,625 provinces, 2,073 states, 119
+- 16,646 provinces (15,963 land, 645 sea, 38 lakes), 2,073 states, 91 strategic regions
+  (11 sea), 119 countries (Araseos' last islet to Terreich; before: 2,074 states, 120
+  countries (2026-10-09, later still: the Oriental Territories, and the
+  Midtierre isles re-cut for Peatiktist); before: 16,625 provinces, 2,073 states, 119
   countries (2026-10-09, later: fourteen new); before: 14,812 provinces
   (two more from the Scealand line, 2026-10-09), 1,866 states,
   105 countries (2026-10-08: seven new; before: 14,334 provinces, 1,823 states,

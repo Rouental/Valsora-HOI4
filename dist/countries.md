@@ -1,12 +1,11 @@
 # Valsora: every country
 
-120 countries, 99 owning land at the start. Read from the built mod; regenerate with `python3 scripts/country_list.py`.
+119 countries, 98 owning land at the start. Read from the built mod; regenerate with `python3 scripts/country_list.py`.
 
 | Tag | Name | Full name | Ideology | Sub-ideology | Culture | Leader | States | Notes |
 |---|---|---|---|---|---|---|---|---|
 | AOE | Alliance of the East | the Alliance of the East | Monarchist | Oligarchy | French | Louis Canrobert | 0 | no land at the start (releasable or civil war) |
 | AGL | Anglost | the Kingdom of Anglost | Democratic | Constitutional Monarchy | English | Russell Collin | 55 |  |
-| ARS | Araseos | Araseos | Monarchist | Absolute Monarchy | Italian | Alessandro Govone | 1 |  |
 | ESC | Artzen | the Wyrhterrepublik of Artzen | Communist | Orthodox Marxism | German | Johann Will | 5 |  |
 | ARV | Arvorenia | the United Kingdom of Éden, Santo Domingo, and Arovia | Democratic | Constitutional Monarchy | Portuguese | Daniel Maurício | 32 |  |
 | ATR | Atrocha | the Republic of Atrocha | Democratic | Liberalism | Spanish | Astrid Bethancourt | 14 |  |
@@ -109,7 +108,7 @@
 | THD | Thorian Dynamics | Thorian Dynamics | Authoritarian | Megacorporation | American | Hamilton Pickett | 5 |  |
 | TCN | Transcainia | the Kingdom of Transcainia | Monarchist | Oligarchy | German | Peter Eisele | 7 |  |
 | TRC | Troc | the Democratic Republic of Troc | Democratic | Liberalism | English | Colbert Dundas | 15 |  |
-| UNG | Ungar | the Grand Duchy of Ungar | Monarchist | Feudalism | German | Heinz Schneider | 4 |  |
+| UNG | Ungar | the Grand Duchy of Ungar | Monarchist | Feudalism | Hungarian | Bertalan Baross | 4 |  |
 | USS | United States of Solitas | United States of Solitas | Democratic | Liberalism | American | Aaron Miller | 30 |  |
 | USN | Usnistan | Usnistan | Monarchist | Absolute Monarchy | Persian | Soroush Jahangir | 76 |  |
 | VAI | Vair | the Duchy of Vair | Monarchist | Feudalism | French | François Dubail | 0 | no land at the start (releasable or civil war) |

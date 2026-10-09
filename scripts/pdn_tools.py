@@ -9,6 +9,11 @@
     python3 scripts/pdn_tools.py give COUNTRY X,Y [X,Y ...]
         Give the whole states containing these pixels to COUNTRY (a common.COUNTRIES key),
         on the Countries layer.
+    python3 scripts/pdn_tools.py attach COUNTRY X,Y [X,Y ...]
+        Give COUNTRY the states containing these pixels and merge each into COUNTRY's
+        nearest state (Countries, States and Strategic Regions layers), the way islets
+        too small for a state of their own join their country's nearest state: for a
+        sliver or islet left behind (2026-10-09: "Araseos 1", 19 px off Terreich's coast).
     python3 scripts/pdn_tools.py border COUNTRY X,Y [X,Y ...]
         Give COUNTRY all the land enclosed by Necessary Borders lines around these pixels
         (the line pixels too), on the Countries layer: a border the author moved. Run
@@ -203,6 +208,33 @@ def give(names, L, country, seeds):
         L["Countries"][m, :3] = COUNTRIES[country][3]
         L["Countries"][m, 3] = 255
         print(f"state at ({x}, {y}): {m.sum()} px -> {country}")
+
+
+def attach(names, L, country, seeds, reach=300):
+    from common import COUNTRIES
+    t = L["Terrain"][..., :3]
+    land = ~((t == OCEAN).all(-1) | (t == LAKES).all(-1))
+    col = code(np.array(COUNTRIES[country][3]))
+    for x, y in seeds:
+        St = np.where(L["States"][..., 3] > 0, code(L["States"][..., :3]), -1)
+        m = land & (St == St[y, x])
+        ys, xs = np.nonzero(m)
+        y0, y1 = max(ys.min() - reach, 0), min(ys.max() + reach + 1, H)
+        x0, x1 = max(xs.min() - reach, 0), min(xs.max() + reach + 1, W)
+        win = np.s_[y0:y1, x0:x1]
+        theirs = land[win] & (code(L["Countries"][win][..., :3]) == col) & ~m[win] & (St[win] >= 0)
+        if not theirs.any():
+            sys.exit(f"attach: no state of {country} within {reach} px of ({x}, {y})")
+        dist, (iy, ix) = ndi.distance_transform_edt(~theirs, return_indices=True)
+        k = np.argmin(np.where(m[win], dist, np.inf))
+        ny, nx = iy.flat[k] + y0, ix.flat[k] + x0  # the nearest pixel of COUNTRY's
+        to = St[ny, nx]
+        L["States"][m, :3] = [(to >> 16) & 255, (to >> 8) & 255, to & 255]
+        L["Strategic Regions"][m, :3] = L["Strategic Regions"][ny, nx, :3]
+        L["Countries"][m, :3] = COUNTRIES[country][3]
+        L["Countries"][m, 3] = 255
+        print(f"state at ({x}, {y}): {m.sum()} px -> {country}, joining its state at ({nx}, {ny}), "
+              f"{dist.flat[k]:.0f} px away")
 
 
 def border(names, L, country, seeds):
@@ -434,6 +466,8 @@ def main():
         recolour(names, L, sys.argv[2], pairs)
     elif cmd == "give":
         give(names, L, sys.argv[2], [tuple(int(v) for v in a.split(",")) for a in sys.argv[3:]])
+    elif cmd == "attach":
+        attach(names, L, sys.argv[2], [tuple(int(v) for v in a.split(",")) for a in sys.argv[3:]])
     elif cmd == "border":
         border(names, L, sys.argv[2], [tuple(int(v) for v in a.split(",")) for a in sys.argv[3:]])
     elif cmd == "cede":
