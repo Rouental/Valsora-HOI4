@@ -193,7 +193,7 @@ OWNERS_0810B = {"ungar": [(554, 1814)]}
 # are Estande's. One seed per patch the lines enclose, found from the author's labels.
 # West Sminishia, cut out of Sminishia by a new line, is done afterwards with
 # pdn_tools.py cede (Sminishia has no state lines of its own).
-OWNERS = {
+OWNERS_0910 = {
     "belka": [(2356, 318), (2271, 176), (2304, 364), (2350, 376), (2383, 385), (2312, 393),
               (2361, 430), (2385, 444), (2465, 486)],
     "sanada": [(2823, 257), (3416, 145), (3393, 161), (2592, 178), (3215, 176), (3379, 183),
@@ -211,6 +211,9 @@ OWNERS = {
     "tenkyoku": [(4197, 1446)],
     "estande": [(3998, 1438), (3916, 1439), (4072, 1469), (4051, 1476), (3990, 1490)],
 }
+# 2026-10-09, later: the three isles and three islets in the Midtierre, between Anglost
+# and Normania, that the author labelled PE (Nonscio's until then) are Peatiktist's
+OWNERS = {"peatiktist": [(634, 1464), (670, 1494), (715, 1513), (692, 1479), (652, 1488), (668, 1508)]}
 OWNERS_0410 = {
     "anglost": [(528, 1283), (607, 1287), (509, 1335), (436, 1342), (506, 1363), (474, 1379),
                 (516, 1386), (563, 1388), (626, 1425), (583, 1428), (654, 1430), (658, 1421),

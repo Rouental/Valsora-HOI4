@@ -227,6 +227,7 @@ LEADERS = {
     "PSC": ["feudalism"],
     "AOE": ["oligarchism"], "RCL": ["despotism"], "SGT": ["feudalism"],
     "KOV": ["feudalism"], "HVQ": ["feudalism"], "SRE": ["feudalism"],
+    "ORT": ["oligarchism"],  # Claude's pick, like the other releasables' governments
     # 2026-10-08 (author)
     "BLK": ["leninism"], "TTH": ["despotism"], "MRG": ["conservatism"],
     "ZWT": ["technocracy"], "OCR": ["feudalism"], "MAH": ["liberalism"],
@@ -317,6 +318,8 @@ RELEASABLE = {
     "SRE": ["Serie", "Verdoyantes"],
     # 2026-10-08 (author): Tethia starts as part of Belekria
     "TTH": ["Tethia"],
+    # 2026-10-09, later (author): Rouental's islets off Solitas
+    "ORT": ["Concorde et Volonté"],
 }
 # exist only through the civil war (author): no cores until the Prince is executed, so
 # they can't be released any other way
@@ -512,6 +515,7 @@ FORMAL_NAMES = {
     "KOV": "the County of Kové",
     "HVQ": "the County of Hevique",
     "SRE": "the Duchy of Serie",
+    "ORT": "the Oriental Territories",
     "BLK": "the Union of Belekrian Republics",
     "TTH": "the Principality of Tethia",
     "MRG": "the Republic of Merikaan",

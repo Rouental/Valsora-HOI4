@@ -106,7 +106,7 @@ TAG_CULTURE = {
     # the civil war factions are Rouentaise too
     **{t: _FRENCH for t in ("BRL", "CRP", "RLT", "MRC", "RLA", "VAI", "FTH")},
     # ... and so are the nations it can release
-    **{t: _FRENCH for t in ("CRL", "MTN", "ORF", "GHS", "RVR", "PSC", "AOE", "RCL", "SGT", "KOV", "HVQ", "SRE")},
+    **{t: _FRENCH for t in ("CRL", "MTN", "ORF", "GHS", "RVR", "PSC", "AOE", "RCL", "SGT", "KOV", "HVQ", "SRE", "ORT")},
     # the Holy See: Italian, after the Papal States (Claude's guess)
     "SEE": dict(names="ITA", portraits="europe", gfx="western_european"),
     # 2026-10-07: Claude's guesses from the names (the author hasn't said): German for

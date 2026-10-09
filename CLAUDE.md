@@ -525,6 +525,17 @@ mismatch, missing localisation) and catches all of them.
     holes in game, are now filled on import: Belka's emblem edge, a 1-px frame around
     Riverraine's and Belekria's flags, a faint row in Garfield's (and, by hand, the top
     row of Ponchomagnifico's, taken from the friend's build).
+    2026-10-09, later still (author): **the Oriental Territories** ORT, a new Rouental
+    releasable (`nations.RELEASABLE`: Concorde et Volonté, Rouental's islets off Solitas;
+    "the Oriental Territories", the author's flag `ORT.png`; Oligarchy, French culture
+    and the colour are Claude's, a shade off the flag's plum, which is Lanzerac's map
+    colour exactly). The three isles and three islets the author labelled PE in the
+    Midtierre, between Anglost and Normania (Nonscio's until then), are Peatiktist's: 3
+    states, one per isle (`apply_outlines.py`). The flag file brought 20 first flags
+    (Coraliza, Volinovia, Merlgould, Rastava, North Pollana, Gaellia, Schteirmark, Mahina,
+    Russovichia, and West Sminishia, Pakitsk, Sanada, Brethren, Ryśny, Sombor, Kamyachyn,
+    Kieska, Zoluzeme, Vilna, Skillia) and four redrawn ones (Estande, South Pollana,
+    Dremaur, Sminishia); map colours were not changed to match.
     All tags were checked against vanilla `common/country_tags`; new tags must be too.
   - The adjectives of the neighbours are guesses; the author may rename them.
 - **State names** are the author's, in `source/state_names.json` ("x,y" of a pixel
@@ -946,8 +957,10 @@ in git history (commit d2d6cd8, `scripts/cartographic.py`). It used
 
 ## Current state
 
-- 16,625 provinces (15,942 land, 645 sea, 38 lakes), 2,073 states, 91 strategic regions
-  (11 sea), 119 countries (2026-10-09, later: fourteen new; before: 14,812 provinces
+- 16,646 provinces (15,963 land, 645 sea, 38 lakes), 2,074 states, 91 strategic regions
+  (11 sea), 120 countries (2026-10-09, later still: the Oriental Territories, and the
+  Midtierre isles re-cut for Peatiktist; before: 16,625 provinces, 2,073 states, 119
+  countries (2026-10-09, later: fourteen new); before: 14,812 provinces
   (two more from the Scealand line, 2026-10-09), 1,866 states,
   105 countries (2026-10-08: seven new; before: 14,334 provinces, 1,823 states,
   98 countries (with six more releasables, 2026-10-07, later; before: 92 (2026-10-07: twenty new nations, 521 new states; `dist/preview_new_nations_*.png`)).

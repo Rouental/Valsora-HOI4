@@ -1,6 +1,6 @@
 # Valsora: every country
 
-119 countries, 99 owning land at the start. Read from the built mod; regenerate with `python3 scripts/country_list.py`.
+120 countries, 99 owning land at the start. Read from the built mod; regenerate with `python3 scripts/country_list.py`.
 
 | Tag | Name | Full name | Ideology | Sub-ideology | Culture | Leader | States | Notes |
 |---|---|---|---|---|---|---|---|---|
@@ -59,15 +59,16 @@
 | MGD | Merlgould | the Kingdom of Merlgould | Monarchist | Personal Union | Portuguese | Diogo de Arriaga | 1 | puppet of Volinovia |
 | AIS | Merlovich | the Federation of Merlovich | Democratic | Liberalism | Australian | PLACEHOLDER | 15 |  |
 | MZG | Mezzogiorno | the Bleacherist Republic of Mezzogiorno | Authoritarian | Bleacherism | Italian | Fabrizio Caramore | 5 | puppet of Republican Illiricium |
-| NSC | Nonscio | Nonscio | Monarchist | Absolute Monarchy | English | Oswald Brown | 4 |  |
+| NSC | Nonscio | Nonscio | Monarchist | Absolute Monarchy | English | Oswald Brown | 2 |  |
 | NRM | Normania | the Principality of Normania | Democratic | Constitutional Monarchy | English | Hubert Golightly | 5 | dominion of Anglost |
 | NPL | North Pollana | the Worker's State of Pollana | Communist | Party Centralism | Latin American | Vicente Arista | 1 |  |
+| ORT | Oriental Territories | the Oriental Territories | Monarchist | Oligarchy | French | Julien de MacMahon | 0 | no land at the start (releasable or civil war) |
 | ORI | Orientalis | Orientalis | Monarchist | Absolute Monarchy | Japanese | Soroku Minami | 140 |  |
 | ORF | Oriflamme | the Oriflamme Alliance | Monarchist | Oligarchy | French | Gustave Humbert | 0 | no land at the start (releasable or civil war) |
 | OST | Ostaria | the Archcounty of Ostaria | Monarchist | Absolute Monarchy | German | Adolf Göttmann | 4 |  |
 | OCR | Ostercoirasreich | the Kaiserinnreichfedderation of Ostercoirasreich | Monarchist | Feudalism | German | Ferdinand Lauck | 3 |  |
 | PKT | Pakitsk | the Republic of Pakitsk | Authoritarian | Strongman Rule | Russian | Aslan Selin | 9 |  |
-| PTK | Peatiktist | the Constitutional Dictatorship of Peatiktist | Authoritarian | Strongman Rule | German | Philipp Gross | 24 |  |
+| PTK | Peatiktist | the Constitutional Dictatorship of Peatiktist | Authoritarian | Strongman Rule | German | Philipp Gross | 27 |  |
 | PSC | Piscary | the Duchy of the Piscary | Monarchist | Feudalism | French | Achille Bosquet | 0 | no land at the start (releasable or civil war) |
 | LNT | Placeholdaire | the Republic of Placeholdaire | Democratic | Conservatism | French | Charles Gallieni | 14 |  |
 | PNC | Ponchomagnifico | the Community of Ponchomagnifico | Authoritarian | Strongman Rule | Spanish | Mauricio Gómez | 6 |  |
