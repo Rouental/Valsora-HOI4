@@ -369,6 +369,14 @@ def main():
             state_capital[s] = p
     state_coastal = [any(coastal[i] for i in g) for g in states]
     # country capital: the sizeable state nearest the centre of the country's land
+    def central(members):
+        cy = np.average([reg["centre"][i][0] for s in members for i in states[s]],
+                        weights=[size[i] for s in members for i in states[s]])
+        cx = np.average([reg["centre"][i][1] for s in members for i in states[s]],
+                        weights=[size[i] for s in members for i in states[s]])
+        big = [s for s in members if len(states[s]) >= 4] or members
+        return min(big, key=lambda s: np.hypot(*(np.mean(
+            [reg["centre"][i] for i in states[s]], axis=0) - (cy, cx))))
     capital_state = {}
     for c in present:
         members = [s for s in range(len(states)) if owners[s] == c]
@@ -376,13 +384,16 @@ def main():
             t = COUNTRIES[c][0]
             capital_state[c] = state_by_name[(nations.CIVIL_WAR.get(t) or nations.RELEASABLE[t])[0]]
             continue
-        cy = np.average([reg["centre"][i][0] for s in members for i in states[s]],
-                        weights=[size[i] for s in members for i in states[s]])
-        cx = np.average([reg["centre"][i][1] for s in members for i in states[s]],
-                        weights=[size[i] for s in members for i in states[s]])
-        big = [s for s in members if len(states[s]) >= 4] or members
-        capital_state[c] = min(big, key=lambda s: np.hypot(*(np.mean(
-            [reg["centre"][i] for i in states[s]], axis=0) - (cy, cx))))
+        capital_state[c] = central(members)
+        # a capital drawn out to a continent holding under a third of the country's land
+        # is chosen again on the continent holding most of it (2026-10-10: Estande's
+        # islands off Araseos and Orientalis had put its capital on one of them)
+        on = Counter()
+        for s in members:
+            on[int(cont[states[s][0]])] += sum(int(size[i]) for i in states[s])
+        if on[int(cont[states[capital_state[c]][0]])] * 3 < sum(on.values()):
+            home = on.most_common(1)[0][0]
+            capital_state[c] = central([s for s in members if int(cont[states[s][0]]) == home])
     # capitals the author chose, by a map pixel (state ids shift when the map changes)
     for tag, (x, y) in nations.CAPITALS.items():
         c = next(k for k in COUNTRIES if COUNTRIES[k][0] == tag)

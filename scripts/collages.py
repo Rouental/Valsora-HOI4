@@ -1,14 +1,17 @@
 """Collages for the author: every custom flag and every custom leader in the built mod.
 
     python3 scripts/collages.py   # after a build: dist/flags_collage.png, dist/leaders_collage.png
+    python3 scripts/collages.py --continent araseos   # dist/flags_araseos.png only
 
 Flags are the pictures in source/flags (the build uses each one), in the game's 82:52
 shape at twice its size; countries still on a placeholder stripe are listed below them.
+With --continent, only the nations whose capital is on that continent.
 Leaders are the characters with a portrait of our own (nations.PORTRAITS, at twice the
 game's size) and the generated rulers the author named (nations.NAMED_LEADERS). Base-game
 portraits aren't in this repository, so those get a labelled tile.
 """
 import re
+import sys
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
@@ -52,7 +55,28 @@ def heading(d, x, y, title, subtitle, width):
     return y + 14
 
 
-def flags(L):
+def continent_of(lands=None):
+    """tag -> the continent of its capital state, from the built mod; lands, if given (a
+    dict), gets tag -> the continents its states are on"""
+    names = re.findall(r"^\t(\w+)$", (MOD / "map/continent.txt").read_text(encoding="utf-8-sig"), re.M)
+    cont = {int(f[0]): int(f[7]) for f in (line.split(";") for line in
+            (MOD / "map/definition.csv").read_text(encoding="utf-8").splitlines()[1:])}
+    first = {}  # state -> its first province
+    for f in (MOD / "history/states").glob("*.txt"):
+        s = f.read_text(encoding="utf-8-sig")
+        first[int(re.search(r"\bid\s*=\s*(\d+)", s).group(1))] = p = \
+            int(re.search(r"provinces\s*=\s*\{\s*(\d+)", s).group(1))
+        if lands is not None:
+            lands.setdefault(re.search(r"owner\s*=\s*(\w+)", s).group(1), set()).add(names[cont[p] - 1])
+    out = {}
+    for f in (MOD / "history/countries").glob("*.txt"):
+        m = re.search(r"^capital\s*=\s*(\d+)", f.read_text(encoding="utf-8-sig"), re.M)
+        if m:
+            out[f.name[:3]] = names[cont[first[int(m.group(1))]] - 1]
+    return out
+
+
+def flags(L, continent=None):
     def key(stem):
         tag, _, var = stem.partition("_")
         base = L.get(tag, tag)
@@ -63,18 +87,34 @@ def flags(L):
         return (base, 2, var), f"{L.get(stem, var.title())} ({base})"  # a cosmetic tag
     items = sorted(key(p.stem) + (p,) for p in FLAGS.glob("*.png"))
     tags = sorted(f.name[:3] for f in (MOD / "history/countries").glob("*.txt"))
+    others = []
+    if continent:
+        lands = {}
+        where = continent_of(lands)
+        items = [it for it in items if where.get(it[2].stem.partition("_")[0]) == continent]
+        others = sorted(L.get(t, t) for t in tags if where.get(t) != continent and continent in lands.get(t, ()))
+        tags = [t for t in tags if where.get(t) == continent]
     missing = sorted(L.get(t, t) for t in tags if not (FLAGS / f"{t}.png").exists())
     cols, cw, ch, pad = 10, FW + 22, FH + 52, 30
     width = pad * 2 + cols * cw
     probe = ImageDraw.Draw(Image.new("RGB", (1, 1)))
     foot = wrap(probe, "Still a placeholder stripe in their map colour (no flag yet): "
                 + ", ".join(missing) + ".", font(REGULAR, 16), width - 2 * pad)
+    if others:
+        foot += wrap(probe, f"Also holding land in {continent.title()}, with their capital elsewhere: "
+                     + ", ".join(others) + ".", font(REGULAR, 16), width - 2 * pad)
     rows = -(-len(items) // cols)
     im = Image.new("RGB", (width, 150 + rows * ch + 30 + 22 * len(foot) + pad), BG)
     d = ImageDraw.Draw(im)
-    top = heading(d, pad, pad, f"Valsora: the {len(items)} custom flags",
-                  "As the game shows them (82 × 52), at twice the size. A flag named after a "
-                  "government is used while that government rules.", width - 2 * pad)
+    if continent:
+        top = heading(d, pad, pad, f"Valsora: the flags of {continent.title()}",
+                      f"The {len(items)} flags of the nations whose capital is in "
+                      f"{continent.title()}, as the game shows them (82 × 52), at twice the size.",
+                      width - 2 * pad)
+    else:
+        top = heading(d, pad, pad, f"Valsora: the {len(items)} custom flags",
+                      "As the game shows them (82 × 52), at twice the size. A flag named after a "
+                      "government is used while that government rules.", width - 2 * pad)
     small = font(REGULAR, 13)
     for i, (_, label, path) in enumerate(items):
         x, y = pad + (i % cols) * cw + 11, top + (i // cols) * ch
@@ -173,6 +213,12 @@ def leaders(L):
 
 def main():
     L = loc()
+    if "--continent" in sys.argv:
+        name = sys.argv[sys.argv.index("--continent") + 1].lower()
+        im, n, missing = flags(L, name)
+        im.save(f"dist/flags_{name}.png", optimize=True)
+        print(f"wrote dist/flags_{name}.png ({n} flags; {len(missing)} nations without one)")
+        return
     im, n, missing = flags(L)
     im.save("dist/flags_collage.png", optimize=True)
     im2, m = leaders(L)

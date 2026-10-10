@@ -54,7 +54,10 @@ for the author. Unknown layer names are ignored.
   name). An unnamed dot, two in one province, or a repeated name stops the build. In
   `build_mod.py` the first city of a state becomes its victory point (worth `CITY_VP` =
   5, or 10 as the capital), and further ones are extra victory points. Capitals are
-  set by `nations.CAPITALS` (the dot's pixel): Winterthorn CRD, Venezzo CTF, Alqira ILR, Malin MZG,
+  set by `nations.CAPITALS` (the dot's pixel); any other country's capital is the
+  sizeable state nearest the centre of its land, chosen again on the continent holding
+  most of it if it falls on one holding under a third (2026-10-10: Estande's had drifted
+  onto its islands east of Terreich). Winterthorn CRD, Venezzo CTF, Alqira ILR, Malin MZG,
   Prestozza ETR, Monte Gnolia KIL (author, 2026-10-01), besides Rêverie ROU. First nine: Winterthorn, Vair, Carcarelle, Rêverie, Venezzo, Alqira,
   Malin, Prestozza, Monte Gnolia.
 - **Heightmap**: clamped to 94 / 96 on the wrong side of sea level.
@@ -176,7 +179,7 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `export_canvas.py` | previews in `dist/` |
 | `package.py` | `dist/valsora_test.zip` |
 | `country_list.py` | by hand, after a build: `dist/world_map_labelled.png` (every country labelled) and `dist/countries.md` / `.csv` (name, full name, ideology, sub-ideology, culture, leader, states), read from the built mod |
-| `collages.py` | by hand, after a build: `dist/flags_collage.png` (every custom flag, and the countries still on a placeholder stripe) and `dist/leaders_collage.png` (every custom leader: own portraits at 2×, named ones with base-game portraits as labelled tiles) |
+| `collages.py` | by hand, after a build: `dist/flags_collage.png` (every custom flag, and the countries still on a placeholder stripe) and `dist/leaders_collage.png` (every custom leader: own portraits at 2×, named ones with base-game portraits as labelled tiles); `--continent NAME` writes only `dist/flags_<name>.png`, the flags of the nations whose capital is on that continent, naming below them those with land there and their capital elsewhere (2026-10-10, Araseos) |
 
 **A clean `check_mod.py` run is the bar for shipping a build.** It was mutation-tested
 (CRLF, X-crossing, missing building row, state split across regions, descriptor

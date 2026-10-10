@@ -206,6 +206,17 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## Map problems found while building
 
+**Estande's capital was on an island overseas** (2026-10-10)
+- Cause: a country's capital is the sizeable state nearest the centre of all its land.
+  Estande's islands east of Terreich (Araseos) and the six added on 2026-10-09 off
+  Orientalis drew that centre out to sea, and the nearest state was one of its islands
+  east of Terreich ("Estande 70"), far from its homeland. Found while making the flag
+  sheet of Araseos, where Estande appeared.
+- Fix: a capital on a continent holding under a third of the country's land is chosen
+  again on the continent holding most of it. Estande's is now "Estande 30", in the
+  middle of its homeland; no other capital moved (a plain "main continent only" rule
+  would also have moved Anglost's, Krionik's, Peatiktist's and Terrabis-Seran's).
+
 **A flag update was missed** (2026-10-09)
 - Cause: `import_flags.py` called a flag unchanged when its mean difference from the
   stored one was under 3, a test meant for resampled copies of the same picture.
