@@ -24,8 +24,9 @@ build/      the unzipped mod, gitignored
 The author edits this file from now on; `docs/EDITING.md` is their guide (keep it in
 step with `read_layers.py`). It is exactly game size (5120×2560, one pixel = one map
 pixel), and each layer is one kind of game data, found **by name**. Bottom to top:
-Heightmap, Terrain, Rivers, Continents, Provinces, Strategic Regions, States, Countries,
-and "Notes (ignored by the build)". **The author's editing layers are named "Necessary …"**
+Heightmap, Terrain, Rivers, Continents, Provinces, Strategic Regions, Ocean Province Lines
+(Merlo's sea borders, from 2026-10-12: read by `sea_provinces.py`, not by the build), States,
+Countries, and "Notes (ignored by the build)". **The author's editing layers are named "Necessary …"**
 (from 2026-10-01): Necessary Borders (country lines), Necessary States (state lines; it
 was called "Necessary Provinces" before), Necessary Names (labels; a short line points
 to an island), Necessary Major / Minor Rivers (plain river lines; the old "Major Rivers"
@@ -160,8 +161,9 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `regions.py` | placeholder mode only: states, strategic regions |
 | `make_game_pdn.py` / `writepdn.py` | turn a placeholder build into a fresh `HOI4 Mod Map.pdn` |
 | `apply_outlines.py` | by hand: the author's outline layers → provinces, states, countries in the `.pdn` |
-| `pdn_tools.py` | by hand: `navigable` (lake → sea with its own region), `sea_zones` (regroup and recolour regions), `give` (whole states to a country), `recolour`, `channel` (reopen a strait: the cheapest water-to-water path between two sea pixels becomes sea), `border` (the land a moved Necessary Borders line encloses → a country), `cede` (the land of one country a moved line cuts off → another, for countries without state lines: only the first country's pixels count, provinces are split along the line; what a split state loses is a state of its own from 600 px (`CEDED_STATE`), smaller slivers join a state that moved whole), `merge_small` (a country's sliver states join a neighbour), `attach` (a state goes to a country and joins its nearest state, regions too: for an islet or sliver too small to be a state) |
-| `strategic_regions.py` | by hand: sea regions = the author's oceans, one each, with names (`source/region_names.json`); land untouched |
+| `pdn_tools.py` | by hand: `navigable` (lake → sea with its own region), `sea_zones` (regroup and recolour regions; refused on a map with Ocean Province Lines), `give` (whole states to a country), `recolour`, `channel` (reopen a strait: the cheapest water-to-water path between two sea pixels becomes sea), `border` (the land a moved Necessary Borders line encloses → a country), `cede` (the land of one country a moved line cuts off → another, for countries without state lines: only the first country's pixels count, provinces are split along the line; what a split state loses is a state of its own from 600 px (`CEDED_STATE`), smaller slivers join a state that moved whole), `merge_small` (a country's sliver states join a neighbour), `attach` (a state goes to a country and joins its nearest state, regions too: for an islet or sliver too small to be a state) |
+| `strategic_regions.py` | retired 2026-10-12 (refuses to run on a map with Ocean Province Lines, unless `--force`): sea regions = the author's oceans, one each, with names (`source/region_names.json`); land untouched |
+| `sea_provinces.py` | by hand: the sea from the Ocean Province Lines layer (Merlo's): `build` (provinces from the lines, cut to HOI4's size limit, colours and regions kept by overlap), `seam` (borders and regions meet across the left/right wrap), `names` (`source/region_names.json`: "<ocean> <n>" west to east), `check` (report only) |
 | `river_provinces.py` | by hand, after a build: re-cuts the provinces of every state a river crosses so rivers run between provinces |
 | `redraw_flags.py` | unused: Fraxhemark's stand-in flag (writes `work/FRX_standin.png`); the author's own `FRX.png` replaced it |
 | `state_map.py` | by hand, after a build: a numbered map of some countries' states (`dist/state_numbers_<name>.png` + `.json`, number → tag and pixel), for the author to name them; `--names` labels them with their names instead |
@@ -214,7 +216,8 @@ mismatch, missing localisation) and catches all of them.
   (x = 0) is a wall no block may cross. `compose.py` then centres the final land exactly
   (equal margins top/bottom and either side of the seam) and records the shift in
   `work/world.npz`, which `export_canvas.py` applies too.
-- **Provinces are bricks**: 32 px on land, 128 px at sea, 48 px on lakes, with odd rows
+- **Provinces are bricks** (at sea only until 2026-10-12, when Merlo's hand-drawn sea
+  provinces replaced them; see Sea provinces below): 32 px on land, 128 px at sea, 48 px on lakes, with odd rows
   offset by half a brick so only three provinces meet at grid corners. Bricks never cross
   the seam (the edge half-bricks of odd rows are folded into their neighbour). Pieces under
   25% of a brick merge into the same-kind neighbour with the longest shared border.
@@ -234,7 +237,37 @@ mismatch, missing localisation) and catches all of them.
     a sea region of its own: Nonscio's, south of Rouental, and Yastreovakia's northern
     one. They were made with `pdn_tools.py navigable`.
   - Other lakes stay lakes.
-- **Sea regions are the author's oceans, unsplit** (`strategic_regions.py`, 2026-09-30).
+- **Sea provinces and sea regions are Merlo's** (the author's friend, 2026-10-12; merged
+  with the author's approval, which reverses their 2026-09-30 wish to keep each ocean
+  one region). Merlo drew the sea's borders by hand on a new layer, **Ocean Province
+  Lines** (red lines), and his scripts (`build_sea.py`, `regroup_sea.py`, not in the
+  repo: they ran on his machine) made 362 sea provinces from them in place of the 645
+  bricks (35 areas over HOI4's size limit cut by wobbly lines, drawn into the layer
+  too) and grouped them into 42 sea regions of about 9 provinces inside each ocean
+  (South Demetric 8, Northern Ocean 6, North Menotius 6, South Menotius 5, Arctic
+  Ocean 4, Northern Friedlich 4, Southern Friedlich 3, Midtierre Sea 2, North Demetric
+  2, Piscary and Norlany 1 each); each province went whole to the ocean covering most
+  of it, which moved 8.7 % of the sea to another ocean. Land, lakes and every other
+  layer were untouched (checked pixel by pixel; one pixel at (2337, 933), sea on Terrain
+  but painted into a Krionik land province, became sea), and his built mod matched our
+  build of his file byte for byte. Our own `scripts/sea_provinces.py` now does the job
+  from the layer: `build` (provinces from the lines; a line pixel keeps its province
+  while that borders it, so unchanged lines give back the same provinces: 22 px
+  differed on Merlo's file), `seam`, `names`, `check`. **The wrap is seamless**
+  (`seam`, at the author's request): Merlo's borders met the two edges at different
+  rows (up to 43 px apart, two with no partner, plus line bits drawn along the edge
+  columns); now every border meets both edges at the same row (pairs bent to meet
+  halfway; the right edge's border at row 229 continued across the wrap, which split a
+  province: 363 sea provinces; a big province that reached the right edge only by a
+  5 px neck, rows 958–975, pulled back), the lines within a few dozen px of the edges
+  are redrawn from the result, and the two provinces facing each other across the wrap
+  share a sea region (10 provinces changed region, the most even choice), so the oceans
+  continue across it too. Names are "<ocean> <n>" west to east (`names`), the oceans'
+  spelling as on the author's ocean map ("North Demetric", "Northern Friedlich").
+  `strategic_regions.py` and `pdn_tools.py sea_zones` would undo all this and refuse to
+  run on a map with the lines layer.
+- **Sea regions were the author's oceans, unsplit** (`strategic_regions.py`, 2026-09-30,
+  until 2026-10-12).
   Each sea province takes its ocean from `source/ref_oceans.webp` and each ocean is ONE
   region, as big as the map shows it: the author will edit them later. Split only where
   HOI4 forces it (a sea region must be connected); none needed it. 11 sea regions:
@@ -1012,9 +1045,10 @@ in git history (commit d2d6cd8, `scripts/cartographic.py`). It used
 
 ## Current state
 
-- 21,366 provinces (20,683 land, 645 sea, 38 lakes), 2,629 states, 91 strategic regions
-  (11 sea), 143 countries (2026-10-11: Orientalis outlined, 24 new nations, 667 new
-  states; before: 16,646 provinces, 2,073 states, 119 countries (Araseos' last islet to
+- 21,084 provinces (20,683 land, 363 sea, 38 lakes), 2,629 states, 122 strategic regions
+  (42 sea), 143 countries (2026-10-12: Merlo's sea, the wrap made seamless; before:
+  21,366 provinces (645 sea), 91 strategic regions (11 sea) (2026-10-11: Orientalis
+  outlined, 24 new nations, 667 new states; before: 16,646 provinces, 2,073 states, 119 countries (Araseos' last islet to
   Terreich); before: 2,074 states, 120
   countries (2026-10-09, later still: the Oriental Territories, and the
   Midtierre isles re-cut for Peatiktist); before: 16,625 provinces, 2,073 states, 119

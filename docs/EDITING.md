@@ -47,6 +47,7 @@ files and so on). The build writes all of them.
 | **Continents** | which continent each land province belongs to | No: blanks are filled in |
 | **Provinces** | every province's shape | **Yes: the most important layer** |
 | **Strategic Regions** | weather and air/naval zones | No: blanks are filled in |
+| **Ocean Province Lines** | the borders between sea provinces, as red lines (Merlo's) | Yes: lines must close |
 | **States** | states: what a country owns, and where factories go | No: blanks are filled in |
 | **Countries** | who owns each state at the start | No: blanks are filled in |
 | **Notes (ignored by the build)** | nothing: the old drawing's country colours, for reference | – |
@@ -60,6 +61,8 @@ Necessary Terrain are kept for later province and terrain detail). Anything with
 for you. The build ignores every layer whose name it doesn't know.
 
 On the **Provinces** layer the sea provinces are blues, so sea is easy to tell from land.
+They are made from the **Ocean Province Lines** layer (see "Sea provinces" below), so
+change sea borders there rather than on Provinces.
 
 "Blanks are filled in" means: if you leave a spot transparent, it joins whatever is
 painted nearest to it, and the build tells you where it did that.
@@ -241,11 +244,27 @@ In the game a flag is only 82×52 pixels (a 1.58:1 rectangle), and much smaller 
 map. A flag of another shape gets squashed, and fine detail turns to noise. The best
 flags are about that shape, with bold shapes.
 
+### Sea provinces
+
+The sea provinces are hand-drawn (Merlo, 2026-10-12): on the **Ocean Province Lines**
+layer, red lines divide the sea, and every area they close off is one sea province. To
+change them, draw or erase lines there, and tell me: I turn the lines into provinces
+(`scripts/sea_provinces.py`), which the build doesn't do by itself.
+
+- **Close every line.** An area that leaks into its neighbour merges with it.
+- **Keep areas smaller than 1/8 of the map** (640 × 320 px). A bigger one is cut by
+  wobbly lines automatically, and the cuts are drawn onto the layer.
+- **The map wraps at its left and right edges.** A line that meets one edge should meet
+  the other at the same height; the script makes them meet exactly, and puts the two
+  provinces facing each other across the wrap in the same sea region.
+
 ### Strategic Regions
 
-The sea regions are the oceans of your ocean map, one region each, and are named after
-them. Names are tied to each region's colour: paint part of an ocean in a new blue and
-the new region gets a plain name like "Sea Zone 3" until names are added for it.
+The sea regions are groups of about nine sea provinces inside each ocean of your ocean
+map (Merlo's, 2026-10-12), named after their ocean and numbered west to east, like
+"North Demetric 1"; the Piscary and Norlany seas are one region each. Names are tied to
+each region's colour (in `source/region_names.json`): paint part of a region in a new blue
+and the new region gets a plain name like "Sea Zone 3" until names are added for it.
 
 One colour per region. Weather, air zones and naval zones work per region. **Sea zones
 are painted in blues, land regions in anything but blue**, so they are easy to tell

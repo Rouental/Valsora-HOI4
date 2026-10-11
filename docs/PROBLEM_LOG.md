@@ -206,6 +206,23 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## Map problems found while building
 
+**The sea didn't meet across the wrap** (2026-10-12, Merlo's update)
+- Cause: Merlo drew the sea borders near the left and right edges separately. Of about
+  13 borders reaching each edge, 5 met their partner exactly, 4 within 8 px, 3 were
+  16-43 px apart, and 2 on the right edge had none; short line bits ran along the edge
+  columns themselves, so one big province touched the right edge only through 18 rows
+  of line pixels; and the provinces facing each other across the wrap were in different
+  sea regions on 71 % of the rows (and the oceans' borders met the edges at different
+  rows).
+- Fix: `sea_provinces.py seam`: borders meet the two edges at the same rows (halfway
+  between, or continued across the wrap), the sliver is pulled back, the lines near the
+  edges are redrawn from the result, and the provinces facing each other share a region.
+  A first try cut the sliver's province 28 px deep with straight lines; its neck is 5 px
+  deep, which is all that goes now.
+- Also: Merlo's two scripts point at folders on his machine, so `sea_provinces.py` does
+  their job here. Two of his provinces are 312-313 px tall, over his own cutting margin
+  (311) but under HOI4's limit (320): areas are cut only within 3 px of the limit.
+
 **Two leaders named after words in a comment** (2026-10-11)
 - Cause: vanilla's German and Russian name lists have comment lines inside them ("# From
   VGE"), and `cultures.py` read every word between the braces as a name, so Daravon's

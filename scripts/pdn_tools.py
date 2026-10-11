@@ -42,7 +42,9 @@
     python3 scripts/pdn_tools.py sea_zones [CELL]
         Regroup all sea provinces into larger sea regions (about CELL px across, default
         1536), and recolour the Strategic Regions layer so sea regions are blues and land
-        regions never are.
+        regions never are. Refused on a map with Merlo's "Ocean Province Lines" layer
+        (2026-10-12): its 42 sea regions would be lost (scripts/sea_provinces.py handles
+        the sea now).
 
 The .pdn is decoded to work/pdn_tools, edited, and saved over itself (its own object
 graph is the template, so layer names, order and visibility are kept).
@@ -479,6 +481,8 @@ def main():
     elif cmd == "channel":
         channel(names, L, [tuple(int(v) for v in a.split(",")) for a in sys.argv[2:]])
     elif cmd == "sea_zones":
+        if "Ocean Province Lines" in L:
+            sys.exit("the sea regions are Merlo's now (scripts/sea_provinces.py): not regrouped")
         sea_zones(names, L, int(sys.argv[2]) if len(sys.argv) > 2 else 1536)
     else:
         sys.exit(__doc__)

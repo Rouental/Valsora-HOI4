@@ -1,5 +1,9 @@
 """Sea regions from the author's ocean map (by hand): one region per ocean, unsplit.
 
+RETIRED (2026-10-12): the sea is now Merlo's hand-drawn provinces in 42 regions (the
+"Ocean Province Lines" layer, scripts/sea_provinces.py). This would put back one region
+per ocean, so it refuses to run on a map with that layer unless given --force.
+
     python3 scripts/strategic_regions.py        # edits source/HOI4 Mod Map.pdn in place
 
 Each sea province takes the ocean it lies in on source/ref_oceans.webp, and every ocean
@@ -18,6 +22,7 @@ Region names go to source/region_names.json (colour -> name), read by build_mod.
 """
 import colorsys
 import json
+import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 
@@ -172,6 +177,9 @@ def place_names(centres, base):
 
 def main():
     names, L = T.load()
+    if "Ocean Province Lines" in L and "--force" not in sys.argv:
+        sys.exit("The sea regions are Merlo's now (scripts/sea_provinces.py); this would "
+                 "put back one region per ocean. Run with --force to do it anyway.")
     code = T.code
     P = code(L["Provinces"][..., :3])
     ter = code(L["Terrain"][..., :3])
