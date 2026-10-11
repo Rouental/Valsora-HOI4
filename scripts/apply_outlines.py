@@ -219,9 +219,8 @@ OWNERS_0910B = {"peatiktist": [(634, 1464), (670, 1494), (715, 1513), (692, 1479
 # the author circled in red east of it (Myehn's, 49 of them) and three bits of other
 # countries: TP in Kianhua (Terreich's), KR at the tip of Arpino's south (Krionik's) and
 # ES on the north coast (Estande's). The peninsula beside Tenkyoku, labelled AC, is
-# Charity's now (it was in LEAVE). The SH islets east of the circle (Shinnokawa, not
-# yet a nation) are left alone. One seed per patch the lines enclose.
-OWNERS = {
+# Charity's now (it was in LEAVE). One seed per patch the lines enclose.
+OWNERS_1011 = {
     "gorduchai": [(3527, 1247)],
     "sarkis": [(4263, 1000), (4660, 774), (4059, 952), (4853, 960), (3883, 992),
                (3889, 1331)],
@@ -265,6 +264,9 @@ OWNERS = {
     "krionik": [(4277, 2255)],
     "estande": [(4177, 794)],
 }
+# 2026-10-11, later: the six SH islets east of Myehn's circle are Shinnokawa's (author)
+OWNERS = {"shinnokawa": [(5005, 1662), (5017, 1671), (5028, 1675), (5037, 1680), (5048, 1684),
+                         (5060, 1688)]}
 OWNERS_0410 = {
     "anglost": [(528, 1283), (607, 1287), (509, 1335), (436, 1342), (506, 1363), (474, 1379),
                 (516, 1386), (563, 1388), (626, 1425), (583, 1428), (654, 1430), (658, 1421),

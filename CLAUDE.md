@@ -556,7 +556,7 @@ mismatch, missing localisation) and catches all of them.
     Haidao HDO ("the Associated City of Haidao", Liberalism); Kuran KRN (Vanguardism, "the
     Red Mountains of Kuran"), Red Path RDP (Vanguardism, "the People's Republic of
     Kianhua", the three RP patches), Kianhua KNH (Liberalism, "the United States of
-    Kianhua"; the author's message spelled it "Kainhua" there), Charity CRT (Absolute
+    Kianhua"; "Kainhua" in the author's message was a typo), Charity CRT (Absolute
     Monarchy, "the Empire of Charitia", with the AC islands and the peninsula beside
     Tenkyoku, which was in `LEAVE`), Kaizan KZN (Personal Union, Charity's puppet), Sho
     SHO (Oligarchy, "the Kingdom of the Sho Dynasty"), Uyizar UYZ and Yatar YTR
@@ -569,12 +569,13 @@ mismatch, missing localisation) and catches all of them.
     Pinzahao"), Ganden GND (Fascism) and Arpino ARP (Enlightened Absolutism, "the United
     Empire of Arpino", with the AR islands). Three bits of other countries: TP in
     Kianhua (Terreich's), KR at the tip of Arpino's south (Krionik's) and the ES cape on
-    the north coast (Estande's, now outlined). Left for the author: Shinnokawa (SH, four
-    islets east of the circle, labelled but not in the list) and the unlabelled land
-    (the south-west's big island and peninsula, the islands between Krionik's and
-    Plaija) stay Orientalis. Cultures: our own Chinese list `CHN` (family name first;
+    the north coast (Estande's, now outlined). Then (author) **Shinnokawa** SHN ("the
+    Empire of Shinnokawa", Absolute Monarchy): the six SH islets east of the circle, one
+    state. The unlabelled land (the south-west's big island and peninsula, the islands
+    between Krionik's and Plaija, about 125,000 px) stays Orientalis for now: the author
+    will fill it later. Cultures: our own Chinese list `CHN` (family name first;
     vanilla's is family names only) for QNG XUE HLG ASC HDO KRN RDP KNH CRT DHI PZH;
-    Japanese for TSU KZN SHO (Sho after Ryukyu's Shō dynasty), Korean WAN, Buryat GOR (a
+    Japanese for TSU KZN SHO SHN (Sho after Ryukyu's Shō dynasty), Korean WAN, Buryat GOR (a
     lamaist Mongol monarchy, like the Bogd Khanate), Armenian SRK, Uzbek UYZ, Kazakh YTR,
     Burmese MYH, Vietnamese PLJ, our own Tibetan `TBT` for GND, and Indian ARP (vanilla's
     Raj names and portraits, commonwealth gfx); KOR ARM UZB KAZ BRM VIN RAJ were copied

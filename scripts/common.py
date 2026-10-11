@@ -212,6 +212,7 @@ COUNTRIES = {
     "pinzahao": ("PZH", "Pinzahao", "Pinzahao", (240, 170, 200)),
     "ganden": ("GND", "Ganden", "Gandenese", (110, 80, 50)),
     "arpino": ("ARP", "Arpino", "Arpinese", (52, 150, 52)),
+    "shinnokawa": ("SHN", "Shinnokawa", "Shinnokawan", (250, 90, 70)),  # added later that day
 }
 # The placeholder countries, one per continent, are the recommended starts in the
 # bookmark; the rest are playable but not listed there.

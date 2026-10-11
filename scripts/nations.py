@@ -250,7 +250,7 @@ LEADERS = {
     "CRT": ["despotism"], "KNH": ["liberalism"], "RDP": ["leninism"], "KZN": ["personal_union"],
     "SHO": ["oligarchism"], "UYZ": ["khanate"], "YTR": ["khanate"], "MYH": ["conservatism"],
     "PLJ": ["marxism"], "PZH": ["radical_republicanism"], "GND": ["fascism_ideology"],
-    "ARP": ["enlightened_absolutism"],
+    "ARP": ["enlightened_absolutism"], "SHN": ["despotism"],
     "SEE": ["theocrat"],
     # 2026-10-07 (author)
     "MGD": ["personal_union"], "TCN": ["oligarchism"], "PTK": ["strongman_rule"],
@@ -593,7 +593,7 @@ FORMAL_NAMES = {
     "DHI": "the Island Principalities of Daihai",
     "TSU": "the Most Serene Republic of Tsuruma",
     "CRT": "the Empire of Charitia",
-    "KNH": "the United States of Kianhua",  # the author's message has "Kainhua" here
+    "KNH": "the United States of Kianhua",
     "RDP": "the People's Republic of Kianhua",  # Red Path
     "KZN": "the Kingdom of Kaizan",
     "SHO": "the Kingdom of the Sho Dynasty",
@@ -604,6 +604,7 @@ FORMAL_NAMES = {
     "PZH": "the Liberated Peoples of Pinzahao",
     "GND": "the Republic of Ganden",
     "ARP": "the United Empire of Arpino",
+    "SHN": "the Empire of Shinnokawa",
 }
 
 LOCALISATION = [

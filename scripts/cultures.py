@@ -192,7 +192,8 @@ TAG_CULTURE = {
     # family names only, its Tibetan one eleven names and two titles)
     **{t: dict(names="CHN", portraits="asia", gfx="asian")
        for t in ("QNG", "XUE", "HLG", "ASC", "HDO", "KRN", "RDP", "KNH", "CRT", "DHI", "PZH")},
-    **{t: dict(names="JAP", portraits="asia", gfx="asian") for t in ("TSU", "KZN", "SHO")},  # Sho: Ryukyu's Shō dynasty
+    **{t: dict(names="JAP", portraits="asia", gfx="asian")
+       for t in ("TSU", "KZN", "SHO", "SHN")},  # Sho: Ryukyu's Shō dynasty
     "WAN": dict(names="KOR", portraits="asia", gfx="asian"),  # the peninsula facing Tenkyoku
     "GOR": dict(names="BYA", portraits="asia", gfx="asian"),  # a lamaist Mongol monarchy, like the Bogd Khanate
     "SRK": dict(names="ARM", portraits="europe", gfx="eastern_european"),  # Sarkis, an Armenian name
