@@ -30,7 +30,7 @@ CULTURE_NAMES = {
     "ALB": "Albanian", "MAC": "Macedonian", "UKR": "Ukrainian", "FIN": "Finnish",
     "LAT": "Latvian", "LIT": "Lithuanian", "GRE": "Greek", "BYA": "Buryat", "HUN": "Hungarian",
     "CHN": "Chinese", "TBT": "Tibetan", "KOR": "Korean", "ARM": "Armenian", "UZB": "Uzbek",
-    "KAZ": "Kazakh", "BRM": "Burmese", "VIN": "Vietnamese", "RAJ": "Indian"}
+    "KAZ": "Kazakh", "BRM": "Burmese", "VNM": "Vietnamese", "RAJ": "Indian"}
 
 
 def loc():
@@ -75,6 +75,18 @@ def rows():
         for target, kind in re.findall(r"set_autonomy = \{ target = (\w+) autonomous_state = autonomy_(\w+)",
                                        f.read_text(encoding="utf-8")):
             puppets[target] = (f.name[:3], kind)
+    # factions at the start: tag -> (faction name, leads it)
+    tmpl = {}
+    for f in (MOD / "common/factions/templates").glob("*.txt"):
+        tmpl.update(re.findall(r"^(\w+) = \{\s*name = (\w+)", f.read_text(encoding="utf-8"), re.M))
+    faction = {}
+    for f in (MOD / "history/countries").glob("*.txt"):
+        t = f.read_text(encoding="utf-8")
+        for tp in re.findall(r"create_faction_from_template = (\w+)", t):
+            name = L.get(tmpl.get(tp, tp), tp)
+            faction[f.name[:3]] = (name, True)
+            for m in re.findall(r"add_to_faction = (\w+)", t):
+                faction[m] = (name, False)
     out = []
     for f in sorted((MOD / "history/countries").glob("*.txt")):
         tag = f.name[:3]
@@ -86,6 +98,8 @@ def rows():
         note = []
         if tag in puppets:
             note.append(f"{puppets[tag][1]} of {L.get(puppets[tag][0], puppets[tag][0])}")
+        if tag in faction:
+            note.append(("leads " if faction[tag][1] else "in ") + faction[tag][0])
         if not states.get(tag):
             note.append("no land at the start (releasable or civil war)")
         out.append(dict(tag=tag, name=L.get(tag, tag), full=L.get(tag + "_DEF", ""),

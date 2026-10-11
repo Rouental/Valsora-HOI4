@@ -577,12 +577,19 @@ mismatch, missing localisation) and catches all of them.
     vanilla's is family names only) for QNG XUE HLG ASC HDO KRN RDP KNH CRT DHI PZH;
     Japanese for TSU KZN SHO SHN (Sho after Ryukyu's Shō dynasty), Korean WAN, Buryat GOR (a
     lamaist Mongol monarchy, like the Bogd Khanate), Armenian SRK, Uzbek UYZ, Kazakh YTR,
-    Burmese MYH, Vietnamese PLJ, our own Tibetan `TBT` for GND, and Indian ARP (vanilla's
-    Raj names and portraits, commonwealth gfx); KOR ARM UZB KAZ BRM VIN RAJ were copied
-    into `vanilla_names.txt` from vanilla. The members of the Great Lake Republics and of
+    Burmese MYH, our own Vietnamese `VNM` for PLJ (family name first too), our own
+    Tibetan `TBT` for GND, and Indian ARP (vanilla's Raj names and portraits, commonwealth
+    gfx); KOR ARM UZB KAZ BRM RAJ were copied into `vanilla_names.txt` from vanilla, and
+    its Buryat list's one name in curly quotes was given straight ones (Gorduchai's
+    leader showed them). The members of the Great Lake Republics and of
     the Synthesist Internationale start with 40 % for their (and their leader's) ideology
-    (`nations.POPULARITIES`), a precaution after Lanzerac and Guedelon. States: STATES_1011
-    (`dist/preview_new_nations_orientalis.png`). The upload predated Araseos 1's move to
+    (`nations.POPULARITIES`), a precaution after Lanzerac and Guedelon. States: Sarkis 198,
+    Arpino 109, Plaija 65, Myehn 63, Charity 56, Kianhua 53, Qingou 24, Uyizar 16, Sho 13,
+    Xuè 12, Yatar 7, Gorduchai, Ganden, Pinzahao, Red Path and Tsuruma 6 each, Wanea 5,
+    Kaizan 4, Hulinguo 3, Kuran 2, the Associated Cities, Haidao, Daihai and Shinnokawa 1
+    each, and one each for Terreich, Krionik and Estande: 667 in all
+    (`dist/preview_new_nations_orientalis.png`). Wanea's line carves a tongue of land
+    south-east of it out to Sarkis, as drawn. The upload predated Araseos 1's move to
     Terreich, so `pdn_tools.py attach` was run again.
     All tags were checked against vanilla `common/country_tags`; new tags must be too.
   - The adjectives of the neighbours are guesses; the author may rename them.
@@ -1005,8 +1012,10 @@ in git history (commit d2d6cd8, `scripts/cartographic.py`). It used
 
 ## Current state
 
-- 16,646 provinces (15,963 land, 645 sea, 38 lakes), 2,073 states, 91 strategic regions
-  (11 sea), 119 countries (Araseos' last islet to Terreich; before: 2,074 states, 120
+- 21,366 provinces (20,683 land, 645 sea, 38 lakes), 2,629 states, 91 strategic regions
+  (11 sea), 143 countries (2026-10-11: Orientalis outlined, 24 new nations, 667 new
+  states; before: 16,646 provinces, 2,073 states, 119 countries (Araseos' last islet to
+  Terreich); before: 2,074 states, 120
   countries (2026-10-09, later still: the Oriental Territories, and the
   Midtierre isles re-cut for Peatiktist); before: 16,625 provinces, 2,073 states, 119
   countries (2026-10-09, later: fourteen new); before: 14,812 provinces

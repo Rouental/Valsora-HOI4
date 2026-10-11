@@ -206,17 +206,22 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## Map problems found while building
 
-**Vanilla's Chinese and Tibetan name lists; famous names in others** (2026-10-11)
+**Vanilla's Chinese, Vietnamese and Tibetan name lists; famous names in others** (2026-10-11)
 - Cause: vanilla's Chinese list (CHI, and its copies for the warlords) has family names
   in both its given-name and surname lists, so every generated Chinese name is two
-  family names ("Wang Zhao"); its Tibetan list is eleven names, with two titles (Dzasa,
-  Rinpoche) among the surnames. Some lists hold famous people's names: the Indian one
+  family names ("Wang Zhao"); its Vietnamese one has a middle name (Văn) among its given
+  names, so Plaija's leader came out "Văn Nu"; its Tibetan list is eleven names, with two
+  titles (Dzasa, Rinpoche) among the surnames; its Buryat one has a name in curly quotes,
+  which Gorduchai's leader showed ("“Dashi-dorzho” Barannikov"). Some lists hold famous
+  people's names: the Indian one
   Gandhi, Modi and "Neru" (beside "Mohandas"), the Burmese one "Suukyi", the Armenian
   one Nzhdeh and Kajaznuni (beside Garegin and Hovhannes).
-- Fix: our own Chinese (`CHN`) and Tibetan (`TBT`) lists in `custom_names.txt`. The
-  Chinese one has the family names where the game takes the first name, so names read
-  family name first, as Chinese names do ("Wang Zhiyuan"). The famous names are in
-  `cultures.NOT_SURNAMES`, so no leader of ours carries them.
+- Fix: our own Chinese (`CHN`), Vietnamese (`VNM`) and Tibetan (`TBT`) lists in
+  `custom_names.txt`. The Chinese and Vietnamese ones have the family names where the
+  game takes the first name, so names read family name first, as they do in those
+  languages ("Wang Zhiyuan", "Trần Văn Hùng"). The Buryat name has straight quotes in
+  `vanilla_names.txt`. The famous names are in `cultures.NOT_SURNAMES`, so no leader of
+  ours carries them.
 
 **Faction members with 20 % for their leader's ideology** (2026-10-11, a precaution)
 - Cause: every country starts with 20 % for each ideology, and a faction member likely

@@ -188,8 +188,8 @@ TAG_CULTURE = {
     "SKL": dict(names="GRE", portraits="europe", gfx="eastern_european"),
     "TKY": dict(names="JAP", portraits="asia", gfx="asian"),
     # 2026-10-11: Arpino Indian (author, like vanilla's Raj); the rest Claude's guesses
-    # from the names. Chinese and Tibetan are our own lists (vanilla's Chinese one is
-    # family names only, its Tibetan one eleven names and two titles)
+    # from the names. Chinese, Vietnamese and Tibetan are our own lists (vanilla's
+    # Chinese one is family names only, its Tibetan one eleven names and two titles)
     **{t: dict(names="CHN", portraits="asia", gfx="asian")
        for t in ("QNG", "XUE", "HLG", "ASC", "HDO", "KRN", "RDP", "KNH", "CRT", "DHI", "PZH")},
     **{t: dict(names="JAP", portraits="asia", gfx="asian")
@@ -200,7 +200,7 @@ TAG_CULTURE = {
     "UYZ": dict(names="UZB", portraits="asia", gfx="asian"),  # Uzbek, the nearest vanilla list to Uyghur
     "YTR": dict(names="KAZ", portraits="asia", gfx="asian"),  # Kazakh, a Kipchak language like Tatar
     "MYH": dict(names="BRM", portraits="asia", gfx="asian"),  # Burmese, after Myanma
-    "PLJ": dict(names="VIN", portraits="asia", gfx="asian"),  # Vietnamese ("plei", a highland village)
+    "PLJ": dict(names="VNM", portraits="asia", gfx="asian"),  # Vietnamese ("plei", a highland village)
     "GND": dict(names="TBT", portraits="asia", gfx="asian"),  # Ganden, a Tibetan monastery
     "ARP": dict(names="RAJ", portraits="india", gfx="commonwealth"),
 }

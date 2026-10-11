@@ -59,3 +59,24 @@ TBT = {
 	}
 	callsigns = { }
 }
+
+# Vietnamese (2026-10-11, Claude's: Plaija). Like Chinese ones, Vietnamese names put the
+# family name first, so the family names are the `names` and the middle and given names
+# the `surnames`. Vanilla's list mixes a middle name (Văn) into its given names, and
+# famous people's names are left out here (no Chí Minh, Tất Thành, Đức Thắng ...)
+VNM = {
+	male = {
+		names = {
+			Nguyễn Trần Lê Phạm Hoàng Huỳnh Phan Vũ Võ Đặng Bùi Đỗ Hồ Ngô Dương Lý Đinh Trịnh Mai Đoàn Tạ Châu Lâm Kiều La Thái Hà Quách Vương Phùng Từ Âu Lục Mạc Thân Triệu
+		}
+	}
+	female = {
+		names = {
+			Nguyễn Trần Lê Phạm Hoàng Huỳnh Phan Vũ Võ Đặng Bùi Đỗ Hồ Ngô Dương Lý Đinh Trịnh Mai Đoàn Tạ Châu Lâm Kiều La Thái Hà Quách Vương Phùng Từ Âu Lục Mạc Thân Triệu
+		}
+	}
+	surnames = {
+		"Văn Hùng" "Văn Minh" "Quang Huy" "Minh Tuấn" "Hữu Phước" "Thanh Sơn" "Công Thành" "Đình Khoa" "Quốc Bảo" "Văn Thắng" "Ngọc Lâm" "Hoàng Nam" "Bá Tùng" "Trọng Nghĩa" "Mạnh Hùng" "Hồng Quân" "Anh Tuấn" "Hải Đăng" "Gia Bảo" "Khắc Hiếu" "Văn Tài" "Minh Khôi" "Quang Vinh" "Hữu Tâm" "Văn Hải" "Xuân Bách" "Tuấn Kiệt" "Phúc Hưng" "Trung Kiên" "Đình Phong" "Hữu Nghĩa" "Văn Lộc" "Minh Quân" "Văn Đức" "Văn Thành" "Minh Hiếu" "Quốc Việt" "Văn Phú" "Hữu Lộc" "Thanh Bình" "Văn Sáng" "Quang Đạt" "Văn Khánh" "Minh Đạo" "Quốc Hưng" "Hữu Đạt" "Minh Phát" "Thanh Hải" "Văn Kiên" "Đức Tài"
+	}
+	callsigns = { }
+}

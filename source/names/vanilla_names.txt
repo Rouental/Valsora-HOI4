@@ -1,5 +1,7 @@
 # Name lists copied from vanilla HOI4 1.19.3 common/names/00_names.txt, one block per
 # culture. scripts/cultures.py renames them to our tags.
+# One fix: vanilla's Buryat list has a name in curly quotes (“Dashi-dorzho”), which
+# the game and our scripts would show with the quotes; here they are straight.
 
 FRA = {
 	male = {
@@ -1524,7 +1526,7 @@ GRE = {
 BYA = {
 	male = {
 		names = {
-			Agvan Aldar Arya Ayur Azarga Badma Badmazhep Bair Baldan Balzhinima Bashiila Bayan Belikto Bidia Borogshon Bukha Bulud Bulgan Damba Dashi “Dashi-dorzho” Dorzho Ekhin Ekir Eshegen Eshi Guluun Galsan Khermen Mergen Nima Osor Rinchin Sambuu Shono Solbon Tekhe Tsydenzhap Urzhin Yeshinhorlo Zhargal Zorikto
+			Agvan Aldar Arya Ayur Azarga Badma Badmazhep Bair Baldan Balzhinima Bashiila Bayan Belikto Bidia Borogshon Bukha Bulud Bulgan Damba Dashi "Dashi-dorzho" Dorzho Ekhin Ekir Eshegen Eshi Guluun Galsan Khermen Mergen Nima Osor Rinchin Sambuu Shono Solbon Tekhe Tsydenzhap Urzhin Yeshinhorlo Zhargal Zorikto
 		}
 	}
 	female = {
@@ -1657,21 +1659,6 @@ BRM = {
 		Amar Aris Aung Awng Aye Bandoola Bayinnaung Bedu Chan Chit Chun Dala Gaing Gambira Gordeno Gyan Gyaw Gyi Gywe Han Hein Hla Hlaing Ho HHtaik Htay Htoo Htoon Htun Khaing Khin Ko Koko Kyi Kyi Kywe Lai Latt "Law-Yone" Lay
 		Loo Lwin Lin Mar Maung May Mg Mie Min Mindon Moe Myint Naing Naung Nu Nway Nyan Nyein Nyunt Ohmar Oo Pe Pha Phan Pu Pwint Sa San Sein Shin Shwe Soe Sofaer Suukyi Swe Sweet Tein Thaik Than Thant Thaung Thaw Thein Thet
 		Tin Thon Thu Thura Tin Toe Tong Tun U Uttla Wa Win Yin Yoe Yu Zarni Zaw Zun
-	}
-	callsigns = { }
-}
-
-VIN = {
-	male = {
-		names = {
-			Lợi Ánh Thuyet Dũng Giáp Xuân Vinh Tuân Văn Toàn Quang Liêm Ngoc Trường Son Thuyet Quốc
-		}
-	}
-	female = {
-		names = { Trần Kim Thị Ánh Viên Liễu Ninh }
-	}
-	surnames = {
-		Nguyễn Trần Lê Pham Hoàng Huỳnh Vũ Võ Phan Trương Bùi Đang Đo Ngô Hồ Duong Đinh Lý Kieu Luc Đái Mao Khong Tôn Nu
 	}
 	callsigns = { }
 }
