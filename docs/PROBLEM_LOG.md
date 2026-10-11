@@ -206,6 +206,15 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## Map problems found while building
 
+**Two leaders named after words in a comment** (2026-10-11)
+- Cause: vanilla's German and Russian name lists have comment lines inside them ("# From
+  VGE"), and `cultures.py` read every word between the braces as a name, so Daravon's
+  leader was "VGE Eisele" and Kurikia's "Nikita Russian". The game itself skips
+  comments, so its own generated generals were fine.
+- Fix: a drawn name that is a comment word is drawn again. The words stay in the lists
+  as read, so no other leader's name changed: Daravon's is now Arthur Ziegler, Kurikia's
+  Nikolay Giligashvili.
+
 **Vanilla's Chinese, Vietnamese and Tibetan name lists; famous names in others** (2026-10-11)
 - Cause: vanilla's Chinese list (CHI, and its copies for the warlords) has family names
   in both its given-name and surname lists, so every generated Chinese name is two

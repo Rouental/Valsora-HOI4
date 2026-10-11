@@ -311,6 +311,17 @@ def _names(culture):
             [n for n in _tokens(sur) if n not in NOT_SURNAMES])
 
 
+def _comment_words(culture):
+    """Words on comment lines inside the culture's names ("# From VGE" in vanilla's German
+    and Russian lists). _names keeps them, so that the draws, and every leader's name, stay
+    as they were; leaders() draws again when it meets one (2026-10-11: Daravon's leader
+    was "VGE Eisele")."""
+    b = re.search(rf"^{culture} = \{{(.*?)^\}}", _names_text(), re.S | re.M).group(1)
+    male = re.search(r"male\s*=\s*\{\s*names\s*=\s*\{(.*?)\}", b, re.S).group(1)
+    sur = re.search(r"surnames\s*=\s*\{(.*?)\}", b, re.S).group(1)
+    return set(_tokens(" ".join(re.findall(r"#[^\n]*", male + "\n" + sur))))
+
+
 def leaders(tag, continent, subtypes, ideology_of, used, named=None):
     """Characters for a country's leaders: a name from its culture's list and a generic
     portrait of its culture, per subtype. Returns (character blocks, loc lines, ids).
@@ -321,6 +332,7 @@ def leaders(tag, continent, subtypes, ideology_of, used, named=None):
     import numpy as np
     c = culture(tag, continent)
     first, last = _names(c["names"])
+    comment = _comment_words(c["names"])
     rng = np.random.default_rng(zlib.crc32(tag.encode()))
     blocks, loc, ids = [], [], []
     for sub in subtypes:
@@ -330,8 +342,9 @@ def leaders(tag, continent, subtypes, ideology_of, used, named=None):
         # any politician of the culture (a single ideology's list is one or two faces)
         pool = sorted({p for v in REGIONS[c["portraits"]]["political"].values() for p in v})
         while True:  # no two leaders share a full name (`used` spans every country)
-            name = f"{first[rng.integers(len(first))]} {last[rng.integers(len(last))]}"
-            if name not in used:
+            a, b = first[rng.integers(len(first))], last[rng.integers(len(last))]
+            name = f"{a} {b}"
+            if name not in used and a not in comment and b not in comment:
                 used.add(name)
                 break
         face = pool[rng.integers(len(pool))]
