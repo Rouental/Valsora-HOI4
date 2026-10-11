@@ -517,9 +517,9 @@ mismatch, missing localisation) and catches all of them.
     `vanilla_names.txt` from vanilla (its BLR list is part of SOV's, so it was not used).
     States: Sanada 84, Volstokn 61, Belka 39, Brethren 20, Kieska 13, Pakitsk 9, Ryśny 8,
     Kamyachyn 5, Skillia 4, Vilna 3, Zoluzeme 2, West Sminishia 2, Sombor 1, Tenkyoku 1
-    (`dist/preview_new_nations_yastreovakia_northeast.png`, `..._orientalis.png`). Left
-    for the author: the ES on Orientalis' north coast at (4178, 793) has no line around
-    it, and four unlabelled islets off the new coasts stay Yastreovakia's. The same day's
+    (`dist/preview_new_nations_yastreovakia_northeast.png`). Left for the author: the ES
+    on Orientalis' north coast at (4178, 793) had no line around it (it has since
+    2026-10-11), and four unlabelled islets off the new coasts stay Yastreovakia's. The same day's
     flag file brought Belka's flag and redrawn Artzen and Daravon flags. Its update to
     Serie's (four gold anchors in the corners) was missed at first: `import_flags.py`
     called a flag unchanged under a mean difference of 3. With the new test, Krionik
@@ -544,6 +544,45 @@ mismatch, missing localisation) and catches all of them.
     to Terreich, joining its nearest state (`pdn_tools.py attach terreich 935,1862`), so
     ARS is no longer in the mod; and Ungar became Hungarian (HUN names, copied into
     `vanilla_names.txt` from vanilla).
+    **2026-10-11** (the author's names, governments and formal names; tags, colours,
+    adjectives and cultures Claude's, but Arpino's Indian culture the author's):
+    **Orientalis outlined**, all but its south-west. Gorduchai GOR (Clerical Monarchism,
+    "the Holy Kingdom of Gorduchai", the island west of Orientalis), Sarkis SRK
+    (Revanchism, "the People's State of Sarkis", with the SR islets), Wanea WAN
+    (Agrarianism), **the Great Lake Republics** (`faction_template_great_lake_republics`):
+    Qingou QNG (Liberalism, "the Qingou Republics", its leader), Xuè XUE (Conservatism;
+    the accent is the author's), Hulinguo HLG (Populism, "the Hulinguo Republic"), the
+    Associated Cities ASC ("the Associated Cities of Dahu and Jinhu", Liberalism) and
+    Haidao HDO ("the Associated City of Haidao", Liberalism); Kuran KRN (Vanguardism, "the
+    Red Mountains of Kuran"), Red Path RDP (Vanguardism, "the People's Republic of
+    Kianhua", the three RP patches), Kianhua KNH (Liberalism, "the United States of
+    Kianhua"; the author's message spelled it "Kainhua" there), Charity CRT (Absolute
+    Monarchy, "the Empire of Charitia", with the AC islands and the peninsula beside
+    Tenkyoku, which was in `LEAVE`), Kaizan KZN (Personal Union, Charity's puppet), Sho
+    SHO (Oligarchy, "the Kingdom of the Sho Dynasty"), Uyizar UYZ and Yatar YTR
+    (Khanate), Myehn MYH (Conservatism, "the Imperial Republic of Myehn"; with the 49
+    islands the author circled in red east of it, and an exclave on Plaija's west tip
+    its label sits on), Tsuruma TSU (Lordly Republic, "the Most Serene Republic of
+    Tsuruma", with the TS islands, one of them far south of Arpino), Daihai DHI
+    (Feudalism, "the Island Principalities of Daihai", the DI islets), Plaija PLJ
+    (Orthodox Marxism), Pinzahao PZH (Radical Republicanism, "the Liberated Peoples of
+    Pinzahao"), Ganden GND (Fascism) and Arpino ARP (Enlightened Absolutism, "the United
+    Empire of Arpino", with the AR islands). Three bits of other countries: TP in
+    Kianhua (Terreich's), KR at the tip of Arpino's south (Krionik's) and the ES cape on
+    the north coast (Estande's, now outlined). Left for the author: Shinnokawa (SH, four
+    islets east of the circle, labelled but not in the list) and the unlabelled land
+    (the south-west's big island and peninsula, the islands between Krionik's and
+    Plaija) stay Orientalis. Cultures: our own Chinese list `CHN` (family name first;
+    vanilla's is family names only) for QNG XUE HLG ASC HDO KRN RDP KNH CRT DHI PZH;
+    Japanese for TSU KZN SHO (Sho after Ryukyu's Shō dynasty), Korean WAN, Buryat GOR (a
+    lamaist Mongol monarchy, like the Bogd Khanate), Armenian SRK, Uzbek UYZ, Kazakh YTR,
+    Burmese MYH, Vietnamese PLJ, our own Tibetan `TBT` for GND, and Indian ARP (vanilla's
+    Raj names and portraits, commonwealth gfx); KOR ARM UZB KAZ BRM VIN RAJ were copied
+    into `vanilla_names.txt` from vanilla. The members of the Great Lake Republics and of
+    the Synthesist Internationale start with 40 % for their (and their leader's) ideology
+    (`nations.POPULARITIES`), a precaution after Lanzerac and Guedelon. States: STATES_1011
+    (`dist/preview_new_nations_orientalis.png`). The upload predated Araseos 1's move to
+    Terreich, so `pdn_tools.py attach` was run again.
     All tags were checked against vanilla `common/country_tags`; new tags must be too.
   - The adjectives of the neighbours are guesses; the author may rename them.
 - **State names** are the author's, in `source/state_names.json` ("x,y" of a pixel

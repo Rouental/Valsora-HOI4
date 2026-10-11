@@ -19,3 +19,43 @@ PLY = {
 	}
 	callsigns = { }
 }
+
+# Chinese (2026-10-11, Claude's: Qingou and its neighbours). Chinese names put the
+# family name first, and the game writes a generated name as <name> <surname>, so the
+# family names are the `names` here and the given names the `surnames`. No names of
+# famous people (no Mao, no Zhongshan, no Enlai ...)
+CHN = {
+	male = {
+		names = {
+			Wang Li Zhang Liu Chen Yang Huang Zhao Wu Zhou Xu Sun Ma Zhu Hu Guo He Gao Lin Luo Zheng Liang Xie Song Tang Han Feng Deng Cao Peng Zeng Xiao Tian Dong Yuan Pan Cai Jiang Yu Du Ye Cheng Wei Su Lü Ding Ren Shen Yao Lu Jin Fang Qiu Xia Tan Wen Fu Bai Kong Meng Qin Gu Hou Shao Long Duan Lei Qian Yan Dai Mo Kang Zou Xiong Jia Jiao Lai Hao Bao Shi Fan Qi
+		}
+	}
+	female = {
+		names = {
+			Wang Li Zhang Liu Chen Yang Huang Zhao Wu Zhou Xu Sun Ma Zhu Hu Guo He Gao Lin Luo Zheng Liang Xie Song Tang Han Feng Deng Cao Peng Zeng Xiao Tian Dong Yuan Pan Cai Jiang Yu Du Ye Cheng Wei Su Lü Ding Ren Shen Yao Lu Jin Fang Qiu Xia Tan Wen Fu Bai Kong Meng Qin Gu Hou Shao Long Duan Lei Qian Yan Dai Mo Kang Zou Xiong Jia Jiao Lai Hao Bao Shi Fan Qi
+		}
+	}
+	surnames = {
+		Zhiyuan Jianguo Wenhua Guoliang Deming Zhiqiang Haoran Jianhua Weiming Xiaodong Mingyuan Tianyi Jinhai Shaowen Zhenyu Hongwei Wenbin Guohua Yaozu Zhengyang Zhihao Ruiqi Haifeng Jiaming Zhenhua Xiangdong Bowen Dawei Chengzhi Kaiwen Shuwen Rongguang Hanqing Baoshan Wenjie Shengli Fuxing Zhongwei Huaiyuan Mingde Qiming Songlin Yuzhang Weiguo Huimin Zhaoyang Jingyu Zongwei Kangping Yanbin Shaohua Jiahui Peiyuan Hongji Yichen Wenzhong Guangyao Renjie Hanwen Xinyu Zhongyi Tianming Yongqiang Chengwu Jiaxiang Shiyuan Tingfeng Xuewen Boyang Yaoting Zhenguo Jinrong Haotian Weidong Yuheng Lianfeng Chunhua Shoucheng Jingwen Huaxin Dingyuan Kexin Mingxuan Ziyu Guanghui Yunfei Shilin
+	}
+	callsigns = { }
+}
+
+# Tibetan (2026-10-11, Claude's: Ganden). Tibetans carry two given names; the second
+# stands in as the surname. Vanilla's list is eleven names and two titles
+TBT = {
+	male = {
+		names = {
+			Tenzin Lobsang Ngawang Thubten Jampa Sonam Tsering Pema Kalsang Dawa Nyima Karma Dorje Tashi Jigme Gyurme Lhakpa Phuntsok Rinchen Samten Tsewang Wangdu Yeshe Gyaltsen Kunga Namgyal Ngodup Palden Phurbu Sangye Lhundup Dhondup Chophel Tsultrim Losang Jamyang Konchok Kelsang Sherab Tsetan Dakpa Dradul Gonpo Jangchub Topgyal Tharchin Chodak Lekshe Rabten Rigzin Thinley Paljor Pasang Tobgyal Trinley Tsondu Wangyal Yonten Zangpo
+		}
+	}
+	female = {
+		names = {
+			Dolma Pema Yangchen Dechen Lhamo Choden Kunsang Yangzom Tsomo Dolkar Sonam Dawa Pasang Dekyi Kalsang Norzin Tseyang Lhadon Diki Dhoka
+		}
+	}
+	surnames = {
+		Dorje Tashi Namgyal Dhondup Phuntsok Tsering Rinchen Gyaltsen Choephel Lhundup Tenzin Sherab Tharchin Topgyal Yonten Dhargyal Samdup Chodak Gyalpo Kelsang Lekshe Thinley Paljor Dakpa Nyandak Tsultrim Wangyal Rabgye Gyurme Choegyal Delek Gelek Jinpa Khedrup Lodro Mingyur Ngodrup Ozer Pasang Rigdzin Sangpo Tobgyal Trinley Tsondu Yeshi Zangpo Lhawang Namdak Phelgye Sonam Tsewang Wangchen Dawa
+	}
+	callsigns = { }
+}

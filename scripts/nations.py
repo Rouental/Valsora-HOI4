@@ -137,6 +137,11 @@ HISTORY = {
     # Daravon leads the Synthesist Internationale with Artzen and Scealand
     "DRV": ["create_faction_from_template = faction_template_synthesist_internationale",
             "add_to_faction = ESC", "add_to_faction = HWT"],
+    # 2026-10-11 (author): Kaizan is Charity's vassal, and Qingou leads the Great Lake
+    # Republics with Xuè, Hulinguo, the Associated Cities and Haidao
+    "CRT": ["set_autonomy = { target = KZN autonomous_state = autonomy_puppet }"],
+    "QNG": ["create_faction_from_template = faction_template_great_lake_republics",
+            *[f"add_to_faction = {t}" for t in ("XUE", "HLG", "ASC", "HDO")]],
 }
 
 # Country names while a given ideology rules: tag -> ideology -> (name, formal
@@ -238,6 +243,14 @@ LEADERS = {
     "RYS": ["agrarianism"], "PKT": ["strongman_rule"], "KSK": ["oligarchism"],
     "ZLZ": ["despotism"], "VIL": ["radical_republicanism"], "SMB": ["lordly_republic"],
     "SKL": ["agrarian_socialism"], "TKY": ["prophetic_rule"],
+    # 2026-10-11 (author)
+    "GOR": ["clerical_monarchism"], "SRK": ["revanchism"], "WAN": ["agrarianism"],
+    "QNG": ["liberalism"], "XUE": ["conservatism"], "HLG": ["populism"], "ASC": ["liberalism"],
+    "HDO": ["liberalism"], "KRN": ["leninism"], "DHI": ["feudalism"], "TSU": ["lordly_republic"],
+    "CRT": ["despotism"], "KNH": ["liberalism"], "RDP": ["leninism"], "KZN": ["personal_union"],
+    "SHO": ["oligarchism"], "UYZ": ["khanate"], "YTR": ["khanate"], "MYH": ["conservatism"],
+    "PLJ": ["marxism"], "PZH": ["radical_republicanism"], "GND": ["fascism_ideology"],
+    "ARP": ["enlightened_absolutism"],
     "SEE": ["theocrat"],
     # 2026-10-07 (author)
     "MGD": ["personal_union"], "TCN": ["oligarchism"], "PTK": ["strongman_rule"],
@@ -385,6 +398,13 @@ AI_STRATEGY = "".join(f"""VAL_reibonnaise_{a}_{b} = {{
 # Republics in the monarchist Association keep their monarchists strong
 POPULARITIES = {t: {"democratic": 40, "neutrality": 30, "fascism": 10, "communism": 10, "theocracy": 10}
                 for t in ("LZC", "GDN")}
+# ... and the members of the factions led by one of their own ideology (2026-10-11):
+# 40 % for it, 15 % for each other
+POPULARITIES.update({t: {i: 40 if i == ideo else 15 for i in ("democratic", "neutrality", "fascism",
+                                                               "communism", "theocracy")}
+                     for ideo, members in (("democratic", ("XUE", "HLG", "ASC", "HDO")),
+                                           ("communism", ("ESC", "HWT")))
+                     for t in members})
 
 # Every other country's starting army (author, 2026-10-02: "something according to their
 # size"): infantry divisions, about one per six states, 2 to 24
@@ -560,6 +580,30 @@ FORMAL_NAMES = {
     "SMB": "the Free City of Sombor",
     "SKL": "the Republic of Skillia",
     "TKY": "the Remnant of Tenkyoku",
+    # 2026-10-11 (author)
+    "GOR": "the Holy Kingdom of Gorduchai",
+    "SRK": "the People's State of Sarkis",
+    "WAN": "the Republic of Wanea",
+    "QNG": "the Qingou Republics",
+    "XUE": "the Republic of Xuè",
+    "HLG": "the Hulinguo Republic",
+    "ASC": "the Associated Cities of Dahu and Jinhu",
+    "HDO": "the Associated City of Haidao",
+    "KRN": "the Red Mountains of Kuran",
+    "DHI": "the Island Principalities of Daihai",
+    "TSU": "the Most Serene Republic of Tsuruma",
+    "CRT": "the Empire of Charitia",
+    "KNH": "the United States of Kianhua",  # the author's message has "Kainhua" here
+    "RDP": "the People's Republic of Kianhua",  # Red Path
+    "KZN": "the Kingdom of Kaizan",
+    "SHO": "the Kingdom of the Sho Dynasty",
+    "UYZ": "the Khanate of Uyizar",
+    "YTR": "the Khanate of Yatar",
+    "MYH": "the Imperial Republic of Myehn",
+    "PLJ": "the People's Republic of Plaija",
+    "PZH": "the Liberated Peoples of Pinzahao",
+    "GND": "the Republic of Ganden",
+    "ARP": "the United Empire of Arpino",
 }
 
 LOCALISATION = [
@@ -568,6 +612,7 @@ LOCALISATION = [
     ' ROU_accept_reality_desc:0 "The Cahuns bicker; the faithful pray. Mahaut VI answers the prayers."',
     ' VAL_reibonnaise_association:0 "The Association of Reibonnaise States"',
     ' VAL_synthesist_internationale:0 "The Synthesist Internationale"',
+    ' VAL_great_lake_republics:0 "The Great Lake Republics"',
     ' VAL_alliance_of_the_vale:0 "The Alliance of the Vale"',
     ' ROU_plans_for_cardonia:0 "Plans for Cardonia"',
     ' ROU_plans_for_cardonia_desc:0 "A war goal against Cardonia, for testing."',
@@ -1003,6 +1048,21 @@ ROU_FOCUS_TREE = """focus_tree = {
 # history. Goals, rules, manifest and icon are vanilla's (as in its generic template).
 FACTION_TEMPLATES = """faction_template_synthesist_internationale = {
 	name = VAL_synthesist_internationale
+	manifest = faction_manifest_strength_in_unity
+	icon = GFX_faction_logo_generic
+	visible = {
+		always = no
+	}
+	goals = {
+		faction_goal_a_military_base
+	}
+	default_rules = {
+		joining_rule_neighbors_only
+		change_leader_rule_manpower
+	}
+}
+faction_template_great_lake_republics = {
+	name = VAL_great_lake_republics
 	manifest = faction_manifest_strength_in_unity
 	icon = GFX_faction_logo_generic
 	visible = {

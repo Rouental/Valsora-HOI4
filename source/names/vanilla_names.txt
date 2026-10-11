@@ -1571,3 +1571,122 @@ HUN = {
 	}
 	callsigns = { }
 }
+
+KOR = {
+	male = {
+		names = { "Hee-Seok" "Jae-Hoon" "Shin-Woo" Sang Gun Kwang Woong Chul Hyuk "Yoon-Gi" "Han-gyeol" }
+	}
+	female = {
+		names = { "Ae-jung" Bora "Chae-won" "Hye-ja" "Ji-young" "Seong-ja" Sora "Yeo-jin" "Kyung-hee" }
+	}
+	surnames = { Kim Cho Lee Park Jeong Choe Jang Yun Rim Ryu Gang }
+	callsigns = { }
+}
+
+ARM = {
+	male = {
+		names = {
+			Adroushan Agheksanter Alex Anag Anania Aramazt Aram Aran Ararad Ari Arman Asbourag Askanaz Avetik Avetis Artashes Barkev Dajad Erik Garegin Ghougas Gomidas Gor Hamo Harutiun Hayk Hovhannes Khoren Krikor Magar Malkhas Markar Mikaiel Mouron Movses Narek Nbad Norayr Nshan Parsegh Pertag Samvel Sarhad Sasoun Serj Set Serop Sirak Sirakan Soukias Teotig Tevan Tigran Vahe Vanagan Varos Zaven Yeghishe
+		}
+	}
+	female = {
+		names = {
+			Anna Anahit Ani Elen Mane Mariam Mary Milena Nare
+		}
+	}
+	surnames = {
+		Aharonian Adontz Arshakuni Artashesian Assarian Aviet Azatyan Babaian Babalian Bagratuni Bakunts Banaian Boshian Boyajian Esmerian Gamburyan Gamerikian Hakobjanian Hintlian Ishkhanian Kajaznuni Kasabian Kasparian Khachatourian Khatisan Khorenatsi Krikorian Mamikonian Manoogian Manvelian Markarian Minassian Mirzoyan Narcessian Nzhdeh Ohanjanyan Pashayan Petrosian Pilosyan Rodnoian Sahakyan Samuelian Sarian Sasounyan Seropian Shirakatsi Shiraz Skendarian Suzmeyan Tatiossian Tigranyan Tovmasian Tumanian Yeghiayan Yerevanian Zakaryan Zornakyan
+	}
+}
+
+UZB = {
+	male = {
+		names = {
+			Abbos "Abdug'ani" Abdulla Abdurahmin Abdurahmon Abdurashid Abdusalom Abduseit Ahamdjon Anvar Arslon Azamat Azizbek Bahodir Bakhretdin "Bo'ri" Botir Dilshod Djavohir Elshod Ergash Farhod Fathullo Habibullo Ibrohim
+			Ilhom Ishoq Ismoil Jahon Jahongir Jiyan "Jo'ra" Jurabek Mamur Mirzo Muhammadjon Muhammadkarim Mukhammad Murod Nosir Nuriddin Odil "Po'lat" Rahmatillo Rakhim Ravshan Ravshanbek Rishod "Sa'dulla" Samandar Sayfuddin
+			Sayfullo Shavkat Sherzod Shuhrat Sobir Suhrob Tohir Tursunmurod "Ulug'bek" Utkirbek Yoqub Yunusbek Zokir
+		}
+	}
+	female = {
+		names = {
+			Adolat Akgul Anora Azaliya Chinara Gulchekhra Gulya Guylchekhra Jamola Jiyan Lola Muhabbat Munisa Nigina Nigora Nozima Olma Oltingul Ravshana Ruhsora Tomyris Yulduza Zamira Ziroatkhon Ziyoda Zuhro Zulfiya
+		}
+	}
+	surnames = {
+		Abaev Abbasov Abdulatipov Abdulin Abdullaev Abdulov Abdurakhmanov Abdurashidov Akbarov Akhtaov Akhmadiev Aliev Alimor Amirov Atoev Azamatov Azizov Babaev Boqiev Burkhanov Cheryazov Choriev Ergashev Hamidov Haydarov
+		Ibragimov Idrisov Isaev Islambekov Islamov Jalilov "Jo'rayev" Jumaniyozov Juraev Kadyrov Karimov Kasymov Khasanov Kurbanov Majidov Mamurov Murodov Musaev Mustafin Niyazov Nuraliev Qurbonov Rakhimonv Ramazon Rasulov
+		Ravshanov Sadykov Saidov Saipov Salamov Samandarov Sharipov Sheraliev Sobirov Sulaymanov Sultanbekov Sultanov Umarov Usmanov Yoldoshov Yunusov Yusufov Yusupov
+	}
+}
+
+KAZ = {
+	male = {
+		names = {
+			Aibek Alikhan Alisher Arman Aslan Aybek Azat Bolat Bulat Erasyl Islam Makhmud Mukhamed Mukhammed Nurasyl Nurislam Nurzhan Ramazan Ruslan Rustam Serik Shamil Sukhrab Talgat Temir Timur
+		}
+	}
+
+	female = {
+		names = {
+			Aiday Aiman Aina Aliya Anar Anara Anargul Aruzhan Ayaulym Ayna Aynur Bibigul Gulnar Gulnara Gulnaz Inkar Inzhu Madina Saltanat Sezim Zhuldyz
+		}
+	}
+
+	surnames = {
+		Abaev Abdulayev Abdulin Adelzhanov Aibekov Aitmukhambetov Akhmetov Aliev Alikhanov Alimov Aliyev Almatyev Amangeldiev Amirov Aruzhanov Astana Asylmuratov Aubakirov Aybekov Azizov Babaev Baizhanov Bolatov Erjanov Erzhanov
+		Ibragimov Idrisov Isaev Iskakov Islamov Ismailov Kadyrov Karimov Kasymov Khasanov Kudaibergenov Kurbanov Kusainov Maksatov Malzagov Mendygaliev Musaev Mustafin Nazarbayev Niyazov Niyazymbetov Nurasylov Nurgaliev Nurislamov
+		Nursultanov Nurzhanov Omarov Ospan Rakhimov Ramadanov Ramazanov Rasulov Salimov Sapiyev Sarsenbaev Sarsenov Serikbaev Serikov Sharipov Shumenov Sultanbekov Sultanov Sydykov Talgatov Tazhibaev Temirov Tursynbekov Umarov
+		Usmanov Yuldashev Ynusov Yusupov Zhanibekov Zhaparov Zhumabekov Zhunusov Zhusupov
+	}
+}
+
+BRM = {
+	male = {
+		names = {
+			Abraham Alexander Aung Aye Ba Binnya Chan Eike Hla Hsinbyushin Hso Htay Htein Htin Ka Kan Kawleikgyin Khun Kin Kyaw Lu Luda Ludu Lun Lwin Maha Mahn Maung May Min Mindon Moe Moethee Mun Mya Myawaddy Myo Myoma Nanda
+			Nandawshay Narameikhla Nay Ne Ngwe Nyi Ohn Pakokku Paw Peter Pe Po Sanda Sao Saw Saya Sein Shwebomin Sin Sitt Soe Tabinshwehti Taw Than Tharyarwaddy Thaung Thein Thibaw Thu Tin Tun U Wareru Win Ye Yei Zaw Zayar
+
+		}
+	}
+	female = {
+		names = {
+			Aung Aye Charm Cynthia Dagon Khet Khin Kyi Ludu Minfong Ma May "Ma Ma" Mi "Mi Mi" Mie Mo "Mo Mo" Myint "Myint Myint" Nilar Rebecca San Su "Su Su" Swe Wai Wendy Yan "Yan Yan" Zoya
+		}
+	}
+	surnames = {
+		Amar Aris Aung Awng Aye Bandoola Bayinnaung Bedu Chan Chit Chun Dala Gaing Gambira Gordeno Gyan Gyaw Gyi Gywe Han Hein Hla Hlaing Ho HHtaik Htay Htoo Htoon Htun Khaing Khin Ko Koko Kyi Kyi Kywe Lai Latt "Law-Yone" Lay
+		Loo Lwin Lin Mar Maung May Mg Mie Min Mindon Moe Myint Naing Naung Nu Nway Nyan Nyein Nyunt Ohmar Oo Pe Pha Phan Pu Pwint Sa San Sein Shin Shwe Soe Sofaer Suukyi Swe Sweet Tein Thaik Than Thant Thaung Thaw Thein Thet
+		Tin Thon Thu Thura Tin Toe Tong Tun U Uttla Wa Win Yin Yoe Yu Zarni Zaw Zun
+	}
+	callsigns = { }
+}
+
+VIN = {
+	male = {
+		names = {
+			Lợi Ánh Thuyet Dũng Giáp Xuân Vinh Tuân Văn Toàn Quang Liêm Ngoc Trường Son Thuyet Quốc
+		}
+	}
+	female = {
+		names = { Trần Kim Thị Ánh Viên Liễu Ninh }
+	}
+	surnames = {
+		Nguyễn Trần Lê Pham Hoàng Huỳnh Vũ Võ Phan Trương Bùi Đang Đo Ngô Hồ Duong Đinh Lý Kieu Luc Đái Mao Khong Tôn Nu
+	}
+	callsigns = { }
+}
+
+RAJ = {
+	male = {
+		names = {
+			Mohandas Narenda Dalbir Bipin Subrata Amarjeet Sanijv Ravi Praveen Surinder Balwant Sarath Amit Bimal Kumar Ranbir Manoj Suresh Sunil Sushila Meena Velu Aniruddha Shokin Ashwani Ashok Abhay Devraj Rudramurti Punita Anand Dipankar Ramnath Bahadur Atan Syed Kesur Bana Chain Ganga Gian Jadunath Mukund Surinder Triveni Varinder Sonam Ram Yogendra
+		}
+	}
+	female = {
+		names = { Indira Aditi Amita Anasuya Kavita Puja Rani Rashmi Sania Dusha Neha Neetu Deepti Deepa Bipasha Preeti Padmavati Uma Vibha }
+	}
+	surnames = {
+		Neru Gandhi Modi Singh Suhag Rawat Hira Saha Sharma Nimbhorkar Talwar Thoge Hooda Bakshi Negi Hariz Chand Soni Verma Reddy Gupta Cheema Prasad Bharali Shivane Unni Sarin Patyal Chakravarty Bali Datta Naravane Chavan Chandra Bandyopadhyay Krishna Pannu Ambre Ahir Varadarajan Wangchuk Yadav
+	}
+	callsigns = { }
+}

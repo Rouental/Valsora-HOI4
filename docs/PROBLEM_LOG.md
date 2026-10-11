@@ -206,6 +206,31 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## Map problems found while building
 
+**Vanilla's Chinese and Tibetan name lists; famous names in others** (2026-10-11)
+- Cause: vanilla's Chinese list (CHI, and its copies for the warlords) has family names
+  in both its given-name and surname lists, so every generated Chinese name is two
+  family names ("Wang Zhao"); its Tibetan list is eleven names, with two titles (Dzasa,
+  Rinpoche) among the surnames. Some lists hold famous people's names: the Indian one
+  Gandhi, Modi and "Neru" (beside "Mohandas"), the Burmese one "Suukyi", the Armenian
+  one Nzhdeh and Kajaznuni (beside Garegin and Hovhannes).
+- Fix: our own Chinese (`CHN`) and Tibetan (`TBT`) lists in `custom_names.txt`. The
+  Chinese one has the family names where the game takes the first name, so names read
+  family name first, as Chinese names do ("Wang Zhiyuan"). The famous names are in
+  `cultures.NOT_SURNAMES`, so no leader of ours carries them.
+
+**Faction members with 20 % for their leader's ideology** (2026-10-11, a precaution)
+- Cause: every country starts with 20 % for each ideology, and a faction member likely
+  needs 30 % for its leader's (see Lanzerac and Guedelon, 2026-10-02); not seen in game.
+- Fix: the Great Lake Republics' four members and the Synthesist Internationale's two
+  start with 40 % for their own ideology, their leader's, and 15 % for each other
+  (`nations.POPULARITIES`).
+
+**The upload predated a change** (2026-10-11)
+- Cause: the author's file was from before Araseos 1 went to Terreich, so its game
+  layers still had the islet as Araseos (the only difference in them).
+- Fix: `apply_outlines.py` ran on the upload, then `pdn_tools.py attach terreich
+  935,1862` again.
+
 **Estande's capital was on an island overseas** (2026-10-10)
 - Cause: a country's capital is the sizeable state nearest the centre of all its land.
   Estande's islands east of Terreich (Araseos) and the six added on 2026-10-09 off

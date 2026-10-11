@@ -87,6 +87,13 @@ REGIONS["usa"] = dict(
     army=_seq("GFX_Portrait_USA_Generic_land", 9), navy=_seq("GFX_Portrait_USA_Generic_navy", 3),
     political=REGIONS["europe"]["political"])
 
+# Indian (Arpino): vanilla's Raj generals, admirals and politicians
+REGIONS["india"] = dict(
+    army=["GFX_Portrait_The_Raj_Army_Generic", "GFX_Portrait_The_Raj_Army_Generic_2"],
+    navy=["GFX_Portrait_The_Raj_Generic_navy_1", "GFX_Portrait_The_Raj_Generic_navy_2"],
+    political={i: ["GFX_Portrait_The_Raj_Political_Leader_Generic",
+                   "GFX_Portrait_The_Raj_Political_Leader_Generic_2"] for i in REGIONS["europe"]["political"]})
+
 # continent -> culture: vanilla name block, portrait region, graphical culture
 CONTINENT_CULTURE = {
     "nonscio": dict(names="ENG", portraits="europe", gfx="western_european"),
@@ -180,6 +187,21 @@ TAG_CULTURE = {
     "SMB": dict(names="SER", portraits="europe", gfx="eastern_european"),  # a Serbian city
     "SKL": dict(names="GRE", portraits="europe", gfx="eastern_european"),
     "TKY": dict(names="JAP", portraits="asia", gfx="asian"),
+    # 2026-10-11: Arpino Indian (author, like vanilla's Raj); the rest Claude's guesses
+    # from the names. Chinese and Tibetan are our own lists (vanilla's Chinese one is
+    # family names only, its Tibetan one eleven names and two titles)
+    **{t: dict(names="CHN", portraits="asia", gfx="asian")
+       for t in ("QNG", "XUE", "HLG", "ASC", "HDO", "KRN", "RDP", "KNH", "CRT", "DHI", "PZH")},
+    **{t: dict(names="JAP", portraits="asia", gfx="asian") for t in ("TSU", "KZN", "SHO")},  # Sho: Ryukyu's Shō dynasty
+    "WAN": dict(names="KOR", portraits="asia", gfx="asian"),  # the peninsula facing Tenkyoku
+    "GOR": dict(names="BYA", portraits="asia", gfx="asian"),  # a lamaist Mongol monarchy, like the Bogd Khanate
+    "SRK": dict(names="ARM", portraits="europe", gfx="eastern_european"),  # Sarkis, an Armenian name
+    "UYZ": dict(names="UZB", portraits="asia", gfx="asian"),  # Uzbek, the nearest vanilla list to Uyghur
+    "YTR": dict(names="KAZ", portraits="asia", gfx="asian"),  # Kazakh, a Kipchak language like Tatar
+    "MYH": dict(names="BRM", portraits="asia", gfx="asian"),  # Burmese, after Myanma
+    "PLJ": dict(names="VIN", portraits="asia", gfx="asian"),  # Vietnamese ("plei", a highland village)
+    "GND": dict(names="TBT", portraits="asia", gfx="asian"),  # Ganden, a Tibetan monastery
+    "ARP": dict(names="RAJ", portraits="india", gfx="commonwealth"),
 }
 
 
@@ -271,7 +293,8 @@ def sprites_used():
 
 # famous surnames a made-up leader should not carry
 NOT_SURNAMES = {"Petain", "Foch", "Joffre", "Salazar", "Napoléon", "Murat", "Davout",
-                "d'Orleans", "Franchet d'Espèrey", "Churchill", "Mussolini", "Hirohito", "Tojo", "Piłsudski"}
+                "d'Orleans", "Franchet d'Espèrey", "Churchill", "Mussolini", "Hirohito", "Tojo", "Piłsudski",
+                "Gandhi", "Modi", "Neru", "Nehru", "Suukyi", "Nzhdeh", "Kajaznuni"}
 
 
 def _tokens(block):

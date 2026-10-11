@@ -187,6 +187,31 @@ COUNTRIES = {
     "sombor": ("SMB", "Sombor", "Somborian", (236, 132, 52)),
     "skillia": ("SKL", "Skillia", "Skillian", (226, 74, 74)),
     "tenkyoku": ("TKY", "Tenkyoku", "Tenkyoku", (176, 22, 52)),
+    # 2026-10-11 (the author's names, governments and formal names; tags, colours and
+    # adjectives Claude's): Orientalis outlined, and Gorduchai's island off it
+    "gorduchai": ("GOR", "Gorduchai", "Gorduchaian", (236, 224, 168)),
+    "sarkis": ("SRK", "Sarkis", "Sarkisian", (104, 108, 120)),
+    "wanea": ("WAN", "Wanea", "Wanean", (110, 160, 60)),
+    "qingou": ("QNG", "Qingou", "Qingouese", (40, 120, 200)),
+    "xue": ("XUE", "Xuè", "Xuè", (100, 190, 170)),
+    "hulinguo": ("HLG", "Hulinguo", "Hulinguo", (240, 140, 110)),
+    "assoc_cities": ("ASC", "Associated Cities", "Dahu-Jinhu", (250, 220, 120)),
+    "haidao": ("HDO", "Haidao", "Haidao", (150, 220, 230)),
+    "kuran": ("KRN", "Kuran", "Kurani", (128, 52, 40)),
+    "daihai": ("DHI", "Daihai", "Daihai", (210, 130, 200)),
+    "tsuruma": ("TSU", "Tsuruma", "Tsuruman", (230, 140, 160)),
+    "charity": ("CRT", "Charity", "Charitian", (240, 210, 20)),
+    "kianhua": ("KNH", "Kianhua", "Kianhuan", (150, 200, 110)),
+    "red_path": ("RDP", "Red Path", "Red Path", (222, 40, 40)),
+    "kaizan": ("KZN", "Kaizan", "Kaizanese", (180, 150, 220)),
+    "sho": ("SHO", "Sho", "Sho", (226, 84, 120)),
+    "uyizar": ("UYZ", "Uyizar", "Uyizari", (160, 120, 80)),
+    "yatar": ("YTR", "Yatar", "Yatari", (120, 60, 90)),
+    "myehn": ("MYH", "Myehn", "Myehnese", (30, 110, 120)),
+    "plaija": ("PLJ", "Plaija", "Plaijan", (205, 70, 30)),
+    "pinzahao": ("PZH", "Pinzahao", "Pinzahao", (240, 170, 200)),
+    "ganden": ("GND", "Ganden", "Gandenese", (110, 80, 50)),
+    "arpino": ("ARP", "Arpino", "Arpinese", (52, 150, 52)),
 }
 # The placeholder countries, one per continent, are the recommended starts in the
 # bookmark; the rest are playable but not listed there.

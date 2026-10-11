@@ -213,7 +213,58 @@ OWNERS_0910 = {
 }
 # 2026-10-09, later: the three isles and three islets in the Midtierre, between Anglost
 # and Normania, that the author labelled PE (Nonscio's until then) are Peatiktist's
-OWNERS = {"peatiktist": [(634, 1464), (670, 1494), (715, 1513), (692, 1479), (652, 1488), (668, 1508)]}
+OWNERS_0910B = {"peatiktist": [(634, 1464), (670, 1494), (715, 1513), (692, 1479), (652, 1488), (668, 1508)]}
+# 2026-10-11: Orientalis, all of it outlined but its south-west, with the islands its
+# labels name (SR Sarkis, AC Charity, TS Tsuruma, DI Daihai, AR Arpino), the islands
+# the author circled in red east of it (Myehn's, 49 of them) and three bits of other
+# countries: TP in Kianhua (Terreich's), KR at the tip of Arpino's south (Krionik's) and
+# ES on the north coast (Estande's). The peninsula beside Tenkyoku, labelled AC, is
+# Charity's now (it was in LEAVE). The SH islets east of the circle (Shinnokawa, not
+# yet a nation) are left alone. One seed per patch the lines enclose.
+OWNERS = {
+    "gorduchai": [(3527, 1247)],
+    "sarkis": [(4263, 1000), (4660, 774), (4059, 952), (4853, 960), (3883, 992),
+               (3889, 1331)],
+    "wanea": [(4084, 1357)],
+    "qingou": [(4471, 1047)],
+    "xue": [(4273, 1145)],
+    "hulinguo": [(4464, 912)],
+    "assoc_cities": [(4437, 1001)],
+    "haidao": [(4713, 1068)],
+    "kuran": [(4621, 1084)],
+    "red_path": [(4556, 1103), (4632, 1189), (4687, 1301)],
+    "kianhua": [(4704, 1225)],
+    "charity": [(4454, 1277), (4341, 1295), (4275, 1305), (4266, 1356), (4295, 1366),
+                (4222, 1385), (4331, 1403), (4232, 1413), (4152, 1460), (4114, 1454),
+                (4172, 1458), (4255, 1438), (4128, 1445)],
+    "kaizan": [(4637, 1328)],
+    "sho": [(4641, 1415)],
+    "uyizar": [(4423, 1462)],
+    "yatar": [(4583, 1469)],
+    "myehn": [(4755, 1456), (4333, 1602), (4935, 1378), (4979, 1386), (4861, 1405),
+              (4928, 1422), (4932, 1452), (4974, 1445), (4954, 1480), (4888, 1473),
+              (4851, 1516), (4900, 1502), (4809, 1499), (4933, 1528), (4891, 1524),
+              (4799, 1559), (4875, 1554), (4891, 1580), (4932, 1569), (4702, 1572),
+              (4793, 1665), (4751, 1628), (4789, 1620), (4829, 1665), (4716, 1670),
+              (4856, 1662), (4849, 1677), (4707, 1706), (4832, 1691), (4835, 1724),
+              (4795, 1734), (4719, 1750), (4810, 1751), (4745, 1755), (4737, 1774),
+              (4762, 1761), (4843, 1799), (4766, 1783), (4746, 1788), (4738, 1799),
+              (4883, 1827), (4789, 1815), (4873, 1879), (4738, 1818), (4778, 1846),
+              (4786, 1882), (4854, 1930), (4806, 1918), (4790, 1935), (4848, 1949),
+              (4874, 1959)],
+    "tsuruma": [(4234, 1470), (4302, 1472), (4295, 1506), (4205, 1532), (4170, 2356),
+                (4196, 1537)],
+    "daihai": [(3876, 1519), (3917, 1530), (3967, 1533), (3976, 1544), (3948, 1551),
+               (3971, 1556), (3947, 1567)],
+    "plaija": [(4484, 1667)],
+    "pinzahao": [(4623, 1745)],
+    "ganden": [(4465, 1857)],
+    "arpino": [(4408, 1963), (4515, 2023), (4494, 2055), (4517, 2061), (4486, 2073),
+               (4497, 2083)],
+    "terreich": [(4872, 1202)],
+    "krionik": [(4277, 2255)],
+    "estande": [(4177, 794)],
+}
 OWNERS_0410 = {
     "anglost": [(528, 1283), (607, 1287), (509, 1335), (436, 1342), (506, 1363), (474, 1379),
                 (516, 1386), (563, 1388), (626, 1425), (583, 1428), (654, 1430), (658, 1421),
@@ -241,7 +292,8 @@ LEAVE = [  # (596, 2222), the bit of coast west of Gaellia, became Terreich's on
          # Krionik's eastern part, Orientalis north of its new line, two patches in
          # Araseos' south-west) and slivers of a few pixels; (297, 1887) is Zwintern's
          # and (554, 1814) Ungar's since 2026-10-08
-         (2553, 933), (4152, 1460), (2254, 405), (487, 1531), (334, 1844),
+         # (4152, 1460), the peninsula beside Tenkyoku, is Charity's since 2026-10-11
+         (2553, 933), (2254, 405), (487, 1531), (334, 1844),
          (1618, 1798), (2323, 1884), (1757, 1894),  # Solitas placeholder land the friend's nations left
          (847, 1402), (769, 1354),  # (403, 1359) is Transcainia's since 2026-10-07
          # Aislada, outlined on 2026-10-04 (still the placeholder's colour)
