@@ -6,6 +6,22 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**Placeholder islets left beside new countries, and a code two nations share** (2026-10-12, author)
+- The author found, by their names in game, states that were still placeholders. Five
+  were islets of 17-52 px a few px off land the update had just outlined (the
+  Cultists', Cascadia's, Charity's, Volstokn's, Sennheiser's): no line went round them
+  and no label named them, so they kept the continent's placeholder colour, and the
+  report only gave the placeholder land's total. Fix: `pdn_tools.py attach` to their
+  neighbour's nearest state. Check before reporting an update: list each placeholder
+  state left and the country beside it (three more such islets remain, by Kyras, the
+  Utopian Republic and Kianhua; the author was asked).
+- "Tsuruma 6", the island far south of Arpino labelled TS, was read as Tsuruma's on
+  2026-10-11, but TS has been Terrabis-Seran's code since 2026-10-05, and it is
+  Terrabis-Seran's. A code two nations use, on land far from both, needs asking.
+- Moving states renumbers the generic names ("Usnistan 3" became "Usnistan 2"), since
+  they count each country's states in map order: refer to states by pixel, not by those
+  names, once they may have changed.
+
 **Atlas, second test: squares, no art, no country names** (2026-10-07, screenshot)
 - Squares and a stair-stepped coast: the flattened heightmap (land 98, sea 89) put a
   cliff at every coast, and the terrain mesh is coarser than the map's pixels, so the

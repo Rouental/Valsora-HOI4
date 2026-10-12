@@ -1,6 +1,6 @@
 # Valsora: every country
 
-178 countries, 157 owning land at the start. Read from the built mod; regenerate with `python3 scripts/country_list.py`.
+176 countries, 155 owning land at the start. Read from the built mod; regenerate with `python3 scripts/country_list.py`.
 
 | Tag | Name | Full name | Ideology | Sub-ideology | Culture | Leader | States | Notes |
 |---|---|---|---|---|---|---|---|---|
@@ -16,7 +16,7 @@
 | ARV | Arvorenia | the United Kingdom of Éden, Santo Domingo, and Arovia | Democratic | Constitutional Monarchy | Portuguese | Daniel Maurício | 32 |  |
 | ASC | Associated Cities | the Associated Cities of Dahu and Jinhu | Democratic | Liberalism | Chinese | Yu Jiaming | 1 | in The Great Lake Republics |
 | ATR | Atrocha | the Republic of Atrocha | Democratic | Liberalism | Spanish | Astrid Bethancourt | 14 |  |
-| BLK | Belekria | the Union of Belekrian Republics | Communist | Vanguardism | Russian | Roman Voroshilov | 44 |  |
+| BLK | Belekria | the Union of Belekrian Republics | Communist | Vanguardism | Russian | Roman Voroshilov | 45 |  |
 | BKA | Belka | the Most Serene State of Belka | Authoritarian | Fascism | Russian | Aleksandr Isayev | 39 |  |
 | BRT | Brethren | the Great Congregation of Brethren | Theocratic | Synodal Rule | German | Willhelm Hildt | 20 |  |
 | BRL | Brillagne | the Holy State of Brillagne | Theocratic | Hierocracy | French | Mahaut VI | 0 | no land at the start (releasable or civil war) |
@@ -94,16 +94,15 @@
 | MQS | Muqadasa Salamat | the Holy Republic of Muqadasa Salamat | Theocratic | Divine Republicanism | Arabic (Saudi) | Shukri ibn Umar | 19 |  |
 | MST | Mustawi | the Republic of Mustawi | Authoritarian | Strongman Rule | Arabic (Kuwaiti) | Ruh Al Mutairi | 11 |  |
 | MYH | Myehn | the Imperial Republic of Myehn | Democratic | Conservatism | Burmese | Mun Naung | 63 |  |
-| NSC | Nonscio | Nonscio | Monarchist | Absolute Monarchy | English | Oswald Brown | 2 |  |
 | NRM | Normania | the Principality of Normania | Democratic | Constitutional Monarchy | English | Hubert Golightly | 5 | dominion of Anglost |
 | NKR | North Koronista | the Republic of North Koronista | Authoritarian | Strongman Rule | Turkish | Nuri Gökberk | 18 |  |
 | NPL | North Pollana | the Worker's State of Pollana | Communist | Party Centralism | Latin American | Vicente Arista | 1 |  |
 | NPR | Nuevo Paraíso | the Dominion of Nuevo Paraíso | Democratic | Conservatism | Latin American | Joaquín Woll | 8 | dominion of United States of Solitas |
 | ORT | Oriental Territories | the Oriental Territories | Monarchist | Oligarchy | French | Julien de MacMahon | 0 | no land at the start (releasable or civil war) |
-| ORI | Orientalis | Orientalis | Monarchist | Absolute Monarchy | Japanese | Soroku Minami | 4 |  |
+| ORI | Orientalis | Orientalis | Monarchist | Absolute Monarchy | Japanese | Soroku Minami | 2 |  |
 | ORF | Oriflamme | the Oriflamme Alliance | Monarchist | Oligarchy | French | Gustave Humbert | 0 | no land at the start (releasable or civil war) |
 | OST | Ostaria | the Archcounty of Ostaria | Monarchist | Absolute Monarchy | German | Adolf Göttmann | 4 |  |
-| OCR | Ostercoirasreich | the Kaiserinnreichfedderation of Ostercoirasreich | Monarchist | Feudalism | German | Ferdinand Lauck | 3 |  |
+| OCR | Ostercoirasreich | the Kaiserinnreichfedderation of Ostercoirasreich | Monarchist | Feudalism | German | Ferdinand Lauck | 4 |  |
 | PKT | Pakitsk | the Republic of Pakitsk | Authoritarian | Strongman Rule | Russian | Aslan Selin | 9 |  |
 | PTK | Peatiktist | the Constitutional Dictatorship of Peatiktist | Authoritarian | Strongman Rule | German | Philipp Gross | 27 |  |
 | PZH | Pinzahao | the Liberated Peoples of Pinzahao | Democratic | Radical Republicanism | Chinese | Yuan Wenzhong | 6 |  |
@@ -128,7 +127,7 @@
 | SSA | San Sierra | the People's Republic of San Sierra | Communist | Council Communism | Spanish | Emilio Díaz | 21 |  |
 | SNA | Sanada | the United Sanadan Clans | Monarchist | Khanate | Buryat | Bulgan Barannikov | 84 |  |
 | SGT | Sangterre | the Duchy of Sangterre | Monarchist | Feudalism | French | Lucien Anthoine | 0 | no land at the start (releasable or civil war) |
-| SRK | Sarkis | the People's State of Sarkis | Authoritarian | Revanchism | Armenian | Vahe Babaian | 200 |  |
+| SRK | Sarkis | the People's State of Sarkis | Authoritarian | Revanchism | Armenian | Vahe Babaian | 201 |  |
 | SRZ | Sarza | the Empire of Sarza | Monarchist | Absolute Monarchy | Persian | Ardashir Khorram-din | 33 |  |
 | HWT | Scealand | the Republik of Scealand | Communist | Orthodox Marxism | German | Ralph Kleiber | 6 | in The Synthesist Internationale |
 | STM | Schteirmark | the Duchy of Schteirmark | Monarchist | Feudalism | German | Werner Winkler | 4 | puppet of Terreich und Preußen |
@@ -152,7 +151,7 @@
 | SPL | South Pollana | the Most Serene Republic of South Pollana | Democratic | Liberalism | Latin American | Agustín Sarmaniego del Castillo | 1 |  |
 | SUS | South Usnistan | the Republic of South Usnistan | Democratic | Conservatism | Persian | Mazdan Turani | 19 |  |
 | TKY | Tenkyoku | the Remnant of Tenkyoku | Theocratic | Prophetic Rule | Japanese | Tomonosuke Okubo | 1 |  |
-| TBS | Terrabis-Seran | the Commonwealth of Terrabis-Seran | Democratic | Social Democracy | English | Lester Haig | 80 |  |
+| TBS | Terrabis-Seran | the Commonwealth of Terrabis-Seran | Democratic | Social Democracy | English | Lester Haig | 81 |  |
 | TUP | Terreich und Preußen | the Bundeskaiserreich of Terreich und Preußen | Democratic | Social Democracy | German | Charlotte Gustoff | 83 |  |
 | TTH | Tethia | the Principality of Tethia | Monarchist | Absolute Monarchy | Polish | Jakub Kowalski | 0 | no land at the start (releasable or civil war) |
 | FTH | The Faithful | the Faithful Children of the Goddess and Her Saint | Theocratic | Holy Order | French | Jean Gouraud | 0 | no land at the start (releasable or civil war) |
@@ -160,23 +159,22 @@
 | THD | Thorian Dynamics | Thorian Dynamics | Authoritarian | Megacorporation | American | Hamilton Pickett | 5 |  |
 | TCN | Transcainia | the Kingdom of Transcainia | Monarchist | Oligarchy | German | Peter Eisele | 7 |  |
 | TRC | Troc | the Democratic Republic of Troc | Democratic | Liberalism | English | Colbert Dundas | 15 |  |
-| TSU | Tsuruma | the Most Serene Republic of Tsuruma | Democratic | Lordly Republic | Japanese | Kuranosuke Minami | 6 |  |
+| TSU | Tsuruma | the Most Serene Republic of Tsuruma | Democratic | Lordly Republic | Japanese | Kuranosuke Minami | 5 |  |
 | UNG | Ungar | the Grand Duchy of Ungar | Monarchist | Feudalism | Hungarian | Bertalan Baross | 4 |  |
 | USS | United States of Solitas | United States of Solitas | Democratic | Liberalism | American | Aaron Miller | 33 |  |
-| USN | Usnistan | Usnistan | Monarchist | Absolute Monarchy | Persian | Soroush Jahangir | 5 |  |
+| USN | Usnistan | Usnistan | Monarchist | Absolute Monarchy | Persian | Soroush Jahangir | 4 |  |
 | UTP | Utopian Republic | the Second Utopian Republic | Democratic | Lordly Republic | English | Albert Plummer | 68 |  |
 | UYZ | Uyizar | the Khanate of Uyizar | Monarchist | Khanate | Uzbek | Po'lat Azamatov | 16 |  |
 | VAI | Vair | the Duchy of Vair | Monarchist | Feudalism | French | François Dubail | 0 | no land at the start (releasable or civil war) |
 | VIL | Vilna | the Free Republic of Vilna | Democratic | Radical Republicanism | Lithuanian | Juras Ivanauskas | 3 |  |
 | VNT | Vineta | the People's Rule Over Vineta | Communist | Party Centralism | Welsh | Rhys Moss | 7 |  |
 | VLN | Volinovia | the Kingdom of Volinovia | Monarchist | Enlightened Absolutism | Portuguese | Fernando Pinto | 16 |  |
-| VSK | Volstokn | the Tsaral Realm of Volstokn | Monarchist | Enlightened Absolutism | Finnish | Petri Mäkinen | 61 |  |
+| VSK | Volstokn | the Tsaral Realm of Volstokn | Monarchist | Enlightened Absolutism | Finnish | Petri Mäkinen | 62 |  |
 | PLH | Vultuca | the United Kingdom of Vultuca | Democratic | Constitutional Monarchy | Portuguese | Abel Ivens | 26 |  |
 | WAN | Wanea | the Republic of Wanea | Democratic | Agrarianism | Korean | Hee-Seok Rim | 5 |  |
 | WRS | Wersh | the Republic of Wersh | Authoritarian | Revanchism | English | Stanley Beatty | 21 |  |
 | WSM | West Sminishia | the Autonomous Region of Western Sminishia | Communist | Vanguardism | Croatian | Juraj Sorkocevic | 2 | puppet of Belekria |
 | XUE | Xuè | the Republic of Xuè | Democratic | Conservatism | Chinese | Lü Jiahui | 12 | in The Great Lake Republics |
-| YAS | Yastreovakia | Yastreovakia | Monarchist | Absolute Monarchy | Polish | Tomasz Jankowski | 4 |  |
 | YTR | Yatar | the Khanate of Yatar | Monarchist | Khanate | Kazakh | Azat Akhmetov | 7 |  |
 | ZNZ | Zanzimibia | the People's Republic of Zanzimibia | Democratic | Social Democracy | Nigerian | Oluwayemisi Amaechi | 9 |  |
 | ZLZ | Zoluzeme | the Kingdom of Zoluzeme | Monarchist | Absolute Monarchy | Latvian | Eduards Krogzems | 2 |  |

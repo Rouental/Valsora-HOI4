@@ -295,8 +295,8 @@ mismatch, missing localisation) and catches all of them.
   grid and must stay contiguous. Lakes go into the land region they border most.
 - **Countries**:
   - One placeholder per continent: NSC ARS AIS SLT YAS USN ORI (`SOL` is a vanilla
-    tag, so Solitas is `SLT`); Araseos has no land left since 2026-10-09, so ARS is left
-    out of the mod. They are `common.PLACEHOLDERS`, the only countries the
+    tag, so Solitas is `SLT`); Araseos has no land left since 2026-10-09, nor Nonscio and
+    Yastreovakia since 2026-10-12, so ARS, NSC and YAS are left out of the mod. They are `common.PLACEHOLDERS`, the only countries the
     bookmark recommends (author's wish, to keep the start menu short).
   - Colours follow the flags (author): Rouental royal green, Guedelon blue, Hollier red, Seigne white,
     Evriches yellow, Lustiana black, Selgrave dark maroon, Lanzerac purple (its new flag's,
@@ -597,7 +597,8 @@ mismatch, missing localisation) and catches all of them.
     (Khanate), Myehn MYH (Conservatism, "the Imperial Republic of Myehn"; with the 49
     islands the author circled in red east of it, and an exclave on Plaija's west tip
     its label sits on), Tsuruma TSU (Lordly Republic, "the Most Serene Republic of
-    Tsuruma", with the TS islands, one of them far south of Arpino), Daihai DHI
+    Tsuruma", with the TS islands; the one far south of Arpino is Terrabis-Seran's since
+    2026-10-12: TS is its code too), Daihai DHI
     (Feudalism, "the Island Principalities of Daihai", the DI islets), Plaija PLJ
     (Orthodox Marxism), Pinzahao PZH (Radical Republicanism, "the Liberated Peoples of
     Pinzahao"), Ganden GND (Fascism) and Arpino ARP (Enlightened Absolutism, "the United
@@ -683,7 +684,17 @@ mismatch, missing localisation) and catches all of them.
     `..._sennheiser.png`). Left as placeholders: about 1,700 px of Usnistan islets (most
     of it the three islands south of it), 300 px of islets off Orientalis and 350 px in
     Yastreovakia. The CU and RA labels were drawn on Necessary Borders: moved to
-    Necessary Names.
+    Necessary Names. Then (author) ten placeholder states changed hands, named as the game
+    showed them: Nonscio 1 (2,696 px, the island group south of the BE islets) to
+    Belekria, Orientalis 4 to Ostercoirasreich, Tsuruma 6 (the TS island far south of
+    Arpino) to Terrabis-Seran, Yastreovakia 1 to Sarkis and Yastreovakia 3 to Volstokn,
+    as states of their own (`pdn_tools.py give`); the islets Usnistan 2, Nonscio 2,
+    Orientalis 3, Yastreovakia 2 and 4 (17-52 px, beside the Cultists', Cascadia's,
+    Charity's, Volstokn's and Sennheiser's land) joined their new owner's nearest state
+    (`attach`). Nonscio and Yastreovakia own nothing now. Left as placeholders: Usnistan
+    1-4 (islets beside Kyras and the Utopian Republic, and the islands south of South
+    Usnistan; the old Usnistan 3-5, renumbered), Orientalis 1-2 (beside Kianhua and Daihai)
+    and Solitas 1-20, the land between the friend's nations.
     All tags were checked against vanilla `common/country_tags`; new tags must be too.
   - The adjectives of the neighbours are guesses; the author may rename them.
 - **State names** are the author's, in `source/state_names.json` ("x,y" of a pixel
@@ -1108,9 +1119,10 @@ in git history (commit d2d6cd8, `scripts/cartographic.py`). It used
 
 ## Current state
 
-- 24,767 provinces (24,366 land, 363 sea, 38 lakes), 3,070 states, 122 strategic regions
-  (42 sea), 178 countries (2026-10-12, later: Usnistan outlined, 35 new nations, 545 new
-  states; before: 21,084 provinces (20,683 land), 2,629 states, 143 countries
+- 24,767 provinces (24,366 land, 363 sea, 38 lakes), 3,065 states, 122 strategic regions
+  (42 sea), 176 countries (2026-10-12, later still: ten placeholder states to their new
+  owners; before: 3,070 states, 178 countries (2026-10-12, later: Usnistan outlined, 35
+  new nations, 545 new states; before: 21,084 provinces (20,683 land), 2,629 states, 143 countries
   (2026-10-12: Merlo's sea, the wrap made seamless; before:
   21,366 provinces (645 sea), 91 strategic regions (11 sea) (2026-10-11: Orientalis
   outlined, 24 new nations, 667 new states; before: 16,646 provinces, 2,073 states, 119 countries (Araseos' last islet to
