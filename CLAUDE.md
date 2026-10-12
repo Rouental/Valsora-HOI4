@@ -171,6 +171,7 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `merge_provinces.py` | by hand, after a build: merges the smallest land provinces into a neighbour in the same state (never across a river, never two city provinces, at most 400 px) until the borders are down to a target (default 60,000), on the Provinces layer |
 | `redraw_flags.py` | unused: Fraxhemark's stand-in flag (writes `work/FRX_standin.png`); the author's own `FRX.png` replaced it |
 | `state_map.py` | by hand, after a build: a numbered map of some countries' states (`dist/state_numbers_<name>.png` + `.json`, number → tag and pixel), for the author to name them; `--names` labels them with their names instead |
+| `terrain_test.py` | by hand, a test not in the game (author, 2026-10-12: "do not add it to the mod yet"): terrain for the whole map from each continent's real-world model (Nonscio western Europe, Araseos Germany, Yastreovakia eastern Europe and Russia, Usnistan the Middle East and Africa, Orientalis Asia, Solitas loosely the New World, Aislada Australia): its own relief with hand-placed ranges (the Alps between Rouental and Illiricium, Tibet and the Himalaya at Ganden, the Ethiopian highlands by Mekele, Rouental's Duchy of the Mountains ...), a climate per continent (latitude frame, prevailing winds and monsoons carrying the sea's moisture inland, rain shadows, hand-placed wet and dry areas), terrain.bmp classes, and each province's majority type; writes `work/terrain_test/` and `dist/terrain_test_map.png`, `terrain_test_provinces.png` |
 | `usnistan_prototype.py` | by hand, a prototype not in the game: a fully generated Usnistan (relief, climate terrain, rivers, ~800 provinces, states, 6 placeholder countries, cities) into `work/usnistan/` and `dist/usnistan_*.png` (author asked for an example, 2026-10-02) |
 | `regroup_states.py` | by hand, after `apply_outlines.py`: in every country with state lines of its own, each drawn area becomes exactly one state (provinces kept, split only where a line crosses them) |
 | `import_flags.py` | by hand: the author's flag `.pdn` (one layer per flag, named after the nation) → `source/flags/TAG.png`; a stored flag is replaced when any pixel differs at the same size, or by more than resampling would at another size (`changed`, 2026-10-09); see-through pixels are filled from the nearest solid one first (`opaque`), since the game shows them as holes |
@@ -1199,7 +1200,8 @@ in git history (commit d2d6cd8, `scripts/cartographic.py`). It used
    outlining countries region by region (see `apply_outlines.py`). The old `.pdn`'s
    country colours, moved to the new layout, are its Notes layer.
 2. Terrain is plains everywhere; there are no rivers, railways or trees; the relief is
-   noise.
+   noise. A generated terrain (with its own relief) exists as a test only,
+   `terrain_test.py` (2026-10-12): the author said not to add it to the mod yet.
 3. Lakes vs. inland seas (see Decisions).
 4. Country content: only Aislada has a leader and focus tree; the rest use generated
    leaders and the generic tree. No units; flags only for Rouental and its neighbours.

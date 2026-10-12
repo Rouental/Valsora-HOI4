@@ -241,6 +241,14 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## Map problems found while building
 
+**Straight-edged strips in the terrain test** (2026-10-12)
+- Cause: the moist air is carried inland one line of pixels at a time, so a lake
+  (which refilled the air with moisture) or the end of a range on one line but not
+  the next drew a straight-edged wet or dry strip; round hand-placed dry areas, forced
+  marshes and straight ranges looked drawn with a ruler and compass.
+- Fix: only the open sea refills the air, each sweep is blurred across the wind, and
+  ranges, wet and dry areas and marshes get ragged, noise-warped edges.
+
 **Letters on the Borders layer, moved one stroke short** (2026-10-12)
 - The author's CU and RA labels (the Cultists', Kyras': 11 of them) were drawn on
   Necessary Borders, where they would have cut islets and coast into scraps. They were
