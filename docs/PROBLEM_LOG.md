@@ -206,6 +206,32 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## Map problems found while building
 
+**Letters on the Borders layer, moved one stroke short** (2026-10-12)
+- The author's CU and RA labels (the Cultists', Kyras': 11 of them) were drawn on
+  Necessary Borders, where they would have cut islets and coast into scraps. They were
+  moved to Necessary Names a 14 x 8 box at a time, but "CU" is 15 px wide, so each U's
+  last stroke (7 px) stayed on Borders and closed off a 2 px sliver of the Cultists'
+  coast.
+- Found by the dry run of the patch selection: the biggest patch with no seed (its
+  "outside patch") was those 2 px. Fix: the two strokes moved too; the dry run then had
+  no patch without a seed.
+
+**Two codes drawn touching, and a label in the sea** (2026-10-12)
+- Six labels were two codes drawn so close they touch ("CH CH", "US US", "FE FE", "RY
+  RY"), each pointing at its own islet; read as one word, each named only one islet.
+  Fix: such words are split letter by letter into codes: five more islets.
+- "Port Almohavid" is written in the sea, and the land nearest it is Almohavid's, so it
+  named Almohavid's whole patch. Port Almohavid is the 16 px tip of land a short line
+  closes off at (3551, 1640).
+
+**An islet left out of its country's states** (2026-10-12)
+- The islet the author circled near Myehn (40 px) became a state of its own:
+  `apply_outlines.py` joins a small islet to the nearest state of its country made in
+  the same run, and Myehn's states are from 2026-10-11.
+- Fix: `pdn_tools.py attach myehn 4752,1538`, as for Araseos 1.
+- Also: Sennheiser's land was in `LEAVE` (2553, 933) since 2026-10-07; the check of
+  `LEAVE` pixels against the seeded patches caught it, and it was removed.
+
 **The sea didn't meet across the wrap** (2026-10-12, Merlo's update)
 - Cause: Merlo drew the sea borders near the left and right edges separately. Of about
   13 borders reaching each edge, 5 met their partner exactly, 4 within 8 px, 3 were

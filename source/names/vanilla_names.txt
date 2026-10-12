@@ -1677,3 +1677,218 @@ RAJ = {
 	}
 	callsigns = { }
 }
+
+SAU = {
+	male = {
+		names = {
+			"Abd Allah" "Abd al-Karim" "Abd al-Malik" "Abd al-Qadir" "Abd al-Rahman" "Abu Bakr" Ahmad Ali
+			Fawzi Fuad Halil Hasan Hisham Ibrahim Ishaq Iskandar Ja'far Jamal Kamil Khalid
+			Muhammad Mustafa "Nur al-Din" "Sa'd al-Din" Salim  Sa'ud Shukri
+			Tawfiq Umar Uthman Yahya Yusuf Zafir
+		}
+		surnames = {
+			"ibn Abd Allah" "ibn Abd al-Qadir" "ibn Abu Bakr" "ibn Ahmad" "ibn Ali"
+				"ibn Fuad" "ibn Halil" "ibn Hasan" "ibn Hisham" "ibn Ishaq" "ibn Ja'far" "ibm Kamil" "ibn Khalid"
+				"ibn Muhammad" "ibn Mustafa" "ibn Salim"
+				"ibn Umar" "ibn Uthman" "ibn Yusuf"
+				"al-Najdi" "al-Hijazi"
+		}
+	}
+	female = {
+		names = {
+			Nadiyya Adila Amsha Asiya Faghira Habiba Hanifa Jahaira Kamala Layla Maryam Nafisa Nyawela Parand
+			Parween Paymaneh Paywand Qamara Rafiqa Rasa Rashida Reshawna
+			Saaman Sabba Saghar Sahba Sajida Samira Semeah Setara Shahrbano Shahzadah Shameem Shararah
+			Sheeftah Sheeva Shogofa Shokouh Shola Sholah Simin Souzan
+			Taliba Tanaz Taneen Yagana Yakta Yasmin Zaynab
+		}
+		surnames = {
+			"bint Abd Allah" "bint Abd al-Qadir" "bint Abu Bakr" "bint Ahmad" "bint Ali"
+				"bint Fuad" "bint Halil" "bint Hasan" "bint Hisham" "bint Ishaq" "bint Ja'far" "ibm Kamil" "bint Khalid"
+				"bint Muhammad" "bint Mustafa" "bint Salim"
+				"bint Umar" "bint Uthman" "bint Yusuf"
+				"al-Najdi" "al-Hijazi"
+		}
+	}
+	callsigns = { }
+}
+
+KUW = {
+	male = {
+		names = {
+			Aali "Abd Al-Latif"  Abdul "Abdul-Rahman" Abu Adnan Ahmed Ali Amir Ammar Ashfaq Ayuub Baqi Bassem Danyal Esmail Fadil Fareed Fawzi Gabir Ghufran Haider Hakeem Hamid Hanif Hatim Houssam Husain Ibrahim
+			Idris Imen Iskandar "Ismai'il" Jafar Jamal Jibril Karim Latif Mahometus Maqsud "Mikha'il" Mohammed Mostafa Murtada Nadeem Najm Navid Nur Omar Osama Qasim Rais Rashid Rayan Ruh Saif Salih Shad Shakir
+			Shukri Sulaiman Taj Tayyib Wafai Yakub Yuhanna Zahi Zawar Zulfaqar
+			#Kuwait Specific
+			Abdulaziz Abdullah Abdulqader "Abdul-Razzak" Ahmad Ajeel Alaa Amani Bader Fahid Faisal Fathi Fayez Fehaid Fouzi Ibrahim Jamal Jasem Kazem Khaled Khalifa Messaed Mishary Mohammed Mojeb Musaed Nasser Nawaf Saad Saleh
+			Wael Yousuf Yusuf Zaid
+		}
+	}
+	female = {
+		names = {
+			Aaliyah Aisha Amaal Anisa Ayda Basma Djamila Farah Fatin Gamila Hadia Haifa Haniyah Hosni Ihab Israa Jathibiyya Khalida Latifa Maha Mona Nadia Nashwa Nimat Rabab Rana Rayhana Ruqayyah Sahar Samia Sarah
+			Shahrizad Shayma Suraya Uzma Yasmin Zahia Zakiya Zulekha
+			#Kuwait Specific
+			Danah Essra Ibtihal Massouma Nawal Thuraya
+		}
+	}
+	surnames = {
+		Abdullah Abdulrashid Ahmad Ahmed Ajam "Al-Amin" Alfarsi "Al-Ghazzawi" "Al-Hashim" Ali "Al-Mufti" Amjad Boulos Bousaid Hakim Hussain Kader Karim Karimi Mohammed Muhammad Naaji Nagi Najm Nejem Qadir Saab Samara
+		Saqqaf Sultan Tawfeek Tawfiq Zaman
+		#Kuwait Specific
+		Adees "Al-Adwani" Ajab "Al-Ajar" "Al-Ajmi" Ali Alqattar Alyan "Al-Anberi" "Al Awda" "Al Azmi" Bandar "Al-Baqsami" Behbehani "Al-Bloushi" "Al-Buloushi" "Al-Dakhil" "Al-Deehani" "Al-Dihani" "Al-Dousari" "El-Efasy" Ghareeb
+		"Al-Habashi" "Al Hadhood" "Al-Haji" "Al Hammad" "Al-Harb" "Al Huwaidi" Ibrahem Kamel "Al-Kharafi" "Al-Khatib" Khraibut "El Kuwaitia" "Al-Mathkour" Mohammed Mubarak "Al-Mubarak" "Al-Mudhaf" "Al Mutairi" "Al-Mutawa"
+		"Al-Nashi" "Al-Nashmi" "Al-Nasrallah" Neda "Al-Obeidi" "Al Rashidi" "Al-Razouki" "Al Refai" "Al Rowaished" "Al-Rubei" "Al-Sabah" "Al-Sadoun" "Al-Saleh" Shah "Al Shammari" "Al Shatty" "Al-Soula" "Al-Suwaidan"
+		"Al-Tarabilsi" "Al-Watani" Yacob "Al-Yassin" "Al Zamel" "Al-Zinkawi"
+	}
+	callsigns = { }
+}
+
+MOR = {
+	male = {
+		names = {
+			Aali "Abd Al-Latif"  Abdul "Abdul-Rahman" Abu Adnan Ahmed Ali Amir Ammar Ashfaq Ayuub Baqi Bassem Danyal Esmail Fadil Fareed Fawzi Gabir Ghufran Haider Hakeem Hamid Hanif Hatim Houssam Husain Ibrahim
+			Idris Imen Iskandar "Ismai'il" Jafar Jamal Jibril Karim Latif Mahometus Maqsud "Mikha'il" Mohammed Mostafa Murtada Nadeem Najm Navid Nur Omar Osama Qasim Rais Rashid Rayan Ruh Saif Salih Shad Shakir
+			Shukri Sulaiman Taj Tayyib Wafai Yakub Yuhanna Zahi Zawar Zulfaqar
+			#Morocco Specific
+			Abbas Abd Abdalaati Abdallah Abdelaziz Abdelhak Abdelilah Abdelkader Abdellatif Abdessadeq "Abu Bakr" Ahmed Alber Albert Ali Andre Azzeddine Bachir Bouchaib Bouchta Brahim David Driss Elam Eli Faouzi Gad Hassan Hicham
+			Henry Hicham Imad Isaac Ismael Jamal Jamel Jaouad Jo Judah Kacem Khalid Laarbi Omar Maati Mahmoud Mehdi Mohamed Mohammed Moshe Mouad Moulay Nabil Nadir Najib Rachid Ralph Rhadi Robert Ryan Said Salah Samuel Samy
+			Shlomo
+		}
+		surnames = {
+			Abdullah Abdulrashid Ahmad Ahmed Ajam "Al-Amin" Alfarsi "Al-Ghazzawi" "Al-Hashim" Ali "Al-Mufti" Amjad Boulos Bousaid Hakim Hussain Kader Karim Karimi Mohammed Muhammad Naaji Nagi Najm Nejem Qadir Saab Samara
+			Saqqaf Sultan Tawfeek Tawfiq Zaman
+			#Morocco Specific
+			Aamara Abdelhadi Abouzeid Aflalo "ibn Al-Aftas" Alfasi "Abed Al-Jabri" Amhali Attar Balafej Basri Belhsen "Ben-Ami" Benhima Bensaidi "El Bidaoui" Bitton Bouabid Chami "Ali Cherif" Debbouze Elbaz Essaidi "Al-Fasi"
+			Ferroukhi "El Ghazzali" Guinia Hakmoun "Al-Hassar" "ben David Hayyuj" Ibrahim Jay Kaghat Khayat Laabi Lahlou Laraki Maan "El Marikh" Mezouar "El Moutawakel" Noury "El Othmani" Pinto Reno Roukhe Skah Tamsamani  Tietjen
+			Youssoufi Zarra
+		}
+	}
+	female = {
+		names = {
+			Aaliyah Aisha Amaal Anisa Ayda Basma Djamila Farah Fatin Gamila Hadia Haifa Haniyah Hosni Ihab Isaac Israa Jathibiyya Khalida Latifa Maha Mahi Mona Nadia Nashwa Nimat Rabab Rana Rayhana Ruqayyah Sahar Samia Sarah
+			Shahrizad Shayma Suraya Uzma Yasmin Zahia Zakiya Zulekha
+			#Morocco Specific
+			Amina Danielle Halima Hasna Latifa Leila Nadia Najat Nezha Sanaa Shatha Simone Sofia Yasmine
+		}
+		surnames = {
+			Abdullah Abdulrashid Ahmad Ahmed Ajam "Al-Amin" Alfarsi "Al-Ghazzawi" "Al-Hashim" Ali "Al-Mufti" Amjad Boulos Bousaid Hakim Hussain Kader Karim Karimi Mohammed Muhammad Naaji Nagi Najm Nejem Qadir Saab Samara
+			Saqqaf Sultan Tawfeek Tawfiq Zaman
+			#Morocco Specific
+			Aamara Abdelhadi Abouzeid Aflalo "bint Al-Aftas" Alfasi "Abed Al-Jabri" Amhali Attar Balafej Basri Belhsen "Ben-Ami" Benhima Bensaidi "El Bidaoui" Bitton Bouabid Chami "Ali Cherif" Debbouze Elbaz Essaidi "Al-Fasi"
+			Ferroukhi "El Ghazzali" Guinia Hakmoun "Al-Hassar" "ben David Hayyuj" Ibrahim Jay Kaghat Khayat Laabi Lahlou Laraki Maan "El Marikh" Mezouar "El Moutawakel" Noury "El Othmani" Pinto Reno Roukhe Skah Tamsamani  Tietjen
+			Youssoufi Zarra
+		}
+	}
+	callsigns = { }
+}
+
+TUR = {
+	male = {
+		names = {
+			Abdullah Abdulhamid Abdulkerim Abdulrahim Ahmet Akif Ali Arif
+			Bahaeddin Bekir Cemal Cevad Celaleddin Cevdet Daud Edhem Emin Enver
+			Fahri Fevzi Ferid Fuat Hafiz Hamza Halil Halim Hasan Hayrullah Husrev
+			Ibrahim Iskender Ismet Izzet Kamil Kazim Kemal Lutfi
+			Mahmut Mehmet Mithat Muhtar Murat Musa Mustafa
+			Namik Nazim Nurettin Nuri Numan Omar Osman
+			Pertev Rauf Receb Reshad Refet Rifat Riza
+			Sabaheddin Said Selim Shevket Shukru Suleyman
+			Talat Tevfik Vefik Yusuf Yunus Ziya Ziyauddin
+		 }
+	}
+	female = {
+		names = {
+			Bozçin Canan Ceylan Dunya Dilber Dilek Emine Esin Fatma Firuze
+			Fatima Gulay Gulbahar Gulfem Leyla Mala Mansure Merve Mutlu Nagihan
+			Nergis Neslihan Nilufer Nur Peksen Terkhen Samur Sarica Umay
+		}
+	}
+	surnames = {
+		Altay Karabekir Cakmak Gürman Orbay Subasi Erkilet Koval Omurtak Özsü Atli Gökberk
+
+	}
+	callsigns = { }
+}
+
+ETH = {
+	male = {
+		names = {
+			Abate Abebe Aberra Abiye Ademe Admassu Afawarq Aklilu Amare Amde Anbassu Asfawossen Asrate Atikam Ayalew Balambaras Beine Bekele Belew Berhanu Berihun Beshah Bezibibeh Birru Damtew Debebe Demissie Desta Emmanual Endelkachew Gessesse Getachew Geteye Girma Haile Hailemariam Hapte Kass Kassa Kebbede Kelile Makonnen Mariam Melekot Mengesha Merid Mikael Nasibu Negasi Saleh Sebhat Seged Selassie Seyum Sileshi Tedeamme Wasane Wondosson Wossen Zeamanuel Zelleka Zewde
+		   }
+	}
+	female = {
+		names = { Abrihet Amete Amhara Bekele Belkis Cheren Debtera Degiat Falasha Falashina Fannah Feiven Genat Habesha Hagos Ijigayehou Jazarah Kayla Kelile Kelyle Kess Kifle Louama Mariam Medferiashwork Nishan Nyala Qwara Rahel Retta Sheba Tsage Tsigemariam Wagaye Wolete Wosenyelesh Yehudit Zala Zauditu Zeina Zena Zenia Zimam Zuriashwork }
+	}
+	surnames = {
+			Abate Abebe Aberra Abiye Ademe Admassu Afawarq Aklilu Amare Amde Anbassu Asfawossen Asrate Atikam Ayalew Balambaras Beine Bekele Belew Berhanu Berihun Beshah Bezibibeh Birru Damtew Debebe Demissie Desta Emmanual Endelkachew Gessesse Getachew Geteye Girma Haile Hailemariam Hapte Kass Kassa Kebbede Kelile Makonnen Mariam Melekot Mengesha Merid Mikael Nasibu Negasi Saleh Sebhat Seged Selassie Seyum Sileshi Tedeamme Wasane Wondosson Wossen Zeamanuel Zelleka Zewde "Ali Nur" "Walda Samayat" "Wolde Malakot" Gebre-Igziabiher "Zera Yacob"
+	 }
+	callsigns = { }
+}
+
+ERI = {
+	male = {
+		names = {
+			Abdalla Abdulkadir Abel Abraha Abraham Ahmed Alamin Alemayo Ali Araya Arefaine Bahta Beraki Berehet Bereket Berhane Daniel Dawit Ermias Fesshaye Fikrejesus Filipos Filmon Gergis Germano Ghebreselassie Ghirmai Girma
+			Haile Hais Hamid Haregot Herman Ibrahim Isaias Jemal Kidane Mahmoud Meb Menghesteab Mesfin Michael Mohamed Mohammed Nevi Ogbe Osman Paulos Petros Remo Saleh Samson Samuel Sebhat Semere Seyoum Solomon Srafel Sulaiman
+			Tedla Teklay Tekle Teklemariam Tesfai Tesfaye Tesfayohannes Testfaldet Umar Woldai Wodeab Woldemichael Worku Yared Yegizaw Yemane Yinekachew Yohannes Yonas Zekarias Zerai Zersenay
+		}
+	}
+	female = {
+		names = {
+			Abeba Amna Askalu Aster Dehab Fozia Furtuna Hannah Helen Meraf Nebiat Ruth Senait Simret Zeudi
+		}
+	}
+	surnames = {
+		Abbai Abdalla Abdella Abdu Abera Abraha Brehe Addonia Adonai Aferworki Afewerki Ahmed Alamin Ali Amahazion Araya Asgedom Asmerom Awate Ayele Baduri Bahta Bairu Baria Berhe Cristaldi Debas Deres Desta Ephrem Faytinga
+		Fissehatsion Francois Futur Gebreab Bhebrehiwet Ghebremariam Ghebremeskez Ghebreselassie Ghirmazion Girone Goitom Habtemariam Hagos Haile Hashim Hassan Himid Isaak Jabir Kebire Keflezighi Kekya Kidane Kiflay Kifle
+		Kiflemariam Medhin Mehari Meki Meles Mengisteab Menkerios Mesfen Michael Mohammed Mukhtar Nati Nawd Nurhusein Omer Pool Russom Samuel Selassie Sherifo Shimangus Simon Solomon Sultan Tadese Tadesse Tedros Teklehaymanot
+		Teklemichael Teklerb Tesfagiorgis Tesfamariam Tesfamichael Tesfaszghi Tilahun Tsegay Tsehaye Tseqay Welday Wolday Woldemariam Woldense Woldeyohannes Yohannes Yoseph Zegergish
+	}
+	callsigns = { }
+}
+
+NGA = {
+	male = {
+		names = {
+			Abidemi Abiodun Abubakar Adebayo Adebowale Adegoke Adisa Akachi Akpofure Alhaji Amadi Ayodele Ayomide Azubuike Babatunde Bitrus Chibueze Chibuzo Chidiebere Chidiegwu Chidubem Chijindum Chikelu Chima Chinedu Chinwe
+			Chinwendu Chioma Cuks Chukwuemeka Dayo Efemena Ejiroghene Ekenedilichukwu Ekwueme Emem Enitan Eseoghene Folami Idowu Ikenna Iniobong Itoro Kayin Kyauta Lekan Ndidi Nkemdilim Obi Oghenekevwe Okafor Okonkwo Okoro
+			Olamide Olanrewaju Olufemi Olufunmilayo Olujimi Olumide Oluwafunmilayo Oluwasegun Oluwaseyi Oluwayemisi Onyekachi Opeyemi Oyibo Udo Uduakobong Umukoro Uzoma
+		}
+	}
+	female = {
+		names = {
+			Abeni Abiodun Adanna Ade Adebowale Detokunbo Akachi Akuchi Alheri Amara Anuli Ayodele Ayotunde Bosede Chiamaka Chibuike Chichi Chidiebere Chidiegwu Chijindum Chike Chikere Chinedu Chinwe Chinwendu Chinyelu Chioma
+			Dada Ebele Efemena Ejiroghene Ekenedilichukwu Emem Enitan Fadimatu Fumnanya Gbemisola Idowu Ifiok Ime Inyene Kayin Mojisola Ndidi Nkechi Nkemdilim Nkiruka Nnenna Nwanneka Ogechukwukama Oghenekevwe Olamide Olubunmi
+			Olufunke Olufunmilola Oluwakanyinsola Oluwaseun Oluwatoyin Omobolanle Oni Onyekachi Opeyemi Oyibo Temitope Udo Uduakobong Uzoma Yejide
+		}
+	}
+	surnames = {
+		Abdullahi Abiola Abioye Abubakar Adeoye Adoti Adebayo Adesina Adeyemi Aduba Agbaje Agrinya Agu Agumanu Akenzua Akerele Akinjide Akintola Akinyemi Akpabio Ali Aliu Amaechi Attah Azebry Azikiwe Baba Babangida Balogun
+		Bankole Bassey Bello Bolaji Chukwu Danjuma Darego Effiong Ejiofor Etienam Eze Ezekwesili Gbadamosi Hassan Ibeh Ibrahim Igbinedion Ikande Imam Iwuchukwu Jaja Kabir Kalu Kazah Konkwo Lawal Mohammed Nenge Njoku Nwankwo
+		Obasanjo Obi Oderasak Odoemene Odusanya Ojukwu Okafor Okeke Okereke Okonkwo Okorie Okoro Okoye Okpara Olanrewaju Olatunji Oni Onyilogwu Oparei Orji Osagie Osahon Oyawale Pepple Popoola Princewill Shehu Tersoo Tinubu Uba
+		Umburter Uthman Voeman
+	}
+	callsigns = { }
+}
+
+GAH = {
+	male = {
+		names = {
+			Abdul Ablade Akwasi Albert Alex Aliu Anthony Ataa Austin Ave Awal Ben Bernard Cephas Clement Daniel Ebenezer Eddie Edward El Elom Emmanuel Ephraim Eric Francis Frank Fred George Gloria Godfried Gyearbuor Hilla
+			Ignatius Isaac Jackie James Jerry Joachim Joe John Joseph Joshua Kobina Koby Kofi Kow Kudjoe Kwadwo Kwaku Kwame Kwamena Kwaw Kwesi Majid Mamood Mark Maxwell Michael Mikki Mohammed Nana Nat Nii Obed Obo Oli Patrick
+			Peter Philip Prince Richie Rikki Rudolf Sammi Samuel Shamo Simon Tetteh Van Victor Yaw
+		}
+	}
+	female = {
+		names = {
+			Akosua Cecilia Juliet Leila Mavis Nadia Nana Shirley Suzzy Yvonne
+		}
+	}
+	surnames = {
+		Abongo Adablah Addy Adjei Adu Affutu Agbee Aggudey Aidoo Akuetteh "Akufo-Addo" Alhassan Amadu Amankwah "Amenga-Etego" Amissah Amoah Amu Anatsui Anin Annan Ansah Apea Arkaah Aryee Asante Ayensu Baah Berko Blay Buari Busia
+		Chireh Djansi Dossey "Frimpong-Manso" Gbeho "de Graft-Johnson" Ibrahim Kalilu Konadu Kuffour Kumah Labi Limann Mahama McBrown Mensah Michel Mumuni Nikoi Nyarko Oko Ollennu Preko Quartey Quaynor Rahman "Sintim-Misa"
+		"Wemega-Kwawu" Yaw
+	}
+	callsigns = { }
+}

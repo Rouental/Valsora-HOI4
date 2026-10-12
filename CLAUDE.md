@@ -128,7 +128,8 @@ for the author. Unknown layer names are ignored.
     (`DRAWN_PLACEHOLDERS`): 9 states plus 6 islands; the circle around Hirane is one.
   - Islets under 150 px join the nearest state of their country within 300 px
     (`ISLET_REACH`); farther ones (Rouental's two islets off Solitas) share a state of
-    their own. `LEAVE` lists patches the lines close off by accident (the land south
+    their own. Only states made in the same run count: an islet by an older state of its
+    country is joined to it with `pdn_tools.py attach` (2026-10-12, Myehn's). `LEAVE` lists patches the lines close off by accident (the land south
     of Entroterra and Estande), which stay as they are.
   - Cut placeholder provinces and states are cleaned up iteratively: scraps join a
     neighbour (a new province's scrap stays in its state), never a new state, and
@@ -624,6 +625,65 @@ mismatch, missing localisation) and catches all of them.
     (`dist/preview_new_nations_orientalis.png`). Wanea's line carves a tongue of land
     south-east of it out to Sarkis, as drawn. The upload predated Araseos 1's move to
     Terreich, so `pdn_tools.py attach` was run again.
+    **2026-10-12** (the author's names, governments and formal names; tags, colours,
+    adjectives and cultures Claude's): **Usnistan outlined**, Orientalis' south-west and
+    Sennheiser. In Usnistan: the Cultists CUL (Prophetic Rule, "the Cult of the Great
+    Cthulu", the CU archipelago), Arcadia ARC (Conservatism, Terreich's puppet), Muqadasa
+    Salamat MQS (the author's new **Divine Republicanism**, Theocratic; "the Holy
+    Republic of Muqadasa Salamat"), Sarza SRZ (Absolute Monarchy, "the Empire of Sarza"),
+    Leviathan LEV (Populism), Kyras KYS (Liberalism, "the Commonwealth of Kyras", with the
+    RA islands and a coastal exclave by Almohavid), Hulya HLY (Conservatism, "the
+    Territory of Hulya", a 148 px box), Levantinin LVN (Holy Order, "the Crusader State of
+    Levantinin"), Mustawi MST (Strongman Rule), Almohavid AMH (Constitutional Monarchy),
+    Port Almohavid PAM (Lordly Republic, "the Free Port of Almohavid": the 16 px tip of
+    land a short line closes off), Mekele MKL (Anarcho-Communism, "the Mekele Peoples'
+    State"), Kalaistan KLS (Military Junta), Al-Radiyaa RDY (Conservatism), Al-Khabid KHB
+    (Oligarchy), the Humanist State HMN (the author's new **Humanism**, Authoritarian: "an
+    apartheid-style ideology placing humans as superior beings to the other races of
+    Valsora"), South Usnistan SUS (Conservatism), Royabad RYB and Koronista KRS (Absolute
+    Monarchy, sultanates), North Koronista NKR (Strongman Rule; "North Kornista" on the
+    map), Zanzimibia ZNZ (Social Democracy), the Utopian Republic UTP (Lordly Republic,
+    "the Second Utopian Republic"), Soloriania SLN (Liberalism, "the Solorianois
+    Confederacy"), Hohenzburg HZB (Strongman Rule, the Kampfian Empire's puppet), Nuevo
+    Paraíso NPR (Conservatism, the United States of Solitas' dominion), Arklen ARK
+    (Conservatism, "the Arklen Free State", a non-aggression pact with Ostaria), Isigoriya
+    ISG (Military Junta), Kizimwe KZW (Synodal Rule, "the Kizimwe Conference of Bishops"),
+    Lafari LFR (Council Communism, "the Worker's Republic of the Lafari"), Meddacah MDC
+    (Fascism, "the Meddacah River Autonomous Zone"), Khaleeya KHY (Feudalism) and Solaria
+    SLA (Hierocracy, "the Holy State of Solaria": on the map but not in the author's
+    list; named when asked); in Orientalis' south-west Chineasia CNA (Vanguardism, "the
+    People's Republic of Chineasia", with the CH islands as far as Krionik's island; led
+    by the author's **Han Leji**, `source/portraits/han_leji.png`; flag `CNA.png`) and
+    Felter FLT (Liberalism, with the FE islands); Sennheiser SNH (Constitutional Monarchy,
+    "the Sennheiser Union", labelled AK) in Yastreovakia's south-west, a `LEAVE` patch
+    until then. The author's "direct colonies": islets and bits of coast labelled US (the
+    United States of Solitas, 3 states), KR (Krionik, 3), KE (the Kampfian Empire, 1), SR
+    (Sarkis, 2) and KF (Kilkire-Foraois, Claude's reading, 1 islet); the islet the author
+    circled near Myehn's red circle joined Myehn's nearest state (`pdn_tools.py attach`).
+    Cultures: the continent's Persian for Kyras (Kyros is Cyrus), Sarza, Royabad,
+    Kalaistan, South Usnistan, the Cultists and the Humanist State; Arabic for Muqadasa
+    Salamat, Al-Khabid and Khaleeya (SAU names) and Mustawi, Al-Radiyaa and Meddacah
+    (KUW), Moroccan for both Almohavids, Turkish for Hulya and both Koronistas, Ethiopian
+    for Mekele and Lafari, Eritrean for Kizimwe, Nigerian for Zanzimibia, Ghanaian for
+    Isigoriya (with the `arabia` and `africa` portraits, the two halves of the continent's
+    mixed set), Greek for Arcadia, English for Leviathan and the Utopian Republic (Hobbes,
+    More), French for Levantinin and Soloriania, German for Hohenzburg and Sennheiser,
+    Dutch for Arklen (the Orange Free State) and Felter, Latin American for Nuevo
+    Paraíso, Italian for Solaria, Chinese for Chineasia. SAU KUW MOR TUR ETH ERI NGA GAH
+    were copied into `vanilla_names.txt` from vanilla; their heads of state and a few
+    other famous names are in `NOT_SURNAMES` (none of them was in a list already in use,
+    so no older leader changed). States: Chineasia 73, the Utopian Republic 68, Kyras and
+    Sarza 33 each, Royabad 31, Felter and Lafari 29 each, the Humanist State 23,
+    Sennheiser 22, the Cultists 21, Muqadasa Salamat and South Usnistan 19 each, North
+    Koronista 18, Arcadia 17, Levantinin 12, Mustawi 11, Almohavid and Zanzimibia 9 each,
+    Al-Khabid, Hohenzburg and Nuevo Paraíso 8 each, Al-Radiyaa 6, Soloriania 4,
+    Isigoriya, Kalaistan, Kizimwe, Koronista, Meddacah and Solaria 3 each, Arklen, Hulya,
+    Khaleeya, Leviathan, Mekele and Port Almohavid 1 each: 545 with the colonies'
+    (`dist/preview_new_nations_usnistan.png`, `..._orientalis_southwest.png`,
+    `..._sennheiser.png`). Left as placeholders: about 1,700 px of Usnistan islets (most
+    of it the three islands south of it), 300 px of islets off Orientalis and 350 px in
+    Yastreovakia. The CU and RA labels were drawn on Necessary Borders: moved to
+    Necessary Names.
     All tags were checked against vanilla `common/country_tags`; new tags must be too.
   - The adjectives of the neighbours are guesses; the author may rename them.
 - **State names** are the author's, in `source/state_names.json` ("x,y" of a pixel
@@ -773,7 +833,8 @@ Aislada is the worked example of a built-out nation:
   (`source/portraits/ema_milize.png`); Krionik's is a council, the **Kriosaivak Council of
   Marshals**, with its emblem as the portrait; Leithanien's is **Helmut Shulz**
   (`helmut_shulz.png`) and Terreich's **Charlotte Gustoff** (`charlotte_gustoff.webp`,
-  cropped from a photo) (author, 2026-10-08).
+  cropped from a photo) (author, 2026-10-08); Chineasia's is **Han Leji**
+  (`han_leji.png`, author, 2026-10-12).
 - **Nation names** come from `COUNTRIES` in `build_mod.py`: name and adjective feed
   `TAG`, `TAG_DEF`, `TAG_ADJ`, the per-ideology variants (`TAG_communism` etc.) and the
   continent key.
@@ -826,8 +887,10 @@ working; names come from `localisation/english/replace/`:
   **Khanate** (2026-10-09, Sanada); Democratic also has the author's **Stratocracy**
   (2026-10-07, Krionik) and **Radical Republicanism** (2026-10-09, Vilna). Authoritarian also has the author's **Bleacherism** (Alban
   supremacy; officially a senatorial republic under a strongman): ILR CTF ETR MZG;
-  KIL is Legitimism. Theocratic: Hierocracy, Clerical Monarchism, Holy Order, Synodal
-  Rule, Prophetic Rule. Vanilla's Earth-bound ones (`nazism`, `japan_militarism_ideology`
+  KIL is Legitimism; and **Humanism** (2026-10-12, the Humanist State: humans above
+  Valsora's other races, apartheid-style). Theocratic: Hierocracy, Clerical Monarchism,
+  Holy Order, Synodal Rule, Prophetic Rule, and the author's **Divine Republicanism**
+  (2026-10-12, Muqadasa Salamat). Vanilla's Earth-bound ones (`nazism`, `japan_militarism_ideology`
   …, `ideologies.HIDDEN`) stay defined because vanilla's characters and focus files name
   them, but are never given to generated leaders. The author wants no more for now.
 - Subtype descriptions start with the subtype's name ("Feudalism: …"), so it shows on
@@ -1045,8 +1108,10 @@ in git history (commit d2d6cd8, `scripts/cartographic.py`). It used
 
 ## Current state
 
-- 21,084 provinces (20,683 land, 363 sea, 38 lakes), 2,629 states, 122 strategic regions
-  (42 sea), 143 countries (2026-10-12: Merlo's sea, the wrap made seamless; before:
+- 24,767 provinces (24,366 land, 363 sea, 38 lakes), 3,070 states, 122 strategic regions
+  (42 sea), 178 countries (2026-10-12, later: Usnistan outlined, 35 new nations, 545 new
+  states; before: 21,084 provinces (20,683 land), 2,629 states, 143 countries
+  (2026-10-12: Merlo's sea, the wrap made seamless; before:
   21,366 provinces (645 sea), 91 strategic regions (11 sea) (2026-10-11: Orientalis
   outlined, 24 new nations, 667 new states; before: 16,646 provinces, 2,073 states, 119 countries (Araseos' last islet to
   Terreich); before: 2,074 states, 120

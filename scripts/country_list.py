@@ -30,7 +30,9 @@ CULTURE_NAMES = {
     "ALB": "Albanian", "MAC": "Macedonian", "UKR": "Ukrainian", "FIN": "Finnish",
     "LAT": "Latvian", "LIT": "Lithuanian", "GRE": "Greek", "BYA": "Buryat", "HUN": "Hungarian",
     "CHN": "Chinese", "TBT": "Tibetan", "KOR": "Korean", "ARM": "Armenian", "UZB": "Uzbek",
-    "KAZ": "Kazakh", "BRM": "Burmese", "VNM": "Vietnamese", "RAJ": "Indian"}
+    "KAZ": "Kazakh", "BRM": "Burmese", "VNM": "Vietnamese", "RAJ": "Indian",
+    "SAU": "Arabic (Saudi)", "KUW": "Arabic (Kuwaiti)", "MOR": "Moroccan", "TUR": "Turkish",
+    "ETH": "Ethiopian", "ERI": "Eritrean", "NGA": "Nigerian", "GAH": "Ghanaian"}
 
 
 def loc():

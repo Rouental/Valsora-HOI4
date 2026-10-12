@@ -94,6 +94,14 @@ REGIONS["india"] = dict(
     political={i: ["GFX_Portrait_The_Raj_Political_Leader_Generic",
                    "GFX_Portrait_The_Raj_Political_Leader_Generic_2"] for i in REGIONS["europe"]["political"]})
 
+# Arab and African nations of Usnistan (2026-10-12): one half of the continent's mixed list each
+REGIONS["arabia"] = dict(
+    army=_seq("GFX_Portrait_Arabia_Generic_land", 3), navy=_seq("GFX_Portrait_Arabia_Generic_navy", 3),
+    political={i: _seq("GFX_Portrait_Arabia_Generic", 3) for i in REGIONS["europe"]["political"]})
+REGIONS["africa"] = dict(
+    army=_seq("GFX_Portrait_Africa_Generic_land", 3), navy=_seq("GFX_Portrait_Africa_Generic_navy", 3),
+    political={i: _seq("GFX_Portrait_Africa_Generic", 3) for i in REGIONS["europe"]["political"]})
+
 # continent -> culture: vanilla name block, portrait region, graphical culture
 CONTINENT_CULTURE = {
     "nonscio": dict(names="ENG", portraits="europe", gfx="western_european"),
@@ -203,6 +211,33 @@ TAG_CULTURE = {
     "PLJ": dict(names="VNM", portraits="asia", gfx="asian"),  # Vietnamese ("plei", a highland village)
     "GND": dict(names="TBT", portraits="asia", gfx="asian"),  # Ganden, a Tibetan monastery
     "ARP": dict(names="RAJ", portraits="india", gfx="commonwealth"),
+    # 2026-10-12: Claude's guesses from the names (the author hasn't said); the rest of
+    # Usnistan's new nations keep the continent's Persian (Kyras after Cyrus, Kyros in
+    # Greek; Royabad, Kalaistan, Sarza, South Usnistan, the Cultists, the Humanist State)
+    **{t: dict(names="SAU", portraits="arabia", gfx="middle_eastern")
+       for t in ("MQS", "KHB", "KHY")},  # Arabic, "ibn" patronymics
+    **{t: dict(names="KUW", portraits="arabia", gfx="middle_eastern")
+       for t in ("MST", "RDY", "MDC")},  # Arabic, family names
+    **{t: dict(names="MOR", portraits="arabia", gfx="middle_eastern")
+       for t in ("AMH", "PAM")},  # after the Almohads
+    **{t: dict(names="TUR", portraits="arabia", gfx="middle_eastern")
+       for t in ("HLY", "KRS", "NKR")},  # Hülya; sultanates
+    **{t: dict(names="ETH", portraits="africa", gfx="african")
+       for t in ("MKL", "LFR")},  # Mekele, an Ethiopian city; Lafari, after Ras Tafari
+    "KZW": dict(names="ERI", portraits="africa", gfx="african"),  # Eritrean: its bishops
+    "ZNZ": dict(names="NGA", portraits="africa", gfx="african"),
+    "ISG": dict(names="GAH", portraits="africa", gfx="african"),
+    "ARC": dict(names="GRE", portraits="europe", gfx="eastern_european"),  # Arcadia, in Greece
+    **{t: dict(names="ENG", portraits="europe", gfx="western_european")
+       for t in ("LEV", "UTP")},  # Hobbes's Leviathan, More's Utopia
+    **{t: _FRENCH for t in ("LVN", "SLN")},  # crusaders; "Solorianois"
+    **{t: dict(names="GER", portraits="europe", gfx="western_european")
+       for t in ("HZB", "SNH")},  # Hohenzburg like Kampf, its overlord
+    # the Arklen Free State after the Orange Free State; Felter, an island republic
+    **{t: dict(names="HOL", portraits="europe", gfx="western_european") for t in ("ARK", "FLT")},
+    "NPR": dict(names="MEX", portraits="latin_america", gfx="southamerican"),
+    "SLA": dict(names="ITA", portraits="europe", gfx="western_european"),  # a holy state, like the Holy See
+    "CNA": dict(names="CHN", portraits="asia", gfx="asian"),
 }
 
 
@@ -295,7 +330,12 @@ def sprites_used():
 # famous surnames a made-up leader should not carry
 NOT_SURNAMES = {"Petain", "Foch", "Joffre", "Salazar", "Napoléon", "Murat", "Davout",
                 "d'Orleans", "Franchet d'Espèrey", "Churchill", "Mussolini", "Hirohito", "Tojo", "Piłsudski",
-                "Gandhi", "Modi", "Neru", "Nehru", "Suukyi", "Nzhdeh", "Kajaznuni"}
+                "Gandhi", "Modi", "Neru", "Nehru", "Suukyi", "Nzhdeh", "Kajaznuni",
+                # 2026-10-12: heads of state and other famous names in the new lists
+                "Selassie", "Isaias", "Aferworki", "Afewerki", "Tedros", "Keflezighi",
+                "Obasanjo", "Babangida", "Azikiwe", "Tinubu", "Ojukwu", "Abiola", "Akintola", "Danjuma",
+                "Annan", "Akufo-Addo", "Kuffour", "Mahama", "Busia", "Limann",
+                "Osama", "Mahometus", "Al-Sabah", "Debbouze", "Reno", "Youssoufi", "El Othmani"}
 
 
 def _tokens(block):

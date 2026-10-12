@@ -103,6 +103,9 @@ SUBTYPES = {
          "central strongman figure wields vast authority over the nation."),
         ("megacorporation", "Megacorporation",  # the author's, 2026-10-04 (Thorian Dynamics)
          "A corporation has become the state: the board governs, and citizens are its employees."),
+        ("humanism", "Humanism",  # the author's, 2026-10-12 (the Humanist State)
+         "An apartheid-style ideology placing humans as superior beings to the other races of "
+         "Valsora."),
     ],
     "neutrality": [
         ("despotism", "Absolute Monarchy", "The monarch rules alone and answers to no one."),
@@ -123,6 +126,9 @@ SUBTYPES = {
         ("holy_order", "Holy Order", "A military religious order holds the state."),
         ("synodal_rule", "Synodal Rule", "A council of bishops or elders governs."),
         ("prophetic_rule", "Prophetic Rule", "A chosen, messianic leader speaks for the divine."),
+        ("divine_republicanism", "Divine Republicanism",  # the author's, 2026-10-12 (Muqadasa Salamat)
+         "A republic under God, whose people elect their leaders, but where holy law binds them "
+         "and the clergy keep watch over it."),
     ],
 }
 # vanilla's Earth-bound subtypes: kept, since vanilla files name them, but never given to

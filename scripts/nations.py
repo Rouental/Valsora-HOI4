@@ -131,7 +131,8 @@ HISTORY = {
     "VNT": ["set_autonomy = { target = HWK autonomous_state = autonomy_puppet }"],
     # 2026-10-07 (author): Merlgould and Schteirmark start as vassals
     "VLN": ["set_autonomy = { target = MGD autonomous_state = autonomy_puppet }"],
-    "TUP": ["set_autonomy = { target = STM autonomous_state = autonomy_puppet }"],
+    "TUP": ["set_autonomy = { target = STM autonomous_state = autonomy_puppet }",
+            "set_autonomy = { target = ARC autonomous_state = autonomy_puppet }"],  # author, 2026-10-12
     "PTK": ["set_autonomy = { target = MRG autonomous_state = autonomy_puppet }"],  # author, 2026-10-08
     "BLK": ["set_autonomy = { target = WSM autonomous_state = autonomy_puppet }"],  # author, 2026-10-09
     # Daravon leads the Synthesist Internationale with Artzen and Scealand
@@ -142,6 +143,11 @@ HISTORY = {
     "CRT": ["set_autonomy = { target = KZN autonomous_state = autonomy_puppet }"],
     "QNG": ["create_faction_from_template = faction_template_great_lake_republics",
             *[f"add_to_faction = {t}" for t in ("XUE", "HLG", "ASC", "HDO")]],
+    # 2026-10-12 (author): Hohenzburg is the Kampfian Empire's puppet, Nuevo Paraíso the
+    # United States of Solitas' dominion, and Arklen has a non-aggression pact with Ostaria
+    "KPF": ["set_autonomy = { target = HZB autonomous_state = autonomy_puppet }"],
+    "USS": ["set_autonomy = { target = NPR autonomous_state = autonomy_dominion }"],
+    "ARK": ["diplomatic_relation = { country = OST relation = non_aggression_pact active = yes }"],
 }
 
 # Country names while a given ideology rules: tag -> ideology -> (name, formal
@@ -251,6 +257,18 @@ LEADERS = {
     "SHO": ["oligarchism"], "UYZ": ["khanate"], "YTR": ["khanate"], "MYH": ["conservatism"],
     "PLJ": ["marxism"], "PZH": ["radical_republicanism"], "GND": ["fascism_ideology"],
     "ARP": ["enlightened_absolutism"], "SHN": ["despotism"],
+    # 2026-10-12 (author); Humanism and Divine Republicanism are the author's new subtypes
+    "CUL": ["prophetic_rule"], "ARC": ["conservatism"], "MQS": ["divine_republicanism"],
+    "SRZ": ["despotism"], "LEV": ["populism"], "KYS": ["liberalism"], "HLY": ["conservatism"],
+    "LVN": ["holy_order"], "MST": ["strongman_rule"], "AMH": ["constitutional_monarchism"],
+    "PAM": ["lordly_republic"], "MKL": ["anarchist_communism"], "KLS": ["military_junta"],
+    "RDY": ["conservatism"], "KHB": ["oligarchism"], "HMN": ["humanism"], "SUS": ["conservatism"],
+    "RYB": ["despotism"], "KRS": ["despotism"], "NKR": ["strongman_rule"], "ZNZ": ["socialism"],
+    "UTP": ["lordly_republic"], "SLN": ["liberalism"], "HZB": ["strongman_rule"],
+    "NPR": ["conservatism"], "ARK": ["conservatism"], "ISG": ["military_junta"],
+    "KZW": ["synodal_rule"], "LFR": ["council_communism"], "MDC": ["fascism_ideology"],
+    "KHY": ["feudalism"], "CNA": ["leninism"], "SNH": ["constitutional_monarchism"],
+    "FLT": ["liberalism"], "SLA": ["theocrat"],
     "SEE": ["theocrat"],
     # 2026-10-07 (author)
     "MGD": ["personal_union"], "TCN": ["oligarchism"], "PTK": ["strongman_rule"],
@@ -282,6 +300,7 @@ NAMED_LEADERS = {
     "KRI_leader_stratocracy": ("Kriosaivak Council of Marshals", "GFX_portrait_KRI_council_of_marshals"),
     "LTH_leader_populism": ("Helmut Shulz", "GFX_portrait_LTH_helmut_shulz"),  # author, 2026-10-08
     "TUP_leader_socialism": ("Charlotte Gustoff", "GFX_portrait_TUP_charlotte_gustoff"),  # author, 2026-10-08
+    "CNA_leader_leninism": ("Han Leji", "GFX_portrait_CNA_han_leji"),  # author, 2026-10-12
 }
 # Characters renamed once they rule their country (author, 2026-10-08): character ->
 # (tag, localisation key of the new name). The on_ruling_party_change on_action does it,
@@ -605,6 +624,42 @@ FORMAL_NAMES = {
     "GND": "the Republic of Ganden",
     "ARP": "the United Empire of Arpino",
     "SHN": "the Empire of Shinnokawa",
+    # 2026-10-12 (author)
+    "CUL": "the Cult of the Great Cthulu",
+    "ARC": "the Republic of Arcadia",
+    "MQS": "the Holy Republic of Muqadasa Salamat",
+    "SRZ": "the Empire of Sarza",
+    "LEV": "the Republic of Leviathan",
+    "KYS": "the Commonwealth of Kyras",
+    "HLY": "the Territory of Hulya",
+    "LVN": "the Crusader State of Levantinin",
+    "MST": "the Republic of Mustawi",
+    "AMH": "the Kingdom of Almohavid",
+    "PAM": "the Free Port of Almohavid",
+    "MKL": "the Mekele Peoples' State",
+    "KLS": "the Republic of Kalaistan",
+    "RDY": "the Republic of Al-Radiyaa",
+    "KHB": "the Kingdom of Al-Khabid",
+    "HMN": "the Humanist State",
+    "SUS": "the Republic of South Usnistan",
+    "RYB": "the Sultanate of Royabad",
+    "KRS": "the Sultanate of Koronista",
+    "NKR": "the Republic of North Koronista",
+    "ZNZ": "the People's Republic of Zanzimibia",
+    "UTP": "the Second Utopian Republic",
+    "SLN": "the Solorianois Confederacy",
+    "HZB": "the State of Hohenzburg",
+    "NPR": "the Dominion of Nuevo Paraíso",
+    "ARK": "the Arklen Free State",
+    "ISG": "the State of Isigoriya",
+    "KZW": "the Kizimwe Conference of Bishops",
+    "LFR": "the Worker's Republic of the Lafari",
+    "MDC": "the Meddacah River Autonomous Zone",
+    "KHY": "the Kingdom of Khaleeya",
+    "CNA": "the People's Republic of Chineasia",
+    "SNH": "the Sennheiser Union",
+    "FLT": "the Republic of Felter",
+    "SLA": "the Holy State of Solaria",
 }
 
 LOCALISATION = [
@@ -1128,6 +1183,8 @@ PORTRAITS = {
     # the author's (2026-10-08): Leithanien's is already portrait-shaped; Terreich's a photo
     "LTH_helmut_shulz": ("source/portraits/helmut_shulz.png", 0, 0, 267, None),
     "TUP_charlotte_gustoff": ("source/portraits/charlotte_gustoff.webp", 180, 40, 740, None),
+    # the author's (2026-10-12), 450 x 593: the full height, a few px off each side
+    "CNA_han_leji": ("source/portraits/han_leji.png", 5, 0, 440, None),
 }
 
 # Hand-picked victory point names. Key either a province id (ids follow the placeholder

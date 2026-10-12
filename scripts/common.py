@@ -213,6 +213,44 @@ COUNTRIES = {
     "ganden": ("GND", "Ganden", "Gandenese", (110, 80, 50)),
     "arpino": ("ARP", "Arpino", "Arpinese", (52, 150, 52)),
     "shinnokawa": ("SHN", "Shinnokawa", "Shinnokawan", (250, 90, 70)),  # added later that day
+    # 2026-10-12 (the author's names, governments and formal names; tags, colours and
+    # adjectives Claude's): Usnistan outlined, Orientalis' south-west (Chineasia, Felter)
+    # and Sennheiser in Yastreovakia's south-west
+    "cultists": ("CUL", "Cultists", "Cultist", (20, 92, 86)),
+    "arcadia": ("ARC", "Arcadia", "Arcadian", (104, 104, 158)),
+    "muqadasa": ("MQS", "Muqadasa Salamat", "Muqadasan", (20, 158, 98)),
+    "sarza": ("SRZ", "Sarza", "Sarzan", (122, 38, 110)),
+    "leviathan": ("LEV", "Leviathan", "Leviathanian", (38, 62, 122)),
+    "kyras": ("KYS", "Kyras", "Kyran", (236, 146, 86)),
+    "hulya": ("HLY", "Hulya", "Hulyan", (212, 212, 122)),
+    "levantinin": ("LVN", "Levantinin", "Levantine", (218, 206, 188)),
+    "mustawi": ("MST", "Mustawi", "Mustawi", (146, 128, 38)),
+    "almohavid": ("AMH", "Almohavid", "Almohavid", (212, 20, 62)),
+    "port_almohavid": ("PAM", "Port Almohavid", "Port Almohavid", (254, 188, 44)),
+    "mekele": ("MKL", "Mekele", "Mekelean", (86, 20, 20)),
+    "kalaistan": ("KLS", "Kalaistan", "Kalaistani", (56, 80, 32)),
+    "al_radiyaa": ("RDY", "Al-Radiyaa", "Radiyaan", (38, 164, 146)),
+    "al_khabid": ("KHB", "Al-Khabid", "Khabidi", (188, 92, 20)),
+    "humanist": ("HMN", "Humanist State", "Humanist", (104, 86, 104)),
+    "s_usnistan": ("SUS", "South Usnistan", "South Usnistani", (98, 128, 200)),
+    "royabad": ("RYB", "Royabad", "Royabadi", (182, 50, 80)),
+    "koronista": ("KRS", "Koronista", "Koronistani", (218, 194, 104)),
+    "n_koronista": ("NKR", "North Koronista", "North Koronistani", (116, 68, 38)),
+    "zanzimibia": ("ZNZ", "Zanzimibia", "Zanzimibian", (254, 146, 182)),
+    "utopian": ("UTP", "Utopian Republic", "Utopian", (92, 170, 224)),
+    "soloriania": ("SLN", "Soloriania", "Solorianois", (230, 218, 92)),
+    "hohenzburg": ("HZB", "Hohenzburg", "Hohenzburger", (74, 98, 20)),
+    "nuevo_paraiso": ("NPR", "Nuevo Paraíso", "Paraisano", (182, 122, 224)),
+    "arklen": ("ARK", "Arklen", "Arklener", (92, 152, 92)),
+    "isigoriya": ("ISG", "Isigoriya", "Isigoriyan", (98, 80, 62)),
+    "kizimwe": ("KZW", "Kizimwe", "Kizimwean", (86, 50, 122)),
+    "lafari": ("LFR", "Lafari", "Lafari", (158, 50, 32)),
+    "meddacah": ("MDC", "Meddacah", "Meddacan", (38, 56, 62)),
+    "khaleeya": ("KHY", "Khaleeya", "Khaleeyan", (152, 146, 194)),
+    "chineasia": ("CNA", "Chineasia", "Chineasian", (194, 26, 80)),
+    "sennheiser": ("SNH", "Sennheiser", "Sennheiser", (62, 80, 158)),
+    "felter": ("FLT", "Felter", "Felterian", (254, 158, 62)),
+    "solaria": ("SLA", "Solaria", "Solarian", (248, 230, 146)),  # on the map, named later that day
 }
 # The placeholder countries, one per continent, are the recommended starts in the
 # bookmark; the rest are playable but not listed there.
