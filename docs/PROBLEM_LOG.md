@@ -241,6 +241,25 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## Map problems found while building
 
+**The terrain test unrealistic in places** (2026-10-12, author: "make the generated
+terrain logical, realistic, and consistent")
+- Causes: Rouental's mountains were four invented round domes, while the author's fief
+  map has the Vale of Reibonne's own ranges; rivers ran over the generated relief with
+  no valleys; woods were blobs of noise, unrelated to the land; the north of Usnistan
+  (the Levant's latitudes) was desert, as the westerlies' winter rain stopped at 38°;
+  half of the Siberian taiga was tundra or dry grassland (a treeline at -6 °C, and a
+  steppe threshold meant for warm climates); the Sahel met the jungle along a ruler-
+  straight edge; Aislada's monsoons wet the whole island, so it had no outback; bogs and
+  coastal fens were scattered blobs and thin strips along the coasts.
+- Fix: the vale is built from the author's ranges (`source/vale_ranges.png`), with a low
+  floor, hills along the rest of its land border and the Reliette gap open; every river
+  has a valley whose bed never rises downstream, and the land where rivers are drawn is
+  wetter; woods follow the relief (uplands, slopes, land above its surroundings) and
+  farmland the lowlands, valleys and coasts; the westerlies reach 27°; the treeline is at
+  -9 °C and trees need little rain in the cold; rainforest, dry forest and savanna grade
+  into each other; Aislada's monsoons reach 20° and 110-200 px inland; bogs lie in
+  basins, and coastal fens only along long, low coasts.
+
 **Straight-edged strips in the terrain test** (2026-10-12)
 - Cause: the moist air is carried inland one line of pixels at a time, so a lake
   (which refilled the air with moisture) or the end of a range on one line but not
