@@ -105,8 +105,9 @@ for the author. Unknown layer names are ignored.
     8 px of line, both 150+ px): first run CRD 22, KRK 11 (+ islands), LNT 10, ROU 54,
     SSA 7 (+ islands), STO 4. `apply_outlines.py` no longer re-cuts a finished country
     (`RECUT_DONE = False`) unless `OWNERS` seeds a new country inside it.
-  - Every state is cut into ~150 px provinces for a granular map (placeholder bricks
-    elsewhere are 1,024 px). Pieces are forced 4-connected.
+  - Every state is cut into ~190 px provinces (`PROVINCE_AREA`; ~150 px for a granular
+    map until 2026-10-12, when HOI4's border limit was hit: see Province borders below;
+    placeholder bricks elsewhere are 1,024 px). Pieces are forced 4-connected.
   - **Borders are organic** (`organic.py`, from 2026-09-29 on). k-means places the
     pieces; then each grows from the pixel nearest its k-means centre by a compact
     watershed over fractal noise (compactness 0.2 / spacing, noise at 0.6 / 0.25 / 0.09
@@ -166,6 +167,8 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `strategic_regions.py` | retired 2026-10-12 (refuses to run on a map with Ocean Province Lines, unless `--force`): sea regions = the author's oceans, one each, with names (`source/region_names.json`); land untouched |
 | `sea_provinces.py` | by hand: the sea from the Ocean Province Lines layer (Merlo's): `build` (provinces from the lines, cut to HOI4's size limit, colours and regions kept by overlap), `seam` (borders and regions meet across the left/right wrap), `names` (`source/region_names.json`: "<ocean> <n>" west to east), `check` (report only) |
 | `river_provinces.py` | by hand, after a build: re-cuts the provinces of every state a river crosses so rivers run between provinces |
+| `borders.py` | HOI4's province border count (pairs of touching provinces, each separate stretch of shared boundary once, land and water alike) and its limit, 65,536; `check_mod.py` uses it; run alone, it counts the last build's |
+| `merge_provinces.py` | by hand, after a build: merges the smallest land provinces into a neighbour in the same state (never across a river, never two city provinces, at most 400 px) until the borders are down to a target (default 60,000), on the Provinces layer |
 | `redraw_flags.py` | unused: Fraxhemark's stand-in flag (writes `work/FRX_standin.png`); the author's own `FRX.png` replaced it |
 | `state_map.py` | by hand, after a build: a numbered map of some countries' states (`dist/state_numbers_<name>.png` + `.json`, number → tag and pixel), for the author to name them; `--names` labels them with their names instead |
 | `usnistan_prototype.py` | by hand, a prototype not in the game: a fully generated Usnistan (relief, climate terrain, rivers, ~800 provinces, states, 6 placeholder countries, cities) into `work/usnistan/` and `dist/usnistan_*.png` (author asked for an example, 2026-10-02) |
@@ -182,7 +185,7 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `export_canvas.py` | previews in `dist/` |
 | `package.py` | `dist/valsora_test.zip` |
 | `country_list.py` | by hand, after a build: `dist/world_map_labelled.png` (every country labelled) and `dist/countries.md` / `.csv` (name, full name, ideology, sub-ideology, culture, leader, states), read from the built mod |
-| `collages.py` | by hand, after a build: `dist/flags_collage.png` (every custom flag, and the countries still on a placeholder stripe) and `dist/leaders_collage.png` (every custom leader: own portraits at 2×, named ones with base-game portraits as labelled tiles); `--continent NAME` writes only `dist/flags_<name>.png`, the flags of the nations whose capital is on that continent, naming below them those with land there and their capital elsewhere (2026-10-10, Araseos) |
+| `collages.py` | by hand, after a build: `dist/flags_collage.png` (every custom flag, and the countries still on a placeholder stripe) and `dist/leaders_collage.png` (every custom leader: own portraits at 2×, named ones with base-game portraits as labelled tiles); `--continent NAME` writes only `dist/flags_<name>.png`, the flags of the nations whose capital is on that continent, naming below them those with land there and their capital elsewhere (2026-10-10, Araseos; 2026-10-12, Yastreovakia) |
 
 **A clean `check_mod.py` run is the bar for shipping a build.** It was mutation-tested
 (CRLF, X-crossing, missing building row, state split across regions, descriptor
@@ -694,7 +697,8 @@ mismatch, missing localisation) and catches all of them.
     (`attach`). Nonscio and Yastreovakia own nothing now. Left as placeholders: Usnistan
     1-4 (islets beside Kyras and the Utopian Republic, and the islands south of South
     Usnistan; the old Usnistan 3-5, renumbered), Orientalis 1-2 (beside Kianhua and Daihai)
-    and Solitas 1-20, the land between the friend's nations.
+    and Solitas 1-20, the land between the friend's nations. Flags for Sennheiser and
+    Volstokn came the same day (`SNH.png`, `VSK.png`; map colours unchanged).
     All tags were checked against vanilla `common/country_tags`; new tags must be too.
   - The adjectives of the neighbours are guesses; the author may rename them.
 - **State names** are the author's, in `source/state_names.json` ("x,y" of a pixel
@@ -1072,6 +1076,16 @@ sprites resolve to files, and that every focus id and prerequisite is valid and 
   - Localisation is UTF-8 **with BOM**.
   - `ambient_object.txt` frame positions follow the map height: top frame at H+142, logo
     at H+82.
+- **At most 65,536 province borders** (HOI4 wiki, Map modding: an integer overflows and
+  the rest are not drawn, "usually hit at about 21000 provinces"). A border is a stretch
+  of boundary two touching provinces share, land or water alike; a pair touching in
+  several places has several. They are made in province id order (here reading order),
+  so a map over the limit loses its province and state lines from some row down
+  (2026-10-12, author's screenshots: 73,231 borders, no lines south of row ~1995; the
+  count put the overflow at row ~1990). `check_mod.py` counts them (`borders.py`) and
+  fails over the limit, with a note within 4,000 of it. `merge_provinces.py` merged
+  4,313 small provinces: 20,454 provinces, 60,318 borders, land provinces 186 px on
+  average (river pixels still 91 % on borders), and new outlines are cut at ~190 px.
 - Map errors crash on launch unless the game runs with `-debug`. Always test with it.
 
 ## Vanilla content switched off
@@ -1119,8 +1133,10 @@ in git history (commit d2d6cd8, `scripts/cartographic.py`). It used
 
 ## Current state
 
-- 24,767 provinces (24,366 land, 363 sea, 38 lakes), 3,065 states, 122 strategic regions
-  (42 sea), 176 countries (2026-10-12, later still: ten placeholder states to their new
+- 20,454 provinces (20,053 land, 363 sea, 38 lakes), 60,318 province borders, 3,065
+  states, 122 strategic regions (42 sea), 176 countries (2026-10-12, last: 4,313 small
+  provinces merged for HOI4's border limit; before: 24,767 provinces (24,366 land),
+  73,231 borders (2026-10-12, later still: ten placeholder states to their new
   owners; before: 3,070 states, 178 countries (2026-10-12, later: Usnistan outlined, 35
   new nations, 545 new states; before: 21,084 provinces (20,683 land), 2,629 states, 143 countries
   (2026-10-12: Merlo's sea, the wrap made seamless; before:

@@ -6,6 +6,25 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**Province and state lines missing from row ~1995 down** (2026-10-12, author's screenshots)
+- Cause: HOI4 draws at most 65,536 province borders; past that an integer overflows and
+  the rest are not drawn (HOI4 wiki, Map modding, "usually hit at about 21000
+  provinces"). A border is each stretch of boundary two touching provinces share, land
+  or water alike. They are made in province id order, which here is reading order, so
+  the lines stopped at the row where the count passed the limit. The map had 24,767
+  provinces (~150 px each wherever the author had outlined) and 73,231 borders; the
+  count puts the overflow at row ~1990, the screenshots at ~1995. Not the map's size.
+- Fix: `merge_provinces.py` merged 4,313 of the smallest land provinces into a neighbour
+  in the same state (never across a river, never two city provinces, at most 400 px):
+  20,454 provinces and 60,318 borders, land provinces 186 px on average; new outlines
+  are cut at ~190 px (`PROVINCE_AREA`). Check: `check_mod.py` counts the borders
+  (`borders.py`) and fails over 65,536 (it failed on the old build), with a note within
+  4,000 of it.
+- The first run took which provinces touch from the build's province map, whose
+  X-crossing fixes move single pixels: two provinces touching only at such a corner
+  were merged and the build stopped on a province in two pieces. It now reads the
+  Provinces layer itself.
+
 **Placeholder islets left beside new countries, and a code two nations share** (2026-10-12, author)
 - The author found, by their names in game, states that were still placeholders. Five
   were islets of 17-52 px a few px off land the update had just outlined (the

@@ -16,6 +16,7 @@ from skimage.measure import label as sklabel
 
 sys.path.insert(0, str(Path(__file__).parent))
 from imgio import read_bmp  # noqa: E402
+from borders import LIMIT as BORDER_LIMIT, count as border_count  # noqa: E402
 from rivers import problems as river_problems  # noqa: E402
 
 VANILLA_STATE_CATEGORIES = {"wasteland", "enclave", "tiny_island", "pastoral", "small_island",
@@ -151,6 +152,14 @@ def main(mod):
     xc = (a != b) & (a != c) & (a != d) & (b != c) & (b != d) & (c != d)
     if xc.any():
         err(f"{int(xc.sum())} X-crossings, first at {np.argwhere(xc)[0].tolist()}")
+    # HOI4 stops drawing province borders after the 65,536th (2026-10-12: no province or
+    # state lines south of row ~1995 with 73,231)
+    n_borders = border_count(prov)[1]
+    if n_borders > BORDER_LIMIT:
+        err(f"{n_borders} province borders: HOI4 draws only {BORDER_LIMIT}, so the province and "
+            f"state lines of the provinces after that are missing (scripts/merge_provinces.py)")
+    elif n_borders > BORDER_LIMIT - 4000:
+        note(f"{n_borders} province borders, near HOI4's limit of {BORDER_LIMIT}")
     pairs = set()
     for p1, p2 in ((prov[:, :-1], prov[:, 1:]), (prov[:-1], prov[1:]), (prov[:, -1:], prov[:, :1])):
         m = p1 != p2

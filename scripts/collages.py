@@ -98,8 +98,10 @@ def flags(L, continent=None):
     cols, cw, ch, pad = 10, FW + 22, FH + 52, 30
     width = pad * 2 + cols * cw
     probe = ImageDraw.Draw(Image.new("RGB", (1, 1)))
-    foot = wrap(probe, "Still a placeholder stripe in their map colour (no flag yet): "
-                + ", ".join(missing) + ".", font(REGULAR, 16), width - 2 * pad)
+    foot = []
+    if missing:
+        foot += wrap(probe, "Still a placeholder stripe in their map colour (no flag yet): "
+                     + ", ".join(missing) + ".", font(REGULAR, 16), width - 2 * pad)
     if others:
         foot += wrap(probe, f"Also holding land in {continent.title()}, with their capital elsewhere: "
                      + ", ".join(others) + ".", font(REGULAR, 16), width - 2 * pad)

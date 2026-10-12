@@ -388,7 +388,7 @@ MIN_STATE = 150      # smaller patches (islets) join the nearest state of their 
 ISLET_REACH = 300    # ... if within this many px; farther islets make a state of their own
 STATE_MAX = 2000     # patches bigger than this become several states ...
 STATE_AREA = 1300    # ... of about this size (650 until 2026-10-04: the author wants fewer states)
-PROVINCE_AREA = 150  # target province size inside the outlines (placeholders: 1024)
+PROVINCE_AREA = 190  # target province size inside the outlines (150 until 2026-10-12; placeholders: 1024)
 MIN_LEFTOVER = 300  # smaller remains of a cut placeholder province join a neighbour
 
 

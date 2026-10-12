@@ -79,6 +79,11 @@ Each province is one solid patch of one colour. Any colour works, as long as:
 - **Four provinces may not meet at one corner.** You don't need to worry about this: the
   build fixes it by moving single pixels and tells you where.
 - **Nothing may cross the left or right edge.** The map wraps around there.
+- **Not too many provinces.** HOI4 draws at most 65,536 province borders (each stretch
+  of boundary two provinces share, sea included), and stops drawing province and state
+  lines after that, from some point down the map. The map has about 60,000 (October
+  2026), so new land is cut into provinces of about 190 px; the build stops if the
+  limit is passed.
 
 A province is land, sea or lake depending on what the **Terrain** layer says under most
 of it. Provinces are numbered from the top-left corner, reading like a book. The numbers
