@@ -139,7 +139,7 @@ HISTORY = {
     # Daravon leads the Synthesist Internationale with Artzen and Scealand
     "DRV": ["create_faction_from_template = faction_template_synthesist_internationale",
             "add_to_faction = ESC", "add_to_faction = HWT"],
-    # 2026-10-11 (author): Kaizan is Charity's vassal, and Qingou leads the Great Lake
+    # 2026-10-11 (author): Kaizan is Charity's vassal, and Qinguo leads the Great Lake
     # Republics with Xuè, Hulinguo, the Associated Cities and Haidao
     "CRT": ["set_autonomy = { target = KZN autonomous_state = autonomy_puppet }"],
     "QNG": ["create_faction_from_template = faction_template_great_lake_republics",
@@ -273,7 +273,10 @@ LEADERS = {
     # 2026-10-13 (author): Solitas' new nations
     "REC": ["agrarianism"], "SRD": ["strongman_rule"], "AVN": ["conservatism"],
     "AVE": ["semi_constitutional_monarchy"], "ABL": ["despotism"], "TEX": ["liberalism"],
-    "GYC": ["liberalism"], "LAN": ["conservatism"], "BRO": ["stalinism"],
+    "GYC": ["liberalism"], "LAN": ["conservatism"],
+    # 2026-10-13, later (author): Bromé a Grand Duchy (Party Centralism until then), and
+    # Santa Fe
+    "BRO": ["semi_constitutional_monarchy"], "SFE": ["stalinism"],
     "SEE": ["theocrat"],
     # 2026-10-07 (author)
     "MGD": ["personal_union"], "TCN": ["oligarchism"], "PTK": ["strongman_rule"],
@@ -314,7 +317,9 @@ NAMED_LEADERS = {
     "TEX_leader_liberalism": ("Iyun' Savon", None),
     "GYC_leader_liberalism": ("The General Cortes", None),  # the federation's parliament
     "LAN_leader_conservatism": ("Michael Ryan", None),
-    "BRO_leader_stalinism": ("Jose Castañeda", None),
+    # still its ruler as a Grand Duchy (2026-10-13, later; the author named no other)
+    "BRO_leader_semi_constitutional_monarchy": ("Jose Castañeda", None),
+    "TSU_leader_lordly_republic": ("Akihiro Tanaka", None),  # author, 2026-10-13, later
 }
 # Characters renamed once they rule their country (author, 2026-10-08): character ->
 # (tag, localisation key of the new name). The on_ruling_party_change on_action does it,
@@ -617,7 +622,7 @@ FORMAL_NAMES = {
     "GOR": "the Holy Kingdom of Gorduchai",
     "SRK": "the People's State of Sarkis",
     "WAN": "the Republic of Wanea",
-    "QNG": "the Qingou Republics",
+    "QNG": "the Qinguo Republics",  # "the Qingou Republics" until 2026-10-13 (author)
     "XUE": "the Republic of Xuè",
     "HLG": "the Hulinguo Republic",
     "ASC": "the Associated Cities of Dahu and Jinhu",
@@ -683,7 +688,8 @@ FORMAL_NAMES = {
     "TEX": "the Republic of Texaria",
     "GYC": "the Federation of Gran Yucanoa",
     "LAN": "the United Isle of Las Anod",
-    "BRO": "the Republic of Bromé",
+    "BRO": "the Grand Duchy of Bromé",  # "the Republic of Bromé" until 2026-10-13, later
+    "SFE": "the Fifth Republic of Santa Fe",
 }
 
 LOCALISATION = [
@@ -1227,6 +1233,8 @@ CITY_NAMES = {
     "capital:SGV": "Villerose",
     "capital:LST": "Tanière",
     "capital:FRX": "Fraternal City",  # 2026-10-01
+    "capital:TSU": "Kishito",   # 2026-10-13, later
+    "capital:MYH": "Shukumei",  # 2026-10-13, later
 }
 
 # Capitals chosen by the author, as a pixel (x, y) inside the capital state; other

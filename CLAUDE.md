@@ -183,6 +183,7 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `superevents.py` | TNO-style superevent windows, their texts, picture and music |
 | `cultures.py` | generic portraits, name lists and graphical culture per continent / country |
 | `ideologies.py` | the five ideologies: ideology file, renamed localisation, theocracy icon |
+| `minimap.py` | the minimap (lower right): Valsora's land on parchment instead of vanilla's Earth, its frame, window and slide (2026-10-13) |
 | `check_mod.py` | re-reads the built files and checks every rule below |
 | `export_canvas.py` | previews in `dist/` |
 | `package.py` | `dist/valsora_test.zip` |
@@ -301,7 +302,8 @@ mismatch, missing localisation) and catches all of them.
 - **Countries**:
   - One placeholder per continent: NSC ARS AIS SLT YAS USN ORI (`SOL` is a vanilla
     tag, so Solitas is `SLT`); Araseos has no land left since 2026-10-09, nor Nonscio and
-    Yastreovakia since 2026-10-12, so ARS, NSC and YAS are left out of the mod. They are `common.PLACEHOLDERS`, the only countries the
+    Yastreovakia since 2026-10-12, nor Orientalis and Usnistan since 2026-10-13, so ARS,
+    NSC, YAS, ORI and USN are left out of the mod (Solitas keeps one 16 px islet). They are `common.PLACEHOLDERS`, the only countries the
     bookmark recommends (author's wish, to keep the start menu short).
   - Colours follow the flags (author): Rouental royal green, Guedelon blue, Hollier red, Seigne white,
     Evriches yellow, Lustiana black, Selgrave dark maroon, Lanzerac purple (its new flag's,
@@ -590,7 +592,8 @@ mismatch, missing localisation) and catches all of them.
     "the Holy Kingdom of Gorduchai", the island west of Orientalis), Sarkis SRK
     (Revanchism, "the People's State of Sarkis", with the SR islets), Wanea WAN
     (Agrarianism), **the Great Lake Republics** (`faction_template_great_lake_republics`):
-    Qingou QNG (Liberalism, "the Qingou Republics", its leader), Xuè XUE (Conservatism;
+    Qingou QNG (Liberalism, "the Qingou Republics", its leader; **Qinguo**, "the Qinguo
+    Republics", since 2026-10-13), Xuè XUE (Conservatism;
     the accent is the author's), Hulinguo HLG (Populism, "the Hulinguo Republic"), the
     Associated Cities ASC ("the Associated Cities of Dahu and Jinhu", Liberalism) and
     Haidao HDO ("the Associated City of Haidao", Liberalism); Kuran KRN (Vanguardism, "the
@@ -724,8 +727,8 @@ mismatch, missing localisation) and catches all of them.
     (Liberalism, "the Federation of Gran Yucanoa", ruled by the General Cortes, its
     parliament, flag), Las Anod LAN (Conservatism, "the United Isle of Las Anod", Michael
     Ryan) and Bromé BRO (Party Centralism, "the Republic of Bromé", Jose Castañeda); the
-    AV patches are Arvorenia's. **Santa Fe**, labelled but not in the author's list, stays
-    the placeholder (`LEAVE`). Cultures: Latin American for Recaxa, Gran Yucanoa and Bromé,
+    AV patches are Arvorenia's. **Santa Fe**, labelled but not in the author's list, stayed
+    the placeholder (`LEAVE`) until that evening. Cultures: Latin American for Recaxa, Gran Yucanoa and Bromé,
     American Surredia, German Arovannea, Greek Avesária, Spanish Abalón, Russian Texaria
     (Iyun' is June), Irish Las Anod. States: Arovannea 26, Surredia 19, Recaxa 16, Gran
     Yucanoa 13, Avesária 6, Abalón 5, Texaria 5, Las Anod 5, Arvorenia 2, Bromé 1
@@ -741,6 +744,26 @@ mismatch, missing localisation) and catches all of them.
     stripes, or Surredia's plain sides trimmed; `dist/flags_new_20261013.png`), and added
     to the author's flag file as layers (`source/New_Mod_Flags.pdn`, now kept in the repo;
     `writepdn.py` adds layers on top).
+    **2026-10-13, later** (the author's names, governments and transfers; tag, colours,
+    adjective and culture Claude's): **Santa Fe** SFE ("the Fifth Republic of Santa Fe",
+    Party Centralism, Latin American, gold to stand out from Bromé's crimson and
+    Atrocha's red; its patch, "Solitas 3" and "4" in game, cut by `apply_outlines.py` into
+    7 states like its neighbours); **Bromé** is "the Grand Duchy of Bromé", a
+    Semi-Constitutional Monarchy (Party Centralism until then; Jose Castañeda still rules,
+    the author named no other); **Silvamar**'s map colour is its flag's navy, a little
+    lighter (10, 30, 140): its green was too close to Arvorenia's and Las Anod's. The
+    placeholder states the author named in game went to their neighbours: Solitas 1 (298
+    px) to Hoalepa and Usnistan 3 and 4 (214 and 1,432 px) to Royabad as states of their
+    own (`pdn_tools.py give`); Solitas 5 (the two old Rouental islets, 90 px) to Atrocha,
+    Orientalis 1 and 2 (38 and 95 px) to Kianhua and Daihai, and Usnistan 1 and 2 (31 and
+    17 px) to Kyras and the Utopian Republic, each joining its new owner's nearest state
+    (`attach`). Orientalis and Usnistan own nothing now; the only placeholder land left is
+    Solitas 2, a 16 px islet off Recaxa's west coast at (1443, 1832)
+    (`dist/preview_new_nations_solitas.png`). Then (author) **Qingou is renamed Qinguo**
+    (tag QNG and key `qingou` kept); five first flags, for Qinguo, Kianhua, Tsuruma, Myehn
+    and Ganden (fitted to 82:52 as below, and added to the flag file); Tsuruma's ruler is
+    **Akihiro Tanaka** and its capital **Kishito**, Myehn's capital **Shukumei**
+    (`CITY_NAMES`). Map colours were not changed to match the new flags.
     All tags were checked against vanilla `common/country_tags`; new tags must be too.
   - The adjectives of the neighbours are guesses; the author may rename them.
 - **State names** are the author's, in `source/state_names.json` ("x,y" of a pixel
@@ -891,8 +914,9 @@ Aislada is the worked example of a built-out nation:
   Marshals**, with its emblem as the portrait; Leithanien's is **Helmut Shulz**
   (`helmut_shulz.png`) and Terreich's **Charlotte Gustoff** (`charlotte_gustoff.webp`,
   cropped from a photo) (author, 2026-10-08); Chineasia's is **Han Leji**
-  (`han_leji.png`, author, 2026-10-12). Solitas' new rulers (2026-10-13) are named
-  without portraits (`None`): they keep a generic portrait of their culture.
+  (`han_leji.png`, author, 2026-10-12). Solitas' new rulers (2026-10-13) and Tsuruma's
+  **Akihiro Tanaka** (2026-10-13, later) are named without portraits (`None`): they keep
+  a generic portrait of their culture.
 - **Nation names** come from `COUNTRIES` in `build_mod.py`: name and adjective feed
   `TAG`, `TAG_DEF`, `TAG_ADJ`, the per-ideology variants (`TAG_communism` etc.) and the
   continent key.
@@ -923,7 +947,10 @@ Aislada is the worked example of a built-out nation:
   from the author's flag sheet. Countries without a PNG get a placeholder stripe in
   their map colour. Flags sent in another shape are fitted to 82:52 without stretching:
   scaled evenly, then plain field added inside the stripes (or plain sides trimmed), so
-  emblems keep their shape (2026-10-13, the author's wish).
+  emblems keep their shape (2026-10-13, the author's wish). Vertical bands get plain rows
+  above and below instead, so their widths stay (Qinguo), and a field division that must
+  reach the corners is redrawn at the new width round the unchanged emblems (Ganden's
+  border and mountain triangle).
 - **Formal names** (`nations.FORMAL_NAMES`, e.g. "the County of Evriches") feed
   `TAG_DEF` and the per-ideology `_DEF` keys that have no `IDEOLOGY_NAMES` entry.
 
@@ -945,7 +972,7 @@ working; names come from `localisation/english/replace/`:
   Monarchist: Absolute Monarchy, Oligarchy, Feudalism, Enlightened Absolutism, Elective
   Monarchy, Legitimism, and the author's **Personal Union** (2026-10-07, Merlgould) and
   **Khanate** (2026-10-09, Sanada) and **Semi-Constitutional Monarchy** (2026-10-13,
-  Avesária); Democratic also has the author's **Stratocracy**
+  Avesária, then Bromé); Democratic also has the author's **Stratocracy**
   (2026-10-07, Krionik) and **Radical Republicanism** (2026-10-09, Vilna). Authoritarian also has the author's **Bleacherism** (Alban
   supremacy; officially a senatorial republic under a strongman): ILR CTF ETR MZG;
   KIL is Legitimism; and **Humanism** (2026-10-12, the Humanist State: humans above
@@ -1133,6 +1160,15 @@ sprites resolve to files, and that every focus id and prerequisite is valid and 
   fails over the limit, with a note within 4,000 of it. `merge_provinces.py` merged
   4,313 small provinces: 20,454 provinces, 60,318 borders, land provinces 186 px on
   average (river pixels still 91 % on borders), and new outlines are cut at ~190 px.
+- **The minimap is a fixed picture**, not drawn from the map: `gfx/minimap/minimap.dds`
+  (sprite `GFX_minimap_world`, vanilla `interface/unitview.gfx`), shown at its own size
+  inside `gfx/minimap/border.dds` (drawn at -5, -5). The window sits at the lower right
+  (`interface/minimap.gui`: vanilla x = -343 y = -98, for a picture about 263×97 plus the
+  80 px of map-mode buttons), and `MINIMAP_TOGGLE_SHIFT` (vanilla 270) is how far ctrl+m
+  slides it away. Until 2026-10-13 ours showed vanilla's Earth (author's screenshot).
+  `minimap.py` draws Valsora's at 194×97 (the map's 2:1) with the window at x = -274 and a
+  slide of 202, as Equestria at War does for its 2:1 minimap; `check_mod.py` checks all
+  four (mutation-tested).
 - Map errors crash on launch unless the game runs with `-debug`. Always test with it.
 
 ## Vanilla content switched off
@@ -1148,6 +1184,9 @@ The following vanilla files are overridden:
   states and provinces.
 - The 21 ENG/FRA/GER/ITA/JAP/SOV/USA files in `common/ai_navy/{goals,fleet,taskforce}`,
   emptied.
+- The minimap's picture and frame (`gfx/minimap/minimap.dds`, `border.dds`) and
+  `interface/minimap.gui` (vanilla's, `source/interface/vanilla_minimap.gui`, with the
+  window moved), plus `MINIMAP_TOGGLE_SHIFT` in `common/defines/valsora_graphics.lua`.
 
 Left loaded on purpose, and noisy in `error.log`:
 - National focus: it holds the generic tree our countries use.
@@ -1180,8 +1219,11 @@ in git history (commit d2d6cd8, `scripts/cartographic.py`). It used
 
 ## Current state
 
-- 20,778 provinces (20,377 land, 363 sea, 38 lakes), 61,283 province borders, 3,118
-  states, 122 strategic regions (42 sea), 184 countries (2026-10-13: Solitas outlined,
+- 20,817 provinces (20,416 land, 363 sea, 38 lakes), 61,400 province borders, 3,118
+  states, 122 strategic regions (42 sea), 183 countries (2026-10-13, later: Santa Fe cut
+  into 7 states, the last placeholder states but one islet given to their neighbours, so
+  Orientalis and Usnistan are left out). Before: 20,778 provinces (20,377 land), 61,283
+  borders, 184 countries (2026-10-13: Solitas outlined,
   nine new nations, the United States of Solitas removed, two islands added). Before:
   20,454 provinces (20,053 land), 60,318 borders, 3,065 states, 176 countries
   (2026-10-12, last: 4,313 small

@@ -241,7 +241,7 @@ TAG_CULTURE = {
     "CNA": dict(names="CHN", portraits="asia", gfx="asian"),
     # 2026-10-13: Claude's guesses from the names (the author hasn't said)
     **{t: dict(names="MEX", portraits="latin_america", gfx="southamerican")
-       for t in ("REC", "GYC", "BRO")},  # Zorreguieta, the Cortes, Castañeda
+       for t in ("REC", "GYC", "BRO", "SFE")},  # Zorreguieta, the Cortes, Castañeda; Santa Fe
     "SRD": dict(names="USA", portraits="usa", gfx="western_european"),  # Sunny Hurricane
     "AVN": dict(names="GER", portraits="europe", gfx="western_european"),  # Illger fön Reegen
     "AVE": dict(names="GRE", portraits="europe", gfx="eastern_european"),  # Dimokratía, Nikosanis

@@ -350,7 +350,7 @@ OWNERS_1012 = {
 # coast are bits of a small loop of line, Abalón's; the 5 px at (2066, 1722) is Gran
 # Yucanoa's. Texaria's eastern line stopped 8 px short of the inlet south of it and was
 # closed, and the "CI" west of Surredia was written on Necessary Borders: moved to Names.
-OWNERS = {
+OWNERS_1013 = {
     "recaxa": [(1517, 1664), (1559, 1867)],
     "surredia": [(1631, 1819), (1797, 1814), (1660, 1910), (1702, 1880), (1758, 1898), (1682, 1922)],
     "arovannea": [(2097, 1636), (1915, 1709), (1964, 1689), (2038, 1719), (1711, 1731), (1839, 1736),
@@ -362,6 +362,11 @@ OWNERS = {
     "las_anod": [(2567, 1755), (2538, 1802)],
     "brome": [(2316, 1919)],
     "arvorenia": [(2316, 1627), (2161, 1888)],
+}
+# 2026-10-13, later (author): Santa Fe, "the Fifth Republic of Santa Fe", the patch left
+# as the placeholder that morning (it was two states, "Solitas 3" and "4").
+OWNERS = {
+    "santa_fe": [(2323, 1884)],
 }
 OWNERS_0410 = {
     "anglost": [(528, 1283), (607, 1287), (509, 1335), (436, 1342), (506, 1363), (474, 1379),
@@ -392,7 +397,7 @@ LEAVE = [  # (596, 2222), the bit of coast west of Gaellia, became Terreich's on
          # and (554, 1814) Ungar's since 2026-10-08
          # (4152, 1460), the peninsula beside Tenkyoku, is Charity's since 2026-10-11
          (2254, 405), (487, 1531), (334, 1844),  # (2553, 933) is Sennheiser's since 2026-10-12
-         (2323, 1884),  # Santa Fe; (1618, 1798) and (1757, 1894) are Surredia's since 2026-10-13
+         # (1618, 1798) and (1757, 1894) are Surredia's since 2026-10-13, and (2323, 1884) Santa Fe's
          (847, 1402), (769, 1354),  # (403, 1359) is Transcainia's since 2026-10-07
          # Aislada, outlined on 2026-10-04 (still the placeholder's colour)
          (2016, 1235), (1853, 1370), (1869, 1216), (2089, 1205), (1887, 1334), (1830, 1288),

@@ -108,7 +108,9 @@ COUNTRIES = {
     # removed from the map on 2026-10-13 (author: "eventually it will be readded as a
     # formable"), so it owns nothing and is left out of the mod
     "us_solitas": ("USS", "United States of Solitas", "American", (140, 60, 190)),
-    "silvamar": ("SVM", "Silvamar", "Silvestran", (20, 120, 50)),
+    # its flag's navy, a little lighter (author, 2026-10-13: green until then, too close
+    # to Arvorenia's and Las Anod's)
+    "silvamar": ("SVM", "Silvamar", "Silvestran", (10, 30, 140)),
     "ponchomagnifico": ("PNC", "Ponchomagnifico", "Ponchomagnifico", (255, 204, 0)),
     # 2026-10-05, later (the author's names, governments and formal names; colours and
     # adjectives Claude's, from the flags where there is one): the south-west of Araseos
@@ -194,7 +196,7 @@ COUNTRIES = {
     "gorduchai": ("GOR", "Gorduchai", "Gorduchaian", (236, 224, 168)),
     "sarkis": ("SRK", "Sarkis", "Sarkisian", (104, 108, 120)),
     "wanea": ("WAN", "Wanea", "Wanean", (110, 160, 60)),
-    "qingou": ("QNG", "Qingou", "Qingouese", (40, 120, 200)),
+    "qingou": ("QNG", "Qinguo", "Qinguoese", (40, 120, 200)),  # "Qingou" until 2026-10-13 (author)
     "xue": ("XUE", "Xuè", "Xuè", (100, 190, 170)),
     "hulinguo": ("HLG", "Hulinguo", "Hulinguo", (240, 140, 110)),
     "assoc_cities": ("ASC", "Associated Cities", "Dahu-Jinhu", (250, 220, 120)),
@@ -264,6 +266,9 @@ COUNTRIES = {
     "gran_yucanoa": ("GYC", "Gran Yucanoa", "Yucanoan", (50, 60, 130)),  # flag navy, lighter
     "las_anod": ("LAN", "Las Anod", "Anodian", (120, 200, 90)),
     "brome": ("BRO", "Bromé", "Bromean", (150, 20, 50)),
+    # 2026-10-13, later (author): the land labelled Santa Fe; gold, so it stands out from
+    # Bromé's crimson and Atrocha's red beside it
+    "santa_fe": ("SFE", "Santa Fe", "Santa Fean", (230, 175, 35)),
 }
 # The placeholder countries, one per continent, are the recommended starts in the
 # bookmark; the rest are playable but not listed there.

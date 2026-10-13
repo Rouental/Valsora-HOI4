@@ -20,7 +20,7 @@ PLY = {
 	callsigns = { }
 }
 
-# Chinese (2026-10-11, Claude's: Qingou and its neighbours). Chinese names put the
+# Chinese (2026-10-11, Claude's: Qinguo and its neighbours). Chinese names put the
 # family name first, and the game writes a generated name as <name> <surname>, so the
 # family names are the `names` here and the given names the `surnames`. No names of
 # famous people (no Mao, no Zhongshan, no Enlai ...)

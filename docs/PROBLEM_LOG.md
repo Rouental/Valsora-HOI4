@@ -6,6 +6,27 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**The minimap showed Earth** (2026-10-13, author's screenshot)
+- Cause: the minimap is not drawn from the map. It is a fixed picture, vanilla's
+  `gfx/minimap/minimap.dds` (sprite `GFX_minimap_world`, defined in vanilla's
+  `interface/unitview.gfx` and shown by `interface/minimap.gui`), which the mod never
+  replaced.
+- Fix: `scripts/minimap.py` draws Valsora's at build time from the land: 194×97, the
+  map's 2:1 (vanilla's Earth is about 263×97, for its 2.75:1 map), pale land on darker
+  parchment like vanilla's, in a frame of our own (`gfx/minimap/border.dds`). The window
+  is moved right to meet the map-mode buttons (`interface/minimap.gui`, x = -274 instead
+  of -343) and the ctrl+m slide that hides it shortened (`MINIMAP_TOGGLE_SHIFT` 202
+  instead of 270), as Equestria at War does for its own 2:1 minimap (195×97). Check:
+  `check_mod.py` checks the picture's shape and the frame, window and slide that go
+  with it (mutation-tested: picture missing, vanilla window position, vanilla slide).
+- Not yet seen in game.
+
+**Silvamar hard to tell from Arvorenia and Las Anod** (2026-10-13, author)
+- Cause: its map colour was a green (Claude's pick, from its flag's green band), next
+  to Arvorenia's dark green and Las Anod's light green.
+- Fix: its flag's navy, a little lighter, (10, 30, 140); `pdn_tools.py recolour` kept
+  the Countries layer in step.
+
 **Province and state lines missing from row ~1995 down** (2026-10-12, author's screenshots)
 - Cause: HOI4 draws at most 65,536 province borders; past that an integer overflows and
   the rest are not drawn (HOI4 wiki, Map modding, "usually hit at about 21000

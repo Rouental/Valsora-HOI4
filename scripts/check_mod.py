@@ -213,6 +213,26 @@ def main(mod):
             err(f"{name}.dds should be {W // div}x{H // div}")
         if p.stat().st_size != 128 + w * h * 4:
             err(f"{name}.dds has the wrong data length")
+    # the minimap (scripts/minimap.py): the map's shape, its frame, window and slide to match
+    mm = mod / "gfx/minimap/minimap.dds"
+    if not mm.exists():
+        err("gfx/minimap/minimap.dds missing: the minimap would show vanilla's Earth")
+    else:
+        hdr = mm.read_bytes()[:128]
+        mh, mw = struct.unpack_from("<II", hdr, 12)
+        if hdr[:4] != b"DDS " or abs(mw / mh - W / H) > 0.02 or mm.stat().st_size != 128 + mw * mh * 4:
+            err(f"minimap.dds is {mw}x{mh}: it should be the map's shape ({W}:{H}), A8R8G8B8")
+        bh, bw = struct.unpack_from("<II", (mod / "gfx/minimap/border.dds").read_bytes()[:128], 12)
+        if (bw, bh) != (mw + 11, mh + 8):
+            err(f"gfx/minimap/border.dds is {bw}x{bh}, should be {mw + 11}x{mh + 8} for the minimap")
+        pos = re.search(r'name = "mini_map_interface"\s*position = \{ x=(-?\d+) y=(-?\d+) \}',
+                        (mod / "interface/minimap.gui").read_text(encoding="utf-8"))
+        if not pos or (int(pos[1]), int(pos[2])) != (-(mw + 80), -(mh + 1)):
+            err(f"interface/minimap.gui: the minimap window should be at x={-(mw + 80)} y={-(mh + 1)}")
+        shift = re.search(r"MINIMAP_TOGGLE_SHIFT = (\d+)",
+                          (mod / "common/defines/valsora_graphics.lua").read_text(encoding="utf-8"))
+        if not shift or int(shift[1]) != mw + 8:
+            err(f"MINIMAP_TOGGLE_SHIFT should be {mw + 8}, the minimap's width and frame")
 
     # ------------------------------------------------------------ countries
     tags = {}
