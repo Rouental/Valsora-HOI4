@@ -122,7 +122,7 @@ OCEAN, LAKES = (8, 31, 130), (55, 90, 220)
 # out of Vultuca, and islands the Names layer labels (KR, RU, PE, TP, ES = Estande, CS).
 # The seeds were found from the author's labels: a name's bordered area, or the land
 # nearest an island label (one seed per patch the lines enclose).
-DEFAULT_OWNER = "krionik"
+DEFAULT_OWNER = "solitas"  # "krionik" until 2026-10-12
 OWNERS_1007 = {
     "cascadia": [(523, 749)],
     "daravon": [(616, 1575)],
@@ -276,7 +276,7 @@ OWNERS_1011B = {"shinnokawa": [(5005, 1662), (5017, 1671), (5028, 1675), (5037, 
 # off at (3551, 1640), and the islet the author circled near Myehn's red circle, at
 # (4752, 1538), is Myehn's. The CU and RA letters were drawn on Necessary Borders and
 # were moved to Necessary Names first. One seed per patch the lines enclose.
-OWNERS = {
+OWNERS_1012 = {
     "cultists": [(2583, 1220), (2618, 1253), (2539, 1248), (2513, 1229), (2500, 1245),
                  (2579, 1256), (2520, 1261), (2496, 1280), (2608, 1288), (2552, 1284),
                  (2630, 1322), (2536, 1302), (2576, 1306), (2601, 1321), (2708, 1358),
@@ -341,6 +341,28 @@ OWNERS = {
     "sarkis": [(4630, 856), (2876, 1224)],
     "myehn": [(4752, 1538)],
 }
+# 2026-10-13 (author): Solitas outlined. The United States of Solitas is gone (its land
+# was repainted as the placeholder's first, so its patches are cut afresh) and its
+# colonies are Anglost's (pdn_tools.py give); codes on the labels: RE Recaxa, SU Surredia,
+# CI Arovannea ("Arovannea (CI)"), AVE Avesária, GY Gran Yucanoa, LA Las Anod, AV
+# Arvorenia. Abalón, Texaria and Bromé are one patch each; Santa Fe, labelled but not in
+# the author's list, stays the placeholder (LEAVE). The five slivers by Abalón's south
+# coast are bits of a small loop of line, Abalón's; the 5 px at (2066, 1722) is Gran
+# Yucanoa's. Texaria's eastern line stopped 8 px short of the inlet south of it and was
+# closed, and the "CI" west of Surredia was written on Necessary Borders: moved to Names.
+OWNERS = {
+    "recaxa": [(1517, 1664), (1559, 1867)],
+    "surredia": [(1631, 1819), (1797, 1814), (1660, 1910), (1702, 1880), (1758, 1898), (1682, 1922)],
+    "arovannea": [(2097, 1636), (1915, 1709), (1964, 1689), (2038, 1719), (1711, 1731), (1839, 1736),
+                  (2154, 1740), (1527, 1784)],
+    "avesaria": [(1788, 1620), (1842, 1629), (1811, 1648)],
+    "abalon": [(1906, 1639), (1897, 1673), (1900, 1677), (1904, 1675), (1908, 1680), (1899, 1683)],
+    "texaria": [(1985, 1635)],
+    "gran_yucanoa": [(2263, 1558), (2286, 1551), (2308, 1562), (2099, 1685), (2066, 1722)],
+    "las_anod": [(2567, 1755), (2538, 1802)],
+    "brome": [(2316, 1919)],
+    "arvorenia": [(2316, 1627), (2161, 1888)],
+}
 OWNERS_0410 = {
     "anglost": [(528, 1283), (607, 1287), (509, 1335), (436, 1342), (506, 1363), (474, 1379),
                 (516, 1386), (563, 1388), (626, 1425), (583, 1428), (654, 1430), (658, 1421),
@@ -370,7 +392,7 @@ LEAVE = [  # (596, 2222), the bit of coast west of Gaellia, became Terreich's on
          # and (554, 1814) Ungar's since 2026-10-08
          # (4152, 1460), the peninsula beside Tenkyoku, is Charity's since 2026-10-11
          (2254, 405), (487, 1531), (334, 1844),  # (2553, 933) is Sennheiser's since 2026-10-12
-         (1618, 1798), (2323, 1884), (1757, 1894),  # Solitas placeholder land the friend's nations left
+         (2323, 1884),  # Santa Fe; (1618, 1798) and (1757, 1894) are Surredia's since 2026-10-13
          (847, 1402), (769, 1354),  # (403, 1359) is Transcainia's since 2026-10-07
          # Aislada, outlined on 2026-10-04 (still the placeholder's colour)
          (2016, 1235), (1853, 1370), (1869, 1216), (2089, 1205), (1887, 1334), (1830, 1288),

@@ -119,6 +119,9 @@ SUBTYPES = {
         ("khanate", "Khanate",  # the author's, 2026-10-09 (Sanada)
          "The clans swear to one khan, raised up by their chiefs in council, who leads them in "
          "war and peace."),
+        ("semi_constitutional_monarchy", "Semi-Constitutional Monarchy",  # the author's, 2026-10-13 (Avesária)
+         "A constitution and an elected parliament, but the monarch still appoints the "
+         "government and holds real power over it."),
     ],
     "theocracy": [
         ("theocrat", "Hierocracy", "The clergy rule in the name of the divine."),

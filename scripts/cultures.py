@@ -235,9 +235,19 @@ TAG_CULTURE = {
        for t in ("HZB", "SNH")},  # Hohenzburg like Kampf, its overlord
     # the Arklen Free State after the Orange Free State; Felter, an island republic
     **{t: dict(names="HOL", portraits="europe", gfx="western_european") for t in ("ARK", "FLT")},
-    "NPR": dict(names="MEX", portraits="latin_america", gfx="southamerican"),
+    # New Paradise, Nuevo Paraíso until 2026-10-13 and now Anglost's dominion: English like it
+    "NPR": dict(names="ENG", portraits="europe", gfx="western_european"),
     "SLA": dict(names="ITA", portraits="europe", gfx="western_european"),  # a holy state, like the Holy See
     "CNA": dict(names="CHN", portraits="asia", gfx="asian"),
+    # 2026-10-13: Claude's guesses from the names (the author hasn't said)
+    **{t: dict(names="MEX", portraits="latin_america", gfx="southamerican")
+       for t in ("REC", "GYC", "BRO")},  # Zorreguieta, the Cortes, Castañeda
+    "SRD": dict(names="USA", portraits="usa", gfx="western_european"),  # Sunny Hurricane
+    "AVN": dict(names="GER", portraits="europe", gfx="western_european"),  # Illger fön Reegen
+    "AVE": dict(names="GRE", portraits="europe", gfx="eastern_european"),  # Dimokratía, Nikosanis
+    "ABL": dict(names="SPR", portraits="iberia", gfx="western_european"),  # Abalón
+    "TEX": dict(names="SOV", portraits="europe", gfx="eastern_european"),  # Iyun', Russian for June
+    "LAN": dict(names="IRE", portraits="europe", gfx="western_european"),  # Michael Ryan
 }
 
 
@@ -338,6 +348,12 @@ NOT_SURNAMES = {"Petain", "Foch", "Joffre", "Salazar", "Napoléon", "Murat", "Da
                 "Osama", "Mahometus", "Al-Sabah", "Debbouze", "Reno", "Youssoufi", "El Othmani"}
 
 
+# famous names met in a list already in use (2026-10-13: Abalón's king drew "Carlos Franco",
+# New Paradise's leader "Graham Windsor"): drawn again, like comment words, so that every
+# other leader keeps their name
+DRAW_AGAIN = {"Franco", "Windsor"}
+
+
 def _tokens(block):
     return [a or b for a, b in re.findall(r'"([^"]+)"|([^\s{}"]+)', block)]
 
@@ -384,12 +400,13 @@ def leaders(tag, continent, subtypes, ideology_of, used, named=None):
         while True:  # no two leaders share a full name (`used` spans every country)
             a, b = first[rng.integers(len(first))], last[rng.integers(len(last))]
             name = f"{a} {b}"
-            if name not in used and a not in comment and b not in comment:
+            if name not in used and a not in comment and b not in comment and b not in DRAW_AGAIN:
                 used.add(name)
                 break
         face = pool[rng.integers(len(pool))]
         if cid in named:  # drawn after the random ones, so other leaders don't change
-            name, face = named[cid]
+            name, own = named[cid]
+            face = own or face  # None: the author named them but drew no portrait
             used.add(name)
         blocks.append(f"""\t{cid} = {{
 \t\tname = {cid}

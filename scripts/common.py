@@ -105,6 +105,8 @@ COUNTRIES = {
     "hoalepa": ("HOA", "Hoalepa", "Hoalepan", (216, 150, 170)),
     "arvorenia": ("ARV", "Arvorenia", "Arovian", (18, 94, 42)),
     "atrocha": ("ATR", "Atrocha", "Atrochan", (225, 20, 20)),
+    # removed from the map on 2026-10-13 (author: "eventually it will be readded as a
+    # formable"), so it owns nothing and is left out of the mod
     "us_solitas": ("USS", "United States of Solitas", "American", (140, 60, 190)),
     "silvamar": ("SVM", "Silvamar", "Silvestran", (20, 120, 50)),
     "ponchomagnifico": ("PNC", "Ponchomagnifico", "Ponchomagnifico", (255, 204, 0)),
@@ -240,7 +242,7 @@ COUNTRIES = {
     "utopian": ("UTP", "Utopian Republic", "Utopian", (92, 170, 224)),
     "soloriania": ("SLN", "Soloriania", "Solorianois", (230, 218, 92)),
     "hohenzburg": ("HZB", "Hohenzburg", "Hohenzburger", (74, 98, 20)),
-    "nuevo_paraiso": ("NPR", "Nuevo Paraíso", "Paraisano", (182, 122, 224)),
+    "nuevo_paraiso": ("NPR", "New Paradise", "New Paradisian", (182, 122, 224)),  # Nuevo Paraíso until 2026-10-13
     "arklen": ("ARK", "Arklen", "Arklener", (92, 152, 92)),
     "isigoriya": ("ISG", "Isigoriya", "Isigoriyan", (98, 80, 62)),
     "kizimwe": ("KZW", "Kizimwe", "Kizimwean", (86, 50, 122)),
@@ -251,6 +253,17 @@ COUNTRIES = {
     "sennheiser": ("SNH", "Sennheiser", "Sennheiser", (62, 80, 158)),
     "felter": ("FLT", "Felter", "Felterian", (254, 158, 62)),
     "solaria": ("SLA", "Solaria", "Solarian", (248, 230, 146)),  # on the map, named later that day
+    # 2026-10-13, Solitas outlined (the author's names; tags, adjectives and colours
+    # Claude's, the colours from the flags where there is one)
+    "recaxa": ("REC", "Recaxa", "Recaxan", (102, 0, 153)),               # flag purple
+    "surredia": ("SRD", "Surredia", "Surredian", (25, 75, 155)),         # flag blue, lighter
+    "arovannea": ("AVN", "Arovannea", "Arovannean", (45, 155, 150)),
+    "avesaria": ("AVE", "Avesária", "Avesárian", (135, 185, 235)),
+    "abalon": ("ABL", "Abalón", "Abalonese", (215, 130, 45)),
+    "texaria": ("TEX", "Texaria", "Texarian", (168, 46, 37)),            # flag red
+    "gran_yucanoa": ("GYC", "Gran Yucanoa", "Yucanoan", (50, 60, 130)),  # flag navy, lighter
+    "las_anod": ("LAN", "Las Anod", "Anodian", (120, 200, 90)),
+    "brome": ("BRO", "Bromé", "Bromean", (150, 20, 50)),
 }
 # The placeholder countries, one per continent, are the recommended starts in the
 # bookmark; the rest are playable but not listed there.

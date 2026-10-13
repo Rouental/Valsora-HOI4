@@ -14,6 +14,11 @@
         nearest state (Countries, States and Strategic Regions layers), the way islets
         too small for a state of their own join their country's nearest state: for a
         sliver or islet left behind (2026-10-09: "Araseos 1", 19 px off Terreich's coast).
+    python3 scripts/pdn_tools.py add_land COUNTRY [LAYER]
+        Make the water under LAYER's opaque pixels (default "Islands to Add", where the
+        author painted new islands on 2026-10-13) land of COUNTRY: plains, the nearest
+        land's height, continent and strategic region, a province per island and one new
+        state for all of them. The layer itself is left as it is.
     python3 scripts/pdn_tools.py border COUNTRY X,Y [X,Y ...]
         Give COUNTRY all the land enclosed by Necessary Borders lines around these pixels
         (the line pixels too), on the Countries layer: a border the author moved. Run
@@ -59,7 +64,7 @@ from pathlib import Path
 import numpy as np
 from scipy import ndimage as ndi
 
-from common import MAP_W as W, MAP_H as H
+from common import MAP_W as W, MAP_H as H, MIN_PROVINCE
 from writepdn import write_pdn
 
 PDN = Path("source/HOI4 Mod Map.pdn")
@@ -237,6 +242,55 @@ def attach(names, L, country, seeds, reach=300):
         L["Countries"][m, 3] = 255
         print(f"state at ({x}, {y}): {m.sum()} px -> {country}, joining its state at ({nx}, {ny}), "
               f"{dist.flat[k]:.0f} px away")
+
+
+def add_land(names, L, country, layer="Islands to Add"):
+    """Water under the opaque pixels of LAYER becomes land of COUNTRY (2026-10-13: the
+    author painted two islands on a layer of their own). Each 4-connected island is a
+    province; together they are one new state. Terrain is plains; height, continent and
+    strategic region are the nearest land's. The sea provinces they were in must stay
+    in one piece."""
+    from common import COUNTRIES
+    from skimage.measure import label as sklabel
+    t = L["Terrain"][..., :3]
+    water = (t == OCEAN).all(-1) | (t == LAKES).all(-1)
+    new = (L[layer][..., 3] > 0) & water
+    if not new.any():
+        sys.exit(f"add_land: no water under the {layer!r} layer")
+    isl = sklabel(new, connectivity=1)
+    sizes = np.bincount(isl.ravel())[1:]
+    if sizes.min() < MIN_PROVINCE:
+        sys.exit(f"add_land: an island of {sizes.min()} px is under {MIN_PROVINCE} px (a province's least)")
+    P = code(L["Provinces"][..., :3])
+    sea_before = {int(c) for c in np.unique(P[new])}
+    dist, (iy, ix) = ndi.distance_transform_edt(water, return_indices=True)
+    ys, xs = np.nonzero(new)
+    ny, nx = iy[ys, xs], ix[ys, xs]  # each new pixel's nearest land
+    L["Terrain"][new] = (86, 124, 27, 255)  # plains, as on the rest of the land
+    hm = L["Heightmap"][ny, nx, 0]
+    L["Heightmap"][ys, xs, :3] = np.maximum(hm, 98)[:, None]
+    L["Heightmap"][ys, xs, 3] = 255
+    for nm in ("Continents", "Strategic Regions"):
+        L[nm][ys, xs, :3] = L[nm][ny, nx, :3]
+        L[nm][ys, xs, 3] = 255
+    pcols = palette(len(sizes), False, 1013, used=np.unique(P).tolist())
+    for k, c in enumerate(pcols, 1):
+        m = isl == k
+        put(L["Provinces"], np.full((H, W), c), m)
+        L["Provinces"][m, 3] = 255
+    S = code(L["States"][..., :3])
+    sc = palette(1, False, 1014, used=np.unique(S[L["States"][..., 3] > 0]).tolist())[0]
+    put(L["States"], np.full((H, W), sc), new)
+    L["States"][new, 3] = 255
+    L["Countries"][new, :3] = COUNTRIES[country][3]
+    L["Countries"][new, 3] = 255
+    P = code(L["Provinces"][..., :3])
+    for c in sorted(sea_before):  # still one piece each?
+        n = sklabel(P == c, connectivity=1).max()
+        if n != 1:
+            sys.exit(f"add_land: sea province {c:06x} would be cut into {n} pieces")
+    print(f"{len(sizes)} islands ({', '.join(f'{s} px' for s in sizes)}) -> one new state of {country}, "
+          f"at ({xs[0]}, {ys[0]}); continent and region of the land at ({nx[0]}, {ny[0]})")
 
 
 def border(names, L, country, seeds):
@@ -470,6 +524,8 @@ def main():
         give(names, L, sys.argv[2], [tuple(int(v) for v in a.split(",")) for a in sys.argv[3:]])
     elif cmd == "attach":
         attach(names, L, sys.argv[2], [tuple(int(v) for v in a.split(",")) for a in sys.argv[3:]])
+    elif cmd == "add_land":
+        add_land(names, L, sys.argv[2], sys.argv[3] if len(sys.argv) > 3 else "Islands to Add")
     elif cmd == "border":
         border(names, L, sys.argv[2], [tuple(int(v) for v in a.split(",")) for a in sys.argv[3:]])
     elif cmd == "cede":

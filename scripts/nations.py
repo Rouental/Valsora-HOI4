@@ -123,7 +123,8 @@ HISTORY = {
     "BRL": ["recruit_character = BRL_mahaut_vi"],
     "RLA": ["recruit_character = RLA_serelle_cahun"],
     # Normania is Anglost's dominion (author, 2026-10-04)
-    "AGL": ["set_autonomy = { target = NRM autonomous_state = autonomy_dominion }"],
+    # ... and New Paradise, the United States of Solitas' until 2026-10-13 (author)
+    "AGL": [f"set_autonomy = {{ target = {t} autonomous_state = autonomy_dominion }}" for t in ("NRM", "NPR")],
     # the Bleacherist republics start as Illiricium's puppets (author, 2026-10-01)
     "ILR": [f"set_autonomy = {{ target = {t} autonomous_state = autonomy_puppet }}"
             for t in ("CTF", "ETR", "MZG")],
@@ -143,10 +144,10 @@ HISTORY = {
     "CRT": ["set_autonomy = { target = KZN autonomous_state = autonomy_puppet }"],
     "QNG": ["create_faction_from_template = faction_template_great_lake_republics",
             *[f"add_to_faction = {t}" for t in ("XUE", "HLG", "ASC", "HDO")]],
-    # 2026-10-12 (author): Hohenzburg is the Kampfian Empire's puppet, Nuevo Paraíso the
-    # United States of Solitas' dominion, and Arklen has a non-aggression pact with Ostaria
+    # 2026-10-12 (author): Hohenzburg is the Kampfian Empire's puppet, and Arklen has a
+    # non-aggression pact with Ostaria (Nuevo Paraíso was the United States of Solitas'
+    # dominion until 2026-10-13)
     "KPF": ["set_autonomy = { target = HZB autonomous_state = autonomy_puppet }"],
-    "USS": ["set_autonomy = { target = NPR autonomous_state = autonomy_dominion }"],
     "ARK": ["diplomatic_relation = { country = OST relation = non_aggression_pact active = yes }"],
 }
 
@@ -269,6 +270,10 @@ LEADERS = {
     "KZW": ["synodal_rule"], "LFR": ["council_communism"], "MDC": ["fascism_ideology"],
     "KHY": ["feudalism"], "CNA": ["leninism"], "SNH": ["constitutional_monarchism"],
     "FLT": ["liberalism"], "SLA": ["theocrat"],
+    # 2026-10-13 (author): Solitas' new nations
+    "REC": ["agrarianism"], "SRD": ["strongman_rule"], "AVN": ["conservatism"],
+    "AVE": ["semi_constitutional_monarchy"], "ABL": ["despotism"], "TEX": ["liberalism"],
+    "GYC": ["liberalism"], "LAN": ["conservatism"], "BRO": ["stalinism"],
     "SEE": ["theocrat"],
     # 2026-10-07 (author)
     "MGD": ["personal_union"], "TCN": ["oligarchism"], "PTK": ["strongman_rule"],
@@ -285,7 +290,7 @@ LEADERS = {
 HAND_MADE = {"ROU", "AIS", "BRL", "RLA"}  # rulers defined in the character files below
 
 # Generated rulers the author has named and drawn: character id -> (name, portrait sprite);
-# the portraits are in PORTRAITS
+# the portraits are in PORTRAITS, and None keeps the generic portrait of their culture
 NAMED_LEADERS = {
     "ILR_leader_bleacherism": ("Ema Milize", "GFX_portrait_ILR_ema_milize"),  # author, 2026-10-02
     "KIL_leader_legitimism": ("Beatrice di Alqiro", "GFX_portrait_KIL_beatrice_di_alqiro"),  # author, 2026-10-05
@@ -301,6 +306,15 @@ NAMED_LEADERS = {
     "LTH_leader_populism": ("Helmut Shulz", "GFX_portrait_LTH_helmut_shulz"),  # author, 2026-10-08
     "TUP_leader_socialism": ("Charlotte Gustoff", "GFX_portrait_TUP_charlotte_gustoff"),  # author, 2026-10-08
     "CNA_leader_leninism": ("Han Leji", "GFX_portrait_CNA_han_leji"),  # author, 2026-10-12
+    # 2026-10-13 (author): named, no portraits (None: a generic one of their culture)
+    "REC_leader_agrarianism": ("Diana Zorreguieta", None),
+    "SRD_leader_strongman_rule": ("Sunny Hurricane", None),
+    "AVN_leader_conservatism": ("Estúr Illger fön Reegen", None),
+    "AVE_leader_semi_constitutional_monarchy": ("Nikosanis Coisan II", None),
+    "TEX_leader_liberalism": ("Iyun' Savon", None),
+    "GYC_leader_liberalism": ("The General Cortes", None),  # the federation's parliament
+    "LAN_leader_conservatism": ("Michael Ryan", None),
+    "BRO_leader_stalinism": ("Jose Castañeda", None),
 }
 # Characters renamed once they rule their country (author, 2026-10-08): character ->
 # (tag, localisation key of the new name). The on_ruling_party_change on_action does it,
@@ -649,7 +663,7 @@ FORMAL_NAMES = {
     "UTP": "the Second Utopian Republic",
     "SLN": "the Solorianois Confederacy",
     "HZB": "the State of Hohenzburg",
-    "NPR": "the Dominion of Nuevo Paraíso",
+    "NPR": "the Dominion of New Paradise",  # Nuevo Paraíso until 2026-10-13
     "ARK": "the Arklen Free State",
     "ISG": "the State of Isigoriya",
     "KZW": "the Kizimwe Conference of Bishops",
@@ -660,6 +674,16 @@ FORMAL_NAMES = {
     "SNH": "the Sennheiser Union",
     "FLT": "the Republic of Felter",
     "SLA": "the Holy State of Solaria",
+    # 2026-10-13 (author)
+    "REC": "the Republic of Recaxa",
+    "SRD": "the Republic of Surredia",
+    "AVN": "the Confederative Republics of Arovannea",
+    "AVE": "the Avesária Dimokratía",  # "the Aversaria Dimokratía" in the author's message; the map has Avesária
+    "ABL": "the Kingdom of Abalón",
+    "TEX": "the Republic of Texaria",
+    "GYC": "the Federation of Gran Yucanoa",
+    "LAN": "the United Isle of Las Anod",
+    "BRO": "the Republic of Bromé",
 }
 
 LOCALISATION = [
@@ -1226,7 +1250,6 @@ CAPITALS = {
     "HOA": (2159, 1545),  # Nuku'alofa
     "ARV": (2088, 1896),  # São Francisco
     "ATR": (2061, 1913),  # Corales
-    "USS": (2152, 1651),  # Tallahassee
     "SVM": (2437, 1846),  # Marcanova
     "PNC": (1721, 1651),  # Rosas
     "LTH": (412, 1555),   # Thielfurt (author, 2026-10-07)

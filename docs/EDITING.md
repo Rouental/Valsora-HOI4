@@ -247,7 +247,10 @@ that ideology rules, like Rouental's tricolour.
 
 In the game a flag is only 82×52 pixels (a 1.58:1 rectangle), and much smaller on the
 map. A flag of another shape gets squashed, and fine detail turns to noise. The best
-flags are about that shape, with bold shapes.
+flags are about that shape, with bold shapes. Send a flag of another shape and I fit it to 82:52
+without stretching: it is scaled evenly, then plain field is added inside its stripes (or
+plain sides trimmed), so emblems keep their shape. The flag file (`New_Mod_Flags.pdn`)
+is kept in `source/` too, with every flag added so far.
 
 ### Sea provinces
 
@@ -303,6 +306,10 @@ other.
 3. That's it. States, Countries, Regions and Continents fill themselves in from the
    nearest land, and the heightmap lifts it above sea level. Paint those layers too if
    you want it to go somewhere specific.
+
+   Or paint new islands on a layer of their own, named "Islands to Add" (any colour), and
+   tell me whose they are: `pdn_tools.py add_land` makes them land, a province each and
+   one state for the country (done for Rouental's two islands on 2026-10-13).
 
 **Make a lake navigable.** Ships can't sail on lakes. Terrain layer: paint the lake in
 the ocean colour (8, 31, 130). Strategic Regions layer: give it a blue of its own.

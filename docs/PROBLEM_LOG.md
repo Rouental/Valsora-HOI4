@@ -241,6 +241,23 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## Map problems found while building
 
+**An upload based on an older map** (2026-10-13)
+- The author's file was the map as it stood after the Usnistan update (commit 4a191cb),
+  before the ten placeholder states changed hands and before 4,313 provinces were merged
+  for the border limit; the author noticed the island below Cascadia in the old colour.
+- Fix: their file was compared layer by layer with that version: only Necessary Borders,
+  Names and Cities, Even More Reference and the new Islands to Add layer differed, and
+  only those were taken onto the current map (whose game layers already had the
+  island as Cascadia's).
+
+**A line short of the coast, and a label on the borders layer** (2026-10-13)
+- Texaria's eastern border stopped 8 px short of the inlet south of it, so Texaria and
+  Gran Yucanoa were one patch; a "CI" was written on Necessary Borders west of Surredia,
+  where its strokes would have cut the patch into scraps.
+- Found by matching every label to the patch under it (two names on one patch) and by
+  looking for letter-sized bits among the new line pixels. Fix: the line was continued
+  to the inlet along its own row, and the letters moved to Necessary Names.
+
 **The terrain test unrealistic in places** (2026-10-12, author: "make the generated
 terrain logical, realistic, and consistent")
 - Causes: Rouental's mountains were four invented round domes, while the author's fief

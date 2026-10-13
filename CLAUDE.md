@@ -161,9 +161,10 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `compose.py` | placeholder mode only: game-resolution land / ocean / lakes, continent per pixel |
 | `provinces.py` | placeholder mode only: brick provinces, sliver merging, X-crossing repair |
 | `regions.py` | placeholder mode only: states, strategic regions |
-| `make_game_pdn.py` / `writepdn.py` | turn a placeholder build into a fresh `HOI4 Mod Map.pdn` |
+| `make_game_pdn.py` / `writepdn.py` | turn a placeholder build into a fresh `HOI4 Mod Map.pdn`; `writepdn` writes any `.pdn` from a template's object graph, and adds layers on top when given more than the template has (2026-10-13, the flag file) |
+| `nrbf.py` | reads a `.pdn`'s .NET object graph into records with their byte spans (used by `writepdn` to add layers) |
 | `apply_outlines.py` | by hand: the author's outline layers → provinces, states, countries in the `.pdn` |
-| `pdn_tools.py` | by hand: `navigable` (lake → sea with its own region), `sea_zones` (regroup and recolour regions; refused on a map with Ocean Province Lines), `give` (whole states to a country), `recolour`, `channel` (reopen a strait: the cheapest water-to-water path between two sea pixels becomes sea), `border` (the land a moved Necessary Borders line encloses → a country), `cede` (the land of one country a moved line cuts off → another, for countries without state lines: only the first country's pixels count, provinces are split along the line; what a split state loses is a state of its own from 600 px (`CEDED_STATE`), smaller slivers join a state that moved whole), `merge_small` (a country's sliver states join a neighbour), `attach` (a state goes to a country and joins its nearest state, regions too: for an islet or sliver too small to be a state) |
+| `pdn_tools.py` | by hand: `navigable` (lake → sea with its own region), `sea_zones` (regroup and recolour regions; refused on a map with Ocean Province Lines), `give` (whole states to a country), `recolour`, `channel` (reopen a strait: the cheapest water-to-water path between two sea pixels becomes sea), `border` (the land a moved Necessary Borders line encloses → a country), `cede` (the land of one country a moved line cuts off → another, for countries without state lines: only the first country's pixels count, provinces are split along the line; what a split state loses is a state of its own from 600 px (`CEDED_STATE`), smaller slivers join a state that moved whole), `merge_small` (a country's sliver states join a neighbour), `attach` (a state goes to a country and joins its nearest state, regions too: for an islet or sliver too small to be a state), `add_land` (the water under a layer's paint, default "Islands to Add", becomes a country's land: plains, the nearest land's height, continent and region, a province per island, one new state) |
 | `strategic_regions.py` | retired 2026-10-12 (refuses to run on a map with Ocean Province Lines, unless `--force`): sea regions = the author's oceans, one each, with names (`source/region_names.json`); land untouched |
 | `sea_provinces.py` | by hand: the sea from the Ocean Province Lines layer (Merlo's): `build` (provinces from the lines, cut to HOI4's size limit, colours and regions kept by overlap), `seam` (borders and regions meet across the left/right wrap), `names` (`source/region_names.json`: "<ocean> <n>" west to east), `check` (report only) |
 | `river_provinces.py` | by hand, after a build: re-cuts the provinces of every state a river crosses so rivers run between provinces |
@@ -380,7 +381,7 @@ mismatch, missing localisation) and catches all of them.
     Arvorenia ARV (Constitutional Monarchy, "the United Kingdom of Éden, Santo Domingo,
     and Arovia", Arovian, Portuguese, capital São Francisco), Atrocha ATR (Liberalism,
     capital Corales), the United States of Solitas USS (Liberalism, American, capital
-    Tallahassee), Silvamar SVM (Liberalism, "the New Republic of Silvamar", Silvestran,
+    Tallahassee; removed 2026-10-13), Silvamar SVM (Liberalism, "the New Republic of Silvamar", Silvestran,
     capital Marcanova) and Ponchomagnifico PNC (Strongman Rule, "the Community of
     Ponchomagnifico", capital Rosas); ATR SVM PNC Spanish. Leaders' names and portraits
     are in `NAMED_LEADERS`. Their flags were taken from the build at 82×52 (the
@@ -568,7 +569,8 @@ mismatch, missing localisation) and catches all of them.
     Riverraine's and Belekria's flags, a faint row in Garfield's (and, by hand, the top
     row of Ponchomagnifico's, taken from the friend's build).
     2026-10-09, later still (author): **the Oriental Territories** ORT, a new Rouental
-    releasable (`nations.RELEASABLE`: Concorde et Volonté, Rouental's islets off Solitas;
+    releasable (`nations.RELEASABLE`: Concorde et Volonté, Rouental's islets off Solitas, on
+    the islands north of it since 2026-10-13;
     "the Oriental Territories", the author's flag `ORT.png`; Oligarchy, French culture
     and the colour are Claude's, a shade off the flag's plum, which is Lanzerac's map
     colour exactly). The three isles and three islets the author labelled PE in the
@@ -700,6 +702,45 @@ mismatch, missing localisation) and catches all of them.
     Usnistan; the old Usnistan 3-5, renumbered), Orientalis 1-2 (beside Kianhua and Daihai)
     and Solitas 1-20, the land between the friend's nations. Flags for Sennheiser and
     Volstokn came the same day (`SNH.png`, `VSK.png`; map colours unchanged).
+    **2026-10-13** (the author's names, governments, formal names and rulers; tags,
+    adjectives, cultures and colours (from the flags where there is one) Claude's):
+    **Solitas outlined.** The upload was the 4a191cb map (after Usnistan, before the ten
+    transfers and the province merge) plus the author's edits, so only those were taken:
+    Necessary Borders, Names and Cities (Tallahassee's dot removed), Even More Reference
+    and a new layer, **Islands to Add**. **The United States of Solitas is removed**
+    ("eventually it will be readded as a formable": it stays in `COUNTRIES`, owning
+    nothing, so it is left out of the mod); its colonies, relabelled AN (six pieces, three
+    states), are Anglost's (`pdn_tools.py give`), and **Nuevo Paraíso is New Paradise**
+    ("the Dominion of New Paradise", now Anglost's dominion and English; key
+    `nuevo_paraiso` kept). Its land on Solitas was repainted as the placeholder's before
+    `apply_outlines.py`, so the new nations were cut afresh. New: Recaxa REC (Agrarianism,
+    "the Republic of Recaxa", Diana Zorreguieta, flag), Surredia SRD (Strongman Rule, "the
+    Republic of Surredia", Sunny Hurricane, flag), Arovannea AVN (Conservatism, "the
+    Confederative Republics of Arovannea", Estúr Illger fön Reegen; code CI, so many
+    pieces), Avesária AVE (the author's new **Semi-Constitutional Monarchy**, "the
+    Avesária Dimokratía", Nikosanis Coisan II; "Aversaria" in the author's message, the
+    map says Avesária), Abalón ABL (Absolute Monarchy, "the Kingdom of Abalón"), Texaria
+    TEX (Liberalism, "the Republic of Texaria", Iyun' Savon, flag), Gran Yucanoa GYC
+    (Liberalism, "the Federation of Gran Yucanoa", ruled by the General Cortes, its
+    parliament, flag), Las Anod LAN (Conservatism, "the United Isle of Las Anod", Michael
+    Ryan) and Bromé BRO (Party Centralism, "the Republic of Bromé", Jose Castañeda); the
+    AV patches are Arvorenia's. **Santa Fe**, labelled but not in the author's list, stays
+    the placeholder (`LEAVE`). Cultures: Latin American for Recaxa, Gran Yucanoa and Bromé,
+    American Surredia, German Arovannea, Greek Avesária, Spanish Abalón, Russian Texaria
+    (Iyun' is June), Irish Las Anod. States: Arovannea 26, Surredia 19, Recaxa 16, Gran
+    Yucanoa 13, Avesária 6, Abalón 5, Texaria 5, Las Anod 5, Arvorenia 2, Bromé 1
+    (`dist/preview_new_nations_solitas.png`). Fixes on the way: Texaria's eastern line
+    stopped 8 px short of the inlet south of it (closed), a "CI" was written on Necessary
+    Borders (moved to Names), and five slivers of a small loop of line by Abalón's coast
+    are Abalón's. **Rouental's eastern territories moved** (author, "to better align with
+    the lore"): the two islands painted on Islands to Add (27 and 45 px, north of
+    Arovannea) are land now (`pdn_tools.py add_land rouental`), one state named Concorde et
+    Volonté, so the Oriental Territories' cores follow; the old islets off Solitas' south
+    are Solitas' again, and their ROU label moved to the islands. The four flags were
+    fitted to 82:52 without stretching (scaled evenly, then plain field added inside the
+    stripes, or Surredia's plain sides trimmed; `dist/flags_new_20261013.png`), and added
+    to the author's flag file as layers (`source/New_Mod_Flags.pdn`, now kept in the repo;
+    `writepdn.py` adds layers on top).
     All tags were checked against vanilla `common/country_tags`; new tags must be too.
   - The adjectives of the neighbours are guesses; the author may rename them.
 - **State names** are the author's, in `source/state_names.json` ("x,y" of a pixel
@@ -850,7 +891,8 @@ Aislada is the worked example of a built-out nation:
   Marshals**, with its emblem as the portrait; Leithanien's is **Helmut Shulz**
   (`helmut_shulz.png`) and Terreich's **Charlotte Gustoff** (`charlotte_gustoff.webp`,
   cropped from a photo) (author, 2026-10-08); Chineasia's is **Han Leji**
-  (`han_leji.png`, author, 2026-10-12).
+  (`han_leji.png`, author, 2026-10-12). Solitas' new rulers (2026-10-13) are named
+  without portraits (`None`): they keep a generic portrait of their culture.
 - **Nation names** come from `COUNTRIES` in `build_mod.py`: name and adjective feed
   `TAG`, `TAG_DEF`, `TAG_ADJ`, the per-ideology variants (`TAG_communism` etc.) and the
   continent key.
@@ -879,7 +921,9 @@ Aislada is the worked example of a built-out nation:
   ideology rules: Rouental's banner of arms is `ROU.png` and its blue-white-gold
   tricolour is `ROU_democratic.png` (author's choice). The other seven were cropped
   from the author's flag sheet. Countries without a PNG get a placeholder stripe in
-  their map colour.
+  their map colour. Flags sent in another shape are fitted to 82:52 without stretching:
+  scaled evenly, then plain field added inside the stripes (or plain sides trimmed), so
+  emblems keep their shape (2026-10-13, the author's wish).
 - **Formal names** (`nations.FORMAL_NAMES`, e.g. "the County of Evriches") feed
   `TAG_DEF` and the per-ideology `_DEF` keys that have no `IDEOLOGY_NAMES` entry.
 
@@ -900,7 +944,8 @@ working; names come from `localisation/english/replace/`:
   Military Junta, Fascism, Corporatism, Strongman Rule, Technocracy, Revanchism.
   Monarchist: Absolute Monarchy, Oligarchy, Feudalism, Enlightened Absolutism, Elective
   Monarchy, Legitimism, and the author's **Personal Union** (2026-10-07, Merlgould) and
-  **Khanate** (2026-10-09, Sanada); Democratic also has the author's **Stratocracy**
+  **Khanate** (2026-10-09, Sanada) and **Semi-Constitutional Monarchy** (2026-10-13,
+  Avesária); Democratic also has the author's **Stratocracy**
   (2026-10-07, Krionik) and **Radical Republicanism** (2026-10-09, Vilna). Authoritarian also has the author's **Bleacherism** (Alban
   supremacy; officially a senatorial republic under a strongman): ILR CTF ETR MZG;
   KIL is Legitimism; and **Humanism** (2026-10-12, the Humanist State: humans above
@@ -917,7 +962,8 @@ working; names come from `localisation/english/replace/`:
   country starts under that subtype's ideology (elections on if democratic).
   `cultures.leaders` makes the characters (`common/characters/valsora_leaders.txt`,
   id `TAG_leader_<subtype>`, never `TAG_<subtype>`, which the game reads as the country's name under that subtype): a name from the culture's list (famous surnames skipped, full
-  names unique map-wide) and a generic politician portrait of the culture, seeded by
+  names unique map-wide; famous ones met in a list already in use, like Franco and Windsor on
+  2026-10-13, are drawn again (`cultures.DRAW_AGAIN`), so no one else's name changes) and a generic politician portrait of the culture, seeded by
   tag. Hand-made rulers (`HAND_MADE`: ROU, AIS) keep theirs; Rouental also gets
   `ROU_leader_constitutional_monarchism` and `ROU_leader_leninism`, promoted by the Polite and Rudely
   focuses. Author's picks: CRD Enlightened Absolutism; EVR, SGN Feudalism; HLR, STO
@@ -1134,8 +1180,11 @@ in git history (commit d2d6cd8, `scripts/cartographic.py`). It used
 
 ## Current state
 
-- 20,454 provinces (20,053 land, 363 sea, 38 lakes), 60,318 province borders, 3,065
-  states, 122 strategic regions (42 sea), 176 countries (2026-10-12, last: 4,313 small
+- 20,778 provinces (20,377 land, 363 sea, 38 lakes), 61,283 province borders, 3,118
+  states, 122 strategic regions (42 sea), 184 countries (2026-10-13: Solitas outlined,
+  nine new nations, the United States of Solitas removed, two islands added). Before:
+  20,454 provinces (20,053 land), 60,318 borders, 3,065 states, 176 countries
+  (2026-10-12, last: 4,313 small
   provinces merged for HOI4's border limit; before: 24,767 provinces (24,366 land),
   73,231 borders (2026-10-12, later still: ten placeholder states to their new
   owners; before: 3,070 states, 178 countries (2026-10-12, later: Usnistan outlined, 35
