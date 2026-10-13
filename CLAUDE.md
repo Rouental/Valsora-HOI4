@@ -188,6 +188,7 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `export_canvas.py` | previews in `dist/` |
 | `package.py` | `dist/valsora_test.zip` |
 | `country_list.py` | by hand, after a build: `dist/world_map_labelled.png` (every country labelled) and `dist/countries.md` / `.csv` (name, full name, ideology, sub-ideology, culture, leader, states), read from the built mod |
+| `nation_sheet.py` | by hand, after a build: `dist/nations_by_continent.png`, every nation in the game under the continent of its capital: flag, ruler at the start (portrait of our own, or a "placeholder" box for a base-game one), full name, ideology and sub-ideology, culture (author, 2026-10-13) |
 | `collages.py` | by hand, after a build: `dist/flags_collage.png` (every custom flag, and the countries still on a placeholder stripe) and `dist/leaders_collage.png` (every custom leader: own portraits at 2×, named ones with base-game portraits as labelled tiles); `--continent NAME` writes only `dist/flags_<name>.png`, the flags of the nations whose capital is on that continent, naming below them those with land there and their capital elsewhere (2026-10-10, Araseos; 2026-10-12, Yastreovakia) |
 
 **A clean `check_mod.py` run is the bar for shipping a build.** It was mutation-tested
@@ -302,8 +303,9 @@ mismatch, missing localisation) and catches all of them.
 - **Countries**:
   - One placeholder per continent: NSC ARS AIS SLT YAS USN ORI (`SOL` is a vanilla
     tag, so Solitas is `SLT`); Araseos has no land left since 2026-10-09, nor Nonscio and
-    Yastreovakia since 2026-10-12, nor Orientalis and Usnistan since 2026-10-13, so ARS,
-    NSC, YAS, ORI and USN are left out of the mod (Solitas keeps one 16 px islet). They are `common.PLACEHOLDERS`, the only countries the
+    Yastreovakia since 2026-10-12, nor Orientalis, Usnistan and Solitas since 2026-10-13,
+    so ARS, NSC, YAS, ORI, USN and SLT are left out of the mod. Merlovich (AIS, still on
+    the placeholder's paint) is the only one left, so the bookmark recommends only it. They are `common.PLACEHOLDERS`, the only countries the
     bookmark recommends (author's wish, to keep the start menu short).
   - Colours follow the flags (author): Rouental royal green, Guedelon blue, Hollier red, Seigne white,
     Evriches yellow, Lustiana black, Selgrave dark maroon, Lanzerac purple (its new flag's,
@@ -757,8 +759,9 @@ mismatch, missing localisation) and catches all of them.
     own (`pdn_tools.py give`); Solitas 5 (the two old Rouental islets, 90 px) to Atrocha,
     Orientalis 1 and 2 (38 and 95 px) to Kianhua and Daihai, and Usnistan 1 and 2 (31 and
     17 px) to Kyras and the Utopian Republic, each joining its new owner's nearest state
-    (`attach`). Orientalis and Usnistan own nothing now; the only placeholder land left is
-    Solitas 2, a 16 px islet off Recaxa's west coast at (1443, 1832)
+    (`attach`). Orientalis and Usnistan own nothing now. The last placeholder land,
+    Solitas 2, a 16 px islet off Recaxa's west coast at (1443, 1832), joined Recaxa's
+    nearest state afterwards (author), so Solitas is left out too
     (`dist/preview_new_nations_solitas.png`). Then (author) **Qingou is renamed Qinguo**
     (tag QNG and key `qingou` kept); five first flags, for Qinguo, Kianhua, Tsuruma, Myehn
     and Ganden (fitted to 82:52 as below, and added to the flag file); Tsuruma's ruler is
@@ -990,7 +993,7 @@ working; names come from `localisation/english/replace/`:
   `cultures.leaders` makes the characters (`common/characters/valsora_leaders.txt`,
   id `TAG_leader_<subtype>`, never `TAG_<subtype>`, which the game reads as the country's name under that subtype): a name from the culture's list (famous surnames skipped, full
   names unique map-wide; famous ones met in a list already in use, like Franco and Windsor on
-  2026-10-13, are drawn again (`cultures.DRAW_AGAIN`), so no one else's name changes) and a generic politician portrait of the culture, seeded by
+  2026-10-13 (and di Savoia, Garibaldi and de Castro, seen on the nation sheet), are drawn again (`cultures.DRAW_AGAIN`), so no one else's name changes) and a generic politician portrait of the culture, seeded by
   tag. Hand-made rulers (`HAND_MADE`: ROU, AIS) keep theirs; Rouental also gets
   `ROU_leader_constitutional_monarchism` and `ROU_leader_leninism`, promoted by the Polite and Rudely
   focuses. Author's picks: CRD Enlightened Absolutism; EVR, SGN Feudalism; HLR, STO
@@ -1219,10 +1222,10 @@ in git history (commit d2d6cd8, `scripts/cartographic.py`). It used
 
 ## Current state
 
-- 20,817 provinces (20,416 land, 363 sea, 38 lakes), 61,400 province borders, 3,118
-  states, 122 strategic regions (42 sea), 183 countries (2026-10-13, later: Santa Fe cut
-  into 7 states, the last placeholder states but one islet given to their neighbours, so
-  Orientalis and Usnistan are left out). Before: 20,778 provinces (20,377 land), 61,283
+- 20,817 provinces (20,416 land, 363 sea, 38 lakes), 61,400 province borders, 3,117
+  states, 122 strategic regions (42 sea), 182 countries (2026-10-13, later: Santa Fe cut
+  into 7 states, the last placeholder states given to their neighbours, so Orientalis,
+  Usnistan and Solitas are left out; `dist/nations_by_continent.png`). Before: 20,778 provinces (20,377 land), 61,283
   borders, 184 countries (2026-10-13: Solitas outlined,
   nine new nations, the United States of Solitas removed, two islands added). Before:
   20,454 provinces (20,053 land), 60,318 borders, 3,065 states, 176 countries

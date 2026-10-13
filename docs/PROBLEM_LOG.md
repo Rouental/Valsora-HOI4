@@ -6,6 +6,14 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**Three generated rulers with famous real names** (2026-10-13, seen on the nation sheet)
+- Cause: the name lists are vanilla's, and the filter for famous surnames (`cultures.NOT_SURNAMES`)
+  didn't have these: Sicilianzo's "Umberto di Savoia" (Italy's last king), Solaria's "Felice
+  Garibaldi" and Coraliza's "Eugénio de Castro" (a Portuguese poet).
+- Fix: their surnames are in `cultures.DRAW_AGAIN`, so those three draw again (Gaetano
+  Mambretti, Fabrizio Sacchi, Bernardo Teixeira) and every other leader keeps their name
+  (checked against the previous `dist/countries.csv`).
+
 **The minimap showed Earth** (2026-10-13, author's screenshot)
 - Cause: the minimap is not drawn from the map. It is a fixed picture, vanilla's
   `gfx/minimap/minimap.dds` (sprite `GFX_minimap_world`, defined in vanilla's

@@ -1,6 +1,6 @@
 # Valsora: every country
 
-183 countries, 162 owning land at the start. Read from the built mod; regenerate with `python3 scripts/country_list.py`.
+182 countries, 161 owning land at the start. Read from the built mod; regenerate with `python3 scripts/country_list.py`.
 
 | Tag | Name | Full name | Ideology | Sub-ideology | Culture | Leader | States | Notes |
 |---|---|---|---|---|---|---|---|---|
@@ -29,7 +29,7 @@
 | CSC | Cascadia | the United Forests of Cascadia | Communist | Anarcho-Communism | American | Donald Abbott | 41 |  |
 | CRT | Charity | the Empire of Charitia | Monarchist | Absolute Monarchy | Chinese | Cao Jianhua | 56 |  |
 | CNA | Chineasia | the People's Republic of Chineasia | Communist | Vanguardism | Chinese | Han Leji | 73 |  |
-| CRZ | Coraliza | the Principality of Coraliza | Democratic | Constitutional Monarchy | Portuguese | Eugénio de Castro | 6 |  |
+| CRZ | Coraliza | the Principality of Coraliza | Democratic | Constitutional Monarchy | Portuguese | Bernardo Teixeira | 6 |  |
 | CRP | Crépuscule | the Principality of Crépuscule | Monarchist | Absolute Monarchy | French | Denis Boué de Lapeyrère | 0 | no land at the start (releasable or civil war) |
 | CUL | Cultists | the Cult of the Great Cthulu | Theocratic | Prophetic Rule | Persian | Ehsan Zahedi | 21 |  |
 | CTF | Côtefer | the Bleacherist Republic of Côtefer | Authoritarian | Bleacherism | Italian | Costanzo Solari | 5 | puppet of Republican Illiricium |
@@ -146,12 +146,11 @@
 | SRE | Serie | the Duchy of Serie | Monarchist | Feudalism | French | Frédéric Hoche | 0 | no land at the start (releasable or civil war) |
 | SHN | Shinnokawa | the Empire of Shinnokawa | Monarchist | Absolute Monarchy | Japanese | Hyoe Yamamoto | 1 |  |
 | SHO | Sho | the Kingdom of the Sho Dynasty | Monarchist | Oligarchy | Japanese | Kenkichi Yashiro | 13 |  |
-| SCZ | Sicilianzo | the Kingdom of Sicilianzo | Democratic | Constitutional Monarchy | Italian | Umberto di Savoia | 3 |  |
+| SCZ | Sicilianzo | the Kingdom of Sicilianzo | Democratic | Constitutional Monarchy | Italian | Gaetano Mambretti | 3 |  |
 | SVM | Silvamar | the New Republic of Silvamar | Democratic | Liberalism | Spanish | Elias Garcovixa | 6 |  |
 | SKL | Skillia | the Republic of Skillia | Communist | Agrarian Socialism | Greek | Militiadis Staikopoulos | 4 |  |
 | SMN | Sminishia | the Worker's Republic of Sminishia | Democratic | Social Democracy | Croatian | Dzivo Erdödy | 20 |  |
-| SLA | Solaria | the Holy State of Solaria | Theocratic | Hierocracy | Italian | Felice Garibaldi | 3 |  |
-| SLT | Solitas | Solitas | Monarchist | Absolute Monarchy | Swedish | Magnus Karlsson | 1 |  |
+| SLA | Solaria | the Holy State of Solaria | Theocratic | Hierocracy | Italian | Fabrizio Sacchi | 3 |  |
 | SLN | Soloriania | the Solorianois Confederacy | Democratic | Liberalism | French | Félicien Ropert | 4 |  |
 | SMB | Sombor | the Free City of Sombor | Democratic | Lordly Republic | Serbian | Nebojsa Paskas | 1 |  |
 | SMR | Someriania | the People's Republik of Someriania | Communist | Vanguardism | German | Franz Kniss | 12 |  |

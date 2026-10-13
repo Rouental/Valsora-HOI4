@@ -349,9 +349,11 @@ NOT_SURNAMES = {"Petain", "Foch", "Joffre", "Salazar", "Napoléon", "Murat", "Da
 
 
 # famous names met in a list already in use (2026-10-13: Abalón's king drew "Carlos Franco",
-# New Paradise's leader "Graham Windsor"): drawn again, like comment words, so that every
+# New Paradise's leader "Graham Windsor"; later, the nation sheet showed Sicilianzo's
+# "Umberto di Savoia", Italy's last king, Solaria's "Felice Garibaldi" and Coraliza's
+# "Eugénio de Castro", a Portuguese poet): drawn again, like comment words, so that every
 # other leader keeps their name
-DRAW_AGAIN = {"Franco", "Windsor"}
+DRAW_AGAIN = {"Franco", "Windsor", "di Savoia", "Garibaldi", "de Castro"}
 
 
 def _tokens(block):
