@@ -3,8 +3,9 @@
     python3 scripts/nation_sheet.py   # after a build: dist/nations_by_continent.png
 
 Each nation shows its flag, its ruler at the start (portrait and name), its full name,
-its ideology and sub-ideology, and the culture its names come from (country_list.py
-reads them all from build/valsora_test). Only portraits of our own are shown (the
+its ideology and sub-ideology, the culture its names come from (country_list.py reads
+them all from build/valsora_test), and a strip of its map colour as the game has it
+(common/countries/colors.txt; no country starts under a cosmetic tag). Only portraits of our own are shown (the
 author's and nations.PORTRAITS): a ruler with a base-game generic portrait, which isn't
 in this repository, gets a box saying "placeholder". Nations go under the continent of
 their capital; those with no land at the start (releasables, civil war countries) come
@@ -28,6 +29,7 @@ PW, PH = 78, 105        # portraits at half the game's 156 x 210
 FW, FH = 123, 78        # flags at 1.5 x the game's 82 x 52
 TW = 300                # text column
 GAP = 12
+STRIP = 12              # the map colour strip under the text
 CW = PW + FW + TW + 3 * GAP + 20   # card width
 COLS, PAD = 4, 30
 BOX = (52, 56, 62)
@@ -64,6 +66,13 @@ def own_portraits():
     return out
 
 
+def map_colours():
+    """tag -> its map colour in the game"""
+    text = (MOD / "common/countries/colors.txt").read_text(encoding="utf-8")
+    return {tag: tuple(int(v) for v in rgb) for tag, *rgb in
+            re.findall(r"^(\w{3}) = \{\s*color = rgb \{ (\d+) (\d+) (\d+) \}", text, re.M)}
+
+
 def flag(tag):
     src = FLAGS / f"{tag}.png"
     im = Image.open(src if src.exists() else MOD / f"gfx/flags/{tag}.tga").convert("RGB")
@@ -80,6 +89,7 @@ def main():
     where = continent_of()
     ruler, sprite = leaders()
     files = own_portraits()
+    colour = map_colours()
     later = {**{t: "civil war country" for t in nations.CIVIL_WAR},
              **{t: "releasable" for t in nations.RELEASABLE}}
     groups = {c: [] for c in CONTINENTS}
@@ -104,7 +114,7 @@ def main():
         return out
 
     def card_height(r):
-        return max(PH, 22 + sum(18 for _ in lines(r)))
+        return max(PH, 22 + sum(18 for _ in lines(r)) + 4 + STRIP)
 
     # height: a heading per continent, then rows of cards as tall as their tallest
     def rows_of(entries):
@@ -123,8 +133,9 @@ def main():
     y = PAD + 52
     note = (f"{total} nations in the game, {landed} with land at the start, under the continent of their "
             "capital. Each shows its flag, its ruler at the start, its full name, ideology and "
-            "sub-ideology, and the culture its names come from. Rulers without a portrait of their own "
-            "(a base-game generic one, not in this repository) have a placeholder box.")
+            "sub-ideology, the culture its names come from, and a strip of its map colour. Rulers "
+            "without a portrait of their own (a base-game generic one, not in this repository) have a "
+            "placeholder box.")
     for line in wrap(d, note, font(REGULAR, 17), width - 2 * PAD):
         d.text((PAD, y), line, font=font(REGULAR, 17), fill=DIM)
         y += 23
@@ -161,6 +172,8 @@ def main():
                 for text, fnt, fill in lines(r):
                     d.text((tx, ty), text, font=fnt, fill=fill)
                     ty += 18
+                ty += 4
+                d.rectangle([tx, ty, tx + TW - 1, ty + STRIP - 1], fill=colour[tag], outline=FRAME)
             y += max(card_height(r) for r in row) + 22
         y += 20
     im = im.crop((0, 0, width, y + PAD - 20))
