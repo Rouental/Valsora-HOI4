@@ -5,9 +5,8 @@ guiTypes = {
 		name = "valsora_deco_pol_title_window"
 		position = { x = 190 y = 34 }
 		size = { width = 292 height = 46 }
-		Orientation = "UPPER_LEFT"
+		Orientation = UPPER_LEFT
 		clipping = no
-		alwaystransparent = yes
 		instantTextBoxType = {
 			name = "valsora_deco_pol_title"
 			position = { x = 0 y = 0 }
@@ -25,9 +24,8 @@ guiTypes = {
 		name = "valsora_deco_pol_info_window"
 		position = { x = 198 y = 192 }
 		size = { width = 334 height = 90 }
-		Orientation = "UPPER_LEFT"
+		Orientation = UPPER_LEFT
 		clipping = no
-		alwaystransparent = yes
 		instantTextBoxType = {
 			name = "valsora_deco_pol_party"
 			position = { x = 0 y = 0 }
@@ -66,9 +64,8 @@ guiTypes = {
 		name = "valsora_deco_pol_desc_window"
 		position = { x = 30 y = 334 }
 		size = { width = 490 height = 80 }
-		Orientation = "UPPER_LEFT"
+		Orientation = UPPER_LEFT
 		clipping = no
-		alwaystransparent = yes
 		instantTextBoxType = {
 			name = "valsora_deco_pol_desc_text"
 			position = { x = 0 y = 0 }
@@ -85,9 +82,8 @@ guiTypes = {
 		name = "valsora_deco_pol_desc_none_window"
 		position = { x = 155 y = 362 }
 		size = { width = 240 height = 24 }
-		Orientation = "UPPER_LEFT"
+		Orientation = UPPER_LEFT
 		clipping = no
-		alwaystransparent = yes
 		iconType = {
 			name = "valsora_deco_pol_ornament"
 			spriteType = "GFX_valsora_deco_pol_ornament"
@@ -99,9 +95,8 @@ guiTypes = {
 		name = "valsora_deco_pol_laws_window"
 		position = { x = 314 y = 450 }
 		size = { width = 212 height = 102 }
-		Orientation = "UPPER_LEFT"
+		Orientation = UPPER_LEFT
 		clipping = no
-		alwaystransparent = yes
 		instantTextBoxType = {
 			name = "valsora_deco_pol_law_conscription_value"
 			position = { x = 0 y = 14 }
@@ -140,9 +135,8 @@ guiTypes = {
 		name = "valsora_deco_pol_faction_role_window"
 		position = { x = 128 y = 689 }
 		size = { width = 82 height = 12 }
-		Orientation = "UPPER_LEFT"
+		Orientation = UPPER_LEFT
 		clipping = no
-		alwaystransparent = yes
 		instantTextBoxType = {
 			name = "valsora_deco_pol_faction_role_text"
 			position = { x = 0 y = 0 }

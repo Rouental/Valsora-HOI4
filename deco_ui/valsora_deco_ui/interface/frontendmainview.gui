@@ -109,7 +109,7 @@ guiTypes = {
 					maxWidth = 150
 					maxHeight = 18
 					text = "SELECT_ALL"	
-					orientation = "UPPER_LEFT"
+					orientation = UPPER_LEFT
 					format = left
 					
 			}
@@ -304,7 +304,7 @@ guiTypes = {
 			name = "sp_continue_flag_left"
 			quadTextureSprite ="GFX_flag_small2_not_masked"
 			position = { x= 35 y = 22 }
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 			alwaystransparent = yes
 		}
 		
@@ -312,7 +312,7 @@ guiTypes = {
 			name = "sp_continue_flag_left_overlay"
 			quadTextureSprite ="GFX_flag_small2_not_masked"
 			position = { x= 35 y = 22 }
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 			alwaystransparent = yes
 		}
 		
@@ -320,7 +320,7 @@ guiTypes = {
 			name = "sp_continue_flag_right"
 			quadTextureSprite ="GFX_flag_small2_not_masked"
 			position = { x= 245 y = 22 }
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 			alwaystransparent = yes
 		}
 		
@@ -328,7 +328,7 @@ guiTypes = {
 			name = "sp_continue_flag_right_overlay"
 			quadTextureSprite ="GFX_flag_small2_not_masked"
 			position = { x= 245 y = 22 }
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 			alwaystransparent = yes
 		}
 		
@@ -379,7 +379,7 @@ guiTypes = {
 		name ="mainmenu_panel_bottom"
 		position = { x = -660 y = -166 }
 		size = { width = 1320 height = 140 }
-		Orientation = "CENTER_DOWN"
+		Orientation = CENTER_DOWN
 		clipping = yes
 		positionType = {
 			name = "subscription_size"
@@ -462,7 +462,7 @@ guiTypes = {
 			position = { x = 174 y = 58 }
 			spriteType = "GFX_icon_best_in_career"
 			centerposition = yes
-			orientation = "UPPER_LEFT"
+			orientation = UPPER_LEFT
 			alwaysTransparent = yes
 		}
 		
@@ -565,7 +565,7 @@ guiTypes = {
 		name = "mainmenu_social_buttons"
 		position = { x = 28 y = 44 }	
 		size = { width = 240 height = 90 }
-		Orientation = "UPPER_LEFT"	
+		Orientation = UPPER_LEFT	
 		
 		positionType = {
 			name = "position_without_social_gui"

@@ -6,18 +6,24 @@ mod's author is the user. This folder is the **source project**. `valsora_deco_u
 everything else is how it gets built.
 
 The first four versions were made in a cloud session that had no game install. It had only copies of
-the game's `interface/` folder, `00_defines.lua` and `00_graphics.lua`. Everything below marked
-**(in game)** was confirmed from the user's screenshots. Everything marked **(assumed)** has not been
-seen in game yet. Treat assumed items as hypotheses.
+the game's `interface/` folder, `00_defines.lua` and `00_graphics.lua`. From v0.4.5 (2026-10-14) the
+project lives in the Valsora repository as `deco_ui/`, and the game's files come from the user's
+private copy of their install (section 3). Everything below marked **(in game)** was confirmed from
+the user's screenshots or `error.log`. Everything marked **(assumed)** has not been seen in game yet.
+Treat assumed items as hypotheses.
 
 ---------------------------------------------------------------------------------------------------
 
-## 1. Status (v0.4.4)
+## 1. Status (v0.4.5)
 
-v0.4.3 was the first v0.3/v0.4 build the user launched. The user's first report covered only the main
-menu: the Valsora background showed **(in game)**, but none of the menu buttons did. v0.4.4 fixes the
-button row's anchoring (section 6, Main menu) and moves the social links to the top-left corner.
-The rest of v0.3/v0.4 (top bar, politics, state panel, focus tree) has still not been seen in game.
+v0.4.3 was the first v0.3/v0.4 build the user launched. The user's reports so far cover only the main
+menu: the Valsora background and the social links in the top-left corner show **(in game)**, but in
+v0.4.3 and v0.4.4 none of the menu buttons did. v0.4.4 blamed `Origo` and was wrong. The user's
+`error.log` showed the real cause: the game rejects a **quoted** `Orientation` on a
+`containerWindowType` and falls back to `UPPER_LEFT` (section 6). v0.4.5 writes every orientation
+bare, which also puts five right-anchored top bar windows back on the right, and moves
+`alwaystransparent` off containers, where the game rejected it too. The rest of v0.3/v0.4 (top bar,
+politics, state panel, focus tree) has still not been seen in game.
 
 | Area | State |
 |---|---|
@@ -28,7 +34,7 @@ The rest of v0.3/v0.4 (top bar, politics, state panel, focus tree) has still not
 | Politics screen (`interface/countrypoliticsview.gui`) | v0.4: the Government mockup's layout (no Court panel), with scripted GUIs for what the game's screen lacks. |
 | State / province panel (`interface/countrystateview.gui`) | v0.4: the mockup's arrangement for the state part (flag + name header, stats row, slots, buildings); the province part keeps the game's positions. |
 | Focus tree (`interface/nationalfocusview.gui`) | v0.4: window chrome, plates, medallions, filters, detail pop-up, legend. Focus icons untouched. |
-| Main menu (`interface/frontendmainview.gui` + background) | v0.3; v0.4.4 fixed the invisible button row. Background **(in game)**. |
+| Main menu (`interface/frontendmainview.gui` + background) | v0.3; v0.4.5 fixed the invisible button row (a quoted `Orientation`). Background and social links **(in game)**. |
 | Army bar (bottom: `leadergroups.gui`) | **Next.** See `docs/next_army_bar_and_map_modes.md`. |
 | Map modes and minimap (bottom right: `mapmodes_interface.gui`, `minimap.gui`) | **Next.** Same doc. |
 | Everything else (production, research, events, diplomacy, trade, ...) | Only the core skin so far. A mockup exists for the superevent. |
@@ -50,6 +56,9 @@ the same as vanilla, go with what you showed in your mockup."*
 
 - They test each release in game at 1920x1080 and send screenshots with a list of what to fix. Expect
   the same loop: build, check, preview, package, then they test.
+- They can also send `error.log` (`Documents/Paradox Interactive/Hearts of Iron IV/logs/`). **Ask for
+  it whenever something does not show in game**: the game names the file and line it rejected. v0.4.4
+  was a wasted round because the fix was guessed from a screenshot.
 - Ship a ready-to-install mod (the `valsora_deco_ui/` folder plus `valsora_deco_ui.mod`) and a
   README that says what changed and what to look at in game.
 - Show previews (`build/preview_*.png`) before asking them to launch the game. They cost nothing and
@@ -92,6 +101,31 @@ Paths come from `tools/paths.py`. Every one can be overridden with an environmen
 `reference/README.md` says what to copy into `reference/` when there is no install to point at.
 **Never ship or commit Paradox files.** `reference/` and `build/` are git-ignored.
 
+### In the Valsora repository (cloud sessions)
+
+The project is `deco_ui/` in the Valsora repository (the mod's own pipeline is in `scripts/`; see the
+repository's `CLAUDE.md`). The game's files are in the user's private repository
+`Rouental/HOI4-Files`: attach it to the session, clone it to `/home/user/hoi4-files` (text files under
+`HOI4 Files/`, `gfx/` at its root; a sparse checkout without `gfx/fonts` textures, `gfx/models` and
+`gfx/event_pictures` is enough), then link it and the built Valsora mod into `reference/`:
+
+```
+cd deco_ui && mkdir -p reference/vanilla
+for f in interface common localisation map portraits history events; do
+  ln -sfn "/home/user/hoi4-files/HOI4 Files/$f" reference/vanilla/$f; done
+ln -sfn /home/user/hoi4-files/gfx reference/vanilla/gfx
+for f in 00_defines.lua 00_graphics.lua; do
+  ln -sfn "/home/user/hoi4-files/HOI4 Files/common/defines/$f" reference/vanilla/$f; done
+ln -sfn ../../build/valsora_test reference/valsora    # build it first: sh scripts/run_all.sh at the root
+CHROMIUM_PATH=/opt/pw-browsers/chromium python3 tools/build_all.py
+python3 tools/package.py ../dist/valsora_deco_ui.zip  # the release the user installs
+```
+
+`CHROMIUM_PATH` points Playwright at the machine's pre-installed Chromium, whose version may not match
+the pip package's (`playwright install` is not needed then). The full build takes under a minute.
+Regenerated textures can differ from the shipped ones by a few anti-aliased pixels; restore the
+shipped files (`git checkout`) when only that changed, so each release changes only what it meant to.
+
 ## 4. Project map
 
 ```
@@ -117,6 +151,7 @@ tools/
   make_menu.py              frontendmainview.gui + background registration + menu sprites
   validate_preview.py       static checks + a preview renderer that reads the generated .gui/.gfx
   preview_screens.py        politics, state panel, focus tree and main menu previews (imports validate_preview)
+  package.py                zips valsora_deco_ui.mod + valsora_deco_ui/ for the user (default build/valsora_deco_ui_<version>.zip)
 source_fonts/               TTFs + OFL licences (Josefin Sans, Federo, Limelight, Bodoni Moda)
 art/                        menu_world.jpg (main menu map), map_rouental.jpg + flag_ROU.png (preview backdrops),
                             mockups/*.jpg (renders) and mockups/source/ (the boards' HTML + assets)
@@ -160,13 +195,34 @@ Build order matters. `gen_fonts` runs first because `layout.py` measures strings
 - Vanilla files contain typos that the engine tolerates. `countrypoliticsview.gui` has `y = 1s` in
   the pie overlay, which `make_politics` fixes before parsing.
 - `Orientation` sets the anchor in the parent. `Origo` sets the anchor point of the element itself.
+  **Write both bare** (`Orientation = CENTER_DOWN`), as vanilla does on every container (it quotes
+  them only on some child elements). **(in game,
+  error.log)** On a `containerWindowType` the game rejects a quoted value ("Not a valid orientation:
+  CENTER_DOWN, near line: 382") and keeps the default `UPPER_LEFT`. That hid the main menu's button
+  row in v0.4.3 and v0.4.4: its offset from the bottom centre, (-660,-166), put it above the top-left
+  corner of the screen. It also sent five top bar windows anchored `UPPER_RIGHT` (command power,
+  nukes, army, navy, air) off the left edge. Quoted values on other element types raised no error,
+  but `guipatch.engine_safe` unquotes them all.
+- The v0.4.4 notes blamed `Origo = center_down` for the main menu. That was a guess from a screenshot
+  and was wrong: v0.4.3 quoted the orientation too. Whether `Origo = center_down` works is untested.
   **(in game)** `Origo = center` and `lower_left`/`lower_right` work on top-level frontend windows
   (the social links, the DLC column and the change-background button all land where vanilla puts
-  them). **(in game)** `Orientation = CENTER_DOWN` plus `Origo = center_down` on the main menu panel
-  did **not** work: none of its buttons showed in v0.4.3, most likely because the panel's top-left
-  landed at the bottom-centre, below the screen. Do not rely on `center_down`. For bottom-centred
-  windows use what vanilla's peace conference chat does: `Orientation = CENTER_DOWN`, no `Origo`,
-  and `position = { x = -width/2 y = -(height + margin) }`.
+  them). Bottom-centred windows follow vanilla's peace conference chat: `Orientation = CENTER_DOWN`,
+  no `Origo`, and `position = { x = -width/2 y = -(height + margin) }`.
+- **(in game, error.log)** `alwaystransparent` is not a `containerWindowType` key ("Unexpected token:
+  alwaystransparent"). Vanilla puts it inside a container's `background = { }` block (83 times), or on
+  icons, buttons and text boxes. `engine_safe` moves a container's own `alwaystransparent` into its
+  background, or drops it when there is none (the game was ignoring it anyway). **(assumed)** A
+  container without a background does not catch clicks itself; its children do. Vanilla's
+  scripted-GUI windows (e.g. `usa_congress_decision_ui_window`) have no background either. If one of
+  ours turns out to block a tooltip under it, an untested remedy is a tiny `size` with
+  `clipping = no`, so its text still draws outside it.
+- The checker reads the game's rules from vanilla, not from our own parser, which accepted everything:
+  `validate_preview` flags quoted orientations, `alwaystransparent` on containers, and any key that no
+  vanilla element of the same type uses. Run on the v0.4.4 files, it flags all 31 lines the game's
+  `error.log` named (19 quoted orientations and 12 `alwaystransparent` on containers), plus 147 quoted
+  orientations on icons, buttons and text boxes that the log did not mention (vanilla quotes some of
+  those itself, so they are probably harmless; they are written bare now anyway).
 - A width of `100%%` runs to the parent's right edge, so right-anchored top bar elements use
   `gui_x = screen_x - 1920`. **(in game)** The world tension ring landed exactly where planned.
 - The top bar container sits at `(-4,-1)`, so `gui = screen + (4,1)` for UPPER_LEFT children
@@ -229,8 +285,10 @@ Build order matters. `gen_fonts` runs first because `layout.py` measures strings
   `[ROOT.GetNameDefCap]`.
 - `visible = { ... }` on a scripted GUI can call a scripted trigger. The long country name switch
   uses `valsora_deco_long_name` (generated, see section 7).
-- Scripted-GUI windows are `alwaystransparent = yes` so they never block clicks on the vanilla
-  elements under them. The law cards' text boxes are not transparent, so their tooltip shows.
+- Scripted-GUI windows have no background, and their text boxes are `alwaystransparent = yes`, so
+  they should not block clicks on the vanilla elements under them **(assumed;** `alwaystransparent`
+  on the window itself is rejected, see .gui files above**)**. The law cards' text boxes are not
+  transparent, so their tooltip shows.
 - Scripted localisation (`common/scripted_localisation`, `defined_text` with `trigger` /
   `localization_key` entries) picks text by state: the current law of each kind (`has_idea`), the
   ruling party's popularity (`has_government` → `[?party_popularity_100@<ideology>|0]%`), the leader's
@@ -270,14 +328,18 @@ Build order matters. `gen_fonts` runs first because `layout.py` measures strings
   base_backgrounds.txt` holds `name = { }` entries for `gfx/loadingscreens/<name>.dds`, plus a
   `GFX_<name>_small` (192x144) sprite for the picker. The mod's `base_backgrounds.txt` **replaces**
   the game's, so only the Valsora background is listed. **(in game)** The Valsora background shows.
-- The bottom panel (`mainmenu_panel_bottom`, 1320x140) is anchored `CENTER_DOWN` at `(-660, -166)`
-  with no `Origo` (see the Origo note above). It has `clipping = yes`, and the three subscription
-  widgets are parked outside it at x 1344, which hides them. The game resizes the panel to its
-  `subscription_size` positionType, so that is set to the panel's own size.
+- The bottom panel (`mainmenu_panel_bottom`, 1320x140) is anchored `CENTER_DOWN` (bare, see the
+  Orientation note above) at `(-660, -166)` with no `Origo`. v0.4.5 is the first build in which the
+  game accepts that anchor **(assumed** until the user's next screenshot**)**. It has
+  `clipping = yes`, and the three subscription widgets are parked outside it at x 1344, which hides
+  them. The game resizes the panel to its `subscription_size` positionType, so that is set to the
+  panel's own size.
 - The game moves `mainmenu_social_buttons` to one of its three positionTypes when the menu opens
   **(in game:** vanilla's `position_without_social_gui` (0,175) put the links over the middle of the
   map**)**. v0.4.4 anchors the window `UPPER_LEFT` with no `Origo` and points all three positionTypes
-  at (28,44), the top-left corner. Its icon rows draw at y -17 and +19 inside the window. **(assumed)**
+  at (28,44), the top-left corner. Its icon rows draw at y -17 and +19 inside the window. **(in game,
+  v0.4.4:** the links sit in the top-left corner; the game rejected the quoted `UPPER_LEFT` but fell
+  back to the same anchor**)**
 - The console is `console_wnd` in vanilla `core.gui` (font `Arial12`, `GFX_console_win_bg`,
   `small_tiles_dialog.dds`); the mod touches none of it. The blue/green 1280x720 and 1600x900
   rectangles the user saw are the game's GUI-bounds debug overlay (console command `gui`).
@@ -402,16 +464,20 @@ t = GP.set_background(t, "mainmenu_panel_bottom", "GFX_valsora_deco_clear")
 t = GP.insert_after(t, "countrypoliticsview>leader_name", snippet)    # new sibling element
 t = GP.insert_child(t, "some_container", snippet, first=True)        # first = drawn underneath
 GP.check(t)                                                          # brace balance
+GP.write_gui(MOD + "interface/x.gui", t)    # braces checked, engine_safe applied, UTF-8 with LF
 ```
 
 - Paths use names. `a>b` means b is a **direct child** of a, and `a/b` means b is **any
   descendant**. Every lookup asserts exactly one hit, so ambiguous names need a longer path.
 - `set_attrs` formats `position`, `size`, `slotsize` and `max_slots` from tuples, and quotes
-  strings for `font`, `sprite`/`spriteType`, `text` and `Orientation`. It edits the element's
+  strings for `font`, `sprite`/`spriteType` and `text`. `Orientation` and `Origo` stay bare (until
+  v0.4.5 it quoted `Orientation`, which the game rejects on containers). It edits the element's
   **own** attributes, never a child's. `own_region` cuts at the element's final `}`. An earlier bug
   appended attributes after the closing brace.
 - Comments are stripped before matching. Matching is case-insensitive on type keywords.
-- Write files as UTF-8 with LF. Vanilla reads them fine.
+- Write every generated .gui with `GP.write_gui`, never a plain `open().write()`. It checks the
+  braces and runs `engine_safe`: orientations unquoted, a container's `alwaystransparent` moved into
+  its background (section 6). Files are UTF-8 with LF, which the game reads fine.
 
 ## 9. Pitfalls already hit (do not repeat)
 
@@ -422,9 +488,12 @@ GP.check(t)                                                          # brace bal
   or the game will not know it.
 - Text boxes that are too short silently drop the second line. Size boxes for 2 lines where names
   can wrap.
-- `Origo = center_down` on a top-level window hid the whole main menu row in v0.4.3. Anchor with
-  explicit offsets instead (section 6). `preview_screens.preview_menu` asserts the panel has no Origo
-  and fits on a 1920x1080 screen.
+- A quoted `Orientation` on a container hid the whole main menu row in v0.4.3 and v0.4.4: the game
+  rejected it and kept `UPPER_LEFT` (section 6). v0.4.4 changed `Origo` instead, guessing from a
+  screenshot; the user's `error.log` named the real cause at once. Ask for the log first. The
+  previews cannot catch this kind of bug, because they read the files with our own parser; the
+  validator's vanilla-based syntax check can. `preview_screens.preview_menu` also asserts the panel
+  has no Origo and fits on a 1920x1080 screen.
 - Never `rm -rf` with relative globs after a `cd`. Use absolute paths, and use `unzip -o` into an
   absolute directory.
 - Long-name detection must use only name keys (`TAG`, `TAG_<ideology>`, cosmetic tags). Matching
@@ -434,8 +503,10 @@ GP.check(t)                                                          # brace bal
 
 ## 10. Open items and things to check in game
 
-Check these first in the user's next screenshots:
+Check these first in the user's next screenshots and `error.log`:
 
+0. **error.log (v0.4.5)**: no "Not a valid orientation" or "Unexpected token: alwaystransparent" lines
+   from this mod's files. Any other line naming one of its files is the next bug.
 1. **v0.3 top bar fixes**
    - flags are crisp
    - the market button has the deco icon
@@ -456,17 +527,21 @@ Check these first in the user's next screenshots:
    - the focus card opens the focus tree; its progress bar fills; the "choose a focus" glow
    - the spirits band wraps at 8; the advisors & laws list scrolls (it starts lower than before)
 5. **Top bar (v0.4)**: the decisions seal opens decisions and shows its count badges and glow; the
-   faction crown swaps between the plain and the in-faction version and shows the logo
+   faction crown swaps between the plain and the in-faction version and shows the logo.
+   **(v0.4.5)** command power, nukes and the army / navy / air buttons sit at the right end (until
+   v0.4.4 the game rejected their anchor, so they were off the left edge); hovering political power
+   and the factory counts still shows their tooltips (the scripted text windows sit over them)
 6. **State panel**: the new background covers the province part too (the game's container is only
    496 tall; the picture is 650); building tiles line up with the building pictures; what the
    game's "owner" text says (it is used as the subtitle); the population icon's size at scale .55;
    resources with two rows do not run into the slots line; resistance (occupied states) next to
    claims
 7. **Focus tree**: plates line up with the focus names and links; the medallion sits behind the
-   icons; filters show on/off; the legend does not hide anything important
+   icons; filters show on/off; the legend does not hide anything important; the search box and
+   buttons under the header band respond (its click-through is on its background since v0.4.5)
 8. **Main menu**
-   - **(v0.4.4 fix)** the button row now shows along the bottom, centred at 16:9 and other ratios
-   - the social links sit in the top-left corner
+   - **(v0.4.5 fix)** the button row now shows along the bottom, centred at 16:9 and other ratios
+   - the social links sit in the top-left corner **(in game, v0.4.4, done)**
    - the background manager shows the Valsora background **(in game, done)**
    - the single player sub-panel looks right
    - the version label is readable
@@ -488,28 +563,37 @@ Still vanilla art:
 ## 11. Integration options (decide with the user)
 
 - **A. Separate mod (current).** `valsora_deco_ui/` goes into `Documents/Paradox Interactive/
-  Hearts of Iron IV/mod/` with its `.mod` file. Load it **after** Valsora in the playset, because
-  both mods ship `interface/countrypoliticsview.gui`. It also works on vanilla, in which case the
-  long-name trigger is built from Valsora data and stays harmless.
+  Hearts of Iron IV/mod/` with its `.mod` file; the release is the Valsora repository's
+  `dist/valsora_deco_ui.zip` (`tools/package.py`), which holds both. Load it **after** Valsora in
+  the playset, because both mods ship `interface/countrypoliticsview.gui` (the only shared path as
+  of v0.4.5, checked file by file). It also works on vanilla, in which case the long-name trigger is
+  built from Valsora data and stays harmless.
+- **Valsora's own interface files.** Valsora ships `interface/countrypoliticsview.gui` (vanilla's
+  with five 13 px party rows) and, since 2026-10-13, its own minimap: `interface/minimap.gui` (the
+  window moved for a 194x97 picture), `gfx/minimap/minimap.dds` and `border.dds`, and
+  `MINIMAP_TOGGLE_SHIFT` in `common/defines/valsora_graphics.lua` (Valsora's `scripts/minimap.py`).
+  The deco minimap work (section 12) must start from those, not from vanilla's, or the minimap
+  goes back to vanilla's size and position.
 - **B. Merged into the Valsora mod.** Set `VALSORA_DECO_MOD` to the Valsora mod folder. The
   generators then write straight into it. Before doing this:
   - copy Valsora's original `interface/countrypoliticsview.gui` to a separate base path and point
     `make_politics` at it
   - check the Valsora mod does not already have files at the same paths (`topbar.gui`, `alerts.gui`,
     `frontendmainview.gui`, `base_backgrounds.txt`, the replaced textures)
-  - keep this source project (tools, fonts, art) **outside** the mod folder, because the Valsora
-    repo root *is* the mod folder (`descriptor.mod` at the root), and anything inside it gets
-    uploaded with the mod
-  - a sibling folder or a separate repo works, or a subfolder that is excluded from uploads
+  - the Valsora repository is not the mod folder: its pipeline builds the mod into
+    `build/valsora_test/` (`scripts/build_mod.py`) and ships `dist/valsora_test.zip`, so this
+    project can stay in `deco_ui/`; merging would mean running the generators against the built
+    mod as a pipeline step (after `build_mod.py`, before `check_mod.py` and `package.py`)
 - Either way, copy `valsora_deco_ui/README.txt`'s install notes into the release.
 
 ## 12. Next steps (in order)
 
-1. Process the user's screenshots of v0.4 (section 10).
+1. Process the user's screenshots and `error.log` of v0.4.5 (section 10).
 2. **Army bar and map modes / minimap**: see `docs/next_army_bar_and_map_modes.md`. It covers the
    sprite tables, the plan and what to read from the game's textures first. These need the real
    `gfx/interface/unitcontrol/`, `gfx/interface/mapmode/` and minimap textures (frame sizes and
-   meanings). The first session did not have them.
+   meanings). The first session did not have them; they are now in `reference/vanilla/gfx` (section
+   3). The minimap must build on Valsora's own (section 11).
 3. Politics extras still missing from the Government mockup: faction member flags (needs a scripted
    GUI dynamic list over the faction's members; not verified that one exists) and a one-spirit card
    with its modifiers. The user does not want "The Court" panel.

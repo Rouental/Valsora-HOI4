@@ -17,6 +17,7 @@ scripts/    the pipeline (run_all.sh runs it all; common.py holds every setting)
 dist/       what gets committed for the author: the mod zip, drawing canvases, previews
 work/       intermediates, gitignored (decoded .pdn layers are 3.5 GB)
 build/      the unzipped mod, gitignored
+deco_ui/    the Valsora Deco UI, a separate interface mod (its own CLAUDE.md; see below)
 ```
 
 ## The editable map: `source/HOI4 Mod Map.pdn`
@@ -1200,6 +1201,26 @@ Left loaded on purpose, and noisy in `error.log`:
 - National focus: it holds the generic tree our countries use.
 - Ideas, MIOs, scripted effects and triggers, ai_areas, operations and achievements. They
   reference vanilla ids, which the previous build showed the game tolerates.
+
+## Deco UI (`deco_ui/`)
+
+**The Valsora Deco UI** is the author's art deco interface mod, made with another Claude session
+(v0.1–v0.4.4) and moved here on 2026-10-14 (v0.4.5). It is a separate mod, loaded **after** Valsora
+in the playset: a restyled top bar, politics screen, state panel, focus tree, main menu (the Valsora
+background) and a core skin. `deco_ui/CLAUDE.md` is its full handoff guide (engine facts, generators,
+what is confirmed in game); read it before touching the UI. In short:
+- Its `tools/` generate everything in `deco_ui/valsora_deco_ui/` from the game's `.gui` files and
+  Valsora's built mod (`build/valsora_test`, linked as `deco_ui/reference/valsora`), so **rebuild it
+  when Valsora adds or renames countries or leaders** (the long-name trigger, the leader
+  descriptions): `CHROMIUM_PATH=/opt/pw-browsers/chromium python3 tools/build_all.py` in `deco_ui/`,
+  after the vanilla links its section 3 lists. `validate_preview.py` must end with `PROBLEMS: none`.
+- The release is `dist/valsora_deco_ui.zip` (`python3 tools/package.py ../dist/valsora_deco_ui.zip`):
+  `valsora_deco_ui.mod` and `valsora_deco_ui/`. To install: delete `mod/valsora_deco_ui/` and
+  `mod/valsora_deco_ui.mod`, unzip it into `mod/`, put it below Valsora in the playset.
+- Both mods ship `interface/countrypoliticsview.gui` (the only shared path): the Deco UI's is
+  rebuilt from Valsora's by its `make_politics.py`, so re-run that whenever Valsora's changes.
+  Valsora's minimap (`minimap.py`) is the base for any Deco UI minimap work.
+- Its `reference/` (the game's files, git-ignored) must never be committed: it is Paradox's content.
 
 ## Atlas submod (removed)
 

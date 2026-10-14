@@ -22,7 +22,7 @@ guiTypes = {
 			name = "valsora_deco_band"
 			position = { x = 4 y = 1 }
 			size = { width = 100%% height = 64 }
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 			clipping = no
 			background = {
 				name = "valsora_deco_band_bg"
@@ -34,12 +34,12 @@ guiTypes = {
 			name = "valsora_deco_band_shadow"
 			position = { x = 4 y = 65 }
 			size = { width = 100%% height = 8 }
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 			clipping = no
-			alwaystransparent = yes
 			background = {
 				name = "valsora_deco_band_shadow_bg"
 				quadTextureSprite = "GFX_valsora_deco_topbar_band_shadow"
+				alwaystransparent = yes
 			}
 		}
 		# tray hanging under the readouts (fuel, supply, convoys)
@@ -47,49 +47,49 @@ guiTypes = {
 			name = "valsora_deco_tray"
 			spriteType = "GFX_valsora_deco_tray"
 			position = { x = 914 y = 63 }
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 		}
 		# readout dividers and labels
 		iconType = {
 			name = "valsora_deco_divider_1"
 			spriteType = "GFX_valsora_deco_divider"
 			position = { x = 690 y = 12 }
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 			alwaystransparent = yes
 		}
 		iconType = {
 			name = "valsora_deco_divider_2"
 			spriteType = "GFX_valsora_deco_divider"
 			position = { x = 862 y = 12 }
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 			alwaystransparent = yes
 		}
 		iconType = {
 			name = "valsora_deco_divider_3"
 			spriteType = "GFX_valsora_deco_divider"
 			position = { x = 981 y = 12 }
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 			alwaystransparent = yes
 		}
 		iconType = {
 			name = "valsora_deco_divider_4"
 			spriteType = "GFX_valsora_deco_divider"
 			position = { x = 1125 y = 12 }
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 			alwaystransparent = yes
 		}
 		iconType = {
 			name = "valsora_deco_divider_5"
 			spriteType = "GFX_valsora_deco_divider"
 			position = { x = 1252 y = 12 }
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 			alwaystransparent = yes
 		}
 		iconType = {
 			name = "valsora_deco_divider_6"
 			spriteType = "GFX_valsora_deco_divider"
 			position = { x = 1398 y = 12 }
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 			alwaystransparent = yes
 		}
 		instantTextBoxType = {
@@ -101,7 +101,7 @@ guiTypes = {
 			maxWidth = 128
 			maxHeight = 14
 			fixedsize = yes
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 			alwaystransparent = yes
 		}
 		instantTextBoxType = {
@@ -113,7 +113,7 @@ guiTypes = {
 			maxWidth = 75
 			maxHeight = 14
 			fixedsize = yes
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 			alwaystransparent = yes
 		}
 		instantTextBoxType = {
@@ -125,7 +125,7 @@ guiTypes = {
 			maxWidth = 100
 			maxHeight = 14
 			fixedsize = yes
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 			alwaystransparent = yes
 		}
 		instantTextBoxType = {
@@ -137,7 +137,7 @@ guiTypes = {
 			maxWidth = 83
 			maxHeight = 14
 			fixedsize = yes
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 			alwaystransparent = yes
 		}
 		instantTextBoxType = {
@@ -149,7 +149,7 @@ guiTypes = {
 			maxWidth = 103
 			maxHeight = 14
 			fixedsize = yes
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 			alwaystransparent = yes
 		}
 		# ================= end of decorative layer =================
@@ -158,14 +158,14 @@ guiTypes = {
 			name ="background"
 			spriteType = "GFX_valsora_deco_medallion"
 			position = { x = 18 y = 1 }
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 		}
 		
 		buttonType = {
 			name = "reopen_ingame_lobby"
 			quadTextureSprite ="GFX_reopen_lobby"
 			position = { x= 188 y = -22 }
-			Orientation = "LOWER_LEFT"
+			Orientation = LOWER_LEFT
 		}
 		
 		instantTextBoxType = {
@@ -177,7 +177,7 @@ guiTypes = {
 			maxWidth = 57
 			maxHeight = 24
 			fixedsize = yes
-			Orientation = "LOWER_LEFT"
+			Orientation = LOWER_LEFT
 			alwaystransparent = yes
 		}
 		
@@ -185,7 +185,7 @@ guiTypes = {
 #			name ="topbar_date_overlay"
 #			spriteType = "GFX_topbar_date_overlay"
 #			position = { x= -357 y = 0 }
-#			Orientation = "UPPER_RIGHT"
+#			Orientation = UPPER_RIGHT
 #		}
 
 		containerWindowType = {
@@ -208,14 +208,14 @@ guiTypes = {
 				name = "music_pause_button"
 				quadTextureSprite ="GFX_music_pause_button"
 				position = { x= -195 y = 6 }
-				Orientation = "UPPER_RIGHT"
+				Orientation = UPPER_RIGHT
 			}	
 
 			buttonType = {
 				name = "music_next_button"
 				quadTextureSprite ="GFX_music_next_button"
 				position = { x= -165 y = 6 }
-				Orientation = "UPPER_RIGHT"
+				Orientation = UPPER_RIGHT
 				pdx_tooltip = "MUSICPLAYER_NEXT"
 			}
 
@@ -223,7 +223,7 @@ guiTypes = {
 				name = "musicplayer_button"
 				quadTextureSprite ="GFX_musicplayer_button"
 				position = { x= -130 y = 6 }
-				Orientation = "UPPER_RIGHT"
+				Orientation = UPPER_RIGHT
 			}			
 				
 		}		
@@ -232,7 +232,7 @@ guiTypes = {
 			name ="armyoverview_buttons_bg"
 			spriteType = "GFX_valsora_deco_topbar_right"
 			position = { x = -532 y = 1 }
-			Orientation = "UPPER_RIGHT"
+			Orientation = UPPER_RIGHT
 			alwaystransparent = yes
 		}
 		
@@ -240,7 +240,7 @@ guiTypes = {
 			name = "player_flag"
 			quadTextureSprite = "GFX_valsora_deco_player_flag"
 			position = { x = 55 y = 19 }
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 			clicksound = click_close
 			oversound = ui_menu_over
 			shortcut = "q"
@@ -250,7 +250,7 @@ guiTypes = {
 			name = "observer_flag_overlay"
 			spriteType = "GFX_observer_flag_overlay"
 			position = { x = 54 y = 20 }
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 			alwaystransparent = yes
 		}
 
@@ -258,14 +258,14 @@ guiTypes = {
 			name ="pol_power_value_bg"
 			spriteType = "GFX_valsora_deco_hit_157x46"
 			position = { x = 698 y = 7 }
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 		}
 
 		iconType ={
 			name ="pol_power_icon"
 			spriteType = "GFX_valsora_deco_icon_pp"
 			position = { x = 700 y = 18 }
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 		}
 
 		instantTextBoxType = {
@@ -283,14 +283,14 @@ guiTypes = {
 			name ="manpower_value_bg"
 			spriteType = "GFX_valsora_deco_hit_112x46"
 			position = { x = 1133 y = 7 }
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 		}
 
 		iconType ={
 			name ="manpower_icon"
 			spriteType = "GFX_valsora_deco_icon_manpower"
 			position = { x = 1135 y = 18 }
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 		}
 
 		instantTextBoxType = {
@@ -308,14 +308,14 @@ guiTypes = {
 			name ="sability_value_bg"
 			spriteType = "GFX_valsora_deco_hit_104x46"
 			position = { x = 870 y = 7 }
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 		}
 		
 		iconType ={
 			name ="stability_icon"
 			spriteType = "GFX_valsora_deco_icon_stability"
 			position = { x = 872 y = 18 }
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 		}
 
 		instantTextBoxType = {
@@ -333,14 +333,14 @@ guiTypes = {
 			name ="war_support_value_bg"
 			spriteType = "GFX_valsora_deco_hit_129x46"
 			position = { x = 989 y = 7 }
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 		}
 		
 		iconType ={
 			name ="war_support_icon"
 			spriteType = "GFX_valsora_deco_icon_war"
 			position = { x = 991 y = 18 }
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 		}
 
 		instantTextBoxType = {
@@ -362,7 +362,7 @@ guiTypes = {
 			position = { x = -188 y = 67 }
 			clipping = no
 			size = { width = 44 height = 32 }
-			Orientation = "UPPER_RIGHT"
+			Orientation = UPPER_RIGHT
 
 			background = {
 				name = "nukes_bg"
@@ -374,7 +374,7 @@ guiTypes = {
 				spriteType = "GFX_valsora_deco_icon_nuke"
 				position = { x = 0 y = 7 }
 				scale = 1.0
-				Orientation = "UPPER_LEFT"
+				Orientation = UPPER_LEFT
 				alwaystransparent = yes
 			}
 
@@ -395,7 +395,7 @@ guiTypes = {
 			position = { x = -394 y = 67 }
 			clipping = no
 			size = { width = 50 height = 32 }
-			Orientation = "UPPER_RIGHT"
+			Orientation = UPPER_RIGHT
 
 				background = {
 					name = "cp_bg"
@@ -406,7 +406,7 @@ guiTypes = {
 				name ="command_power_icon"
 				spriteType = "GFX_valsora_deco_icon_command"
 				position = { x = 0 y = 7 }
-				Orientation = "UPPER_LEFT"
+				Orientation = UPPER_LEFT
 				alwaystransparent = yes
 			}
 		
@@ -429,14 +429,14 @@ guiTypes = {
 			name ="industrial_capacity_bg" 
 			spriteType = "GFX_valsora_deco_hit_132x46"
 			position = { x = 1260 y = 7 } 
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 		}
 		
 		iconType ={
 			name ="industrial_capacity_icon"
 			spriteType = "GFX_valsora_deco_icon_factory"
 			position = { x = 1262 y = 18 } 
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 		}
         
 		instantTextBoxType = {
@@ -464,14 +464,14 @@ guiTypes = {
 			name ="convoy_text_bg"
 			spriteType = "GFX_valsora_deco_hit_63x30"
 			position = { x = 1096 y = 65 }
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 		}
 		
 		iconType ={
 			name ="convoys_icon"
 			spriteType = "GFX_valsora_deco_icon_convoy"
 			position = { x = 1096 y = 71 }
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 		}
 		
 		instantTextBoxType = {
@@ -500,14 +500,14 @@ guiTypes = {
 			name ="fuel_value_bg"
 			spriteType = "GFX_valsora_deco_hit_67x30"
 			position = { x = 928 y = 65 }
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 		}
 		
 		iconType = {
 			name ="fuel_icon"
 			spriteType = "GFX_valsora_deco_icon_fuel"
 			position = { x = 928 y = 71 }
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 		}		
 		
 		instantTextBoxType = {
@@ -535,14 +535,14 @@ guiTypes = {
 			name ="supply_value_bg"
 			spriteType = "GFX_valsora_deco_hit_67x30"
 			position = { x = 1012 y = 65 }
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 		}
 		
 		iconType = {
 			name ="supply_icon"
 			spriteType = "GFX_equipment_icon"
 			position = { x = 1009 y = 68 }
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 		}		
 		
 		instantTextBoxType = {
@@ -569,7 +569,7 @@ guiTypes = {
 			name ="threat_button"
 			spriteType = "GFX_world_tension_icon_big_strip"
 			position = { x = -100 y = 20 }
-			Orientation = "UPPER_RIGHT"
+			Orientation = UPPER_RIGHT
 			clicksound = click_default
 		}
 
@@ -577,7 +577,7 @@ guiTypes = {
 			name ="threat_icon_glow"
 			spriteType = "GFX_WT_anim_strip"
 			position = { x = -115 y = 5 }
-			Orientation = "UPPER_RIGHT"
+			Orientation = UPPER_RIGHT
 			alwaystransparent = yes
 		}
 		
@@ -585,7 +585,7 @@ guiTypes = {
 			name ="threat_value_button"
 			spriteType = "GFX_world_tension_icon_big_strip"
 			position = { x = -100 y = 83 }
-			Orientation = "UPPER_RIGHT"
+			Orientation = UPPER_RIGHT
 			clicksound = click_default
 			size = { x=50 y=20 }
 			quadTextureSprite ="GFX_tiled_window_transparent"
@@ -600,7 +600,7 @@ guiTypes = {
 			maxWidth = 50
 			maxHeight = 24
 			fixedsize = yes
-			Orientation = "UPPER_RIGHT"
+			Orientation = UPPER_RIGHT
 			alwaystransparent = yes
 		}	
 		
@@ -614,7 +614,7 @@ guiTypes = {
 				name = "pause_button_date"
 				quadTextureSprite = "GFX_valsora_deco_date_bg"
 				position = { x = 0 y = 0 }
-				Orientation = "UPPER_LEFT"
+				Orientation = UPPER_LEFT
 				shortcut = "SPACE" #Will be disabled in MP from code
 				clicksound = pause_button
 			}
@@ -623,7 +623,7 @@ guiTypes = {
 				name = "pause_button_date_paused"
 				quadTextureSprite = "GFX_valsora_deco_date_paused"
 				position = { x = 0 y = 0 }
-				Orientation = "UPPER_LEFT"
+				Orientation = UPPER_LEFT
 				shortcut = "SPACE" #Will be disabled in MP from code
 				clicksound = pause_button
 			}
@@ -692,7 +692,7 @@ guiTypes = {
 				maxWidth = 220
 				maxHeight = 22
 				format = centre
-				Orientation = "UPPER_LEFT"	
+				Orientation = UPPER_LEFT	
 				alwaystransparent = yes
 				fixedsize = yes
 			}
@@ -707,7 +707,7 @@ guiTypes = {
 			buttonFont = "Main_14_black"
 			clicksound = click_ok
 			oversound = ui_menu_over
-			Orientation = "UPPER_RIGHT"
+			Orientation = UPPER_RIGHT
 			pdx_tooltip = "MAIN_MENU"
 		}
 		
@@ -719,7 +719,7 @@ guiTypes = {
 			buttonFont = "Main_14_black"
 			clicksound = click_ok
 			oversound = ui_menu_over
-			Orientation = "UPPER_RIGHT"
+			Orientation = UPPER_RIGHT
 			pdx_tooltip = "HELP_MENU"
 			web_link = ""
 		}
@@ -732,7 +732,7 @@ guiTypes = {
 			buttonFont = "Main_14_black"
 			clicksound = click_ok
 			oversound = ui_menu_over
-			Orientation = "UPPER_RIGHT"
+			Orientation = UPPER_RIGHT
 		}
 		
 		buttonType = {
@@ -743,7 +743,7 @@ guiTypes = {
 			buttonFont = "Main_14_black"
 			clicksound = click_ok
 			oversound = ui_menu_over
-			Orientation = "UPPER_RIGHT"
+			Orientation = UPPER_RIGHT
 			pdx_tooltip = "MUSICPLAYER_TOGGLE_CONTROLLER"
 		}		
 		
@@ -755,7 +755,7 @@ guiTypes = {
 			buttonFont = "Main_14_black"
 			clicksound = click_ok
 			oversound = ui_menu_over
-			Orientation = "UPPER_RIGHT"
+			Orientation = UPPER_RIGHT
 		}
 		
 		
@@ -773,7 +773,7 @@ guiTypes = {
 					name = "faction_button"
 					quadTextureSprite = "GFX_topbar_faction_empty"
 					position = { x = 0 y = 0 }
-					Orientation = "UPPER_LEFT"
+					Orientation = UPPER_LEFT
 					clicksound = click_close
 					oversound = ui_menu_over
 					shortcut = "ctrl+q"
@@ -785,7 +785,7 @@ guiTypes = {
 					font = "valsora_deco_value_12"
 					text = "999"
 					format = centre
-					orientation = "UPPER_LEFT"
+					orientation = UPPER_LEFT
 					maxWidth = 24
 					maxHeight = 14
 					fixedsize = yes
@@ -815,7 +815,7 @@ guiTypes = {
 					name = "decisionview_button"
 					quadTextureSprite = "GFX_valsora_deco_decisions_seal"
 					position = { x = -114 y = 119 }
-					Orientation = "UPPER_LEFT"
+					Orientation = UPPER_LEFT
 					clicksound = click_close
 					oversound = ui_menu_over
 					shortcut = "shift+q"
@@ -864,7 +864,7 @@ guiTypes = {
 					name = "intel_agency_button"
 					quadTextureSprite = "GFX_valsora_deco_tb_intelligence" 
 					position = { x = 50 y = 0 }
-					Orientation = "UPPER_LEFT"
+					Orientation = UPPER_LEFT
 					clicksound = click_close
 					oversound = ui_menu_over
 					shortcut = "shift+w"
@@ -917,7 +917,7 @@ guiTypes = {
 						name = "technology_button"
 						quadTextureSprite = "GFX_valsora_deco_tb_technology"
 						position = { x = 0 y = 0 }
-						Orientation = "UPPER_LEFT"
+						Orientation = UPPER_LEFT
 						shortcut = "w"
 						clicksound = click_close
 						oversound = ui_menu_over
@@ -947,7 +947,7 @@ guiTypes = {
 						name = "diplomacy_button"
 						quadTextureSprite = "GFX_valsora_deco_tb_diplomacy"
 						position = { x = 50 y = 0 }
-						Orientation = "UPPER_LEFT"
+						Orientation = UPPER_LEFT
 						shortcut = "e"
 						clicksound = click_close
 						oversound = ui_menu_over
@@ -1004,7 +1004,7 @@ guiTypes = {
 						name = "trade_button"
 						position = { x = 100 y = 0 }
 						quadTextureSprite = "GFX_valsora_deco_tb_trade"
-						Orientation = "UPPER_LEFT"
+						Orientation = UPPER_LEFT
 						shortcut = "r"
 						clicksound = click_close
 						oversound = ui_menu_over
@@ -1014,7 +1014,7 @@ guiTypes = {
 						name = "construction_button"
 						position = { x = 150 y = 0 }
 						quadTextureSprite = "GFX_valsora_deco_tb_construction"
-						Orientation = "UPPER_LEFT"
+						Orientation = UPPER_LEFT
 						shortcut = "t"
 						clicksound = click_close
 						oversound = ui_menu_over
@@ -1031,7 +1031,7 @@ guiTypes = {
 						name = "production_button"
 						position = { x = 200 y = 0 }
 						quadTextureSprite = "GFX_valsora_deco_tb_production"
-						Orientation = "UPPER_LEFT"
+						Orientation = UPPER_LEFT
 						shortcut = "y"
 						clicksound = click_close
 						oversound = ui_menu_over
@@ -1041,7 +1041,7 @@ guiTypes = {
 						name = "deployment_button"
 						position = { x = 250 y = 0 }
 						quadTextureSprite = "GFX_valsora_deco_tb_deployment"
-						Orientation = "UPPER_LEFT"
+						Orientation = UPPER_LEFT
 						shortcut = "u"
 						clicksound = click_close
 						oversound = ui_menu_over
@@ -1051,7 +1051,7 @@ guiTypes = {
 						name = "logistics_button"
 						position = { x = 300 y = 0 }
 						quadTextureSprite = "GFX_valsora_deco_tb_logistics"
-						Orientation = "UPPER_LEFT"
+						Orientation = UPPER_LEFT
 						shortcut = "i"
 						clicksound = click_close
 						oversound = ui_menu_over
@@ -1061,7 +1061,7 @@ guiTypes = {
 						name = "officer_corp_button"
 						position = { x = 350 y = 0 }
 						quadTextureSprite = "GFX_valsora_deco_tb_officer"
-						Orientation = "UPPER_LEFT"
+						Orientation = UPPER_LEFT
 						shortcut = "shift+e"
 						clicksound = click_close
 						oversound = ui_menu_over
@@ -1073,7 +1073,7 @@ guiTypes = {
 				name = "army_button"
 				position = { x = -336 y = 59 }
 				quadTextureSprite = "GFX_valsora_deco_overview_army"
-				Orientation = "UPPER_right"
+				Orientation = UPPER_right
 				shortcut = "o"
 				clicksound = click_close
 				oversound = ui_menu_over
@@ -1083,7 +1083,7 @@ guiTypes = {
 				name = "navy_button"
 				position = { x = -288 y = 59 }
 				quadTextureSprite = "GFX_valsora_deco_overview_navy"
-				Orientation = "UPPER_right"
+				Orientation = UPPER_right
 				shortcut = "p"
 				clicksound = click_close
 				oversound = ui_menu_over
@@ -1093,7 +1093,7 @@ guiTypes = {
 				name = "air_button"
 				position = { x = -240 y = 59 }
 				quadTextureSprite = "GFX_valsora_deco_overview_air"
-				Orientation = "UPPER_right"
+				Orientation = UPPER_right
 				shortcut = "l"
 				clicksound = click_close
 				oversound = ui_menu_over
@@ -1105,7 +1105,7 @@ guiTypes = {
 			position = { x = -314 y = 93 }
 			clipping = no
 			size = { width = 26 height = 15 }
-			Orientation = "UPPER_RIGHT"
+			Orientation = UPPER_RIGHT
 
 			background = {
 				name = "land_xp_bg"
@@ -1116,7 +1116,7 @@ guiTypes = {
 				name ="experience_icon"
 				spriteType = "GFX_valsora_deco_none"
 				position = { x = 0 y = 0 }
-				Orientation = "UPPER_LEFT"
+				Orientation = UPPER_LEFT
 				alwaystransparent = yes
 			}
 			
@@ -1137,7 +1137,7 @@ guiTypes = {
 			position = { x = -266 y = 93 }
 			clipping = no
 			size = { width = 26 height = 15 }
-			Orientation = "UPPER_RIGHT"
+			Orientation = UPPER_RIGHT
 				
 			background = {
 				name = "navy_xp_bg"
@@ -1148,7 +1148,7 @@ guiTypes = {
 				name ="navy_experience_icon"
 				spriteType = "GFX_valsora_deco_none"
 				position = { x = 0 y = 0 }
-				Orientation = "UPPER_LEFT"
+				Orientation = UPPER_LEFT
 				alwaystransparent = yes
 			}		
 			
@@ -1169,7 +1169,7 @@ guiTypes = {
 			position = { x = -218 y = 93 }
 			clipping = no
 			size = { width = 26 height = 15 }
-			Orientation = "UPPER_RIGHT"
+			Orientation = UPPER_RIGHT
 			
 			background = {
 				name = "air_xp_bg"
@@ -1180,7 +1180,7 @@ guiTypes = {
 				name ="air_experience_icon"
 				spriteType = "GFX_valsora_deco_none"
 				position = { x = 0 y = 0 }
-				Orientation = "UPPER_LEFT"
+				Orientation = UPPER_LEFT
 				alwaystransparent = yes
 			}
 			
@@ -1207,7 +1207,7 @@ guiTypes = {
 		#	verticalBorder= ""
 		#	fullScreen = no
 		#	moveable = 0
-		#	Orientation = "CENTER_UP"
+		#	Orientation = CENTER_UP
 		#	
 
 		#	

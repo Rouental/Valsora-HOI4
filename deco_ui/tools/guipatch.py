@@ -76,7 +76,9 @@ def own_region(block):
     return block[:cut], block[cut:]
 
 
-QUOTED = ("font", "sprite", "Orientation", "text", "spriteType", "quadTextureSprite", "buttonFont")
+# Orientation and Origo are written bare: the game rejects a quoted value on containerWindowType
+# (see engine_safe)
+QUOTED = ("font", "sprite", "text", "spriteType", "quadTextureSprite", "buttonFont")
 
 
 def fmt_value(key, val):
@@ -145,6 +147,62 @@ def insert_child(text, path, snippet, first=True):
     if first:
         return text[:s] + head + snippet + rest + text[e:]
     return text[:e - 1].rstrip() + snippet + "\n" + text[e - 1:]
+
+
+def _own_background(rest):
+    """(start, end) of the background block that belongs to the element whose remaining text (its
+    children and closing brace) is `rest`, or None."""
+    clean = _strip_comments(rest)
+    depth = 0
+    for m in re.finditer(r"background\s*=\s*\{|\{|\}", clean, re.I):
+        if m.group(0) == "{":
+            depth += 1
+        elif m.group(0) == "}":
+            depth -= 1
+        elif depth == 0:
+            return m.start(), _block_end(clean, m.start())
+        else:
+            depth += 1                       # a nested element's background opens a brace too
+    return None
+
+
+def engine_safe(text):
+    """Make generated .gui text acceptable to the game's reader (1.19.3).
+
+    The game's error.log (2026-10-14, v0.4.4) showed it rejects, on containerWindowType only:
+      - a quoted orientation:  Orientation = "CENTER_DOWN" -> "Not a valid orientation: CENTER_DOWN";
+        the window then keeps the default UPPER_LEFT anchor (this hid the main menu's button row:
+        its offset from the bottom centre put it above the top-left corner of the screen)
+      - alwaystransparent:     "Unexpected token: alwaystransparent"
+    Vanilla writes orientations bare on every element type, and puts alwaystransparent inside a
+    container's background block. So every Orientation / Origo value is unquoted, and a container's
+    own alwaystransparent moves into its own background, or is dropped when it has none."""
+    text = re.sub(r'(?i)\b(orientation|origo)(\s*=\s*)"([A-Za-z_]+)"', r"\1\2\3", text)
+    starts = [m.start() for m in re.finditer(r"containerWindowType\s*=\s*\{", _strip_comments(text), re.I)]
+    for s in reversed(starts):               # inner containers first, so earlier offsets stay valid
+        e = _block_end(_strip_comments(text), s)
+        head, rest = own_region(text[s:e])
+        m = re.search(r"\n[ \t]*alwaystransparent\s*=\s*(\w+)[^\n]*", _strip_comments(head), re.I)
+        if not m:
+            continue
+        head = head[:m.start()] + head[m.end():]
+        bg = _own_background(rest) if m.group(1).lower() == "yes" else None
+        if bg and not re.search(r"alwaystransparent", _strip_comments(rest[bg[0]:bg[1]]), re.I):
+            close = bg[1] - 1                # the background's closing brace
+            indent = re.search(r"([ \t]*)\S*$", rest[:bg[0]]).group(1) + "\t"
+            rest = rest[:close].rstrip() + "\n" + indent + "alwaystransparent = yes\n" + \
+                indent[:-1] + rest[close:]
+        text = text[:s] + head + rest + text[e:]
+    return text
+
+
+def write_gui(path, text):
+    """Write a generated .gui: braces checked, engine-safe, UTF-8 with LF."""
+    text = engine_safe(check(text))
+    check(text)
+    with open(path, "w", encoding="utf-8", newline="\n") as f:
+        f.write(text)
+    return text
 
 
 def check(text):

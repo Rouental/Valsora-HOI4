@@ -2,7 +2,7 @@
 from playwright.sync_api import sync_playwright
 
 from icons import ICONS, icon
-from paths import BUILD
+from paths import BUILD, CHROMIUM
 
 names = [k for k in ICONS if k != "supply"]
 cells = []
@@ -19,7 +19,7 @@ html = ('<html><body style="margin:0;background:#11191E;padding:20px;width:1460p
         '<div style="display:flex;flex-wrap:wrap;gap:22px 18px">' + "".join(cells) + '</div></body></html>')
 open(BUILD + "icon_sheet.html", "w").write(html)
 with sync_playwright() as p:
-    b = p.chromium.launch()
+    b = p.chromium.launch(**CHROMIUM)
     pg = b.new_page(viewport={"width": 1500, "height": 400}, device_scale_factor=1)
     pg.goto("file://" + BUILD + "icon_sheet.html")
     pg.wait_for_timeout(300)

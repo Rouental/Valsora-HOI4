@@ -10,7 +10,7 @@ guiTypes = {
 			name = "claim_flag"
 			position = { x = 0 y = 0 }
 			quadTextureSprite ="GFX_flag_small"
-			Orientation = "LOWER_LEFT"
+			Orientation = LOWER_LEFT
 		}	
 	}
 	
@@ -263,7 +263,7 @@ guiTypes = {
 				name ="population_icon"
 				spriteType = "GFX_population_icon"
 				position = { x = 160 y = 80 }
-				Orientation = "UPPER_LEFT"
+				Orientation = UPPER_LEFT
 				scale = 0.55
 			}
 			
@@ -314,7 +314,7 @@ guiTypes = {
 						position = { x = 0 y = 68 }
 						quadTextureSprite = "GFX_occupation_state_select_law_button"
 						buttonFont = "hoi_18mbs"
-						Orientation = "UPPER_LEFT"
+						Orientation = UPPER_LEFT
 					}
 
 					iconType = {
@@ -359,7 +359,7 @@ guiTypes = {
 				name = "terrain_picture"
 				position = { x =0 y=0 }
 				spriteType = "GFX_terrain_default"
-				Orientation = "UPPER_LEFT"
+				Orientation = UPPER_LEFT
 			}
 			
 			instantTextboxType = {
@@ -375,14 +375,14 @@ guiTypes = {
 				name = "province_required_rule"
 				position = { x = 100 y = 15 }
 				spriteType = "GFX_required_rule"
-				Orientation = "UPPER_LEFT"
+				Orientation = UPPER_LEFT
 			}	
 
 			iconType = {
 				name = "building_modifiers_icon"
 				position = { x = 342 y= -76 }
 				spriteType = "GFX_buildings_strip"
-				Orientation = "UPPER_LEFT"
+				Orientation = UPPER_LEFT
 				frame = 21
 				scale = 0.8
 				hide = yes
@@ -393,14 +393,14 @@ guiTypes = {
 				name = "modifiers_mud_icon"
 				position = { x = 0 y= 0 }
 				spriteType = "GFX_modifiers_mud_icon"
-				Orientation = "UPPER_LEFT"
+				Orientation = UPPER_LEFT
 			}
 			
 			iconType = {
 				name = "modifiers_snow_icons"
 				position = { x = 0 y= 0 }
 				spriteType = "GFX_modifiers_snow_icons"
-				Orientation = "UPPER_LEFT"
+				Orientation = UPPER_LEFT
 				frame = 1
 			}
 
@@ -408,7 +408,7 @@ guiTypes = {
 				name = "modifiers_weather_icons"
 				position = { x = 0 y= 0 }
 				spriteType = "GFX_modifiers_weather_icons"
-				Orientation = "UPPER_LEFT"
+				Orientation = UPPER_LEFT
 				frame = 1
 			}
 
@@ -416,7 +416,7 @@ guiTypes = {
 				name = "temperature_icons"
 				position = { x = 0 y= 0 }
 				spriteType = "GFX_temperature_icons"
-				Orientation = "UPPER_LEFT"
+				Orientation = UPPER_LEFT
 				frame = 1				
 			}
 
@@ -424,7 +424,7 @@ guiTypes = {
 				name = "impassability_icon"
 				position = { x = 0 y= 0 }
 				spriteType = "GFX_impassable_icon"
-				Orientation = "UPPER_LEFT"
+				Orientation = UPPER_LEFT
 			}
 
 			instantTextboxType = {
@@ -464,21 +464,21 @@ guiTypes = {
 					name = "flooded_icon"
 					spriteType = "GFX_modifiers_flooded_icon"
 					position = { x = 0 y = 0 }
-					Orientation = "UPPER_LEFT"			
+					Orientation = UPPER_LEFT			
 				}
 
 				iconType = {
 					name = "unplanned_offensive_icon"
 					spriteType = "GFX_modifiers_unplanned_offensive_icon"
 					position = { x = 0 y = 0 }
-					Orientation = "UPPER_LEFT"			
+					Orientation = UPPER_LEFT			
 				}
 
 				iconType = {
 					name = "the_great_wall_icon"
 					spriteType = "GFX_modifiers_the_great_wall_icon"
 					position = { x = 0 y = 0 }
-					Orientation = "UPPER_LEFT"			
+					Orientation = UPPER_LEFT			
 				}	
 			}
 
@@ -508,7 +508,7 @@ guiTypes = {
 			quadTextureSprite = "GFX_valsora_deco_pol_close"
 			buttonFont = "Main_14_black"
 			shortcut = "ESCAPE"
-			Orientation = "UPPER_RIGHT"
+			Orientation = UPPER_RIGHT
 			clicksound = click_close
 			pdx_tooltip = "CLOSE"
 		}
@@ -518,7 +518,7 @@ guiTypes = {
 			position = { x = -17 y = 413 }
 			quadTextureSprite ="GFX_scorched_earth_state"
 			buttonFont = "Main_14_black"
-			Orientation = "UPPER_RIGHT"
+			Orientation = UPPER_RIGHT
 		}
 	}
 	
@@ -531,7 +531,7 @@ guiTypes = {
 			name = "stakeholder_country_flag"
 			quadTextureSprite ="GFX_flag_small2"
 			position = { x= 0 y = 1 }
-			#Orientation = "UPPER_LEFT"
+			#Orientation = UPPER_LEFT
 		}
 		
 		iconType = {
@@ -808,7 +808,7 @@ guiTypes = {
 			name = "flag"
 			position = { x = 23 y = 23 }
 			quadTextureSprite ="GFX_mapicon_unit_flag_stripe"
-			orientation = "UPPER_LEFT"
+			orientation = UPPER_LEFT
 		}
 	}
 	

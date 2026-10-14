@@ -15,7 +15,7 @@ from playwright.sync_api import sync_playwright
 from ddsutil import write_dds as _wd
 from icons import icon as _icon
 
-from paths import MOD, PNG, ART, BUILD, FONTS_SRC
+from paths import MOD, PNG, ART, BUILD, FONTS_SRC, CHROMIUM
 os.makedirs(PNG, exist_ok=True)
 
 
@@ -868,7 +868,7 @@ open(BUILD + "sprites.html", "w").write(page)
 
 manifest = []
 with sync_playwright() as p:
-    b = p.chromium.launch()
+    b = p.chromium.launch(**CHROMIUM)
     pg = b.new_page(viewport={"width": 2000, "height": 1500}, device_scale_factor=1)
     pg.goto("file://" + BUILD + "sprites.html")
     pg.wait_for_timeout(600)

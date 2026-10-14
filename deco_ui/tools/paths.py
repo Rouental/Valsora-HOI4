@@ -11,7 +11,7 @@ Layout (relative to the project root = the folder above tools/):
 
 Every location can be overridden with an environment variable:
     VALSORA_DECO_ROOT, VALSORA_DECO_MOD, HOI4_DIR (the game folder, used instead of reference/vanilla),
-    VALSORA_MOD_DIR (instead of reference/valsora).
+    VALSORA_MOD_DIR (instead of reference/valsora), CHROMIUM_PATH (the browser Playwright uses).
 """
 import os
 
@@ -29,6 +29,9 @@ ART = _d(os.path.join(ROOT, "art"))
 VANILLA = _d(os.environ.get("HOI4_DIR") or os.path.join(ROOT, "reference", "vanilla"))
 VALSORA = _d(os.environ.get("VALSORA_MOD_DIR") or os.path.join(ROOT, "reference", "valsora"))
 BUILD = _d(os.path.join(ROOT, "build"))
+# Chromium for Playwright: by default Playwright's own download; CHROMIUM_PATH points at another one
+# (e.g. a cloud machine's pre-installed /opt/pw-browsers/chromium when the versions differ)
+CHROMIUM = {"executable_path": os.environ["CHROMIUM_PATH"]} if os.environ.get("CHROMIUM_PATH") else {}
 PNG = _d(os.path.join(BUILD, "png"))
 for _p in (BUILD, PNG):
     os.makedirs(_p, exist_ok=True)

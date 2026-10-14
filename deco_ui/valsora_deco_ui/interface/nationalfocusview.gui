@@ -15,10 +15,10 @@ guiTypes = {
 			position = { x = 0 y = 0 }
 			size = { width = 100%% height = 47 }
 			clipping = no
-			alwaystransparent = yes
 			background = {
 				name = "valsora_deco_nf_header_bg"
 				quadTextureSprite = "GFX_valsora_deco_nf_header"
+				alwaystransparent = yes
 			}
 		}		background = {
 			name = "Background"
@@ -175,28 +175,28 @@ guiTypes = {
 					name ="tutorial_glow_1"
 					spriteType = "GFX_tutorial_national_focus_icon_glow"
 					position = { x= 252 y = 20 }
-					Orientation = "UPPER_LEFT"
+					Orientation = UPPER_LEFT
 					hide = yes
 				}
 				iconType ={
 					name ="tutorial_glow_2"
 					spriteType = "GFX_tutorial_national_focus_icon_glow"
 					position = { x= 829 y = 20 }
-					Orientation = "UPPER_LEFT"
+					Orientation = UPPER_LEFT
 					hide = yes
 				}
 				iconType ={
 					name ="tutorial_glow_3"
 					spriteType = "GFX_tutorial_national_focus_icon_glow"
 					position = { x= 1116 y = 150 }
-					Orientation = "UPPER_LEFT"
+					Orientation = UPPER_LEFT
 					hide = yes
 				}
 				iconType ={
 					name ="tutorial_glow_4"
 					spriteType = "GFX_tutorial_national_focus_icon_glow"
 					position = { x= 1308 y = 150 }
-					Orientation = "UPPER_LEFT"
+					Orientation = UPPER_LEFT
 					hide = yes
 				}
 				
@@ -417,7 +417,7 @@ guiTypes = {
 			quadTextureSprite = "GFX_valsora_deco_pol_close"
 			buttonFont = "Main_14_black"
 			shortcut = "ESCAPE"
-			Orientation = "UPPER_RIGHT"
+			Orientation = UPPER_RIGHT
 			clicksound = click_close
 			pdx_tooltip = "CLOSE"
 		}
@@ -454,7 +454,7 @@ guiTypes = {
 			name = "valsora_deco_nf_legend"
 			spriteType = "GFX_valsora_deco_nf_legend"
 			position = { x = -612 y = -66 }
-			Orientation = "LOWER_RIGHT"
+			Orientation = LOWER_RIGHT
 			alwaystransparent = yes
 		}
 	}
@@ -583,7 +583,7 @@ guiTypes = {
 			name = "viewing_flag"
 			quadTextureSprite ="GFX_flag_small2"
 			position = {  x=110 y=30 }
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 		}
 
 		iconType ={
@@ -725,7 +725,7 @@ guiTypes = {
 			name ="info_top_win"
 			spriteType = "GFX_valsora_deco_none"
 			position = { x= 1 y = 1 }
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 			alwaystransparent = yes
 		}
 
@@ -735,7 +735,7 @@ guiTypes = {
 			buttonFont = "vic_18"
 			position = { x = -46 y = 8 }
 			shortcut = "ESCAPE"
-			Orientation = "UPPER_RIGHT"
+			Orientation = UPPER_RIGHT
 			pdx_tooltip = "CLOSE"
 			clicksound = click_close
 		}
@@ -891,7 +891,7 @@ guiTypes = {
 			name ="info_top_win"
 			spriteType = "GFX_valsora_deco_none"
 			position = { x= 1 y = 1 }
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 			alwaystransparent = yes
 		}
 
@@ -901,7 +901,7 @@ guiTypes = {
 			buttonFont = "vic_18"
 			position = { x = -46 y = 8 }
 			shortcut = "ESCAPE"
-			Orientation = "UPPER_RIGHT"
+			Orientation = UPPER_RIGHT
 			pdx_tooltip = "CLOSE"
 			clicksound = click_close
 		}
@@ -1042,7 +1042,7 @@ guiTypes = {
 			name = "checkbox"
 			position = { x = 0 y = 0 }
 			quadTextureSprite = "GFX_valsora_deco_nf_filter"
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 			clicksound = click_checkbox
 			frame = 1
 		}
@@ -1051,7 +1051,7 @@ guiTypes = {
 			name = "icon"
 			position = { x = 8 y = 7 }
 			quadTextureSprite ="GFX_FOCUS_FILTER_POLITICAL"
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 			alwaystransparent = yes
 		}
 	}
@@ -1065,7 +1065,7 @@ guiTypes = {
 			name = "checkbox"
 			position = { x = 0 y = 0 }
 			quadTextureSprite = "GFX_valsora_deco_nf_filter"
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 			clicksound = click_checkbox
 			frame = 2
 		}
@@ -1073,7 +1073,7 @@ guiTypes = {
 		iconType = {
 			name = "icon"
 			position = { x = 7 y = 6 }
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 			alwaystransparent = yes
 		}
 	}
@@ -1122,7 +1122,7 @@ guiTypes = {
 			name = "toggle"
 			position = { x = 0 y = 0 }
 			quadTextureSprite ="GFX_production_line_arrow_down"
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 			clicksound = click_checkbox
 			frame = 1
 			pdx_tooltip = "TREE_FILTER_TOGGLE"

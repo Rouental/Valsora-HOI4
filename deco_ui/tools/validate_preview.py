@@ -74,6 +74,49 @@ for f in glob.glob(M + "interface/*") + glob.glob(M + "common/**/*.txt", recursi
     if t.count("{") != t.count("}"):
         problems.append(f"brace mismatch in {f}")
 
+# ------------------------------------------------------------------ what the game's .gui reader accepts
+# 1.19.3 rejects a quoted Orientation and alwaystransparent on containerWindowType (error.log of v0.4.4:
+# "Not a valid orientation: CENTER_DOWN", "Unexpected token: alwaystransparent") and the window keeps
+# the default UPPER_LEFT anchor: that hid the main menu's button row. guipatch.write_gui fixes both;
+# this catches anything written another way, and any key the mod puts on an element type that no
+# vanilla element of that type uses (the reader may reject it the same silent way).
+def element_keys(path):
+    """(element type, key, raw value) of every key = value in a .gui file, types lowercased."""
+    toks = tokenize(open(path, encoding="utf-8-sig", errors="replace").read())
+    stack, out, i = [], [], 0
+    while i < len(toks):
+        if toks[i] == "}":
+            if stack:
+                stack.pop()
+            i += 1
+        elif i + 2 < len(toks) and toks[i + 1] == "=":
+            if toks[i + 2] == "{":
+                stack.append(toks[i].lower())
+            else:
+                out.append((stack[-1] if stack else "", toks[i].lower(), toks[i + 2]))
+            i += 3
+        else:
+            i += 1
+    return out
+
+
+vanilla_keys = {}
+for f in glob.glob(VANILLA + "interface/**/*.gui", recursive=True):
+    for typ, key, _ in element_keys(f):
+        vanilla_keys.setdefault(typ, set()).add(key)
+for f in sorted(glob.glob(M + "interface/*.gui")):
+    base = os.path.basename(f)
+    for typ, key, val in element_keys(f):
+        if key in ("orientation", "origo") and val.startswith('"'):
+            problems.append(f"{base}: quoted {key} {val} on {typ}: write it bare (the game rejects a quoted "
+                            f"orientation on containerWindowType; vanilla writes them bare)")
+        elif typ == "containerwindowtype" and key == "alwaystransparent":
+            problems.append(f"{base}: alwaystransparent on a containerWindowType (put it in the background)")
+        elif vanilla_keys and typ in vanilla_keys and key not in vanilla_keys[typ]:
+            problems.append(f"{base}: '{key}' on {typ}, which no vanilla {typ} uses")
+if not vanilla_keys:
+    problems.append("no vanilla .gui files found: the syntax check needs HOI4_DIR (reference/vanilla)")
+
 # ------------------------------------------------------------------ sprite definitions
 defs = {}
 for f in glob.glob(M + "interface/*.gfx"):

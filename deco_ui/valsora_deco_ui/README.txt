@@ -1,4 +1,4 @@
-VALSORA DECO UI - v0.4.4 (for HOI4 1.19)
+VALSORA DECO UI - v0.4.5 (for HOI4 1.19)
 ======================================
 
 An art deco interface for the Valsora total conversion: core skin, a rebuilt
@@ -22,6 +22,28 @@ INSTALL
 The layout is built for 1920 px of UI width: 1920x1080 at 100% UI scale, or
 2560x1440 at up to 133%.
 
+
+NEW IN v0.4.5
+-------------
+  - Main menu fix, for real this time. Your error.log showed the cause:
+    the game rejects a window's position anchor written in quotes
+    ("Not a valid orientation: CENTER_DOWN") and falls back to the
+    top-left corner of the screen. The button row's offset from the
+    bottom centre then put it above the top-left corner, off-screen.
+    Every anchor is now written the way the game's own files write it.
+  - The same mistake had sent five top bar windows meant for the right
+    edge (command power, nukes, and the army, navy and air buttons) to
+    the left edge, off-screen. They are anchored correctly now.
+  - Click-through ("alwaystransparent") was written on twelve windows
+    themselves, where the game ignores it ("Unexpected token" in
+    error.log). It is now on the window's background where there is one
+    (the focus tree's header band, the shadow under the top bar). The ten
+    scripted text windows (politics screen, top bar) have no background
+    and their text boxes were already click-through, so for them nothing
+    changes in game.
+  - error.log should have no more "Not a valid orientation" or
+    "Unexpected token: alwaystransparent" lines from this mod. If any
+    remain, send the log again.
 
 NEW IN v0.4.4
 -------------
@@ -125,6 +147,10 @@ THINGS TO CHECK IN-GAME
   - The logistics tray and XP badges read well. The globe sits in its ring.
   - Alerts do not cover the tray or the menu buttons.
   - Long names use the small font, short names the large one.
+  - (v0.4.5) Command power, nukes and the army / navy / air buttons sit at
+    the right end of the bar.
+  - Hovering political power and the factory counts still shows their
+    tooltips (the mod's own text is drawn over them).
   Politics screen
   - Every value in the grid shows a value (ruling party and %, elections,
     last election, political power and daily change). If one shows raw
@@ -142,9 +168,10 @@ THINGS TO CHECK IN-GAME
   - Focus names sit centred on their plates; the links still meet the
     plates; the medallions sit behind the icons.
   - The filter chips light up when selected.
+  - The search box and buttons under the header band still respond.
   Main menu
-  - The button row shows along the bottom, centred, with Friends / Nudge /
-    Exit under it and the version number at its left.
+  - (v0.4.5) The button row shows along the bottom, centred, with Friends /
+    Nudge / Exit under it and the version number at its left.
   - The social links sit in the top-left corner.
   - Single Player opens its panel in the middle of the screen as before.
   - (Confirmed in v0.4.3: the Valsora background shows.)

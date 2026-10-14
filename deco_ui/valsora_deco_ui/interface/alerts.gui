@@ -80,7 +80,7 @@ guiTypes = {
 			name ="country_flag"
 			quadTextureSprite = "GFX_flag_smallest"
 			position = { x= 12 y = 28 }
-			Orientation = "UPPER_LEFT"
+			Orientation = UPPER_LEFT
 		}
 	}
 }

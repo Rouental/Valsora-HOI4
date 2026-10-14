@@ -6,6 +6,23 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**Deco UI: no main menu buttons** (2026-10-14, the Valsora Deco UI v0.4.3 and v0.4.4; author's
+screenshot and `error.log`)
+- Cause: the UI mod's `.gui` patcher wrote orientations in quotes (`Orientation = "CENTER_DOWN"`).
+  On a `containerWindowType` the game rejects that ("Not a valid orientation: CENTER_DOWN") and keeps
+  the default `UPPER_LEFT`, so the button row's offset from the bottom centre, (-660, -166), put it
+  above the top-left corner of the screen. The same error sent five top bar windows meant for the
+  right edge (command power, nukes, army, navy, air) off the left edge. It also wrote
+  `alwaystransparent` on twelve containers, which the game rejects there ("Unexpected token").
+  v0.4.4 had guessed at `Origo` from the screenshot and changed nothing that mattered; the log named
+  the file and line at once.
+- Fix: `deco_ui/tools/guipatch.write_gui` (used by every generator) writes orientations bare, as
+  vanilla does on containers, and moves a container's `alwaystransparent` into its `background`
+  block, where vanilla puts it. Released as v0.4.5 (`dist/valsora_deco_ui.zip`).
+- Check: `deco_ui/tools/validate_preview.py` flags quoted orientations, `alwaystransparent` on a
+  container and any key no vanilla element of that type uses (read from the game's own `.gui`
+  files). On the v0.4.4 files it flags all 31 lines the game's log named.
+
 **Three generated rulers with famous real names** (2026-10-13, seen on the nation sheet)
 - Cause: the name lists are vanilla's, and the filter for famous surnames (`cultures.NOT_SURNAMES`)
   didn't have these: Sicilianzo's "Umberto di Savoia" (Italy's last king), Solaria's "Felice
