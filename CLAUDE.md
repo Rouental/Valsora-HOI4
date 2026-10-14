@@ -309,7 +309,8 @@ mismatch, missing localisation) and catches all of them.
     bookmark recommends (author's wish, to keep the start menu short).
   - Colours follow the flags (author): Rouental royal green, Guedelon blue, Hollier red, Seigne white,
     Evriches yellow, Lustiana black, Selgrave dark maroon, Lanzerac purple (its new flag's,
-    2026-10-09; dark gold before), Cardonia deep purple. Guedelon's blue and Hollier's red are their flags' main colours. `pdn_tools.py recolour Countries OLD=NEW` keeps
+    2026-10-09; dark gold before), Cardonia deep purple (kept when its own flag, black,
+    white and navy, came on 2026-10-14). Guedelon's blue and Hollier's red are their flags' main colours. `pdn_tools.py recolour Countries OLD=NEW` keeps
     the `.pdn` in step.
   - Real countries the author drew: Rouental ROU, Seigne SGN, Evriches EVR, Hollier
     HLR, Selgrave SGV, Lustiana LST, Lanzerac LZC, Guedelon GDN, Cardonia CRD,
@@ -767,6 +768,10 @@ mismatch, missing localisation) and catches all of them.
     and Ganden (fitted to 82:52 as below, and added to the flag file); Tsuruma's ruler is
     **Akihiro Tanaka** and its capital **Kishito**, Myehn's capital **Shukumei**
     (`CITY_NAMES`). Map colours were not changed to match the new flags.
+    **2026-10-14**: Cardonia's first flag (the author's: black, white and navy bands, an
+    owl on a compass star), fitted to 82:52 by trimming 9 px of plain band at each side
+    and added to the flag file (`dist/flag_cardonia_20261014.png`); its map colour stays
+    deep purple.
     All tags were checked against vanilla `common/country_tags`; new tags must be too.
   - The adjectives of the neighbours are guesses; the author may rename them.
 - **State names** are the author's, in `source/state_names.json` ("x,y" of a pixel
