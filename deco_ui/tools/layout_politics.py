@@ -91,13 +91,14 @@ def notch_outline(d):
     return offset_poly(NOTCH_POLY, d)
 
 
-# for clicks: the notch as bands of rows (x0, y0, x1, y1), each covering the polygon in that band
-def _bands():
-    ys = sorted({max(0.0, y) for _, y in NOTCH_POLY})
+# for clicks: the notch as bands of rows (y0, y1, x0, x1), each covering the polygon in that band
+def bands(poly=None):
+    poly = NOTCH_POLY if poly is None else poly
+    ys = sorted({max(0.0, y) for _, y in poly})
     out = []
     for ya, yb in zip(ys, ys[1:]):
         xs = []
-        for (x1, y1), (x2, y2) in zip(NOTCH_POLY, NOTCH_POLY[1:] + NOTCH_POLY[:1]):
+        for (x1, y1), (x2, y2) in zip(poly, poly[1:] + poly[:1]):
             lo, hi = min(y1, y2), max(y1, y2)
             if hi <= ya or lo >= yb:
                 continue
@@ -109,7 +110,7 @@ def _bands():
     return out
 
 
-NOTCH = [(x0, y0, x1, y1) for y0, y1, x0, x1 in _bands()]
+NOTCH = [(x0, y0, x1, y1) for y0, y1, x0, x1 in bands()]
 NOTCH_BOTTOM = max(r[3] for r in NOTCH)            # 106: the header strip above it is drawn by pol_view_bg
 HEAD_ART_H = 344                                   # vanilla's pol_view_bg(_no_dlc).dds are 550x344
 

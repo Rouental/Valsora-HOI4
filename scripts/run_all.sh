@@ -21,6 +21,7 @@ else
     python3 scripts/regions.py       # states and strategic regions
 fi
 python3 scripts/build_mod.py     # every mod file
+python3 scripts/deco_ui.py       # the Valsora Deco UI into the mod (common.DECO_UI)
 python3 scripts/check_mod.py     # verify against HOI4's rules
 python3 scripts/export_canvas.py # previews
 python3 scripts/package.py       # dist/valsora_test.zip

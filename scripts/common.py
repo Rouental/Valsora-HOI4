@@ -317,3 +317,9 @@ MIN_SEA_REGION_PROVINCES = 4
 # name the launcher shows. The folder name matches the previous test build's.
 MOD_DIR_NAME = "valsora_test"
 MOD_NAME = "Valsora (test map)"
+
+# The Valsora Deco UI (deco_ui/, the author's art deco interface) is part of the mod since 2026-10-14 (author:
+# "simplify things to only have the one install", and they may want the game's own interface back one day).
+# True: scripts/deco_ui.py copies it into the build, and the minimap and start date picture are drawn in its
+# style. False: the game's own interface, Valsora's parchment minimap, and none of the Deco UI's files.
+DECO_UI = True

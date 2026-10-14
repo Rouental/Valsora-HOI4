@@ -8,6 +8,8 @@ Vanilla's is 268 x 97 px for its 2.75 : 1 map; Valsora's map is 2 : 1, so ours i
 slide that hides it (ctrl+m) shortened to match, as Equestria at War does for its own
 2 : 1 minimap (195 x 97). The picture is a parchment map in the spirit of vanilla's:
 pale land on darker paper, inked coasts. The frame is our own: a thin dark metal rim.
+With the Deco UI (common.DECO_UI, 2026-10-14) both are drawn in its style instead: gilt land and coasts
+on dark lacquer, a gilt frame; the start date's picture follows.
 """
 from pathlib import Path
 
@@ -62,6 +64,49 @@ def picture(land, w, h):
     return np.dstack([np.asarray(small), np.full((h, w), 255, np.uint8)])
 
 
+def picture_deco(land, w, h):
+    """The Deco UI's minimap (common.DECO_UI): gilt land on dark lacquer, bright gilt coasts, a faint gilt
+    graticule at sea, like the interface around it. land: the land mask (row 0 = north); h x w x 4 uint8."""
+    k = 4
+    W, H = w * k, h * k
+    frac = np.asarray(Image.fromarray((land * 255).astype(np.uint8)).resize((W, H), Image.BOX)) / 255.0
+    frac = ndi.gaussian_filter(frac, 0.7)
+    on = frac >= 0.5
+    d_in = ndi.distance_transform_edt(on)
+    d_out = ndi.distance_transform_edt(~on)
+    grain = sum(smooth_noise((H, W), s, 2027 + s) * a for s, a in ((3, 0.3), (9, 0.4), (27, 0.6)))
+    sea = np.array([15, 26, 31], float) + np.array([14, 22, 22], float) * np.exp(-d_out / 10)[..., None]
+    gilt = np.array([150, 118, 58], float) * (1 + 0.18 * grain)[..., None]
+    gilt *= (1 - 0.22 * np.exp(-d_in / 4))[..., None]                       # shaded towards the coast
+    col = sea * (1 - frac[..., None]) + gilt * frac[..., None]
+    yy, xx = np.mgrid[0:H, 0:W]
+    grid = ((xx % (W // 8)) < 1) | ((yy % (H // 4)) < 1)                    # 45 degrees a line
+    col = np.where((grid & ~on)[..., None], col + np.array([40, 33, 18]) * 0.55, col)
+    edge = np.clip(np.hypot(ndi.sobel(frac, 0), ndi.sobel(frac, 1)) * 0.9, 0, 1)
+    col = col * (1 - edge[..., None]) + np.array([232, 205, 132]) * edge[..., None]   # gilt coastline
+    r = np.hypot((xx - W / 2) / (W / 2), (yy - H / 2) / (H / 2))
+    col *= (1 - 0.22 * np.clip(r - 0.6, 0, None) ** 1.5)[..., None]
+    small = Image.fromarray(np.clip(col, 0, 255).astype(np.uint8)).resize((w, h), Image.LANCZOS)
+    return np.dstack([np.asarray(small), np.full((h, w), 255, np.uint8)])
+
+
+def frame_deco(w, h):
+    """The Deco UI's frame: a gilt rule between two dark lines, brighter on the lit (top and left) sides,
+    and the soft shadow of the parchment frame below"""
+    rgba = frame(w, h).astype(float)
+    fw, fh = w + LEFT + RIGHT, h + TOP + BOTTOM
+    yy, xx = np.mgrid[0:fh, 0:fw]
+    dx = np.maximum(LEFT - 1 - xx, xx - (LEFT + w))
+    dy = np.maximum(TOP - 1 - yy, yy - (TOP + h))
+    d = np.maximum(dx, dy)
+    lit = ((xx < LEFT) & (dx >= dy)) | ((yy < TOP) & (dy >= dx))
+    gold = np.where(lit[..., None], np.array([232, 205, 132]), np.array([176, 140, 70]))
+    for ring, colour in ((0, np.array([11, 16, 20])), (2, np.array([11, 16, 20]))):
+        rgba[d == ring, :3] = colour
+    rgba[d == 1, :3] = gold[d == 1]
+    return np.clip(rgba, 0, 255).astype(np.uint8)
+
+
 def frame(w, h):
     """A thin dark metal rim round a w x h picture, transparent inside."""
     fw, fh = w + LEFT + RIGHT, h + TOP + BOTTOM
@@ -99,11 +144,12 @@ def gui(w):
 BOOKMARK = (180, 104)  # vanilla's start date pictures (gfx/interface/select_date_1936.dds)
 
 
-def write_bookmark(write, out, land):
+def write_bookmark(write, out, land, deco=False):
     """The start date's picture (single player's date screen): vanilla's shows 1936's soldiers over
-    Europe; ours is Valsora on the minimap's parchment, darkened at the edges like vanilla's."""
+    Europe; ours is Valsora on the minimap's parchment (or the Deco UI's gilt), darkened at the edges like
+    vanilla's."""
     w, h = BOOKMARK
-    pic = picture(land, round(h * land.shape[1] / land.shape[0]), h).astype(float)
+    pic = (picture_deco if deco else picture)(land, round(h * land.shape[1] / land.shape[0]), h).astype(float)
     x0 = (pic.shape[1] - w) // 2
     pic = pic[:, x0:x0 + w]
     yy, xx = np.mgrid[0:h, 0:w]
@@ -116,13 +162,14 @@ def write_bookmark(write, out, land):
           '\t\ttexturefile = "gfx/interface/valsora_select_date.dds"\n\t}\n}\n')
 
 
-def write_files(write, out, land):
+def write_files(write, out, land, deco=False):
+    """deco: the Deco UI's style (common.DECO_UI), at the same sizes"""
     h_map, w_map = land.shape
     w, h = size(w_map, h_map)
     d = out / "gfx/minimap"
     d.mkdir(parents=True, exist_ok=True)
-    write_dds(d / "minimap.dds", picture(land, w, h))
-    write_dds(d / "border.dds", frame(w, h))
+    write_dds(d / "minimap.dds", (picture_deco if deco else picture)(land, w, h))
+    write_dds(d / "border.dds", (frame_deco if deco else frame)(w, h))
     write("interface/minimap.gui", gui(w))
     write("common/defines/valsora_graphics.lua",
           "-- the minimap slides this far right to hide it (vanilla 270, for its wider minimap)\n"

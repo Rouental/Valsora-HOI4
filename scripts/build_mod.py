@@ -16,7 +16,7 @@ import numpy as np
 from PIL import Image
 from scipy import ndimage as ndi
 
-from common import MAP_W, MAP_H, CONTINENTS, MOD_NAME, MOD_DIR_NAME, COUNTRIES, PLACEHOLDERS
+from common import MAP_W, MAP_H, CONTINENTS, MOD_NAME, MOD_DIR_NAME, COUNTRIES, PLACEHOLDERS, DECO_UI
 import cultures
 import ideologies
 import globe
@@ -330,8 +330,8 @@ def main():
               palette_from_header(PAL / "trees.bmp.header.bin"))
     write_bmp(OUT / "map/world_normal.bmp", normal_map(height))
     textures(pix_kind, height, d_sea)
-    minimap.write_files(write, OUT, pix_kind == 1)  # Valsora, not vanilla's Earth
-    minimap.write_bookmark(write, OUT, pix_kind == 1)  # the start date's picture too
+    minimap.write_files(write, OUT, pix_kind == 1, DECO_UI)  # Valsora, not vanilla's Earth
+    minimap.write_bookmark(write, OUT, pix_kind == 1, DECO_UI)  # the start date's picture too
     globe.write_files(OUT, pix_kind == 1)  # the world tension globe too
 
     def world_y(y, x):

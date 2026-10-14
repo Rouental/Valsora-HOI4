@@ -6,6 +6,20 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**Deco UI: the other side panels left a gap under the top bar and covered the medallion; two installs**
+(2026-10-14, author)
+- Every side panel but the politics screen still opened at y 78 (16 px below the band) and, drawn over the top
+  bar, hid the medallion's lower part and the decisions seal. Fix (v0.5, `deco_ui/tools/make_panels.py`): the
+  16 panels get the politics screen's treatment (flush at y 62, a notch the shape of the medallion and seal,
+  the title moved right of it, the content moved below the seal) and the 17 windows that open beside them sit
+  flush too. Check: the Deco UI's `validate_preview.py` keeps every element of each patched file, and
+  `preview_panels.py` draws each panel with the game's textures.
+- The Deco UI was a second mod to install, which had to load after Valsora (v0.4.5 loaded first). Fix: it is
+  part of the Valsora build (`scripts/deco_ui.py`, `common.DECO_UI` to switch it off). The files it makes from
+  Valsora's data (the long-name trigger, the politics screen) are made by the build itself, so a new country
+  or sub-ideology can no longer leave them stale. Check: `deco_ui.py` stops on any file both mods ship that the
+  Deco UI does not replace on purpose; `check_mod.py` checks the merged mod.
+
 **The tension globe's fire "didn't come out too well"** (2026-10-14, author's screenshot at 100 %)
 - Cause: flames were painted over the disc from below; at full tension the whole globe was a noisy
   orange blur with no shape left.
@@ -721,3 +735,10 @@ terrain logical, realistic, and consistent")
 - `descriptor.mod` and the launcher's `.mod` file must match.
 - Vanilla files that name Earth places (tutorial, AI navy plans) are overridden with
   empty or cut-down versions.
+- With the Deco UI in the mod (2026-10-14): localisation may be in the game's other languages, but only the
+  Deco UI's files (`valsora_deco_*_l_<language>.yml`, first line `l_<language>:`); a .gfx sprite of any kind
+  (cornered tiles, progress bars, pie charts, `textureFile` in any case) counts as defined, and its textures
+  must exist; a sprite the game's own .gui files name without defining (`GFX_category_end_bg`) is allowed in
+  the copies of those files the Deco UI patches. The first merged build failed all three (38 errors), plus the
+  Deco UI's sub-ideology text naming the game's Earth-bound ones (nazism ...), which Valsora keeps defined but
+  never localises: the Deco UI now lists only the sub-ideologies Valsora names.

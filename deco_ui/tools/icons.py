@@ -49,6 +49,11 @@ ICONS = {
                '2.1 2.1 0 0 0 4.2 0 2.1 2.1 0 0 0 4.3 0"/><path d="M5 12.3V20.5h14v-8.2M10 20.5v-5h4v5"/>'),
     "music": '<path d="M9 18V5.5l10-2V16"/><circle cx="6.8" cy="18" r="2.3"/><circle cx="16.8" cy="16" r="2.3"/>',
     "search": '<circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.3 15.3l5.2 5.2"/>',
+    # minimap pings (v0.5): offensive = crossed swords, defensive = a heater shield
+    "swords": ('<path d="M4 4l11.5 11.5M20 4L8.5 15.5"/><path d="M13 18l5-5M11 18l-5-5"/>'
+               '<path d="M16.5 16.5l3.5 3.5M7.5 16.5L4 20"/>'),
+    "shield": '<path d="M12 3.2l7.2 2.6v5.4c0 4.6-3 8.1-7.2 9.6-4.2-1.5-7.2-5-7.2-9.6V5.8z"/><path d="M12 6.5v11"/>',
+    "chevron_left": '<path d="M14.5 5.5L8 12l6.5 6.5"/>',
 }
 ICONS["supply"] = ICONS["logistics"]
 

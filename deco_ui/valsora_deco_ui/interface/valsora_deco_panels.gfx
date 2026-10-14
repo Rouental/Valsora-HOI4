@@ -1,0 +1,19 @@
+# Valsora Deco UI (make_panels.py): the side panels' header pictures
+spriteTypes = {
+	spriteType = {
+		name = "GFX_valsora_deco_panel_head_500_0"
+		texturefile = "gfx/interface/valsora_deco/panels/head_500_0.dds"
+	}
+	spriteType = {
+		name = "GFX_valsora_deco_panel_head_550_m6"
+		texturefile = "gfx/interface/valsora_deco/panels/head_550_m6.dds"
+	}
+	spriteType = {
+		name = "GFX_valsora_deco_panel_head_689_m6"
+		texturefile = "gfx/interface/valsora_deco/panels/head_689_m6.dds"
+	}
+	spriteType = {
+		name = "GFX_valsora_deco_panel_head_700_m9"
+		texturefile = "gfx/interface/valsora_deco/panels/head_700_m9.dds"
+	}
+}

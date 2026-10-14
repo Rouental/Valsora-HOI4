@@ -137,6 +137,201 @@ def button(w, h):
 for (w, h) in [(148, 34), (221, 34), (123, 34), (261, 34), (359, 34), (223, 32), (238, 38), (211, 20), (148, 20), (372, 43), (94, 31)]:
     add(f"btn_{w}x{h}", f"gfx/interface/button_{w}x{h}.dds", w, h, button(w, h))
 
+# ---------------------------------------------------------------- core skin: the panels' shared pieces (v0.5)
+# The game draws these on every side panel and sub-window (close buttons, background tiles, header bars, tabs,
+# sort buttons, checkboxes), so they are replaced at their vanilla paths, sizes and frame counts and the panels'
+# contents follow the deco style with no .gui change. Two-frame sprites keep vanilla's order, which differs per
+# sprite: the tabs, the diplomacy filters and sort_button_100x29_2 are lit in frame 1 (countrytechnologyview.gui
+# starts its shown tab at frame 1), sort_button_202x29 and the checkbox in frame 2.
+STRIPES = "repeating-linear-gradient(90deg,rgba(255,255,255,.025) 0 1px,transparent 1px 7px)"
+BAR_FILL = "linear-gradient(180deg,#1A252C,#0E1519)"
+LIT_FILL = "linear-gradient(180deg,#2C665A,#163A33)"           # jade, as the top bar's lit buttons
+DIM_FILL = "linear-gradient(180deg,#141D22,#0B1014)"
+
+
+def bar(fill=BAR_FILL, rim="rgba(201,165,90,.6)", c=5, shine=.22):
+    """a chamfered lacquer bar with a gilt hairline: header strips, list headers, footers, tabs"""
+    return (f'<div style="position:absolute;inset:0;background:{rim};clip-path:{chamfer(c)}"></div>'
+            f'<div style="position:absolute;inset:1px;clip-path:{chamfer(max(1, c - .4))};background:{STRIPES},{fill}"></div>'
+            f'<div style="position:absolute;left:{c + 3}px;right:{c + 3}px;top:2px;height:1px;background:rgba(241,220,156,{shine})"></div>')
+
+
+def frames(w, h, *parts):
+    fw = w // len(parts)
+    return "".join(f'<div style="position:absolute;left:{i * fw}px;top:0;width:{fw}px;height:{h}px">{p}</div>'
+                   for i, p in enumerate(parts))
+
+
+def lit_bar(c=5):
+    return bar(LIT_FILL, GOLD, c, .35)
+
+
+GOLD = "linear-gradient(180deg,#E8CD84,#8B6A2C)"
+SHARED = {   # vanilla path: (w, h, html)
+    "gfx/interface/closebutton.dds": (32, 33,
+        '<div style="position:absolute;left:5px;top:5.5px;width:22px;height:22px;transform:rotate(45deg);border:1px solid #E3C77E;'
+        'background:#0B1014;box-sizing:border-box"></div>'
+        '<svg width="32" height="33" viewBox="0 0 32 33" style="position:absolute;left:0;top:0"><path d="M11.5 12l9 9M20.5 12l-9 9" '
+        'stroke="#E3C77E" stroke-width="1.6"/></svg>'),
+    "gfx/interface/tiles/tiled_bg.dds": (192, 192, window(192, 192, dict(rule="single", corners="small"))),
+    "gfx/interface/header_bg.dds": (543, 41, bar(c=7)),
+    "gfx/interface/category_header.dds": (511, 44, bar("linear-gradient(180deg,#1E2A30,#111A1F)", c=7)),
+    "gfx/interface/factions/ui/faction_header.dds": (530, 42, bar(c=7)),
+    "gfx/interface/main_screens_bottom.dds": (545, 54, bar(DIM_FILL, c=8, shine=.12)),
+    "gfx/interface/deployment_binding.dds": (533, 35, bar(c=6)),
+    "gfx/interface/tradeview/trade_header.dds": (516, 35, bar(c=6)),
+    "gfx/interface/intel_ledger/tab_bg.dds": (520, 40, bar(DIM_FILL, c=6, shine=.1)),
+    "gfx/interface/diplo_details_header.dds": (241, 51, bar(c=7)),
+    "gfx/interface/generic_text_bg_108.dds": (108, 27,
+        '<div style="position:absolute;inset:0;background:#0A0F12;box-shadow:inset 0 0 0 1px rgba(201,165,90,.35)"></div>'),
+    "gfx/interface/tiles/tiling_sort_button.dds": (60, 23, bar(c=4, shine=.15)),
+    "gfx/interface/tab_large.dds": (516, 42, frames(516, 42, lit_bar(7), bar(DIM_FILL, "rgba(201,165,90,.4)", 7, .1))),
+    "gfx/interface/intel_ledger/tab.dds": (520, 42, frames(520, 42, lit_bar(7), bar(DIM_FILL, "rgba(201,165,90,.4)", 7, .1))),
+    "gfx/interface/diplo_filter_entry.dds": (246, 34, frames(246, 34, lit_bar(5), bar(c=5))),
+    "gfx/interface/sort_button_100x29_2.dds": (200, 29, frames(200, 29, lit_bar(4), bar(c=4, shine=.15))),
+    # vanilla's is a .tga, which the game loads only when no .dds of the same name exists
+    "gfx/interface/sort_button_202x29.dds": (404, 29, frames(404, 29, bar(c=4, shine=.15), lit_bar(4))),
+    "gfx/interface/generic_checkbox.dds": (68, 30, frames(68, 30,
+        '<div style="position:absolute;left:7px;top:5px;width:20px;height:20px;background:#0A0F12;box-shadow:inset 0 0 0 1px #C9A55A"></div>',
+        '<div style="position:absolute;left:7px;top:5px;width:20px;height:20px;background:#163A33;box-shadow:inset 0 0 0 1px #E3C77E"></div>'
+        '<svg width="34" height="30" viewBox="0 0 34 30" style="position:absolute;left:0;top:0"><path d="M11 15.5l4 4 8-9" fill="none" '
+        'stroke="#F1DC9C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>')),
+}
+for rel, (w, h, html) in SHARED.items():
+    add("shared_" + rel.split("/")[-1][:-4], rel, w, h, html)
+
+# ---------------------------------------------------------------- map modes and minimap (lower right, v0.5)
+# Replaced at their vanilla paths, sizes and frame counts (interface/mapmodes_interface.gui and Valsora's
+# minimap.gui stay as they are). The game picks a map mode's icon by frame, so the small icons and the toggles
+# keep vanilla's glyphs, recoloured in gilt (their meaning and order stay exactly the game's); the four big
+# ones (land, air, naval, intelligence) are the mod's line icons on octagonal medallions. The minimap's own
+# picture and frame are drawn by the Valsora mod (scripts/minimap.py, its deco style).
+import base64
+import io as _io
+from paths import VANILLA as _VANILLA
+
+MM = "gfx/interface/mapmode/"
+GILT_RAMP = [(0.0, (46, 32, 12)), (0.35, (122, 92, 38)), (0.62, (201, 165, 90)), (0.85, (232, 205, 132)), (1.0, (251, 236, 186))]
+
+
+def vanilla_frames(rel, n):
+    im = Image.open(_VANILLA + rel).convert("RGBA")
+    fw = im.width // n
+    return [im.crop((i * fw, 0, (i + 1) * fw, im.height)) for i in range(n)]
+
+
+def gilt(img, gain=1.0, alpha=1.0, grey=0.0):
+    """a vanilla glyph in gilt: its shading mapped onto the gilt ramp, its alpha kept"""
+    a = np.asarray(img, dtype=float)
+    lum = a[..., :3].mean(-1)
+    m = a[..., 3] > 96
+    lo, hi = (np.percentile(lum[m], 4), np.percentile(lum[m], 99)) if m.any() else (0.0, 255.0)
+    tt = np.clip((lum - lo) / max(1.0, hi - lo) * gain, 0, 1)
+    xs = [s for s, _ in GILT_RAMP]
+    col = np.stack([np.interp(tt, xs, [c[i] for _, c in GILT_RAMP]) for i in range(3)], -1)
+    if grey:
+        col = col * (1 - grey) + col.mean(-1, keepdims=True) * grey
+    return Image.fromarray(np.clip(np.dstack([col, a[..., 3] * alpha]), 0, 255).astype(np.uint8), "RGBA")
+
+
+def img_tag(img, x=0, y=0):
+    b = _io.BytesIO()
+    img.save(b, "PNG")
+    return (f'<img src="data:image/png;base64,{base64.b64encode(b.getvalue()).decode()}" '
+            f'style="position:absolute;left:{x}px;top:{y}px;width:{img.width}px;height:{img.height}px">')
+
+
+def octagon(w, h, c):
+    return f"polygon({c}px 0,{w - c}px 0,{w}px {c}px,{w}px {h - c}px,{w - c}px {h}px,{c}px {h}px,0 {h - c}px,0 {c}px)"
+
+
+def medallion(w, h, icon_name, lit, size=20):
+    rim = "#F1DC9C" if lit else "#C9A55A"
+    fill = LIT_FILL if lit else "linear-gradient(180deg,#1B262D,#0B1014)"
+    ic = "#FBEAB4" if lit else "#E3C77E"
+    return (f'<div style="position:absolute;inset:0;background:{rim};clip-path:{octagon(w, h, 8)}"></div>'
+            f'<div style="position:absolute;inset:1px;background:{STRIPES},{fill};clip-path:{octagon(w - 2, h - 2, 7.6)}"></div>'
+            f'<div class="ico" style="position:absolute;inset:0">{svg(icon_name, size, ic, 1.6)}</div>')
+
+
+def chip(w, h, lit):
+    return bar(LIT_FILL if lit else DIM_FILL, "#E3C77E" if lit else "rgba(201,165,90,.7)", 3, .3 if lit else .12)
+
+
+# the column (map_modes_bg, 87x206 at the container's x 549: its last 5 px are off-screen) and its foot
+COLUMN = ('<div class="lac" style="position:absolute;inset:0;opacity:.97"></div>'
+          '<div class="frame" style="left:0;top:0;bottom:0;width:1px;background:rgba(0,0,0,.6)"></div>'
+          '<div class="frame" style="left:1px;top:0;bottom:0;width:1px;background:#B8954F"></div>'
+          '<div class="frame" style="left:5px;top:5px;bottom:0;width:1px;background:rgba(201,165,90,.45)"></div>'
+          '<div class="frame" style="left:1px;right:0;top:1px;height:1px;background:#B8954F"></div>'
+          '<div class="frame" style="left:5px;right:0;top:5px;height:1px;background:rgba(201,165,90,.45)"></div>'
+          '<div class="frame" style="left:54px;top:36px;bottom:18px;width:1px;'
+          'background:linear-gradient(180deg,rgba(201,165,90,0),rgba(201,165,90,.35) 20%,rgba(201,165,90,.35) 80%,rgba(201,165,90,0))"></div>'
+          '<i class="ck tl"></i>')
+FOOT = ('<div class="lac" style="position:absolute;inset:0;opacity:.97"></div>'
+        '<div class="frame" style="left:0;top:0;bottom:0;width:1px;background:rgba(0,0,0,.6)"></div>'
+        '<div class="frame" style="left:1px;top:0;bottom:0;width:1px;background:#B8954F"></div>'
+        '<div class="frame" style="left:1px;right:0;top:1px;height:1px;background:#B8954F"></div>'
+        '<div class="frame" style="left:5px;right:0;top:5px;height:1px;background:rgba(201,165,90,.45)"></div>')
+add("mm_column", MM + "mapmode_main_bg.dds", 87, 206, COLUMN)
+add("mm_foot", MM + "mapmode_bottom_bg.dds", 86, 59, FOOT)
+add("mm_find", MM + "find_screen_button.dds", 39, 39, medallion(39, 39, "search", False, 20))
+add("mm_all", MM + "mapmode_button_all.dds", 44, 21, frames(44, 21,
+    chip(22, 21, False) + f'<div class="ico" style="position:absolute;inset:0">{svg("chevron_left", 16, "#E3C77E", 1.8)}</div>',
+    chip(22, 21, True) + f'<div class="ico" style="position:absolute;inset:0">{svg("chevron_left", 16, "#FBEAB4", 1.8)}</div>'))
+# the well behind each big button (42x51, the button 4 px in and 10 down): a gilt thread above and below the
+# medallion, so the column's big buttons read as one chain; transparent elsewhere (the wells overlap)
+add("mm_well", MM + "mapmode_button_bg.dds", 42, 51,
+    '<div style="position:absolute;left:20.5px;top:0;width:1px;height:11px;background:rgba(201,165,90,.5)"></div>'
+    '<div style="position:absolute;left:20.5px;top:40px;width:1px;height:11px;background:rgba(201,165,90,.5)"></div>')
+BIG = ["army", "air", "navy", "intel"]      # vanilla's frames: soldier, plane, anchor, eye
+add("mm_big", MM + "mapmode_buttons_deselected_big.dds", 136, 31, frames(136, 31, *[medallion(34, 31, n, False, 19) for n in BIG]))
+add("mm_big_s", MM + "mapmode_buttons_selected_big.dds", 136, 31, frames(136, 31, *[medallion(34, 31, n, True, 19) for n in BIG]))
+# behind a selected small button and behind every toggle: a dark well with a gilt hairline
+add("mm_depressed", MM + "mapmode_button_depressed.dds", 23, 20,
+    '<div style="position:absolute;inset:0;background:#0A0F12;box-shadow:inset 0 0 0 1px rgba(201,165,90,.45)"></div>')
+SMALL = vanilla_frames(MM + "mapmode_buttons_deselected_small.dds", 18)
+add("mm_small", MM + "mapmode_buttons_deselected_small.dds", 360, 18, frames(360, 18, *[img_tag(gilt(f)) for f in SMALL]))
+add("mm_small_s", MM + "mapmode_buttons_selected_small.dds", 360, 18, frames(360, 18, *[
+    '<div style="position:absolute;inset:0;background:#163A33;box-shadow:inset 0 0 0 1px #E3C77E"></div>' + img_tag(gilt(f, 1.15))
+    for f in SMALL]))
+for key, rel in [("day_night", "day_night_toggle.dds"), ("counters", "player_counters_toggle.dds"),
+                 ("counter_colours", "counters_color_mode_button.dds"), ("allied_plans", "allied_plans_button.dds"),
+                 ("fog", "fog_of_war_toggle.dds"), ("radar", "radar_toggle.dds")]:
+    f0, f1 = vanilla_frames(MM + rel, 2)
+    add("mm_" + key, MM + rel, 44, 22, frames(44, 22, img_tag(gilt(f0, 1.1)), img_tag(gilt(f1, .9, .7, .65))))
+CF = 173                                                        # configure list: plain, lit, and with a chevron
+add("mm_configure", MM + "mapmode_configure_bg.dds", 3 * CF, 23, frames(3 * CF, 23, bar(c=4, shine=.15), lit_bar(4),
+    bar(c=4, shine=.15) + f'<div style="position:absolute;left:4px;top:3px">{svg("chevron_left", 17, "#E3C77E", 1.8)}</div>'))
+# the social button over the column (vanilla's is a .tga, so a .dds of the same name is loaded first)
+add("sort_83", "gfx/interface/sort_button_83x29.dds", 166, 29, frames(166, 29, bar(c=4, shine=.15), lit_bar(4)))
+
+# the minimap's handle (slides it away, ctrl+m) and its ping buttons and pings
+MN = "gfx/minimap/"
+
+
+def handle(lit):
+    rim = "#F1DC9C" if lit else "#C9A55A"
+    fill = "linear-gradient(90deg,#6B4E1C,#2A1F0C)" if lit else "linear-gradient(90deg,#1B262D,#0B1014)"
+    pts = "polygon(8px 0,24px 0,24px 64px,0 64px,0 8px)"
+    grip = "".join(f'<div style="position:absolute;left:{x}px;top:18px;width:1px;height:34px;background:{rim};opacity:.8"></div>'
+                   for x in (8, 12, 16))
+    return (f'<div style="position:absolute;inset:0;background:{rim};clip-path:{pts}"></div>'
+            f'<div style="position:absolute;left:1px;top:1px;right:0;bottom:1px;background:{STRIPES},{fill};'
+            'clip-path:polygon(7.6px 0,23px 0,23px 62px,0 62px,0 7.6px)"></div>' + grip)
+
+
+add("mn_handle", MN + "handle_default.dds", 24, 64, handle(False))
+add("mn_handle_pinged", MN + "handle_pinged.dds", 24, 64, handle(True))
+for key, ic in (("offensive", "swords"), ("defensive", "shield")):
+    add(f"mn_{key}_btn", MN + f"{key}_ping_btn.dds", 64, 31, frames(64, 31,
+        f'<div style="position:absolute;left:2px;top:1px;width:28px;height:28px">{medallion(28, 28, ic, False, 18)}</div>',
+        f'<div style="position:absolute;left:2px;top:1px;width:28px;height:28px">{medallion(28, 28, ic, True, 18)}</div>'))
+for key, ic, w, h in (("offensive", "swords", 21, 22), ("defensive", "shield", 23, 21)):
+    add(f"mn_ping_{key}", MN + f"minimap_ping_{key}.dds", w, h,
+        f'<div class="ico" style="position:absolute;inset:0;filter:drop-shadow(0 0 1px #000) drop-shadow(0 0 1px #000)">'
+        f'{svg(ic, min(w, h) - 2, "#F1DC9C", 2)}</div>')
+
 # ---------------------------------------------------------------- top bar (v2: the mockup's layout)
 import layout as L
 
@@ -511,6 +706,39 @@ add("pol_body", P + "body.dds", 192, 192,
     '<div class="frame" style="left:1px;right:1px;top:-2px;bottom:1px;border:1px solid #B8954F;border-top:none"></div>'
     '<div class="frame" style="left:5px;right:5px;top:-2px;bottom:5px;border:1px solid rgba(201,165,90,.45);border-top:none"></div>'
     '<i class="ck bl"></i><i class="ck br"></i>')
+
+# ---------------------------------------------------------------- side panels (v0.5, make_panels.py)
+# Each panel's header strip, as the politics screen's (HEAD above): lacquer round a notch for the top bar's
+# flag medallion and decisions seal, the frame's verticals, the notch's gilt edge, the jade wash and the rule
+# under the title. One picture per panel width and screen x (the notch's place in the panel depends on both).
+import layout_panels as LPN
+
+
+def panel_head(w, px):
+    nb, hh = LPN.NB, LPN.HEAD_H
+    region = f"M0 0 H{w} V{nb} H0 Z"
+    lac = ('<div class="lac" style="position:absolute;inset:0;opacity:.97"></div>'
+           f'<div style="position:absolute;left:0;top:0;width:{w}px;height:{LP.HEAD_GLOW_H}px;'
+           'background:linear-gradient(180deg,rgba(46,110,96,.22),rgba(46,110,96,0))"></div>'
+           f'<div style="position:absolute;left:0;top:0;width:{w}px;height:12px;'
+           'background:linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,0))"></div>')
+    out = (f'<div style="position:absolute;left:0;top:0;width:{w}px;height:{nb}px;'
+           f"clip-path:path(evenodd,'{region} {path_d(LPN.notch_outline(0, px))}')\">{lac}</div>")
+    for x, col in ((0, "rgba(0,0,0,.6)"), (1, "#B8954F"), (5, "rgba(201,165,90,.45)")):
+        for xx in (x, w - 1 - x):
+            out += f'<div style="position:absolute;left:{xx}px;top:0;width:1px;height:{nb}px;background:{col}"></div>'
+    for d_out, d_in, fill in ((1, 0, "#C9A55A"), (2, 1, "rgba(0,0,0,.45)"), (5, 4, "rgba(201,165,90,.45)")):
+        out += (f'<div style="position:absolute;left:0;top:0;width:{w}px;height:{hh}px;background:{fill};'
+                f"clip-path:path(evenodd,'{path_d(LPN.notch_outline(d_out, px))} {path_d(LPN.notch_outline(d_in, px))}')\"></div>")
+    out += f'<div style="position:absolute;left:0;top:0;width:{w}px;height:{nb}px"><i class="ck tr"></i></div>'
+    hx = LPN.hx(px)
+    out += hrule(hx - 2, LPN.RULE_Y, w - 6 - (hx - 2),
+                 "linear-gradient(90deg,rgba(201,165,90,.15),#C9A55A 12%,#C9A55A 88%,rgba(201,165,90,.1))")
+    return out
+
+
+for _w, _px in LPN.HEADS:
+    add(f"panel_head_{_w}_{_px}".replace("-", "m"), LPN.head_texture(_w, _px), _w, LPN.HEAD_H, panel_head(_w, _px))
 
 # section art over the body, under everything else (its own icon, valsora_deco_pol_sections)
 SEC = ""

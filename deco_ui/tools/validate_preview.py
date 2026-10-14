@@ -69,7 +69,7 @@ def xy(lst):
 
 
 # ------------------------------------------------------------------ braces
-for f in glob.glob(M + "interface/*") + glob.glob(M + "common/**/*.txt", recursive=True):
+for f in [g for g in glob.glob(M + "interface/**/*", recursive=True) if os.path.isfile(g)] + glob.glob(M + "common/**/*.txt", recursive=True):
     t = re.sub(r"#[^\n]*", "", open(f, encoding="utf-8").read())
     if t.count("{") != t.count("}"):
         problems.append(f"brace mismatch in {f}")
@@ -104,8 +104,8 @@ vanilla_keys = {}
 for f in glob.glob(VANILLA + "interface/**/*.gui", recursive=True):
     for typ, key, _ in element_keys(f):
         vanilla_keys.setdefault(typ, set()).add(key)
-for f in sorted(glob.glob(M + "interface/*.gui")):
-    base = os.path.basename(f)
+for f in sorted(glob.glob(M + "interface/**/*.gui", recursive=True)):
+    base = os.path.relpath(f, M + "interface")
     for typ, key, val in element_keys(f):
         if key in ("orientation", "origo") and val.startswith('"'):
             problems.append(f"{base}: quoted {key} {val} on {typ}: write it bare (the game rejects a quoted "
@@ -192,7 +192,7 @@ for _n, (_rel, _fr, _kind) in REPLACED.items():
 
 gui = load(M + "interface/topbar.gui")
 extras = load(M + "interface/valsora_deco_topbar_extras.gui")
-gui_text = "".join(open(f, encoding="utf-8-sig").read() for f in sorted(glob.glob(M + "interface/*.gui")))
+gui_text = "".join(open(f, encoding="utf-8-sig").read() for f in sorted(glob.glob(M + "interface/**/*.gui", recursive=True)))
 used = set(re.findall(r'"(GFX_valsora_[^"]+)"', gui_text))
 for u in sorted(used - set(defs)):
     problems.append(f"sprite used but not defined: {u}")
@@ -200,13 +200,18 @@ print("sprites defined", len(defs), "used", len(used), "unused", sorted(set(defs
 vanilla_gfx = set()
 for f in glob.glob(VANILLA + "interface/**/*.gfx", recursive=True):
     vanilla_gfx |= set(re.findall(r'name\s*=\s*"?(GFX_[A-Za-z0-9_]+)', open(f, encoding="utf-8-sig", errors="ignore").read()))
-for u in sorted(set(re.findall(r'"(GFX_[A-Za-z0-9_]+)"', gui_text)) - set(defs) - vanilla_gfx):
+# sprites the game's own .gui files name without defining them (countrydecisionview.gui's GFX_category_end_bg)
+# are the game's to sort out: the mod keeps every element of the files it patches
+vanilla_named = set()
+for f in glob.glob(VANILLA + "interface/**/*.gui", recursive=True):
+    vanilla_named |= set(re.findall(r'"(GFX_[A-Za-z0-9_]+)"', open(f, encoding="utf-8-sig", errors="ignore").read()))
+for u in sorted(set(re.findall(r'"(GFX_[A-Za-z0-9_]+)"', gui_text)) - set(defs) - vanilla_gfx - vanilla_named):
     problems.append(f"sprite neither in the mod nor in the game: {u}")
 
 # every vanilla element still present exactly as often: for EVERY .gui the mod ships at a vanilla path
 # (the engine finds elements by name). countrypoliticsview.gui is compared with the Valsora mod's copy
 # when it has one, since that is the base make_politics.py starts from.
-from paths import VALSORA  # noqa: E402
+from paths import VALSORA, VALSORA_BASE  # noqa: E402
 
 
 def _names(path):
@@ -214,12 +219,13 @@ def _names(path):
     return re.findall(r'\bname\s*=\s*"?([A-Za-z0-9_.\-]+)"?', src)
 
 
-for mod_gui in sorted(glob.glob(M + "interface/*.gui")):
-    base = os.path.basename(mod_gui)
-    ref = VALSORA + "interface/" + base
-    if not os.path.isfile(ref):
+for mod_gui in sorted(glob.glob(M + "interface/**/*.gui", recursive=True)):
+    base = os.path.relpath(mod_gui, M + "interface").replace(os.sep, "/")
+    ref = next((r + "interface/" + base for r in (VALSORA_BASE, VALSORA, VANILLA) if os.path.isfile(r + "interface/" + base)
+                and "Valsora Deco UI" not in open(r + "interface/" + base, encoding="utf-8-sig", errors="ignore").read(300)), None)
+    if ref is None and os.path.isfile(VANILLA + "interface/" + base):
         ref = VANILLA + "interface/" + base
-    if not os.path.isfile(ref):
+    if not ref:
         continue                                          # a new file of the mod's own
     van, mine = _names(ref), _names(mod_gui)
     for n in sorted(set(van)):
@@ -291,12 +297,21 @@ VANILLA_TILES = {
     "gfx/interface/tiles/tiled_window_thin_border.dds": (192, 192), "gfx/interface/tiles/tiled_window_thin_border2.dds": (192, 192),
     "gfx/interface/tiles/tiled_window_small.dds": (96, 96), "gfx/interface/tiles/tiled_window_small_small.dds": (48, 48),
     "gfx/interface/tiles/tiled_mini_dialog.dds": (32, 32), "gfx/interface/tiles/tiled_plain_bg.dds": (192, 192),
+    "gfx/interface/tiles/tiled_bg.dds": (192, 192),
 }
 for rel, size in VANILLA_TILES.items():
     if read_dds(M + rel).size != size:
         problems.append(f"{rel} size mismatch")
 # replaced at vanilla's size on purpose: the icon whose sprite the game swaps, the tooltip's frame
-SAME_SIZE = ["gfx/interface/pol_view_bg.dds", "gfx/interface/pol_view_bg_no_dlc.dds", "gfx/interface/tiles/tiles_dialog.dds"]
+SAME_SIZE = ["gfx/interface/pol_view_bg.dds", "gfx/interface/pol_view_bg_no_dlc.dds", "gfx/interface/tiles/tiles_dialog.dds",
+             # the panels' shared pieces (v0.5): the game lays them out at vanilla's sizes
+             "gfx/interface/closebutton.dds", "gfx/interface/header_bg.dds", "gfx/interface/category_header.dds",
+             "gfx/interface/factions/ui/faction_header.dds", "gfx/interface/main_screens_bottom.dds",
+             "gfx/interface/deployment_binding.dds", "gfx/interface/tradeview/trade_header.dds",
+             "gfx/interface/intel_ledger/tab_bg.dds", "gfx/interface/diplo_details_header.dds",
+             "gfx/interface/generic_text_bg_108.dds", "gfx/interface/tiles/tiling_sort_button.dds",
+             "gfx/interface/tab_large.dds", "gfx/interface/intel_ledger/tab.dds", "gfx/interface/diplo_filter_entry.dds",
+             "gfx/interface/sort_button_100x29_2.dds", "gfx/interface/generic_checkbox.dds"]
 VG = VANILLA + "gfx/"
 if os.path.isdir(VG):
     resized = []

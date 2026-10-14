@@ -139,6 +139,12 @@ def main():
     for f in glob.glob(str(V / "interface/**/*.gfx"), recursive=True):
         sprites |= set(re.findall(r'name\s*=\s*"(GFX_[^"]+)"', Path(f).read_text(encoding="utf-8-sig", errors="replace")))
     put("sprites.txt", sorted(sprites), "every sprite vanilla's interface/*.gfx declares")
+    named = set()
+    for f in glob.glob(str(V / "interface/**/*.gui"), recursive=True):
+        named |= set(re.findall(r'"(GFX_\w+)"', Path(f).read_text(encoding="utf-8-sig", errors="replace")))
+    put("gui_undefined_sprites.txt", sorted(named - sprites),
+        "sprites vanilla's own interface/*.gui files name but no .gfx declares (the game tolerates them; the "
+        "Deco UI keeps them in the vanilla files it patches)")
 
     techs = set()
     for f in glob.glob(str(V / "common/technologies/*.txt")):

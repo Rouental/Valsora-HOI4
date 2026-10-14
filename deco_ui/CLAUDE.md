@@ -14,7 +14,7 @@ Treat assumed items as hypotheses.
 
 ---------------------------------------------------------------------------------------------------
 
-## 1. Status (v0.4.8)
+## 1. Status (v0.5)
 
 v0.4.3 was the first v0.3/v0.4 build the user launched. The user's reports so far cover only the main
 menu: the Valsora background and the social links in the top-left corner show **(in game)**, but in
@@ -38,6 +38,16 @@ laws list needed. v0.4.8 puts the panel flush under the band with a notch round 
 replaces both header textures and the tooltip's .dds, drops the description (the portrait's own tooltip
 has it) and the law cards, adds the sub-ideology, moves the spirits up beside the popularity, and the
 list starts 156 px higher.
+**v0.5 (2026-10-14, not yet seen in game)**, the user's next request: "apply the same no-gap fix to the other
+side panels, and begin styling them ... style the bar and map ... roll the UI mod into the main Valsora mod,
+but with the knowledge that I might eventually want it taken out again". So: every other side panel (16, and
+17 windows that open beside them) opens flush under the band with the politics screen's notch and a deco
+header (`make_panels.py`, `layout_panels.py`); the pictures the panels share (close buttons, background tiles,
+header bars, tabs, sort buttons, filters, checkboxes) are replaced at their vanilla paths; the map modes and
+minimap are styled (gilt-recoloured game icons, line-icon medallions, a gilt minimap drawn by the Valsora
+mod); and the **Deco UI is part of the Valsora mod**: the Valsora build copies `valsora_deco_ui/` into its
+own (`scripts/deco_ui.py` there, switched by `DECO_UI` in `scripts/common.py`). There is no separate
+release any more (section 11).
 
 | Area | State |
 |---|---|
@@ -46,12 +56,13 @@ list starts 156 px higher.
 | Top bar (`interface/topbar.gui`) | Re-laid to the mockup. v0.4: **decisions** is the seal under the flag; **faction** moved into the crown row (first slot). |
 | Alerts row (`interface/alerts.gui`) | v0.3: moved below the band, under the menu buttons. |
 | Politics screen (`interface/countrypoliticsview.gui`) | v0.4: the Government mockup's layout (no Court panel), with scripted GUIs for what the game's screen lacks. v0.4.8: flush under the top bar, notched round the medallion; no description or law cards; sub-ideology; spirits beside popularity. |
+| Other side panels (16: army, construction, decisions, deployment, diplomacy, intelligence, logistics, occupation, officer corps, production, research, trade, faction, faction setup, faction pings, market) | v0.5 (`make_panels.py`): flush under the top bar with the notch, deco header (gilt title right of the notch, close diamond, header buttons, rule), the politics body tile, content moved below the seal; the windows that open beside them flush too. Their insides keep the game's layout; shared pieces (tabs, sort buttons, headers, checkboxes, close, `tiled_bg`) are re-skinned. |
 | State / province panel (`interface/countrystateview.gui`) | v0.4: the mockup's arrangement for the state part (flag + name header, stats row, slots, buildings); the province part keeps the game's positions. |
 | Focus tree (`interface/nationalfocusview.gui`) | v0.4: window chrome, plates, medallions, filters, detail pop-up, legend. Focus icons untouched. |
 | Main menu (`interface/frontendmainview.gui` + background) | v0.3; v0.4.5 fixed the invisible button row (a quoted `Orientation`). Background and social links **(in game)**. |
 | Army bar (bottom: `leadergroups.gui`) | **Next.** See `docs/next_army_bar_and_map_modes.md`. |
-| Map modes and minimap (bottom right: `mapmodes_interface.gui`, `minimap.gui`) | **Next.** Same doc. |
-| Everything else (production, research, events, diplomacy, trade, ...) | Only the core skin so far. A mockup exists for the superevent. |
+| Map modes and minimap (bottom right: `mapmodes_interface.gui`, `minimap.gui`) | v0.5: textures only (layouts are the game's and Valsora's): lacquer column, line-icon medallions for land/air/naval/intel, the game's small icons and toggles recoloured in gilt, deco handle and ping buttons; the minimap's picture and frame in gilt by the Valsora mod (`scripts/minimap.py`, deco style). |
+| Everything else (events, the army bar, the panels' own pictures ...) | Only the core skin so far. A mockup exists for the superevent. |
 
 **HOI4 has no outliner.** The mockup's "Outliner" panel was a design idea. The closest things in the
 game are the army/navy/air overview lists (opened from the top bar's army/navy/air buttons); restyle
@@ -132,8 +143,13 @@ for f in 00_defines.lua 00_graphics.lua; do
   ln -sfn "/home/user/hoi4-files/HOI4 Files/common/defines/$f" reference/vanilla/$f; done
 ln -sfn ../../build/valsora_test reference/valsora    # build it first: sh scripts/run_all.sh at the root
 CHROMIUM_PATH=/opt/pw-browsers/chromium python3 tools/build_all.py
-python3 tools/package.py ../dist/valsora_deco_ui.zip  # the release the user installs
+cd .. && sh scripts/run_all.sh                         # the Valsora build takes the Deco UI in (section 11)
 ```
+
+Since v0.5 there is no separate release: `dist/valsora_test.zip` (the Valsora mod) carries the Deco UI.
+`reference/valsora` is the built mod, which then holds the Deco UI's own copies of the files it replaces;
+the tools read Valsora's originals from `../work/deco_base/` (`paths.VALSORA_BASE`, kept by the Valsora build),
+and `make_politics.py` stops if its base is the Deco UI's own output.
 
 `CHROMIUM_PATH` points Playwright at the machine's pre-installed Chromium, whose version may not match
 the pip package's (`playwright install` is not needed then). The full build takes under a minute.
@@ -163,9 +179,15 @@ tools/
   make_stateview.py         countrystateview.gui + its sprites
   make_focus.py             nationalfocusview.gui + its sprites
   make_menu.py              frontendmainview.gui + background registration + menu sprites
+  layout_panels.py          the other side panels (v0.5): notch per panel x, header, shift, each panel's spec
+  make_panels.py            the 16 side panels' .gui files (the game's, patched) + the windows beside them + panels .gfx
+  long_names.py             the long-name trigger (which names need the medallion's small font); make_topbar and the
+                            Valsora build run it
   validate_preview.py       static checks + a preview renderer that reads the generated .gui/.gfx
   preview_screens.py        politics, state panel, focus tree and main menu previews (imports validate_preview)
-  package.py                zips valsora_deco_ui.mod + valsora_deco_ui/ for the user (default build/valsora_deco_ui_<version>.zip)
+  preview_panels.py         every side panel (build/preview_panel_<key>.png and _vanilla.png, the game's) and the
+                            lower right corner (build/preview_corner.png), drawn with the game's own textures
+  package.py                zips valsora_deco_ui.mod + valsora_deco_ui/ (the separate mod; unused since v0.5)
 source_fonts/               TTFs + OFL licences (Josefin Sans, Federo, Limelight, Bodoni Moda)
 art/                        menu_world.jpg (main menu map), map_rouental.jpg + flag_ROU.png (preview backdrops),
                             mockups/*.jpg (renders) and mockups/source/ (the boards' HTML + assets)
@@ -176,7 +198,8 @@ build/                      intermediates and previews (safe to delete)
 
 Build order matters. `gen_fonts` runs first because `layout.py` measures strings with the generated
 `.fnt` files. Next comes `gen_textures`, because many texture sizes come from `layout.py` /
-`layout_politics.py`. The `make_*` generators follow, then the checks.
+`layout_politics.py` / `layout_panels.py`, and it reads the game's map mode icons (to recolour them). The
+`make_*` generators follow, then the checks and previews.
 
 ## 5. Design language
 
@@ -258,8 +281,27 @@ Build order matters. `gen_fonts` runs first because `layout.py` measures strings
   panel's look and click-catching come from children that stay out of the notch: a body container from
   the notch's bottom down (`valsora_deco_pol_body`, a cornered tile), invisible containers with clear
   backgrounds beside the notch (`valsora_deco_pol_block_*`), the section art and the header picture
-  (`pol_view_bg`, click-through). **(assumed)** clicks in the notch reach the top bar's seal beneath; the
-  other side panels still open at vanilla's y 78 with the gap.
+  (`pol_view_bg`, click-through). **(assumed)** clicks in the notch reach the top bar's seal beneath.
+- **v0.5: every other side panel the same way** (`make_panels.py`; `layout_panels.py` has the numbers). The
+  game's side panels (survey of 1.19.3's `interface/**/*.gui`, 2026-10-14): 16 windows slide in at y 78
+  from the left (x -6; the construction screen at -9, faction pings at 0 and 500 wide, trade 689 wide), and
+  17 more open beside them at x 537-545, y 78-83. All of them put a header band at y 0-40 (`*_header_bg` at
+  (5,7), the title at (45,8) in `hoi_36header`, close at UPPER_RIGHT (-43,9)) and their content right under
+  it, so the notch (local x 20-176, y 0-107) needs the title moved right of it and the content moved down:
+  a per-panel survey of each element's real size (`build/` scratch, the game's textures) put the needed
+  shift at 62-72 px (the faction screen's banner, which starts at y -10, 119). The notch's place in a panel
+  depends on the panel's x (`layout_panels.notch_poly(x)`), so each (width, x) has its own header picture.
+- **(inferred from vanilla)** a **negative size** runs to the parent's edge minus that much (the logistics
+  list, `height = -98`, ends where its 98 px footer, LOWER_LEFT at y -98, begins), like `100%%` runs to the
+  edge; so moving a box down only shortens it, and bottom-anchored elements stay put.
+- **(assumed)** `decision_grid_container`'s height is "Set in code to match the window size, but initial value
+  is used as extra space in height" (vanilla's comment, `height = -10`). Whether the game subtracts the box's own
+  y is unknown: if not, the decisions list now runs 72 px further past the screen's bottom. Check in game (scroll
+  to the last decision); if so, give it `height = -82` in `layout_panels` (an `attrs` entry).
+- The construction screen draws wider than its window: its building list (`possible_constructions`, x 433,
+  267 wide) and close button (UPPER_RIGHT +107) hang out of the 550 px window (`clipping = no`); its header
+  picture is 700 wide. **(assumed)** when the list is folded away (the arrow by the close diamond) the
+  header still fits; check in game.
 - **(inferred from vanilla, in game)** a child container with `height = 100%%` runs from its own position
   to the parent's bottom edge (vanilla's ideas list sits at y 425 with 100%%, and its scroll bar ends at
   the bottom of the screen), so the body container ends at the screen's bottom.
@@ -470,6 +512,29 @@ grid); the list starts at `IDEAS_Y` 666. The scripted GUIs are title, info grid,
 role; the description trigger file is deleted. `preview_screens` also writes
 `build/preview_politics_many_spirits.png` (15 spirits, as Devlon's test).
 
+**make_panels.py (v0.5).** The 16 other side panels, from the game's files (Valsora ships none of them), as
+the politics screen: window at `layout_panels.TOP` (position and show_position), its background clear and
+click-through; new first children (right after the window's own background) draw the panel: a body tile from
+the seal's bottom (`GFX_valsora_deco_pol_body`), clear click-catchers beside the notch, and the header
+picture (`GFX_valsora_deco_panel_head_<w>_<x>`); the game's header picture is hidden, the title moves right of
+the notch in `valsora_deco_title_24` (one or two lines, centred in a 60 px box; `title_18` when it doesn't fit,
+measured with the English text), the close button becomes the politics diamond, and the header buttons named
+in the panel's spec line up beside it. Every other top-anchored direct child moves down by the panel's
+`shift` (bottom-anchored ones stay; see the negative-size note in section 6). Fixed-height windows (faction
+pings) grow by the shift. It also moves the 17 windows that open beside the panels to y `TOP`
+(`layout_panels.BESIDE`; the politics screen's four are moved by `make_politics.py`). Asserts: each panel's x
+and width are the spec's, and no header button sits beside the title's lines.
+
+**long_names.py.** The long-name trigger (`valsora_deco_long_name`), moved out of `make_topbar.py` in v0.5 so
+the Valsora build can run it on its own.
+
+**gen_textures.py, v0.5 additions.** The panels' header pictures (one per width and x); the shared pieces
+(`SHARED`: close button, `tiled_bg`, header bars, tabs, sort buttons, filters, checkbox, text field), at vanilla
+paths and sizes (`validate_preview.SAME_SIZE` holds them to it); the map modes (`mm_*`: the column and its foot,
+the find and "all" buttons, the big medallions with `army`/`air`/`navy`/`intel` line icons, the game's 18 small
+icons and 6 toggles recoloured in gilt from its own textures, `gilt()`, the configure list, the social button)
+and the minimap's handle, ping buttons and pings.
+
 **make_stateview.py.** The panel that opens on a province click. The state part follows the mockup:
 owner flag in a gilt well and the state name (gilt capitals) with the game's "owner" text as a
 subtitle; a stats row (victory points | manpower | resources) with the mod's labels; shared building
@@ -557,11 +622,27 @@ GP.write_gui(MOD + "interface/x.gui", t)    # braces checked, engine_safe applie
 - Long-name detection must use only name keys (`TAG`, `TAG_<ideology>`, cosmetic tags). Matching
   any loc key that starts with a tag flagged the wrong countries.
 - When merging into the Valsora mod (section 11), `make_politics` must not read its own output.
-  Keep a pristine copy of Valsora's original `countrypoliticsview.gui` as the base.
+  Keep a pristine copy of Valsora's original `countrypoliticsview.gui` as the base (done since v0.5:
+  `work/deco_base/`, kept by the Valsora build; `make_politics.py` asserts its base is not its own output).
+- A .gui the mod ships at a vanilla path can name a sprite nothing defines, because the game's own file does
+  (`countrydecisionview.gui`: `GFX_category_end_bg`). The checks skip those (the Valsora repository's
+  `source/vanilla/index/gui_undefined_sprites.txt`, made by `scripts/vanilla_sync.py`).
+- Two-frame sprites do not agree on which frame is lit: tabs (`tab_large`, `intel_ledger/tab`), the diplomacy
+  filters and `sort_button_100x29_2` are lit in frame 1 (`countrytechnologyview.gui` starts its shown tab at
+  `frame = 1`); `sort_button_202x29`, `sort_button_83x29` and `generic_checkbox` in frame 2. Look at the
+  game's texture before redrawing one.
+- The game's map mode icons are picked by frame number, and their meaning is not written anywhere: keep
+  their order and glyphs (v0.5 recolours them; the big four are land, air, naval, intelligence).
 
 ## 10. Open items and things to check in game
 
 Check these first in the user's next screenshots and `error.log`:
+
+- **v0.5** (the README's checklist has the user-facing version): each side panel's notch (medallion, name and
+  seal visible, gilt edge, no map between), its title, close and header buttons, nothing cut off at the
+  bottom (logistics, officer corps, faction, research), the construction screen with its list folded, the
+  windows beside the panels; tabs and sort buttons in both states; the map mode medallions (land, air, naval)
+  and the gilt small icons and toggles (on vs off); the gilt minimap, its camera frame, handle and pings.
 
 0. **error.log (v0.4.5)**: no "Not a valid orientation" or "Unexpected token: alwaystransparent" lines
    from this mod's files. Any other line naming one of its files is the next bug.
@@ -625,49 +706,46 @@ Still vanilla art:
 - focus icons and the links between focuses
 - every screen other than the politics screen, state panel, focus tree and main menu (core skin only)
 
-## 11. Integration options (decide with the user)
+## 11. Integration: part of the Valsora mod (v0.5)
 
-- **A. Separate mod (current).** `valsora_deco_ui/` goes into `Documents/Paradox Interactive/
-  Hearts of Iron IV/mod/` with its `.mod` file; the release is the Valsora repository's
-  `dist/valsora_deco_ui.zip` (`tools/package.py`), which holds both. It must load **after** Valsora,
-  because both mods ship `interface/countrypoliticsview.gui` (the only shared path as of v0.4.5,
-  checked file by file). **(in game, v0.4.5)** It loaded first in the user's playset: the politics
-  screen was Valsora's, with the Deco UI's scripted text drawn over it in the wrong places. Since
-  v0.4.7 both descriptors carry `dependencies = { "Valsora (test map)" }` (Valsora's descriptor
-  name, exactly), which makes the launcher load it after Valsora whatever the playset order. It also works on vanilla, in which case the long-name trigger is
-  built from Valsora data and stays harmless.
-- **Valsora's own interface files.** Valsora ships `interface/countrypoliticsview.gui` (vanilla's
-  with five 13 px party rows) and, since 2026-10-13, its own minimap: `interface/minimap.gui` (the
-  window moved for a 194x97 picture), `gfx/minimap/minimap.dds` and `border.dds`, and
-  `MINIMAP_TOGGLE_SHIFT` in `common/defines/valsora_graphics.lua` (Valsora's `scripts/minimap.py`).
-  The deco minimap work (section 12) must start from those, not from vanilla's, or the minimap
-  goes back to vanilla's size and position.
-- **B. Merged into the Valsora mod.** Set `VALSORA_DECO_MOD` to the Valsora mod folder. The
-  generators then write straight into it. Before doing this:
-  - copy Valsora's original `interface/countrypoliticsview.gui` to a separate base path and point
-    `make_politics` at it
-  - check the Valsora mod does not already have files at the same paths (`topbar.gui`, `alerts.gui`,
-    `frontendmainview.gui`, `base_backgrounds.txt`, the replaced textures)
-  - the Valsora repository is not the mod folder: its pipeline builds the mod into
-    `build/valsora_test/` (`scripts/build_mod.py`) and ships `dist/valsora_test.zip`, so this
-    project can stay in `deco_ui/`; merging would mean running the generators against the built
-    mod as a pipeline step (after `build_mod.py`, before `check_mod.py` and `package.py`)
-- Either way, copy `valsora_deco_ui/README.txt`'s install notes into the release.
+The user asked (2026-10-14) for one install, keeping the option of going back to the game's interface. So:
+
+- **The Valsora build takes the Deco UI in.** `scripts/deco_ui.py` (run by `scripts/run_all.sh` after
+  `build_mod.py`, when `DECO_UI = True` in `scripts/common.py`):
+  1. keeps Valsora's own copies of the files the Deco UI replaces (`REPLACES`: only
+     `interface/countrypoliticsview.gui`) in `work/deco_base/`;
+  2. runs `long_names.py` and `make_politics.py` against that build (environment `VALSORA_MOD_DIR`,
+     `VALSORA_BASE_DIR`), so the long-name trigger and the politics screen with its sub-ideologies always
+     follow Valsora's countries and ideologies. Both need only Valsora's files and this project's fonts;
+  3. copies `valsora_deco_ui/` into `build/valsora_test/`, all but `descriptor.mod`, `README.txt` and
+     `thumbnail.png`. A path both mods ship stops the build unless it is in `REPLACES`. Running it twice is
+     fine (`work/deco_base/copied.txt`).
+  `scripts/check_mod.py` then checks the merged mod (it knows the Deco UI's 9 languages, its politics screen's
+  five 19 px party rows, every sprite kind in a .gfx and the game's own undefined sprites).
+- **The minimap** is Valsora's (`scripts/minimap.py`): with `DECO_UI` it draws the picture and frame in this
+  style (gilt land and coasts on lacquer, a gilt frame) at the same sizes, and the start date picture too;
+  this project only ships the handle, ping buttons and pings (`gfx/minimap/`, vanilla paths Valsora doesn't use).
+- **Everything else** (textures, fonts, the patched game screens) is built here by hand with the game's files
+  at hand (`tools/build_all.py`) and committed in `valsora_deco_ui/`; the Valsora build copies what is there.
+  Rebuild it after any change to the tools, then rebuild Valsora.
+- **To go back to the game's interface:** `DECO_UI = False` and rebuild. `build_mod.py` empties the build
+  first, so none of this project's files remain, and the minimap is parchment again.
+- `valsora_deco_ui.mod` and `descriptor.mod` stay (v0.5.0) for the separate-mod form (option A before
+  v0.5: it had to load after Valsora, `dependencies = { "Valsora (test map)" }`), which `tools/package.py`
+  still zips; nothing ships it now. The user was told to delete the old separate copy from `mod/`: if left in
+  the playset it loads after Valsora and puts its older files back.
 
 ## 12. Next steps (in order)
 
-1. Process the user's screenshots and `error.log` of v0.4.6 (section 10).
-2. **Army bar and map modes / minimap**: see `docs/next_army_bar_and_map_modes.md`. It covers the
-   sprite tables, the plan and what to read from the game's textures first. These need the real
-   `gfx/interface/unitcontrol/`, `gfx/interface/mapmode/` and minimap textures (frame sizes and
-   meanings). The first session did not have them; they are now in `reference/vanilla/gfx` (section
-   3). The minimap must build on Valsora's own (section 11).
+1. Process the user's screenshots and `error.log` of v0.5 (section 10 and the README's checklist): the side
+   panels' notch and headers, the construction screen folded, the map modes and minimap.
+2. **Army bar**: see `docs/next_army_bar_and_map_modes.md` (the map modes and minimap part is done, v0.5).
 3. Politics extras still missing from the Government mockup: faction member flags (needs a scripted
    GUI dynamic list over the faction's members; not verified that one exists) and a one-spirit card
    with its modifiers. The user does not want "The Court" panel.
-4. Apply the mockup style to the other side panels. Production, research, trade, diplomacy and
-   logistics already inherit the skinned `tiled_plain_bg`, windows and buttons. Re-lay them only
-   if the user asks.
+4. The side panels' insides (v0.5 did their frames, headers and the shared pieces): the game's pictures
+   inside them (research's photograph, `production_win_top`, the officer corps' coloured command boxes, the
+   intelligence agency's art, `overview_top_strip`) and the +/- buttons; re-lay a panel only if the user asks.
 5. Superevent screen (mockup in `art/mockups/`). Valsora has its own `valsora_superevent.gui`, so
    coordinate with that file rather than overriding it blindly. The focus tree's links are still
    vanilla (16 px tiles, 4 frames per state, frame meaning unknown: read the textures first).
@@ -681,5 +759,5 @@ For every new screen, follow this pattern:
 - add the sprites to a `valsora_deco_<screen>.gfx`
 - add the loc keys in 9 languages
 - extend `validate_preview.py`
-- add a preview in `preview_screens.py`
+- add a preview in `preview_screens.py` (or `preview_panels.py`, which draws the game's own textures)
 - add the step to `build_all.py`

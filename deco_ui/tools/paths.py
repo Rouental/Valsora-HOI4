@@ -11,7 +11,8 @@ Layout (relative to the project root = the folder above tools/):
 
 Every location can be overridden with an environment variable:
     VALSORA_DECO_ROOT, VALSORA_DECO_MOD, HOI4_DIR (the game folder, used instead of reference/vanilla),
-    VALSORA_MOD_DIR (instead of reference/valsora), CHROMIUM_PATH (the browser Playwright uses).
+    VALSORA_MOD_DIR (instead of reference/valsora), VALSORA_BASE_DIR (instead of ../work/deco_base: the Valsora
+    mod's own copies of the files the Deco UI replaces), CHROMIUM_PATH (the browser Playwright uses).
 """
 import os
 
@@ -28,6 +29,11 @@ FONTS_SRC = _d(os.path.join(ROOT, "source_fonts"))
 ART = _d(os.path.join(ROOT, "art"))
 VANILLA = _d(os.environ.get("HOI4_DIR") or os.path.join(ROOT, "reference", "vanilla"))
 VALSORA = _d(os.environ.get("VALSORA_MOD_DIR") or os.path.join(ROOT, "reference", "valsora"))
+# the Valsora mod's own files that the Deco UI replaces (interface/countrypoliticsview.gui), as Valsora built them:
+# since the Deco UI is part of the Valsora build (2026-10-14), build/valsora_test holds the Deco UI's copies, so
+# the Valsora build keeps its own in work/deco_base/ (scripts/deco_ui.py) and make_politics.py starts from there
+_base = os.environ.get("VALSORA_BASE_DIR") or os.path.join(ROOT, "..", "work", "deco_base")
+VALSORA_BASE = _d(_base) if os.path.isdir(_base) else VALSORA
 BUILD = _d(os.path.join(ROOT, "build"))
 # Chromium for Playwright: by default Playwright's own download; CHROMIUM_PATH points at another one
 # (e.g. a cloud machine's pre-installed /opt/pw-browsers/chromium when the versions differ)

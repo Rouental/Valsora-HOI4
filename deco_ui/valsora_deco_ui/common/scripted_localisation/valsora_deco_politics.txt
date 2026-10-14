@@ -90,14 +90,6 @@ defined_text = {
 		localization_key = agrarian_socialism
 	}
 	text = {
-		trigger = { has_country_leader_ideology = anti_revisionism }
-		localization_key = anti_revisionism
-	}
-	text = {
-		trigger = { has_country_leader_ideology = buddhist_socialism }
-		localization_key = buddhist_socialism
-	}
-	text = {
 		trigger = { has_country_leader_ideology = military_junta }
 		localization_key = military_junta
 	}
@@ -134,26 +126,6 @@ defined_text = {
 		localization_key = humanism
 	}
 	text = {
-		trigger = { has_country_leader_ideology = nazism }
-		localization_key = nazism
-	}
-	text = {
-		trigger = { has_country_leader_ideology = gen_nazism }
-		localization_key = gen_nazism
-	}
-	text = {
-		trigger = { has_country_leader_ideology = falangism }
-		localization_key = falangism
-	}
-	text = {
-		trigger = { has_country_leader_ideology = rexism }
-		localization_key = rexism
-	}
-	text = {
-		trigger = { has_country_leader_ideology = emperor_fascism }
-		localization_key = emperor_fascism
-	}
-	text = {
 		trigger = { has_country_leader_ideology = despotism }
 		localization_key = despotism
 	}
@@ -188,22 +160,6 @@ defined_text = {
 	text = {
 		trigger = { has_country_leader_ideology = semi_constitutional_monarchy }
 		localization_key = semi_constitutional_monarchy
-	}
-	text = {
-		trigger = { has_country_leader_ideology = anarchism }
-		localization_key = anarchism
-	}
-	text = {
-		trigger = { has_country_leader_ideology = moderatism }
-		localization_key = moderatism
-	}
-	text = {
-		trigger = { has_country_leader_ideology = centrism }
-		localization_key = centrism
-	}
-	text = {
-		trigger = { has_country_leader_ideology = japan_militarism_ideology }
-		localization_key = japan_militarism_ideology
 	}
 	text = {
 		trigger = { has_country_leader_ideology = theocrat }
@@ -297,14 +253,6 @@ defined_text = {
 		localization_key = agrarian_socialism_desc
 	}
 	text = {
-		trigger = { has_country_leader_ideology = anti_revisionism }
-		localization_key = anti_revisionism_desc
-	}
-	text = {
-		trigger = { has_country_leader_ideology = buddhist_socialism }
-		localization_key = buddhist_socialism_desc
-	}
-	text = {
 		trigger = { has_country_leader_ideology = military_junta }
 		localization_key = military_junta_desc
 	}
@@ -341,26 +289,6 @@ defined_text = {
 		localization_key = humanism_desc
 	}
 	text = {
-		trigger = { has_country_leader_ideology = nazism }
-		localization_key = nazism_desc
-	}
-	text = {
-		trigger = { has_country_leader_ideology = gen_nazism }
-		localization_key = gen_nazism_desc
-	}
-	text = {
-		trigger = { has_country_leader_ideology = falangism }
-		localization_key = falangism_desc
-	}
-	text = {
-		trigger = { has_country_leader_ideology = rexism }
-		localization_key = rexism_desc
-	}
-	text = {
-		trigger = { has_country_leader_ideology = emperor_fascism }
-		localization_key = emperor_fascism_desc
-	}
-	text = {
 		trigger = { has_country_leader_ideology = despotism }
 		localization_key = despotism_desc
 	}
@@ -395,22 +323,6 @@ defined_text = {
 	text = {
 		trigger = { has_country_leader_ideology = semi_constitutional_monarchy }
 		localization_key = semi_constitutional_monarchy_desc
-	}
-	text = {
-		trigger = { has_country_leader_ideology = anarchism }
-		localization_key = anarchism_desc
-	}
-	text = {
-		trigger = { has_country_leader_ideology = moderatism }
-		localization_key = moderatism_desc
-	}
-	text = {
-		trigger = { has_country_leader_ideology = centrism }
-		localization_key = centrism_desc
-	}
-	text = {
-		trigger = { has_country_leader_ideology = japan_militarism_ideology }
-		localization_key = japan_militarism_ideology_desc
 	}
 	text = {
 		trigger = { has_country_leader_ideology = theocrat }

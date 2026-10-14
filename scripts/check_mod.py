@@ -68,6 +68,28 @@ def vanilla_index(name):
     return [line for line in path.read_text(encoding="utf-8").splitlines() if line and not line.startswith("#")]
 
 
+SPRITE_BLOCK = re.compile(r"\b(?:spriteType|frameAnimatedSpriteType|corneredTileSpriteType|textSpriteType|progressbartype|"
+                          r"maskedShieldType|pieChartType)\s*=\s*\{", re.I)
+
+
+def gfx_sprites(text):
+    """{sprite name: [texture files]} of a .gfx file's sprite blocks (any kind: plain, cornered, frames, progress
+    bars, masked shields, pie charts), whatever the keys' case and order"""
+    out = {}
+    for m in SPRITE_BLOCK.finditer(text):
+        depth, j = 0, m.end() - 1
+        for j in range(m.end() - 1, len(text)):
+            depth += {"{": 1, "}": -1}.get(text[j], 0)
+            if depth == 0:
+                break
+        body = text[m.end():j]
+        name = re.search(r'\bname\s*=\s*"([^"]+)"', body)
+        if name:
+            out[name.group(1)] = [re.sub(r"/+", "/", t_) for t_ in
+                                  re.findall(r'\btexturefile\d?\s*=\s*"([^"]+)"', body, re.I)]
+    return out
+
+
 def is_vanilla_part(path, mod):
     """Whether a built file is one of vanilla's that the mod ships changed (source/vanilla/)."""
     rel = Path(path).relative_to(mod).as_posix()
@@ -430,13 +452,19 @@ def main(mod):
 
     # ------------------------------------------------------------ localisation
     keys = set()
+    # the mod is English; the Deco UI (common.DECO_UI) ships its few strings in every language the game has
+    langs = ("english", "french", "german", "spanish", "braz_por", "polish", "russian", "japanese", "simp_chinese")
     for f in (mod / "localisation").rglob("*.yml"):
         raw = f.read_bytes()
         if not raw.startswith(b"\xef\xbb\xbf"):
             err(f"{f.name} must be UTF-8 with BOM")
-        if not f.name.endswith("_l_english.yml") or b"l_english:" not in raw[:20]:
-            err(f"{f.name} must be an l_english file")
-        keys |= set(re.findall(r"^ (\S+?):\d? ", raw.decode("utf-8-sig"), re.M))
+        lang = next((g for g in langs if f.name.endswith(f"_l_{g}.yml")), None)
+        if lang is None or f"l_{lang}:".encode() not in raw[:20]:
+            err(f"{f.name} must be an l_<language> file (l_english, ...) that says so in its first line")
+        elif lang != "english" and not f.name.startswith("valsora_deco"):
+            err(f"{f.name}: only the Deco UI's files are in other languages than English")
+        if lang == "english":
+            keys |= set(re.findall(r"^ (\S+?):\d? ", raw.decode("utf-8-sig"), re.M))
     for f in (mod / "history/states").glob("*.txt"):
         k = field(f.read_text(), "name")
         if k not in keys:
@@ -458,11 +486,12 @@ def main(mod):
     for f in (mod / "common/characters").glob("*.txt"):
         chars |= set(re.findall(r"^\t(\w+)\s*=\s*\{", strip(f.read_text()), re.M))
     sprites = {}
-    for f in (mod / "interface").glob("*.gfx"):
-        for name, tex in re.findall(r'name\s*=\s*"(\w+)"\s*texturefile\s*=\s*"([^"]+)"', f.read_text()):
-            sprites[name] = tex
-            if not (mod / tex).exists():
-                err(f"sprite {name} points at missing {tex}")
+    for f in (mod / "interface").rglob("*.gfx"):
+        for name, texs in gfx_sprites(strip(f.read_text(encoding="utf-8-sig"))).items():
+            sprites[name] = texs[0] if texs else None
+            for tex in texs:
+                if not (mod / tex).exists() and not (tex.endswith(".tga") and (mod / (tex[:-4] + ".dds")).exists()):
+                    err(f"sprite {name} points at missing {tex}")
     for f in (mod / "history/countries").glob("*.txt"):
         for c in re.findall(r"recruit_character\s*=\s*(\w+)", f.read_text()):
             if c not in chars:
@@ -583,12 +612,14 @@ def main(mod):
     for k in re.findall(r'buttonText\s*=\s*"(\w+)"', own_gui):  # vanilla overrides use vanilla keys
         if k not in keys:
             err(f"button text {k} has no localisation")
-    # the party list: vanilla's box holds 4 x 16 px rows
+    # the party list: vanilla's box holds 4 x 16 px rows; the Deco UI's politics screen (common.DECO_UI) has room
+    # for five 19 px rows (deco_ui/tools/layout_politics.py: LEGEND, and BOP below it)
     pv = mod / "interface/countrypoliticsview.gui"
-    row = re.search(r'"parties_grid".*?slotsize\s*=\s*\{[^}]*height\s*=\s*(\d+)', pv.read_text(), re.S) \
-        if pv.exists() else None
+    pv_text = pv.read_text(encoding="utf-8-sig") if pv.exists() else ""
+    row = re.search(r'"parties_grid".*?slotsize\s*=\s*\{[^}]*height\s*=\s*(\d+)', pv_text, re.S)
+    room = 5 * 19 + 2 if "Valsora Deco UI" in pv_text[:400] else 4 * 16 + 2
     n_ideo = len(re.findall(r"^\t(\w+) = \{", (mod / "common/ideologies/00_ideologies.txt").read_text(), re.M))
-    if n_ideo * (int(row.group(1)) if row else 16) > 4 * 16 + 2:
+    if n_ideo * (int(row.group(1)) if row else 16) > room:
         err(f"{n_ideo} ideologies do not fit the politics view's party list")
 
     # ------------------------------------------------------------ portraits, names, factions
@@ -708,7 +739,8 @@ def main(mod):
     defined_sprites = set()
     for f in (mod / "interface").rglob("*.gfx"):
         defined_sprites |= set(re.findall(r'name\s*=\s*"(GFX_\w+)"', f.read_text(encoding="utf-8-sig")))
-    known_sprites = defined_sprites | set(vanilla_index("sprites.txt"))
+    # (and those the game's own .gui files name without declaring them: the Deco UI keeps them in the files it patches)
+    known_sprites = defined_sprites | set(vanilla_index("sprites.txt")) | set(vanilla_index("gui_undefined_sprites.txt"))
     for f in ours:
         text = text_of.get(f) or f.read_text(encoding="utf-8-sig", errors="replace")
         for spr in set(re.findall(r"\b(GFX_\w+)", text)):

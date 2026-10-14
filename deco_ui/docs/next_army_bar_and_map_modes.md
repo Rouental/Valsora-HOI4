@@ -1,4 +1,25 @@
-# Next: the army bar and the bottom-right map controls
+# Next: the army bar (the bottom-right map controls are done, v0.5)
+
+**Done in v0.5 (2026-10-14): map modes and minimap**, by textures at vanilla paths only (the game's
+`mapmodes_interface.gui` and Valsora's `minimap.gui` are untouched); `gen_textures.py`, the `mm_*` and `mn_*`
+sprites; preview `build/preview_corner.png` (`preview_panels.py`). What the game's textures turned out to be:
+
+| texture | size, frames | what it is |
+|---|---|---|
+| `mapmode/mapmode_main_bg.dds` | 87x206 | the column behind the buttons (at the container's x 549: its last 5 px are off-screen) |
+| `mapmode/mapmode_bottom_bg.dds` | 86x59 | its foot, under the six toggles (2 rows of 3, 25 px apart) |
+| `mapmode/mapmode_buttons_(de)selected_big.dds` | 136x31, 4 | soldier (land), plane (air), anchor (naval), eye |
+| `mapmode/mapmode_button_bg.dds` | 42x51 | the well behind each big button (the button sits 4 px in, 10 down; wells overlap) |
+| `mapmode/mapmode_buttons_(de)selected_small.dds` | 360x18, 18 | `?` `?` `?`, eye, flag, cards, flame, pennant, sack, hill, star, two figures, a figure carrying, three figures, fist in a wreath, arrows, crosshair, blank (meanings not written anywhere: kept, recoloured) |
+| `mapmode/mapmode_button_depressed.dds` | 23x20 | the well behind a selected small button and behind every toggle |
+| toggles (`day_night_toggle`, `player_counters_toggle`, `counters_color_mode_button`, `allied_plans_button`, `fog_of_war_toggle`, `radar_toggle`) | 44x22, 2 | frame 1 coloured (on), frame 2 grey |
+| `mapmode/find_screen_button.dds`, `mapmode_button_all.dds`, `mapmode_configure_bg.dds` | 39x39; 44x21, 2; 519x23, 3 | find; "<" (all map modes); the configure list's rows (plain, lit, with a chevron) |
+| `sort_button_83x29.tga` | 166x29, 2 | the social button over the column (frame 2 lit); replaced by a `.dds` of the same name |
+| `gfx/minimap/handle_default/pinged.dds`, `*_ping_btn.dds`, `minimap_ping_*.dds` | 24x64; 64x31, 2; ~22x22 | the minimap's slide handle, its two ping buttons, the pings on it |
+
+The game shows either `3_button_mapmode` or `4_button_mapmode` (the 3-button one also holds a fourth button
+over the third). Still to check in game: the toggles' on/off frames and the selected states.
+
 
 The user's request after testing v0.2 was: *"The armies at the bottom of the screen, and the filters
 on the bottom right don't have the same custom touch as the rest of the UI."*

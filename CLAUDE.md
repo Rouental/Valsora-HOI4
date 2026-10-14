@@ -181,11 +181,12 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `organic.py` | organic splitting (seeded watershed over noise), used by `apply_outlines.py` |
 | `rivers.py` | plain river lines → HOI4 rivers.bmp format, and the river rules check |
 | `build_mod.py` | every mod file |
+| `deco_ui.py` | the Valsora Deco UI into the build (`common.DECO_UI`; see Deco UI below): Valsora's own copies of what it replaces kept in `work/deco_base/`, its long-name trigger and politics screen made from this build, then `deco_ui/valsora_deco_ui/` copied in (a file both ship stops the build unless the Deco UI replaces it on purpose) |
 | `nations.py` | hand-written per-nation content (leaders, portraits, focus trees), used by `build_mod.py` |
 | `superevents.py` | TNO-style superevent windows, their texts, picture and music |
 | `cultures.py` | generic portraits, name lists and graphical culture per continent / country |
 | `ideologies.py` | the five ideologies: ideology file, renamed localisation, theocracy icon |
-| `minimap.py` | the minimap (lower right): Valsora's land on parchment instead of vanilla's Earth, its frame, window and slide (2026-10-13) |
+| `minimap.py` | the minimap (lower right): Valsora's land on parchment instead of vanilla's Earth, its frame, window and slide (2026-10-13); with the Deco UI (`DECO_UI`) gilt land and coasts on lacquer in a gilt frame, same sizes, and the start date picture the same (2026-10-14) |
 | `globe.py` | the world tension globe (top bar, 10 frames) and its small icon: Valsora instead of Earth (2026-10-14), cracking into lava as tension grows (redrawn the same day: the first flames "didn't come out too well"); run alone, `dist/tension_globe_preview.png` |
 | `vanilla_parts.py` | vanilla's parts in the mod, for `build_mod.py`: the vanilla files it ships moved to 2036, the stand-ins for what Earth's content still names (decisions, events, country histories), the start and end dates, the AI's faction theaters |
 | `vanilla_sync.py` | by hand, after a game update: refreshes `source/vanilla/` from the author's copy of the game (`Rouental/HOI4-Files`): the vanilla files the mod ships changed, and lists of vanilla's names |
@@ -1306,25 +1307,35 @@ Left loaded on purpose, and noisy in `error.log`:
 - Ideas, MIOs, scripted effects and triggers, ai_areas, operations and achievements. They
   reference vanilla ids, which the previous build showed the game tolerates.
 
-## Deco UI (`deco_ui/`)
+## Deco UI (`deco_ui/`): part of the mod
 
-**The Valsora Deco UI** is the author's art deco interface mod, made with another Claude session
-(v0.1–v0.4.4) and moved here on 2026-10-14 (v0.4.5; v0.4.8 the same day: the politics screen flush under
-the top bar, styled tooltips, see its guide). It is a separate mod, loaded **after** Valsora
-in the playset: a restyled top bar, politics screen, state panel, focus tree, main menu (the Valsora
-background) and a core skin. `deco_ui/CLAUDE.md` is its full handoff guide (engine facts, generators,
-what is confirmed in game); read it before touching the UI. In short:
-- Its `tools/` generate everything in `deco_ui/valsora_deco_ui/` from the game's `.gui` files and
-  Valsora's built mod (`build/valsora_test`, linked as `deco_ui/reference/valsora`), so **rebuild it
-  when Valsora adds or renames countries or leaders** (the long-name trigger, the leader
-  descriptions): `CHROMIUM_PATH=/opt/pw-browsers/chromium python3 tools/build_all.py` in `deco_ui/`,
-  after the vanilla links its section 3 lists. `validate_preview.py` must end with `PROBLEMS: none`.
-- The release is `dist/valsora_deco_ui.zip` (`python3 tools/package.py ../dist/valsora_deco_ui.zip`):
-  `valsora_deco_ui.mod` and `valsora_deco_ui/`. To install: delete `mod/valsora_deco_ui/` and
-  `mod/valsora_deco_ui.mod`, unzip it into `mod/`, put it below Valsora in the playset.
-- Both mods ship `interface/countrypoliticsview.gui` (the only shared path): the Deco UI's is
-  rebuilt from Valsora's by its `make_politics.py`, so re-run that whenever Valsora's changes.
-  Valsora's minimap (`minimap.py`) is the base for any Deco UI minimap work.
+**The Valsora Deco UI** is the author's art deco interface, made with another Claude session (v0.1–v0.4.4)
+and moved here on 2026-10-14 (v0.4.5–v0.4.8 the same day: the politics screen flush under the top bar,
+styled tooltips). **Since v0.5 (2026-10-14, later) it is part of the Valsora mod** (author: "roll the UI mod
+into the main Valsora mod, but with the knowledge that I might eventually want it taken out again ... I'd like
+to simplify things to only have the one install"): a restyled top bar, every side panel (the politics screen
+re-laid to its mockup; 16 others flush under the top bar with a notch for the flag medallion and a deco header,
+v0.5), the state panel, focus tree, map modes and minimap (v0.5), main menu (the Valsora background) and a core
+skin. `deco_ui/CLAUDE.md` is its full handoff guide (engine facts, generators, what is confirmed in game); read
+it before touching the UI. In short:
+- **One switch:** `DECO_UI` in `scripts/common.py`. True: `scripts/deco_ui.py` (after `build_mod.py`)
+  copies `deco_ui/valsora_deco_ui/` into the build, and `minimap.py` draws the minimap in its style. False:
+  the game's own interface (`build_mod.py` empties the build first, so nothing of the Deco UI is left).
+- The build makes the Deco UI's Valsora-dependent files itself, so they can't go stale: the long-name trigger
+  (`deco_ui/tools/long_names.py`: names too long for the medallion's large font) and the politics screen
+  (`make_politics.py`, from Valsora's own `countrypoliticsview.gui`, kept in `work/deco_base/`; its
+  sub-ideologies are those Valsora names, 39). The only file both ship is that one (`deco_ui.REPLACES`).
+- Everything else (textures, fonts, the game screens it patches) is built by hand with the game's files at
+  hand: `CHROMIUM_PATH=/opt/pw-browsers/chromium python3 tools/build_all.py` in `deco_ui/`, after the
+  vanilla links its section 3 lists (`deco_ui/reference/valsora` is `build/valsora_test`); then rebuild
+  Valsora. `validate_preview.py` must end with `PROBLEMS: none`. Rendering noise: restore textures that only
+  changed by a few anti-aliased pixels (`git checkout`).
+- `check_mod.py` checks the merged mod: the Deco UI's localisation in the game's 9 languages (only its files
+  may be other than English), its politics screen's five 19 px party rows, every kind of sprite in a .gfx, and
+  sprites the game's own .gui files name without defining (`source/vanilla/index/gui_undefined_sprites.txt`).
+- There is no separate release any more (`dist/valsora_deco_ui.zip` was removed). The author was told to delete
+  the old `mod/valsora_deco_ui/` and `mod/valsora_deco_ui.mod` and take it out of the playset: left in, it
+  loads after Valsora and puts its older files back.
 - Its `reference/` (the game's files, git-ignored) must never be committed: it is Paradox's content.
 
 ## Atlas submod (removed)
@@ -1353,6 +1364,8 @@ in git history (commit d2d6cd8, `scripts/cartographic.py`). It used
 
 ## Current state
 
+- 2026-10-14, later: no map changes; the Deco UI (v0.5) is part of the mod: every side panel flush under
+  the top bar with the medallion's notch, map modes and a gilt minimap. Not yet seen in game.
 - 2026-10-14: no map changes; the game starts in 2036, vanilla's generic events, AI
   strategies and on_actions are back, and stand-ins should take about 1,900 lines out
   of the 2,081-line error.log (decisions, Earth's histories, AI theaters, unit

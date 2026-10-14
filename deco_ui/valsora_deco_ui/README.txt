@@ -1,29 +1,59 @@
-VALSORA DECO UI - v0.4.8 (for HOI4 1.19)
-======================================
+VALSORA DECO UI - v0.5 (for HOI4 1.19)
+====================================
 
 An art deco interface for the Valsora total conversion: core skin, a rebuilt
-top bar, the politics screen, the province panel, the focus tree and the
-main menu, laid out like the Valsora mockups.
+top bar, the politics screen, every side panel, the province panel, the
+focus tree, the map modes and minimap, and the main menu, laid out like the
+Valsora mockups.
 
 
 INSTALL
 -------
-1. Copy BOTH of these into  Documents/Paradox Interactive/Hearts of Iron IV/mod/
-     valsora_deco_ui.mod
-     valsora_deco_ui/          (this folder)
-   Replace older versions completely (delete the old folder first).
-2. In the launcher, add "Valsora Deco UI" to your playset with the Valsora
-   mod. Both mods contain interface/countrypoliticsview.gui, and this one was
-   built from Valsora's, so it must load last. Since v0.4.7 it names Valsora
-   as a dependency, so the launcher loads it after Valsora on its own (keep
-   it below Valsora in the list anyway).
-3. Start a game. If anything looks wrong, check
+Since v0.5 the Deco UI is part of the Valsora mod itself: install Valsora
+(dist/valsora_test.zip) and you have it. There is no separate Deco UI mod
+any more.
+1. Delete the old one, if you have it: mod/valsora_deco_ui/ and
+   mod/valsora_deco_ui.mod in Documents/Paradox Interactive/Hearts of Iron IV/,
+   and take "Valsora Deco UI" out of your playset. Left in, it would load
+   after Valsora and put its older files back over the new ones.
+2. Install Valsora as usual (delete mod/valsora_test/ and mod/valsora_test.mod,
+   unzip dist/valsora_test.zip into mod/), launch with -debug.
+If anything looks wrong, check
      Documents/Paradox Interactive/Hearts of Iron IV/logs/error.log
-   for lines mentioning "valsora_deco", a .gui file, a texture or a font.
+for lines mentioning "valsora_deco", a .gui file, a texture or a font.
+
+To go back to the game's own interface one day: set DECO_UI = False in the
+Valsora repository's scripts/common.py and rebuild (sh scripts/run_all.sh).
 
 The layout is built for 1920 px of UI width: 1920x1080 at 100% UI scale, or
 2560x1440 at up to 133%.
 
+
+NEW IN v0.5
+-----------
+  - One install: the Deco UI is built into the Valsora mod (see INSTALL).
+  - Every side panel now opens flush under the top bar like the country
+    screen, with the same cut-out for the flag medallion and the decisions
+    seal: army (division overview), construction, decisions, recruit &
+    deploy, diplomacy, intelligence agency, logistics, occupied territories,
+    officer corps, production, research, trade, faction, create faction,
+    faction theaters and the international market. Each has a deco header:
+    its title in gilt capitals right of the medallion, the close diamond,
+    its own buttons beside it, a gilt rule, and the panel's body below.
+    The panel's contents start below the seal (about 50 px lower on screen
+    than the game's), so lists are a little shorter.
+  - The windows that open beside a panel (equipment, lend-lease, templates,
+    advisors, subjects, exiles ...) also open flush under the top bar.
+  - The game's pictures used inside every panel are restyled: close
+    buttons, background tiles, header bars, tabs (the lit one in jade),
+    sort buttons, filters and checkboxes.
+  - Map modes (lower right): a lacquer column with gilt edges; the land, air
+    and naval buttons are octagonal medallions with the deco line icons,
+    linked by a gilt thread (jade when selected); the small map modes and
+    the toggles keep the game's icons, recoloured in gilt.
+  - Minimap: gilt land and coastlines on dark lacquer with a faint graticule,
+    in a gilt frame; deco handle and ping buttons. The start date's picture
+    in single player follows.
 
 NEW IN v0.4.8
 -------------
@@ -196,6 +226,34 @@ DIFFERENCES FROM THE MOCKUP, AND WHY
 
 THINGS TO CHECK IN-GAME
 -----------------------
+  Side panels (v0.5; one screenshot of each you open is ideal)
+  - Each opens right under the top bar; the flag medallion, the country
+    name and the decisions seal show above it, with the gilt edge round
+    them and no map between them. Nothing of the panel draws over the
+    medallion.
+  - The title sits right of the medallion; the close diamond and the
+    panel's own buttons (division overview: naval HQ, sunk ships,
+    equipment; occupied territories: garrison log, equipment;
+    construction: the factory counter and the arrow that widens the
+    building list) work.
+  - The panel's contents start below the seal and nothing is cut off at
+    the bottom (logistics, officer corps, the faction screen and the
+    research screen have the most at the bottom). In decisions, scroll to
+    the last decision: the game sizes that list itself, so it is the one
+    most likely to run past the bottom of the screen now.
+  - The construction screen with its building list both open and folded
+    away (the arrow left of its close diamond): does the header still
+    match the panel when folded?
+  - Tabs show the selected one in jade; sort buttons, filters and
+    checkboxes look right in their two states.
+  - The windows that open beside a panel open flush under the top bar.
+  Map modes and minimap (v0.5)
+  - The land, air and naval buttons show a helmet, a jet and an anchor,
+    and the selected one is jade. The small map mode icons and the toggles
+    (day/night, counters, fog of war, radar ...) read well in gilt, and on
+    and off are told apart.
+  - The minimap shows Valsora in gilt; the camera frame on it, the handle
+    that slides it away (ctrl+m) and the ping buttons work.
   Top bar
   - Flags look crisp. The new market icon shows.
   - The decisions seal opens decisions; its counters and glow appear.
@@ -250,9 +308,11 @@ THINGS TO CHECK IN-GAME
     are the game's own "GUI bounds" debug guides; the console command `gui`
     turns them on and off.
   Still vanilla
-  - The army bar and the map mode buttons (next), the world tension globe,
-    achievements and dismissed alert buttons, the music player pop-out,
-    faction logos, focus icons and focus links.
+  - The army bar (next), the world tension globe's glow, achievements and
+    dismissed alert buttons, the music player pop-out, faction logos, focus
+    icons and focus links, and the pictures inside some panels (research's
+    scientists, the officer corps' coloured command boxes, the
+    intelligence agency's art).
 
 
 SHARPER FLAGS (optional, untested)
