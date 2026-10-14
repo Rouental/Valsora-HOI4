@@ -543,6 +543,28 @@ def main(mod):
         for c in re.findall(r"continent\s*=\s*\{\s*name\s*=\s*(\w+)", text):
             if c not in continents:
                 err(f"{f.name}: continent {c} is not in map/continent.txt")
+    # vanilla's and the DLCs' portrait files name Earth continents: each must be replaced by ours
+    # (error.log 2026-10-14: "unknown continent europe" and an unexpected token per list)
+    for name in ("00_portraits.txt", "01_anniversary_portraits.txt", "027_lar_portraits.txt",
+                 "02_tiger_portraits.txt", "03_mtg_portraits.txt", "998_scientist_portraits.txt"):
+        if not (mod / "portraits" / name).exists():
+            err(f"portraits/{name} is not replaced: vanilla's, with Earth continents, would load")
+    p00 = mod / "portraits/00_portraits.txt"
+    if p00.exists() and not blocks(strip(p00.read_text()), "default"):
+        err("portraits/00_portraits.txt has no default block (fallback and operative portraits)")
+    # every continent and country list has scientists, or the game logs "Failed to generate a
+    # portrait ... scientist" and, on every load, an empty icon ("" / "_small") per such scientist
+    pv = mod / "portraits/valsora_portraits.txt"
+    if pv.exists():
+        text = strip(pv.read_text())
+        for m in re.finditer(r"^(continent|\w{3}) = \{", text, re.M):
+            head = m.group(1)
+            body = blocks(text[m.start():], head)[0]
+            sci = blocks(body, "scientist")
+            name = field(body, "name") if head == "continent" else head
+            if not sci or any(not re.search(r'"GFX_\w+"', "".join(blocks(sci[0], g)))
+                              for g in ("male", "female")):
+                err(f"valsora_portraits.txt: {name} has no male and female scientist portraits")
     named = set()
     for f in (mod / "common/names").glob("*.txt"):
         named |= set(re.findall(r"^(\w{3}) = \{", f.read_text(encoding="utf-8"), re.M))

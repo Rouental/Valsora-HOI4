@@ -9,8 +9,13 @@ HOI4 generates leaders, generals, admirals and scientists from two sources:
     We copy vanilla culture blocks from source/names/vanilla_names.txt under our tags.
 
 A country takes its culture from the continent of its capital unless TAG_CULTURE says
-otherwise. Portrait sprites come from vanilla 1.19.3 interface/_random_portraits.gfx
-(the full list is source/names/vanilla_portrait_sprites.txt, which check_mod.py uses).
+otherwise. Portrait sprites come from vanilla 1.19.3 interface/_random_portraits.gfx, the
+scientists' from _scientists_portraits.gfx (the full list is
+source/names/vanilla_portrait_sprites.txt, which check_mod.py uses).
+
+The game also reads vanilla's own portrait files (and the DLCs'), whose Earth continents
+fill error.log ("unknown continent europe", then an unexpected token for each of their
+lists). The mod ships a file of ours under each of their names (VANILLA_PORTRAIT_FILES).
 """
 import re
 from pathlib import Path
@@ -101,6 +106,46 @@ REGIONS["arabia"] = dict(
 REGIONS["africa"] = dict(
     army=_seq("GFX_Portrait_Africa_Generic_land", 3), navy=_seq("GFX_Portrait_Africa_Generic_navy", 3),
     political={i: _seq("GFX_Portrait_Africa_Generic", 3) for i in REGIONS["europe"]["political"]})
+
+
+def _scientists(*kinds):
+    """vanilla's generic scientist portraits (GFX_portrait_generic_<kind>_<gender>_NN)"""
+    n = dict(europe=16, africa=8, arabia=8, asia=8, india=6, southamerica=8)
+    return {g: [f"GFX_portrait_generic_{k}_{g}_{i:02d}" for k in kinds for i in range(1, n[k] + 1)]
+            for g in ("male", "female")}
+
+
+# scientists (special projects): vanilla gives Europe's to Europe and North America, and has
+# its own for Africa, the Middle East, Asia, India and South America
+SCIENTISTS = dict(europe=_scientists("europe"), france=_scientists("europe"), usa=_scientists("europe"),
+                  iberia=_scientists("europe"), mideast_africa=_scientists("arabia", "africa"),
+                  arabia=_scientists("arabia"), africa=_scientists("africa"), asia=_scientists("asia"),
+                  india=_scientists("india"), latin_america=_scientists("southamerica"))
+for _r in REGIONS:
+    REGIONS[_r]["scientist"] = SCIENTISTS[_r]
+
+# vanilla's and the DLCs' portrait files, all keyed by Earth continents (error.log of
+# 2026-10-14): each is replaced by a file of ours under the same name. 00_portraits.txt keeps
+# vanilla's default block, the fallbacks for operatives and anyone without a list
+VANILLA_PORTRAIT_FILES = ("00_portraits.txt", "01_anniversary_portraits.txt", "027_lar_portraits.txt",
+                          "02_tiger_portraits.txt", "03_mtg_portraits.txt", "998_scientist_portraits.txt")
+DEFAULT_PORTRAITS = """default = {
+	operative = {
+		male = {
+			"GFX_portrait_operative_unknown"
+		}
+		female = {
+			"GFX_portrait_operative_unknown"
+		}
+	}
+	male = {
+		"GFX_portrait_unknown"
+	}
+	female = {
+		"GFX_portrait_unknown_female"
+	}
+}
+"""
 
 # continent -> culture: vanilla name block, portrait region, graphical culture
 CONTINENT_CULTURE = {
@@ -300,6 +345,10 @@ def _portrait_body(region, indent):
     for ideo, sprites in r["political"].items():
         out += [f"{t}\t{ideo} = {{\n{t}\t\tmale = {{\n", lst(sprites, "\t\t\t"), f"{t}\t\t}}\n{t}\t}}\n"]
     out.append(f"{t}}}\n")
+    out.append(f"{t}scientist = {{\n")
+    for g in ("male", "female"):
+        out += [f"{t}\t{g} = {{\n", lst(r["scientist"][g], "\t\t"), f"{t}\t}}\n"]
+    out.append(f"{t}}}\n")
     return "".join(out)
 
 
@@ -313,6 +362,10 @@ def write_files(write, tag_continent, continents):
         if tag in TAG_CULTURE:
             parts.append(f"{tag} = {{\n{_portrait_body(TAG_CULTURE[tag]['portraits'], 1)}}}\n")
     write("portraits/valsora_portraits.txt", "".join(parts))
+    note = "# Valsora: replaces vanilla's file of this name, whose lists are keyed by Earth continents.\n"
+    for name in VANILLA_PORTRAIT_FILES:
+        write("portraits/" + name, note + (DEFAULT_PORTRAITS if name == "00_portraits.txt" else
+                                           "# Our lists are in valsora_portraits.txt.\n"))
 
     # names: the vanilla culture block, under our tag
     src = _names_text()
@@ -333,6 +386,8 @@ def sprites_used():
     for r in REGIONS.values():
         s |= set(r["army"]) | set(r["navy"])
         for v in r["political"].values():
+            s |= set(v)
+        for v in r["scientist"].values():
             s |= set(v)
     return s
 

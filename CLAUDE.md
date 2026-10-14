@@ -1070,9 +1070,20 @@ don't exist here. That was the cause of "Failed to generate a portrait / name" a
     GDN) and Placeholdros (LNT) use FRA names and France portraits (author: French for now);
     RST VLN ESD CRZ PLH use POR names (added to `source/names/vanilla_names.txt` from
     vanilla) and Europe portraits.
-- **Scientists and operatives** have no blocks yet. Vanilla's scientist file format
-  (`998_scientist_portraits.txt`) couldn't be fetched, so "failed to generate a
-  portrait … scientist" may remain.
+- **Scientists** (2026-10-14): every continent and country block also has
+  `scientist = { male female }`, vanilla's generic scientist portraits
+  (`interface/_scientists_portraits.gfx`: Europe's for European, French, Iberian and
+  American cultures as vanilla does for North America, Arabia's and Africa's for Usnistan,
+  Asia's, India's, South America's). Without them every generated scientist logged "Failed
+  to generate a portrait … scientist" and then, on every save load, an empty icon (`""` and
+  `"_small"`, icon_entry.cpp): 156 + 568 lines in the 2026-10-02 log. Operatives use
+  vanilla's default (an unknown silhouette).
+- **Vanilla's portrait files** (`00_portraits.txt`, the DLCs' `01_anniversary`, `02_tiger`,
+  `03_mtg`, `027_lar` and `998_scientist_portraits.txt`) are keyed by Earth continents: 139
+  error.log lines ("unknown continent europe", then an unexpected token per list). The mod
+  ships a file under each name (`cultures.VANILLA_PORTRAIT_FILES`); `00_portraits.txt`
+  keeps vanilla's `default` block (fallback and operative portraits). `check_mod.py` checks
+  all six and the scientist lists (mutation-tested).
 
 ## Superevents (`superevents.py`)
 
@@ -1115,8 +1126,8 @@ white via `§W…§!` in their localisation (the typewriter fonts draw dark). Ho
   and their files, scripted localisation keys, and GUI window, element, sprite and
   button-text references (mutation-tested).
 - **error.log on that test** also had 128 pairs of `Icon definition "" / "_small"`
-  (icon_entry.cpp) when a second game was started. Source unknown, not seen before;
-  watch for it.
+  (icon_entry.cpp) when a second game was started: scientists generated without a
+  portrait, one pair per scientist on each load; fixed 2026-10-14 (see Cultures).
 
 `check_mod.py` also checks that recruited characters exist and are localised, that portrait
 sprites resolve to files, and that every focus id and prerequisite is valid and localised.
@@ -1196,6 +1207,7 @@ The following vanilla files are overridden:
 - The minimap's picture and frame (`gfx/minimap/minimap.dds`, `border.dds`) and
   `interface/minimap.gui` (vanilla's, `source/interface/vanilla_minimap.gui`, with the
   window moved), plus `MINIMAP_TOGGLE_SHIFT` in `common/defines/valsora_graphics.lua`.
+- The six portrait files of vanilla and its DLCs (see Cultures).
 
 Left loaded on purpose, and noisy in `error.log`:
 - National focus: it holds the generic tree our countries use.
@@ -1326,7 +1338,7 @@ in git history (commit d2d6cd8, `scripts/cartographic.py`). It used
 3. Lakes vs. inland seas (see Decisions).
 4. Country content: only Aislada has a leader and focus tree; the rest use generated
    leaders and the generic tree. No units; flags only for Rouental and its neighbours.
-   Generic portraits and name lists exist (see Cultures), but not yet for scientists.
+   Generic portraits and name lists exist (see Cultures), scientists' too since 2026-10-14.
 
 ## Working with the author
 
@@ -1342,8 +1354,9 @@ their own layers (outlines, rivers, names, references) from the upload.
 **Vanilla reference files** (2026-10-14): the author's private repo `Rouental/HOI4-Files`
 holds a copy of their 1.19.3 install under `HOI4 Files/`: common, events, history,
 interface, localisation (every language), map, portraits (with
-`998_scientist_portraits.txt`) and gfx's models, but not yet the rest of `gfx` (leader
-portraits, interface images, minimap, FX shaders). Attach it to a session with the
+`998_scientist_portraits.txt`) and, since later that day, `gfx/` at the repo's root (leader
+portraits, interface images, minimap, FX shaders; a sparse checkout without the font
+textures, models and event pictures is enough, 2.6 GB). Attach it to a session with the
 Valsora repo and clone it to `/home/user/hoi4-files`; check vanilla there before searching
 mirrors or other mods. It is Paradox's content: never copy it wholesale into this public
 repo (single vanilla files the mod overrides, like `source/interface/`, are fine).

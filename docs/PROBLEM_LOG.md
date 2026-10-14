@@ -6,6 +6,21 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**Portrait files and scientists in error.log** (2026-10-14, read with vanilla's own files at last)
+- Cause: vanilla's `portraits/00_portraits.txt` and the DLCs' `01_anniversary`, `02_tiger`,
+  `03_mtg`, `027_lar` and `998_scientist_portraits.txt` key their lists by Earth continents
+  (139 lines: "unknown continent europe", then an unexpected token for each list). And our
+  own lists had no scientists: every scientist the game generated logged "Failed to generate
+  a portrait … scientist" and kept an empty portrait, which logged `Icon definition ""` and
+  `"_small"` on every load (156 + 568 lines in the 2026-10-02 log; the "source unknown"
+  noise noted under Superevents).
+- Fix: the mod ships a file under each of the six names (`cultures.VANILLA_PORTRAIT_FILES`;
+  `00_portraits.txt` keeps vanilla's `default` block of fallback and operative portraits),
+  and every continent and country block has vanilla's generic scientist portraits for its
+  culture.
+- Check: `check_mod.py` fails if one of the six files is missing or a block has no male and
+  female scientists (mutation-tested).
+
 **Deco UI: no main menu buttons** (2026-10-14, the Valsora Deco UI v0.4.3 and v0.4.4; author's
 screenshot and `error.log`)
 - Cause: the UI mod's `.gui` patcher wrote orientations in quotes (`Orientation = "CENTER_DOWN"`).
