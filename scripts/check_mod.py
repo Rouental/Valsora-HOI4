@@ -19,9 +19,15 @@ from imgio import read_bmp  # noqa: E402
 from borders import LIMIT as BORDER_LIMIT, count as border_count  # noqa: E402
 from rivers import problems as river_problems  # noqa: E402
 
-VANILLA_STATE_CATEGORIES = {"wasteland", "enclave", "tiny_island", "pastoral", "small_island",
-                            "rural", "town", "large_town", "city", "large_city", "metropolis",
-                            "megalopolis"}
+# vanilla 1.19.3 common/state_category: building slots of each
+CATEGORY_SLOTS = {"wasteland": 0, "enclave": 0, "tiny_island": 0, "pastoral": 1, "small_island": 1, "rural": 2,
+                  "large_island": 3, "town": 4, "large_town": 5, "city": 6, "large_city": 8, "metropolis": 10,
+                  "megalopolis": 12}
+VANILLA_STATE_CATEGORIES = set(CATEGORY_SLOTS)
+# vanilla common/buildings/00_buildings.txt level_cap (state_max; naval_base is per province)
+BUILDING_MAX = {"infrastructure": 5, "air_base": 10, "anti_air_building": 5, "industrial_complex": 20,
+                "arms_factory": 20, "dockyard": 20, "naval_base": 10}
+RESOURCE_KEYS = {"oil", "steel", "aluminium", "rubber", "tungsten", "chromium"}
 STATE_BUILDINGS = {"air_base": 1, "anti_air_building": 3, "arms_factory": 6,
                    "industrial_complex": 6, "fuel_silo": 1, "nuclear_reactor_spawn": 1,
                    "radar_station": 1, "rocket_site_spawn": 1, "stronghold_network": 1,
@@ -319,6 +325,27 @@ def main(mod):
         vp = blocks(body, "victory_points")
         if vp and int(vp[0].split()[0]) not in state_provs[sid]:
             err(f"state {sid}: victory point outside the state")
+        # buildings within vanilla's caps and the category's slots; resources vanilla knows
+        # (the Gazetteer lets friends set them)
+        cat = field(body, "state_category")
+        bl = blocks(body, "buildings")
+        if bl:
+            lv = {k: int(v) for k, v in re.findall(r"\b(\w+)\s*=\s*(\d+)\b", re.sub(r"\d+\s*=\s*\{[^{}]*\}", "", bl[0]))}
+            for k, v in lv.items():
+                if v > BUILDING_MAX.get(k, v):
+                    err(f"state {sid}: {k} {v} is over vanilla's {BUILDING_MAX[k]}")
+            used = sum(lv.get(k, 0) for k in ("industrial_complex", "arms_factory", "dockyard"))
+            if used > CATEGORY_SLOTS.get(cat, used):
+                err(f"state {sid}: {used} factories and dockyards in a {cat}, which has {CATEGORY_SLOTS[cat]} building slots")
+            for p, v in re.findall(r"(\d+)\s*=\s*\{\s*naval_base\s*=\s*(\d+)\s*\}", bl[0]):
+                if int(p) not in state_provs[sid] or int(v) > BUILDING_MAX["naval_base"]:
+                    err(f"state {sid}: naval base {v} on province {p}, outside the state or over vanilla's 10")
+        for res in blocks(body, "resources"):
+            for k, v in re.findall(r"(\w+)\s*=\s*(-?[\d.]+)", res):
+                if k not in RESOURCE_KEYS or float(v) < 0:
+                    err(f"state {sid}: resource {k} = {v}")
+        if not int(field(body, "manpower") or 0) > 0:
+            err(f"state {sid}: manpower must be above 0")
     if sorted(state_provs) != list(range(1, len(state_provs) + 1)):
         err("state ids are not contiguous from 1")
     state_of = {}
@@ -444,6 +471,19 @@ def main(mod):
         lvl, p = ln.split()
         if int(p) not in state_of:
             err(f"supply node on province {p}, which is in no state")
+    # railways (the Gazetteer's): level, count, then provinces in a row that touch, on land in states
+    for ln in (mod / "map/railways.txt").read_text().splitlines():
+        f = [int(v) for v in ln.split()]
+        lvl, cnt, ps = f[0], f[1], f[2:]
+        if not 1 <= lvl <= 5 or cnt != len(ps) or cnt < 2 or len(set(ps)) != cnt:
+            err(f"railway {ln[:60]!r}: needs a level 1-5, its count, and 2+ different provinces")
+            continue
+        for p in ps:
+            if p not in state_of:
+                err(f"railway on province {p}, which is in no state")
+        for u, v in zip(ps, ps[1:]):
+            if (u - 1, v - 1) not in pairs and (v - 1, u - 1) not in pairs:
+                err(f"railway from province {u} to {v}, which don't touch")
     adj = (mod / "map/adjacencies.csv").read_bytes()
     if not adj.rstrip().endswith(b"-1;-1;;-1;-1;-1;-1;-1;-1") or b"\r\n" not in adj:
         err("adjacencies.csv needs CRLF and the -1 end line")

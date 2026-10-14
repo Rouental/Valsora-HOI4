@@ -18,6 +18,7 @@ from scipy import ndimage as ndi
 
 from common import MAP_W, MAP_H, CONTINENTS, MOD_NAME, MOD_DIR_NAME, COUNTRIES, PLACEHOLDERS, DECO_UI
 import cultures
+import gazetteer
 import ideologies
 import globe
 import vanilla_parts
@@ -250,6 +251,9 @@ def main():
     states, regions = rj["states"], rj["regions"]
     world = np.load("work/world.npz")
     by_tag = {v[0]: c for c, v in COUNTRIES.items()}
+    # what friends filled in on the Gazetteer (source/gazetteer/, scripts/gazetteer.py)
+    G, gnotes = gazetteer.load(), []
+    gfacts = gazetteer.state_facts(G, lab, state_of, rj["owners"], gnotes) if G else {}
     # owner of every state: from the Countries layer, or the continent's placeholder
     owners = [by_tag[t] for t in rj["owners"]] if "owners" in rj else \
         [CONTINENTS[int(cont[g[0]]) - 1] for g in states]
@@ -379,7 +383,11 @@ def main():
             raise SystemExit(f"source/state_names.json: {named[s]} and {nm} name the same state")
         named[s] = nm
         state_name[s] = nm
-    state_by_name = {nm: s for s, nm in named.items()}
+    by_old_name = {nm: s for s, nm in named.items()}  # nations.py's references keep working after a rename
+    for s, f in gfacts.items():
+        if f.get("name"):
+            named[s] = state_name[s] = f["name"]
+    state_by_name = {**by_old_name, **{nm: s for s, nm in named.items()}}
     # cores of countries released later (nations.CIVIL_WAR), by state name
     extra_cores = defaultdict(list)
     for tag, names in (*nations.CIVIL_WAR.items(), *nations.RELEASABLE.items()):
@@ -391,9 +399,12 @@ def main():
     state_capital = [max(g, key=lambda i: (size[i], -i)) for g in states]
     # the author's cities (Cities layer): the first in a state becomes its victory point,
     # any others extra ones; all named, worth CITY_VP unless the country's capital
-    city_of = {int(p): name for p, name, _, _ in rj.get("cities", [])}
+    city_of = {int(c[0]): c[1] for c in rj.get("cities", [])}
+    # the Gazetteer's cities carry their victory points and the capital
+    city_vp = {int(c[0]): int(c[4]) for c in rj.get("cities", []) if len(c) > 4}
+    city_capital = [int(c[0]) for c in rj.get("cities", []) if len(c) > 5 and c[5]]
     extra_vps = defaultdict(list)
-    for p in city_of:
+    for p in sorted(city_of, key=lambda p: p not in city_capital):  # a capital city first in its state
         s = int(state_of[p])
         if state_capital[s] in city_of and state_capital[s] != p:
             extra_vps[s].append(p)
@@ -433,35 +444,65 @@ def main():
         if c not in capital_state or s < 0 or owners[s] != c:
             raise SystemExit(f"nations.CAPITALS: ({x}, {y}) is not in a state of {tag}")
         capital_state[c] = s
+    # a capital city named on the Gazetteer moves its country's capital there
+    for p in city_capital:
+        s = int(state_of[p])
+        if capital_state.get(owners[s]) != s:
+            gnotes.append(f"Gazetteer: {COUNTRIES[owners[s]][0]}'s capital is {city_of[p]}")
+        capital_state[owners[s]] = s
     for s, g in enumerate(states):
         c = owners[s]
         tag = COUNTRIES[c][0]
         is_cap = capital_state[c] == s
         px = sum(int(size[i]) for i in g)
-        cat = "city" if is_cap else ("small_island" if len(g) <= 2 else
-                                     "town" if len(g) >= 16 else "rural")
+        f = gfacts.get(s, {})
+        cat = f.get("cat") or ("city" if is_cap else ("small_island" if len(g) <= 2 else
+                                                      "town" if len(g) >= 16 else "rural"))
         cap = state_capital[s]
-        bl = [f"\t\t\tinfrastructure = {3 if is_cap else 2}"]
+        # buildings: a capital gets some industry; the Gazetteer's numbers win, within what the
+        # state takes (factories share its building slots; islands cap air and naval bases)
+        build = {"infrastructure": 3 if is_cap else 2}
         if is_cap:
-            bl += ["\t\t\tindustrial_complex = 3", "\t\t\tarms_factory = 2", "\t\t\tair_base = 2"]
+            build.update(industrial_complex=3, arms_factory=2, air_base=2)
             if state_coastal[s]:
-                bl.append("\t\t\tdockyard = 1")
-                port_prov = max((i for i in g if coastal[i] and i in port), key=lambda i: size[i])
-                bl.append(f"\t\t\t{pid[port_prov]} = {{ naval_base = 3 }}")
+                build.update(dockyard=1, naval_base=3)
+        for k, (b, most) in gazetteer.BUILDINGS.items():
+            if f.get(k) is not None:
+                build[b] = min(int(f[k]), most)
+        if not state_coastal[s]:
+            build.pop("dockyard", None)
+            build.pop("naval_base", None)
+        for b, most in gazetteer.ISLAND_MAX.get(cat, {}).items():
+            if build.get(b, 0) > most:
+                build[b] = most
+        slots = gazetteer.CATEGORIES[cat]
+        for b in ("dockyard", "arms_factory", "industrial_complex"):  # over the slots: dockyards go first
+            over = sum(build.get(k, 0) for k in ("industrial_complex", "arms_factory", "dockyard")) - slots
+            if over > 0 and build.get(b):
+                if f:
+                    gnotes.append(f"Gazetteer: state {s + 1} ({state_name[s]}) has {slots} building slots; "
+                                  f"{min(over, build[b])} {b} left out")
+                build[b] -= min(over, build[b])
+        bl = [f"\t\t\t{b} = {v}" for b, v in build.items() if b != "naval_base" and v]
+        if build.get("naval_base"):
+            port_prov = max((i for i in g if coastal[i] and i in port), key=lambda i: size[i])
+            bl.append(f"\t\t\t{pid[port_prov]} = {{ naval_base = {build['naval_base']} }}")
+        res = {r: int(v) for r, v in (f.get("res") or {}).items() if v}
         text = "\n".join([
             "state = {",
             f"\tid = {s + 1}",
             f'\tname = "VAL_STATE_{s + 1}"',
             # 300 people per map pixel (20 until 2026-10-04: the world held 75 million and
-            # no country could man its starting army)
-            f"\tmanpower = {max(15000, px * POP_PER_PX)}",
+            # no country could man its starting army), or the Gazetteer's population
+            f"\tmanpower = {max(100, int(f['pop'])) if f.get('pop') is not None else max(15000, px * POP_PER_PX)}",
+            *(["\tresources = {", *[f"\t\t{r} = {v}" for r, v in res.items()], "\t}"] if res else []),
             f"\tstate_category = {cat}",
             "\thistory = {",
             f"\t\towner = {tag}",
             f"\t\tadd_core_of = {tag}",
             *[f"\t\tadd_core_of = {t}" for t in extra_cores[s]],
-            f"\t\tvictory_points = {{ {pid[cap]} {10 if is_cap else CITY_VP if cap in city_of else 1} }}",
-            *[f"\t\tvictory_points = {{ {pid[e]} {CITY_VP} }}" for e in extra_vps[s]],
+            f"\t\tvictory_points = {{ {pid[cap]} {city_vp.get(cap, 10 if is_cap else CITY_VP if cap in city_of else 1)} }}",
+            *[f"\t\tvictory_points = {{ {pid[e]} {city_vp.get(e, CITY_VP)} }}" for e in extra_vps[s]],
             "\t\tbuildings = {",
             *bl,
             "\t\t}",
@@ -659,8 +700,15 @@ def main():
             rows.append(f"{r + 1};{pos(y, x)};{sz}")
     write("map/weatherpositions.txt", "\n".join(rows) + "\n")
 
-    write("map/supply_nodes.txt", "".join(f"1 {pid[c]}\n" for c in state_capital))
-    write("map/railways.txt", "")
+    # supply hubs: one in every state, unless the Gazetteer places a nation's own (then those
+    # and its capital); railways only from the Gazetteer
+    ghubs = gazetteer.hubs(G, lab, kind, state_of, rj["owners"])
+    nodes = [state_capital[s] for s in range(len(states)) if COUNTRIES[owners[s]][0] not in ghubs]
+    for tag, hs in ghubs.items():
+        nodes += hs + [state_capital[capital_state[by_tag[tag]]]]
+    write("map/supply_nodes.txt", "".join(f"1 {pid[c]}\n" for c in dict.fromkeys(nodes)))
+    rails = gazetteer.railways(G, lab, kind, reg["centre"], rj["adjacency"], gnotes)
+    write("map/railways.txt", "".join(f"{lv} {len(line)} {' '.join(str(pid[i]) for i in line)}\n" for lv, line in rails))
     write("map/positions.txt", "")
 
     # ---------------------------------------------------------------- other map files
@@ -716,11 +764,14 @@ def main():
     # every ruler (and Rouental's other party leaders) is a set character (author)
     ideology_of = ideologies.ideology_of()
     ruling, recruits, leader_blocks, leader_loc, used_names = {}, {}, [], [], set()
+    named_leaders = dict(nations.NAMED_LEADERS)
     for c in present:
         tag = COUNTRIES[c][0]
-        subs = nations.LEADERS.get(tag, [])
+        # the Gazetteer's ruling sub-ideology, parties and ruler, over nations.LEADERS
+        subs = gazetteer.leaders(tag, nations.LEADERS.get(tag, []), G.get(tag, {}).get("politics"),
+                                 tag in nations.HAND_MADE, named_leaders)
         blocks, lloc, ids = cultures.leaders(tag, tag_continent[tag], subs, ideology_of, used_names,
-                                             nations.NAMED_LEADERS)
+                                             named_leaders)
         leader_blocks += blocks
         leader_loc += lloc
         recruits[tag] = [f"recruit_character = {i}" for i in ids]
@@ -871,12 +922,17 @@ def main():
 
     # ---------------------------------------------------------------- localisation
     loc = ["l_english:"]
+    names_of = {}
     for c in present:
         tag, name, adj, _ = COUNTRIES[c]
-        formal = nations.FORMAL_NAMES.get(tag, name)
+        # the Gazetteer's names and titles over nations.FORMAL_NAMES and IDEOLOGY_NAMES
+        (name, formal, adj), per = gazetteer.names(tag, (name, nations.FORMAL_NAMES.get(tag, name), adj),
+                                                   nations.IDEOLOGY_NAMES.get(tag, {}),
+                                                   G.get(tag, {}).get("politics"))
+        names_of[tag] = per
         loc += [f' {tag}:0 "{name}"', f' {tag}_DEF:0 "{formal}"', f' {tag}_ADJ:0 "{adj}"']
         for ideo in IDEOLOGIES:
-            i_name, i_def, i_adj = nations.IDEOLOGY_NAMES.get(tag, {}).get(ideo, (name, formal, adj))
+            i_name, i_def, i_adj = per[ideo]
             loc += [f' {tag}_{ideo}:0 "{i_name}"', f' {tag}_{ideo}_DEF:0 "{i_def}"',
                     f' {tag}_{ideo}_ADJ:0 "{i_adj}"']
     loc += [f' {c}:0 "{COUNTRIES[c][1]}"' for c in CONTINENTS]  # continent names
@@ -892,10 +948,10 @@ def main():
         tag, name, adj, _ = COUNTRIES[c]
         for look in nations.LOOKS.get(tag, {}):
             cos = cosmetic(tag, look)
-            n0, d0, a0 = nations.IDEOLOGY_NAMES.get(tag, {}).get(look, (name, name, adj))
+            n0, d0, a0 = names_of[tag][look]
             loc += [f' {cos}:0 "{n0}"', f' {cos}_DEF:0 "{d0}"', f' {cos}_ADJ:0 "{a0}"']
             for ideo in IDEOLOGIES:
-                n1, d1, a1 = nations.IDEOLOGY_NAMES.get(tag, {}).get(ideo, (n0, d0, a0))
+                n1, d1, a1 = names_of[tag][ideo]
                 loc += [f' {cos}_{ideo}:0 "{n1}"', f' {cos}_{ideo}_DEF:0 "{d1}"', f' {cos}_{ideo}_ADJ:0 "{a1}"']
     for cos, (n0, d0, a0, _, _) in nations.COSMETICS.items():
         loc += [f' {cos}:0 "{n0}"', f' {cos}_DEF:0 "{d0}"', f' {cos}_ADJ:0 "{a0}"']
@@ -912,6 +968,8 @@ def main():
             c = by_tag[key[8:]]
             if c not in capital_state:
                 continue  # that country owns no land at the moment
+            if "cities" in G.get(key[8:], {}):
+                continue  # its cities are the Gazetteer's, named there
             key = int(pid[state_capital[capital_state[c]]])
         if city_names.get(key, name) != name:
             raise SystemExit(f"nations.CITY_NAMES calls {city_names[key]} {name}")
@@ -936,7 +994,10 @@ def main():
     thumb = np.where(pix_kind[..., None] == 1, np.array([96, 140, 70]),
                      np.array([35, 60, 105])).astype(np.uint8)
     Image.fromarray(thumb).resize((512, 256), Image.BOX).save(OUT / "thumbnail.png")
-    print(f"wrote {OUT}: {n} provinces, {len(states)} states, {len(regions)} strategic regions")
+    for m in gnotes:
+        print("note:", m)
+    print(f"wrote {OUT}: {n} provinces, {len(states)} states, {len(regions)} strategic regions"
+          + (f"; Gazetteer facts of {len(G)} nations, {len(rails)} railway lines" if G else ""))
 
 
 if __name__ == "__main__":

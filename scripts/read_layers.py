@@ -32,6 +32,7 @@ from common import (MAP_W, MAP_H, CONT_COLOURS, COUNTRIES, TERRAIN_TYPES,
                     TERRAIN_OCEAN, TERRAIN_LAKE, MAX_BOX)
 from imgio import palette_from_header
 from provinces import adjacency, crossings, repair
+import gazetteer
 import rivers as river_lines
 from regions import anchors
 
@@ -172,6 +173,8 @@ def fill_blanks(code, lab, n, ids, valid, layer):
 
 def main():
     L = load()
+    G = gazetteer.load()  # what friends filled in on the Gazetteer (source/gazetteer/)
+    gnotes = []
 
     # ---------------------------------------------------------------- terrain -> kind
     tpal = palette_from_header("source/palettes/terrain.bmp.header.bin")
@@ -392,7 +395,7 @@ def main():
     # ---------------------------------------------------------------- report
     for m in notes:
         print("note:", m)
-    cities = read_cities(L, lab, kind, state_of)
+    cities = gazetteer.cities(G, read_cities(L, lab, kind, state_of), lab, kind, state_of, owners, gnotes)
     if errors:
         print(f"\n{len(errors)} problem(s) in the .pdn; fix these and rebuild:")
         for k, m in enumerate(errors[:40], 1):
@@ -411,8 +414,11 @@ def main():
     rv = to_palette(L["Rivers"], rpal, list(range(12)), "Rivers")
     if ((rv >= 0) & water).any():
         print(f"note: Rivers: {((rv >= 0) & water).sum()} river pixels on water were ignored")
-    if any(nm in L for nm in OPTIONAL):
-        lines = {nm: (L[nm][..., 3] > 0) if nm in L else np.zeros((H, W), bool) for nm in OPTIONAL}
+    lines = {nm: (L[nm][..., 3] > 0) if nm in L else np.zeros((H, W), bool) for nm in OPTIONAL}
+    g_rivers = gazetteer.rivers(G, lines, rv, lab, kind, state_of, owners)
+    if g_rivers:
+        print(f"note: Gazetteer: {g_rivers} river pixels drawn on the page")
+    if any(nm in L for nm in OPTIONAL) or g_rivers or any("rivers" in f for f in G.values()):
         auto = river_lines.trace(lines["Major Rivers"], lines["Minor Rivers"], ~water)
         drawn = sum(int(m.sum()) for m in lines.values())
         rv = np.where(rv >= 0, rv, np.where(auto != river_lines.NONE, auto, -1))
@@ -422,7 +428,10 @@ def main():
     for m in river_lines.problems(np.where(rv >= 0, rv, river_lines.NONE).astype(np.uint8), ~water):
         print("note: river problem (the game may draw this river wrong):", m)
     rivers = np.where(rv >= 0, rv, np.where(water, 254, 255)).astype(np.uint8)
+    terr = gazetteer.terrain(G, terr, lab, kind, state_of, owners, gnotes)
     terrain_bmp = np.where(water, TERRAIN_OCEAN, terr).astype(np.uint8)
+    for m in gnotes:
+        print("note:", m)
     t_major = majority(terrain_bmp.astype(np.int64), lab, n)
     ptype = [TERRAIN_TYPES[int(t)] if kind[i] == 1 else ("ocean" if kind[i] == 0 else "lakes")
              for i, t in enumerate(t_major)]

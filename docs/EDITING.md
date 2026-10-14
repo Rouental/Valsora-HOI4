@@ -164,6 +164,10 @@ The build can't read the written names (they are just pixels), so I type them in
 A new or far-moved dot stops the build until I've added its name. Two cities in the same
 province, or two dots with the same name, also stop it. Cities in the same state are fine.
 
+For a nation filled in on the **Gazetteer** (the shared page for your friends,
+`docs/GAZETTEER.md`), its cities, state names, terrain, rivers, railways and politics come from
+there: its dots on Necessary Cities are no longer read once its cities are edited on the page.
+
 ### Continents
 
 One colour per continent. It only matters for a few game rules, and blank land takes the

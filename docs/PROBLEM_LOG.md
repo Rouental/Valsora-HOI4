@@ -412,6 +412,19 @@ screenshot and `error.log`)
 
 ## Map problems found while building
 
+**The Gazetteer, found while testing it** (2026-10-14)
+- The ledger rebuilt itself after every saved field, so a field still being typed in could
+  lose its text, and a field losing focus during the rebuild threw "The node to be removed
+  is no longer a child of this node". Fix: panes re-render on the next frame, never inside
+  an event handler, and a pane being typed in waits until focus leaves it.
+- `check_mod.py` didn't know vanilla's `large_island` state category, which the Gazetteer
+  offers. Fix: the categories and their building slots are vanilla's full list (1.19.3
+  `common/state_category`). Check: factories and dockyards over a state's slots, building
+  levels over vanilla's caps, unknown resources, railways between provinces that don't
+  touch (mutation-tested).
+- Text fields ran past the ledger's edge: the page's reset sizes boxes without their padding
+  (`box-sizing: content-box`). Fixed with `border-box`.
+
 **An upload based on an older map** (2026-10-13)
 - The author's file was the map as it stood after the Usnistan update (commit 4a191cb),
   before the ten placeholder states changed hands and before 4,313 provinces were merged

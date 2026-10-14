@@ -197,6 +197,9 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `country_list.py` | by hand, after a build: `dist/world_map_labelled.png` (every country labelled) and `dist/countries.md` / `.csv` (name, full name, ideology, sub-ideology, culture, leader, states), read from the built mod |
 | `nation_sheet.py` | by hand, after a build: `dist/nations_by_continent.png`, every nation in the game under the continent of its capital: flag, ruler at the start (portrait of our own, or a "placeholder" box for a base-game one), full name, ideology and sub-ideology, culture, and a strip of its map colour (author, 2026-10-13) |
 | `collages.py` | by hand, after a build: `dist/flags_collage.png` (every custom flag, and the countries still on a placeholder stripe) and `dist/leaders_collage.png` (every custom leader: own portraits at 2×, named ones with base-game portraits as labelled tiles); `--continent NAME` writes only `dist/flags_<name>.png`, the flags of the nations whose capital is on that continent, naming below them those with land there and their capital elsewhere (2026-10-10, Araseos; 2026-10-12, Yastreovakia) |
+| `facts_export.py` | by hand, after a build: the Gazetteer's map data into `work/gazetteer/` (`index.json`, `world.png`, `n/<TAG>.json` per nation: its states, provinces, cities and politics as built, its flag, its land and the neighbours' around it as province numbers per pixel, in parts, with the rivers), published with the page |
+| `gazetteer.html` | the Gazetteer (see below): the shared page where friends fill in their nations' facts, published as a claude.ai artifact with its own database |
+| `gazetteer.py` | `import FILE.json`: the Gazetteer's facts (a file saved from the page) into `source/gazetteer/<TAG>.json`; `pull DIR`: the same from the atlas as the ArtifactData tool saves it (`list` with `out_dir` of `nations`, `facts` and `requests`), listing the open requests; `status`; and the functions `read_layers.py` (terrain, rivers, cities) and `build_mod.py` (state facts, capitals, railways, supply hubs, names, sub-ideologies) call |
 
 **A clean `check_mod.py` run is the bar for shipping a build.** It was mutation-tested
 (CRLF, X-crossing, missing building row, state split across regions, descriptor
@@ -1307,6 +1310,47 @@ Left loaded on purpose, and noisy in `error.log`:
 - Ideas, MIOs, scripted effects and triggers, ai_areas, operations and achievements. They
   reference vanilla ids, which the previous build showed the game tolerates.
 
+## The Gazetteer (`docs/GAZETTEER.md`)
+
+The author's request (2026-10-14): a tool their friends open by a link to fill in their own
+nations once the states are drawn, instead of the `.pdn` ("tedious and hard to keep track of,
+especially with cities"). It is a claude.ai artifact,
+**https://claude.ai/artifact/PqTTD5FuFJhpL4JKp8sumN**: `scripts/gazetteer.html` published with
+`work/gazetteer/` (`facts_export.py`), declaring `db`, `user` (profile) and `downloads`.
+**Republish** to the same URL after map changes (the facts are kept by map pixel): run
+`python3 scripts/facts_export.py`, then the Artifact tool (from another session, read the URL
+first) publishes `scripts/gazetteer.html` with that `url`, `root` = `work/gazetteer` and `files` =
+`index.json`, `world.png` and every `n/<TAG>.json` (163 files today; a nation that no longer owns
+land: its path as `null`); leave `capabilities` out to keep them.
+- **What it edits**, per nation: state names, population, kind of state, buildings (within
+  slots and vanilla's caps), resources, notes; province terrain (8 types) and supply hubs;
+  cities (one per province, victory points, the capital); rivers (major, minor, erase strokes);
+  railways (level 1-5); names, full titles and adjectives under every government and each
+  ideology, the ruling sub-ideology, head of state and the other parties' sub-ideologies
+  (author, 2026-10-14, later: "Full titles of each nation under each ideology; sub ideologies;
+  a 'requests' option"); status and notes. **Requests** (new sub-ideologies, subject types, map
+  changes ...) are a board on the start page; the owner sets them done or declined and replies.
+  Phone and desktop layouts (the author asked for both).
+- **The atlas** (the artifact's database): `nations/<TAG>` (status, notes, `editors` ids),
+  `facts/<TAG>-<kind>` (`states`, `provinces`, `cities`, `rivers`, `rails`, `politics`; keys
+  "x,y" for states and provinces, ids for the rest, `null` = deleted), `requests/<id>`. Friends
+  must be invited by email as Editors, with no public link (outside viewers can't write); a
+  view-only page keeps edits in the browser and saves a file instead. **To pull it:** ArtifactData
+  `list` of `nations`, `facts` and `requests` (limit 1000, page with the cursor) with one
+  `out_dir`, then `python3 scripts/gazetteer.py pull <out_dir>`, then rebuild (and
+  `river_provinces.py` after new rivers); tell the author the open requests it lists.
+- **In the build** (`source/gazetteer/<TAG>.json`, none yet): a nation's facts win over the `.pdn`
+  and `nations.py` for that nation: its cities replace the Cities layer's dots on its land
+  (`regions.json` cities then carry victory points and the capital flag), its state names
+  replace `state_names.json`'s (the old names still resolve for `nations.CIVIL_WAR` /
+  `RELEASABLE`), its capital city replaces `nations.CAPITALS`, its hubs replace the one per
+  state (plus its capital). Railways take the shortest way over land between the provinces
+  under their points, centre to centre (the page draws the same route); shared stretches are
+  written once at the higher level. Hand-made rulers (`HAND_MADE`) keep their leaders. Without
+  facts the build is byte-identical to before. `check_mod.py` checks railways (adjacent, in
+  states, level 1-5), building caps and slots, resources and manpower (mutation-tested, 7 of 7).
+  `GAZETTEER_DIR` points the build at another folder (tests).
+
 ## Deco UI (`deco_ui/`): part of the mod
 
 **The Valsora Deco UI** is the author's art deco interface, made with another Claude session (v0.1–v0.4.4)
@@ -1364,6 +1408,8 @@ in git history (commit d2d6cd8, `scripts/cartographic.py`). It used
 
 ## Current state
 
+- 2026-10-14, latest: the Gazetteer (https://claude.ai/artifact/PqTTD5FuFJhpL4JKp8sumN), for friends to fill in their nations; no
+  facts imported yet, so the build is unchanged.
 - 2026-10-14, later: no map changes; the Deco UI (v0.5) is part of the mod: every side panel flush under
   the top bar with the medallion's notch, map modes and a gilt minimap. Not yet seen in game.
 - 2026-10-14: no map changes; the game starts in 2036, vanilla's generic events, AI
