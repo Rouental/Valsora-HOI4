@@ -185,6 +185,7 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `cultures.py` | generic portraits, name lists and graphical culture per continent / country |
 | `ideologies.py` | the five ideologies: ideology file, renamed localisation, theocracy icon |
 | `minimap.py` | the minimap (lower right): Valsora's land on parchment instead of vanilla's Earth, its frame, window and slide (2026-10-13) |
+| `globe.py` | the world tension globe (top bar, 10 frames) and its small icon: Valsora instead of Earth (2026-10-14); run alone, `dist/tension_globe_preview.png` |
 | `check_mod.py` | re-reads the built files and checks every rule below |
 | `export_canvas.py` | previews in `dist/` |
 | `package.py` | `dist/valsora_test.zip` |
@@ -1183,12 +1184,23 @@ sprites resolve to files, and that every focus id and prerequisite is valid and 
 - **The minimap is a fixed picture**, not drawn from the map: `gfx/minimap/minimap.dds`
   (sprite `GFX_minimap_world`, vanilla `interface/unitview.gfx`), shown at its own size
   inside `gfx/minimap/border.dds` (drawn at -5, -5). The window sits at the lower right
-  (`interface/minimap.gui`: vanilla x = -343 y = -98, for a picture about 263×97 plus the
-  80 px of map-mode buttons), and `MINIMAP_TOGGLE_SHIFT` (vanilla 270) is how far ctrl+m
+  (`interface/minimap.gui`: vanilla x = -343 y = -98, for its 268×97 picture (border
+  276×105, read from vanilla's own files on 2026-10-14; "about 263" was a guess before) plus
+  the 75 px of map-mode buttons), and `MINIMAP_TOGGLE_SHIFT` (vanilla 270) is how far ctrl+m
   slides it away. Until 2026-10-13 ours showed vanilla's Earth (author's screenshot).
   `minimap.py` draws Valsora's at 194×97 (the map's 2:1) with the window at x = -274 and a
-  slide of 202, as Equestria at War does for its 2:1 minimap; `check_mod.py` checks all
-  four (mutation-tested).
+  slide of 202, as Equestria at War does for its 2:1 minimap (5 px further from the
+  buttons than vanilla's); `check_mod.py` checks all four (mutation-tested). **In game**
+  (2026-10-14, author's screenshot): Valsora's land, beside the map-mode buttons.
+- **The world tension globe is a fixed picture too**: `gfx/interface/world_tension_icon_big_strip.dds`
+  (sprite `GFX_world_tension_icon_big_strip`, vanilla `interface/topbar.gfx`), ten 49×49 frames
+  side by side, one per tenth of world tension (vanilla's Earth catches fire frame by frame),
+  and a small 29×25 icon, `world_tension_icon.dds` (diplomacy view, peace conference). Until
+  2026-10-14 both showed Earth (author's screenshot). `globe.py` draws Valsora's: the land
+  on a lit sphere seen from above Nonscio and Araseos (orthographic, the map read as
+  longitude and latitude), flames rising from below as tension grows (slowly at first), and
+  the small icon ringed with flames; `check_mod.py` checks both sizes (mutation-tested);
+  `python3 scripts/globe.py` writes `dist/tension_globe_preview.png`.
 - Map errors crash on launch unless the game runs with `-debug`. Always test with it.
 
 ## Vanilla content switched off
@@ -1208,6 +1220,8 @@ The following vanilla files are overridden:
   `interface/minimap.gui` (vanilla's, `source/interface/vanilla_minimap.gui`, with the
   window moved), plus `MINIMAP_TOGGLE_SHIFT` in `common/defines/valsora_graphics.lua`.
 - The six portrait files of vanilla and its DLCs (see Cultures).
+- The world tension globe and its small icon (`gfx/interface/world_tension_icon_big_strip.dds`,
+  `world_tension_icon.dds`).
 
 Left loaded on purpose, and noisy in `error.log`:
 - National focus: it holds the generic tree our countries use.

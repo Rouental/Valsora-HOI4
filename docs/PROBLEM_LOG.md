@@ -6,6 +6,28 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**The world tension globe showed Earth** (2026-10-14, author's screenshot)
+- Cause: like the minimap, it is a fixed picture: vanilla's
+  `gfx/interface/world_tension_icon_big_strip.dds`, ten frames of Earth catching fire as
+  tension rises, and the small `world_tension_icon.dds`.
+- Fix: `scripts/globe.py` draws Valsora's at the same sizes from the land: a lit globe seen
+  from above Nonscio and Araseos, flames rising frame by frame (`dist/tension_globe_preview.png`).
+- Check: `check_mod.py` fails if either file is missing or not vanilla's size (mutation-tested).
+
+**Deco UI: the politics screen was a mess** (2026-10-14, author's screenshot of v0.4.5)
+- Cause: it was not the Deco UI's screen. Both mods ship `interface/countrypoliticsview.gui`,
+  and the Deco UI loaded first, so Valsora's own copy won, with the Deco UI's scripted text
+  (title, ruling party, last election, law names, the leader's description) drawn over it
+  where the Deco UI's layout would have had room for it.
+- Fix: the Deco UI (v0.4.7) names Valsora as a dependency (`dependencies = { "Valsora (test
+  map)" }` in both its descriptors), so the launcher always loads it after Valsora.
+
+**Deco UI: the faction logo sat on the button's icon** (2026-10-14, author's screenshot)
+- Cause: the game shows `topbar_faction_empty` (vanilla: a plain plate) in a faction, with the
+  faction's logo over it, and `topbar_faction` (vanilla: crossed axes) out of one. The Deco UI
+  had drawn them the other way round.
+- Fix: swapped (v0.4.7), the logo centred in the button's ring.
+
 **Portrait files and scientists in error.log** (2026-10-14, read with vanilla's own files at last)
 - Cause: vanilla's `portraits/00_portraits.txt` and the DLCs' `01_anniversary`, `02_tiger`,
   `03_mtg`, `027_lar` and `998_scientist_portraits.txt` key their lists by Earth continents
@@ -52,7 +74,7 @@ screenshot and `error.log`)
   `interface/unitview.gfx` and shown by `interface/minimap.gui`), which the mod never
   replaced.
 - Fix: `scripts/minimap.py` draws Valsora's at build time from the land: 194×97, the
-  map's 2:1 (vanilla's Earth is about 263×97, for its 2.75:1 map), pale land on darker
+  map's 2:1 (vanilla's Earth is 268×97, for its 2.75:1 map), pale land on darker
   parchment like vanilla's, in a frame of our own (`gfx/minimap/border.dds`). The window
   is moved right to meet the map-mode buttons (`interface/minimap.gui`, x = -274 instead
   of -343) and the ctrl+m slide that hides it shortened (`MINIMAP_TOGGLE_SHIFT` 202

@@ -3,7 +3,7 @@
 Vanilla draws it from gfx/minimap/minimap.dds (sprite GFX_minimap_world, defined in
 vanilla's interface/unitview.gfx) at the texture's own size, inside a frame,
 gfx/minimap/border.dds, and maps the whole world onto it for the camera rectangle.
-Vanilla's is about 263 x 97 px for its 2.75 : 1 map; Valsora's map is 2 : 1, so ours is
+Vanilla's is 268 x 97 px for its 2.75 : 1 map; Valsora's map is 2 : 1, so ours is
 194 x 97, with the window moved right to meet the map-mode panel (80 px wide) and the
 slide that hides it (ctrl+m) shortened to match, as Equestria at War does for its own
 2 : 1 minimap (195 x 97). The picture is a parchment map in the spirit of vanilla's:

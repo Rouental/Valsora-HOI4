@@ -233,6 +233,15 @@ def main(mod):
                           (mod / "common/defines/valsora_graphics.lua").read_text(encoding="utf-8"))
         if not shift or int(shift[1]) != mw + 8:
             err(f"MINIMAP_TOGGLE_SHIFT should be {mw + 8}, the minimap's width and frame")
+    # the world tension globe and its small icon (scripts/globe.py), at vanilla's sizes
+    for name, size in (("world_tension_icon_big_strip.dds", (490, 49)), ("world_tension_icon.dds", (29, 25))):
+        p = mod / "gfx/interface" / name
+        if not p.exists():
+            err(f"gfx/interface/{name} missing: the world tension globe would show vanilla's Earth")
+            continue
+        gh, gw = struct.unpack_from("<II", p.read_bytes()[:128], 12)
+        if (gw, gh) != size or p.stat().st_size != 128 + gw * gh * 4:
+            err(f"gfx/interface/{name} is {gw}x{gh}: vanilla's is {size[0]}x{size[1]} (A8R8G8B8)")
 
     # ------------------------------------------------------------ countries
     tags = {}

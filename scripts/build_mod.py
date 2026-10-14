@@ -19,6 +19,7 @@ from scipy import ndimage as ndi
 from common import MAP_W, MAP_H, CONTINENTS, MOD_NAME, MOD_DIR_NAME, COUNTRIES, PLACEHOLDERS
 import cultures
 import ideologies
+import globe
 import minimap
 import nations
 import superevents
@@ -303,6 +304,7 @@ def main():
     write_bmp(OUT / "map/world_normal.bmp", normal_map(height))
     textures(pix_kind, height, d_sea)
     minimap.write_files(write, OUT, pix_kind == 1)  # Valsora, not vanilla's Earth
+    globe.write_files(OUT, pix_kind == 1)  # the world tension globe too
 
     def world_y(y, x):
         return height[y, x] / 10
