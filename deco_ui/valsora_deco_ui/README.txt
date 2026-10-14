@@ -1,4 +1,4 @@
-VALSORA DECO UI - v0.4.6 (for HOI4 1.19)
+VALSORA DECO UI - v0.4.7 (for HOI4 1.19)
 ======================================
 
 An art deco interface for the Valsora total conversion: core skin, a rebuilt
@@ -12,9 +12,11 @@ INSTALL
      valsora_deco_ui.mod
      valsora_deco_ui/          (this folder)
    Replace older versions completely (delete the old folder first).
-2. In the launcher, add "Valsora Deco UI" to your playset BELOW the Valsora
+2. In the launcher, add "Valsora Deco UI" to your playset with the Valsora
    mod. Both mods contain interface/countrypoliticsview.gui, and this one was
-   built from Valsora's, so it must load last.
+   built from Valsora's, so it must load last. Since v0.4.7 it names Valsora
+   as a dependency, so the launcher loads it after Valsora on its own (keep
+   it below Valsora in the list anyway).
 3. Start a game. If anything looks wrong, check
      Documents/Paradox Interactive/Hearts of Iron IV/logs/error.log
    for lines mentioning "valsora_deco", a .gui file, a texture or a font.
@@ -22,6 +24,22 @@ INSTALL
 The layout is built for 1920 px of UI width: 1920x1080 at 100% UI scale, or
 2560x1440 at up to 133%.
 
+
+NEW IN v0.4.7
+-------------
+  - The country (politics) screen: in your screenshot it was Valsora's own
+    screen with this mod's text scattered over it, because the Deco UI had
+    loaded before Valsora. It now declares Valsora as a dependency, so it
+    always loads after it and its own politics screen is used. This is the
+    first time you will see that screen as designed: please send a
+    screenshot of it.
+  - The faction button: the game shows the plain picture in a faction and
+    the one with the icon outside one; this mod had them the other way
+    round, so its icon sat under your faction's logo. Swapped, and the logo
+    is now centred in the button's ring.
+  - The world tension globe now shows Valsora instead of Earth. That comes
+    from the Valsora mod itself (update it too), so it shows with or without
+    this mod.
 
 NEW IN v0.4.6
 -------------

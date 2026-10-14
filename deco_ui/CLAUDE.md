@@ -14,7 +14,7 @@ Treat assumed items as hypotheses.
 
 ---------------------------------------------------------------------------------------------------
 
-## 1. Status (v0.4.6)
+## 1. Status (v0.4.7)
 
 v0.4.3 was the first v0.3/v0.4 build the user launched. The user's reports so far cover only the main
 menu: the Valsora background and the social links in the top-left corner show **(in game)**, but in
@@ -23,8 +23,13 @@ v0.4.3 and v0.4.4 none of the menu buttons did. v0.4.4 blamed `Origo` and was wr
 `containerWindowType` and falls back to `UPPER_LEFT` (section 6). v0.4.5 writes every orientation
 bare, which also puts five right-anchored top bar windows back on the right, and moves
 `alwaystransparent` off containers, where the game rejected it too. v0.4.6, the same day, moves five
-continent labels on the menu background to the user's own arrangement (they sent the picture). The
-rest of v0.3/v0.4 (top bar, politics, state panel, focus tree) has still not been seen in game.
+continent labels on the menu background to the user's own arrangement (they sent the picture).
+**(in game, v0.4.5)** the user then played: the top bar shows as designed, its right end included.
+Their report and screenshots (2026-10-14) led to v0.4.7: the politics screen was Valsora's own (the
+Deco UI loaded first; it now names Valsora as a dependency), the faction button's two pictures were
+swapped (section 6), the world tension globe showed Earth (Valsora's main mod now draws a Valsora
+globe at the vanilla path, `scripts/globe.py` there), and the map modes and minimap are still
+unstyled (section 12). The state panel and focus tree have still not been seen in game.
 
 | Area | State |
 |---|---|
@@ -252,9 +257,11 @@ Build order matters. `gen_fonts` runs first because `layout.py` measures strings
   `gfx/interface/topbar/toolbar/international_market_button.dds` (2 frames) at its vanilla path.
 - **Runtime sprite swaps: keep the vanilla sprite name and replace its textures.** Known (or very
   likely, from the sprite names in the .gfx) swaps, all handled this way:
-  - `faction_button`: `GFX_topbar_faction_empty` / `GFX_topbar_faction` (in a faction) →
-    `gfx/interface/factions/ui/topbar_faction(_empty).dds`, 1 frame. **(assumed)** v0.3 retargeted
-    this button to an own sprite, which the swap would have undone.
+  - `faction_button`: `GFX_topbar_faction` out of a faction (vanilla's picture has crossed axes) and
+    `GFX_topbar_faction_empty` in one (vanilla's is a plain plate; the faction's logo, `faction_icon`,
+    is drawn over it) → `gfx/interface/factions/ui/topbar_faction(_empty).dds`, 1 frame. **(in game,
+    v0.4.5:** in a faction the game showed `_empty`; v0.3–v0.4.6 had the two pictures swapped, so our
+    line icon showed under the logo**)**. The logo (a 32 px miniature) is centred in the ring at 0.85.
   - `decision_view_alert_glow`: `GFX_decisions_glow` / `_blue` / `_yellow` / `_green` →
     `gfx/interface/decisionview/decisions_glow*.dds`, 2 frames each (now octagonal halos sized to the
     seal). Vanilla also used the yellow one on `production_button_glow`, which now has its own crown
@@ -555,7 +562,9 @@ Check these first in the user's next screenshots and `error.log`:
 
 Still vanilla art:
 
-- the world tension globe and glow
+- the world tension globe's glow (the globe itself is Valsora's own since 2026-10-14, drawn by the
+  Valsora mod: `gfx/interface/world_tension_icon_big_strip.dds`, 10 frames, and the small
+  `world_tension_icon.dds`; do not replace those here)
 - the supply icon
 - the achievements and dismissed-alert buttons
 - the count badges on the menu buttons
@@ -568,9 +577,12 @@ Still vanilla art:
 
 - **A. Separate mod (current).** `valsora_deco_ui/` goes into `Documents/Paradox Interactive/
   Hearts of Iron IV/mod/` with its `.mod` file; the release is the Valsora repository's
-  `dist/valsora_deco_ui.zip` (`tools/package.py`), which holds both. Load it **after** Valsora in
-  the playset, because both mods ship `interface/countrypoliticsview.gui` (the only shared path as
-  of v0.4.5, checked file by file). It also works on vanilla, in which case the long-name trigger is
+  `dist/valsora_deco_ui.zip` (`tools/package.py`), which holds both. It must load **after** Valsora,
+  because both mods ship `interface/countrypoliticsview.gui` (the only shared path as of v0.4.5,
+  checked file by file). **(in game, v0.4.5)** It loaded first in the user's playset: the politics
+  screen was Valsora's, with the Deco UI's scripted text drawn over it in the wrong places. Since
+  v0.4.7 both descriptors carry `dependencies = { "Valsora (test map)" }` (Valsora's descriptor
+  name, exactly), which makes the launcher load it after Valsora whatever the playset order. It also works on vanilla, in which case the long-name trigger is
   built from Valsora data and stays harmless.
 - **Valsora's own interface files.** Valsora ships `interface/countrypoliticsview.gui` (vanilla's
   with five 13 px party rows) and, since 2026-10-13, its own minimap: `interface/minimap.gui` (the

@@ -794,8 +794,8 @@ guiTypes = {
 				iconType = {
 					name = "faction_icon"
 					spriteType = "GFX_faction_logo_generic_democratic_miniature"
-					position = { x = 4 y = 7 }
-					scale = 0.7
+					position = { x = 8 y = 11 }
+					scale = 0.85
 					alwaystransparent = yes
 				}
 			}

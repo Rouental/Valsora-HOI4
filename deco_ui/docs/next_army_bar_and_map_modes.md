@@ -36,8 +36,12 @@ Container anchors: `MapmodesInterface_Ingame` is LOWER_RIGHT at (-631,-244), and
 - Toggle buttons (day/night, counters, fog of war, radar, allied plans) have 2 frames, probably
   off/on. Check this in game.
 - `GFX_minimap_world` is `gfx/minimap/minimap.dds`, a static picture of the world. The copy of the
-  Valsora mod the first session saw had **no `gfx/minimap/`**. If the minimap shows Earth, Valsora
-  needs its own minimap image, which can be drawn from Valsora's map (provinces.bmp/terrain).
+  Valsora mod the first session saw had **no `gfx/minimap/`**. Since 2026-10-13 Valsora draws its own
+  (`scripts/minimap.py` in the main mod: 194x97 parchment, its frame `border.dds` 205x105, the window
+  moved to x = -274 and `MINIMAP_TOGGLE_SHIFT` 202; **in game** 2026-10-14). Style around it: keep
+  Valsora's picture and window size, or redraw both together (the picture comes from the map).
+- Vanilla's sizes, read from the game files on 2026-10-14: minimap 268x97, border 276x105, map-mode
+  panel 75 px wide to its right (the window's x = -343 = -(268 + 75)).
 
 ## Plan
 

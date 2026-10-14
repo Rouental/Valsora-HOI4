@@ -67,7 +67,7 @@ NAME_FONTS = ("valsora_deco_name_big", "valsora_deco_name")   # big for most nam
 SEAL = dict(x=70, y=125, w=44, h=44)              # decisions seal (octagon, 2 frames like vanilla)
 SEAL_GLOW = 10                                    # the decisions alert glow is drawn this much larger all round
 DEC_BADGES = dict(timeout=(SEAL["x"] + 31, SEAL["y"] - 1), to_take=(SEAL["x"] + 31, SEAL["y"] + 27))
-FACTION_LOGO = dict(dx=4, dy=7, scale=0.7)        # faction logo inside the faction crown (vanilla miniature)
+FACTION_LOGO = dict(dx=8, dy=11, scale=0.85)      # faction logo (32 px miniature) centred in the crown's ring
 FACTION_INIT = dict(dx=24, dy=33, w=24, h=14)     # faction initiative: bottom-right corner of the crown
 
 # ------------------------------------------------------------------ crown buttons

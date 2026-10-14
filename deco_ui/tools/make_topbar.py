@@ -274,9 +274,10 @@ t = set_attrs(t, "dismissed_alerts_button", position=GR(*L.DISMISSED))
 # ---------------------------------------------------------------- 8. menu row (country_menu_window)
 t = set_attrs(t, "country_menu_window", position=G(CMX, CMY), size=("100%%", L.BTN_H), clipping="no")
 rel = lambda k: L.MENU_POS[k] - CMX
-# faction: first crown of the row. The game swaps this button between GFX_topbar_faction_empty and
-# GFX_topbar_faction (in a faction) at runtime, so both vanilla textures are replaced at their paths and
-# the button keeps the vanilla sprite name.
+# faction: first crown of the row. The game swaps this button between GFX_topbar_faction (out of a
+# faction) and GFX_topbar_faction_empty (in one, with the faction's logo, faction_icon, drawn over it) at
+# runtime, so both vanilla textures are replaced at their paths and the button keeps the vanilla sprite
+# name. The logo is centred in the ring of our in-faction picture.
 f0 = rel("faction")
 t = set_attrs(t, "faction_button_container", position=(f0, 0), size=(L.BTN_W, L.BTN_H), clipping="no")
 t = set_attrs(t, "faction_button", sprite="GFX_topbar_faction_empty", position=(0, 0))

@@ -282,8 +282,10 @@ TB = {"intelligence": "intel", "technology": "research", "diplomacy": "diplomacy
 for k, ic in TB.items():
     add("tb_" + k, D + f"button_{k}.dds", 2 * L.BTN_W, L.BTN_H, two_frames(L.BTN_W, L.BTN_H, lambda lit, ic=ic: crown(L.BTN_W, L.BTN_H, ic, lit)))
 # faction (first crown): the game swaps GFX_topbar_faction_empty / GFX_topbar_faction on this button, so
-# the vanilla textures are replaced at their paths (1 frame each, like vanilla). In a faction the faction's
-# logo is drawn over the centre, so that version shows an empty medallion ring instead of the icon.
+# the vanilla textures are replaced at their paths (1 frame each, like vanilla). In a faction the game
+# shows topbar_faction_empty, vanilla's plain plate, and draws the faction's logo over it: ours is an
+# empty medallion ring. Out of a faction it shows topbar_faction (vanilla's crossed axes): our line icon.
+# (Until v0.4.7 the two were the other way round, and in game the icon showed under the logo.)
 def faction_crown(in_faction):
     w, h, c = L.BTN_W, L.BTN_H, 9
     pts = [(c, 0), (w - c, 0), (w, c), (w, h), (0, h), (0, c)]
@@ -293,8 +295,8 @@ def faction_crown(in_faction):
     return plate(pts, "linear-gradient(180deg,#1E2930,#0E1519)") + inner
 
 
-add("tb_faction_empty", "gfx/interface/factions/ui/topbar_faction_empty.dds", L.BTN_W, L.BTN_H, faction_crown(False))
-add("tb_faction", "gfx/interface/factions/ui/topbar_faction.dds", L.BTN_W, L.BTN_H, faction_crown(True))
+add("tb_faction_empty", "gfx/interface/factions/ui/topbar_faction_empty.dds", L.BTN_W, L.BTN_H, faction_crown(True))
+add("tb_faction", "gfx/interface/factions/ui/topbar_faction.dds", L.BTN_W, L.BTN_H, faction_crown(False))
 # production alert glow (vanilla used the decisions' yellow glow there): own crown-shaped halo, 2 frames
 CG = 8
 
