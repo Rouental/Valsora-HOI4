@@ -182,6 +182,9 @@ REPLACED = {
     "GFX_focus_unavailable": ("gfx/interface/focusview/titlebar/focus_unavailable_bg.dds", 1, "spriteType"),
     "GFX_focus_can_start": ("gfx/interface/focusview/titlebar/focus_can_start_bg.dds", 1, "spriteType"),
     "GFX_focus_completed": ("gfx/interface/focusview/titlebar/focus_completed_bg.dds", 1, "spriteType"),
+    # the politics screen's header picture: the game picks one of the two at runtime (v0.4.8)
+    "GFX_pol_view_bg": ("gfx/interface/pol_view_bg.dds", 1, "spriteType"),
+    "GFX_pol_view_bg_no_dlc": ("gfx/interface/pol_view_bg_no_dlc.dds", 1, "spriteType"),
 }
 for _n, (_rel, _fr, _kind) in REPLACED.items():
     if os.path.isfile(M + _rel):
@@ -270,17 +273,53 @@ for name, fd in list(fdefs.items()) + [("tahoma_60", dict(path="gfx/fonts/hoi_ma
     print(f"font {name}: {len(f['chars'])} chars, {len(f['kern'])} kerning pairs, atlas {W}x{H}, line {f['common']['lineHeight']}")
 
 # ------------------------------------------------------------------ replaced vanilla textures keep vanilla sizes
-VANILLA = {
+def tex_size(path):
+    """(width, height) from a DDS or TGA header (vanilla's DDS may be compressed; only the header is read)"""
+    with open(path, "rb") as f:
+        head = f.read(20)
+    if head[:4] == b"DDS ":
+        return int.from_bytes(head[16:20], "little"), int.from_bytes(head[12:16], "little")
+    return int.from_bytes(head[12:14], "little"), int.from_bytes(head[14:16], "little")
+
+
+# the window tiles' sizes come from the sprite definitions in vanilla's .gfx (192x192 ...), not from vanilla's
+# texture files (190x190 ...); the game reads them by the definition
+VANILLA_TILES = {
     "gfx/interface/tiles/tiled_window.dds": (192, 192), "gfx/interface/tiles/tiled_window_2b_border.dds": (192, 192),
     "gfx/interface/tiles/tiled_window2_2b_border.dds": (192, 192), "gfx/interface/tiles/tiled_window_1b_border.dds": (192, 192),
     "gfx/interface/tiles/tiled_window2_1b_border.dds": (192, 192), "gfx/interface/tiles/tiled_window_1b_thin_border.dds": (192, 192),
     "gfx/interface/tiles/tiled_window_thin_border.dds": (192, 192), "gfx/interface/tiles/tiled_window_thin_border2.dds": (192, 192),
     "gfx/interface/tiles/tiled_window_small.dds": (96, 96), "gfx/interface/tiles/tiled_window_small_small.dds": (48, 48),
-    "gfx/interface/tiles/tiled_mini_dialog.dds": (32, 32),
+    "gfx/interface/tiles/tiled_mini_dialog.dds": (32, 32), "gfx/interface/tiles/tiled_plain_bg.dds": (192, 192),
 }
-for rel, size in VANILLA.items():
+for rel, size in VANILLA_TILES.items():
     if read_dds(M + rel).size != size:
         problems.append(f"{rel} size mismatch")
+# replaced at vanilla's size on purpose: the icon whose sprite the game swaps, the tooltip's frame
+SAME_SIZE = ["gfx/interface/pol_view_bg.dds", "gfx/interface/pol_view_bg_no_dlc.dds", "gfx/interface/tiles/tiles_dialog.dds"]
+VG = VANILLA + "gfx/"
+if os.path.isdir(VG):
+    resized = []
+    for f in sorted(glob.glob(M + "gfx/**/*.*", recursive=True)):
+        rel = f[len(M):].replace(os.sep, "/")
+        if not rel.endswith((".dds", ".tga")) or rel.startswith("gfx/fonts/"):
+            continue
+        van = VANILLA + rel
+        # the game loads a .dds of the same name before a .tga, vanilla's included (in game, v0.4.7: the
+        # tooltip .tga never showed, vanilla's tiles_dialog.dds did)
+        if rel.endswith(".tga") and os.path.isfile(van[:-4] + ".dds"):
+            problems.append(f"{rel}: the game loads vanilla's {rel[:-4]}.dds instead; replace the .dds")
+        if os.path.isfile(van) and tex_size(f) != tex_size(van):
+            if rel in SAME_SIZE:
+                problems.append(f"{rel}: {tex_size(f)} but vanilla's is {tex_size(van)}")
+            elif rel not in VANILLA_TILES:
+                resized.append(f"{rel.split('/')[-1]} {tex_size(van)}->{tex_size(f)}")
+    for rel in SAME_SIZE:
+        if not os.path.isfile(M + rel):
+            problems.append(f"{rel} missing")
+    print("replaced vanilla textures drawn at another size (laid out by the mod's .gui):", ", ".join(resized))
+else:
+    problems.append(f"no vanilla gfx at {VG}: replaced textures were not checked (section 3 of CLAUDE.md)")
 for p in glob.glob(M + "gfx/interface/button_*.dds"):
     w, h = map(int, re.search(r"button_(\d+)x(\d+)", p).groups())
     if read_dds(p).size != (w, h):

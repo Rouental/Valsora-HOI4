@@ -824,7 +824,7 @@ guiTypes = {
 				iconType = {
 					name = "decisionview_amount_timeout_bg"
 					spriteType = "GFX_topbar_alert_bg"
-					position = { x = -81 y = 118 }
+					position = { x = -133 y = 112 }
 					alwaystransparent = yes
 					frame = 2
 
@@ -832,7 +832,7 @@ guiTypes = {
 
 				instantTextBoxType = {
 					name ="decisionview_amount_timeout_items"
-					position = { x = -83 y = 118 }
+					position = { x = -135 y = 112 }
 					font = "hoi_16mbs"
 					text = "999"
 					format = center
@@ -844,14 +844,14 @@ guiTypes = {
 				iconType = {
 					name = "decisionview_amount_to_take_bg"
 					spriteType = "GFX_topbar_alert_bg"
-					position = { x = -81 y = 146 }
+					position = { x = -66 y = 112 }
 					alwaystransparent = yes
 					frame = 1
 				}
 
 				instantTextBoxType = {
 					name ="decisionview_amount_to_take_items"
-					position = { x = -83 y = 146 }
+					position = { x = -68 y = 112 }
 					font = "hoi_16mbs"
 					text = "999"
 					format = center

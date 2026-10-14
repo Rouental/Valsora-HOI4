@@ -10,21 +10,9 @@ scripted_gui = {
 		window_name = "valsora_deco_pol_info_window"
 		parent_window_token = politics_tab
 	}
-	valsora_deco_pol_desc = {
+	valsora_deco_pol_sub_ideology = {
 		context_type = player_context
-		window_name = "valsora_deco_pol_desc_window"
-		parent_window_token = politics_tab
-		visible = { valsora_deco_leader_has_desc = yes }
-	}
-	valsora_deco_pol_desc_none = {
-		context_type = player_context
-		window_name = "valsora_deco_pol_desc_none_window"
-		parent_window_token = politics_tab
-		visible = { NOT = { valsora_deco_leader_has_desc = yes } }
-	}
-	valsora_deco_pol_laws = {
-		context_type = player_context
-		window_name = "valsora_deco_pol_laws_window"
+		window_name = "valsora_deco_pol_sub_ideology_window"
 		parent_window_token = politics_tab
 	}
 	valsora_deco_pol_faction_role = {

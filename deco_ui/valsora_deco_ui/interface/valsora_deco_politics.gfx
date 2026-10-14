@@ -68,10 +68,6 @@ spriteTypes = {
 		texturefile = "gfx/interface/valsora_deco/politics/idea_slot.dds"
 	}
 	spriteType = {
-		name = "GFX_valsora_deco_pol_ornament"
-		texturefile = "gfx/interface/valsora_deco/politics/ornament.dds"
-	}
-	spriteType = {
 		name = "GFX_valsora_deco_pol_sub_header"
 		texturefile = "gfx/interface/valsora_deco/politics/sub_header.dds"
 	}
@@ -100,7 +96,7 @@ spriteTypes = {
 	# the popularity pie, larger than vanilla's (size = radius)
 	pieChartType = {
 		name = "GFX_valsora_deco_pol_chart"
-		size = 40
+		size = 44
 	}
 	progressbartype = {
 		name = "GFX_valsora_deco_pol_focus_bar"
@@ -110,6 +106,13 @@ spriteTypes = {
 		textureFile2 = "gfx/interface/valsora_deco/politics/focus_track.dds"
 		size = { x = 176 y = 4 }
 		effectFile = "gfx/FX/progress_startend.lua"
+	}
+	corneredTileSpriteType = {
+		name = "GFX_valsora_deco_pol_body"
+		size = { x = 192 y = 192 }
+		textureFile = "gfx/interface/valsora_deco/politics/body.dds"
+		borderSize = { x = 64 y = 64 }
+		tilingCenter = yes
 	}
 	corneredTileSpriteType = {
 		name = "GFX_valsora_deco_pol_entry_87"

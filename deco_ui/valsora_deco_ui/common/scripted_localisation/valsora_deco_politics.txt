@@ -28,10 +28,206 @@ defined_text = {
 }
 
 defined_text = {
-	name = GetValsoraDecoLeaderDesc
+	name = GetValsoraDecoSubIdeology
 	text = {
-		trigger = { has_country_leader = { character = ROU_roland_cahun ruling_only = yes } }
-		localization_key = ROU_roland_cahun_desc
+		trigger = { has_country_leader_ideology = conservatism }
+		localization_key = conservatism
+	}
+	text = {
+		trigger = { has_country_leader_ideology = liberalism }
+		localization_key = liberalism
+	}
+	text = {
+		trigger = { has_country_leader_ideology = socialism }
+		localization_key = socialism
+	}
+	text = {
+		trigger = { has_country_leader_ideology = populism }
+		localization_key = populism
+	}
+	text = {
+		trigger = { has_country_leader_ideology = agrarianism }
+		localization_key = agrarianism
+	}
+	text = {
+		trigger = { has_country_leader_ideology = constitutional_monarchism }
+		localization_key = constitutional_monarchism
+	}
+	text = {
+		trigger = { has_country_leader_ideology = lordly_republic }
+		localization_key = lordly_republic
+	}
+	text = {
+		trigger = { has_country_leader_ideology = stratocracy }
+		localization_key = stratocracy
+	}
+	text = {
+		trigger = { has_country_leader_ideology = radical_republicanism }
+		localization_key = radical_republicanism
+	}
+	text = {
+		trigger = { has_country_leader_ideology = marxism }
+		localization_key = marxism
+	}
+	text = {
+		trigger = { has_country_leader_ideology = leninism }
+		localization_key = leninism
+	}
+	text = {
+		trigger = { has_country_leader_ideology = stalinism }
+		localization_key = stalinism
+	}
+	text = {
+		trigger = { has_country_leader_ideology = council_communism }
+		localization_key = council_communism
+	}
+	text = {
+		trigger = { has_country_leader_ideology = anarchist_communism }
+		localization_key = anarchist_communism
+	}
+	text = {
+		trigger = { has_country_leader_ideology = agrarian_socialism }
+		localization_key = agrarian_socialism
+	}
+	text = {
+		trigger = { has_country_leader_ideology = anti_revisionism }
+		localization_key = anti_revisionism
+	}
+	text = {
+		trigger = { has_country_leader_ideology = buddhist_socialism }
+		localization_key = buddhist_socialism
+	}
+	text = {
+		trigger = { has_country_leader_ideology = military_junta }
+		localization_key = military_junta
+	}
+	text = {
+		trigger = { has_country_leader_ideology = fascism_ideology }
+		localization_key = fascism_ideology
+	}
+	text = {
+		trigger = { has_country_leader_ideology = corporatism }
+		localization_key = corporatism
+	}
+	text = {
+		trigger = { has_country_leader_ideology = strongman_rule }
+		localization_key = strongman_rule
+	}
+	text = {
+		trigger = { has_country_leader_ideology = technocracy }
+		localization_key = technocracy
+	}
+	text = {
+		trigger = { has_country_leader_ideology = revanchism }
+		localization_key = revanchism
+	}
+	text = {
+		trigger = { has_country_leader_ideology = bleacherism }
+		localization_key = bleacherism
+	}
+	text = {
+		trigger = { has_country_leader_ideology = megacorporation }
+		localization_key = megacorporation
+	}
+	text = {
+		trigger = { has_country_leader_ideology = humanism }
+		localization_key = humanism
+	}
+	text = {
+		trigger = { has_country_leader_ideology = nazism }
+		localization_key = nazism
+	}
+	text = {
+		trigger = { has_country_leader_ideology = gen_nazism }
+		localization_key = gen_nazism
+	}
+	text = {
+		trigger = { has_country_leader_ideology = falangism }
+		localization_key = falangism
+	}
+	text = {
+		trigger = { has_country_leader_ideology = rexism }
+		localization_key = rexism
+	}
+	text = {
+		trigger = { has_country_leader_ideology = emperor_fascism }
+		localization_key = emperor_fascism
+	}
+	text = {
+		trigger = { has_country_leader_ideology = despotism }
+		localization_key = despotism
+	}
+	text = {
+		trigger = { has_country_leader_ideology = oligarchism }
+		localization_key = oligarchism
+	}
+	text = {
+		trigger = { has_country_leader_ideology = feudalism }
+		localization_key = feudalism
+	}
+	text = {
+		trigger = { has_country_leader_ideology = enlightened_absolutism }
+		localization_key = enlightened_absolutism
+	}
+	text = {
+		trigger = { has_country_leader_ideology = elective_monarchy }
+		localization_key = elective_monarchy
+	}
+	text = {
+		trigger = { has_country_leader_ideology = legitimism }
+		localization_key = legitimism
+	}
+	text = {
+		trigger = { has_country_leader_ideology = personal_union }
+		localization_key = personal_union
+	}
+	text = {
+		trigger = { has_country_leader_ideology = khanate }
+		localization_key = khanate
+	}
+	text = {
+		trigger = { has_country_leader_ideology = semi_constitutional_monarchy }
+		localization_key = semi_constitutional_monarchy
+	}
+	text = {
+		trigger = { has_country_leader_ideology = anarchism }
+		localization_key = anarchism
+	}
+	text = {
+		trigger = { has_country_leader_ideology = moderatism }
+		localization_key = moderatism
+	}
+	text = {
+		trigger = { has_country_leader_ideology = centrism }
+		localization_key = centrism
+	}
+	text = {
+		trigger = { has_country_leader_ideology = japan_militarism_ideology }
+		localization_key = japan_militarism_ideology
+	}
+	text = {
+		trigger = { has_country_leader_ideology = theocrat }
+		localization_key = theocrat
+	}
+	text = {
+		trigger = { has_country_leader_ideology = clerical_monarchism }
+		localization_key = clerical_monarchism
+	}
+	text = {
+		trigger = { has_country_leader_ideology = holy_order }
+		localization_key = holy_order
+	}
+	text = {
+		trigger = { has_country_leader_ideology = synodal_rule }
+		localization_key = synodal_rule
+	}
+	text = {
+		trigger = { has_country_leader_ideology = prophetic_rule }
+		localization_key = prophetic_rule
+	}
+	text = {
+		trigger = { has_country_leader_ideology = divine_republicanism }
+		localization_key = divine_republicanism
 	}
 	text = {
 		localization_key = VAL_DECO_POL_NONE
@@ -39,34 +235,206 @@ defined_text = {
 }
 
 defined_text = {
-	name = GetValsoraDecoLawConscription
+	name = GetValsoraDecoSubIdeologyDesc
 	text = {
-		trigger = { has_idea = disarmed_nation }
-		localization_key = disarmed_nation
+		trigger = { has_country_leader_ideology = conservatism }
+		localization_key = conservatism_desc
 	}
 	text = {
-		trigger = { has_idea = volunteer_only }
-		localization_key = volunteer_only
+		trigger = { has_country_leader_ideology = liberalism }
+		localization_key = liberalism_desc
 	}
 	text = {
-		trigger = { has_idea = limited_conscription }
-		localization_key = limited_conscription
+		trigger = { has_country_leader_ideology = socialism }
+		localization_key = socialism_desc
 	}
 	text = {
-		trigger = { has_idea = extensive_conscription }
-		localization_key = extensive_conscription
+		trigger = { has_country_leader_ideology = populism }
+		localization_key = populism_desc
 	}
 	text = {
-		trigger = { has_idea = service_by_requirement }
-		localization_key = service_by_requirement
+		trigger = { has_country_leader_ideology = agrarianism }
+		localization_key = agrarianism_desc
 	}
 	text = {
-		trigger = { has_idea = all_adults_serve }
-		localization_key = all_adults_serve
+		trigger = { has_country_leader_ideology = constitutional_monarchism }
+		localization_key = constitutional_monarchism_desc
 	}
 	text = {
-		trigger = { has_idea = scraping_the_barrel }
-		localization_key = scraping_the_barrel
+		trigger = { has_country_leader_ideology = lordly_republic }
+		localization_key = lordly_republic_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = stratocracy }
+		localization_key = stratocracy_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = radical_republicanism }
+		localization_key = radical_republicanism_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = marxism }
+		localization_key = marxism_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = leninism }
+		localization_key = leninism_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = stalinism }
+		localization_key = stalinism_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = council_communism }
+		localization_key = council_communism_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = anarchist_communism }
+		localization_key = anarchist_communism_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = agrarian_socialism }
+		localization_key = agrarian_socialism_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = anti_revisionism }
+		localization_key = anti_revisionism_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = buddhist_socialism }
+		localization_key = buddhist_socialism_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = military_junta }
+		localization_key = military_junta_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = fascism_ideology }
+		localization_key = fascism_ideology_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = corporatism }
+		localization_key = corporatism_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = strongman_rule }
+		localization_key = strongman_rule_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = technocracy }
+		localization_key = technocracy_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = revanchism }
+		localization_key = revanchism_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = bleacherism }
+		localization_key = bleacherism_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = megacorporation }
+		localization_key = megacorporation_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = humanism }
+		localization_key = humanism_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = nazism }
+		localization_key = nazism_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = gen_nazism }
+		localization_key = gen_nazism_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = falangism }
+		localization_key = falangism_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = rexism }
+		localization_key = rexism_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = emperor_fascism }
+		localization_key = emperor_fascism_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = despotism }
+		localization_key = despotism_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = oligarchism }
+		localization_key = oligarchism_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = feudalism }
+		localization_key = feudalism_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = enlightened_absolutism }
+		localization_key = enlightened_absolutism_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = elective_monarchy }
+		localization_key = elective_monarchy_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = legitimism }
+		localization_key = legitimism_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = personal_union }
+		localization_key = personal_union_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = khanate }
+		localization_key = khanate_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = semi_constitutional_monarchy }
+		localization_key = semi_constitutional_monarchy_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = anarchism }
+		localization_key = anarchism_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = moderatism }
+		localization_key = moderatism_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = centrism }
+		localization_key = centrism_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = japan_militarism_ideology }
+		localization_key = japan_militarism_ideology_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = theocrat }
+		localization_key = theocrat_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = clerical_monarchism }
+		localization_key = clerical_monarchism_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = holy_order }
+		localization_key = holy_order_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = synodal_rule }
+		localization_key = synodal_rule_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = prophetic_rule }
+		localization_key = prophetic_rule_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = divine_republicanism }
+		localization_key = divine_republicanism_desc
 	}
 	text = {
 		localization_key = VAL_DECO_POL_NONE
@@ -74,60 +442,13 @@ defined_text = {
 }
 
 defined_text = {
-	name = GetValsoraDecoLawEconomy
+	name = GetValsoraDecoLastElection
 	text = {
-		trigger = { has_idea = undisturbed_isolation }
-		localization_key = undisturbed_isolation
+		trigger = { has_elections = no }
+		localization_key = VAL_DECO_POL_NO_ELECTIONS
 	}
 	text = {
-		trigger = { has_idea = isolation }
-		localization_key = isolation
-	}
-	text = {
-		trigger = { has_idea = civilian_economy }
-		localization_key = civilian_economy
-	}
-	text = {
-		trigger = { has_idea = low_economic_mobilisation }
-		localization_key = low_economic_mobilisation
-	}
-	text = {
-		trigger = { has_idea = partial_economic_mobilisation }
-		localization_key = partial_economic_mobilisation
-	}
-	text = {
-		trigger = { has_idea = war_economy }
-		localization_key = war_economy
-	}
-	text = {
-		trigger = { has_idea = tot_economic_mobilisation }
-		localization_key = tot_economic_mobilisation
-	}
-	text = {
-		localization_key = VAL_DECO_POL_NONE
-	}
-}
-
-defined_text = {
-	name = GetValsoraDecoLawTrade
-	text = {
-		trigger = { has_idea = closed_economy }
-		localization_key = closed_economy
-	}
-	text = {
-		trigger = { has_idea = limited_exports }
-		localization_key = limited_exports
-	}
-	text = {
-		trigger = { has_idea = export_focus }
-		localization_key = export_focus
-	}
-	text = {
-		trigger = { has_idea = free_trade }
-		localization_key = free_trade
-	}
-	text = {
-		localization_key = VAL_DECO_POL_NONE
+		localization_key = VAL_DECO_POL_LAST_ELECTION_DATE
 	}
 }
 

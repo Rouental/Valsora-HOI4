@@ -115,12 +115,14 @@ add("win_small", "gfx/interface/tiles/tiled_window_small.dds", 96, 96, window(96
 add("win_small_small", "gfx/interface/tiles/tiled_window_small_small.dds", 48, 48, window(48, 48, dict(rule="single")))
 add("mini_dialog", "gfx/interface/tiles/tiled_mini_dialog.dds", 32, 32,
     '<div class="lac" style="position:absolute;inset:0"></div><div class="frame" style="inset:0;border:1px solid #9C7A36"></div>')
-# tooltip background (vanilla ToolTip textBoxType: tiles_dialog.tga, borderSize 18)
-add("tooltip", "gfx/interface/tiles/tiles_dialog.tga", 64, 64,
+# tooltip background (vanilla ToolTip textBoxType: tiles_dialog.tga, borderSize 18). The game loads a .dds of
+# the same name first, and vanilla ships only gfx/interface/tiles/tiles_dialog.dds (96x96): in game (v0.4.7)
+# our .tga never showed, every tooltip kept vanilla's look. So the .dds, at vanilla's size, is replaced.
+add("tooltip", "gfx/interface/tiles/tiles_dialog.dds", 96, 96,
     '<div style="position:absolute;inset:0;background:#0E1519;opacity:.96"></div>'
     '<div class="frame" style="inset:0;border:1px solid #B8954F"></div>'
     '<div class="frame" style="left:1px;right:1px;top:1px;height:2px;background:linear-gradient(90deg,#8B6A2C,#F1DC9C,#8B6A2C)"></div>'
-    '<i class="ck sm tl"></i><i class="ck sm tr"></i><i class="ck sm bl"></i><i class="ck sm br"></i>', fmt="tga")
+    '<i class="ck sm tl"></i><i class="ck sm tr"></i><i class="ck sm bl"></i><i class="ck sm br"></i>')
 
 # ---------------------------------------------------------------- core skin: standard buttons
 def button(w, h):
@@ -449,41 +451,90 @@ def diamond_icon(cx, cy, icon_name, d=26):
             f'<div style="position:absolute;left:{cx - 9}px;top:{cy - 9}px;width:18px;height:18px">{svg(icon_name, 18)}</div>')
 
 
-# section art under everything (replaces the vanilla pol_view_bg)
+def path_d(pts):
+    return "M" + " L".join(f"{x} {y}" for x, y in pts) + " Z"
+
+
+PW, NB, HA = LP.PANEL_W, LP.NOTCH_BOTTOM, LP.HEAD_ART_H
+NOTCH_D = path_d(LP.notch_outline(0))
+
+
+def clipped(html, h, w=PW, region=None):
+    """html clipped to everything but the notch (and to `region`, a path, when given)"""
+    region = region or f"M0 0 H{w} V{h} H0 Z"
+    return (f'<div style="position:absolute;left:0;top:0;width:{w}px;height:{h}px;'
+            f"clip-path:path(evenodd,'{region} {NOTCH_D}')\">{html}</div>")
+
+
+def notch_ring(d_out, d_in, fill):
+    """a band following the notch's outline, from d_in to d_out px out into the panel"""
+    return (f'<div style="position:absolute;left:0;top:0;width:{PW}px;height:{HA}px;background:{fill};'
+            f"clip-path:path(evenodd,'{path_d(LP.notch_outline(d_out))} {path_d(LP.notch_outline(d_in))}')\"></div>")
+
+
+def side_lines(h, top=0):
+    """the panel frame's verticals (as window(): shade at the edge, gilt 1 px in, faint 5 px in)"""
+    out = ""
+    for x, col in ((0, "rgba(0,0,0,.6)"), (1, "#B8954F"), (5, "rgba(201,165,90,.45)")):
+        for xx in (x, PW - 1 - x):
+            out += f'<div style="position:absolute;left:{xx}px;top:{top}px;width:1px;height:{h}px;background:{col}"></div>'
+    return out
+
+
+# the header strip: vanilla's pol_view_bg sprite, which the game swaps for GFX_pol_view_bg_no_dlc at runtime, so
+# both vanilla textures (550x344) are replaced. Lacquer above the notch's bottom, everything but the notch (the
+# top bar's flag medallion and decisions seal show through it), the frame's verticals, a gilt edge round
+# the notch, the band's shadow, the jade wash and the rule under the title. Transparent below.
+HEAD = clipped('<div class="lac" style="position:absolute;inset:0;opacity:.97"></div>'
+               f'<div style="position:absolute;left:0;top:0;width:{PW}px;height:{LP.HEAD_GLOW_H}px;'
+               'background:linear-gradient(180deg,rgba(46,110,96,.22),rgba(46,110,96,0))"></div>'
+               f'<div style="position:absolute;left:0;top:0;width:{PW}px;height:12px;'
+               'background:linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,0))"></div>', NB)
+HEAD += side_lines(NB)
+# the edge round the medallion and seal: gilt over their own outermost pixel (the panel overlaps it by
+# LP.NOTCH_OVERLAP, so no map shows between them), a dark line, and the frame's faint second line
+HEAD += notch_ring(1, 0, "#C9A55A") + notch_ring(2, 1, "rgba(0,0,0,.45)") + notch_ring(5, 4, "rgba(201,165,90,.45)")
+HEAD += f'<div style="position:absolute;left:0;top:0;width:{PW}px;height:{NB}px"><i class="ck tr"></i></div>'
+HEAD += hrule(LP.HX - 2, LP.HEAD_RULE_Y, LP.X1 + 12 - (LP.HX - 2),
+              "linear-gradient(90deg,rgba(201,165,90,.15),#C9A55A 12%,#C9A55A 88%,rgba(201,165,90,.1))")
+for rel in ("gfx/interface/pol_view_bg.dds", "gfx/interface/pol_view_bg_no_dlc.dds"):
+    add("pol_head_" + os.path.basename(rel)[:-4], rel, PW, HA, HEAD)
+
+# the panel below the header strip (a cornered tile running to the bottom of the screen): lacquer, the
+# frame's verticals running through the top edge (they continue the header strip's), the frame along the
+# bottom with the big corner brackets
+add("pol_body", P + "body.dds", 192, 192,
+    '<div class="lac" style="position:absolute;inset:0;opacity:.97"></div>'
+    '<div class="frame" style="left:0;right:0;bottom:0;height:1px;background:rgba(0,0,0,.6)"></div>'
+    '<div class="frame" style="left:0;top:0;bottom:0;width:1px;background:rgba(0,0,0,.6)"></div>'
+    '<div class="frame" style="right:0;top:0;bottom:0;width:1px;background:rgba(0,0,0,.6)"></div>'
+    '<div class="frame" style="left:1px;right:1px;top:-2px;bottom:1px;border:1px solid #B8954F;border-top:none"></div>'
+    '<div class="frame" style="left:5px;right:5px;top:-2px;bottom:5px;border:1px solid rgba(201,165,90,.45);border-top:none"></div>'
+    '<i class="ck bl"></i><i class="ck br"></i>')
+
+# section art over the body, under everything else (its own icon, valsora_deco_pol_sections)
 SEC = ""
-# header: jade wash, double rule under it
-SEC += (f'<div style="position:absolute;left:0;top:0;width:{LP.PANEL_W}px;height:{LP.HEAD_GLOW_H}px;'
-        'background:linear-gradient(180deg,rgba(46,110,96,.22),rgba(46,110,96,0))"></div>')
-SEC += hrule(LP.X0 - 12, LP.HEAD_RULE_Y, LP.X1 - LP.X0 + 24, "linear-gradient(90deg,rgba(201,165,90,.1),#C9A55A 12%,#C9A55A 88%,rgba(201,165,90,.1))")
 # sunburst behind the portrait
 SB = LP.SUNBURST
 SEC += sunburst(SB["cx"], SB["cy"], SB["r"])
 # ideology chip
 C = LP.CHIP
 SEC += f'<div style="position:absolute;left:{C["x"]}px;top:{C["y"]}px;width:{C["w"]}px;height:{C["h"]}px;box-shadow:inset 0 0 0 1px rgba(201,165,90,.45)"></div>'
-# a faint divider between the two grid columns
+# a faint divider between the grid's two columns (its first two rows), a hairline above the sub-ideology row
 gx = LP.GRID_X[1] - 6
-SEC += (f'<div style="position:absolute;left:{gx}px;top:{LP.GRID_LABEL_Y[0]}px;width:1px;height:{LP.GRID_VALUE_Y[1] + LP.GRID_VALUE_H - LP.GRID_LABEL_Y[0]}px;'
+SEC += (f'<div style="position:absolute;left:{gx}px;top:{LP.GRID_LABEL_Y[0]}px;width:1px;height:{LP.GRID_VALUE_Y[1] + LP.GRID_VALUE_H - LP.GRID_LABEL_Y[0] - 8}px;'
         'background:linear-gradient(180deg,transparent,rgba(201,165,90,.35) 20%,rgba(201,165,90,.35) 80%,transparent)"></div>')
-# description: rules above and below
-D_ = LP.DESC
-SEC += hrule(D_["x"], D_["y"], D_["w"], "rgba(201,165,90,.28)") + hrule(D_["x"], D_["y"] + D_["h"], D_["w"], "rgba(201,165,90,.28)")
+SEC += hrule(LP.RX, LP.GRID_LABEL_Y[2] - 9, LP.X1 - LP.RX, "linear-gradient(90deg,rgba(201,165,90,.35),rgba(201,165,90,.05))")
 # section rules after each label (label widths measured from the generated font)
 for key, (x, y, text) in LP.SECTION_LABELS.items():
     lw = L.measure("valsora_deco_section_11", text.upper())
     x0 = x + lw + 12
     SEC += dbl_rule(x0, y + 3, LP.SECTION_ENDS[key] - x0)
-# law cards (icons are static; the law names are a scripted GUI)
-for i, (key, ic) in enumerate(LP.LAW_CARDS):
-    y = LP.LAW_Y0 + i * (LP.LAW_H + LP.LAW_GAP)
-    SEC += (f'<div style="position:absolute;left:{LP.LAWS_X}px;top:{y}px;width:{LP.LAWS_W}px;height:{LP.LAW_H}px;'
-            'box-shadow:inset 0 0 0 1px rgba(201,165,90,.35);background:linear-gradient(90deg,rgba(201,165,90,.08),rgba(201,165,90,0))"></div>')
-    SEC += diamond_icon(LP.LAWS_X + 20, y + LP.LAW_H / 2, ic, 21)
-# national spirits band (mockup: gilt-edged card with a warm wash)
+# national spirits card (mockup: gilt-edged card with a warm wash)
 S_ = LP.SPIRITS
 SEC += (f'<div style="position:absolute;left:{S_["x"]}px;top:{S_["y"]}px;width:{S_["w"]}px;height:{S_["h"]}px;'
         'background:linear-gradient(90deg,rgba(122,42,38,.28),rgba(122,42,38,0) 70%),rgba(6,10,12,.35);box-shadow:inset 0 0 0 1px rgba(201,165,90,.45)"></div>')
-add("pol_sections", P + "pol_sections.dds", LP.PANEL_W, LP.IDEAS_Y, SEC)
+add("pol_sections", P + "pol_sections.dds", PW, LP.IDEAS_Y, clipped(SEC, LP.IDEAS_Y))
 
 # arched portrait frame: lacquer outside the arch hides the portrait's top corners; the sunburst continues
 # across the lacquer so the frame sits on it seamlessly
@@ -495,7 +546,8 @@ rim2 = f"M6.5 {FH - 6.5} L6.5 {8 + r_} A{r_ + 1.5} {r_ + 1.5} 0 0 1 {FW - 6.5} {
 sbx, sby = SB["cx"] - LP.FRAME["x"], SB["cy"] - LP.FRAME["y"]
 add("pol_frame", P + "portrait_frame.dds", FW, FH,
     # panel-coloured lacquer + the same sunburst, clipped to the area outside the arch
-    f'<div style="position:absolute;inset:0;clip-path:path(evenodd,\'M0 0H{FW}V{FH}H0Z {inner}\');background:{LAC},linear-gradient(180deg,#18232A,#111A1F)">'
+    # (the panel's own lacquer, stripes in phase: the frame sits at x 16, a multiple of their 8 px)
+    f'<div style="position:absolute;inset:0;clip-path:path(evenodd,\'M0 0H{FW}V{FH}H0Z {inner}\');background:repeating-linear-gradient(90deg,rgba(255,255,255,.028) 0 1px,transparent 1px 8px),#11191E">'
     f'{sunburst(sbx, sby, SB["r"])}</div>'
     f'<svg width="{FW}" height="{FH}" style="position:absolute;left:0;top:0"><defs>'
     '<linearGradient id="gilt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F6E3A6"/><stop offset="1" stop-color="#8B6A2C"/></linearGradient></defs>'
@@ -605,14 +657,6 @@ S53 = LP.IDEA_SLOT
 add("pol_idea_slot", P + "idea_slot.dds", S53, S53,
     '<div style="position:absolute;left:2px;top:2px;right:2px;bottom:2px;border:1px dashed rgba(201,165,90,.7);background:rgba(11,16,20,.55)"></div>'
     f'<svg width="{S53}" height="{S53}" style="position:absolute;left:0;top:0"><path d="M{S53 / 2} {S53 / 2 - 7}v14M{S53 / 2 - 7} {S53 / 2}h14" stroke="#C9A55A" stroke-width="1.5"/></svg>')
-# ornament shown in the description band when the leader has no description
-add("pol_ornament", P + "ornament.dds", 240, 24,
-    '<div style="position:absolute;left:0;top:11px;width:96px;height:1px;background:linear-gradient(90deg,transparent,#C9A55A)"></div>'
-    '<div style="position:absolute;right:0;top:11px;width:96px;height:1px;background:linear-gradient(90deg,#C9A55A,transparent)"></div>'
-    '<div style="position:absolute;left:108px;top:0;width:24px;height:24px">' + svg("pp", 24) + '</div>'
-    '<div style="position:absolute;left:100px;top:9px;width:6px;height:6px;transform:rotate(45deg);background:#C9A55A"></div>'
-    '<div style="position:absolute;left:134px;top:9px;width:6px;height:6px;transform:rotate(45deg);background:#C9A55A"></div>')
-
 # sub-windows (advisor picker, subjects, exiles, occupied): header band, entry cards
 add("pol_sub_header", P + "sub_header.dds", 500, 30,
     '<div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(201,165,90,.18),rgba(201,165,90,.02))"></div>'

@@ -66,7 +66,10 @@ NAME_FONTS = ("valsora_deco_name_big", "valsora_deco_name")   # big for most nam
 # the faction button moved into the crown row (first slot)
 SEAL = dict(x=70, y=125, w=44, h=44)              # decisions seal (octagon, 2 frames like vanilla)
 SEAL_GLOW = 10                                    # the decisions alert glow is drawn this much larger all round
-DEC_BADGES = dict(timeout=(SEAL["x"] + 31, SEAL["y"] - 1), to_take=(SEAL["x"] + 31, SEAL["y"] + 27))
+# the decision counters (vanilla's 17 px badges, 20 px text) sit on the plate's lower step either side of the
+# seal (v0.4.8; until then both were on its right edge, partly below the plate): the politics panel, drawn
+# over the top bar, leaves the plate and the seal uncovered (layout_politics.NOTCH), so they stay visible
+DEC_BADGES = dict(timeout=(SEAL["x"] - 21, SEAL["y"] - 7), to_take=(SEAL["x"] + SEAL["w"] + 2, SEAL["y"] - 7))
 FACTION_LOGO = dict(dx=8, dy=11, scale=0.85)      # faction logo (32 px miniature) centred in the crown's ring
 FACTION_INIT = dict(dx=24, dy=33, w=24, h=14)     # faction initiative: bottom-right corner of the crown
 

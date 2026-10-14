@@ -3,7 +3,7 @@
 guiTypes = {
 	containerWindowType = {
 		name = "valsora_deco_pol_title_window"
-		position = { x = 190 y = 34 }
+		position = { x = 190 y = 30 }
 		size = { width = 292 height = 46 }
 		Orientation = UPPER_LEFT
 		clipping = no
@@ -22,8 +22,8 @@ guiTypes = {
 	}
 	containerWindowType = {
 		name = "valsora_deco_pol_info_window"
-		position = { x = 198 y = 192 }
-		size = { width = 334 height = 90 }
+		position = { x = 198 y = 186 }
+		size = { width = 334 height = 92 }
 		Orientation = UPPER_LEFT
 		clipping = no
 		instantTextBoxType = {
@@ -39,7 +39,7 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "valsora_deco_pol_last_election"
-			position = { x = 0 y = 56 }
+			position = { x = 0 y = 58 }
 			font = "valsora_deco_value_15"
 			text = "VAL_DECO_POL_LAST_ELECTION_VALUE"
 			format = left
@@ -50,7 +50,7 @@ guiTypes = {
 		}
 		instantTextBoxType = {
 			name = "valsora_deco_pol_pp"
-			position = { x = 170 y = 56 }
+			position = { x = 170 y = 58 }
 			font = "valsora_deco_value_15"
 			text = "VAL_DECO_POL_PP_VALUE"
 			format = left
@@ -61,79 +61,26 @@ guiTypes = {
 		}
 	}
 	containerWindowType = {
-		name = "valsora_deco_pol_desc_window"
-		position = { x = 30 y = 334 }
-		size = { width = 490 height = 80 }
+		name = "valsora_deco_pol_sub_ideology_window"
+		position = { x = 198 y = 302 }
+		size = { width = 334 height = 18 }
 		Orientation = UPPER_LEFT
 		clipping = no
 		instantTextBoxType = {
-			name = "valsora_deco_pol_desc_text"
+			name = "valsora_deco_pol_sub_ideology_text"
 			position = { x = 0 y = 0 }
-			font = "valsora_deco_italic_13"
-			text = "VAL_DECO_POL_DESC"
+			font = "valsora_deco_value_15"
+			text = "VAL_DECO_POL_SUB_IDEOLOGY_VALUE"
 			format = left
-			maxWidth = 490
-			maxHeight = 80
+			maxWidth = 334
+			maxHeight = 18
 			fixedsize = yes
-			alwaystransparent = yes
-		}
-	}
-	containerWindowType = {
-		name = "valsora_deco_pol_desc_none_window"
-		position = { x = 155 y = 362 }
-		size = { width = 240 height = 24 }
-		Orientation = UPPER_LEFT
-		clipping = no
-		iconType = {
-			name = "valsora_deco_pol_ornament"
-			spriteType = "GFX_valsora_deco_pol_ornament"
-			position = { x = 0 y = 0 }
-			alwaystransparent = yes
-		}
-	}
-	containerWindowType = {
-		name = "valsora_deco_pol_laws_window"
-		position = { x = 314 y = 450 }
-		size = { width = 212 height = 102 }
-		Orientation = UPPER_LEFT
-		clipping = no
-		instantTextBoxType = {
-			name = "valsora_deco_pol_law_conscription_value"
-			position = { x = 0 y = 14 }
-			font = "valsora_deco_body_13"
-			text = "VAL_DECO_POL_LAW_CONSCRIPTION_VALUE"
-			format = left
-			maxWidth = 212
-			maxHeight = 15
-			fixedsize = yes
-			pdx_tooltip = "VAL_DECO_POL_LAWS_TT"
-		}
-		instantTextBoxType = {
-			name = "valsora_deco_pol_law_economy_value"
-			position = { x = 0 y = 50 }
-			font = "valsora_deco_body_13"
-			text = "VAL_DECO_POL_LAW_ECONOMY_VALUE"
-			format = left
-			maxWidth = 212
-			maxHeight = 15
-			fixedsize = yes
-			pdx_tooltip = "VAL_DECO_POL_LAWS_TT"
-		}
-		instantTextBoxType = {
-			name = "valsora_deco_pol_law_trade_value"
-			position = { x = 0 y = 86 }
-			font = "valsora_deco_body_13"
-			text = "VAL_DECO_POL_LAW_TRADE_VALUE"
-			format = left
-			maxWidth = 212
-			maxHeight = 15
-			fixedsize = yes
-			pdx_tooltip = "VAL_DECO_POL_LAWS_TT"
+			pdx_tooltip = "VAL_DECO_POL_SUB_IDEOLOGY_TT"
 		}
 	}
 	containerWindowType = {
 		name = "valsora_deco_pol_faction_role_window"
-		position = { x = 128 y = 689 }
+		position = { x = 128 y = 547 }
 		size = { width = 82 height = 12 }
 		Orientation = UPPER_LEFT
 		clipping = no

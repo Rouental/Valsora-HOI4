@@ -100,6 +100,17 @@ def rouental_oob(state_vp):
     return "\n".join(out + ["}", ""])
 
 
+# Layout test (author, 2026-10-14: "add 15 or so spirits to The Free State of Devlon, so I can use
+# it to test" how the politics screen shows many national spirits). No effects; remove this list and
+# its entry in HISTORY when the test is done.
+TEST_SPIRITS = ["agrarian_society", "air_bonus", "anti_air", "armor", "build_infrastructure",
+                "central_management", "coastal_navy", "convoys", "economic_increase", "fuel_reserves",
+                "infantry_bonus", "intel_bonus", "manpower_bonus", "navy_bonus", "production_bonus"]
+TEST_SPIRIT_IDEAS = "ideas = {\n\tcountry = {\n" + "".join(
+    f"\t\tDVL_test_spirit_{i} = {{\n\t\t\tpicture = generic_{pic}\n\t\t\tallowed = {{ always = no }}\n"
+    "\t\t\tremoval_cost = -1\n\t\t}\n" for i, pic in enumerate(TEST_SPIRITS, start=1)) + "\t}\n}\n"
+
+
 # extra lines appended to history/countries/<TAG> - <Name>.txt
 HISTORY = {
     # recruit_character only works in history files, so Communist Merlovich is
@@ -120,6 +131,8 @@ HISTORY = {
             "diplomatic_relation = { country = KIL relation = guarantee active = yes }"],
     # the civil war: Brillagne and the Loyal Army are led by copies of Rouental's own
     # theocratic and authoritarian rulers (one character can't serve two countries)
+    # the politics screen's layout test (TEST_SPIRITS)
+    "DVL": ["add_ideas = { " + " ".join(f"DVL_test_spirit_{i}" for i in range(1, len(TEST_SPIRITS) + 1)) + " }"],
     "BRL": ["recruit_character = BRL_mahaut_vi"],
     "RLA": ["recruit_character = RLA_serelle_cahun"],
     # Normania is Anglost's dominion (author, 2026-10-04)
@@ -693,6 +706,9 @@ FORMAL_NAMES = {
 }
 
 LOCALISATION = [
+    *[f' DVL_test_spirit_{i}:0 "Test Spirit {i}"' for i in range(1, len(TEST_SPIRITS) + 1)],
+    *[f' DVL_test_spirit_{i}_desc:0 "A placeholder with no effect, to test how the politics screen shows many '
+      'national spirits."' for i in range(1, len(TEST_SPIRITS) + 1)],
     ' ROU_mahaut_vi:0 "Mahaut VI"',
     ' ROU_accept_reality:0 "Accept Reality"',
     ' ROU_accept_reality_desc:0 "The Cahuns bicker; the faithful pray. Mahaut VI answers the prayers."',
@@ -1370,6 +1386,7 @@ def write_files(write, out, state_ids, state_vp):
     write("common/units/names_divisions/ROU_names_divisions.txt", rouental_division_names(), bom=True)
     write("history/units/ROU_2036.txt", rouental_oob(state_vp), bom=True)
     write("common/ideas/valsora_ideas.txt", FEUDAL_ARMY)
+    write("common/ideas/valsora_test_ideas.txt", TEST_SPIRIT_IDEAS)
     write("common/opinion_modifiers/valsora_opinion_modifiers.txt", OPINION_MODIFIERS)
     write("common/scripted_effects/valsora_opinion_effects.txt", OPINION_EFFECTS)
     write("common/ai_strategy/valsora_reibonnaise.txt", AI_STRATEGY)

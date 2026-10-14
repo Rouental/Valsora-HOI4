@@ -14,7 +14,7 @@ Treat assumed items as hypotheses.
 
 ---------------------------------------------------------------------------------------------------
 
-## 1. Status (v0.4.7)
+## 1. Status (v0.4.8)
 
 v0.4.3 was the first v0.3/v0.4 build the user launched. The user's reports so far cover only the main
 menu: the Valsora background and the social links in the top-left corner show **(in game)**, but in
@@ -30,6 +30,14 @@ Deco UI loaded first; it now names Valsora as a dependency), the faction button'
 swapped (section 6), the world tension globe showed Earth (Valsora's main mod now draws a Valsora
 globe at the vanilla path, `scripts/globe.py` there), and the map modes and minimap are still
 unstyled (section 12). The state panel and focus tree have still not been seen in game.
+**(in game, v0.4.7)** the user's first screenshots of the politics screen (2026-10-14) led to v0.4.8: the
+panel hid the top bar's medallion below y 78 (side panels are drawn over the top bar) and left a gap under
+the band; the header behind the portrait was vanilla's art (a runtime sprite swap); tooltips were
+vanilla's (a .dds shadowed our .tga); the leader's description and the law cards took room the advisors &
+laws list needed. v0.4.8 puts the panel flush under the band with a notch round the medallion and seal,
+replaces both header textures and the tooltip's .dds, drops the description (the portrait's own tooltip
+has it) and the law cards, adds the sub-ideology, moves the spirits up beside the popularity, and the
+list starts 156 px higher.
 
 | Area | State |
 |---|---|
@@ -37,7 +45,7 @@ unstyled (section 12). The state panel and focus tree have still not been seen i
 | Icons (`tools/icons.py`) | The mockup's 24 px gilt line icons, with modern subjects for army, deployment, air and convoys. Sheet: `build/icon_sheet.png`. |
 | Top bar (`interface/topbar.gui`) | Re-laid to the mockup. v0.4: **decisions** is the seal under the flag; **faction** moved into the crown row (first slot). |
 | Alerts row (`interface/alerts.gui`) | v0.3: moved below the band, under the menu buttons. |
-| Politics screen (`interface/countrypoliticsview.gui`) | v0.4: the Government mockup's layout (no Court panel), with scripted GUIs for what the game's screen lacks. |
+| Politics screen (`interface/countrypoliticsview.gui`) | v0.4: the Government mockup's layout (no Court panel), with scripted GUIs for what the game's screen lacks. v0.4.8: flush under the top bar, notched round the medallion; no description or law cards; sub-ideology; spirits beside popularity. |
 | State / province panel (`interface/countrystateview.gui`) | v0.4: the mockup's arrangement for the state part (flag + name header, stats row, slots, buildings); the province part keeps the game's positions. |
 | Focus tree (`interface/nationalfocusview.gui`) | v0.4: window chrome, plates, medallions, filters, detail pop-up, legend. Focus icons untouched. |
 | Main menu (`interface/frontendmainview.gui` + background) | v0.3; v0.4.5 fixed the invisible button row (a quoted `Orientation`). Background and social links **(in game)**. |
@@ -238,7 +246,23 @@ Build order matters. `gen_fonts` runs first because `layout.py` measures strings
 - `pieChartType` is drawn centred on x with its top at y, so the centre is `(x, y + r)`. Its `.gfx`
   `size` is the **radius**; the politics pie uses its own `GFX_valsora_deco_pol_chart` (radius 40).
 - An element added *before* the vanilla ones in a container draws underneath them. The decorative
-  layer in `make_topbar` is inserted first for that reason.
+  layer in `make_topbar` is inserted first for that reason. The same holds for vanilla's own order:
+  `political_title` comes before `pol_view_bg` in vanilla's file, so once `pol_view_bg` became an opaque
+  header picture (v0.4.8) the title vanished under it in the preview; it is emptied and a label of our own
+  is inserted after the picture.
+- **(in game, v0.4.7)** **Side panels are drawn over the top bar.** The politics panel (top at y 78) hid the
+  medallion's name plate and the decisions seal. v0.4.8 puts the panel at the band's bottom (y 62,
+  `layout_politics.TOP`) and leaves a **notch** the shape of the medallion and seal
+  (`layout_politics.NOTCH_POLY`, from the same numbers gen_textures draws the medallion with): the window's
+  own background is a clear sprite with `alwaystransparent = yes` in its background block, and the
+  panel's look and click-catching come from children that stay out of the notch: a body container from
+  the notch's bottom down (`valsora_deco_pol_body`, a cornered tile), invisible containers with clear
+  backgrounds beside the notch (`valsora_deco_pol_block_*`), the section art and the header picture
+  (`pol_view_bg`, click-through). **(assumed)** clicks in the notch reach the top bar's seal beneath; the
+  other side panels still open at vanilla's y 78 with the gap.
+- **(inferred from vanilla, in game)** a child container with `height = 100%%` runs from its own position
+  to the parent's bottom edge (vanilla's ideas list sits at y 425 with 100%%, and its scroll bar ends at
+  the bottom of the screen), so the body container ends at the screen's bottom.
 
 ### Sprites and textures
 
@@ -255,6 +279,15 @@ Build order matters. `gen_fonts` runs first because `layout.py` measures strings
 - **(in game)** The engine swaps `GFX_topbar_international_market` onto `diplomacy_button` at
   runtime, which is why v0.2 showed a vanilla icon there. The fix is to replace the texture
   `gfx/interface/topbar/toolbar/international_market_button.dds` (2 frames) at its vanilla path.
+- **(in game, v0.4.7)** **A .gfx or .gui that names a `.tga` gets a `.dds` of the same name first,
+  vanilla's included.** The tooltip (`ToolTip` in vanilla `core.gui`: `tiles_dialog.tga`) kept vanilla's
+  look because vanilla ships only `gfx/interface/tiles/tiles_dialog.dds` (96x96) and our `.tga` lost to it.
+  v0.4.8 replaces the `.dds` at vanilla's size; `validate_preview` flags any mod `.tga` that a vanilla
+  `.dds` of the same name shadows. Tooltips are one style for the whole game (no per-element styling).
+- **Replaced textures' sizes.** The window tiles follow the `size` in vanilla's `.gfx` (192x192), not
+  vanilla's texture files (190x190 for `tiled_plain_bg` etc.): keep 192. Textures drawn at another size on
+  purpose (buttons re-laid by the mod, the seal's glows, the crown buttons, the focus plates) are listed
+  by `validate_preview` as information; `SAME_SIZE` there lists those that must stay vanilla's size.
 - **Runtime sprite swaps: keep the vanilla sprite name and replace its textures.** Known (or very
   likely, from the sprite names in the .gfx) swaps, all handled this way:
   - `faction_button`: `GFX_topbar_faction` out of a faction (vanilla's picture has crossed axes) and
@@ -268,6 +301,9 @@ Build order matters. `gen_fonts` runs first because `layout.py` measures strings
     glow sprite.
   - focus name plates: `GFX_focus_unavailable` / `_can_start` / `_completed` →
     `gfx/interface/focusview/titlebar/focus_*_bg.dds`. The joint-focus variants stay vanilla.
+  - the politics header `pol_view_bg`: `GFX_pol_view_bg` / `GFX_pol_view_bg_no_dlc` (by DLC) →
+    `gfx/interface/pol_view_bg(_no_dlc).dds`, 550x344 **(in game, v0.4.7:** our sprite on that icon never
+    showed; vanilla's metal header with its round sockets did**)**. Both carry the same header strip.
   - `validate_preview.REPLACED` lists these so previews can draw them.
 - **(in game)** Flags are not smoothed when scaled, so any scaling pixelates them. Show them at
   native size. The large flag is 82x52, set by `NDefines_Graphics.NGraphics.COUNTRY_FLAG_TEX_WIDTH/
@@ -423,6 +459,17 @@ role). It also writes `common/scripted_localisation/valsora_deco_politics.txt` a
 read from Valsora's `common/characters`; re-run when leaders are added). It adds 13 elements and
 keeps all vanilla ones. Balance of power (Valsora has none) sits at the right of the spirits label.
 
+**make_politics.py, v0.4.8** (the user's screenshots): the panel sits flush under the band with a notch
+round the medallion and seal (section 6); the description band, the ornament and the law cards are gone
+(the description is the portrait's own tooltip; the laws are in the list); the grid has a fifth, full-width
+cell, the **sub-ideology** (scripted localisation over `has_country_leader_ideology`, generated from the
+`types` blocks of Valsora's ideologies, names `<key>`, descriptions `<key>_desc` as its tooltip; the
+longest name is measured against the cell); "Last election" is None with `has_elections = no`; the
+national spirits sit beside the popularity (2 rows of 4 large, then 7 small a row in the over-defined
+grid); the list starts at `IDEAS_Y` 666. The scripted GUIs are title, info grid, sub-ideology and faction
+role; the description trigger file is deleted. `preview_screens` also writes
+`build/preview_politics_many_spirits.png` (15 spirits, as Devlon's test).
+
 **make_stateview.py.** The panel that opens on a province click. The state part follows the mockup:
 owner flag in a gilt well and the state name (gilt capitals) with the game's "owner" text as a
 subtitle; a stats row (victory points | manpower | resources) with the mod's labels; shared building
@@ -527,16 +574,21 @@ Check these first in the user's next screenshots and `error.log`:
      topbar-local vs screen)
    - Terrabis-Seran and other long names use the small font on 1-2 lines
 2. Daily political power format `+=2` shows like "+1.80".
-3. **Z-order:** does the top bar medallion draw over side panels? The politics header is kept clear
-   of it either way.
-4. **Politics screen (v0.4)**
+3. **Z-order (answered, in game v0.4.7):** side panels draw over the top bar. v0.4.8's politics panel
+   leaves a notch for the medallion; check the seal still opens decisions with the panel open, and that
+   the header's empty parts don't click through to the map.
+4. **Politics screen (v0.4, v0.4.8)**
+   - (v0.4.8) the panel flush under the band; medallion, name and seal visible with the gilt edge round
+     them, no map between; the decision counters either side of the seal; the deco header art (not
+     vanilla's); tooltips in the deco frame; the sub-ideology and its tooltip; "None" for no elections;
+     Devlon's 15 test spirits as small icons in the spirits card
    - every scripted value shows: ruling party · %, last election, political power and daily change,
-     the three laws, the leader description (Roland II) / ornament (others), faction role
-   - the pie (own, radius 40) sits in its ring; the legend diamonds take the party colours
+     faction role
+   - the pie (own, radius 44 since v0.4.8) sits in its ring; the legend diamonds take the party colours
    - the ideology icon in the chip (scale .34 is a guess)
    - the faction card's frames (1 in a faction, 2 create)
    - the focus card opens the focus tree; its progress bar fills; the "choose a focus" glow
-   - the spirits band wraps at 8; the advisors & laws list scrolls (it starts lower than before)
+   - the spirits switch to small icons past 8; the advisors & laws list scrolls and reaches the bottom
 5. **Top bar (v0.4)**: the decisions seal opens decisions and shows its count badges and glow; the
    faction crown swaps between the plain and the in-faction version and shows the logo.
    **(v0.4.5)** command power, nukes and the army / navy / air buttons sit at the right end (until

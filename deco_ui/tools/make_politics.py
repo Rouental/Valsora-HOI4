@@ -9,9 +9,14 @@ GUIs docked to the politics window (common/scripted_guis/valsora_deco_politics.t
 
   title        the country's full name                     [ROOT.GetNameDefCap]
   info         ruling party + its popularity, last election, political power and its daily change
-  description  the leader's description (from the Valsora characters' country_leader desc), or an ornament
-  laws         the current conscription / economy / trade law (scripted localisation over the law ideas)
+  sub-ideology the ruling leader's sub-ideology, its description as the tooltip (scripted localisation
+               over has_country_leader_ideology, from the Valsora mod's ideologies)
   faction role "Leader" / "Member"
+
+v0.4.8: the panel sits flush under the top bar with a notch around the top bar's flag medallion and
+decisions seal (layout_politics.NOTCH), which show through it; the leader's description is only in the
+portrait's own tooltip; the law cards are gone (the laws are in the list below); the header picture is
+vanilla's pol_view_bg sprite (the game swaps it at runtime, so its textures are replaced at their paths).
 
 Positions come from layout_politics.py. Also writes the scripted GUIs, scripted localisation, the trigger
 for "has a description", the sprites (.gfx) and the localisation.
@@ -37,7 +42,6 @@ NONE = "GFX_valsora_deco_none"
 D = "GFX_valsora_deco_pol_"
 LABEL, SECTION, HEADING = "valsora_deco_label", "valsora_deco_section_11", "valsora_deco_heading_24"
 BODY15, BODY13, VALUE15, VALUE12 = "valsora_deco_body_15", "valsora_deco_body_13", "valsora_deco_value_15", "valsora_deco_value_12"
-ITALIC = "valsora_deco_italic_13"
 
 
 def at(path, **kw):
@@ -57,14 +61,41 @@ def new_text(name, text, font, x, y, w, h, fmt="left", valign=True):
             f'\t\t\tmaxHeight = {h}\n\t\t\tfixedsize = yes{va}\n\t\t\talwaystransparent = yes\n\t\t}}')
 
 
+# ---------------------------------------------------------------- the panel: flush under the top bar
+# The panel is drawn over the top bar, so it leaves a notch where the flag medallion and decisions seal
+# hang: its own background is clear and lets clicks through, and the panel's look and its click-catching
+# come from children that stay out of the notch (in game: whether clicks reach the seal through it).
+at(R, position=(LP.PANEL_X - 600, LP.TOP), show_position=(LP.PANEL_X, LP.TOP))
+t = GP.set_background(t, R, "GFX_valsora_deco_clear")
+t = re.sub(r'(name = "countrypoliticsview".*?background\s*=\s*\{[^{}]*?quadTextureSprite\s*=\s*"GFX_valsora_deco_clear")',
+           r'\1\n\t\t\talwaystransparent = yes', t, count=1, flags=re.S)
+assert t.count("alwaystransparent = yes", 0, t.index('name ="production_header_bg"')) == 1, "panel background not click-through"
+under = ("\n\t\t# ===== Valsora Deco: the panel below the header strip, invisible click-catchers beside the notch, "
+         "the section art =====\n"
+         f'\t\tcontainerWindowType = {{\n\t\t\tname = "valsora_deco_pol_body"\n'
+         f'\t\t\tposition = {{ x = 0 y = {LP.NOTCH_BOTTOM} }}\n\t\t\tsize = {{ width = {LP.PANEL_W} height = 100%% }}\n'
+         f'\t\t\tbackground = {{\n\t\t\t\tname = "valsora_deco_pol_body_bg"\n\t\t\t\tquadTextureSprite = "{D}body"\n\t\t\t}}\n\t\t}}')
+for i, (x0, y0, x1, y1) in enumerate(LP.blockers()):
+    under += (f'\n\t\tcontainerWindowType = {{\n\t\t\tname = "valsora_deco_pol_block_{i}"\n'
+              f'\t\t\tposition = {{ x = {x0} y = {y0} }}\n\t\t\tsize = {{ width = {x1 - x0} height = {y1 - y0} }}\n'
+              f'\t\t\tbackground = {{\n\t\t\t\tname = "valsora_deco_pol_block_{i}_bg"\n\t\t\t\tquadTextureSprite = "GFX_valsora_deco_clear"\n\t\t\t}}\n\t\t}}')
+under += new_icon("valsora_deco_pol_sections", D + "sections", 0, 0) + "\n"
+t = GP.insert_child(t, R, under, first=True)
+
 # ---------------------------------------------------------------- header
 at(f"{R}>production_header_bg", sprite=NONE)
 H = LP.HEAD_LABEL
+# the game's title is drawn before pol_view_bg, which is now the header picture, so it stays empty and a
+# label of our own is drawn after the picture (below)
 at(f"{R}>political_title", position=(H["x"], H["y"]), font=LABEL, maxWidth=H["w"], maxHeight=H["h"],
-   text="VAL_DECO_POL_GOVERNMENT")
+   text="VAL_DECO_POL_NONE")
 at(f"{R}>close_button", sprite=D + "close", position=(LP.CLOSE["x"], LP.CLOSE["y"]))
 at(f"{R}>rules", position=LP.RULES)
-at(f"{R}>pol_view_bg", sprite=D + "sections", position=(0, 0))
+# the game swaps this icon's sprite to GFX_pol_view_bg or GFX_pol_view_bg_no_dlc at runtime (in game, v0.4.7:
+# vanilla's header art showed), so it keeps the vanilla name and its textures are replaced (gen_textures.py)
+at(f"{R}>pol_view_bg", sprite="GFX_pol_view_bg", position=(0, 0), alwaystransparent="yes")
+t = GP.insert_after(t, f"{R}>pol_view_bg", new_text("valsora_deco_pol_head_label", "VAL_DECO_POL_GOVERNMENT", LABEL,
+                                                     H["x"], H["y"], H["w"], H["h"], valign=False))
 
 # ---------------------------------------------------------------- head of state
 at(f"{R}>leader", position=(LP.PORTRAIT["x"], LP.PORTRAIT["y"]))
@@ -77,7 +108,7 @@ added = "\n\t\t# ===== Valsora Deco: ribbon, labels (static text; the values are
 added += new_icon("valsora_deco_pol_ribbon", D + "ribbon", rb["x"], rb["y"])
 added += new_text("valsora_deco_pol_head_of_state", "VAL_DECO_POL_HEAD_OF_STATE", LABEL, rb["x"], rb["y"] + 4, rb["w"],
                   rb["h"] - 8, "centre")
-for i, key in enumerate(["RULING_PARTY", "ELECTIONS", "LAST_ELECTION", "POLITICAL_POWER"]):
+for i, key in enumerate(["RULING_PARTY", "ELECTIONS", "LAST_ELECTION", "POLITICAL_POWER", "SUB_IDEOLOGY"]):
     col, row = i % 2, i // 2
     added += new_text(f"valsora_deco_pol_label_{key.lower()}", f"VAL_DECO_POL_{key}", LABEL, LP.GRID_X[col],
                       LP.GRID_LABEL_Y[row], LP.GRID_W[col], 12, valign=False)
@@ -86,10 +117,6 @@ for key, (x, y, _) in LP.SECTION_LABELS.items():
         continue   # the game's own "National Spirits" title is restyled instead
     added += new_text(f"valsora_deco_pol_section_{key}", f"VAL_DECO_POL_SECTION_{key.upper()}", SECTION, x, y, 200, 12,
                       valign=False)
-for i, (key, _) in enumerate(LP.LAW_CARDS):
-    y = LP.LAW_Y0 + i * (LP.LAW_H + LP.LAW_GAP)
-    added += new_text(f"valsora_deco_pol_law_{key}", f"VAL_DECO_POL_LAW_{key.upper()}", LABEL, LP.LAWS_X + 40, y + 4,
-                      LP.LAWS_W - 46, 10, valign=False)
 t = GP.insert_after(t, f"{R}>leader_name", added)
 
 # ideology chip: the game's ideology icon (small) and ideology text
@@ -101,7 +128,7 @@ at("ruling_party_info>ideology", position=(CT["x"], CT["y"]), font=LABEL, maxWid
 # elections: the game's own text in the grid's second cell
 at("ruling_party_info>elections", position=(LP.GRID_X[1], LP.GRID_VALUE_Y[0]), font=BODY13, maxWidth=LP.GRID_W[1],
    maxHeight=LP.GRID_VALUE_H, vertical_alignment="top")
-at("ruling_party_info>power_balance_button", position=(LP.BOP["x"], LP.BOP["y"]))
+at("ruling_party_info>power_balance_button", position=(LP.BOP["x"], LP.BOP["y"]))   # under the legend
 
 # ---------------------------------------------------------------- faction card
 FC = LP.FACTION_CARD
@@ -159,9 +186,12 @@ SP = LP.SPIRITS
 at(f"{R}>national_spirit", position=(SP["x"], LP.SPIRITS_LABEL_Y), size=(SP["w"], SP["h"] + SP["y"] - LP.SPIRITS_LABEL_Y))
 at("national_spirit>title", position=(0, 0), font=SECTION, maxWidth=220, maxHeight=12)
 at("national_spirit>national_spirit_container", position=(0, SP["y"] - LP.SPIRITS_LABEL_Y), size=(SP["w"], SP["h"]))
-at("national_spirit_container>spirit_grid", position=(6, 2), size=(SP["w"] - 12, 68), max_slots=(8, 1))
-at("national_spirit_container>spirit_grid_over_defined", position=(8, 2), size=(SP["w"] - 16, 68),
-   max_slots_horizontal=15)
+big, small = LP.SPIRIT_SLOT, LP.SPIRIT_SMALL
+nb = (SP["w"] - 8) // big[0]                       # 4 large spirits a row, 2 rows
+ns = (SP["w"] - 24) // small[0]                    # then 7 small ones a row (room for the scrollbar)
+at("national_spirit_container>spirit_grid", position=(4, 2), size=(nb * big[0], 2 * big[1]), max_slots=(nb, 2))
+at("national_spirit_container>spirit_grid_over_defined", position=(4, 2), size=(ns * small[0], SP["h"] - 4),
+   max_slots_horizontal=ns)
 
 # ---------------------------------------------------------------- management buttons
 Y, BX, BH = LP.BUTTONS_Y, LP.BUTTON_X, LP.BUTTON["h"]
@@ -225,20 +255,11 @@ def text(name, loc, font, x, y, w, h, fmt="left", valign=False, tooltip=None, tr
             f'\t\t\tmaxHeight = {h}\n\t\t\tfixedsize = yes\n{va}{tt}{tr}\t\t}}\n')
 
 
-def icon_el(name, sprite, x, y):
-    return (f'\t\ticonType = {{\n\t\t\tname = "{name}"\n\t\t\tspriteType = "{sprite}"\n'
-            f'\t\t\tposition = {{ x = {x} y = {y} }}\n\t\t\talwaystransparent = yes\n\t\t}}\n')
-
-
 HT = LP.HEAD_TITLE
 gx0, gy0 = LP.GRID_X[0], LP.GRID_VALUE_Y[0]
 dy = LP.GRID_VALUE_Y[1] - LP.GRID_VALUE_Y[0]
 dx = LP.GRID_X[1] - LP.GRID_X[0]
-DT = LP.DESC_TEXT
-law_rows = "".join(text(f"valsora_deco_pol_law_{key}_value", f"VAL_DECO_POL_LAW_{key.upper()}_VALUE", BODY13, 0,
-                        i * (LP.LAW_H + LP.LAW_GAP) + 14, LP.LAWS_W - 46, 15, tooltip="VAL_DECO_POL_LAWS_TT",
-                        transparent=False)
-                   for i, (key, _) in enumerate(LP.LAW_CARDS))
+SI = LP.SUB_IDEOLOGY
 WINDOWS = [
     ("valsora_deco_pol_title", "valsora_deco_pol_title_window", HT["x"], HT["y"], HT["w"], HT["h"],
      text("valsora_deco_pol_title", "VAL_DECO_POL_TITLE", "valsora_deco_title_18", 0, 0, HT["w"], HT["h"], valign=True), None),
@@ -246,14 +267,10 @@ WINDOWS = [
      text("valsora_deco_pol_party", "VAL_DECO_POL_PARTY_VALUE", VALUE15, 0, 0, LP.GRID_W[0], LP.GRID_VALUE_H)
      + text("valsora_deco_pol_last_election", "VAL_DECO_POL_LAST_ELECTION_VALUE", VALUE15, 0, dy, LP.GRID_W[0], LP.GRID_VALUE_H)
      + text("valsora_deco_pol_pp", "VAL_DECO_POL_PP_VALUE", VALUE15, dx, dy, LP.GRID_W[1], LP.GRID_VALUE_H), None),
-    ("valsora_deco_pol_desc", "valsora_deco_pol_desc_window", DT["x"], DT["y"], DT["w"], DT["h"],
-     text("valsora_deco_pol_desc_text", "VAL_DECO_POL_DESC", ITALIC, 0, 0, DT["w"], DT["h"]),
-     "valsora_deco_leader_has_desc = yes"),
-    ("valsora_deco_pol_desc_none", "valsora_deco_pol_desc_none_window", LP.DESC["x"] + LP.DESC["w"] // 2 - 120,
-     LP.DESC["y"] + LP.DESC["h"] // 2 - 12, 240, 24, icon_el("valsora_deco_pol_ornament", D + "ornament", 0, 0),
-     "NOT = { valsora_deco_leader_has_desc = yes }"),
-    ("valsora_deco_pol_laws", "valsora_deco_pol_laws_window", LP.LAWS_X + 40, LP.LAW_Y0, LP.LAWS_W - 46,
-     3 * LP.LAW_H + 2 * LP.LAW_GAP, law_rows, None),
+    # the sub-ideology; its description is the tooltip (the text box is not click-through, so it shows)
+    ("valsora_deco_pol_sub_ideology", "valsora_deco_pol_sub_ideology_window", SI["x"], SI["y"], SI["w"], SI["h"],
+     text("valsora_deco_pol_sub_ideology_text", "VAL_DECO_POL_SUB_IDEOLOGY_VALUE", VALUE15, 0, 0, SI["w"], SI["h"],
+          tooltip="VAL_DECO_POL_SUB_IDEOLOGY_TT", transparent=False), None),
     ("valsora_deco_pol_faction_role", "valsora_deco_pol_faction_role_window", FC["x"] + 110, FC["y"] + 7, 82, 12,
      text("valsora_deco_pol_faction_role_text", "VAL_DECO_POL_FACTION_ROLE", LABEL, 0, 0, 82, 12, "right"),
      "is_in_faction = yes"),
@@ -289,33 +306,46 @@ if os.path.isdir(ipath):
             else:
                 depth -= 1
     ideologies = found or ideologies
-leaders_with_desc = []
-cpath = os.path.join(VALSORA, "common", "characters")
-if os.path.isdir(cpath):
-    for f in sorted(os.listdir(cpath)):
-        src = re.sub(r"#[^\n]*", "", open(os.path.join(cpath, f), encoding="utf-8-sig").read())
-        for m in re.finditer(r"^\t([A-Za-z0-9_]+)\s*=\s*\{", src, re.M):
-            s_, e_ = m.start(), m.end()
-            depth, j = 1, e_
-            while depth and j < len(src):
-                depth += {"{": 1, "}": -1}.get(src[j], 0)
-                j += 1
-            body = src[e_:j]
-            cl = re.search(r"country_leader\s*=\s*\{(.*?)\}", body, re.S)
-            if cl:
-                dm = re.search(r'desc\s*=\s*"?([A-Za-z0-9_.]+)"?', cl.group(1))
-                if dm:
-                    leaders_with_desc.append((m.group(1), dm.group(1)))
-print("ideologies:", ideologies, "| leaders with a description:", [c for c, _ in leaders_with_desc])
+# sub-ideologies: the keys inside each ideology's types = { } block (their names and descriptions are the
+# game's localisation keys <key> and <key>_desc, which Valsora writes)
+sub_ideologies = []
 
-# the game's laws (Valsora uses vanilla's law ideas)
-LAWS = {
-    "conscription": ["disarmed_nation", "volunteer_only", "limited_conscription", "extensive_conscription",
-                     "service_by_requirement", "all_adults_serve", "scraping_the_barrel"],
-    "economy": ["undisturbed_isolation", "isolation", "civilian_economy", "low_economic_mobilisation",
-                "partial_economic_mobilisation", "war_economy", "tot_economic_mobilisation"],
-    "trade": ["closed_economy", "limited_exports", "export_focus", "free_trade"],
-}
+
+def _block_end(s, i):
+    """index just past the brace that closes the block opened right before i"""
+    depth = 1
+    while depth and i < len(s):
+        depth += {"{": 1, "}": -1}.get(s[i], 0)
+        i += 1
+    return i
+
+
+if os.path.isdir(ipath):
+    for f in sorted(os.listdir(ipath)):
+        src = re.sub(r"#[^\n]*", "", open(os.path.join(ipath, f), encoding="utf-8-sig").read())
+        for m in re.finditer(r"\btypes\s*=\s*\{", src):
+            body = src[m.end():_block_end(src, m.end()) - 1]
+            depth = 0
+            for mm in re.finditer(r"([A-Za-z_][A-Za-z0-9_]*)\s*=\s*\{|\{|\}", body):
+                if mm.group(0) == "}":
+                    depth -= 1
+                else:
+                    if depth == 0 and mm.group(1):
+                        sub_ideologies.append(mm.group(1))
+                    depth += 1
+print("ideologies:", ideologies, "| sub-ideologies:", len(sub_ideologies))
+# the longest sub-ideology name must fit its row, in one line
+sub_names = {}
+for root, _, files in os.walk(os.path.join(VALSORA, "localisation", "english")):
+    for f in files:
+        if f.endswith(".yml"):
+            for k, v in re.findall(r'^ ([A-Za-z0-9_]+):\d* "(.*)"', open(os.path.join(root, f), encoding="utf-8-sig").read(), re.M):
+                sub_names[k] = v
+if sub_ideologies and sub_names:
+    longest = max((sub_names.get(s, s) for s in sub_ideologies), key=lambda n: LP.L.measure(VALUE15, n))
+    width = LP.L.measure(VALUE15, longest)
+    assert width <= LP.SUB_IDEOLOGY["w"], f"sub-ideology {longest!r} is {width} px, its row {LP.SUB_IDEOLOGY['w']}"
+    print(f"longest sub-ideology name: {longest!r}, {width} of {LP.SUB_IDEOLOGY['w']} px")
 
 os.makedirs(MOD + "common/scripted_localisation", exist_ok=True)
 sl = ["# Valsora Deco UI - politics screen text (generated by tools/make_politics.py from the Valsora mod)"]
@@ -331,23 +361,21 @@ def defined(name, entries, fallback):
 
 sl.append(defined("GetValsoraDecoRulingPopularity", [(f"has_government = {i}", f"VAL_DECO_POL_POP_{i.upper()}") for i in ideologies],
                   "VAL_DECO_POL_NONE"))
-sl.append(defined("GetValsoraDecoLeaderDesc",
-                  [(f"has_country_leader = {{ character = {c} ruling_only = yes }}", d) for c, d in leaders_with_desc],
-                  "VAL_DECO_POL_NONE"))
-for key, ideas in LAWS.items():
-    sl.append(defined(f"GetValsoraDecoLaw{key.capitalize()}", [(f"has_idea = {i}", i) for i in ideas], "VAL_DECO_POL_NONE"))
+sl.append(defined("GetValsoraDecoSubIdeology",
+                  [(f"has_country_leader_ideology = {s}", s) for s in sub_ideologies], "VAL_DECO_POL_NONE"))
+sl.append(defined("GetValsoraDecoSubIdeologyDesc",
+                  [(f"has_country_leader_ideology = {s}", f"{s}_desc") for s in sub_ideologies], "VAL_DECO_POL_NONE"))
+sl.append(defined("GetValsoraDecoLastElection", [("has_elections = no", "VAL_DECO_POL_NO_ELECTIONS")],
+                  "VAL_DECO_POL_LAST_ELECTION_DATE"))
 sl.append(defined("GetValsoraDecoFactionRole", [("is_faction_leader = yes", "VAL_DECO_POL_FACTION_LEADER")],
                   "VAL_DECO_POL_FACTION_MEMBER"))
 open(MOD + "common/scripted_localisation/valsora_deco_politics.txt", "w", encoding="utf-8", newline="\n").write(
     "\n\n".join(sl) + "\n")
 
-os.makedirs(MOD + "common/scripted_triggers", exist_ok=True)
-trig = ("\n".join(f"\t\thas_country_leader = {{ character = {c} ruling_only = yes }}" for c, _ in leaders_with_desc)
-        or "\t\talways = no")
-open(MOD + "common/scripted_triggers/valsora_deco_politics_triggers.txt", "w", encoding="utf-8", newline="\n").write(
-    "# Valsora Deco UI - generated by tools/make_politics.py from the Valsora characters (country_leader desc).\n"
-    "# True when the ruling leader has a description to show on the politics screen.\n"
-    f"valsora_deco_leader_has_desc = {{\n\tOR = {{\n{trig}\n\t\talways = no\n\t}}\n}}\n")
+# v0.4.7's "the leader has a description" trigger went with the description band
+old_trigger = MOD + "common/scripted_triggers/valsora_deco_politics_triggers.txt"
+if os.path.isfile(old_trigger):
+    os.remove(old_trigger)
 
 # ================================================================ sprites and localisation
 TEX = "gfx/interface/valsora_deco/politics/"
@@ -367,7 +395,6 @@ SPRITES = [  # name, texture, frames, effect, extra
     ("strip", "strip.dds", 1, None, ""),
     ("cat_header", "category_header.dds", 1, None, ""),
     ("idea_slot", "idea_slot.dds", 1, None, ""),
-    ("ornament", "ornament.dds", 1, None, ""),
     ("sub_header", "sub_header.dds", 1, None, ""),
     ("idea_entry_grid", "idea_entry_grid.dds", 2, None, ""),
     ("idea_entry_list", "idea_entry_list.dds", 2, None, ""),
@@ -391,6 +418,9 @@ FBAR = LP.FOCUS_BAR
 gfx += (f'\tprogressbartype = {{\n\t\tname = "GFX_valsora_deco_pol_focus_bar"\n\t\tcolor = {{ 1.0 1.0 1.0 }}\n'
         f'\t\tcolortwo = {{ 1.0 1.0 1.0 }}\n\t\ttextureFile1 = "{TEX}focus_fill.dds"\n\t\ttextureFile2 = "{TEX}focus_track.dds"\n'
         f'\t\tsize = {{ x = {FBAR["w"]} y = {FBAR["h"]} }}\n\t\teffectFile = "gfx/FX/progress_startend.lua"\n\t}}\n')
+# the panel below the header strip: lacquer with the frame down the sides and along the bottom
+gfx += (f'\tcorneredTileSpriteType = {{\n\t\tname = "GFX_valsora_deco_pol_body"\n\t\tsize = {{ x = 192 y = 192 }}\n'
+        f'\t\ttextureFile = "{TEX}body.dds"\n\t\tborderSize = {{ x = 64 y = 64 }}\n\t\ttilingCenter = yes\n\t}}\n')
 # the entry cards are container backgrounds: corneredTile so they fill the container
 for name, (w, h) in {"entry_87": (494, 87), "entry_95": (494, 95), "entry_65": (494, 65), "entry_100": (494, 100)}.items():
     gfx += (f'\tcorneredTileSpriteType = {{\n\t\tname = "GFX_valsora_deco_pol_{name}"\n\t\tsize = {{ x = {w} y = {h} }}\n'
@@ -406,21 +436,17 @@ LOC = {
     "VAL_DECO_POL_ELECTIONS": "Elections",
     "VAL_DECO_POL_LAST_ELECTION": "Last Election",
     "VAL_DECO_POL_POLITICAL_POWER": "Political Power",
+    "VAL_DECO_POL_SUB_IDEOLOGY": "Sub-Ideology",
     "VAL_DECO_POL_SECTION_POPULARITY": "Popularity",
-    "VAL_DECO_POL_SECTION_LAWS": "Laws",
     "VAL_DECO_POL_SECTION_FACTION": "Faction",
     "VAL_DECO_POL_SECTION_FOCUS": "National Focus",
-    "VAL_DECO_POL_LAW_CONSCRIPTION": "Conscription",
-    "VAL_DECO_POL_LAW_ECONOMY": "Economy",
-    "VAL_DECO_POL_LAW_TRADE": "Trade",
-    "VAL_DECO_POL_LAW_CONSCRIPTION_VALUE": "[GetValsoraDecoLawConscription]",
-    "VAL_DECO_POL_LAW_ECONOMY_VALUE": "[GetValsoraDecoLawEconomy]",
-    "VAL_DECO_POL_LAW_TRADE_VALUE": "[GetValsoraDecoLawTrade]",
-    "VAL_DECO_POL_LAWS_TT": "Laws are changed in the advisors and laws list at the bottom of this screen.",
     "VAL_DECO_POL_PARTY_VALUE": "[ROOT.GetRulingParty] · [GetValsoraDecoRulingPopularity]",
-    "VAL_DECO_POL_LAST_ELECTION_VALUE": "[ROOT.GetLastElection]",
+    "VAL_DECO_POL_LAST_ELECTION_VALUE": "[GetValsoraDecoLastElection]",
+    "VAL_DECO_POL_LAST_ELECTION_DATE": "[ROOT.GetLastElection]",
+    "VAL_DECO_POL_NO_ELECTIONS": "None",
     "VAL_DECO_POL_PP_VALUE": "[?political_power|0]  [?political_power_daily|+=2]",
-    "VAL_DECO_POL_DESC": "[GetValsoraDecoLeaderDesc]",
+    "VAL_DECO_POL_SUB_IDEOLOGY_VALUE": "[GetValsoraDecoSubIdeology]",
+    "VAL_DECO_POL_SUB_IDEOLOGY_TT": "[GetValsoraDecoSubIdeologyDesc]",
     "VAL_DECO_POL_FACTION_ROLE": "[GetValsoraDecoFactionRole]",
     "VAL_DECO_POL_FACTION_LEADER": "Leader",
     "VAL_DECO_POL_FACTION_MEMBER": "Member",

@@ -186,7 +186,7 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `cultures.py` | generic portraits, name lists and graphical culture per continent / country |
 | `ideologies.py` | the five ideologies: ideology file, renamed localisation, theocracy icon |
 | `minimap.py` | the minimap (lower right): Valsora's land on parchment instead of vanilla's Earth, its frame, window and slide (2026-10-13) |
-| `globe.py` | the world tension globe (top bar, 10 frames) and its small icon: Valsora instead of Earth (2026-10-14); run alone, `dist/tension_globe_preview.png` |
+| `globe.py` | the world tension globe (top bar, 10 frames) and its small icon: Valsora instead of Earth (2026-10-14), cracking into lava as tension grows (redrawn the same day: the first flames "didn't come out too well"); run alone, `dist/tension_globe_preview.png` |
 | `vanilla_parts.py` | vanilla's parts in the mod, for `build_mod.py`: the vanilla files it ships moved to 2036, the stand-ins for what Earth's content still names (decisions, events, country histories), the start and end dates, the AI's faction theaters |
 | `vanilla_sync.py` | by hand, after a game update: refreshes `source/vanilla/` from the author's copy of the game (`Rouental/HOI4-Files`): the vanilla files the mod ships changed, and lists of vanilla's names |
 | `pdxscript.py` | a reader for Paradox script (nested `key = value` blocks), used by `vanilla_sync.py` |
@@ -943,6 +943,10 @@ Aislada is the worked example of a built-out nation:
   history does `add_manpower` (12,000 per division; Rouental 150,000) just before
   `set_oob`. State population is 300 per map pixel (`build_mod.POP_PER_PX`; 20 until
   2026-10-04, when the whole world held 75 million and Seigne 7,000).
+- **Devlon's 15 test spirits** (author, 2026-10-14: to see how the politics screen shows many
+  national spirits): `nations.TEST_SPIRITS`, ideas `DVL_test_spirit_1`..`15` with vanilla's generic
+  pictures and no effects, added in Devlon's history. Remove the list and its `HISTORY` entry after
+  the test. `check_mod.py` checks every idea's picture exists.
 - **Opinion modifier names**: `valsora_reibonnaise_ties` is "Seran Ties" and
   `valsora_against_communism` "Seran Biases" (author, 2026-10-04).
 - **Named generated rulers**: `nations.NAMED_LEADERS` gives a generated ruler the
@@ -1233,8 +1237,11 @@ sprites resolve to files, and that every focus id and prerequisite is valid and 
   and a small 29×25 icon, `world_tension_icon.dds` (diplomacy view, peace conference). Until
   2026-10-14 both showed Earth (author's screenshot). `globe.py` draws Valsora's: the land
   on a lit sphere seen from above Nonscio and Araseos (orthographic, the map read as
-  longitude and latitude), flames rising from below as tension grows (slowly at first), and
-  the small icon ringed with flames; `check_mod.py` checks both sizes (mutation-tested);
+  longitude and latitude). As tension grows it burns from below as vanilla's does: glowing lava
+  cracks (the borders of random cells on the sphere, warped) spread upwards ahead of the heat, the
+  surface chars to a dark red crust that keeps the light and shape, and a molten glow rises from
+  the bottom (the first version painted flames over the disc, an orange blur at 100 %, author's
+  screenshot, 2026-10-14). The small icon is ringed with flames; `check_mod.py` checks both sizes (mutation-tested);
   `python3 scripts/globe.py` writes `dist/tension_globe_preview.png`.
 - Map errors crash on launch unless the game runs with `-debug`. Always test with it.
 
@@ -1302,7 +1309,8 @@ Left loaded on purpose, and noisy in `error.log`:
 ## Deco UI (`deco_ui/`)
 
 **The Valsora Deco UI** is the author's art deco interface mod, made with another Claude session
-(v0.1–v0.4.4) and moved here on 2026-10-14 (v0.4.5). It is a separate mod, loaded **after** Valsora
+(v0.1–v0.4.4) and moved here on 2026-10-14 (v0.4.5; v0.4.8 the same day: the politics screen flush under
+the top bar, styled tooltips, see its guide). It is a separate mod, loaded **after** Valsora
 in the playset: a restyled top bar, politics screen, state panel, focus tree, main menu (the Valsora
 background) and a core skin. `deco_ui/CLAUDE.md` is its full handoff guide (engine facts, generators,
 what is confirmed in game); read it before touching the UI. In short:

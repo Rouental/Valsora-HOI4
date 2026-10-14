@@ -57,18 +57,16 @@ STANDIN = {"GFX_pol_factions_strip": (standin(60, 60, "M", True), 1), "GFX_rules
            "GFX_relation_faction": (CLEAR, 1), "GFX_idea_categories": (standin(56, 24, "cat"), 1),
            "GFX_idea_traits_strip": (CLEAR, 1)}
 SKIP = {"power_balance_button", "autonomy_progress_view", "in_faction", "original_in_faction", "nat_spirit_glow_overlay",
-        "valsora_deco_pol_desc_none_window", "valsora_deco_pol_faction_role_window",
+        "valsora_deco_pol_faction_role_window",
         "continuous_glow", "continuous_small_glow", "tutorial_glow", "focus_cost", "pol_power_icon",
-        "drop_continuous_focus_button", "spirit_grid_over_defined", "idea_alert_glow", "dismantle_faction"}
+        "drop_continuous_focus_button", "idea_alert_glow", "dismantle_faction"}
+N_SPIRITS = 1          # Rouental has one; the second preview shows Devlon's 15 test spirits
 import layout_politics as LP  # noqa: E402
-DESC = re.search(r'ROU_roland_cahun_desc:0 "(.*)"', open(VALSORA + "localisation/english/valsora_l_english.yml",
-                                                          encoding="utf-8-sig").read()).group(1)
-TEXT = {"political_title": "Government", "ideology": "Monarchist · Feudalism", "leader_name": "Roland II Cahun",
-        "elections": "Not allowed", "view_factions_text": "Create Faction",
-        "valsora_deco_pol_party": "Monarchist · 20%", "valsora_deco_pol_last_election": "1 January 1932",
-        "valsora_deco_pol_pp": "47  §G+1.80§!", "valsora_deco_pol_desc_text": DESC,
-        "valsora_deco_pol_law_conscription_value": "Volunteer Only", "valsora_deco_pol_law_economy_value": "Civilian Economy",
-        "valsora_deco_pol_law_trade_value": "Export Focus",
+# sample values as the game shows them (in game, v0.4.7)
+TEXT = {"political_title": "Government", "ideology": "Monarchist", "leader_name": "Roland II Cahun",
+        "elections": "No Elections", "view_factions_text": "Create Faction",
+        "valsora_deco_pol_party": "Monarchist · 20%", "valsora_deco_pol_last_election": "None",
+        "valsora_deco_pol_pp": "851  §G+1.83§!", "valsora_deco_pol_sub_ideology_text": "Feudalism",
         "title": None, "manage_occupied_button_text": "Occupied Territories",
         "manage_exiled_collaborations_governments": "Exiled Governments", "show_subjects_button_text": "Manage Subjects",
         "valsora_deco_pol_title": "The Sacred Principality of Rouental"}
@@ -113,9 +111,14 @@ def render(cv, elems, px, py, pr, T, ctx=None):
             if name == "parties_grid":
                 for i, (pn, col) in enumerate(PARTIES):
                     render(cv, T["political_party_info_entry"], ax, ay + i * sh, ax + 330, T, dict(party=(pn, col, i == 0)))
-            elif name == "spirit_grid":
-                for i in range(2):
-                    V.paste(cv, SPIRIT.resize((56, 56), Image.LANCZOS), ax + i * sw + 2, ay + 4)
+            elif name == "spirit_grid" and N_SPIRITS <= LP.SPIRIT_ROWS * ((LP.SPIRITS["w"] - 8) // sw):
+                for i in range(N_SPIRITS):
+                    per = (LP.SPIRITS["w"] - 8) // sw
+                    V.paste(cv, SPIRIT.resize((56, 56), Image.LANCZOS), ax + (i % per) * sw + 2, ay + (i // per) * sh + 4)
+            elif name == "spirit_grid_over_defined" and N_SPIRITS > LP.SPIRIT_ROWS * ((LP.SPIRITS["w"] - 8) // LP.SPIRIT_SLOT[0]):
+                per = int(d.get("max_slots_horizontal", 7))
+                for i in range(N_SPIRITS):
+                    V.paste(cv, SPIRIT.resize((30, 30), Image.LANCZOS), ax + (i % per) * sw + 1, ay + (i // per) * sh + 2)
             elif name == "idea_categories_grid":
                 for i, (cn, n) in enumerate(CATEGORIES):
                     render(cv, T["country_politics_idea_category_entry"], ax, ay + 14 + i * sh, ax + 550, T,
@@ -212,14 +215,20 @@ if __name__ == "__main__":
     pol = V.load(M + "interface/countrypoliticsview.gui")
     T = templates(pol)
     panel = T["countrypoliticsview"]
-    # shown position: x = -6, y = 78
-    render(cv, [("containerWindowType", [(k, v) for k, v in panel if not (k and k.lower() == "position")]
-                 + [("position", [("x", "-6"), ("y", "78")])])], 0, 0, 1920, T)
+    shown = V.xy(V.sub(panel, "show_position"))
+    assert (int(shown[0]), int(shown[1])) == (LP.PANEL_X, LP.TOP), shown
     ex = V.load(M + "interface/valsora_deco_politics_extras.gui")
-    render(cv, ex[0][1], -6, 78, 544, T)
-    out = Image.fromarray((np.clip(cv, 0, 1) * 255).astype(np.uint8))
-    out.save(BUILD + "preview_politics_full.png")
-    out.crop((0, 0, 760, 1080)).save(BUILD + "preview_politics.png")
+    base = cv.copy()
+    for N_SPIRITS, name in ((1, "preview_politics"), (15, "preview_politics_many_spirits")):
+        cv = base.copy()
+        # shown position: flush under the top bar's band
+        render(cv, [("containerWindowType", [(k, v) for k, v in panel if not (k and k.lower() == "position")]
+                     + [("position", [("x", str(LP.PANEL_X)), ("y", str(LP.TOP))])])], 0, 0, 1920, T)
+        render(cv, ex[0][1], LP.PANEL_X, LP.TOP, LP.PANEL_X + LP.PANEL_W, T)
+        out = Image.fromarray((np.clip(cv, 0, 1) * 255).astype(np.uint8))
+        if N_SPIRITS == 1:
+            out.save(BUILD + "preview_politics_full.png")
+        out.crop((0, 0, 760, 1080)).save(BUILD + name + ".png")
     print("politics preview written; problems:", [p for p in V.problems if "preview" in p or "overflow" in p or "lines" in p])
 
 

@@ -1,4 +1,4 @@
-VALSORA DECO UI - v0.4.7 (for HOI4 1.19)
+VALSORA DECO UI - v0.4.8 (for HOI4 1.19)
 ======================================
 
 An art deco interface for the Valsora total conversion: core skin, a rebuilt
@@ -24,6 +24,34 @@ INSTALL
 The layout is built for 1920 px of UI width: 1920x1080 at 100% UI scale, or
 2560x1440 at up to 133%.
 
+
+NEW IN v0.4.8
+-------------
+The country (politics) screen, after your first screenshots of it:
+  - It now opens flush under the top bar, with no gap. The game draws
+    side panels over the top bar, so the panel leaves a cut-out the shape
+    of the flag medallion and the decisions seal, and they show through it
+    with a gilt edge round them. The two decision counters moved onto the
+    medallion's lower step, either side of the seal, so the panel never
+    covers them.
+  - The leader's description (Roland II's titles) is no longer printed on
+    the screen. It stays in the tooltip over the portrait.
+  - Tooltips are styled at last (dark lacquer, gilt frame), everywhere in
+    the game: the game was loading its own tooltip picture in place of this
+    mod's (it looks for a .dds before the .tga this mod shipped).
+  - The background behind the portrait, name and ruling party was the
+    game's own picture: the game swaps that picture in while running, which
+    hid this mod's. Both of the game's versions are now replaced.
+  - The three law cards are gone (the laws are in the list below). Their
+    place went to the national spirits, which moved up beside the
+    popularity: two rows of large icons, then smaller ones, seven to a row,
+    and a scroll bar beyond 28. The leader's sub-ideology (Feudalism,
+    Khanate ...) is a new line under the political power, with its
+    description in the tooltip; that row can also hold buttons for special
+    mechanics later.
+  - "Last election" says None for countries without elections.
+  - Everything above moved up: the advisors and laws list at the bottom is
+    156 px taller (about one and a half more rows at 1080p).
 
 NEW IN v0.4.7
 -------------
@@ -123,14 +151,16 @@ right are planned next.
 WHAT CHANGES (all files)
 ------------------------
 Core skin (vanilla textures replaced at the same path and size):
-  gfx/interface/tiles/ (window frames, panel backgrounds, tooltip),
+  gfx/interface/tiles/ (window frames, panel backgrounds; the tooltip is
+  tiles_dialog.dds since v0.4.8),
   gfx/interface/button_<w>x<h>.dds (11 standard buttons),
   gfx/fonts/hoi_mapfont4 (map country names, redrawn in Federo).
 Textures the game swaps onto buttons while running, replaced at their paths:
   gfx/interface/topbar/toolbar/{international_market,diplomacy}_button.dds,
   gfx/interface/factions/ui/topbar_faction{,_empty}.dds,
   gfx/interface/decisionview/decisions_glow{,_blue,_yellow,_green}.dds,
-  gfx/interface/focusview/titlebar/focus_{unavailable,can_start,completed}_bg.dds.
+  gfx/interface/focusview/titlebar/focus_{unavailable,can_start,completed}_bg.dds,
+  gfx/interface/pol_view_bg{,_no_dlc}.dds (the politics screen's header).
 Interface files (rebuilt from the game's or Valsora's own; every original
 element is kept, only moved and re-skinned):
   interface/topbar.gui, alerts.gui, countrypoliticsview.gui,
@@ -150,8 +180,8 @@ DIFFERENCES FROM THE MOCKUP, AND WHY
     a row of icons with their effects in the tooltips rather than one big
     card. The national focus card is not in the mockup but the game needs
     it: it is how the focus tree opens.
-  - Politics: the law cards show the current laws; changing a law is still
-    done in the advisors and laws list at the bottom of the screen.
+  - Politics: the laws are changed in the advisors and laws list at the
+    bottom of the screen (the law cards of v0.4 - v0.4.7 only repeated it).
   - Province panel: infrastructure and air base are the game's building
     tiles with levels rather than the mockup's bars, and the province part
     keeps the game's arrangement (the game places several of its pieces).
@@ -178,14 +208,27 @@ THINGS TO CHECK IN-GAME
   - Hovering political power and the factory counts still shows their
     tooltips (the mod's own text is drawn over them).
   Politics screen
+  - (v0.4.8) The screen opens right under the top bar; the flag medallion,
+    the country name and the decisions seal show above it, with the
+    screen's gilt edge round them and no map showing between them.
+  - (v0.4.8) The decisions seal still opens decisions while the screen is
+    open (clicks should reach it through the cut-out), and the empty parts
+    of the screen's header do not click through to the map.
+  - (v0.4.8) The decision counters sit either side of the seal.
+  - (v0.4.8) The background behind the portrait and name is the deco one.
+  - (v0.4.8) Tooltips have the dark lacquer and gilt frame.
+  - (v0.4.8) The sub-ideology line names the leader's sub-ideology, with
+    its description in the tooltip. Last election says None without
+    elections, and a date with elections.
+  - (v0.4.8) National spirits: Devlon has 15 test spirits (Valsora mod):
+    they should show as small icons, seven to a row, inside their box.
   - Every value in the grid shows a value (ruling party and %, elections,
     last election, political power and daily change). If one shows raw
-    text like [ROOT.GetLastElection] or stays empty, tell me which.
-  - The three law cards show your current laws.
-  - Roland II's description shows; other leaders show the ornament.
+    text or stays empty, tell me which.
   - The pie sits in its gilt ring; the legend diamonds have party colours.
   - The focus card opens the focus tree and its progress bar fills.
-  - The advisors and laws list scrolls.
+  - The advisors and laws list scrolls, and reaches the bottom of the
+    screen.
   Province panel
   - The background covers the whole panel, including the province part at
     the bottom.

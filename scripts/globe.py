@@ -5,7 +5,11 @@ Vanilla's is a strip of ten 49 x 49 frames, gfx/interface/world_tension_icon_big
 of Earth, more of it on fire at each tenth of world tension. The small icon,
 gfx/interface/world_tension_icon.dds (29 x 25, the diplomacy view and the peace conference),
 is a globe ringed with flames. Ours draw Valsora's land on a lit sphere, seen from above
-Nonscio and Araseos, with the same fire rising from below as tension grows.
+Nonscio and Araseos. As tension grows the globe cracks and burns from below, as vanilla's does:
+glowing lava cracks (the borders of cells on the sphere, warped so they wander) spread upwards
+ahead of the heat, the surface chars to a dark red crust that keeps the globe's light and shape,
+and a molten glow rises from the bottom. (The first version, 2026-10-14, painted flames over
+the disc; at full tension it was an orange blur: "the fire didn't come out too well".)
 """
 import numpy as np
 from PIL import Image
@@ -53,6 +57,15 @@ def _sphere(n, view):
     return inside, np.degrees(lon), np.degrees(lat), u, v, z
 
 
+def _cracks(P, n_cells, seed, width):
+    """Lines along the borders of n_cells random cells on the sphere (P: unit vectors, h x w x 3)."""
+    rng = np.random.default_rng(seed)
+    s = rng.normal(size=(n_cells, 3))
+    s /= np.linalg.norm(s, axis=1, keepdims=True)
+    d = np.sort(P @ s.T, axis=-1)                 # cosine to each cell's centre
+    return np.exp(-((d[..., -1] - d[..., -2]) / width) ** 2)   # 0 gap between the two nearest: a border
+
+
 def _sample(field, lon, lat):
     """Bilinear sample of an equirectangular field (row 0 = north, x = -180..180) at lon/lat."""
     h, w = field.shape
@@ -72,34 +85,46 @@ def _globe(land, n, view, level, seed=11):
     polar = np.clip((np.abs(lat) - 68) / 10, 0, 1)[..., None]          # ice caps
     land_col = land_col * (1 - polar) + ICE * polar
     col = sea * (1 - frac[..., None]) + land_col * frac[..., None]
-    # light from the upper left, a glint on the sea, darker towards the rim
     nl = np.stack([u, v, z], -1)
     light = np.array([-0.55, 0.6, 0.58]); light /= np.linalg.norm(light)
     lam = np.clip((nl * light).sum(-1), 0, 1)
+    if level > 0:
+        # the heat rises from the bottom, unevenly; s > 0 is burning
+        h = (-v) * 0.8 + _fractal((n, n), seed + 100, (9, 21, 45)) * 0.42
+        s = h - (1.12 - 2.45 * level)
+        burn = np.clip(s / 0.35, 0, 1)
+        hot = np.clip((s + 0.1) / 1.0, 0, 1)
+        # the surface chars to a dark red crust, still lit, so the globe keeps its shape
+        crust = np.array([104, 30, 15]) * (0.8 + 0.35 * np.clip(0.5 + grain, 0, 1))[..., None]
+        col = col * (1 - 0.9 * burn[..., None]) + crust * (0.9 * burn[..., None])
+    # light from the upper left, a glint on the sea, darker towards the rim
     col = col * (0.28 + 0.85 * lam)[..., None]
     half = light + np.array([0, 0, 1.0]); half /= np.linalg.norm(half)
-    spec = np.clip((nl * half).sum(-1), 0, 1) ** 40 * (1 - frac) * 120
-    col = col + spec[..., None]
-    # fire: rises from the bottom along a noise field; level is the share of the disc burning
+    spec = np.clip((nl * half).sum(-1), 0, 1) ** 40 * 120
     if level > 0:
-        heat = _fractal((n, n), seed + 100, (5, 11, 23), 2.6) * 0.55 + (-v) * 0.45  # flames rise
-        front = np.quantile(heat[inside], 1 - 0.93 * level)
-        burn = np.clip((heat - front) / 0.06, 0, 1)
-        edge = np.exp(-((heat - front) / 0.05) ** 2)                            # flames at the front
-        # inside the fire: red and orange tongues over darker char, yellow where hottest and lowest
-        t = np.clip(0.55 + _fractal((n, n), seed + 300, (3, 7, 13), 2.2) * 0.8 + (-v) * 0.15, 0, 1)
-        fire = np.array([70, 14, 6]) * (1 - t)[..., None] + np.array([226, 70, 14]) * t[..., None]
-        fire = fire + np.array([255, 190, 70]) * (np.clip(t - 0.6, 0, 1) / 0.4)[..., None] * 0.9
-        fire = fire * (0.6 + 0.6 * lam)[..., None]
-        col = col * (1 - burn[..., None]) + fire * burn[..., None]
-        col = col + np.array([255, 150, 40]) * (edge * 0.85)[..., None]
-        # glowing cracks running ahead of the front
-        veins = np.clip(1 - np.abs(_fractal((n, n), seed + 200, (4, 9)) * 7), 0, 1)
-        ahead = np.clip(1 - (front - heat) / 0.25, 0, 1) * (1 - burn)
-        col = col + np.array([240, 90, 20]) * (veins * ahead * min(1.0, level * 3) * 0.8)[..., None]
+        # lava cracks: cell borders on the sphere, warped so they wander, broken in places; finer branches
+        P = nl + np.stack([_fractal((n, n), seed + 400 + i, (13, 29, 61)) for i in range(3)], -1) * 0.24
+        P /= np.linalg.norm(P, axis=-1, keepdims=True)
+        major = _cracks(P, 26, seed + 500, 0.016) * np.clip(0.75 + _fractal((n, n), seed + 800, (15, 33)) * 1.2, 0, 1)
+        minor = _cracks(P, 90, seed + 600, 0.010) * np.clip(0.4 + _fractal((n, n), seed + 700, (11, 25)) * 1.6, 0, 1)
+        ahead = np.clip((s + 0.25) / 0.25, 0, 1)                 # thin lines run a little ahead of the fire
+        cv = np.maximum(major, 0.6 * minor) * ahead * (0.45 + 0.55 * hot)
+        col = col + np.array([200, 40, 8]) * (ndi.gaussian_filter(cv, n / 150) * 1.1)[..., None]   # their red halo
+        col = col + np.array([255, 128, 36]) * cv[..., None] * 0.95
+        col = col + np.array([255, 228, 150]) * (np.clip(cv - 0.6, 0, 1) * hot * 1.4)[..., None]   # white-hot cores
+        # the molten glow low on the globe, the crust reddening as it heats, and from the first frame an
+        # ember glow creeping up the bottom edge
+        glow = np.clip(s / 1.6, 0, 1) * np.clip((-v - 0.15) / 0.85, 0, 1) ** 1.3
+        col = col + np.array([235, 88, 18]) * (glow * 0.7)[..., None] + np.array([255, 200, 90]) * (glow ** 2.5 * 0.45)[..., None]
+        col = col + np.array([70, 12, 0]) * (burn * hot)[..., None]
+        ember = min(1.0, level * 4) * np.clip((-v - 0.5) / 0.5, 0, 1) ** 2 * np.clip((np.hypot(u, v) - 0.55) / 0.45, 0, 1)
+        col = col + np.array([235, 96, 24]) * (ember * 0.6)[..., None]
+        spec = spec * (1 - 0.5 * level)
+    col = col + spec[..., None] * (1 - frac[..., None] * 0.7)
     # thin bright atmosphere at the rim
     rim = np.clip((np.hypot(u, v) - 0.9) / 0.1, 0, 1) ** 2
-    col = col + np.array([120, 190, 220]) * (rim * 0.45)[..., None]
+    heat = min(1.0, level * 1.4)                   # blue air, glowing orange as the globe burns
+    col = col + (np.array([120, 190, 220]) * (1 - heat) + np.array([255, 120, 40]) * heat) * (rim * 0.45)[..., None]
     a = inside.astype(float) * 255
     return np.dstack([np.clip(col, 0, 255), a])
 
@@ -117,8 +142,8 @@ def _reduce(rgba, size):
 
 def strip(land):
     """The ten 49 x 49 frames side by side, calm to ablaze."""
-    # slow at first, as vanilla's: a little smoke at low tension, ablaze near the top
-    frames = [_reduce(_globe(land, SIZE * K, VIEW, (i / (FRAMES - 1)) ** 1.6), (SIZE, SIZE)) for i in range(FRAMES)]
+    # a little slow at first, as vanilla's: an ember glow at low tension, molten at the top
+    frames = [_reduce(_globe(land, SIZE * K, VIEW, (i / (FRAMES - 1)) ** 1.1), (SIZE, SIZE)) for i in range(FRAMES)]
     return np.concatenate(frames, axis=1)
 
 

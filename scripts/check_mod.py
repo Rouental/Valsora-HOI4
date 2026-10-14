@@ -722,6 +722,13 @@ def main(mod):
             for name in re.findall(r"^\t\t(\w+)\s*=\s*\{", cat, re.M):
                 our_ideas.add(name)
     v_ideas = set(vanilla_index("ideas.txt")) | our_ideas
+    # an idea's picture is the sprite GFX_idea_<picture>
+    for f in (mod / "common/ideas").glob("*.txt"):
+        if is_vanilla_part(f, mod):
+            continue
+        for pic in re.findall(r"\bpicture\s*=\s*(\w+)", strip(f.read_text(encoding="utf-8-sig"))):
+            if f"GFX_idea_{pic}" not in known_sprites:
+                err(f"{f.relative_to(mod)}: idea picture {pic} (GFX_idea_{pic}) is defined neither by the mod nor by the game")
     for f, text in text_of.items():
         rel = f.relative_to(mod)
         for body in blocks(text, "set_technology"):

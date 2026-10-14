@@ -6,6 +6,28 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**The tension globe's fire "didn't come out too well"** (2026-10-14, author's screenshot at 100 %)
+- Cause: flames were painted over the disc from below; at full tension the whole globe was a noisy
+  orange blur with no shape left.
+- Fix: `globe.py` burns it as vanilla's does: lava cracks (borders of random cells on the sphere,
+  warped) spreading upwards, a dark red crust that keeps the globe's light and highlight, a molten
+  glow from below (`dist/tension_globe_preview.png`).
+
+**Deco UI: the politics screen covered the medallion, kept vanilla's header, unstyled tooltips**
+(2026-10-14, author's screenshots of v0.4.7)
+- The panel opened 16 px below the top bar's band and hid the medallion's name plate and the
+  decisions seal: side panels are drawn over the top bar. Fix (v0.4.8): the panel sits at the band's
+  bottom and leaves a notch the shape of the medallion and seal (they show through it); its own
+  background lets clicks through and children outside the notch catch them.
+- The header behind the portrait was vanilla's metal picture: the game swaps the `pol_view_bg` icon's
+  sprite at runtime (`GFX_pol_view_bg` / `_no_dlc`), so ours never showed. Fix: both vanilla
+  textures are replaced at their paths.
+- Tooltips kept vanilla's look: the game loads `tiles_dialog.dds` (vanilla's) before the
+  `tiles_dialog.tga` the Deco UI shipped. Fix: the `.dds` is replaced. Check: the Deco UI's
+  `validate_preview.py` flags any `.tga` a vanilla `.dds` of the same name shadows.
+- Also (author's requests): the leader's description only in the portrait's tooltip, the law cards
+  gone, the sub-ideology shown, the spirits moved up: the advisors & laws list is 156 px taller.
+
 **Valsora started in 1936** (2026-10-14, author: "Valsora takes place in 2036")
 - Cause: the clock, the tech tree and every date condition were vanilla's.
 - Fix: the start and end dates (`common/defines/valsora_game.lua`), the bookmark, our

@@ -7,8 +7,8 @@ guiTypes = {
 
 	containerWindowType = {
 		name = "countrypoliticsview"
-		position = { x=-606 y=78}	
-		show_position = { x=-6 y =78 }
+		position = { x = -606 y = 62 }	
+		show_position = { x = -6 y = 62 }
 		show_animation_type = decelerated
 		hide_animation_type = accelerated
 		animation_time = 300	
@@ -17,9 +17,118 @@ guiTypes = {
 		#hide_sound = menu_close_window
 		show_sound = menu_open_window
 		
+
+		# ===== Valsora Deco: the panel below the header strip, invisible click-catchers beside the notch, the section art =====
+		containerWindowType = {
+			name = "valsora_deco_pol_body"
+			position = { x = 0 y = 106 }
+			size = { width = 550 height = 100%% }
+			background = {
+				name = "valsora_deco_pol_body_bg"
+				quadTextureSprite = "GFX_valsora_deco_pol_body"
+			}
+		}
+		containerWindowType = {
+			name = "valsora_deco_pol_block_0"
+			position = { x = 0 y = 0 }
+			size = { width = 21 height = 59 }
+			background = {
+				name = "valsora_deco_pol_block_0_bg"
+				quadTextureSprite = "GFX_valsora_deco_clear"
+			}
+		}
+		containerWindowType = {
+			name = "valsora_deco_pol_block_1"
+			position = { x = 175 y = 0 }
+			size = { width = 375 height = 59 }
+			background = {
+				name = "valsora_deco_pol_block_1_bg"
+				quadTextureSprite = "GFX_valsora_deco_clear"
+			}
+		}
+		containerWindowType = {
+			name = "valsora_deco_pol_block_2"
+			position = { x = 0 y = 59 }
+			size = { width = 39 height = 13 }
+			background = {
+				name = "valsora_deco_pol_block_2_bg"
+				quadTextureSprite = "GFX_valsora_deco_clear"
+			}
+		}
+		containerWindowType = {
+			name = "valsora_deco_pol_block_3"
+			position = { x = 157 y = 59 }
+			size = { width = 393 height = 13 }
+			background = {
+				name = "valsora_deco_pol_block_3_bg"
+				quadTextureSprite = "GFX_valsora_deco_clear"
+			}
+		}
+		containerWindowType = {
+			name = "valsora_deco_pol_block_4"
+			position = { x = 0 y = 72 }
+			size = { width = 61 height = 13 }
+			background = {
+				name = "valsora_deco_pol_block_4_bg"
+				quadTextureSprite = "GFX_valsora_deco_clear"
+			}
+		}
+		containerWindowType = {
+			name = "valsora_deco_pol_block_5"
+			position = { x = 135 y = 72 }
+			size = { width = 415 height = 13 }
+			background = {
+				name = "valsora_deco_pol_block_5_bg"
+				quadTextureSprite = "GFX_valsora_deco_clear"
+			}
+		}
+		containerWindowType = {
+			name = "valsora_deco_pol_block_6"
+			position = { x = 0 y = 85 }
+			size = { width = 77 height = 10 }
+			background = {
+				name = "valsora_deco_pol_block_6_bg"
+				quadTextureSprite = "GFX_valsora_deco_clear"
+			}
+		}
+		containerWindowType = {
+			name = "valsora_deco_pol_block_7"
+			position = { x = 119 y = 85 }
+			size = { width = 431 height = 10 }
+			background = {
+				name = "valsora_deco_pol_block_7_bg"
+				quadTextureSprite = "GFX_valsora_deco_clear"
+			}
+		}
+		containerWindowType = {
+			name = "valsora_deco_pol_block_8"
+			position = { x = 0 y = 94 }
+			size = { width = 77 height = 12 }
+			background = {
+				name = "valsora_deco_pol_block_8_bg"
+				quadTextureSprite = "GFX_valsora_deco_clear"
+			}
+		}
+		containerWindowType = {
+			name = "valsora_deco_pol_block_9"
+			position = { x = 119 y = 94 }
+			size = { width = 431 height = 12 }
+			background = {
+				name = "valsora_deco_pol_block_9_bg"
+				quadTextureSprite = "GFX_valsora_deco_clear"
+			}
+		}
+		iconType = {
+			name = "valsora_deco_pol_sections"
+			spriteType = "GFX_valsora_deco_pol_sections"
+			position = { x = 0 y = 0 }
+			Orientation = UPPER_LEFT
+			alwaystransparent = yes
+		}
 		background = {
 			name = "Background"		
-			quadTextureSprite ="GFX_tiled_plain_bg"
+			quadTextureSprite ="GFX_valsora_deco_clear"
+			alwaystransparent = yes
 		}
 
 		iconType ={
@@ -31,11 +140,11 @@ guiTypes = {
 
 		instantTextboxType = {
 			name = "political_title"
-			position = { x = 190 y = 20 }
+			position = { x = 190 y = 16 }
 			textureFile = ""
 			font = "valsora_deco_label"
 			borderSize = {x = 0 y = 0}
-			text = "VAL_DECO_POL_GOVERNMENT"
+			text = "VAL_DECO_POL_NONE"
 			maxWidth = 260
 			maxHeight = 12
 			fixedsize = yes
@@ -43,15 +152,27 @@ guiTypes = {
 		
 		iconType ={
 			name ="pol_view_bg"
-			spriteType = "GFX_valsora_deco_pol_sections"
+			spriteType = "GFX_pol_view_bg"
 			position = { x = 0 y = 0 }
 			Orientation = UPPER_LEFT
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
+			name = "valsora_deco_pol_head_label"
+			position = { x = 190 y = 16 }
+			font = "valsora_deco_label"
+			text = "VAL_DECO_POL_GOVERNMENT"
+			format = left
+			maxWidth = 260
+			maxHeight = 12
+			fixedsize = yes
+			alwaystransparent = yes
 		}	
 
 		iconType ={
 			name ="pol_faction_icon"
 			spriteType = "GFX_pol_factions_strip"
-			position = { x = 203 y = 140 }
+			position = { x = 203 y = 136 }
 			Orientation = UPPER_LEFT
 			frame = 1
 			scale = 0.34
@@ -70,9 +191,9 @@ guiTypes = {
 			
 			gridBoxType = {
 				name = "parties_grid"
-				position = { x = 110 y = 452 }
+				position = { x = 118 y = 372 }
 				size = { width = 100%% height = 100%% }
-				slotsize = { width = 150 height = 18 }
+				slotsize = { width = 142 height = 19 }
 				format = "UPPER_LEFT"
 			}
 		}
@@ -80,14 +201,14 @@ guiTypes = {
 		
 		containerWindowType = {
 			name = "political_pie_chart"
-			position = { x = 14 y = 448 }
-			size = { width = 88 height = 88 }
+			position = { x = 14 y = 372 }
+			size = { width = 96 height = 96 }
 			clipping = no
 
 			iconType = {
 				name = "chart"
 				spriteType = "GFX_valsora_deco_pol_chart"
-				position = { x = 44 y = 4 }
+				position = { x = 48 y = 4 }
 			}
 			
 			iconType ={
@@ -114,7 +235,7 @@ guiTypes = {
 			
 			instantTextboxType = {
 				name = "ideology"
-				position = { x = 228 y = 143 }
+				position = { x = 228 y = 139 }
 				font = "valsora_deco_label"
 				text = "ideology"
 				maxWidth = 214
@@ -125,7 +246,7 @@ guiTypes = {
 			
 			instantTextboxType = {
 				name = "elections"
-				position = { x = 368 y = 192 }
+				position = { x = 368 y = 186 }
 				font = "valsora_deco_body_13"
 				text = "elections"
 				maxWidth = 164
@@ -135,7 +256,7 @@ guiTypes = {
 			
 			containerWindowType = {
 				name = "faction"
-				position = { x = 18 y = 682 }
+				position = { x = 18 y = 540 }
 				size = { width = 240 height = 78 }
 				clipping = no
 
@@ -253,7 +374,7 @@ guiTypes = {
 
 			containerWindowType = {
 				name = "power_balance_button"
-				position = { x = 392 y = 548 }
+				position = { x = 118 y = 473 }
 				clipping = no
 
 				buttonType = {
@@ -305,7 +426,7 @@ guiTypes = {
 						
 		containerWindowType = {
 			name = "autonomy_progress_view"
-			position = { x = 0 y = 811 }
+			position = { x = 0 y = 671 }
 			size = { width = 100%% height = 75 }
 			clipping = no
 	
@@ -429,7 +550,7 @@ guiTypes = {
 		
 		containerWindowType = {
 			name = "active_goal"
-			position = { x = 266 y = 682 }
+			position = { x = 266 y = 540 }
 			size = { width = 266 height = 78 }
 			clipping = no
 						
@@ -535,8 +656,8 @@ guiTypes = {
 		}
 		containerWindowType = {
 			name = "national_spirit"
-			position = { x = 18 y = 566 }
-			size = { width = 514 height = 88 }
+			position = { x = 272 y = 354 }
+			size = { width = 260 height = 158 }
 			clipping = no
 						
 			instantTextboxType = {
@@ -552,8 +673,8 @@ guiTypes = {
 			
 			containerWindowType = {
 				name = "national_spirit_container"
-				position = { x = 0 y = 16 }
-				size = { width = 514 height = 72 }
+				position = { x = 0 y = 18 }
+				size = { width = 260 height = 140 }
 				verticalScrollbar = "right_vertical_slider"
 				
 				background = {
@@ -563,38 +684,38 @@ guiTypes = {
 				
 				gridboxtype = {
 					name = "spirit_grid"
-					position = { x = 6 y = 2 }
-					size = { width = 502 height = 68 }
+					position = { x = 4 y = 2 }
+					size = { width = 236 height = 136 }
 					slotsize = { width = 59 height = 68 }
-					max_slots = { x = 8 y = 1 }
+					max_slots = { x = 4 y = 2 }
 					format = "UPPER_LEFT"
 				}
 				gridboxtype = {
 					name = "spirit_grid_over_defined"
-					position = { x = 8 y = 2 }
-					size = { width = 498 height = 68 }
+					position = { x = 4 y = 2 }
+					size = { width = 231 height = 136 }
 					slotsize = { width = 33 height = 34 }
-					max_slots_horizontal = 15
+					max_slots_horizontal = 7
 					format = "UPPER_LEFT"
 				}
 			}
 		}
 		iconType = {
 			name = "leader"
-			position = { x = 24 y = 100 }
+			position = { x = 24 y = 122 }
 			spriteType = "GFX_leader_unknown"
 		}
 		
 		iconType = {
 			name = "leader_frame2"
 			spriteType = "GFX_valsora_deco_pol_frame"
-			position = { x = 16 y = 92 }		
+			position = { x = 16 y = 114 }		
 			alwaystransparent = yes
 		}
 
 		instantTextboxType = {
 			name = "leader_name"
-			position = { x = 198 y = 100 }
+			position = { x = 198 y = 98 }
 			font = "valsora_deco_heading_24"
 			text = "leader_name"
 			maxWidth = 334
@@ -607,13 +728,13 @@ guiTypes = {
 		iconType = {
 			name = "valsora_deco_pol_ribbon"
 			spriteType = "GFX_valsora_deco_pol_ribbon"
-			position = { x = 38 y = 300 }
+			position = { x = 38 y = 322 }
 			Orientation = UPPER_LEFT
 			alwaystransparent = yes
 		}
 		instantTextboxType = {
 			name = "valsora_deco_pol_head_of_state"
-			position = { x = 38 y = 304 }
+			position = { x = 38 y = 326 }
 			font = "valsora_deco_label"
 			text = "VAL_DECO_POL_HEAD_OF_STATE"
 			format = centre
@@ -625,7 +746,7 @@ guiTypes = {
 		}
 		instantTextboxType = {
 			name = "valsora_deco_pol_label_ruling_party"
-			position = { x = 198 y = 178 }
+			position = { x = 198 y = 172 }
 			font = "valsora_deco_label"
 			text = "VAL_DECO_POL_RULING_PARTY"
 			format = left
@@ -636,7 +757,7 @@ guiTypes = {
 		}
 		instantTextboxType = {
 			name = "valsora_deco_pol_label_elections"
-			position = { x = 368 y = 178 }
+			position = { x = 368 y = 172 }
 			font = "valsora_deco_label"
 			text = "VAL_DECO_POL_ELECTIONS"
 			format = left
@@ -647,7 +768,7 @@ guiTypes = {
 		}
 		instantTextboxType = {
 			name = "valsora_deco_pol_label_last_election"
-			position = { x = 198 y = 234 }
+			position = { x = 198 y = 230 }
 			font = "valsora_deco_label"
 			text = "VAL_DECO_POL_LAST_ELECTION"
 			format = left
@@ -658,7 +779,7 @@ guiTypes = {
 		}
 		instantTextboxType = {
 			name = "valsora_deco_pol_label_political_power"
-			position = { x = 368 y = 234 }
+			position = { x = 368 y = 230 }
 			font = "valsora_deco_label"
 			text = "VAL_DECO_POL_POLITICAL_POWER"
 			format = left
@@ -668,8 +789,19 @@ guiTypes = {
 			alwaystransparent = yes
 		}
 		instantTextboxType = {
+			name = "valsora_deco_pol_label_sub_ideology"
+			position = { x = 198 y = 288 }
+			font = "valsora_deco_label"
+			text = "VAL_DECO_POL_SUB_IDEOLOGY"
+			format = left
+			maxWidth = 160
+			maxHeight = 12
+			fixedsize = yes
+			alwaystransparent = yes
+		}
+		instantTextboxType = {
 			name = "valsora_deco_pol_section_popularity"
-			position = { x = 18 y = 430 }
+			position = { x = 18 y = 354 }
 			font = "valsora_deco_section_11"
 			text = "VAL_DECO_POL_SECTION_POPULARITY"
 			format = left
@@ -679,19 +811,8 @@ guiTypes = {
 			alwaystransparent = yes
 		}
 		instantTextboxType = {
-			name = "valsora_deco_pol_section_laws"
-			position = { x = 274 y = 430 }
-			font = "valsora_deco_section_11"
-			text = "VAL_DECO_POL_SECTION_LAWS"
-			format = left
-			maxWidth = 200
-			maxHeight = 12
-			fixedsize = yes
-			alwaystransparent = yes
-		}
-		instantTextboxType = {
 			name = "valsora_deco_pol_section_faction"
-			position = { x = 18 y = 666 }
+			position = { x = 18 y = 524 }
 			font = "valsora_deco_section_11"
 			text = "VAL_DECO_POL_SECTION_FACTION"
 			format = left
@@ -702,7 +823,7 @@ guiTypes = {
 		}
 		instantTextboxType = {
 			name = "valsora_deco_pol_section_focus"
-			position = { x = 266 y = 666 }
+			position = { x = 266 y = 524 }
 			font = "valsora_deco_section_11"
 			text = "VAL_DECO_POL_SECTION_FOCUS"
 			format = left
@@ -711,43 +832,10 @@ guiTypes = {
 			fixedsize = yes
 			alwaystransparent = yes
 		}
-		instantTextboxType = {
-			name = "valsora_deco_pol_law_conscription"
-			position = { x = 314 y = 454 }
-			font = "valsora_deco_label"
-			text = "VAL_DECO_POL_LAW_CONSCRIPTION"
-			format = left
-			maxWidth = 212
-			maxHeight = 10
-			fixedsize = yes
-			alwaystransparent = yes
-		}
-		instantTextboxType = {
-			name = "valsora_deco_pol_law_economy"
-			position = { x = 314 y = 490 }
-			font = "valsora_deco_label"
-			text = "VAL_DECO_POL_LAW_ECONOMY"
-			format = left
-			maxWidth = 212
-			maxHeight = 10
-			fixedsize = yes
-			alwaystransparent = yes
-		}
-		instantTextboxType = {
-			name = "valsora_deco_pol_law_trade"
-			position = { x = 314 y = 526 }
-			font = "valsora_deco_label"
-			text = "VAL_DECO_POL_LAW_TRADE"
-			format = left
-			maxWidth = 212
-			maxHeight = 10
-			fixedsize = yes
-			alwaystransparent = yes
-		}
 		
 		containerWindowType = {
 			name = "ideas"
-			position = { x = 0 y = 806 }
+			position = { x = 0 y = 666 }
 			size = { width=100%% height=100%% }
 			verticalScrollbar = "right_vertical_slider"
 			scroll_wheel_factor = 40
@@ -774,14 +862,14 @@ guiTypes = {
 		iconType ={
 			name ="tutorial_glow"
 			spriteType = "GFX_tutorial_politics_icon_glow"
-			position = { x = 18 y = 772 }
+			position = { x = 18 y = 630 }
 			Orientation = UPPER_LEFT
 			hide = yes
 		}	
 		
 		buttonType = {
 			name = "close_button"
-			position = { x = -52 y = 26 }
+			position = { x = -52 y = 14 }
 			quadTextureSprite = "GFX_valsora_deco_pol_close"
 			buttonFont = "Main_14_black"
 			shortcut = "ESCAPE"
@@ -794,7 +882,7 @@ guiTypes = {
 		iconType ={
 			name ="politics_bottom"
 			spriteType = "GFX_valsora_deco_pol_strip"
-			position = { x = 6 y = 766 }
+			position = { x = 6 y = 624 }
 			Orientation = UPPER_LEFT
 			scale = 1.0
 		}
@@ -802,12 +890,12 @@ guiTypes = {
 		iconType = {
 			name = "rules"
 			spriteType = "GFX_rules_sum_icon"
-			position = { x = 506 y = 64 }
+			position = { x = 506 y = 56 }
 		}
 
 		buttonType = {
 			name = "manage_occupied_button"
-			position = { x = 18 y = 772 }
+			position = { x = 18 y = 630 }
 			quadTextureSprite = "GFX_valsora_deco_pol_button"
 			buttonFont = "hoi_16mbs"
 			Orientation = UPPER_LEFT
@@ -815,7 +903,7 @@ guiTypes = {
 
 		instantTextboxType = {
 			name = "manage_occupied_button_text"
-			position = { x = 54 y = 778 }
+			position = { x = 54 y = 636 }
 			font = "valsora_deco_body_13"
 			text = "MANAGE_OCCUPIED_TERRITORIES"
 			maxWidth = 124
@@ -824,7 +912,7 @@ guiTypes = {
 		
 		containerWindowType = {
 			name = "subjects_button_container"
-			position = { x = 368 y = 772 }
+			position = { x = 368 y = 630 }
 
 			buttonType = {
 				name = "show_subjects_button"
@@ -855,7 +943,7 @@ guiTypes = {
 		
 		buttonType = {
 			name = "show_exiles_collaborations_button"
-			position = { x = 193 y = 772 }
+			position = { x = 193 y = 630 }
 			quadTextureSprite = "GFX_valsora_deco_pol_button"
 			buttonFont = "hoi_16mbs"
 			Orientation = UPPER_LEFT
@@ -864,7 +952,7 @@ guiTypes = {
 
 		instantTextboxType = {
 			name = "manage_exiled_collaborations_governments"
-			position = { x = 227 y = 778 }
+			position = { x = 227 y = 636 }
 			font = "valsora_deco_body_13"
 			maxWidth = 126
 			maxHeight = 20
@@ -877,13 +965,13 @@ guiTypes = {
 		iconType = {
 			name = "icon_exiled_collaborations_governments"
 			spriteType = "GFX_icon_exiled_governments"
-			position = { x = 196 y = 770 }
+			position = { x = 196 y = 628 }
 		}
 
 		iconType = {
 			name = "icon_occupied_territories"
 			spriteType = "GFX_icon_occupied_territories"
-			position = { x = 21 y = 770 }
+			position = { x = 21 y = 628 }
 		}
 	}
 	
@@ -1275,7 +1363,7 @@ guiTypes = {
 	
 	containerWindowType = {
 		name = "political_party_info_entry"
-		size = { width = 150 height = 18 }
+		size = { width = 142 height = 19 }
 		clipping = no
 
 		iconType = {
@@ -1311,7 +1399,7 @@ guiTypes = {
 			font = "valsora_deco_body_13"
 			text = "party name"
 			fixedsize = yes
-			maxWidth = 128
+			maxWidth = 120
 			maxHeight = 16
 		}
 	}
