@@ -1,4 +1,4 @@
-VALSORA DECO UI - v0.4.5 (for HOI4 1.19)
+VALSORA DECO UI - v0.4.6 (for HOI4 1.19)
 ======================================
 
 An art deco interface for the Valsora total conversion: core skin, a rebuilt
@@ -22,6 +22,14 @@ INSTALL
 The layout is built for 1920 px of UI width: 1920x1080 at 100% UI scale, or
 2560x1440 at up to 133%.
 
+
+NEW IN v0.4.6
+-------------
+  - The main menu background is your new arrangement: the Nonscio,
+    Araseos, Yastreovakia, Usnistan and Orientalis labels moved (Orientalis
+    down onto its land, Nonscio to the west). Same picture otherwise.
+  - Everything from v0.4.5 below (the main menu button fix) is included;
+    v0.4.5 was never tested in game.
 
 NEW IN v0.4.5
 -------------

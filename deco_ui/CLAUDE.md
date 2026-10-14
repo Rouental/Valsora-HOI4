@@ -14,7 +14,7 @@ Treat assumed items as hypotheses.
 
 ---------------------------------------------------------------------------------------------------
 
-## 1. Status (v0.4.5)
+## 1. Status (v0.4.6)
 
 v0.4.3 was the first v0.3/v0.4 build the user launched. The user's reports so far cover only the main
 menu: the Valsora background and the social links in the top-left corner show **(in game)**, but in
@@ -22,8 +22,9 @@ v0.4.3 and v0.4.4 none of the menu buttons did. v0.4.4 blamed `Origo` and was wr
 `error.log` showed the real cause: the game rejects a **quoted** `Orientation` on a
 `containerWindowType` and falls back to `UPPER_LEFT` (section 6). v0.4.5 writes every orientation
 bare, which also puts five right-anchored top bar windows back on the right, and moves
-`alwaystransparent` off containers, where the game rejected it too. The rest of v0.3/v0.4 (top bar,
-politics, state panel, focus tree) has still not been seen in game.
+`alwaystransparent` off containers, where the game rejected it too. v0.4.6, the same day, moves five
+continent labels on the menu background to the user's own arrangement (they sent the picture). The
+rest of v0.3/v0.4 (top bar, politics, state panel, focus tree) has still not been seen in game.
 
 | Area | State |
 |---|---|
@@ -344,6 +345,9 @@ Build order matters. `gen_fonts` runs first because `layout.py` measures strings
   `small_tiles_dialog.dds`); the mod touches none of it. The blue/green 1280x720 and 1600x900
   rectangles the user saw are the game's GUI-bounds debug overlay (console command `gui`).
 - The menu background is 1920x1440, of which the middle 1080 rows show on 16:9 (crop `OY = 180`).
+  The continent labels on it are `gen_textures.CN`; since v0.4.6 they are where the user put them in
+  a picture they sent (measured by template matching against the old labels, then re-rendered: the
+  picture came through chat as a lossy WebP, so it was not used directly).
 
 ### Alerts
 
@@ -588,7 +592,7 @@ Still vanilla art:
 
 ## 12. Next steps (in order)
 
-1. Process the user's screenshots and `error.log` of v0.4.5 (section 10).
+1. Process the user's screenshots and `error.log` of v0.4.6 (section 10).
 2. **Army bar and map modes / minimap**: see `docs/next_army_bar_and_map_modes.md`. It covers the
    sprite tables, the plan and what to read from the game's textures first. These need the real
    `gfx/interface/unitcontrol/`, `gfx/interface/mapmode/` and minimap textures (frame sizes and

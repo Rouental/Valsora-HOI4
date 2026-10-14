@@ -793,8 +793,11 @@ add("nf_legend", NF + "legend.dds", LGW, LGH,
 # ---------------------------------------------------------------- main menu
 MENU = "gfx/interface/valsora_deco/menu/"
 WORLD = ART + "menu_world.jpg"
-CN = [("NONSCIO", 548, 548, 14), ("ARASEOS", 492, 772, 14), ("YASTREOVAKIA", 1012, 352, 14), ("AISLADA", 800, 642, 12),
-      ("SOLITAS", 806, 806, 14), ("USNISTAN", 1100, 730, 14), ("ORIENTALIS", 1436, 478, 14)]
+# continent labels (centre x, y in the 1080-row art): the user's arrangement of 2026-10-14 (v0.4.6),
+# measured from their picture; until then Nonscio (548, 548), Araseos (492, 772), Yastreovakia
+# (1012, 352), Usnistan (1100, 730), Orientalis (1436, 478)
+CN = [("NONSCIO", 466, 553, 14), ("ARASEOS", 511, 794, 14), ("YASTREOVAKIA", 1026, 350, 14), ("AISLADA", 800, 642, 12),
+      ("SOLITAS", 806, 806, 14), ("USNISTAN", 1112, 729, 14), ("ORIENTALIS", 1455, 568, 14)]
 OY = 180   # the 1920x1440 background is cropped to its middle 1080 rows on a 16:9 screen
 names = "".join(
     f'<div style="position:absolute;left:{x}px;top:{y + OY}px;transform:translate(-50%,-50%);font:400 {fs}px/1 Federo;letter-spacing:.55em;'
