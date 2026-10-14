@@ -96,6 +96,26 @@ def gui(w):
     return s.replace(POSITION, f'\t\tposition = {{ x=-{w + PANEL} y=-{HEIGHT + 1} }}')
 
 
+BOOKMARK = (180, 104)  # vanilla's start date pictures (gfx/interface/select_date_1936.dds)
+
+
+def write_bookmark(write, out, land):
+    """The start date's picture (single player's date screen): vanilla's shows 1936's soldiers over
+    Europe; ours is Valsora on the minimap's parchment, darkened at the edges like vanilla's."""
+    w, h = BOOKMARK
+    pic = picture(land, round(h * land.shape[1] / land.shape[0]), h).astype(float)
+    x0 = (pic.shape[1] - w) // 2
+    pic = pic[:, x0:x0 + w]
+    yy, xx = np.mgrid[0:h, 0:w]
+    r = np.hypot((xx - w / 2) / (w / 2), (yy - h / 2) / (h / 2))
+    pic[..., :3] *= (1 - 0.45 * np.clip(r - 0.45, 0, None) ** 1.3)[..., None]
+    d = out / "gfx/interface"
+    d.mkdir(parents=True, exist_ok=True)
+    write_dds(d / "valsora_select_date.dds", np.clip(pic, 0, 255).astype(np.uint8))
+    write("interface/valsora_bookmark.gfx", 'spriteTypes = {\n\tspriteType = {\n\t\tname = "GFX_select_date_valsora"\n'
+          '\t\ttexturefile = "gfx/interface/valsora_select_date.dds"\n\t}\n}\n')
+
+
 def write_files(write, out, land):
     h_map, w_map = land.shape
     w, h = size(w_map, h_map)

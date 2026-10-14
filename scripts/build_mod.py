@@ -20,6 +20,7 @@ from common import MAP_W, MAP_H, CONTINENTS, MOD_NAME, MOD_DIR_NAME, COUNTRIES, 
 import cultures
 import ideologies
 import globe
+import vanilla_parts
 import minimap
 import nations
 import superevents
@@ -48,9 +49,6 @@ STATE_BUILDINGS = [("air_base", 1), ("anti_air_building", 3), ("arms_factory", 6
 # ... these per land province, and these per coastal province.
 PROVINCE_BUILDINGS = ["bunker", "special_project_facility_spawn", "supply_node"]
 COASTAL_BUILDINGS = ["naval_headquarters", "naval_supply_hub", "coastal_bunker"]
-# Unit stack types vanilla provinces carry (measured in vanilla-derived maps).
-LAND_STACKS = [0, 1, 9, 10, 21, 22, 38]
-SEA_STACKS = [0, 1, 2, 9, 10, 11, 12, 21, 22, 23, 30, 31, 38]
 
 
 def country_file(c):
@@ -211,6 +209,35 @@ def fmt_ids(ids, per_line=20):
     return "\n".join("\t\t" + " ".join(ids[k:k + per_line]) for k in range(0, len(ids), per_line))
 
 
+def neighbours(lab, anchor):
+    """province -> [(neighbour, border pixels, border y, border x)], the longest borders first;
+    the border point is the mean of the shared edge, x measured round the province's anchor (wrap)."""
+    H, W = lab.shape
+    ys, xs = np.mgrid[0:H, 0:W]
+    pa = np.concatenate([lab[:, :-1].ravel(), lab[:-1, :].ravel(), lab[:, -1]])
+    pb = np.concatenate([lab[:, 1:].ravel(), lab[1:, :].ravel(), lab[:, 0]])
+    py = np.concatenate([ys[:, :-1].ravel().astype(float), ys[:-1, :].ravel() + 0.5, ys[:, -1].astype(float)])
+    px = np.concatenate([xs[:, :-1].ravel() + 0.5, xs[:-1, :].ravel().astype(float), np.full(H, W - 0.5)])
+    m = pa != pb
+    a = np.concatenate([pa[m], pb[m]]).astype(np.int64)
+    b = np.concatenate([pb[m], pa[m]]).astype(np.int64)
+    y = np.concatenate([py[m], py[m]])
+    x = np.concatenate([px[m], px[m]])
+    ax = np.array([anchor[i][1] for i in range(len(anchor))], float)
+    dx = ((x - ax[a] + W / 2) % W) - W / 2
+    key = a * (int(b.max()) + 1) + b
+    uniq, inv, cnt = np.unique(key, return_inverse=True, return_counts=True)
+    my = np.bincount(inv, y) / cnt
+    mdx = np.bincount(inv, dx) / cnt
+    ua, ub = uniq // (int(b.max()) + 1), uniq % (int(b.max()) + 1)
+    out = defaultdict(list)
+    for i, j, c, yy, ddx in zip(ua.tolist(), ub.tolist(), cnt.tolist(), my.tolist(), mdx.tolist()):
+        out[i].append((j, c, yy, (ax[i] + ddx) % W))
+    for i in out:
+        out[i].sort(key=lambda e: (-e[1], e[0]))
+    return out
+
+
 def main():
     if OUT.exists():
         shutil.rmtree(OUT)
@@ -304,6 +331,7 @@ def main():
     write_bmp(OUT / "map/world_normal.bmp", normal_map(height))
     textures(pix_kind, height, d_sea)
     minimap.write_files(write, OUT, pix_kind == 1)  # Valsora, not vanilla's Earth
+    minimap.write_bookmark(write, OUT, pix_kind == 1)  # the start date's picture too
     globe.write_files(OUT, pix_kind == 1)  # the world tension globe too
 
     def world_y(y, x):
@@ -509,17 +537,118 @@ def main():
     # no trailing newline: the game reads an empty last line as a malformed row
     write("map/buildings.txt", "\n".join(rows))
 
+    # unit positions, every kind vanilla's map gives (read from vanilla's unitstacks.txt, 2026-10-14):
+    #   0, 9, 10, 21, 38   near the centre (standing, defending, ...)
+    #   1-8 and 22-29      toward each neighbour, the longest borders first (moving, attacking)
+    #   11-18 and 30-37    fleets, spread across a sea province
+    #   19, 20             ships in port: the coast and just offshore of a coastal province
+    # Until then only the required kinds were written, and the game placed the rest itself: in two
+    # of Merlo's large sea provinces "too far away from center" (error.log, 2026-10-14).
+    nb = neighbours(lab, anchor)
+
+    def toward(i, j_y, j_x):
+        """A point inside province i, part of the way from its anchor to a border point."""
+        ay, ax = anchor[i]
+        dx = ((j_x - ax + W / 2) % W) - W / 2
+        for f in (0.55, 0.45, 0.35, 0.25, 0.15):
+            yy, xx = int(round(ay + f * (j_y - ay))), int(round(ax + f * dx)) % W
+            if 0 <= yy < H and lab[yy, xx] == i and inner[yy, xx] >= 2:
+                return yy, xx
+        return spot(i, 0)
+
+    def ring(i, k):
+        """The k-th of eight fleet spots round a sea province's anchor."""
+        ay, ax = anchor[i]
+        r = min(30.0, max(6.0, 0.35 * math.sqrt(size[i])))
+        a = k * math.pi / 4
+        while r >= 3:
+            yy, xx = int(round(ay + r * math.sin(a))), int(round(ax + r * math.cos(a))) % W
+            if 0 <= yy < H and lab[yy, xx] == i and inner[yy, xx] >= 3:
+                return yy, xx
+            r *= 0.75
+        return spot(i, k + 1)
+
+    def facing(y0, x0, y1, x1):
+        return math.atan2(-(y1 - y0), ((x1 - x0 + W // 2) % W) - W // 2)
+
     rows = []
     for i in range(n):
         if kind[i] == 2:
             continue
-        y, x = spot(i, 0)
-        types = LAND_STACKS if kind[i] == 1 else SEA_STACKS
-        yy = world_y(y, x) if kind[i] == 1 else 9.5
-        off = 0.3 if kind[i] == 1 else 1.0
-        for t in types:
-            rows.append(f"{pid[i]};{t};{x + 0.5:.2f};{yy:.2f};{H - y - 0.5:.2f};0.00;{off:.2f}")
+        land = kind[i] == 1
+        off = 0.3 if land else 1.0
+
+        def row(t, y, x, rot=0.0, o=off, sea_level=not land):
+            yy = 9.5 if sea_level else world_y(y, x)
+            rows.append(f"{pid[i]};{t};{x + 0.5:.2f};{yy:.2f};{H - y - 0.5:.2f};{rot:.2f};{o:.2f}")
+        for k, t in enumerate((0, 9, 10, 21, 38)):
+            y, x = spot(i, k)
+            row(t, y, x)
+        ay, ax = anchor[i]
+        near = nb.get(i, [])[:8] or [(None, 0, ay, ax)]
+        if not land and len(near) < 2:                  # a sea province needs kinds 2 and 23 too
+            near = near + [(None, 0, ay, ax)]
+        for k, (j, _, by, bx) in enumerate(near):
+            y, x = toward(i, by, bx)
+            rot = facing(ay, ax, by, bx) if j is not None else 0.0
+            row(1 + k, y, x, rot)
+            row(22 + k, y, x, rot)
+        if not land:
+            for k in range(8):
+                y, x = ring(i, k)
+                row(11 + k, y, x, facing(ay, ax, y, x))
+                row(30 + k, y, x, facing(ay, ax, y, x))
+        if land and i in port:
+            _, S, ly, lx, sy, sx = port[i]
+            rot = facing(ly, lx, sy, sx)
+            row(19, ly, lx, rot, 0.3)
+            row(20, sy, sx, rot, 0.3, sea_level=True)
+        else:
+            y, x = spot(i, 0)
+            row(19, y, x)
+            row(20, y, x)
     write("map/unitstacks.txt", "\n".join(rows) + "\n")
+
+    # the AI's faction theaters: each continent's land regions and the sea regions on its coasts,
+    # split where they don't connect (a theater must be one connected area)
+    region_of = np.full(n, -1)
+    for r, rg in enumerate(regions):
+        region_of[rg["provinces"]] = r
+    radj = defaultdict(set)
+    for i, near in nb.items():
+        for j, _, _, _ in near:
+            a_, b_ = region_of[i], region_of[j]
+            if a_ != b_ and a_ >= 0 and b_ >= 0:
+                radj[a_].add(b_)
+    land_cont = {r: Counter(int(cont[i]) for i in rg["provinces"]).most_common(1)[0][0]
+                 for r, rg in enumerate(regions) if rg["kind"] == "land"}
+    theater_list = []
+    for ci, c in enumerate(CONTINENTS, start=1):
+        own = {r for r, k in land_cont.items() if k == ci}
+        area = own | {s for r in own for s in radj[r] if regions[s]["kind"] == "sea"}
+        seen, parts = set(), []
+        for start in sorted(own):
+            if start in seen:
+                continue
+            comp, todo = [], [start]
+            seen.add(start)
+            while todo:
+                r = todo.pop()
+                comp.append(r)
+                for s in radj[r]:
+                    if s in area and s not in seen:
+                        seen.add(s)
+                        todo.append(s)
+            parts.append(comp)
+        parts.sort(key=len, reverse=True)
+        for k, comp in enumerate(parts):
+            if not any(r in own for r in comp):
+                continue
+            first = min(r for r in comp if r in own)
+            ids = [first + 1] + sorted(r + 1 for r in comp if r != first)
+            theater_list.append((c + ("" if k == 0 else f"_{k + 1}"), c, ids))
+    write("common/ai_faction_theaters/ai_faction_theaters.txt",
+          vanilla_parts.theaters([(key, c, ids) for key, c, ids in theater_list]))
 
     rows = []
     for r, rg in enumerate(regions):
@@ -610,9 +739,9 @@ def main():
         if tag == "ROU" or not mine:
             continue
         mine.sort(key=lambda s: (s != capital_state[c], -len(states[s]), s))
-        write(f"history/units/{tag}_1936.txt", nations.generic_oob(tag, [int(pid[state_capital[s]]) for s in mine]))
+        write(f"history/units/{tag}_2036.txt", nations.generic_oob(tag, [int(pid[state_capital[s]]) for s in mine]))
         army[tag] = [nations.GENERIC_ARMY_TECH, *nations.oob_manpower(nations.generic_divisions(len(mine))),
-                     f'set_oob = "{tag}_1936"']
+                     f'set_oob = "{tag}_2036"']
     for c in present:
         tag, name, adj, col = COUNTRIES[c]
         fname = country_file(c)
@@ -627,7 +756,7 @@ def main():
             "set_war_support = 0.3",
             "set_politics = {",
             f"\truling_party = {ruling[tag]}",
-            '\tlast_election = "1932.1.1"',
+            '\tlast_election = "2032.1.1"',
             "\telection_frequency = 48",
             f"\telections_allowed = {'yes' if ruling[tag] == 'democratic' else 'no'}",
             "}",
@@ -671,8 +800,8 @@ def main():
         "\tbookmark = {",
         '\t\tname = "VALSORA_BOOKMARK"',
         '\t\tdesc = "VALSORA_BOOKMARK_DESC"',
-        "\t\tdate = 1936.1.1.12",
-        '\t\tpicture = "GFX_select_date_1936"',
+        f"\t\tdate = {vanilla_parts.START_DATE}",
+        '\t\tpicture = "GFX_select_date_valsora"',
         f'\t\tdefault_country = "{tags[0]}"',
         "\t\tdefault = yes",
         *[f'\t\t{t} = {{ history = "VALSORA_PLACEHOLDER_DESC" ideology = neutrality }}' for t in tags],
@@ -717,6 +846,19 @@ def main():
     for d in ("common/decisions", "common/ai_strategy", "common/ai_strategy_plans",
               "history/units", "history/general"):
         write(f"{d}/valsora_placeholder.txt", "# Intentionally empty: vanilla content is switched off.\n")
+    # vanilla's files the mod ships changed (2036; the generic AI strategies, events and
+    # on_actions), stand-ins for its removed decisions, histories for Earth's country tags
+    shipped = vanilla_parts.files()
+    for rel, text, bom in shipped:
+        write(rel, text, bom=bom)
+    write("events/valsora_vanilla_event_stand_ins.txt", vanilla_parts.event_stand_ins(shipped)[0])
+    cat, stand_ins = vanilla_parts.stand_ins()
+    write("common/decisions/categories/valsora_vanilla_stand_ins.txt", cat)
+    write("common/decisions/valsora_vanilla_stand_ins.txt", stand_ins)
+    for fname, text in vanilla_parts.history_stubs(1).items():
+        write(f"history/countries/{fname}", text)
+    write("common/defines/valsora_game.lua", vanilla_parts.defines())
+    write("localisation/english/replace/valsora_vanilla_years_l_english.yml", vanilla_parts.year_names(), bom=True)
     # vanilla's tutorial points at Earth states/provinces; keep only its first, id-free step
     write("tutorial/tutorial.txt", 'tutorial = {\n\twindow = "tutorial_screen_1"\n'
           '\tuse_mil_fac = {\n\t\ttextbox = "obj_1"\n\t}\n}\n')
@@ -738,10 +880,11 @@ def main():
             loc += [f' {tag}_{ideo}:0 "{i_name}"', f' {tag}_{ideo}_DEF:0 "{i_def}"',
                     f' {tag}_{ideo}_ADJ:0 "{i_adj}"']
     loc += [f' {c}:0 "{COUNTRIES[c][1]}"' for c in CONTINENTS]  # continent names
+    loc += [f' theater_valsora_{key}:0 "{COUNTRIES[c][1]}"' for key, c, _ in theater_list]  # AI theaters
     loc += [f' VAL_STATE_{s + 1}:0 "{state_name[s]}"' for s in range(len(states))]
     loc += [f' VAL_REGION_{r + 1}:0 "{region_name[r]}"' for r in range(len(regions))]
     loc += [' VALSORA_BOOKMARK:0 "Valsora"',
-            ' VALSORA_BOOKMARK_DESC:0 "Placeholder map of Valsora: square provinces, one country per continent."',
+            ' VALSORA_BOOKMARK_DESC:0 "The world of Valsora, 1 January 2036."',
             ' VALSORA_PLACEHOLDER_DESC:0 "A placeholder country, until the real ones are drawn."']
     loc += nations.LOCALISATION
     # cosmetic tags need their own names, for every ideology

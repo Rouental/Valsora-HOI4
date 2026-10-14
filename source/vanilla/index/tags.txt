@@ -1,0 +1,365 @@
+# Earth's country tags: tag, country file name (vanilla 1.19.3, scripts/vanilla_sync.py)
+GER	Germany
+ENG	United Kingdom
+SOV	Soviet Union
+SWE	Sweden
+FRA	France
+LUX	Luxemburg
+BEL	Belgium
+HOL	Holland
+CZE	Czechoslovakia
+POL	Poland
+AUS	Austria
+LIT	Lithuania
+EST	Estonia
+LAT	Latvia
+SPR	Spain
+ITA	Italy
+ROM	Romania
+YUG	Yugoslavia
+SER	Serbia
+SWI	Switzerland
+TUR	Turkey
+GRE	Greece
+ALB	Albania
+NOR	Norway
+DEN	Denmark
+BUL	Bulgaria
+POR	Portugal
+FIN	Finland
+IRE	Ireland
+HUN	Hungary
+AFG	Afghanistan
+ARG	Argentina
+AST	Australia
+BHU	Bhutan
+BOL	Bolivia
+BRA	Brazil
+CAN	Canada
+CHI	China
+CHL	Chile
+COL	Colombia
+COS	Costa Rica
+ECU	Ecuador
+ELS	El Salvador
+ETH	Ethiopia
+GUA	Guatemla
+HON	Honduras
+IRQ	Iraq
+JAP	Japan
+KOR	Korea
+LIB	Liberia
+MEX	Mexico
+MEN	Mengkukuo
+NEP	Nepal
+NIC	Nicaragua
+NZL	New Zealand
+PAN	Panama
+PER	Persia
+PHI	Philippines
+PRU	Peru
+SAF	South Africa
+SAU	Saudi Arabia
+SIA	Siam
+SIK	Sinkiang
+TIB	Tibet
+URG	Uruguay
+VEN	Venezula
+YUN	Yunnan
+USA	USA
+MON	Mongolia
+TAN	Tannu Tuva
+PAR	Paraguay
+CUB	Cuba
+DOM	Dominican Republic
+HAI	Haiti
+YEM	Yeman
+OMA	Oman
+SLO	Slovakia
+RAJ	British Raj
+CRO	Croatia
+GXC	Guangxi
+PRC	ComChina
+SHX	Shanxi
+XSM	Xibei San Ma
+ICE	Iceland
+LEB	Lebanon
+JOR	Jordan
+SYR	Syria
+EGY	Egypt
+LBA	Libya
+WGR	West Germany
+DDR	East Germany
+PAL	Palestine
+ISR	Israel
+VIN	Vietnam
+CAM	Cambodia
+MAL	Malaysia
+INS	Indonesia
+LAO	Laos
+MNT	Montenegro
+UKR	Ukraine
+GEO	Georgia
+KAZ	Kazakhstan
+AZR	Azerbaijan
+ARM	Armenia
+BLR	Belarus
+ANG	Angola
+MZB	Mozambique
+ZIM	Zimbabwe
+COG	Congo
+KEN	Kenya
+PAK	Pakistan
+BOT	Botswana
+MAN	Manchukou
+BAH	Bahamas
+BAN	Bangladesh
+BLZ	Belize
+BRM	Burma
+CRC	Curacao
+GDL	Guadeloupe
+GYA	Guyana
+JAM	Jamaica
+JAN	Jan Mayen
+KYR	Kyrgyzstan
+MAD	Madagascar
+MOL	Moldova
+PNG	Papua New Guinea
+PUE	Puerto Rico
+QAT	Qatar
+SCO	Scotland
+SRL	Sri Lanka
+SUR	Suriname
+TAJ	Tajikistan
+TRI	Trinidad and Tobago
+TMS	Turkmenistan
+UAE	United Arab Emirates
+UZB	Uzbekistan
+KUW	Kuwait
+CYP	Cyprus
+MLT	Malta
+ALG	Algeria
+MOR	Morocco
+TUN	Tunisia
+SUD	Sudan
+ERI	Eritrea
+DJI	Djibouti
+SOM	Somalia
+UGA	Uganda
+RWA	Rwanda
+BRD	Burundi
+TZN	Tanzania
+ZAM	Zambia
+MLW	Malawi
+GAB	Gabon
+RCG	Republic of Congo
+EQG	Equatorial Guinea
+CMR	Cameroon
+CAR	Central African Republic
+CHA	Chad
+NGA	Nigeria
+DAH	Dahomey
+TOG	Togo
+GHA	Ghana
+IVO	Ivory Coast
+VOL	Upper Volta
+MLI	Mali
+SIE	Sierra Leone
+GNA	Guinea
+GNB	Guinea-Bissau
+SEN	Senegal
+GAM	Gambia
+WLS	Wales
+NGR	Niger
+CSA	CSA
+USB	USB
+MRT	Mauritania
+NMB	Namibia
+WES	Western Sahara
+BAS	British Antilles
+CAY	Cayenne
+MLD	Maldives
+FIJ	Fiji
+FSM	Micronesia
+TAH	Tahiti
+GUM	Guam
+SOL	Solomon
+SAM	Samoa
+HAW	Hawaii
+SLV	Slovenia
+BOS	Bosnia
+HRZ	Herzegovina
+MAC	Macedonia
+NIR	Northern Ireland
+BAY	Bavaria
+MEK	Mecklenburg
+PRE	Prussia
+SAX	Saxony
+HAN	Hanover
+WUR	Wurtemberg
+SHL	Schleswig-Holstein
+CAT	Catalonia
+NAV	Navarra
+GLC	Galicia
+ADU	Andalusia
+BRI	Brittany
+OCC	Occitania
+COR	Corsica
+KUR	Kurdistan
+TRA	Transylvania
+DNZ	Danzig
+SIL	Silesia
+KSH	Kashubia
+DON	Don Republic
+KUB	Kuban Republic
+BUK	Bukharan Republic
+ALT	Altay
+KAL	Kalmykia
+KAR	Karelia
+CRI	Crimea
+TAT	Tatarstan
+CIN	Chechnya Ingushetia
+DAG	Dagestan
+BYA	Buryatia
+CKK	Chukotka
+FER	Fareastern Republic
+YAK	Yakutia
+VLA	Vladivostok
+KKP	Karakalpakstan
+YAM	Yamalia
+TAY	Taymyria
+OVO	Ostyak Vogulia
+NEN	Nenetsia
+KOM	Komi
+ABK	Abkhazia
+KBK	Kabardino Balkaria
+NOA	North Ossetia
+VGE	Volga Germany
+BSK	Bashkortostan
+KHI	Khiva
+UDM	Udmurtia
+CHU	Chuvashia
+MEL	Mariel
+RIF	Rif
+HAR	Harar
+TIG	Tigray
+AFA	Afar
+BEG	Benishangul-Gumuz
+GBA	Gambela
+SID	Sidamo
+ORO	Oromo
+QEM	Qemant
+KHA	Khakassia
+AOI	Italian East Africa
+LBV	Lombardy Venetia
+PAP	Papal States
+TOS	Tuscany
+SPM	Sardinia Piedmont
+TTS	The Two Sicilies
+SMI	Sami
+GRN	Greenland
+RAP	Rapa Nui
+YUC	Yucatan
+RIG	Rio Grande
+QUE	Quebec
+KAT	Katanga
+BIA	Biafra
+WLA	Welsh Argentina
+CBV	Cabo Verde
+BAR	Barotseland
+EVE	Evenkia
+SOK	Sokoto
+THU	Thuringia
+HES	Hesse
+RHI	Rhineland
+UBD	United Baltic Duchy
+KOS	Kosovo
+RKB	Reichskommisariat Belgien
+RKN	Reichskommisariat Niederlande
+RKG	Reichskommisariat Norwegen
+RKU	Reichskommisariat Ukraine
+RKO	Reichskommisariat Ostland
+RKK	Reichskommisariat Kaukasien
+RKT	Reichskommisariat Turkestan
+RKM	Reichskommisariat Moskowien
+RKL	Reichskommisariat Urals
+GEN	Generalgouvernement
+RKH	Bohmen Mahren
+RKI	Reichskommisariat Iberien
+RKC	Reichskommisariat Balkan
+RGB	Reichskommisariat Grossbritannien
+RKA	Reichskommisariat Mittelafrika
+RNA	Reichskommisariat Nordafrika
+RKV	Reichskommisariat Klein Venedig
+RAN	Reichskommisariat Anden
+RCO	Reichskommisariat Kolumbus
+RUS	Reichskommisariat Nordamerika
+RHD	Reichskommisariat Grosshindustan
+RAR	Reichskommisariat Arabien
+ROA	Reichskommisariat Ostasien
+RAA	Reichskommisariat Australasien
+GAR	Guarani
+INC	Inca
+MIS	Miskito
+MAY	Maya
+INU	Inuit
+CHR	Charrua
+ITZ	Itza
+NAH	Nahua
+IAS	Isthmo Amerindia
+DIP	Partisans
+PSH	Pashtunistan
+HYD	Hyderabad
+MYS	Mysore
+RJP	Rajputana
+CIP	Central Indian Provinces
+RAS	Madras States
+NWF	North Western Frontier States
+KAS	Kashmir
+MPU	Manipur
+WIS	Western Indian States
+KOL	Kolhapur and Deccan States
+KHL	Khalistan
+SIN	Sindh
+KLT	Kalat
+SKK	Sikkim
+FSA	Federation of South Arabia
+ASY	Assyria
+BHR	Bahrain
+IMO	Omani Imamate
+BLC	Balochistan
+EZO	Ezo Republic
+OKN	Okinawa
+ANU	Ainu
+PLU	Palau
+FOR	Formosa
+TML	Timor Leste
+CHM	Champa
+SNG	Singapore
+SAR	Sarawak
+SAB	Sabah
+BRN	Brunei
+WPG	West Papua
+KUM	Kumul Khanate
+GSM	Gansu Ma
+GDC	Guangdong
+KHM	Khotan Ma
+NXM	Ningxia Ma
+SND	Shandong
+SIC	Sichuan
+XIC	Xian
+RNG	Reorganized National Government
+PSR	Philippine Second Republic
+HBC	Hebei-Chahar
+SDL	Sudetenland
+RUT	Ruthenia
+GAL	Galicia and Lodomeria
+BLI	Bali
+ATJ	Atjeh
+SSI	Siak
+POK	Pontianak
+GOW	Gowa
+TNE	Ternate
+BOU	Bougainville
+VAN	Vanuatu
+CPS	Champasak

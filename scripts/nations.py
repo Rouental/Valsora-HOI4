@@ -36,7 +36,7 @@ ROU_ARMY_HISTORY = [
     # last, once the techs and the tank design exist
     # the royal host's men come on top of the (tiny, Feudal Army) pool: see oob_manpower
     "add_manpower = 150000",
-    'set_oob = "ROU_1936"',
+    'set_oob = "ROU_2036"',
 ]
 
 # The Royal Host's order of battle: (template, division count, state name to stand in)
@@ -77,7 +77,7 @@ FEUDAL_ARMY = """ideas = {
 
 
 def rouental_oob(state_vp):
-    """history/units/ROU_1936.txt: the templates, then the divisions, named from the
+    """history/units/ROU_2036.txt: the templates, then the divisions, named from the
     Royal Host's division names. state_vp: state name -> province id to stand in."""
     out = []
     for name, t in ROU_TEMPLATES.items():
@@ -464,7 +464,7 @@ def oob_manpower(n_divisions):
 
 
 def generic_oob(tag, vps):
-    """history/units/<tag>_1936.txt: vps are the victory point provinces of the
+    """history/units/<tag>_2036.txt: vps are the victory point provinces of the
     country's states, capital first."""
     n = generic_divisions(len(vps))
     out = ["division_template = {", '\tname = "Infantry Division"', "\tregiments = {",
@@ -745,7 +745,7 @@ ROU_CHARACTERS = """characters = {
 		}
 		country_leader = {
 			ideology = theocrat
-			expire = "1965.1.1.1"
+			expire = "2065.1.1.1"
 			id = -1
 		}
 	}
@@ -759,7 +759,7 @@ ROU_CHARACTERS = """characters = {
 		country_leader = {
 			ideology = feudalism
 			desc = "ROU_roland_cahun_desc"
-			expire = "1965.1.1.1"
+			expire = "2065.1.1.1"
 			id = -1
 		}
 	}
@@ -775,7 +775,7 @@ ROU_CHARACTERS = """characters = {
 		}
 		country_leader = {
 			ideology = strongman_rule
-			expire = "1965.1.1.1"
+			expire = "2065.1.1.1"
 			id = -1
 		}
 		# a general from the start (author, 2026-10-02); the communist path retires her
@@ -798,7 +798,7 @@ ROU_CHARACTERS = """characters = {
 		}
 		country_leader = {
 			ideology = theocrat
-			expire = "1965.1.1.1"
+			expire = "2065.1.1.1"
 			id = -1
 		}
 	}
@@ -814,7 +814,7 @@ ROU_CHARACTERS = """characters = {
 		}
 		country_leader = {
 			ideology = strongman_rule
-			expire = "1965.1.1.1"
+			expire = "2065.1.1.1"
 			id = -1
 		}
 		# a general from the start (author, 2026-10-02); the communist path retires her
@@ -840,7 +840,7 @@ CHARACTERS = """characters = {
 		}
 		country_leader = {
 			ideology = liberalism
-			expire = "1965.1.1.1"
+			expire = "2065.1.1.1"
 			id = -1
 		}
 	}
@@ -854,7 +854,7 @@ CHARACTERS = """characters = {
 		}
 		country_leader = {
 			ideology = anarchist_communism
-			expire = "1965.1.1.1"
+			expire = "2065.1.1.1"
 			id = -1
 		}
 	}
@@ -1368,7 +1368,7 @@ def write_files(write, out, state_ids, state_vp):
     write("common/national_focus/aislada.txt", FOCUS_TREE)
     # UTF-8 with BOM, like vanilla's files of these kinds (the names have accents)
     write("common/units/names_divisions/ROU_names_divisions.txt", rouental_division_names(), bom=True)
-    write("history/units/ROU_1936.txt", rouental_oob(state_vp), bom=True)
+    write("history/units/ROU_2036.txt", rouental_oob(state_vp), bom=True)
     write("common/ideas/valsora_ideas.txt", FEUDAL_ARMY)
     write("common/opinion_modifiers/valsora_opinion_modifiers.txt", OPINION_MODIFIERS)
     write("common/scripted_effects/valsora_opinion_effects.txt", OPINION_EFFECTS)

@@ -59,6 +59,18 @@ mod/
   `events`, `common/decisions`, `common/ai_strategy`, `common/ai_strategy_plans`,
   `common/on_actions` and `common/bookmarks`. Keep at least one valid file in each
   replaced folder.
+- **What a replaced folder held for every country goes too**: replacing `events`,
+  `common/on_actions` and `common/ai_strategy` also removed elections, aces, war
+  justification, capitulation news, collaboration governments, the AI's generic plans
+  (Valsora until 2026-10-14). Ship the generic files back as the mod's own.
+- **`replace_path` is not recursive**: `common/decisions/categories` still loads after
+  `common/decisions` is replaced, and so do the focus trees, ideas and scripted triggers
+  that name vanilla's decisions. Each name they use needs a definition (Valsora ships
+  never-visible stand-ins), or `error.log` fills with "Invalid decision" and "Invalid Decision
+  ID" lines.
+- **Earth's country tags stay defined** while the mod keeps vanilla's
+  `common/country_tags` (vanilla's technologies, AI and peace conference name them), and
+  each needs a history file, or `error.log` lists "is missing a history file" for all 364.
 - **Overriding a single file**: ship a file with the same path and name.
 - **Load order**: a mod that lists another under `dependencies={ "Exact Mod Name" }`
   loads after it, so its files win. Use this for submods and compatibility patches.
@@ -231,8 +243,9 @@ mod/
 
 ## 7. Armies and economy
 
-- `history/units/<TAG>_1936.txt` holds division templates and units, loaded by
-  `set_oob = "<TAG>_1936"` in the country history. **OOB divisions take their men from
+- `history/units/<TAG>_2036.txt` holds division templates and units, loaded by
+  `set_oob = "<TAG>_2036"` in the country history (any file name works; vanilla's are
+  `<TAG>_1936`, Valsora's carry its start year). **OOB divisions take their men from
   the country's manpower pool** (verified: armies started empty), and
   `start_manpower_factor` did not prevent it. So give the country enough population,
   or `add_manpower` before `set_oob`.

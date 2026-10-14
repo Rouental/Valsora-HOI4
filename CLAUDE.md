@@ -3,7 +3,8 @@
 Turns the author's hand-drawn fictional world (paint.net `.pdn`) into a Hearts of Iron IV
 map. Game version: **1.19.3**. The mod installs as `mod/valsora_test` in
 `Documents/Paradox Interactive/Hearts of Iron IV/` (on the author's machine Documents sits
-under OneDrive — keep that segment in any absolute path).
+under OneDrive — keep that segment in any absolute path). Valsora takes place in **2036**:
+the game starts on 1 January 2036 (see "2036" under Decisions worth keeping).
 
 This is the second attempt. The current build is deliberately minimal: the real
 geography with **placeholder square provinces**, one placeholder country per continent,
@@ -186,6 +187,9 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `ideologies.py` | the five ideologies: ideology file, renamed localisation, theocracy icon |
 | `minimap.py` | the minimap (lower right): Valsora's land on parchment instead of vanilla's Earth, its frame, window and slide (2026-10-13) |
 | `globe.py` | the world tension globe (top bar, 10 frames) and its small icon: Valsora instead of Earth (2026-10-14); run alone, `dist/tension_globe_preview.png` |
+| `vanilla_parts.py` | vanilla's parts in the mod, for `build_mod.py`: the vanilla files it ships moved to 2036, the stand-ins for what Earth's content still names (decisions, events, country histories), the start and end dates, the AI's faction theaters |
+| `vanilla_sync.py` | by hand, after a game update: refreshes `source/vanilla/` from the author's copy of the game (`Rouental/HOI4-Files`): the vanilla files the mod ships changed, and lists of vanilla's names |
+| `pdxscript.py` | a reader for Paradox script (nested `key = value` blocks), used by `vanilla_sync.py` |
 | `check_mod.py` | re-reads the built files and checks every rule below |
 | `export_canvas.py` | previews in `dist/` |
 | `package.py` | `dist/valsora_test.zip` |
@@ -195,10 +199,33 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 
 **A clean `check_mod.py` run is the bar for shipping a build.** It was mutation-tested
 (CRLF, X-crossing, missing building row, state split across regions, descriptor
-mismatch, missing localisation) and catches all of them.
+mismatch, missing localisation) and catches all of them. Since 2026-10-14 it also checks
+our files against vanilla's own names (`source/vanilla/index`): sprites, technologies,
+equipment, modules, battalions, ideas, defines, the map files the mod inherits, the
+stand-ins for Earth's decisions and tags, every event fired (by focus, effect, event or
+on_action) and 2036 (mutation-tested: 19 breaks, all caught). The checks that judge our
+scripting (tags targeted, popularities, ideologies) skip vanilla's shipped files.
 
 ## Decisions worth keeping
 
+- **2036** (author, 2026-10-14: "Valsora takes place in 2036"). Everything the game dates
+  moves a hundred years (`vanilla_parts.py`):
+  - the clock: `START_DATE` 2036.1.1.12, `END_DATE` 2049.1.1.1 (vanilla also runs 13
+    years) and `TENSION_TIME_SCALE_START_DATE` in `common/defines/valsora_game.lua`, the
+    bookmark's date, and our history (last elections 2032, rulers' terms to 2065, order of
+    battle files `<TAG>_2036`);
+  - the tech tree: every technology's `start_year` (research ahead of it is penalised) and
+    the tree's year labels (`interface/countrytechtreeview.gui`);
+  - the date conditions of the generic content the mod ships (laws, the generic focus
+    tree, AI templates and strategies, faction goals, special projects, raids, medals,
+    events) and the game rule "war goals from focuses only, until 1938 / 1939 / 1940"
+    (2038 ..., `diplomacy_scripted_triggers.txt`);
+  - the generic names with years ("2036 Cruiser Hull", "Heavy cruiser 2040", the game
+    rule's options), in `localisation/english/replace/`.
+  Equipment keeps vanilla's `year`: licence costs count it from 1936
+  (`LICENSE_IC_COST_YEAR_INCREASE`), so moving it would only make licences dearer.
+  `check_mod.py` fails on any 18xx or 19xx date, `start_year` or tech tree label in the
+  built files, and on a start date or bookmark outside 2036 (mutation-tested).
 - **Map size 5120×2560.** HOI4 needs both sides to be multiples of 256 and the area to stay
   under ~13,238,272 px. 5120×2560 = 13,107,200 is the largest size under that cap, and
   2:1 matches the author's canvas. It is proven in the wild (the Mappa Mundi mod ships this
@@ -908,7 +935,7 @@ Aislada is the worked example of a built-out nation:
     - ROU's history does `create_faction_from_template` + `add_to_faction`, the way
       vanilla ENG does in 1.19.
 - **Starting armies** (author, 2026-10-02): every country owning land but Rouental gets
-  `history/units/<TAG>_1936.txt` (`nations.generic_oob`): "Infantry Division" (8
+  `history/units/<TAG>_2036.txt` (`nations.generic_oob`): "Infantry Division" (8
   infantry, 1 artillery, engineers, recon), about one per six states, 2 to 24, at the
   victory points of its states (capital first), plus the techs for them. An OOB
   division takes its men out of the country's pool; `start_manpower_factor = 1.0` did
@@ -942,7 +969,7 @@ Aislada is the worked example of a built-out nation:
   `common/units/names_divisions/ROU_names_divisions.txt`. The levy-army design is in
   `docs/ROUENTAL_ARMY.md`. Built: the **Feudal Army** spirit (`ROU_feudal_army`:
   recruitable population −80 %, training ×2, PP −10 %, stability −5 %; anime placeholder
-  icon) and the **royal host** (`history/units/ROU_1936.txt`: 2 armoured, 2 mechanised,
+  icon) and the **royal host** (`history/units/ROU_2036.txt`: 2 armoured, 2 mechanised,
   8 motorised divisions, full support, plus techs, a "Char Royal" tank and a stockpile).
   The levies themselves are not built: tiers and costs await the author.
   - The author's detailed fief map (`Rouental_Map_TEMP_2.pdn`, 8000×4471, decoded in
@@ -1160,7 +1187,15 @@ sprites resolve to files, and that every focus id and prerequisite is valid and 
   - **Per coastal province:** naval_base_spawn and floating_harbor (both naming the sea
     province), naval_headquarters, naval_supply_hub, coastal_bunker.
 - `unitstacks.txt`: land provinces need types {0,1,9,10,21,22,38}; sea provinces need
-  {0,1,2,9,10,11,12,21,22,23,30,31,38}; lakes need none.
+  {0,1,2,9,10,11,12,21,22,23,30,31,38}; lakes need none. The game places the kinds a
+  province lacks itself, badly: ships in port (19, 20) "too far away from center" in two of
+  Merlo's large sea provinces (error.log, 2026-10-14). So every kind vanilla's own map has
+  is written (`build_mod.py`, read from vanilla's file): 0, 9, 10, 21, 38 near the centre;
+  1-8 and 22-29 part of the way toward each neighbour, longest borders first, facing it;
+  11-18 and 30-37 fleets on a ring round a sea province's centre; 19 and 20 ships in port,
+  on a coastal province's coast and just offshore (at the centre elsewhere). The last
+  column is vanilla's offset: 0.3 on land and in port, 1.0 at sea. `check_mod.py` wants 19
+  and 20 everywhere but on lakes (mutation-tested).
 - `weatherpositions.txt`: each strategic region needs a `small` and a **`big`** row (not
   "large").
 - Other rules:
@@ -1222,6 +1257,42 @@ The following vanilla files are overridden:
 - The six portrait files of vanilla and its DLCs (see Cultures).
 - The world tension globe and its small icon (`gfx/interface/world_tension_icon_big_strip.dds`,
   `world_tension_icon.dds`).
+- The start date's picture (`GFX_select_date_valsora`, `minimap.write_bookmark`: Valsora on
+  the minimap's parchment, in place of 1936's soldiers).
+- `common/ai_faction_theaters/ai_faction_theaters.txt`: the AI's faction theaters, one per
+  continent with the sea regions on its coasts (split where they don't connect), in place
+  of vanilla's Earth ones (Barbarossa, North Africa ...: 30 error.log lines, 2026-10-14).
+- Everything in `source/vanilla/` (below).
+
+**Vanilla's generic content comes back as the mod's own** (2026-10-14, read from the
+author's copy of the game). The replaced folders also held what every country uses, so
+from the first build there were no election, ace, war justification, nuclear, capitulation
+or operative events, no faction and demand events (`Generic.txt`), no collaboration
+governments (`LAR_occupation.txt`), no generic AI strategies and no generic on_actions.
+`source/vanilla/` (its README lists it all) now holds:
+- `files/`: exact copies of the vanilla files the mod ships changed (`vanilla_sync.py`);
+  `vanilla_parts.py` moves their dates to 2036 and cuts Earth-only blocks out of the AI's
+  `default.txt` (Japan's, the USA's and Britain's naval focus, Earth's area priorities);
+- `curated/common/on_actions/valsora_generic_on_actions.txt`: vanilla's generic hooks
+  (elections, aces, war justification, army leaders, doctrines, compliance, nuclear and
+  capitulation news, the end of an ideological civil war, operatives), cut by hand from
+  vanilla's on_actions without their Earth parts. Vanilla's peace conference hooks only
+  clear flags on Earth states, so none came back;
+- `index/`: lists of vanilla's names, which `check_mod.py` checks ours against (sprites,
+  technologies, equipment, modules, battalions, ideas, defines, map files).
+And stand-ins, so what vanilla still names exists (error.log, 2026-10-14):
+- **Decisions**: `replace_path` is not recursive, so vanilla's decision categories still
+  load, as do the focus trees, ideas and scripted triggers that name its decisions (1,142
+  lines of "Invalid decision" / "Invalid Decision ID"). `vanilla_parts.stand_ins` writes a
+  never-visible decision of the same kind (decision, mission, targeted, state-targeted) for
+  each of the 732 names, in the category `valsora_vanilla_stand_ins`.
+- **Earth's country tags** stay defined (vanilla's technologies, AI and peace conference
+  name them; removing them would break those files): each of the 364 has a history file
+  (`TAG - Name.txt`: capital state 1, owning nothing, monarchist), for the 728 lines of
+  "is missing a history file". `check_mod.py` requires every one and no more in them.
+- **Events** the shipped files fire only for Earth's countries (Denmark's election,
+  Munich's Czech crisis, ...) are hidden empty events
+  (`events/valsora_vanilla_event_stand_ins.txt`).
 
 Left loaded on purpose, and noisy in `error.log`:
 - National focus: it holds the generic tree our countries use.
@@ -1274,6 +1345,10 @@ in git history (commit d2d6cd8, `scripts/cartographic.py`). It used
 
 ## Current state
 
+- 2026-10-14: no map changes; the game starts in 2036, vanilla's generic events, AI
+  strategies and on_actions are back, and stand-ins should take about 1,900 lines out
+  of the 2,081-line error.log (decisions, Earth's histories, AI theaters, unit
+  positions). Not yet seen in game.
 - 20,817 provinces (20,416 land, 363 sea, 38 lakes), 61,400 province borders, 3,117
   states, 122 strategic regions (42 sea), 182 countries (2026-10-13, later: Santa Fe cut
   into 7 states, the last placeholder states given to their neighbours, so Orientalis,

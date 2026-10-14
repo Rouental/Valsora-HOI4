@@ -1,0 +1,392 @@
+# files in vanilla's map folder (vanilla 1.19.3, scripts/vanilla_sync.py)
+adjacencies.csv
+adjacency_rules.txt
+ambient_object.txt
+buildings.txt
+cities.bmp
+cities.txt
+colors.txt
+continent.txt
+default.map
+definition.csv
+heightmap.bmp
+positions.txt
+provinces.bmp
+railways.txt
+rivers.bmp
+seasons.txt
+strategicregions/1-Southern England.txt
+strategicregions/10-Southern Sweden.txt
+strategicregions/100-Red Sea.txt
+strategicregions/101-Bay of Bengal.txt
+strategicregions/102-East African Coast.txt
+strategicregions/103-Mozambique Channel.txt
+strategicregions/104-Arabian Sea.txt
+strategicregions/105-Eastern Pacific 1.txt
+strategicregions/106-Mexican Coast.txt
+strategicregions/107-Western Canal zone.txt
+strategicregions/108-South American coast.txt
+strategicregions/109-Peruivan Coast.txt
+strategicregions/11-Southern Norway.txt
+strategicregions/110-East Pacific 2.txt
+strategicregions/111-East Pacific 3.txt
+strategicregions/112-Far South Pacific.txt
+strategicregions/113-South Pacific.txt
+strategicregions/114-North Pacific.txt
+strategicregions/115-North East Pacific.txt
+strategicregions/116-Iran.txt
+strategicregions/117-East Coast.txt
+strategicregions/118-West Coast.txt
+strategicregions/119-South West.txt
+strategicregions/12-Northern Scandinavia.txt
+strategicregions/120-Central USA.txt
+strategicregions/121-Eastern Canada.txt
+strategicregions/122-Western Canada.txt
+strategicregions/123-Mexico.txt
+strategicregions/124-Northern South America.txt
+strategicregions/125-Brazil.txt
+strategicregions/126-North Africa.txt
+strategicregions/127-Saharadesert.txt
+strategicregions/128-Egypt.txt
+strategicregions/129-Asia minor.txt
+strategicregions/13-Finland.txt
+strategicregions/130-Ukraine.txt
+strategicregions/131-Belarus.txt
+strategicregions/132-Northern Front.txt
+strategicregions/133-Central Russia.txt
+strategicregions/134-Caucasus Region.txt
+strategicregions/135-Taman Region.txt
+strategicregions/136-Great Steppe.txt
+strategicregions/137-Western Steppe.txt
+strategicregions/138-Ural Region.txt
+strategicregions/139-South Africa.txt
+strategicregions/14-TransUrals.txt
+strategicregions/140-Sub-Sarhan Africa.txt
+strategicregions/141-East India.txt
+strategicregions/142-South East Asia.txt
+strategicregions/143-Eastern China.txt
+strategicregions/144-Western China.txt
+strategicregions/145-Central Asia.txt
+strategicregions/146-Himalayas.txt
+strategicregions/147-Siberian Region.txt
+strategicregions/148-Russian Far East.txt
+strategicregions/149-Eastern Siberia.txt
+strategicregions/15-Asia.txt
+strategicregions/150-Artic Russia.txt
+strategicregions/151-Western Siberia.txt
+strategicregions/152-Central Steppe.txt
+strategicregions/153-Northern India.txt
+strategicregions/154-Home Islands.txt
+strategicregions/155-Manchuria.txt
+strategicregions/156-Austrialia.txt
+strategicregions/157-New Nealand.txt
+strategicregions/158-Guinea.txt
+strategicregions/159-Borneo.txt
+strategicregions/16-North Sea.txt
+strategicregions/160-Philippines.txt
+strategicregions/161-Iceland.txt
+strategicregions/162-Afghanistan Area.txt
+strategicregions/163-Amazonian Brazil.txt
+strategicregions/164-South East China.txt
+strategicregions/165-South West China.txt
+strategicregions/166-Hudson Bay.txt
+strategicregions/167-New Guinea.txt
+strategicregions/168-Adriatic Sea.txt
+strategicregions/169-Tyrrhenian Sea.txt
+strategicregions/17-Africa.txt
+strategicregions/170-Florida Coast.txt
+strategicregions/171-Northwest Coast.txt
+strategicregions/172-South Central Pacific.txt
+strategicregions/173-Eastern North Sea.txt
+strategicregions/174-Norwegian Coast.txt
+strategicregions/175-Southeastern Central Pacific.txt
+strategicregions/176-Central North Pacific.txt
+strategicregions/177-Western North Pacific.txt
+strategicregions/178-West Polynesia.txt
+strategicregions/179-French Polynesia.txt
+strategicregions/18-Channel.txt
+strategicregions/180-Micronesian Gap.txt
+strategicregions/181-Madgascar.txt
+strategicregions/182-North West Africa.txt
+strategicregions/183-Central Africa.txt
+strategicregions/184-South West Africa.txt
+strategicregions/185-South East Africa.txt
+strategicregions/186-Korea.txt
+strategicregions/187-Sumatra.txt
+strategicregions/188-Malaya.txt
+strategicregions/189-Burma.txt
+strategicregions/19-Northern France.txt
+strategicregions/190-Pakistan.txt
+strategicregions/191-Northern Norway.txt
+strategicregions/192-Northern Sweden.txt
+strategicregions/193-Northern Australia.txt
+strategicregions/194-Eastern Australia.txt
+strategicregions/195-Central Australia.txt
+strategicregions/196-Arabian Coast.txt
+strategicregions/197-New England.txt
+strategicregions/198-Midwest.txt
+strategicregions/199-Rocky Mountains.txt
+strategicregions/2-Northern England.txt
+strategicregions/20-Southern France.txt
+strategicregions/200-Quinghai.txt
+strategicregions/201-Northern Andes.txt
+strategicregions/202-Aegean Sea.txt
+strategicregions/203-Persian Gulf.txt
+strategicregions/204-Sierra Madre.txt
+strategicregions/205-Yucatan Peninsula.txt
+strategicregions/206-Lower Baltic Sea.txt
+strategicregions/207-Danish Belts.txt
+strategicregions/208-Western France.txt
+strategicregions/209-Northwestern Iberia.txt
+strategicregions/21-Alpine Region.txt
+strategicregions/210-Southern Iberia.txt
+strategicregions/211-Gulf Coast.txt
+strategicregions/212-Central Canada.txt
+strategicregions/213-Maritimes.txt
+strategicregions/214-Appalachia.txt
+strategicregions/215-Namibia.txt
+strategicregions/216-Upper Nile.txt
+strategicregions/217-Lake Victoria.txt
+strategicregions/218-California.txt
+strategicregions/219-Southern Rockies.txt
+strategicregions/22-Czechoslovakia.txt
+strategicregions/220-Labrador and Newfoundland.txt
+strategicregions/221-Saskatchewan.txt
+strategicregions/222-Northern Canada.txt
+strategicregions/223-North South Africa.txt
+strategicregions/224-Angola.txt
+strategicregions/225-Tripoli.txt
+strategicregions/226-West Africa.txt
+strategicregions/227-Congo.txt
+strategicregions/228-South Indochina.txt
+strategicregions/229-Siam.txt
+strategicregions/23-Italy.txt
+strategicregions/230-Cape Comorin.txt
+strategicregions/231-Coromandel Coast.txt
+strategicregions/232-Levant.txt
+strategicregions/233-Quebec.txt
+strategicregions/234-Ontario Region.txt
+strategicregions/235-British Columbia.txt
+strategicregions/236-South Arabia.txt
+strategicregions/237-Hejaz.txt
+strategicregions/238-East Arabia.txt
+strategicregions/239-Alborz.txt
+strategicregions/24-Western Balkans.txt
+strategicregions/240-Zagros.txt
+strategicregions/241-Dasht-e kavir.txt
+strategicregions/242-Northern Manchuria.txt
+strategicregions/243-Eastern Manchuria.txt
+strategicregions/244-Chahar.txt
+strategicregions/245-Shanxi Region.txt
+strategicregions/246-Central China.txt
+strategicregions/247-Yantze River Region.txt
+strategicregions/248-Guangxi.txt
+strategicregions/249-Yunnan.txt
+strategicregions/25-Greece.txt
+strategicregions/250-Kham.txt
+strategicregions/251-Ngari.txt
+strategicregions/252-Tien Shan.txt
+strategicregions/253-Vindhyachal.txt
+strategicregions/254-Thar Desert.txt
+strategicregions/255-Amur.txt
+strategicregions/256-Transbaikal.txt
+strategicregions/257-Northern Far East.txt
+strategicregions/258-Okhotsk.txt
+strategicregions/259-Sakha.txt
+strategicregions/26-Eastern Balkans.txt
+strategicregions/260-Western Sakha.txt
+strategicregions/261-Altai.txt
+strategicregions/262-Central Siberia.txt
+strategicregions/263-Eastern Nenetsia.txt
+strategicregions/264-Komi-Nenetsia.txt
+strategicregions/265-East Karelia.txt
+strategicregions/266-Uriankhai.txt
+strategicregions/267-Tanscaspia.txt
+strategicregions/268-Ferghana.txt
+strategicregions/269-Samarkand.txt
+strategicregions/27-Northern Balkans.txt
+strategicregions/270-Syr Darya.txt
+strategicregions/271-South West Congo.txt
+strategicregions/272-West Congo.txt
+strategicregions/273-Danakil.txt
+strategicregions/274-Ogaden.txt
+strategicregions/275-Jutland Peninsula.txt
+strategicregions/276-Northern Norrland.txt
+strategicregions/277-Northern Finland.txt
+strategicregions/278-Western Finland.txt
+strategicregions/279-Gulf of Bothnia.txt
+strategicregions/28-Middle East.txt
+strategicregions/280-Guiana.txt
+strategicregions/281-Gran Chaco.txt
+strategicregions/282-Rio Grande.txt
+strategicregions/283-Patagonia.txt
+strategicregions/284-Southern Andes.txt
+strategicregions/285-Rio Tocantins.txt
+strategicregions/286-Rio Grande do Norte.txt
+strategicregions/287-Bolovia.txt
+strategicregions/288-Central Brazil.txt
+strategicregions/289-Southern Afghanistan.txt
+strategicregions/29-Central Mediterranean Sea.txt
+strategicregions/290-Bengal.txt
+strategicregions/291-Baluchistan.txt
+strategicregions/292-Shan States.txt
+strategicregions/293-Tenasserim.txt
+strategicregions/294-Rangoon.txt
+strategicregions/295-Mandalay.txt
+strategicregions/296-Gujarat.txt
+strategicregions/297-Eastern-Iranian Range.txt
+strategicregions/298-Eastern Zagros.txt
+strategicregions/299-Tosando.txt
+strategicregions/3-Scotland and Northern Ireland.txt
+strategicregions/30-Black Sea.txt
+strategicregions/300-South Japan.txt
+strategicregions/301-South Island.txt
+strategicregions/302-South-Eastern Australia.txt
+strategicregions/303-Western Australia.txt
+strategicregions/304-North-Western Australia.txt
+strategicregions/31-Indian Area.txt
+strategicregions/32-Southern Ocean.txt
+strategicregions/33-North America.txt
+strategicregions/34-Central America.txt
+strategicregions/35-South America.txt
+strategicregions/36-Atlantic Ocean.txt
+strategicregions/37-Baltic States.txt
+strategicregions/38-Western Poland.txt
+strategicregions/39-Eastern Poland.txt
+strategicregions/4-Ireland.txt
+strategicregions/40-Western Russia.txt
+strategicregions/41-Northeastern Iberia.txt
+strategicregions/42-Bay of Biscay.txt
+strategicregions/43-Western Approaches.txt
+strategicregions/44-Denmark Strait.txt
+strategicregions/45-Norwegian Sea.txt
+strategicregions/46-Barents Sea.txt
+strategicregions/47-Spanish Coast.txt
+strategicregions/48-African Coast.txt
+strategicregions/49-Mid Atlantic 1.txt
+strategicregions/5-Benelux Region.txt
+strategicregions/50-Labrador Sea.txt
+strategicregions/51-Mid atlantic 2.txt
+strategicregions/52-Gulf of Mexico.txt
+strategicregions/53-Caribbean.txt
+strategicregions/54-Eastern Seaboard.txt
+strategicregions/55-Newfoundland Sea.txt
+strategicregions/56-Mid Atlandtic 3.txt
+strategicregions/57-Mid Atlantic 4.txt
+strategicregions/58-Mid Atlantic 5.txt
+strategicregions/59-Mid Atlantic 6.txt
+strategicregions/6-North-West Germany.txt
+strategicregions/60-West Indian Ocean.txt
+strategicregions/61-Central Atlantic.txt
+strategicregions/62-Cape Approach.txt
+strategicregions/63-Argintine Coast.txt
+strategicregions/64-Super Southern atlantic 1.txt
+strategicregions/65-Cape of Africa.txt
+strategicregions/66-South central atlantic 1.txt
+strategicregions/67-Super south atlantic 2.txt
+strategicregions/68-Western Mediterranean Sea.txt
+strategicregions/69-Eastern mediterranean Sea.txt
+strategicregions/7-Western Germany.txt
+strategicregions/70-Caspian Sea.txt
+strategicregions/71-East Indian Ocean.txt
+strategicregions/72-Straits of Malacca.txt
+strategicregions/73-Gulf of Thailand.txt
+strategicregions/74-South East Indian Ocean.txt
+strategicregions/75-South China Sea.txt
+strategicregions/76-East China Sea.txt
+strategicregions/77-Yellow Sea.txt
+strategicregions/78-Philippine Sea.txt
+strategicregions/79-Sea of Japan.txt
+strategicregions/8-Eastern Germany.txt
+strategicregions/80-Celebes Sea.txt
+strategicregions/81-Coral Sea.txt
+strategicregions/82-Gulf of Carpentaria.txt
+strategicregions/83-Soloman Sea.txt
+strategicregions/84-Bismarck Sea.txt
+strategicregions/85-South West Indian Ocean.txt
+strategicregions/86-Tasman Sea.txt
+strategicregions/87-Sea of Okhotsk.txt
+strategicregions/88-Bering Sea.txt
+strategicregions/89-Western Seaboard.txt
+strategicregions/9-Baltic Sea.txt
+strategicregions/90-Coast of Japan.txt
+strategicregions/91-Arafura Sea.txt
+strategicregions/92-Timor Sea.txt
+strategicregions/93-Banda Sea.txt
+strategicregions/94-Western Pacific.txt
+strategicregions/95-Western pacific 2.txt
+strategicregions/96-North West Pacific.txt
+strategicregions/97-South West Pacific.txt
+strategicregions/98-Great Austrialian Blight.txt
+strategicregions/99-Far Eastern Indian Ocean.txt
+supply_nodes.txt
+supplyareas/1-SupplyArea.txt
+terrain.bmp
+terrain/RiverSurface_diffuse_0.dds
+terrain/RiverSurface_diffuse_1.dds
+terrain/RiverSurface_diffuse_2.dds
+terrain/RiverSurface_masks.dds
+terrain/RiverSurface_normal_0.dds
+terrain/RiverSurface_normal_1.dds
+terrain/RiverSurface_normal_2.dds
+terrain/Tree_season.bmp
+terrain/Tree_tint.bmp
+terrain/atlas0.dds
+terrain/atlas1.dds
+terrain/atlas2.dds
+terrain/atlas_normal0.dds
+terrain/atlas_normal1.dds
+terrain/atlas_normal2.dds
+terrain/border_country_0.dds
+terrain/border_country_1.dds
+terrain/border_country_2.dds
+terrain/border_impassable_0.dds
+terrain/border_impassable_1.dds
+terrain/border_impassable_2.dds
+terrain/border_province_0.dds
+terrain/border_province_1.dds
+terrain/border_province_2.dds
+terrain/border_sea_0.dds
+terrain/border_sea_1.dds
+terrain/border_sea_2.dds
+terrain/border_sea_region_0.dds
+terrain/border_sea_region_1.dds
+terrain/border_sea_region_2.dds
+terrain/border_state_0.dds
+terrain/border_state_1.dds
+terrain/border_state_2.dds
+terrain/citylights_rgb_snowmask_a_0.dds
+terrain/citylights_rgb_snowmask_a_1.dds
+terrain/citylights_rgb_snowmask_a_2.dds
+terrain/colormap_rgb_cityemissivemask_a.dds
+terrain/colormap_water_0.dds
+terrain/colormap_water_1.dds
+terrain/colormap_water_2.dds
+terrain/fow_noise_0.dds
+terrain/fow_noise_1.dds
+terrain/fow_noise_2.dds
+terrain/fow_rgb_waterspec_a.dds
+terrain/ice_diffuse.dds
+terrain/ice_noise_0.dds
+terrain/ice_noise_1.dds
+terrain/ice_noise_2.dds
+terrain/lean1.dds
+terrain/lean2.dds
+terrain/mud_diffuse_rgb_gloss_a_0.dds
+terrain/mud_diffuse_rgb_gloss_a_1.dds
+terrain/mud_diffuse_rgb_gloss_a_2.dds
+terrain/mud_normal_rgb_spec_a_0.dds
+terrain/mud_normal_rgb_spec_a_1.dds
+terrain/mud_normal_rgb_spec_a_2.dds
+terrain/naval_dominance_fx.dds
+terrain/reflection.dds
+terrain/reflection_land_unit.dds
+terrain/snow_normal_rgb_diffuse_a.dds
+terrain/strait.dds
+terrain/underwater_terrain_0.dds
+terrain/underwater_terrain_1.dds
+terrain/underwater_terrain_2.dds
+trees.bmp
+unitstacks.txt
+weatherpositions.txt
+world_normal.bmp

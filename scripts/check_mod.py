@@ -62,6 +62,18 @@ def field(body, key):
     return m.group(1) if m else None
 
 
+def vanilla_index(name):
+    """A list of vanilla's names from source/vanilla/index/ (scripts/vanilla_sync.py)."""
+    path = Path("source/vanilla/index") / name
+    return [line for line in path.read_text(encoding="utf-8").splitlines() if line and not line.startswith("#")]
+
+
+def is_vanilla_part(path, mod):
+    """Whether a built file is one of vanilla's that the mod ships changed (source/vanilla/)."""
+    rel = Path(path).relative_to(mod).as_posix()
+    return any((Path("source/vanilla") / d / rel).exists() for d in ("files", "curated"))
+
+
 def id_list(body, key):
     b = blocks(body, key)
     return [int(x) for x in b[0].split()] if b else []
@@ -250,12 +262,26 @@ def main(mod):
             tags[tag] = path
             if not (mod / "common" / path).exists():
                 err(f"country file common/{path} missing")
-    hist = {}
+    # Earth's tags stay defined (vanilla's files name them), each with a stand-in history of its own,
+    # or error.log fills with "<TAG> - is missing a history file" (728 lines, 2026-10-14)
+    earth = {line.split("\t")[0] for line in vanilla_index("tags.txt")}
+    if earth & set(tags):
+        err(f"our tags {sorted(earth & set(tags))} are also Earth's (vanilla common/country_tags)")
+    hist, stubbed = {}, set()
     for f in (mod / "history/countries").glob("*.txt"):
         tag = f.name[:3]
+        if tag in earth:
+            stubbed.add(tag)
+            text = strip(f.read_text(encoding="utf-8"))
+            if field(text, "capital") is None or "recruit_character" in text or "set_oob" in text:
+                err(f"history file {f.name}: Earth's {tag} should only have a stand-in history")
+            continue
         if tag not in tags:
             err(f"history file {f.name} for unknown tag")
         hist[tag] = int(field(f.read_text(), "capital"))
+    if earth - stubbed:
+        err(f"{len(earth - stubbed)} of Earth's tags have no history file (error.log: \"is missing a history "
+            f"file\"), e.g. {sorted(earth - stubbed)[:5]}")
 
     # ------------------------------------------------------------ states
     state_provs, owner = {}, {}
@@ -370,13 +396,19 @@ def main(mod):
     stacks = defaultdict(set)
     for ln in (mod / "map/unitstacks.txt").read_text().splitlines():
         p, t, x, y, z, rot, off = ln.split(";")
-        if inside(x, z) != int(p):
+        at = inside(x, z)
+        # kind 20 (a ship moving in port) lies just offshore, in the sea beside its port, as in vanilla
+        if at != int(p) and not (t == "20" and kind[at - 1] == 0 and coastal[int(p) - 1]):
             err(f"unit stack {t} of province {p} lies outside it")
         stacks[int(p)].add(int(t))
     for i in range(n):
         want = LAND_STACKS if kind[i] == 1 else SEA_STACKS if kind[i] == 0 else set()
         if want - stacks[i + 1]:
             err(f"province {i + 1} lacks unit stacks {sorted(want - stacks[i + 1])}")
+        # ships in port: without kinds 19 and 20 the game places them itself, in a large sea province
+        # "too far away from center" (error.log, 2026-10-14)
+        if kind[i] != 2 and {19, 20} - stacks[i + 1]:
+            err(f"province {i + 1} lacks unit stacks 19 and 20 (ships in port)")
     wp = defaultdict(set)
     for ln in (mod / "map/weatherpositions.txt").read_text().splitlines():
         rid, x, y, z, sz = ln.split(";")
@@ -448,7 +480,7 @@ def main(mod):
     # every country's name)
     import ideologies
     govs = set(ideologies.IDEOLOGIES) | set(ideologies.ideology_of())
-    tags = {f.name[:3] for f in (mod / "history/countries").glob("*.txt")}
+    tags = {f.name[:3] for f in (mod / "history/countries").glob("*.txt")} - earth
     for f in (mod / "common/characters").glob("*.txt"):
         for cid in re.findall(r"^\t(\w+) = \{", f.read_text(), re.M):
             if cid[:3] in tags and cid[4:] in govs:
@@ -462,12 +494,16 @@ def main(mod):
     import ideologies
     io = {**ideologies.ideology_of(), **{k: i for i, v in ideologies.HIDDEN.items() for k in v}}
     for f in (mod / "history/countries").glob("*.txt"):
+        if f.name[:3] in earth:
+            continue  # Earth's tags: a stand-in history, no leader
         t = f.read_text()
         rp = re.search(r"ruling_party\s*=\s*(\w+)", t).group(1)
         leads = [c for c in re.findall(r"recruit_character\s*=\s*(\w+)", t) if io.get(sub_ideo.get(c)) == rp]
         if not leads:
             err(f"{f.name}: no recruited character leads its ruling party ({rp})")
     for f in (mod / "common/national_focus").glob("*.txt"):
+        if is_vanilla_part(f, mod):
+            continue  # vanilla's generic tree (shifted to 2036): the game localises it
         text = strip(f.read_text())
         ids = re.findall(r"\bfocus\s*=\s*\{\s*id\s*=\s*(\w+)", text)
         for fid in ids:
@@ -482,19 +518,33 @@ def main(mod):
     effects = set()
     for f in (mod / "common/scripted_effects").glob("*.txt"):
         effects |= set(re.findall(r"^(\w+)\s*=\s*\{", strip(f.read_text()), re.M))
+    # events are defined at the left margin; an indented "country_event = { id = ... }" fires one
+    kinds = r"(?:country|news|state|unit_leader|operative_leader)_event"
     events = set()
     for f in (mod / "events").glob("*.txt"):
-        events |= set(re.findall(r"^\s*id\s*=\s*([\w.]+)", strip(f.read_text()), re.M))
-    scripted = ""
+        events |= set(re.findall(rf"^{kinds}\s*=\s*\{{\s*id\s*=\s*([\w.]+)", strip(f.read_text(encoding="utf-8-sig")),
+                                 re.M))
+    scripted = ""      # ours: focus trees, scripted effects, events
+    scripted_all = ""  # with vanilla's files the mod ships (source/vanilla)
     for d in ("common/national_focus", "common/scripted_effects", "events"):
         for f in (mod / d).glob("*.txt"):
-            scripted += strip(f.read_text()) + "\n"
+            text = strip(f.read_text(encoding="utf-8-sig")) + "\n"
+            scripted_all += text
+            if not is_vanilla_part(f, mod):
+                scripted += text
+    on_actions_all = "".join(strip(f.read_text(encoding="utf-8-sig")) + "\n"
+                             for f in (mod / "common/on_actions").glob("*.txt"))
     for name in set(re.findall(r"\b(valsora_\w+)\s*=\s*yes", scripted)):
         if name not in effects:
             err(f"scripted effect {name} is used but not defined")
-    for ev in set(re.findall(r"country_event\s*=\s*\{\s*id\s*=\s*([\w.]+)", scripted)):
-        if ev not in events:
-            err(f"event {ev} is fired but not defined")
+    fired = set(re.findall(rf"\b{kinds}\s*=\s*\{{[^{{}}]*?\bid\s*=\s*([\w.]+)", scripted_all + on_actions_all))
+    fired |= set(re.findall(rf"\b{kinds}\s*=\s*([A-Za-z_]\w*\.\d+)\b", scripted_all + on_actions_all))
+    for body in blocks(on_actions_all, "random_events"):
+        fired |= {e for e in re.findall(r"\d+\s*=\s*([\w.]+)", body) if "." in e}
+    for body in blocks(on_actions_all, "events"):
+        fired |= {e for e in body.split() if "." in e}
+    for ev in sorted(fired - events):
+        err(f"event {ev} is fired but not defined")
     # songs: defined in a music/**/*.asset next to their file, and (the game ignores them
     # otherwise: "Song doesnt exist") listed in a station .txt with music_station = "..."
     songs, in_station = {}, set()
@@ -615,7 +665,7 @@ def main(mod):
             subs.add(name)
         depth += 1
     everything = scripted + "".join(f.read_text() for f in (mod / "history/countries").glob("*.txt"))
-    everything += "".join(f.read_text() for f in (mod / "common/on_actions").glob("*.txt"))
+    everything += "".join(f.read_text() for f in (mod / "common/on_actions").glob("*.txt") if not is_vanilla_part(f, mod))
     for block in re.findall(r"set_popularities\s*=\s*\{([^}]*)\}", everything):
         vals = dict((k, int(v)) for k, v in re.findall(r"(\w+)\s*=\s*(\d+)", block))
         if set(vals) - ideos:
@@ -647,6 +697,92 @@ def main(mod):
     for rp in rps:
         if not any((mod / rp).glob("*.*")):
             err(f"replaced folder {rp} has no file in the mod")
+
+    # ------------------------------------------------------------ against vanilla's own names
+    # Everything we name that the game defines must exist in the game (source/vanilla/index,
+    # read from the author's copy of the game by vanilla_sync.py, 2026-10-14): a misspelt sprite,
+    # technology, equipment, battalion, module, idea or define would otherwise only show in game.
+    ours = [f for f in mod.rglob("*") if f.is_file() and f.suffix in (".txt", ".gui", ".gfx", ".yml", ".lua")
+            and not is_vanilla_part(f, mod)]
+    text_of = {f: strip(f.read_text(encoding="utf-8-sig", errors="replace")) for f in ours if f.suffix != ".yml"}
+    defined_sprites = set()
+    for f in (mod / "interface").rglob("*.gfx"):
+        defined_sprites |= set(re.findall(r'name\s*=\s*"(GFX_\w+)"', f.read_text(encoding="utf-8-sig")))
+    known_sprites = defined_sprites | set(vanilla_index("sprites.txt"))
+    for f in ours:
+        text = text_of.get(f) or f.read_text(encoding="utf-8-sig", errors="replace")
+        for spr in set(re.findall(r"\b(GFX_\w+)", text)):
+            if spr not in known_sprites and not spr.endswith("_"):
+                err(f"{f.relative_to(mod)}: sprite {spr} is defined neither by the mod nor by the game")
+    v_tech, v_equip = set(vanilla_index("technologies.txt")), set(vanilla_index("equipment.txt"))
+    v_sub, v_mod = set(vanilla_index("subunits.txt")), set(vanilla_index("modules.txt"))
+    our_ideas = set()
+    for f in (mod / "common/ideas").glob("*.txt"):
+        for cat in blocks(strip(f.read_text(encoding="utf-8-sig")), "ideas"):
+            for name in re.findall(r"^\t\t(\w+)\s*=\s*\{", cat, re.M):
+                our_ideas.add(name)
+    v_ideas = set(vanilla_index("ideas.txt")) | our_ideas
+    for f, text in text_of.items():
+        rel = f.relative_to(mod)
+        for body in blocks(text, "set_technology"):
+            for tech in re.findall(r"(\w+)\s*=\s*1\b", body):
+                if tech not in v_tech:
+                    err(f"{rel}: technology {tech} is not the game's")
+        for body in blocks(text, "add_equipment_to_stockpile") + blocks(text, "create_equipment_variant"):
+            eq = field(body, "type")
+            if eq and eq not in v_equip:
+                err(f"{rel}: equipment {eq} is not the game's")
+            for slot, module in re.findall(r"(\w+_slot(?:_\d+)?)\s*=\s*(\w+)", body):
+                if module not in v_mod:
+                    err(f"{rel}: equipment module {module} is not the game's")
+        for kind_ in ("regiments", "support"):
+            for body in blocks(text, kind_):
+                for sub in re.findall(r"(\w+)\s*=\s*\{\s*x\s*=", body):
+                    if sub not in v_sub:
+                        err(f"{rel}: battalion or company {sub} is not the game's")
+        for single in re.findall(r"\badd_ideas\s*=\s*(\w+)", text):
+            if single not in v_ideas:
+                err(f"{rel}: idea {single} is neither ours nor the game's")
+        for body in blocks(text, "add_ideas"):
+            for idea in body.split():
+                if idea not in v_ideas:
+                    err(f"{rel}: idea {idea} is neither ours nor the game's")
+    v_defines = set(vanilla_index("defines.txt"))
+    for f in (mod / "common/defines").glob("*.lua"):
+        for name in re.findall(r"^(NDefines(?:_Graphics)?\.\w+\.\w+)\s*=", f.read_text(encoding="utf-8"), re.M):
+            if name not in v_defines:
+                err(f"{f.name}: {name} is not one of the game's defines")
+    # vanilla's map files we don't ship are inherited: only these are safe (no Earth ids)
+    inherited_ok = {"cities.txt", "colors.txt", "seasons.txt", "supplyareas/1-SupplyArea.txt"}
+    for rel in vanilla_index("map_files.txt"):
+        if rel.startswith("strategicregions/") or (mod / "map" / rel).exists() or rel.startswith("terrain/"):
+            continue
+        if rel not in inherited_ok:
+            err(f"map/{rel}: vanilla's (Earth's) would be loaded; the mod should ship its own")
+    # decisions vanilla's loaded files still name: each has a stand-in (error.log 2026-10-14)
+    stand_in = (mod / "common/decisions/valsora_vanilla_stand_ins.txt")
+    have = set(re.findall(r"^\t(\w+) = \{", stand_in.read_text(encoding="utf-8"), re.M)) if stand_in.exists() else set()
+    lacking = {line.split("\t")[0] for line in vanilla_index("decisions.txt")} - have
+    if lacking:
+        err(f"{len(lacking)} vanilla decisions named by loaded files have no stand-in, e.g. {sorted(lacking)[:3]}")
+
+    # ------------------------------------------------------------ 2036 (author, 2026-10-14)
+    start = re.search(r'START_DATE\s*=\s*"([\d.]+)"', (mod / "common/defines/valsora_game.lua").read_text()) \
+        if (mod / "common/defines/valsora_game.lua").exists() else None
+    if not start or not start[1].startswith("2036."):
+        err("the game should start in 2036 (NDefines.NGame.START_DATE in common/defines/valsora_game.lua)")
+    for f in (mod / "common/bookmarks").glob("*.txt"):
+        for d in re.findall(r"\bdate\s*=\s*([\d.]+)", strip(f.read_text())):
+            if start and d != start[1]:
+                err(f"bookmark {f.name}: date {d} is not the start date {start[1]}")
+    for f in list(mod.rglob("*.txt")) + list(mod.rglob("*.gui")):
+        text = strip(f.read_text(encoding="utf-8-sig", errors="replace"))
+        old = re.findall(r"(?<![\w.@])(1[89]\d\d\.\d{1,2}\.\d{1,2})(?![\d])", text)
+        old += re.findall(r"\bstart_year\s*=\s*(1[89]\d\d)\b", text)
+        if f.suffix == ".gui":
+            old += re.findall(r'\btext\s*=\s*"(1[89]\d\d)"', text)
+        if old:
+            err(f"{f.relative_to(mod)}: a date or year before 2036's century ({old[0]}): Valsora is set in 2036")
 
     lands = int((kind == 1).sum())
     print(f"{W}x{H}, {n} provinces ({lands} land, {(kind == 0).sum()} sea, {(kind == 2).sum()} lake), "

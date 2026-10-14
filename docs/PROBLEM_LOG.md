@@ -6,6 +6,58 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**Valsora started in 1936** (2026-10-14, author: "Valsora takes place in 2036")
+- Cause: the clock, the tech tree and every date condition were vanilla's.
+- Fix: the start and end dates (`common/defines/valsora_game.lua`), the bookmark, our
+  history, every technology's `start_year`, the tech tree's year labels, the date
+  conditions of the generic content the mod ships, a game rule's years and the generic
+  names with years moved a hundred years (`vanilla_parts.py`; see "2036" in CLAUDE.md).
+  The start date's picture is Valsora's, not 1936's soldiers.
+- Check: `check_mod.py` fails on an 18xx or 19xx date, research year or tech tree label in
+  the built files, and on a start date or bookmark outside 2036 (mutation-tested).
+- Not yet seen in game.
+
+**The generic events, AI strategies and on_actions were missing since the first build**
+(2026-10-14, found reading vanilla's own files)
+- Cause: `replace_path` on `events`, `common/on_actions` and `common/ai_strategy` switched
+  off Earth's content, and with it what every country uses: the election, ace, war
+  justification, nuclear, capitulation and operative events, the faction and demand
+  events (`Generic.txt`), collaboration governments and resistance (`LAR_occupation.txt`),
+  the generic AI strategies (default, doctrines, operations, operatives) and the hooks
+  that fire them.
+- Fix: those files come back as the mod's own, from `source/vanilla/` (copies made by
+  `vanilla_sync.py`, the on_actions cut by hand without their Earth parts, Earth-only
+  blocks cut from `default.txt`); the events they fire only for Earth's countries
+  (Denmark's election, ...) are hidden empty stand-ins.
+- Check: `check_mod.py` fails on an event fired but not defined (mutation-tested).
+- Not yet seen in game.
+
+**error.log: 1,142 lines of "Invalid decision" and "Invalid Decision ID"** (2026-10-14)
+- Cause: `replace_path` is not recursive, so vanilla's decision categories still load, and
+  so do the focus trees, ideas and scripted triggers that name its decisions: 732 names.
+- Fix: a never-visible decision of the same kind under each name
+  (`common/decisions/valsora_vanilla_stand_ins.txt`, generated from
+  `source/vanilla/index/decisions.txt`).
+- Check: `check_mod.py` fails if one has no stand-in (mutation-tested).
+
+**error.log: 728 lines of "is missing a history file"** (2026-10-14)
+- Cause: Earth's 364 country tags stay defined (vanilla's `common/country_tags`), and each
+  needs a history file. Removing the tags would break vanilla's files that name them
+  (technologies alone, 620 times; the peace conference, the AI, achievements).
+- Fix: a stand-in history for each (capital state 1, owning nothing).
+- Check: `check_mod.py` fails if one is missing, holds more than the stand-in, or if one of
+  our tags is Earth's (mutation-tested).
+
+**error.log: 30 lines of AI faction theaters, and ships in port "too far away from
+center"** (2026-10-14)
+- Cause: vanilla's `ai_faction_theaters.txt` names Earth's strategic regions; and the game
+  placed the unit positions `unitstacks.txt` didn't give, putting ships in port far from
+  the centre of two of Merlo's large sea provinces.
+- Fix: one AI theater per continent with its coastal seas, in a file of vanilla's name;
+  every kind of unit position vanilla's map has is written (see What HOI4 requires).
+- Check: `check_mod.py` wants ships in port (19, 20) everywhere but on lakes
+  (mutation-tested).
+
 **The world tension globe showed Earth** (2026-10-14, author's screenshot)
 - Cause: like the minimap, it is a fixed picture: vanilla's
   `gfx/interface/world_tension_icon_big_strip.dds`, ten frames of Earth catching fire as

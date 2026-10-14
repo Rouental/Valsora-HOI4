@@ -1,0 +1,834 @@
+# Valsora: the generic mechanics of vanilla 1.19.3's on_actions, without their Earth-specific parts
+# (hand-curated from 00_on_actions.txt, 04_mtg, 05_lar and 07_nsb_on_actions.txt on 2026-10-14).
+# The mod switches vanilla's on_actions off (replace_path), since the same hooks also set up Earth's
+# countries (canals at Earth provinces, Spain's and the USA's elections, ...). These come back:
+#   - elections, aces and war justification: the generic events (shipped from vanilla's event files)
+#   - army leaders: sickness, wounds, "recently promoted", capture when defeated, skill and traits from
+#     the army spirits (NSB), traits of exiled leaders (MTG)
+#   - doctrines: the marines' demolition on naval invasion, the paratroopers' effects
+#   - a new government halves the compliance of occupied states
+#   - the news of the first nuclear attack, and of each capitulation
+#   - the end of an ideological civil war
+#   - spies (LaR): what happens to spotted, captured, detected and dead operatives, operatives'
+#     traits after operations, and the AI's weekly operation planning
+on_actions = {
+	# ---- on_ace_promoted (vanilla 00_on_actions.txt)
+	on_ace_promoted = {
+		random_events = {
+			100 = ace_promoted.1
+			5 = ace_promoted.2
+		}
+	}
+	# ---- on_aces_killed_each_other (vanilla 00_on_actions.txt)
+	on_aces_killed_each_other = {
+		random_events = {
+			100 = aces_killed_each_other.1
+		}
+	}
+	# ---- on_ace_killed_by_ace (vanilla 00_on_actions.txt)
+	on_ace_killed_by_ace = {
+		random_events = {
+			100 = ace_killed_by_ace.1
+		}
+	}
+	# ---- on_ace_killed_other_ace (vanilla 00_on_actions.txt)
+	on_ace_killed_other_ace = {
+		random_events = {
+			100 = ace_killed_other_ace.1
+		}
+	}
+	# ---- on_ace_killed (vanilla 00_on_actions.txt)
+	on_ace_killed = {
+		random_events = {
+			100 = ace_died.1
+		}
+	}
+	# ---- on_justifying_wargoal_pulse (vanilla 00_on_actions.txt)
+	on_justifying_wargoal_pulse = {
+
+		random_events = {
+			100 = war_justification.1
+			100 = war_justification.2
+			100 = war_justification.3
+			100 = war_justification.4
+			100 = war_justification.5
+			100 = war_justification.6
+			100 = war_justification.7
+			100 = war_justification.8
+			100 = war_justification.9
+			100 = war_justification.10
+			100 = war_justification.11
+			100 = war_justification.12
+			100 = war_justification.13
+			100 = war_justification.14
+			100 = war_justification.15
+			100 = war_justification.16
+			100 = war_justification.17
+			100 = war_justification.18
+			100 = war_justification.19
+			17000 = 0
+		}
+	}
+	# ---- on_wargoal_expire (vanilla 00_on_actions.txt)
+	on_wargoal_expire = {
+		random_events = {
+			100 = war_justification.301
+		}
+	}
+	# ---- on_new_term_election (vanilla 00_on_actions.txt)
+	on_new_term_election = {
+		random_events = {
+			100 = election.2
+			100 = election.3
+			100 = election.4
+			100 = election.5
+			100 = election.6
+			100 = election.11
+			100 = election.12
+			100 = election.13
+			100 = election.14
+			100 = election.15
+		}
+	}
+	# ---- on_army_leader_daily (vanilla 00_on_actions.txt)
+	on_army_leader_daily = {
+		effect = {
+			if = {
+				limit = {
+					check_variable = { random < 0.02 }
+					NOT = { has_trait = sick }
+					set_temp_variable = { temp = sum_unit_terrain_modifier@sickness_chance }
+					divide_temp_variable = { temp = num_units }
+					check_variable = { temp > 0.75 }
+					NOT = { has_unit_leader_flag = recently_sick }
+				}
+				add_timed_unit_leader_trait = {
+					trait = sick
+					days = 30
+				}
+				set_unit_leader_flag = {
+					flag = recently_sick
+					value = 1
+					days = 180
+				}
+			}
+		}
+	}
+	# ---- on_army_leader_won_combat (vanilla 00_on_actions.txt)
+	on_army_leader_won_combat = {
+		effect = {
+			if = {
+				limit = {
+					set_temp_variable = { chance = 0.001 }
+					set_temp_variable = { factor = 1.0 }
+					add_to_temp_variable = { factor = leader_modifier@wounded_chance_factor }
+					multiply_temp_variable = { chance = factor }
+					check_variable = { random < chance }
+					NOT = { has_trait = wounded }
+				}
+				add_timed_unit_leader_trait = {
+					trait = wounded
+					days = 90
+				}
+			}
+		}
+	}
+	# ---- on_army_leader_lost_combat (vanilla 00_on_actions.txt)
+	on_army_leader_lost_combat = {
+		effect = {
+			if = {
+				limit = {
+					set_temp_variable = { chance = 0.005 }
+					set_temp_variable = { factor = 1.0 }
+					add_to_temp_variable = { factor = leader_modifier@wounded_chance_factor }
+					multiply_temp_variable = { chance = factor }
+					check_variable = { random < chance }
+					NOT = { has_trait = wounded }
+				}
+				add_timed_unit_leader_trait = {
+					trait = wounded
+					days = 90
+				}
+			}
+		}
+	}
+	# ---- on_army_leader_promoted (vanilla 00_on_actions.txt)
+	on_army_leader_promoted = {
+		effect = {
+			add_timed_unit_leader_trait = {
+				trait = recently_promoted
+				days = 100
+			}
+		}
+	}
+	# ---- on_deployed_leader_defeated (vanilla 00_on_actions.txt)
+	on_deployed_leader_defeated = {
+		effect = {
+			if = {
+				limit = { can_be_captured = yes }
+				# TODO TAOG: a percentage chance to be captured? Other effects otherwise?
+
+				capture_by = FROM
+			}
+			else = {
+				# uncapturable leaders (e.g. country leaders) get wounded instead
+				if = {
+					limit = { NOT = { has_trait = wounded } }
+					add_timed_unit_leader_trait = {
+						trait = wounded
+						days = 90
+					}
+				}
+			}
+		}
+	}
+	# ---- on_naval_invasion (vanilla 00_on_actions.txt)
+	on_naval_invasion = {
+	 	effect = {
+		 	if = {
+				limit = {
+					ROOT = {
+						divisions_in_state = {
+							 unit = marine_commando
+							 size > 0
+							 state = PREV
+						}
+						has_mastery_level = {
+							amount = 3
+						 	sub_doctrine = marines_1
+						 	#has_tech = marines_commandos_demolition - old equivalent
+						} 
+					}
+					NOT = { has_state_flag = marines_commando_effect }
+					OWNER = { NOT = { tag = ROOT } }
+				}
+				SF_marine_demoliton_effect = yes # Note that the state flag condition is not preventing it from doing 1 damage per division 
+			}
+	 	}
+	}
+	# ---- on_paradrop (vanilla 00_on_actions.txt)
+	on_paradrop = {
+	    effect = {
+		    ROOT = { set_country_flag = has_paradropped_flag }
+		}
+	}
+	# ---- on_units_paradropped_in_state (vanilla 00_on_actions.txt)
+	on_units_paradropped_in_state = {
+		effect = {
+			if = {
+				limit = { 
+					FROM = { 
+						has_mastery_level = {
+							amount = 1
+							sub_doctrine = paratroopers_1
+						}
+						#has_tech = paras_dispersed_drop - old equivalent
+					} 
+					NOT = { 
+						has_state_flag = {
+						    flag = para_drop_effect
+						    value = 0
+						}
+					}
+					CONTROLLER = { NOT = { tag = FROM } }
+				}
+				SF_PARA_sabotage_effect = yes
+			}
+			if = {
+				limit = { 
+					FROM = { 
+						has_mastery_level = {
+							amount = 1
+							sub_doctrine = paratroopers_2
+						}
+						#has_tech = paras_combat_drop  - old equivalent
+					} 
+					NOT = { 
+						has_state_flag = {
+						    flag = para_drop_effect
+						    value = 0
+						}
+					}
+				}
+				SF_PARA_combat_effect = yes
+			}
+		}
+	}
+	# ---- on_ruling_party_change (vanilla 00_on_actions.txt)
+	on_ruling_party_change = {
+		# temp var old_ideology_token is available for effects
+		effect = {
+			every_controlled_state = {
+				limit = {
+					has_resistance = yes
+				}
+				set_temp_variable = { new_compliance = compliance }
+				multiply_temp_variable = { new_compliance = 0.5 }
+				set_compliance = new_compliance
+			}
+		}
+	}
+	# ---- on_operative_on_mission_spotted (vanilla 05_lar_on_actions.txt)
+	on_operative_on_mission_spotted = {
+
+		effect = {
+            # SCOPE  the operative
+            # ROOT   the country the operative was performing its mission in
+            # FROM   the country the operative is operating for
+
+			# base values
+            set_temp_variable = {
+                var = capture_chance
+                value = 40
+            }
+            set_temp_variable = {
+                var = kill_chance
+                value = 5
+            }
+            set_temp_variable = {
+                var = hiding_chance
+                value = 55
+            }
+
+            # nullify kill chance for some missions
+            if = {
+                limit = {
+                    OR = {
+                        operative_leader_mission = control_trade
+                        operative_leader_mission = diplomatic_pressure
+                    }
+                }
+                set_temp_variable = {
+                    var = kill_chance
+                    value = 0
+                }
+                # redistribute to hiding
+                add_to_temp_variable = {
+                    var = hiding_chance
+                    value = 5
+                }
+            }
+
+            random_list = {
+                temp_var:capture_chance = {
+                   	capture_operative = {
+                   	    captured_by = ROOT
+                   	}
+                }
+                temp_var:kill_chance = {
+                    kill_operative = {
+                        killed_by = ROOT
+                    }
+                }
+                temp_var:hiding_chance = {
+                    force_operative_leader_into_hiding = 28
+                }
+            }
+
+        }
+        
+    }
+	# ---- on_operative_captured (vanilla 05_lar_on_actions.txt)
+	on_operative_captured = {
+		effect = {
+			# SCOPE  the operative
+			# ROOT   the country the operative was performing its mission in
+			# FROM   the country the operative is operating for
+			operative_leader_event = {
+					id = lar_operative_event.6
+					recipient = ROOT
+					originator = ROOT
+					set_from_from = ROOT
+					set_from = FROM
+					days = 1
+			}
+			if = {
+				limit = {
+					NOT = { has_unit_leader_flag = le_clerc1 }
+				}
+				set_unit_leader_flag = le_clerc1
+			}
+			else_if = {
+				limit = {
+					has_unit_leader_flag = le_clerc1
+				}
+				set_unit_leader_flag = le_clerc2
+			}
+			random_list = {
+				log = yes
+				90 = { #regular
+					operative_leader_event = {
+						id = lar_operative_event.1
+						set_from_from = ROOT
+					}
+				}
+				10 = { #operative turned
+					modifier = {
+						has_trait = operative_tough
+						factor = 0 #tough operatives never get turned
+					}
+					modifier = {
+						has_trait = operative_double_agent
+						factor = 0 #no tripple agents please
+					}
+					turn_operative = { turned_by = ROOT }
+					# ensure the operative has the nationality of the country he is coming from
+					add_nationality = FROM
+					operative_leader_event = {
+            	    	id = lar_operative_event.5
+						set_from_from = FROM #tells the event which nationality to add
+            		}
+            	}
+			}
+		}
+	}
+	# ---- on_operative_death (vanilla 05_lar_on_actions.txt)
+	on_operative_death = {
+		effect = {
+			# SCOPE  the operative
+			# ROOT   the killer country (optional)
+			# FROM   the country the operative is operating for
+			if = {
+				limit = {
+					country_exists = ROOT
+				}
+
+				# operative killed by a country, likelly while on mission
+				operative_leader_event = {
+					id = lar_operative_event.3
+					set_from_from = ROOT
+				}
+			}
+			else = {
+				# other cause of death
+			}
+			
+			if = {
+				limit = {
+					FROM = {
+						NOT = { is_ai = yes }
+						has_done_agency_upgrade = upgrade_suicide_pills
+					}
+				}
+				set_global_flag = kill_me_alive_flag
+			}
+		}
+	}
+	# ---- on_operative_detected_during_operation (vanilla 05_lar_on_actions.txt)
+	on_operative_detected_during_operation = {
+		effect = {
+			random_list = {
+				45 = {
+					force_operative_leader_into_hiding = 45
+					operative_leader_event = {
+						id = lar_operative_event.2
+						set_from_from = FROM
+					}
+				}
+				25 = {
+					capture_operative = {
+						captured_by = FROM
+					}
+				}
+				25 = {
+					harm_operative_leader = 90
+					operative_leader_event = {
+						id = lar_operative_event.4
+						set_from_from = FROM
+					}
+				}
+				5 = {
+					kill_operative = {
+						killed_by = FROM
+					}
+				}
+			}
+		}
+	}
+	# ---- on_operation_completed (vanilla 05_lar_on_actions.txt)
+	on_operation_completed = {
+		effect = {
+			# same scope setup as in operation outcome:
+			# THIS: the operation
+			# ROOT: the initiating country
+			# FROM: the target country
+			#log = "This: [This.GetName] From: [From.GetName] Root: [Root.GetName]"
+			
+			if = {
+				limit = {
+					ROOT = { has_country_flag = just_freed_operative_flag }
+				}
+				every_operative = {
+					if = {
+						limit = {
+							NOT = { has_trait = operative_escape_artist }
+						}
+						random_list = {
+							15 = { add_unit_leader_trait = operative_escape_artist }
+							85 = {}
+						}
+					}
+				}
+				ROOT = { clr_country_flag = just_freed_operative_flag }
+			}
+			every_operative = { #add target nationality if linguist
+				if = {
+					limit = {
+						has_trait = operative_linguist
+						NOT = { has_nationality = FROM }
+					}
+					random_list = {
+						20 = { add_nationality = FROM }
+						80 = {}
+					}
+				}
+			}
+		}
+	}
+	# ---- on_weekly (vanilla 05_lar_on_actions.txt)
+	on_weekly = {
+		effect = {
+			if = {
+				limit = { 
+					has_intelligence_agency = yes
+					is_ai = yes
+				}
+				update_operation_ai = yes
+			}
+		}
+	}
+	# ---- on_unit_leader_level_up (vanilla 07_nsb_on_actions.txt)
+	on_unit_leader_level_up = {
+		effect = {
+			if = { 
+				limit = { 
+					FROM = { 
+						has_idea = bold_attack_spirit 
+					} 
+				}
+				character = { 
+					IF = { 
+						limit = { is_army_leader = yes }
+					
+						random_list = { 
+							50 = { add_attack = 1 } 
+							50 = {} 
+						} 
+					}
+				}
+			}
+			else_if = { #since these spirits are mutually exclusive, we can use else_if for added performance!
+				limit = {
+					FROM = { has_idea = tenacious_defense_spirit }
+				}
+				character = { 
+					IF = { 
+						limit = { is_army_leader = yes }
+					
+						random_list = {
+							50 = { add_defense = 1 }
+							50 = {}
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					FROM = { has_idea = meticulous_preparation_spirit }
+				}
+				character = { 
+					IF = { 
+						limit = { is_army_leader = yes }
+					
+						random_list = {
+							50 = { 
+								add_planning = 1 
+								add_logistics = 1
+							}
+							50 = {}
+						}
+					}
+				}
+			}
+
+			
+			if = {
+				limit = {
+					FROM = { has_idea = instilled_aggression_spirit }
+				}
+				character = { 
+					IF = { 
+						limit = { is_navy_leader = yes }
+		
+						random_list = {
+							50 = { 
+								add_attack = 1 
+							}
+							50 = {}
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					FROM = { has_idea = calculated_restraint_spirit }
+				}
+				character = { 
+					IF = { 
+						limit = { is_navy_leader = yes }
+					
+						random_list = {
+							50 = { 
+								add_defense = 1 
+							}
+							50 = {}
+						}
+					}
+				}
+			}
+			else_if = {
+				limit = {
+					FROM = { has_idea = signals_training_spirit }
+				}
+				character = { 
+					IF = { 
+						limit = { is_navy_leader = yes }
+					
+						random_list = {
+							50 = { 
+								add_maneuver = 1
+								add_coordination = 1
+							}
+							50 = {}
+						}
+					}
+				}
+			}
+		}  
+	}
+	# ---- on_unit_leader_created (vanilla 07_nsb_on_actions.txt)
+	on_unit_leader_created = { # This uses the UNIT LEADER sub scope of a character, FROM == country
+		effect = {
+			character = {
+				if = { 
+					limit = {
+						is_army_leader = yes
+					}
+					if = {
+						limit = {	
+							FROM = { 
+								OR = {
+									has_idea = political_loyalty_spirit 
+									has_idea = CHI_whampoa_military_academy_spirit 
+								}
+								
+							} #done here instead of the trait file to avoid some oddness with generating assignable traits under certain circumstances, makes it easier to control probabilities
+						}
+						root = {
+							random_list = {
+								50 = { 
+									add_unit_leader_trait = media_personality
+								}
+								50 = { 
+									add_unit_leader_trait = politically_connected
+								}
+							}
+						}
+						
+					}
+					else_if = {
+						limit = {
+							FROM = { has_idea = mobile_warfare_academy_spirit } #done here instead of the trait file to avoid some oddness with generating assignable traits under certain circumstances, makes it easier to control probabilities
+						}
+						root = {
+							random_list = {
+								50 = { 
+									add_unit_leader_trait = armor_officer
+								}
+								50 = {}
+							}
+						}
+					}
+					else_if = {
+						limit = {
+							FROM = { has_idea = mass_assault_academy_spirit } #done here instead of the trait file to avoid some oddness with generating assignable traits under certain circumstances, makes it easier to control probabilities
+						}
+						root = {
+							random_list = {
+								50 = { 
+									add_unit_leader_trait = infantry_officer
+								}
+								50 = {}
+							}
+						}
+					}
+					else_if = {
+						limit = {
+							FROM = { has_idea = inventive_leadership_spirit } #done here instead of the trait file to avoid some oddness with generating assignable traits under certain circumstances, makes it easier to control probabilities
+						}
+						root = {
+							random_list = {
+								75 = { 
+									random_list = {
+										33 = { add_unit_leader_trait = naval_invader }
+										33 = { add_unit_leader_trait = commando }
+										33 = { add_unit_leader_trait = trickster }
+									}
+								}
+								25 = {}
+							}
+						}
+					}
+					else_if = {
+						limit = {
+							FROM = { has_idea = superior_firepower_academy_spirit } #done here instead of the trait file to avoid some oddness with generating assignable traits under certain circumstances, makes it easier to control probabilities
+						}
+						root = {
+							random_list = {
+								50 = { 
+									add_unit_leader_trait = engineer_officer
+								}
+								50 = {}
+							}
+						}
+					}
+					else_if = {
+						limit = {
+							FROM = { has_idea = theatre_training_spirit } #done here instead of the trait file to avoid some oddness with generating assignable traits under certain circumstances, makes it easier to control probabilities
+						}
+						root = {
+							random_list = {
+								50 = { 
+									random_list = {
+										50 = { add_unit_leader_trait = brilliant_strategist }
+										50 = { add_unit_leader_trait = inflexible_strategist }
+									}
+								}
+								50 = {}
+							}
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						FROM = { has_idea = fleet_in_being_academy_spirit } #done here instead of the trait file to avoid some oddness with generating assignable traits under certain circumstances, makes it easier to control probabilities
+					}
+					root = {
+						random_list = {
+							50 = { 
+								add_unit_leader_trait = gunnery_expert
+							}
+							50 = {}
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						FROM = { has_idea = trade_interdiction_academy_spirit } #done here instead of the trait file to avoid some oddness with generating assignable traits under certain circumstances, makes it easier to control probabilities
+					}
+					root = {
+						random_list = {
+							25 = { 
+								add_unit_leader_trait = seawolf
+							}
+							25 = { 
+								add_unit_leader_trait = blockade_runner
+							}
+							50 = {}
+						}
+					}
+				}
+				else_if = {
+					limit = {
+						FROM = { has_idea = base_strike_academy_spirit } #done here instead of the trait file to avoid some oddness with generating assignable traits under certain circumstances, makes it easier to control probabilities
+					}
+					root = {
+						random_list = {
+							50 = { 
+								add_unit_leader_trait = aviation_enthusiast 
+							}
+							50 = {}
+						}
+					}
+				}
+			}
+		}
+	}
+	# ---- on_unit_leader_created (vanilla 04_mtg_on_actions.txt)
+	on_unit_leader_created = {
+		effect = {
+			if = {
+				limit = { is_exiled_leader = yes }
+				From.From = { save_event_target_as = exile_nation }
+				add_unit_leader_trait = exiled_leader
+				
+				add_random_trait = {
+					old_guard
+					brilliant_strategist
+					inflexible_strategist
+					war_hero
+					trait_cautious
+					trait_reckless
+					media_personality
+					harsh_leader
+					infantry_officer
+					cavalry_officer
+					armor_officer
+				}
+
+				add_random_trait = {
+					organizer
+					panzer_leader
+					cavalry_leader
+					trait_engineer
+					infantry_leader
+					naval_invader						
+					commando
+					skilled_staffer
+					trickster					
+				}
+
+				unit_leader_event = { id = mtg_exile_leader_added.1 }
+			}
+		}
+	}
+	# ---- on_nuke_drop (vanilla 00_on_actions.txt: its generic part; the news of the first nuclear attack)
+	on_nuke_drop = {
+		effect = {
+			set_global_flag = first_nuke_dropped
+			set_variable = { global.nukecountry = ROOT }
+			if = {
+				limit = { has_idea = race_for_the_bomb_outclassed }
+				remove_ideas = race_for_the_bomb_outclassed
+			}
+		}
+		random_events = {
+			100 = nuke_dropped.0
+		}
+	}
+	# ---- on_capitulation (vanilla 00_on_actions.txt: the news of a capitulation, with its generic conditions)
+	on_capitulation = {
+		effect = {
+			if = {
+				limit = {
+					NOT = { has_government = fascism }
+					has_civil_war = no
+				}
+				news_event = { id = country_capitulated.0 days = 0 }
+			}
+		}
+	}
+	# ---- on_civil_war_end (vanilla 00_on_actions.txt: the end of an ideological civil war)
+	on_civil_war_end = {
+		effect = {
+			if = {
+				limit = {
+					has_country_flag = ideology_civil_war
+				}
+				clr_country_flag = ideology_civil_war
+				set_country_flag = { flag = won_ideology_civil_war value = 1 days = 365 }
+				country_event = { id = generic.11 days = 1 }
+			}
+		}
+	}
+}

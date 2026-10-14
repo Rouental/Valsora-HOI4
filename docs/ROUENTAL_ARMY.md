@@ -24,7 +24,7 @@ themselves are not.
 - **Feudal Army** (`ROU_feudal_army`, author 2026-10-02; placeholder icon, the anime
   picture): recruitable population −80 %, training time ×2, political power −10 %,
   stability −5 %. Its description says it opens the levies.
-- **The royal host** (`history/units/ROU_1936.txt`): 2 armoured ("Division Blindée de la
+- **The royal host** (`history/units/ROU_2036.txt`): 2 armoured ("Division Blindée de la
   Garde": 4 medium tank + 2 mechanised), 2 mechanised and 8 motorised divisions, all at
   full equipment and 0.6 experience, with engineers, recon, AA, signals, logistics or
   maintenance, and field hospitals in support. Stationed around Rouental, Saintiers,
@@ -35,7 +35,7 @@ themselves are not.
 
 ## Recommended design (all vanilla mechanics)
 
-1. **The royal host at game start.** An order of battle (`history/units/ROU_1936.txt`)
+1. **The royal host at game start.** An order of battle (`history/units/ROU_2036.txt`)
    with a few divisions at high experience and full, modern equipment. HOI4 does this
    for every country; ours are empty for now.
 

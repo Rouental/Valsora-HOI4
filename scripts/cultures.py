@@ -474,7 +474,7 @@ def leaders(tag, continent, subtypes, ideology_of, used, named=None):
 \t\t}}
 \t\tcountry_leader = {{
 \t\t\tideology = {sub}
-\t\t\texpire = "1965.1.1.1"
+\t\t\texpire = "2065.1.1.1"
 \t\t\tid = -1
 \t\t}}
 \t}}
