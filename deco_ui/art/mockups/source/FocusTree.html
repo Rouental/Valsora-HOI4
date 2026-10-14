@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<style>
+/* local copies of the Google Fonts the boards used (SIL OFL, in the project's source_fonts/) */
+@font-face{font-family:'Federo';src:url('../../../source_fonts/federo/Federo-Regular.ttf')}
+@font-face{font-family:'Limelight';src:url('../../../source_fonts/limelight/Limelight-Regular.ttf')}
+@font-face{font-family:'Josefin Sans';src:url('../../../source_fonts/josefinsans/JosefinSans[wght].ttf');font-weight:100 700;font-style:normal}
+@font-face{font-family:'Josefin Sans';src:url('../../../source_fonts/josefinsans/JosefinSans-Italic[wght].ttf');font-weight:100 700;font-style:italic}
+@font-face{font-family:'Bodoni Moda';src:url('../../../source_fonts/bodonimoda/BodoniModa[opsz,wght].ttf');font-weight:400 900;font-style:normal}
+@font-face{font-family:'Bodoni Moda';src:url('../../../source_fonts/bodonimoda/BodoniModa-Italic[opsz,wght].ttf');font-weight:400 900;font-style:italic}
+</style>
+<meta charset="utf-8">
+<title>Valsora – Rouentaise focus tree</title>
+
+</head>
+<body>
+<x-dc>
+<helmet>
+
+<style>
+body{margin:0}
+a{color:#E3C77E}a:hover{color:#F6E3A6}
+.fed{font-family:'Federo',serif;font-weight:400}
+.bod{font-family:'Bodoni Moda',serif;font-style:italic}
+.cap{text-transform:uppercase;letter-spacing:.18em;font-weight:600}
+.panel{position:absolute;box-sizing:border-box;border:1px solid #B8954F;background:repeating-linear-gradient(90deg,rgba(255,255,255,.022) 0 1px,transparent 1px 7px),linear-gradient(180deg,rgba(23,32,38,.98),rgba(11,17,21,.98));box-shadow:inset 0 0 0 3px rgba(11,17,21,.98),inset 0 0 0 4px rgba(201,165,90,.42),0 16px 36px rgba(0,0,0,.55)}
+.ck{position:absolute;width:16px;height:16px;pointer-events:none}
+.ck::before{content:"";position:absolute;inset:0;border-top:2px solid #E3C77E;border-left:2px solid #E3C77E}
+.ck::after{content:"";position:absolute;left:6px;top:6px;width:6px;height:6px;border-top:2px solid #E3C77E;border-left:2px solid #E3C77E}
+.ck.tl{left:-2px;top:-2px}.ck.tr{right:-2px;top:-2px;transform:scaleX(-1)}.ck.bl{left:-2px;bottom:-2px;transform:scaleY(-1)}.ck.br{right:-2px;bottom:-2px;transform:scale(-1,-1)}
+.gilt{background:linear-gradient(180deg,#F8EBBD 0%,#E4C67E 46%,#B08B41 58%,#E9D190 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ib{width:44px;height:46px;padding:1px;border:0;margin:0;background:linear-gradient(180deg,#E8CD84,#8B6A2C);clip-path:polygon(9px 0,calc(100% - 9px) 0,100% 9px,100% 100%,0 100%,0 9px);cursor:pointer;position:relative;display:block}
+.ib>span{display:flex;width:100%;height:100%;align-items:center;justify-content:center;background:linear-gradient(180deg,#1E2930,#0E1519);clip-path:polygon(8.5px 0,calc(100% - 8.5px) 0,100% 8.5px,100% 100%,0 100%,0 8.5px);color:#E3C77E}
+.rl{font:600 9.5px/1 'Josefin Sans',sans-serif;letter-spacing:.17em;text-transform:uppercase;color:#B7A680}
+.rv{font:700 17px/1 'Josefin Sans',sans-serif;color:#F4ECD9}
+.pos{color:#93D6A5}.neg{color:#EE8C7E}
+.vd{width:1px;align-self:stretch;margin:11px 0;background:linear-gradient(180deg,transparent,#C9A55A 30%,#C9A55A 70%,transparent)}
+.chip{height:30px;padding:0 14px;border:1px solid rgba(201,165,90,.55);background:#0E1519;color:#CBBF9F;font:600 10.5px/1 'Josefin Sans',sans-serif;letter-spacing:.18em;text-transform:uppercase;cursor:pointer;clip-path:polygon(7px 0,100% 0,calc(100% - 7px) 100%,0 100%)}
+.chip.on{background:linear-gradient(180deg,#2E6E60,#153730);color:#FBEAB4;border-color:#E3C77E}
+.fn{position:absolute;width:156px;display:flex;flex-direction:column;align-items:center;padding:0;border:0;background:none;cursor:pointer;font:inherit;color:inherit}
+.med{display:block;width:96px;height:96px;padding:2px;box-sizing:border-box;background:linear-gradient(180deg,#F1DC9C,#8B6A2C);clip-path:polygon(29% 0,71% 0,100% 29%,100% 71%,71% 100%,29% 100%,0 71%,0 29%)}
+.med>span{display:flex;width:100%;height:100%;align-items:center;justify-content:center;clip-path:polygon(29% 0,71% 0,100% 29%,100% 71%,71% 100%,29% 100%,0 71%,0 29%);background:repeating-conic-gradient(rgba(227,199,126,.2) 0deg 5deg,transparent 5deg 15deg),radial-gradient(circle,#27493F 0%,#0E1A18 72%);color:#F1DC9C}
+.plate{display:block;margin-top:-9px;width:156px;padding:1px;box-sizing:border-box;background:linear-gradient(180deg,#E8CD84,#8B6A2C);clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%,0 10px);position:relative}
+.plate>span{display:flex;align-items:center;justify-content:center;min-height:52px;padding:8px 10px 5px;box-sizing:border-box;text-align:center;font:600 13px/1.22 'Josefin Sans',sans-serif;color:#F4ECD9;background:linear-gradient(180deg,#1E2930,#0E1519);clip-path:polygon(9.5px 0,calc(100% - 9.5px) 0,100% 9.5px,100% 100%,0 100%,0 9.5px)}
+.fn.done .med>span{background:repeating-conic-gradient(rgba(255,248,220,.4) 0deg 5deg,transparent 5deg 15deg),radial-gradient(circle,#F6E3A6 0%,#B48F44 78%);color:#1A1307}
+.fn.done .plate>span{background:linear-gradient(180deg,#F3DFA0,#CFAC5F 52%,#AC883F);color:#1A1307}
+.fn.off{filter:grayscale(.85) brightness(.5)}
+.exl{position:absolute;height:2px;background:repeating-linear-gradient(90deg,#B4473C 0 8px,transparent 8px 13px)}
+.exd{position:absolute;width:24px;height:24px;margin:-12px 0 0 -12px;transform:rotate(45deg);background:linear-gradient(180deg,#7C2A26,#3E1412);border:1px solid #E8877A;display:flex;align-items:center;justify-content:center}
+.fx{display:flex;align-items:flex-start;gap:10px;font-size:13.5px;line-height:1.38;color:#DCD2BA}
+.fx i{flex:none;width:6px;height:6px;margin-top:6px;background:#E3C77E;transform:rotate(45deg)}
+.hl{color:#F6E3A6;font-weight:700}
+.fl{display:block;width:41px;height:26px;outline:1px solid rgba(201,165,90,.7)}
+</style>
+</helmet>
+<div style="position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #0B1014; font-family: 'Josefin Sans', sans-serif; color: #EFE6D0">
+
+<img src="assets/map_rouental.jpg" alt="" style="position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; display: block; filter: brightness(.45) saturate(.7)">
+
+<!-- ============ TOP BAR ============ -->
+<div style="position: absolute; left: 0; top: 0; width: 1920px; height: 58px; background: repeating-linear-gradient(90deg, rgba(255,255,255,.025) 0 1px, transparent 1px 7px), linear-gradient(180deg, #1A252C 0%, #0D1418 100%); border-bottom: 1px solid #C9A55A; box-shadow: 0 3px 0 #0B1014, 0 4px 0 rgba(201,165,90,.45), 0 14px 28px rgba(0,0,0,.55)"></div>
+<nav aria-label="Game menus" style="position: absolute; left: 186px; top: 6px; display: flex; gap: 6px">
+<button class="ib" aria-label="Government"><span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 9.5L12 4l9 5.5z"></path><path d="M5.5 11v7M9.8 11v7M14.2 11v7M18.5 11v7M3.5 20.5h17M4.5 18.5h15"></path></svg></span></button>
+<button class="ib" aria-label="Research"><span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M9 3h6M10 3v6l-5.2 9.2A1.9 1.9 0 0 0 6.5 21h11a1.9 1.9 0 0 0 1.7-2.8L14 9V3"></path><path d="M7.4 15h9.2"></path></svg></span></button>
+<button class="ib" aria-label="Diplomacy"><span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="6" width="18" height="12.5"></rect><path d="M3 6.5l9 6.5 9-6.5"></path><circle cx="12" cy="16" r="2.2"></circle></svg></span></button>
+<button class="ib" aria-label="Trade"><span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 4v16M7.5 20.5h9M5 7h14"></path><path d="M5 7l-2.6 6a2.6 2.6 0 0 0 5.2 0zM19 7l-2.6 6a2.6 2.6 0 0 0 5.2 0z"></path></svg></span></button>
+<button class="ib" aria-label="Construction"><span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6.5 21V3.5M3.5 21h6M6.5 4.5h14M6.5 8.5l4-4M17.5 4.5V10"></path><path d="M16 11.2a1.6 1.6 0 1 0 3 .6"></path></svg></span></button>
+<button class="ib" aria-label="Production"><span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 20.5V11l5 3v-3l5 3v-3l5 3V4.5h3v16z"></path><path d="M6.5 17.5h2M11 17.5h2M15.5 17.5h2"></path></svg></span></button>
+<button class="ib" aria-label="Recruit and deploy"><span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 14.5a7 7 0 0 1 14 0"></path><path d="M2.5 14.5h19M12 7.5V5M8 14.5v2a4 2.2 0 0 0 8 0v-2"></path></svg></span></button>
+<button class="ib" aria-label="Logistics"><span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2.5 6.5h11v9.5h-11zM13.5 10h3.8l3.2 3.2V16h-7"></path><circle cx="6.5" cy="17.5" r="1.8"></circle><circle cx="16.8" cy="17.5" r="1.8"></circle></svg></span></button>
+<button class="ib" aria-label="Intelligence"><span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6-10-6-10-6z"></path><circle cx="12" cy="12" r="3"></circle><path d="M12 2.5v2M12 19.5v2"></path></svg></span></button>
+<button class="ib" aria-label="Decisions"><span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"></path><path d="M15 3v4h4M9 13.5l2.2 2.2 4.3-4.6"></path></svg></span></button>
+</nav>
+<div style="position: absolute; left: 700px; top: 0; height: 58px; display: flex; align-items: center; gap: 13px">
+<div class="vd"></div>
+<div style="display: flex; align-items: center; gap: 10px; padding: 0 4px"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#E3C77E" stroke-width="1.4" aria-hidden="true"><path d="M7 19c-3-2.5-4-6.5-2.6-10.5M17 19c3-2.5 4-6.5 2.6-10.5"></path><path d="M5.2 15.5l-2-.8M4.4 12l-2-1.2M4.6 8.6l-1.6-1.8M18.8 15.5l2-.8M19.6 12l2-1.2M19.4 8.6l1.6-1.8"></path><path d="M12 6.5l1.4 3 3.3.3-2.5 2.2.8 3.2L12 13.5l-3 1.7.8-3.2-2.5-2.2 3.3-.3z" fill="#E3C77E" stroke="none"></path></svg><div><div class="rl">Political Power</div><div style="display: flex; align-items: baseline; gap: 6px; margin-top: 5px"><span class="rv">115</span><span class="pos" style="font: 700 12px/1 'Josefin Sans'">+1.80</span></div></div></div>
+<div class="vd"></div>
+<div style="display: flex; align-items: center; gap: 10px; padding: 0 4px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E3C77E" stroke-width="1.4" aria-hidden="true"><path d="M5 5.5h14M6.5 3.5h11M7.5 7.5v10.5M12 7.5v10.5M16.5 7.5v10.5M5.5 18.5h13M4 20.5h16"></path></svg><div><div class="rl">Stability</div><div class="rv" style="margin-top: 5px">60%</div></div></div>
+<div class="vd"></div>
+<div style="display: flex; align-items: center; gap: 10px; padding: 0 4px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E3C77E" stroke-width="1.4" aria-hidden="true"><path d="M6 21V3M6 4h12l-2.4 3.5L18 11H6"></path></svg><div><div class="rl">War Support</div><div class="rv" style="margin-top: 5px">30%</div></div></div>
+<div class="vd"></div>
+<div style="display: flex; align-items: center; gap: 10px; padding: 0 4px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E3C77E" stroke-width="1.4" aria-hidden="true"><circle cx="9" cy="8" r="2.8"></circle><path d="M3.5 19.5a5.5 5.5 0 0 1 11 0"></path><circle cx="16.5" cy="9" r="2.2"></circle><path d="M14.8 14.2a4.4 4.4 0 0 1 6.2 4.3"></path></svg><div><div class="rl">Manpower</div><div class="rv" style="margin-top: 5px">152.0K</div></div></div>
+<div class="vd"></div>
+<div style="display: flex; align-items: center; gap: 10px; padding: 0 4px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E3C77E" stroke-width="1.4" aria-hidden="true"><path d="M3 20.5V11l5 3v-3l5 3v-3l5 3V4.5h3v16z"></path></svg><div><div class="rl">Factories</div><div style="display: flex; align-items: center; gap: 10px; margin-top: 5px"><span class="rv" style="display: flex; align-items: center; gap: 5px"><i style="width: 8px; height: 8px; background: #E9E1CC; transform: rotate(45deg)"></i>3</span><span class="rv" style="display: flex; align-items: center; gap: 5px"><i style="width: 8px; height: 8px; background: #E7A24A; transform: rotate(45deg)"></i>2</span><span class="rv" style="display: flex; align-items: center; gap: 5px; color: #8F8770"><i style="width: 8px; height: 8px; background: #4F8F9A; transform: rotate(45deg)"></i>0</span></div></div></div>
+<div class="vd"></div>
+</div>
+<div style="position: absolute; right: 12px; top: 6px; width: 404px; height: 46px; padding: 1px; box-sizing: border-box; background: linear-gradient(180deg, #E8CD84, #8B6A2C); clip-path: polygon(16px 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 16px 100%, 0 50%)">
+<div style="display: flex; align-items: center; height: 100%; padding: 0 22px 0 20px; gap: 14px; box-sizing: border-box; background: repeating-linear-gradient(90deg, rgba(255,255,255,.025) 0 1px, transparent 1px 7px), linear-gradient(180deg, #1E2930, #0D1418); clip-path: polygon(15.5px 0, calc(100% - 15.5px) 0, 100% 50%, calc(100% - 15.5px) 100%, 15.5px 100%, 0 50%)">
+<button aria-label="Resume" style="width: 28px; height: 28px; border: 1px solid #E3C77E; background: #2E6E60; transform: rotate(45deg); display: flex; align-items: center; justify-content: center; padding: 0; cursor: pointer"><svg width="12" height="12" viewBox="0 0 12 12" style="transform: rotate(-45deg)" aria-hidden="true"><path d="M3 1.5l7 4.5-7 4.5z" fill="#FBEAB4"></path></svg></button>
+<div style="flex: 1; text-align: center"><div class="fed" style="font-size: 20px; letter-spacing: .14em; color: #F4ECD9; line-height: 1">8 APRIL 1936</div><div class="rl" style="margin-top: 4px; letter-spacing: .3em; color: #E7B75A">Paused</div></div>
+<div style="display: flex; gap: 3px; align-items: center" aria-label="Game speed 3 of 5">
+<svg width="10" height="16" viewBox="0 0 10 16" aria-hidden="true"><path d="M1 1l7 7-7 7" fill="none" stroke="#F1DC9C" stroke-width="2.4"></path></svg>
+<svg width="10" height="16" viewBox="0 0 10 16" aria-hidden="true"><path d="M1 1l7 7-7 7" fill="none" stroke="#F1DC9C" stroke-width="2.4"></path></svg>
+<svg width="10" height="16" viewBox="0 0 10 16" aria-hidden="true"><path d="M1 1l7 7-7 7" fill="none" stroke="#F1DC9C" stroke-width="2.4"></path></svg>
+<svg width="10" height="16" viewBox="0 0 10 16" aria-hidden="true"><path d="M1 1l7 7-7 7" fill="none" stroke="#4A4434" stroke-width="2.4"></path></svg>
+<svg width="10" height="16" viewBox="0 0 10 16" aria-hidden="true"><path d="M1 1l7 7-7 7" fill="none" stroke="#4A4434" stroke-width="2.4"></path></svg>
+</div>
+<div style="display: flex; flex-direction: column; gap: 2px">
+<button aria-label="Faster" style="width: 22px; height: 15px; padding: 0; border: 1px solid rgba(201,165,90,.6); background: #0B1014; color: #E3C77E; font: 700 12px/1 'Josefin Sans'; cursor: pointer">+</button>
+<button aria-label="Slower" style="width: 22px; height: 15px; padding: 0; border: 1px solid rgba(201,165,90,.6); background: #0B1014; color: #E3C77E; font: 700 12px/1 'Josefin Sans'; cursor: pointer">−</button>
+</div>
+</div>
+</div>
+<button aria-label="Rouental – open government" style="position: absolute; left: 14px; top: 0; width: 156px; height: 158px; padding: 0 1px 1px 1px; border: 0; margin: 0; cursor: pointer; background: linear-gradient(180deg, #8B6A2C, #E8CD84 40%, #8B6A2C); clip-path: polygon(0 0, 100% 0, 100% 80%, 88% 80%, 88% 90%, 74% 90%, 74% 100%, 26% 100%, 26% 90%, 12% 90%, 12% 80%, 0 80%); z-index: 3">
+<span style="display: flex; flex-direction: column; align-items: center; width: 100%; height: 100%; padding-top: 10px; box-sizing: border-box; background: repeating-linear-gradient(90deg, rgba(255,255,255,.025) 0 1px, transparent 1px 7px), linear-gradient(180deg, #1B262D, #0C1317); clip-path: polygon(0 0, 100% 0, 100% calc(80% - 1px), calc(88% - 1px) calc(80% - 1px), calc(88% - 1px) calc(90% - 1px), calc(74% - 1px) calc(90% - 1px), calc(74% - 1px) calc(100% - 1px), calc(26% + 1px) calc(100% - 1px), calc(26% + 1px) calc(90% - 1px), calc(12% + 1px) calc(90% - 1px), calc(12% + 1px) calc(80% - 1px), 0 calc(80% - 1px))">
+<span style="display: block; padding: 2px; background: linear-gradient(180deg, #F1DC9C, #9C7A36); box-shadow: 0 4px 10px rgba(0,0,0,.5)"><img src="assets/flag_ROU_REIBONNE.png" alt="Flag of the People's Republic of Rouental" style="display: block; width: 120px; height: 76px"></span>
+<span class="fed gilt" style="display: block; margin-top: 9px; font-size: 16px; letter-spacing: .32em; padding-left: .32em">ROUENTAL</span>
+</span>
+</button>
+
+<!-- ============ FOCUS WINDOW ============ -->
+<section aria-label="National focus tree" class="panel" style="left: 12px; top: 72px; width: 1896px; height: 996px; padding: 0">
+<i class="ck tl"></i><i class="ck tr"></i><i class="ck bl"></i><i class="ck br"></i>
+
+<!-- header -->
+<div style="position: relative; height: 100px; display: flex; align-items: center; padding: 0 28px 0 176px; gap: 28px; border-bottom: 1px solid rgba(201,165,90,.5); background: linear-gradient(180deg, rgba(46,110,96,.22), rgba(46,110,96,0))">
+<div style="flex: none">
+<div class="fed gilt" style="font-size: 30px; letter-spacing: .2em; line-height: 1">ROUENTAISE FOCUS TREE</div>
+<div class="bod" style="margin-top: 7px; font-size: 15px; color: #CBBF9F">The People’s Republic of Rouental · Vanguardism</div>
+</div>
+<div style="flex: 1; display: flex; justify-content: center; gap: 6px" role="group" aria-label="Search filters">
+<button class="chip">All</button>
+<button class="chip on" aria-pressed="true">Political</button>
+<button class="chip">Research</button>
+<button class="chip">Industry</button>
+<button class="chip">Stability</button>
+<button class="chip">War Support</button>
+<button class="chip">Manpower</button>
+</div>
+<div style="flex: none; text-align: right">
+<div class="rl">Focus in progress</div>
+<div style="margin-top: 6px; font: 700 15px/1 'Josefin Sans'; color: #F4ECD9">Execute the Prince <span style="color: #E3C77E">· 42 days</span></div>
+</div>
+<button aria-label="Close focus tree" style="flex: none; width: 34px; height: 34px; padding: 0; border: 1px solid #E3C77E; background: #0B1014; transform: rotate(45deg); display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="14" height="14" viewBox="0 0 14 14" style="transform: rotate(-45deg)" aria-hidden="true"><path d="M2 2l10 10M12 2L2 12" stroke="#E3C77E" stroke-width="1.8"></path></svg></button>
+</div>
+
+<!-- tree canvas -->
+<div style="position: absolute; left: 4px; right: 4px; top: 101px; bottom: 4px; overflow: hidden; background-image: radial-gradient(circle at 50% 100%, transparent 0 25px, rgba(201,165,90,.10) 25px 26px, transparent 26px 31px, rgba(201,165,90,.06) 31px 32px, transparent 32px), radial-gradient(circle at 50% 100%, transparent 0 25px, rgba(201,165,90,.10) 25px 26px, transparent 26px 31px, rgba(201,165,90,.06) 31px 32px, transparent 32px), radial-gradient(ellipse at 50% 35%, #15221F 0%, #0B1113 70%); background-size: 64px 32px, 64px 32px, 100% 100%; background-position: 0 0, 32px 16px, 0 0">
+
+<!-- exclusivity links between the five political paths -->
+<div class="exl" style="left: 293px; top: 247px; width: 160px"></div><div class="exd" style="left: 373px; top: 248px"><svg width="10" height="10" viewBox="0 0 10 10" style="transform: rotate(-45deg)" aria-hidden="true"><path d="M1.5 1.5l7 7M8.5 1.5l-7 7" stroke="#FBD7CF" stroke-width="1.6"></path></svg></div>
+<div class="exl" style="left: 549px; top: 247px; width: 160px"></div><div class="exd" style="left: 629px; top: 248px"><svg width="10" height="10" viewBox="0 0 10 10" style="transform: rotate(-45deg)" aria-hidden="true"><path d="M1.5 1.5l7 7M8.5 1.5l-7 7" stroke="#FBD7CF" stroke-width="1.6"></path></svg></div>
+<div class="exl" style="left: 805px; top: 247px; width: 160px"></div><div class="exd" style="left: 885px; top: 248px"><svg width="10" height="10" viewBox="0 0 10 10" style="transform: rotate(-45deg)" aria-hidden="true"><path d="M1.5 1.5l7 7M8.5 1.5l-7 7" stroke="#FBD7CF" stroke-width="1.6"></path></svg></div>
+<div class="exl" style="left: 1061px; top: 247px; width: 160px"></div><div class="exd" style="left: 1141px; top: 248px"><svg width="10" height="10" viewBox="0 0 10 10" style="transform: rotate(-45deg)" aria-hidden="true"><path d="M1.5 1.5l7 7M8.5 1.5l-7 7" stroke="#FBD7CF" stroke-width="1.6"></path></svg></div>
+
+<!-- prerequisite: Rudely -> Execute the Prince -->
+<div style="position: absolute; left: 1010px; top: 339px; width: 6px; height: 82px; background: linear-gradient(90deg, #6E5426, #F6E3A6 50%, #6E5426); box-shadow: 0 0 12px rgba(241,220,156,.45)"></div>
+
+<!-- row 0 -->
+<button class="fn off" aria-label="Kick Out the Parasites (Polite) – unavailable, mutually exclusive" style="left: 167px; top: 200px"><span class="med"><span><svg width="46" height="46" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 42V6h24v36"></path><path d="M12 6l14 4v34l-14-2"></path><circle cx="22" cy="26" r="1.4" fill="currentColor"></circle><path d="M30 24h12M38 20l4 4-4 4"></path></svg></span></span><span class="plate"><span>Kick Out the Parasites (Polite)</span></span></button>
+
+<button class="fn off" aria-label="Kick Out Your Brother – unavailable, mutually exclusive" style="left: 423px; top: 200px"><span class="med"><span><svg width="46" height="46" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10 32l3-15 7 7 4-11 4 11 7-7 3 15z"></path><path d="M24 3v42M18 38h12M21 45h6"></path></svg></span></span><span class="plate"><span>Kick Out Your Brother</span></span></button>
+
+<button class="fn off" aria-label="Steady As She Goes – unavailable, mutually exclusive" style="left: 679px; top: 200px"><span class="med"><span><svg width="46" height="46" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="24" cy="24" r="12"></circle><circle cx="24" cy="24" r="3.5"></circle><path d="M24 4v40M4 24h40M9.9 9.9l28.2 28.2M38.1 9.9L9.9 38.1"></path></svg></span></span><span class="plate"><span>Steady As She Goes</span></span></button>
+
+<button class="fn done" aria-label="Kick Out the Parasites (Rudely) – completed" style="left: 935px; top: 200px"><span class="med" style="position: relative"><span><svg width="46" height="46" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M8 6h24v30H8zM20 6v30M8 21h24"></path><path d="M28 30l13 13M33 43h8v-8"></path></svg></span></span><span class="plate"><span>Kick Out the Parasites (Rudely)</span></span></button>
+<div style="position: absolute; left: 1046px; top: 196px; width: 26px; height: 26px; transform: rotate(45deg); background: linear-gradient(180deg, #2E6E60, #153730); border: 1px solid #F6E3A6; display: flex; align-items: center; justify-content: center"><svg width="12" height="12" viewBox="0 0 12 12" style="transform: rotate(-45deg)" aria-hidden="true"><path d="M2 6.5l2.6 2.6L10 3.5" fill="none" stroke="#FBEAB4" stroke-width="1.8"></path></svg></div>
+
+<button class="fn off" aria-label="Accept Reality – unavailable, mutually exclusive" style="left: 1191px; top: 200px"><span class="med"><span><svg width="46" height="46" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="24" cy="12" r="6"></circle><path d="M24 2v2M14 6l1.5 1.5M34 6l-1.5 1.5M10 13h2M36 13h2"></path><path d="M14 44V30a10 10 0 0 1 20 0v14M10 44h28M19 44V33M29 44V33"></path></svg></span></span><span class="plate"><span>Accept Reality</span></span></button>
+
+<button class="fn" aria-label="Plans for Cardonia – available" style="left: 1575px; top: 200px"><span class="med"><span><svg width="46" height="46" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 8l26 26M40 8L14 34"></path><path d="M30 38l8-8M10 30l8 8M34 34l6 6M14 34l-6 6"></path><path d="M8 8l-1 5 5-1M40 8l1 5-5-1"></path></svg></span></span><span class="plate"><span>Plans for Cardonia</span></span></button>
+
+<!-- row 1: current focus -->
+<div style="position: absolute; left: 943px; top: 396px; width: 140px; height: 140px; border-radius: 50%; background: repeating-conic-gradient(from 4deg, rgba(246,227,166,.55) 0deg 3deg, transparent 3deg 12deg); -webkit-mask: radial-gradient(circle, transparent 46px, #000 47px, #000 60px, transparent 70px); mask: radial-gradient(circle, transparent 46px, #000 47px, #000 60px, transparent 70px)"></div>
+<div style="position: absolute; left: 953px; top: 406px; width: 120px; height: 120px; border-radius: 50%; box-shadow: 0 0 40px 6px rgba(241,220,156,.35)"></div>
+<button class="fn" aria-label="Execute the Prince – in progress, 42 days left" style="left: 935px; top: 418px"><span class="med" style="background: linear-gradient(180deg, #FFF3C8, #C9A55A)"><span style="background: repeating-conic-gradient(rgba(246,227,166,.32) 0deg 5deg, transparent 5deg 15deg), radial-gradient(circle, #6B2B26 0%, #2A0F0D 75%)"><svg width="46" height="46" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M13 45V5M35 45V5M11 5h26"></path><path d="M13 11l22 6v5H13z" fill="rgba(241,220,156,.25)"></path><path d="M19 36a5 5 0 0 0 10 0M13 36h22M8 45h32"></path></svg></span></span><span class="plate" style="background: linear-gradient(180deg, #FFF3C8, #B48F44)"><span>Execute the Prince</span></span></button>
+<div style="position: absolute; left: 935px; top: 574px; width: 156px">
+<div style="height: 6px; background: #0A0F12; border: 1px solid rgba(201,165,90,.6)"><div style="width: 40%; height: 100%; background: linear-gradient(180deg, #F1DC9C, #B48F44)"></div></div>
+<div style="margin-top: 6px; text-align: center; font: 700 12px/1 'Josefin Sans'; letter-spacing: .1em; color: #E3C77E">28 / 70 DAYS</div>
+</div>
+
+<!-- tooltip for Execute the Prince -->
+<div class="panel" role="tooltip" style="left: 1118px; top: 380px; width: 520px; padding: 20px 24px 20px">
+<i class="ck tl"></i><i class="ck tr"></i><i class="ck bl"></i><i class="ck br"></i>
+<div style="display: flex; justify-content: space-between; align-items: baseline">
+<div class="fed gilt" style="font-size: 22px; letter-spacing: .16em">EXECUTE THE PRINCE</div>
+<div class="rl" style="color: #E3C77E">Political · 70 days</div>
+</div>
+<div class="bod" style="margin-top: 10px; font-size: 15px; line-height: 1.45; color: #D8CCAE">The committee has voted. Roland II Cahun will not see another spring, and neither, perhaps, will the peace.</div>
+<div style="height: 1px; margin: 16px 0 14px; background: linear-gradient(90deg, #C9A55A, rgba(201,165,90,.08))"></div>
+<div class="rl" style="margin-bottom: 12px">On completion</div>
+<div style="display: flex; flex-direction: column; gap: 9px">
+<div class="fx"><i></i><span>Superevent: <span class="hl">The Rouentaise Civil War</span></span></div>
+<div class="fx" style="align-items: center"><i style="margin-top: 0"></i><span style="flex: 1">Rouental becomes <span class="hl">the People’s Republic of the Reibonne</span></span><img class="fl" src="assets/flag_ROU_REIBONNE.png" alt="Flag of the Reibonne"></div>
+<div class="fx"><i></i><span><span class="hl">Lustiana</span> takes Maïeul and Serpette · <span class="hl">Hollier</span> takes Chirac · <span class="hl">Selgrave</span> takes Moelle</span></div>
+<div class="fx"><i></i><span>The Association of Reibonnaise States becomes <span class="hl">the Alliance of the Vale</span></span></div>
+<div class="fx"><i style="background: #E8877A"></i><span>Seven factions rise and <span style="color: #F2A194; font-weight: 700">declare war on you</span></span></div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; margin-top: 12px; padding-left: 16px">
+<figure style="margin: 0; text-align: center"><img class="fl" src="assets/flag_BRL.png" alt="" style="width: 48px; height: 31px; margin: 0 auto"><figcaption style="margin-top: 5px; font-size: 10.5px; color: #CBBF9F">Brillagne</figcaption></figure>
+<figure style="margin: 0; text-align: center"><img class="fl" src="assets/flag_CRP.png" alt="" style="width: 48px; height: 31px; margin: 0 auto"><figcaption style="margin-top: 5px; font-size: 10.5px; color: #CBBF9F">Crépuscule</figcaption></figure>
+<figure style="margin: 0; text-align: center"><img class="fl" src="assets/flag_RLT.png" alt="" style="width: 48px; height: 31px; margin: 0 auto"><figcaption style="margin-top: 5px; font-size: 10.5px; color: #CBBF9F">Reliette</figcaption></figure>
+<figure style="margin: 0; text-align: center"><img class="fl" src="assets/flag_MRC.png" alt="" style="width: 48px; height: 31px; margin: 0 auto"><figcaption style="margin-top: 5px; font-size: 10.5px; color: #CBBF9F">The Marches</figcaption></figure>
+<figure style="margin: 0; text-align: center"><img class="fl" src="assets/flag_RLA.png" alt="" style="width: 48px; height: 31px; margin: 0 auto"><figcaption style="margin-top: 5px; font-size: 10.5px; color: #CBBF9F">HMMLA</figcaption></figure>
+<figure style="margin: 0; text-align: center"><img class="fl" src="assets/flag_VAI.png" alt="" style="width: 48px; height: 31px; margin: 0 auto"><figcaption style="margin-top: 5px; font-size: 10.5px; color: #CBBF9F">Vair</figcaption></figure>
+<figure style="margin: 0; text-align: center"><img class="fl" src="assets/flag_FTH.png" alt="" style="width: 48px; height: 31px; margin: 0 auto"><figcaption style="margin-top: 5px; font-size: 10.5px; color: #CBBF9F">The Faithful</figcaption></figure>
+</div>
+</div>
+
+<!-- continuous focuses -->
+<button aria-label="Continuous focuses" style="position: absolute; left: 26px; bottom: 26px; padding: 1px; border: 0; background: linear-gradient(180deg, #E8CD84, #8B6A2C); clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px); cursor: pointer">
+<span style="display: flex; align-items: center; gap: 14px; padding: 12px 18px 12px 14px; background: linear-gradient(180deg, #1E2930, #0E1519); clip-path: polygon(9.5px 0, 100% 0, 100% calc(100% - 9.5px), calc(100% - 9.5px) 100%, 0 100%, 0 9.5px)">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#E3C77E" stroke-width="1.5" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.6"></path><path d="M20 4v4h-4"></path></svg>
+<span style="text-align: left"><span class="rl" style="display: block; color: #EBD397">Continuous focuses</span><span style="display: block; margin-top: 5px; font-size: 12.5px; color: #8F8670">No continuous focus selected</span></span>
+</span>
+</button>
+
+<!-- legend -->
+<div style="position: absolute; right: 26px; bottom: 26px; display: flex; gap: 22px; align-items: center; padding: 12px 18px; background: rgba(11,16,20,.8); border: 1px solid rgba(201,165,90,.35)">
+<span style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: #CBBF9F"><i style="width: 14px; height: 14px; background: linear-gradient(180deg, #F6E3A6, #B48F44); clip-path: polygon(29% 0, 71% 0, 100% 29%, 100% 71%, 71% 100%, 29% 100%, 0 71%, 0 29%)"></i>Completed</span>
+<span style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: #CBBF9F"><i style="width: 14px; height: 14px; background: radial-gradient(circle, #6B2B26, #2A0F0D); border-radius: 50%; box-shadow: 0 0 0 2px #F1DC9C, 0 0 8px #F1DC9C"></i>In progress</span>
+<span style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: #CBBF9F"><i style="width: 14px; height: 14px; background: #27493F; border: 1px solid #E3C77E; clip-path: polygon(29% 0, 71% 0, 100% 29%, 100% 71%, 71% 100%, 29% 100%, 0 71%, 0 29%)"></i>Available</span>
+<span style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: #CBBF9F"><i style="width: 12px; height: 12px; transform: rotate(45deg); background: #7C2A26; border: 1px solid #E8877A"></i>Mutually exclusive</span>
+</div>
+
+</div>
+</section>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1920,"height":1080}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

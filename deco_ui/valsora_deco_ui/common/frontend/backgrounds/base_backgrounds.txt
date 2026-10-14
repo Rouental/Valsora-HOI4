@@ -1,0 +1,5 @@
+# Valsora Deco UI - main menu background.
+# This file replaces the game's list, so the Valsora background is the default (and only) choice.
+# Format (from the game's own file): name_of_dds_file = { } with the .dds in gfx/loadingscreens,
+# plus a GFX_<name>_small sprite (192x144) for the background picker.
+valsora_menu = { }

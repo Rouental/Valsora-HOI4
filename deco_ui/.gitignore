@@ -1,0 +1,7 @@
+# game and Valsora inputs: never commit Paradox files
+reference/*
+!reference/README.md
+# build intermediates and previews
+build/
+__pycache__/
+*.pyc

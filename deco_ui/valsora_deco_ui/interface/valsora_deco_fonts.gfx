@@ -1,0 +1,426 @@
+# Valsora Deco UI - bitmap fonts (top bar and screens).
+# Generated from Josefin Sans and Federo (SIL Open Font License); see README.
+# The *_label, *_date and *_name fonts draw lowercase letters as capitals.
+# The map font is not defined here: it replaces the files behind vanilla "tahoma_60"
+# (gfx/fonts/hoi_mapfont4.fnt/.dds) without touching its definition.
+
+bitmapfonts = {
+
+	# readout values (U+25C6 is a diamond, for the factory counts)
+	bitmapfont = {
+		name = "valsora_deco_value_17"
+		path = "gfx/fonts/valsora_deco_value_17"
+		color = 0xfff4ecd9
+		textcolors = {
+			C = { 92 160 170 }
+			L = { 195 176 145 }
+			W = { 244 236 217 }
+			B = { 110 150 230 }
+			G = { 147 214 165 }
+			R = { 238 140 126 }
+			b = { 0 0 0 }
+			g = { 176 168 146 }
+			Y = { 231 183 90 }
+			H = { 241 220 156 }
+			T = { 246 238 220 }
+			O = { 231 162 74 }
+			K = { 44 31 10 }
+		}
+	}
+
+	# tray values, world tension, daily political power
+	bitmapfont = {
+		name = "valsora_deco_value_15"
+		path = "gfx/fonts/valsora_deco_value_15"
+		color = 0xfff4ecd9
+		textcolors = {
+			C = { 92 160 170 }
+			L = { 195 176 145 }
+			W = { 244 236 217 }
+			B = { 110 150 230 }
+			G = { 147 214 165 }
+			R = { 238 140 126 }
+			b = { 0 0 0 }
+			g = { 176 168 146 }
+			Y = { 231 183 90 }
+			H = { 241 220 156 }
+			T = { 246 238 220 }
+			O = { 231 162 74 }
+			K = { 44 31 10 }
+		}
+	}
+
+	# badges: experience, faction initiative
+	bitmapfont = {
+		name = "valsora_deco_value_12"
+		path = "gfx/fonts/valsora_deco_value_12"
+		color = 0xfff4ecd9
+		textcolors = {
+			C = { 92 160 170 }
+			L = { 195 176 145 }
+			W = { 244 236 217 }
+			B = { 110 150 230 }
+			G = { 147 214 165 }
+			R = { 238 140 126 }
+			b = { 0 0 0 }
+			g = { 176 168 146 }
+			Y = { 231 183 90 }
+			H = { 241 220 156 }
+			T = { 246 238 220 }
+			O = { 231 162 74 }
+			K = { 44 31 10 }
+		}
+	}
+
+	# invisible: hides the game's factory number, which a scripted GUI redraws
+	bitmapfont = {
+		name = "valsora_deco_blank"
+		path = "gfx/fonts/valsora_deco_blank"
+		color = 0xfff4ecd9
+		textcolors = {
+			C = { 92 160 170 }
+			L = { 195 176 145 }
+			W = { 244 236 217 }
+			B = { 110 150 230 }
+			G = { 147 214 165 }
+			R = { 238 140 126 }
+			b = { 0 0 0 }
+			g = { 176 168 146 }
+			Y = { 231 183 90 }
+			H = { 241 220 156 }
+			T = { 246 238 220 }
+			O = { 231 162 74 }
+			K = { 44 31 10 }
+		}
+	}
+
+	# readout labels: small tracked capitals
+	bitmapfont = {
+		name = "valsora_deco_label"
+		path = "gfx/fonts/valsora_deco_label"
+		color = 0xffb7a680
+		textcolors = {
+			C = { 92 160 170 }
+			L = { 195 176 145 }
+			W = { 244 236 217 }
+			B = { 110 150 230 }
+			G = { 147 214 165 }
+			R = { 238 140 126 }
+			b = { 0 0 0 }
+			g = { 176 168 146 }
+			Y = { 231 183 90 }
+			H = { 241 220 156 }
+			T = { 246 238 220 }
+			O = { 231 162 74 }
+			K = { 44 31 10 }
+		}
+	}
+
+	# date: Federo capitals
+	bitmapfont = {
+		name = "valsora_deco_date"
+		path = "gfx/fonts/valsora_deco_date"
+		color = 0xfff4ecd9
+		textcolors = {
+			C = { 92 160 170 }
+			L = { 195 176 145 }
+			W = { 244 236 217 }
+			B = { 110 150 230 }
+			G = { 147 214 165 }
+			R = { 238 140 126 }
+			b = { 0 0 0 }
+			g = { 176 168 146 }
+			Y = { 231 183 90 }
+			H = { 241 220 156 }
+			T = { 246 238 220 }
+			O = { 231 162 74 }
+			K = { 44 31 10 }
+		}
+	}
+
+	# country name: gilt is baked into the glyphs, so the colour is white
+	bitmapfont = {
+		name = "valsora_deco_name_big"
+		path = "gfx/fonts/valsora_deco_name_big"
+		color = 0xffffffff
+		textcolors = {
+			C = { 92 160 170 }
+			L = { 195 176 145 }
+			W = { 244 236 217 }
+			B = { 110 150 230 }
+			G = { 147 214 165 }
+			R = { 238 140 126 }
+			b = { 0 0 0 }
+			g = { 176 168 146 }
+			Y = { 231 183 90 }
+			H = { 241 220 156 }
+			T = { 246 238 220 }
+			O = { 231 162 74 }
+			K = { 44 31 10 }
+		}
+	}
+
+	# country name, smaller cut for long words
+	bitmapfont = {
+		name = "valsora_deco_name"
+		path = "gfx/fonts/valsora_deco_name"
+		color = 0xffffffff
+		textcolors = {
+			C = { 92 160 170 }
+			L = { 195 176 145 }
+			W = { 244 236 217 }
+			B = { 110 150 230 }
+			G = { 147 214 165 }
+			R = { 238 140 126 }
+			b = { 0 0 0 }
+			g = { 176 168 146 }
+			Y = { 231 183 90 }
+			H = { 241 220 156 }
+			T = { 246 238 220 }
+			O = { 231 162 74 }
+			K = { 44 31 10 }
+		}
+	}
+
+	# screens: character names
+	bitmapfont = {
+		name = "valsora_deco_heading_22"
+		path = "gfx/fonts/valsora_deco_heading_22"
+		color = 0xfff4ecd9
+		textcolors = {
+			C = { 92 160 170 }
+			L = { 195 176 145 }
+			W = { 244 236 217 }
+			B = { 110 150 230 }
+			G = { 147 214 165 }
+			R = { 238 140 126 }
+			b = { 0 0 0 }
+			g = { 176 168 146 }
+			Y = { 231 183 90 }
+			H = { 241 220 156 }
+			T = { 246 238 220 }
+			O = { 231 162 74 }
+			K = { 44 31 10 }
+		}
+	}
+
+	# screens: titles in gilt capitals (gilt baked in)
+	bitmapfont = {
+		name = "valsora_deco_title_18"
+		path = "gfx/fonts/valsora_deco_title_18"
+		color = 0xffffffff
+		textcolors = {
+			C = { 92 160 170 }
+			L = { 195 176 145 }
+			W = { 244 236 217 }
+			B = { 110 150 230 }
+			G = { 147 214 165 }
+			R = { 238 140 126 }
+			b = { 0 0 0 }
+			g = { 176 168 146 }
+			Y = { 231 183 90 }
+			H = { 241 220 156 }
+			T = { 246 238 220 }
+			O = { 231 162 74 }
+			K = { 44 31 10 }
+		}
+	}
+
+	# screens: section headers in gilt capitals (gilt baked in)
+	bitmapfont = {
+		name = "valsora_deco_section_14"
+		path = "gfx/fonts/valsora_deco_section_14"
+		color = 0xffffffff
+		textcolors = {
+			C = { 92 160 170 }
+			L = { 195 176 145 }
+			W = { 244 236 217 }
+			B = { 110 150 230 }
+			G = { 147 214 165 }
+			R = { 238 140 126 }
+			b = { 0 0 0 }
+			g = { 176 168 146 }
+			Y = { 231 183 90 }
+			H = { 241 220 156 }
+			T = { 246 238 220 }
+			O = { 231 162 74 }
+			K = { 44 31 10 }
+		}
+	}
+
+	# focus tree: window title in gilt capitals (gilt baked in)
+	bitmapfont = {
+		name = "valsora_deco_title_24"
+		path = "gfx/fonts/valsora_deco_title_24"
+		color = 0xffffffff
+		textcolors = {
+			C = { 92 160 170 }
+			L = { 195 176 145 }
+			W = { 244 236 217 }
+			B = { 110 150 230 }
+			G = { 147 214 165 }
+			R = { 238 140 126 }
+			b = { 0 0 0 }
+			g = { 176 168 146 }
+			Y = { 231 183 90 }
+			H = { 241 220 156 }
+			T = { 246 238 220 }
+			O = { 231 162 74 }
+			K = { 44 31 10 }
+		}
+	}
+
+	# politics: the leader's name
+	bitmapfont = {
+		name = "valsora_deco_heading_24"
+		path = "gfx/fonts/valsora_deco_heading_24"
+		color = 0xfff6eedc
+		textcolors = {
+			C = { 92 160 170 }
+			L = { 195 176 145 }
+			W = { 244 236 217 }
+			B = { 110 150 230 }
+			G = { 147 214 165 }
+			R = { 238 140 126 }
+			b = { 0 0 0 }
+			g = { 176 168 146 }
+			Y = { 231 183 90 }
+			H = { 241 220 156 }
+			T = { 246 238 220 }
+			O = { 231 162 74 }
+			K = { 44 31 10 }
+		}
+	}
+
+	# politics: the leader's description (Bodoni Moda italic)
+	bitmapfont = {
+		name = "valsora_deco_italic_13"
+		path = "gfx/fonts/valsora_deco_italic_13"
+		color = 0xffcbbf9f
+		textcolors = {
+			C = { 92 160 170 }
+			L = { 195 176 145 }
+			W = { 244 236 217 }
+			B = { 110 150 230 }
+			G = { 147 214 165 }
+			R = { 238 140 126 }
+			b = { 0 0 0 }
+			g = { 176 168 146 }
+			Y = { 231 183 90 }
+			H = { 241 220 156 }
+			T = { 246 238 220 }
+			O = { 231 162 74 }
+			K = { 44 31 10 }
+		}
+	}
+
+	# screens: section labels (tracked capitals)
+	bitmapfont = {
+		name = "valsora_deco_section_11"
+		path = "gfx/fonts/valsora_deco_section_11"
+		color = 0xffebd397
+		textcolors = {
+			C = { 92 160 170 }
+			L = { 195 176 145 }
+			W = { 244 236 217 }
+			B = { 110 150 230 }
+			G = { 147 214 165 }
+			R = { 238 140 126 }
+			b = { 0 0 0 }
+			g = { 176 168 146 }
+			Y = { 231 183 90 }
+			H = { 241 220 156 }
+			T = { 246 238 220 }
+			O = { 231 162 74 }
+			K = { 44 31 10 }
+		}
+	}
+
+	# screens: body text
+	bitmapfont = {
+		name = "valsora_deco_body_15"
+		path = "gfx/fonts/valsora_deco_body_15"
+		color = 0xffe8dfc8
+		textcolors = {
+			C = { 92 160 170 }
+			L = { 195 176 145 }
+			W = { 244 236 217 }
+			B = { 110 150 230 }
+			G = { 147 214 165 }
+			R = { 238 140 126 }
+			b = { 0 0 0 }
+			g = { 176 168 146 }
+			Y = { 231 183 90 }
+			H = { 241 220 156 }
+			T = { 246 238 220 }
+			O = { 231 162 74 }
+			K = { 44 31 10 }
+		}
+	}
+
+	# screens: small body text
+	bitmapfont = {
+		name = "valsora_deco_body_13"
+		path = "gfx/fonts/valsora_deco_body_13"
+		color = 0xffd9cfb6
+		textcolors = {
+			C = { 92 160 170 }
+			L = { 195 176 145 }
+			W = { 244 236 217 }
+			B = { 110 150 230 }
+			G = { 147 214 165 }
+			R = { 238 140 126 }
+			b = { 0 0 0 }
+			g = { 176 168 146 }
+			Y = { 231 183 90 }
+			H = { 241 220 156 }
+			T = { 246 238 220 }
+			O = { 231 162 74 }
+			K = { 44 31 10 }
+		}
+	}
+
+	# main menu buttons
+	bitmapfont = {
+		name = "valsora_deco_menu_15"
+		path = "gfx/fonts/valsora_deco_menu_15"
+		color = 0xffe7d3a0
+		textcolors = {
+			C = { 92 160 170 }
+			L = { 195 176 145 }
+			W = { 244 236 217 }
+			B = { 110 150 230 }
+			G = { 147 214 165 }
+			R = { 238 140 126 }
+			b = { 0 0 0 }
+			g = { 176 168 146 }
+			Y = { 231 183 90 }
+			H = { 241 220 156 }
+			T = { 246 238 220 }
+			O = { 231 162 74 }
+			K = { 44 31 10 }
+		}
+	}
+
+	# main menu: the gold Single Player button (dark text)
+	bitmapfont = {
+		name = "valsora_deco_menu_big"
+		path = "gfx/fonts/valsora_deco_menu_big"
+		color = 0xff2a1e0a
+		textcolors = {
+			C = { 92 160 170 }
+			L = { 195 176 145 }
+			W = { 244 236 217 }
+			B = { 110 150 230 }
+			G = { 147 214 165 }
+			R = { 238 140 126 }
+			b = { 0 0 0 }
+			g = { 176 168 146 }
+			Y = { 231 183 90 }
+			H = { 241 220 156 }
+			T = { 246 238 220 }
+			O = { 231 162 74 }
+			K = { 44 31 10 }
+		}
+	}
+}

@@ -1,0 +1,25 @@
+# Valsora Deco UI - top bar additions. No 'dirty' variable, so the texts refresh every tick.
+scripted_gui = {
+	valsora_deco_country_name = {
+		context_type = player_context
+		window_name = "valsora_deco_country_name_window"
+		parent_window_token = top_bar
+		visible = { NOT = { valsora_deco_long_name = yes } }
+	}
+	valsora_deco_country_name_small = {
+		context_type = player_context
+		window_name = "valsora_deco_country_name_small_window"
+		parent_window_token = top_bar
+		visible = { valsora_deco_long_name = yes }
+	}
+	valsora_deco_pp_daily = {
+		context_type = player_context
+		window_name = "valsora_deco_pp_daily_window"
+		parent_window_token = top_bar
+	}
+	valsora_deco_factory_counts = {
+		context_type = player_context
+		window_name = "valsora_deco_factory_counts_window"
+		parent_window_token = top_bar
+	}
+}

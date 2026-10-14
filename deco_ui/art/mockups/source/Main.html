@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+<style>
+/* local copies of the Google Fonts the boards used (SIL OFL, in the project's source_fonts/) */
+@font-face{font-family:'Federo';src:url('../../../source_fonts/federo/Federo-Regular.ttf')}
+@font-face{font-family:'Limelight';src:url('../../../source_fonts/limelight/Limelight-Regular.ttf')}
+@font-face{font-family:'Josefin Sans';src:url('../../../source_fonts/josefinsans/JosefinSans[wght].ttf');font-weight:100 700;font-style:normal}
+@font-face{font-family:'Josefin Sans';src:url('../../../source_fonts/josefinsans/JosefinSans-Italic[wght].ttf');font-weight:100 700;font-style:italic}
+@font-face{font-family:'Bodoni Moda';src:url('../../../source_fonts/bodonimoda/BodoniModa[opsz,wght].ttf');font-weight:400 900;font-style:normal}
+@font-face{font-family:'Bodoni Moda';src:url('../../../source_fonts/bodonimoda/BodoniModa-Italic[opsz,wght].ttf');font-weight:400 900;font-style:italic}
+</style>
+<meta charset="utf-8">
+<title>Valsora HUD – Rouental</title>
+
+</head>
+<body>
+<x-dc>
+<helmet>
+
+<style>
+body{margin:0}
+a{color:#E3C77E}a:hover{color:#F6E3A6}
+.fed{font-family:'Federo',serif;font-weight:400}
+.bod{font-family:'Bodoni Moda',serif;font-style:italic}
+.cap{text-transform:uppercase;letter-spacing:.18em;font-weight:600}
+.panel{position:absolute;box-sizing:border-box;border:1px solid #B8954F;background:repeating-linear-gradient(90deg,rgba(255,255,255,.022) 0 1px,transparent 1px 7px),linear-gradient(180deg,rgba(23,32,38,.97),rgba(11,17,21,.97));box-shadow:inset 0 0 0 3px rgba(11,17,21,.97),inset 0 0 0 4px rgba(201,165,90,.42),0 16px 36px rgba(0,0,0,.55)}
+.ck{position:absolute;width:16px;height:16px;pointer-events:none}
+.ck::before{content:"";position:absolute;inset:0;border-top:2px solid #E3C77E;border-left:2px solid #E3C77E}
+.ck::after{content:"";position:absolute;left:6px;top:6px;width:6px;height:6px;border-top:2px solid #E3C77E;border-left:2px solid #E3C77E}
+.ck.tl{left:-2px;top:-2px}.ck.tr{right:-2px;top:-2px;transform:scaleX(-1)}.ck.bl{left:-2px;bottom:-2px;transform:scaleY(-1)}.ck.br{right:-2px;bottom:-2px;transform:scale(-1,-1)}
+.gilt{background:linear-gradient(180deg,#F8EBBD 0%,#E4C67E 46%,#B08B41 58%,#E9D190 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ib{width:44px;height:46px;padding:1px;border:0;margin:0;background:linear-gradient(180deg,#E8CD84,#8B6A2C);clip-path:polygon(9px 0,calc(100% - 9px) 0,100% 9px,100% 100%,0 100%,0 9px);cursor:pointer;position:relative;display:block}
+.ib>span{display:flex;width:100%;height:100%;align-items:center;justify-content:center;background:linear-gradient(180deg,#1E2930,#0E1519);clip-path:polygon(8.5px 0,calc(100% - 8.5px) 0,100% 8.5px,100% 100%,0 100%,0 8.5px);color:#E3C77E}
+.ib.on>span{background:linear-gradient(180deg,#2E6E60,#153730);color:#FBEAB4}
+.rl{font:600 9.5px/1 'Josefin Sans',sans-serif;letter-spacing:.17em;text-transform:uppercase;color:#B7A680}
+.rv{font:700 17px/1 'Josefin Sans',sans-serif;color:#F4ECD9}
+.pos{color:#93D6A5}.neg{color:#EE8C7E}
+.vd{width:1px;align-self:stretch;margin:11px 0;background:linear-gradient(180deg,transparent,#C9A55A 30%,#C9A55A 70%,transparent)}
+.ml{position:absolute;white-space:nowrap;font-family:'Federo',serif;text-transform:uppercase;color:rgba(246,238,216,.5);text-shadow:0 1px 0 rgba(0,0,0,.35);pointer-events:none}
+.vp{position:absolute;width:7px;height:7px;background:#E8CD84;transform:translate(-50%,-50%) rotate(45deg);box-shadow:0 0 0 1.5px #16110a}
+.vn{position:absolute;font:600 11.5px/1 'Josefin Sans',sans-serif;letter-spacing:.05em;color:#F6EEDC;text-shadow:0 1px 2px #000,0 0 4px rgba(0,0,0,.9);white-space:nowrap}
+.uc{position:absolute;display:flex;height:24px;transform:translate(-50%,-50%);filter:drop-shadow(0 3px 4px rgba(0,0,0,.65))}
+.uc .fl{width:7px;background:#366A40;border:1px solid #D2B064;border-right:0}
+.uc .bd{display:flex;align-items:center;gap:6px;padding:0 7px 0 6px;background:linear-gradient(180deg,#1E2A31,#0E1519);border:1px solid #D2B064;color:#EBD397;font:700 14px/1 'Josefin Sans',sans-serif}
+.uc .st{position:absolute;left:0;right:0;bottom:-5px;height:3px;background:#0B1014;border:1px solid rgba(0,0,0,.6)}
+.uc .st i{display:block;height:100%;background:#93D6A5}
+.row{display:flex;align-items:center;gap:9px;padding:6px 10px 6px 12px;border-bottom:1px solid rgba(201,165,90,.12)}
+.bar2{width:38px;display:flex;flex-direction:column;gap:3px}
+.bar2 i{display:block;height:3px;background:#2A363D}
+.bar2 i b{display:block;height:100%}
+.sh{display:flex;align-items:center;justify-content:space-between;padding:9px 12px 8px 12px;background:linear-gradient(90deg,rgba(201,165,90,.16),rgba(201,165,90,.04));border-top:1px solid rgba(201,165,90,.35);border-bottom:1px solid rgba(201,165,90,.35)}
+.mm{width:38px;height:38px;padding:1px;border:0;margin:0;background:linear-gradient(180deg,#E3C77E,#8B6A2C);clip-path:polygon(7px 0,100% 0,100% calc(100% - 7px),calc(100% - 7px) 100%,0 100%,0 7px);cursor:pointer}
+.mm>span{display:flex;width:100%;height:100%;align-items:center;justify-content:center;background:linear-gradient(180deg,#1E2930,#0E1519);clip-path:polygon(6.5px 0,100% 0,100% calc(100% - 6.5px),calc(100% - 6.5px) 100%,0 100%,0 6.5px);color:#E3C77E}
+.mm.on>span{background:linear-gradient(180deg,#2E6E60,#153730);color:#FBEAB4}
+.slot{width:56px;height:56px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;border:1px solid rgba(201,165,90,.55);background:linear-gradient(180deg,#1B252B,#10171B)}
+.pip{width:14px;height:6px;background:#2A363D;transform:skewX(-20deg)}
+.pip.on{background:linear-gradient(180deg,#F1DC9C,#B48F44)}
+</style>
+</helmet>
+<div style="position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #0B1014; font-family: 'Josefin Sans', sans-serif; color: #EFE6D0">
+
+<img src="assets/map_rouental.jpg" alt="Political map centred on Rouental" style="position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; display: block">
+
+<!-- country names -->
+<div class="ml" style="left: 880px; top: 626px; font-size: 44px; letter-spacing: .55em; transform: translate(-50%, -50%) rotate(9deg)">Rouental</div>
+<div class="ml" style="left: 840px; top: 318px; font-size: 50px; letter-spacing: .6em; transform: translate(-50%, -50%) rotate(-2deg)">Cardonia</div>
+<div class="ml" style="left: 1380px; top: 760px; font-size: 40px; letter-spacing: .45em; transform: translate(-50%, -50%) rotate(-16deg)">Fraxhemark</div>
+<div class="ml" style="left: 1440px; top: 262px; font-size: 30px; letter-spacing: .45em; transform: translate(-50%, -50%) rotate(10deg)">Kurikia</div>
+<div class="ml" style="left: 430px; top: 596px; font-size: 22px; letter-spacing: .35em; transform: translate(-50%, -50%) rotate(19deg)">Placeholdaire</div>
+<div class="ml" style="left: 250px; top: 108px; font-size: 20px; letter-spacing: .4em; transform: translate(-50%, -50%) rotate(-8deg)">Wersh</div>
+
+<div class="ml" style="left: 598px; top: 846px; font-size: 18px; letter-spacing: .4em; transform: translate(-50%, -50%) rotate(-26deg)">Selto</div>
+<div class="ml" style="left: 760px; top: 1000px; font-size: 18px; letter-spacing: .4em; transform: translate(-50%, -50%) rotate(-6deg)">Estande</div>
+
+<!-- victory points -->
+<div style="position: absolute; left: 572px; top: 492px; width: 18px; height: 18px; transform: translate(-50%, -50%)">
+<svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><circle cx="9" cy="9" r="8" fill="#16110A" stroke="#E8CD84" stroke-width="1.2"></circle><path d="M9 3.6l1.5 3.4 3.7.3-2.8 2.4.9 3.6L9 11.4 5.7 13.3l.9-3.6L3.8 7.3l3.7-.3z" fill="#F3DE9E"></path></svg>
+</div>
+<div class="vn" style="left: 520px; top: 504px; font-size: 13px; font-weight: 700">Rêverie</div>
+<div class="vp" style="left: 603px; top: 485px"></div><div class="vn" style="left: 612px; top: 488px">Seraine</div>
+<div class="vp" style="left: 655px; top: 521px"></div><div class="vn" style="left: 664px; top: 524px">Saintiers</div>
+<div class="vp" style="left: 337px; top: 448px"></div><div class="vn" style="left: 346px; top: 451px">Carcarelle</div>
+<div class="vp" style="left: 332px; top: 356px"></div><div class="vn" style="left: 341px; top: 359px">Vair</div>
+<div class="vp" style="left: 351px; top: 523px"></div><div class="vn" style="left: 360px; top: 526px">Grande Reliette</div>
+<div class="vp" style="left: 943px; top: 675px"></div><div class="vn" style="left: 952px; top: 678px">Torres</div>
+<div class="vp" style="left: 1108px; top: 541px"></div><div class="vn" style="left: 1112px; top: 552px">Grande Hollier</div>
+<div class="vp" style="left: 1134px; top: 402px"></div><div class="vn" style="left: 1143px; top: 405px">Tanière</div>
+<div class="vp" style="left: 989px; top: 482px"></div><div class="vn" style="left: 940px; top: 462px">Evriches</div>
+<div class="vp" style="left: 1061px; top: 537px"></div><div class="vn" style="left: 968px; top: 566px">Argent-sur-Seigne</div>
+<div class="vp" style="left: 1191px; top: 341px"></div><div class="vn" style="left: 1200px; top: 344px">Villerose</div>
+<div class="vp" style="left: 1177px; top: 425px"></div><div class="vn" style="left: 1186px; top: 428px">Lanzerac</div>
+<div class="vp" style="left: 852px; top: 703px"></div><div class="vn" style="left: 861px; top: 706px">Guedelon</div>
+
+<!-- division counters (ROU_1936 order of battle) -->
+<div class="uc" style="left: 548px; top: 456px"><div class="fl"></div><div class="bd"><svg width="26" height="14" viewBox="0 0 26 14" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M2 3.5h13v7H2zM15 6h5l3.5 3v1.5H15z"></path><circle cx="6" cy="11.5" r="1.8"></circle><circle cx="19" cy="11.5" r="1.8"></circle></svg>2</div><div class="st"><i style="width: 100%"></i></div></div>
+<div class="uc" style="left: 636px; top: 452px"><div class="fl"></div><div class="bd"><svg width="26" height="14" viewBox="0 0 26 14" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M8 2.5h7.5l1.5 3H7z"></path><path d="M16 4h8.5"></path><path d="M2 6.5h21l-1.5 4.5H3.5z"></path><path d="M5 11h16"></path></svg>2</div><div class="st"><i style="width: 100%"></i></div></div>
+<div class="uc" style="left: 694px; top: 560px"><div class="fl"></div><div class="bd"><svg width="26" height="14" viewBox="0 0 26 14" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M2.5 4h14l5 3.5v3H2.5z"></path><path d="M6 4V2h6v2"></path><circle cx="6.5" cy="11.5" r="1.6"></circle><path d="M13 12h7"></path></svg>1</div><div class="st"><i style="width: 100%"></i></div></div>
+<div class="uc" style="left: 806px; top: 424px"><div class="fl"></div><div class="bd"><svg width="26" height="14" viewBox="0 0 26 14" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M2.5 4h14l5 3.5v3H2.5z"></path><path d="M6 4V2h6v2"></path><circle cx="6.5" cy="11.5" r="1.6"></circle><path d="M13 12h7"></path></svg>1</div><div class="st"><i style="width: 100%"></i></div></div>
+<div class="uc" style="left: 880px; top: 452px"><div class="fl"></div><div class="bd"><svg width="26" height="14" viewBox="0 0 26 14" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M2 3.5h13v7H2zM15 6h5l3.5 3v1.5H15z"></path><circle cx="6" cy="11.5" r="1.8"></circle><circle cx="19" cy="11.5" r="1.8"></circle></svg>2</div><div class="st"><i style="width: 100%"></i></div></div>
+<div class="uc" style="left: 790px; top: 588px"><div class="fl"></div><div class="bd"><svg width="26" height="14" viewBox="0 0 26 14" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M2 3.5h13v7H2zM15 6h5l3.5 3v1.5H15z"></path><circle cx="6" cy="11.5" r="1.8"></circle><circle cx="19" cy="11.5" r="1.8"></circle></svg>2</div><div class="st"><i style="width: 100%"></i></div></div>
+<div class="uc" style="left: 718px; top: 424px"><div class="fl"></div><div class="bd"><svg width="26" height="14" viewBox="0 0 26 14" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M2 3.5h13v7H2zM15 6h5l3.5 3v1.5H15z"></path><circle cx="6" cy="11.5" r="1.8"></circle><circle cx="19" cy="11.5" r="1.8"></circle></svg>2</div><div class="st"><i style="width: 100%"></i></div></div>
+
+<!-- ============ TOP BAR ============ -->
+<div style="position: absolute; left: 0; top: 0; width: 1920px; height: 58px; background: repeating-linear-gradient(90deg, rgba(255,255,255,.025) 0 1px, transparent 1px 7px), linear-gradient(180deg, #1A252C 0%, #0D1418 100%); border-bottom: 1px solid #C9A55A; box-shadow: 0 3px 0 #0B1014, 0 4px 0 rgba(201,165,90,.45), 0 14px 28px rgba(0,0,0,.55)"></div>
+
+<!-- flag medallion -->
+<button aria-label="Rouental – open government" style="position: absolute; left: 14px; top: 0; width: 156px; height: 158px; padding: 0 1px 1px 1px; border: 0; margin: 0; cursor: pointer; background: linear-gradient(180deg, #8B6A2C, #E8CD84 40%, #8B6A2C); clip-path: polygon(0 0, 100% 0, 100% 80%, 88% 80%, 88% 90%, 74% 90%, 74% 100%, 26% 100%, 26% 90%, 12% 90%, 12% 80%, 0 80%)">
+<span style="display: flex; flex-direction: column; align-items: center; width: 100%; height: 100%; padding-top: 10px; box-sizing: border-box; background: repeating-linear-gradient(90deg, rgba(255,255,255,.025) 0 1px, transparent 1px 7px), linear-gradient(180deg, #1B262D, #0C1317); clip-path: polygon(0 0, 100% 0, 100% calc(80% - 1px), calc(88% - 1px) calc(80% - 1px), calc(88% - 1px) calc(90% - 1px), calc(74% - 1px) calc(90% - 1px), calc(74% - 1px) calc(100% - 1px), calc(26% + 1px) calc(100% - 1px), calc(26% + 1px) calc(90% - 1px), calc(12% + 1px) calc(90% - 1px), calc(12% + 1px) calc(80% - 1px), 0 calc(80% - 1px))">
+<span style="display: block; padding: 2px; background: linear-gradient(180deg, #F1DC9C, #9C7A36); box-shadow: 0 4px 10px rgba(0,0,0,.5)"><img src="assets/flag_ROU.png" alt="Flag of Rouental" style="display: block; width: 120px; height: 76px"></span>
+<span class="fed gilt" style="display: block; margin-top: 9px; font-size: 16px; letter-spacing: .32em; padding-left: .32em">ROUENTAL</span>
+</span>
+</button>
+
+<!-- menu buttons -->
+<nav aria-label="Game menus" style="position: absolute; left: 186px; top: 6px; display: flex; gap: 6px">
+<button class="ib" aria-label="Government"><span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 9.5L12 4l9 5.5z"></path><path d="M5.5 11v7M9.8 11v7M14.2 11v7M18.5 11v7M3.5 20.5h17M4.5 18.5h15"></path></svg></span></button>
+<button class="ib" aria-label="Research"><span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M9 3h6M10 3v6l-5.2 9.2A1.9 1.9 0 0 0 6.5 21h11a1.9 1.9 0 0 0 1.7-2.8L14 9V3"></path><path d="M7.4 15h9.2"></path></svg></span><i style="position: absolute; right: 4px; top: 4px; width: 7px; height: 7px; background: #E7B75A; transform: rotate(45deg); box-shadow: 0 0 6px #E7B75A"></i></button>
+<button class="ib" aria-label="Diplomacy"><span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="6" width="18" height="12.5"></rect><path d="M3 6.5l9 6.5 9-6.5"></path><circle cx="12" cy="16" r="2.2"></circle></svg></span></button>
+<button class="ib" aria-label="Trade"><span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 4v16M7.5 20.5h9M5 7h14"></path><path d="M5 7l-2.6 6a2.6 2.6 0 0 0 5.2 0zM19 7l-2.6 6a2.6 2.6 0 0 0 5.2 0z"></path></svg></span></button>
+<button class="ib" aria-label="Construction"><span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6.5 21V3.5M3.5 21h6M6.5 4.5h14M6.5 8.5l4-4M17.5 4.5V10"></path><path d="M16 11.2a1.6 1.6 0 1 0 3 .6"></path></svg></span></button>
+<button class="ib" aria-label="Production"><span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 20.5V11l5 3v-3l5 3v-3l5 3V4.5h3v16z"></path><path d="M6.5 17.5h2M11 17.5h2M15.5 17.5h2"></path></svg></span></button>
+<button class="ib" aria-label="Recruit and deploy"><span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 14.5a7 7 0 0 1 14 0"></path><path d="M2.5 14.5h19M12 7.5V5M8 14.5v2a4 2.2 0 0 0 8 0v-2"></path></svg></span></button>
+<button class="ib" aria-label="Logistics"><span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2.5 6.5h11v9.5h-11zM13.5 10h3.8l3.2 3.2V16h-7"></path><circle cx="6.5" cy="17.5" r="1.8"></circle><circle cx="16.8" cy="17.5" r="1.8"></circle></svg></span></button>
+<button class="ib" aria-label="Intelligence"><span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6-10-6-10-6z"></path><circle cx="12" cy="12" r="3"></circle><path d="M12 2.5v2M12 19.5v2"></path></svg></span></button>
+<button class="ib" aria-label="Decisions"><span><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"></path><path d="M15 3v4h4M9 13.5l2.2 2.2 4.3-4.6"></path></svg></span></button>
+</nav>
+
+<!-- resource readouts -->
+<div style="position: absolute; left: 700px; top: 0; height: 58px; display: flex; align-items: center; gap: 13px">
+<div class="vd"></div>
+<div style="display: flex; align-items: center; gap: 10px; padding: 0 4px; position: relative">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#E3C77E" stroke-width="1.4" aria-hidden="true"><path d="M7 19c-3-2.5-4-6.5-2.6-10.5M17 19c3-2.5 4-6.5 2.6-10.5"></path><path d="M5.2 15.5l-2-.8M4.4 12l-2-1.2M4.6 8.6l-1.6-1.8M18.8 15.5l2-.8M19.6 12l2-1.2M19.4 8.6l1.6-1.8"></path><path d="M12 6.5l1.4 3 3.3.3-2.5 2.2.8 3.2L12 13.5l-3 1.7.8-3.2-2.5-2.2 3.3-.3z" fill="#E3C77E" stroke="none"></path></svg>
+<div><div class="rl">Political Power</div><div style="display: flex; align-items: baseline; gap: 6px; margin-top: 5px"><span class="rv">47</span><span class="pos" style="font: 700 12px/1 'Josefin Sans'">+1.80</span></div></div>
+<i style="position: absolute; left: 0; right: 0; bottom: -9px; height: 2px; background: linear-gradient(90deg, transparent, #F1DC9C, transparent)"></i>
+</div>
+<div class="vd"></div>
+<div style="display: flex; align-items: center; gap: 10px; padding: 0 4px">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E3C77E" stroke-width="1.4" aria-hidden="true"><path d="M5 5.5h14M6.5 3.5h11M7.5 7.5v10.5M12 7.5v10.5M16.5 7.5v10.5M5.5 18.5h13M4 20.5h16"></path></svg>
+<div><div class="rl">Stability</div><div class="rv" style="margin-top: 5px">60%</div></div>
+</div>
+<div class="vd"></div>
+<div style="display: flex; align-items: center; gap: 10px; padding: 0 4px">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E3C77E" stroke-width="1.4" aria-hidden="true"><path d="M6 21V3M6 4h12l-2.4 3.5L18 11H6"></path></svg>
+<div><div class="rl">War Support</div><div class="rv" style="margin-top: 5px">30%</div></div>
+</div>
+<div class="vd"></div>
+<div style="display: flex; align-items: center; gap: 10px; padding: 0 4px">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E3C77E" stroke-width="1.4" aria-hidden="true"><circle cx="9" cy="8" r="2.8"></circle><path d="M3.5 19.5a5.5 5.5 0 0 1 11 0"></path><circle cx="16.5" cy="9" r="2.2"></circle><path d="M14.8 14.2a4.4 4.4 0 0 1 6.2 4.3"></path></svg>
+<div><div class="rl">Manpower</div><div class="rv" style="margin-top: 5px">151.2K</div></div>
+</div>
+<div class="vd"></div>
+<div style="display: flex; align-items: center; gap: 10px; padding: 0 4px">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#E3C77E" stroke-width="1.4" aria-hidden="true"><path d="M3 20.5V11l5 3v-3l5 3v-3l5 3V4.5h3v16z"></path></svg>
+<div><div class="rl">Factories</div><div style="display: flex; align-items: center; gap: 10px; margin-top: 5px"><span class="rv" style="display: flex; align-items: center; gap: 5px"><i style="width: 8px; height: 8px; background: #E9E1CC; transform: rotate(45deg)"></i>3</span><span class="rv" style="display: flex; align-items: center; gap: 5px"><i style="width: 8px; height: 8px; background: #E7A24A; transform: rotate(45deg)"></i>2</span><span class="rv" style="display: flex; align-items: center; gap: 5px; color: #8F8770"><i style="width: 8px; height: 8px; background: #4F8F9A; transform: rotate(45deg)"></i>0</span></div></div>
+</div>
+<div class="vd"></div>
+</div>
+
+<!-- date + speed cartouche -->
+<div style="position: absolute; right: 12px; top: 6px; width: 404px; height: 46px; padding: 1px; box-sizing: border-box; background: linear-gradient(180deg, #E8CD84, #8B6A2C); clip-path: polygon(16px 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 16px 100%, 0 50%)">
+<div style="display: flex; align-items: center; height: 100%; padding: 0 22px 0 20px; gap: 14px; box-sizing: border-box; background: repeating-linear-gradient(90deg, rgba(255,255,255,.025) 0 1px, transparent 1px 7px), linear-gradient(180deg, #1E2930, #0D1418); clip-path: polygon(15.5px 0, calc(100% - 15.5px) 0, 100% 50%, calc(100% - 15.5px) 100%, 15.5px 100%, 0 50%)">
+<button aria-label="Pause" style="width: 28px; height: 28px; border: 1px solid #C9A55A; background: #0B1014; transform: rotate(45deg); display: flex; align-items: center; justify-content: center; padding: 0; cursor: pointer"><svg width="12" height="12" viewBox="0 0 12 12" style="transform: rotate(-45deg)" aria-hidden="true"><path d="M3.5 2v8M8.5 2v8" stroke="#E3C77E" stroke-width="2"></path></svg></button>
+<div style="flex: 1; text-align: center">
+<div class="fed" style="font-size: 20px; letter-spacing: .14em; color: #F4ECD9; line-height: 1">1 MARCH 1936</div>
+<div class="rl" style="margin-top: 4px; letter-spacing: .3em; color: #9F906C">12:00 · Thursday</div>
+</div>
+<div style="display: flex; gap: 3px; align-items: center" aria-label="Game speed 3 of 5">
+<svg width="10" height="16" viewBox="0 0 10 16" aria-hidden="true"><path d="M1 1l7 7-7 7" fill="none" stroke="#F1DC9C" stroke-width="2.4"></path></svg>
+<svg width="10" height="16" viewBox="0 0 10 16" aria-hidden="true"><path d="M1 1l7 7-7 7" fill="none" stroke="#F1DC9C" stroke-width="2.4"></path></svg>
+<svg width="10" height="16" viewBox="0 0 10 16" aria-hidden="true"><path d="M1 1l7 7-7 7" fill="none" stroke="#F1DC9C" stroke-width="2.4"></path></svg>
+<svg width="10" height="16" viewBox="0 0 10 16" aria-hidden="true"><path d="M1 1l7 7-7 7" fill="none" stroke="#4A4434" stroke-width="2.4"></path></svg>
+<svg width="10" height="16" viewBox="0 0 10 16" aria-hidden="true"><path d="M1 1l7 7-7 7" fill="none" stroke="#4A4434" stroke-width="2.4"></path></svg>
+</div>
+<div style="display: flex; flex-direction: column; gap: 2px">
+<button aria-label="Faster" style="width: 22px; height: 15px; padding: 0; border: 1px solid rgba(201,165,90,.6); background: #0B1014; color: #E3C77E; font: 700 12px/1 'Josefin Sans'; cursor: pointer">+</button>
+<button aria-label="Slower" style="width: 22px; height: 15px; padding: 0; border: 1px solid rgba(201,165,90,.6); background: #0B1014; color: #E3C77E; font: 700 12px/1 'Josefin Sans'; cursor: pointer">−</button>
+</div>
+</div>
+</div>
+
+<!-- alerts -->
+<div style="position: absolute; left: 1262px; top: 76px; display: flex; gap: 14px">
+<button aria-label="Research slot unused" style="width: 34px; height: 34px; padding: 0; border: 1px solid #E7B75A; background: linear-gradient(180deg, #3A2E14, #1A150A); transform: rotate(45deg); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 12px rgba(231,183,90,.35); cursor: pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F1D08A" stroke-width="1.8" style="transform: rotate(-45deg)" aria-hidden="true"><path d="M9 3h6M10 3v6l-5.2 9.2A1.9 1.9 0 0 0 6.5 21h11a1.9 1.9 0 0 0 1.7-2.8L14 9V3"></path></svg></button>
+<button aria-label="Idle military factories" style="width: 34px; height: 34px; padding: 0; border: 1px solid #E8877A; background: linear-gradient(180deg, #3B1A16, #1B0C0A); transform: rotate(45deg); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 12px rgba(232,135,122,.3); cursor: pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F1A496" stroke-width="1.8" style="transform: rotate(-45deg)" aria-hidden="true"><path d="M3 20.5V11l5 3v-3l5 3v-3l5 3V4.5h3v16z"></path></svg></button>
+</div>
+
+<!-- national focus plaque -->
+<button aria-label="National focus: Kick Out the Parasites (Rudely), 10 days left" style="position: absolute; left: 14px; top: 172px; width: 312px; height: 66px; padding: 1px; border: 0; margin: 0; cursor: pointer; background: linear-gradient(90deg, #E8CD84, #8B6A2C); clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px))">
+<span style="display: flex; align-items: center; gap: 12px; width: 100%; height: 100%; padding: 0 14px 0 8px; box-sizing: border-box; background: repeating-linear-gradient(90deg, rgba(255,255,255,.025) 0 1px, transparent 1px 7px), linear-gradient(180deg, #1B262D, #0C1317); clip-path: polygon(0 0, calc(100% - 11.5px) 0, 100% 11.5px, 100% 100%, 11.5px 100%, 0 calc(100% - 11.5px)); text-align: left">
+<span style="position: relative; width: 50px; height: 50px; flex: none; display: flex; align-items: center; justify-content: center; background: repeating-conic-gradient(from 0deg, rgba(227,199,126,.32) 0deg 6deg, transparent 6deg 15deg), radial-gradient(circle, #2E6E60 0%, #10241F 70%); clip-path: polygon(30% 0, 70% 0, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0 70%, 0 30%)"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#F6E3A6" stroke-width="1.5" aria-hidden="true"><path d="M4 3.5h16v17H4zM12 3.5v17M4 12h16"></path><path d="M14.5 14.5l5 5M17 19.5h2.5V17"></path></svg></span>
+<span style="flex: 1; min-width: 0">
+<span class="rl" style="display: block; color: #9F906C">National Focus</span>
+<span style="display: block; margin-top: 5px; font: 700 13.5px/1.1 'Josefin Sans'; color: #F4ECD9; white-space: nowrap">Kick Out the Parasites (Rudely)</span>
+<span style="display: flex; align-items: center; gap: 8px; margin-top: 7px"><span style="flex: 1; height: 5px; background: #0A0F12; border: 1px solid rgba(201,165,90,.45)"><span style="display: block; width: 86%; height: 100%; background: linear-gradient(180deg, #F1DC9C, #B48F44)"></span></span><span style="font: 700 11px/1 'Josefin Sans'; color: #E3C77E">10 days</span></span>
+</span>
+</span>
+</button>
+
+<!-- political power tooltip -->
+<div class="panel" role="tooltip" style="left: 732px; top: 72px; width: 330px; padding: 16px 18px 16px 18px">
+<i class="ck tl"></i><i class="ck tr"></i><i class="ck bl"></i><i class="ck br"></i>
+<div style="display: flex; justify-content: space-between; align-items: baseline">
+<div class="fed gilt" style="font-size: 18px; letter-spacing: .16em">POLITICAL POWER</div>
+<div style="font: 700 15px/1 'Josefin Sans'; color: #F4ECD9">47.00</div>
+</div>
+<div style="height: 1px; margin: 10px 0 10px; background: linear-gradient(90deg, #C9A55A, rgba(201,165,90,.1))"></div>
+<div style="display: grid; grid-template-columns: 1fr auto; row-gap: 7px; font-size: 13.5px; color: #DCD2BA">
+<span>Base gain</span><span class="pos" style="font-weight: 700">+2.00</span>
+<span style="display: flex; align-items: center; gap: 7px"><i style="width: 6px; height: 6px; background: #E3C77E; transform: rotate(45deg)"></i>Feudal Army</span><span class="neg" style="font-weight: 700">−10%</span>
+</div>
+<div style="height: 1px; margin: 11px 0 9px; background: rgba(201,165,90,.3)"></div>
+<div style="display: flex; justify-content: space-between; font-size: 14px"><span class="cap" style="font-size: 11px; color: #B7A680; letter-spacing: .2em">Daily change</span><span class="pos" style="font-weight: 700">+1.80</span></div>
+<div class="bod" style="margin-top: 12px; font-size: 13.5px; line-height: 1.4; color: #CBBF9F">The banners can be called; the recruiting sergeant cannot. Spend it on advisors, laws and the crown’s decisions.</div>
+</div>
+
+<!-- ============ OUTLINER ============ -->
+<div class="panel" style="left: 1590px; top: 78px; width: 318px; height: 700px; padding: 6px 5px">
+<i class="ck tl"></i><i class="ck tr"></i><i class="ck bl"></i><i class="ck br"></i>
+<div style="display: flex; align-items: center; justify-content: center; gap: 12px; padding: 10px 0 12px">
+<i style="width: 34px; height: 5px; border-top: 1px solid #C9A55A; border-bottom: 1px solid #C9A55A"></i>
+<div class="fed gilt" style="font-size: 17px; letter-spacing: .34em; padding-left: .34em">OUTLINER</div>
+<i style="width: 34px; height: 5px; border-top: 1px solid #C9A55A; border-bottom: 1px solid #C9A55A"></i>
+</div>
+<div class="sh"><span class="cap" style="font-size: 11px; color: #EBD397">▾&#160; Land forces</span><span style="font: 700 12px/1 'Josefin Sans'; color: #EBD397">12</span></div>
+<div style="padding: 7px 12px 5px; font: 600 9.5px/1 'Josefin Sans'; letter-spacing: .22em; text-transform: uppercase; color: #8F8670">The Royal Host · not in an army</div>
+<div class="row"><svg width="26" height="14" viewBox="0 0 26 14" fill="none" stroke="#E3C77E" stroke-width="1.3" aria-hidden="true"><path d="M8 2.5h7.5l1.5 3H7z"></path><path d="M16 4h8.5"></path><path d="M2 6.5h21l-1.5 4.5H3.5z"></path><path d="M5 11h16"></path></svg><div style="flex: 1; min-width: 0"><div style="font-size: 13px; font-weight: 600; color: #F4ECD9">1e Garde Royale</div><div style="font-size: 10.5px; color: #8F8670; margin-top: 3px; letter-spacing: .06em">Seraine</div></div><div class="bar2"><i><b style="width: 100%; background: #93D6A5"></b></i><i><b style="width: 100%; background: #E9E1CC"></b></i></div></div>
+<div class="row"><svg width="26" height="14" viewBox="0 0 26 14" fill="none" stroke="#E3C77E" stroke-width="1.3" aria-hidden="true"><path d="M8 2.5h7.5l1.5 3H7z"></path><path d="M16 4h8.5"></path><path d="M2 6.5h21l-1.5 4.5H3.5z"></path><path d="M5 11h16"></path></svg><div style="flex: 1; min-width: 0"><div style="font-size: 13px; font-weight: 600; color: #F4ECD9">2e Ost de Rouental</div><div style="font-size: 10.5px; color: #8F8670; margin-top: 3px; letter-spacing: .06em">Seraine</div></div><div class="bar2"><i><b style="width: 100%; background: #93D6A5"></b></i><i><b style="width: 100%; background: #E9E1CC"></b></i></div></div>
+<div class="row"><svg width="26" height="14" viewBox="0 0 26 14" fill="none" stroke="#E3C77E" stroke-width="1.3" aria-hidden="true"><path d="M2.5 4h14l5 3.5v3H2.5z"></path><path d="M6 4V2h6v2"></path><circle cx="6.5" cy="11.5" r="1.6"></circle><path d="M13 12h7"></path></svg><div style="flex: 1; min-width: 0"><div style="font-size: 13px; font-weight: 600; color: #F4ECD9">3e Ost de Saintiers</div><div style="font-size: 10.5px; color: #8F8670; margin-top: 3px; letter-spacing: .06em">Saintiers</div></div><div class="bar2"><i><b style="width: 100%; background: #93D6A5"></b></i><i><b style="width: 100%; background: #E9E1CC"></b></i></div></div>
+<div class="row"><svg width="26" height="14" viewBox="0 0 26 14" fill="none" stroke="#E3C77E" stroke-width="1.3" aria-hidden="true"><path d="M2.5 4h14l5 3.5v3H2.5z"></path><path d="M6 4V2h6v2"></path><circle cx="6.5" cy="11.5" r="1.6"></circle><path d="M13 12h7"></path></svg><div style="flex: 1; min-width: 0"><div style="font-size: 13px; font-weight: 600; color: #F4ECD9">4e Ost de Cournin</div><div style="font-size: 10.5px; color: #8F8670; margin-top: 3px; letter-spacing: .06em">Cournin City</div></div><div class="bar2"><i><b style="width: 100%; background: #93D6A5"></b></i><i><b style="width: 100%; background: #E9E1CC"></b></i></div></div>
+<div class="row" style="background: linear-gradient(90deg, rgba(46,110,96,.45), rgba(46,110,96,.08)); box-shadow: inset 2px 0 0 #E3C77E"><svg width="26" height="14" viewBox="0 0 26 14" fill="none" stroke="#F6E3A6" stroke-width="1.3" aria-hidden="true"><path d="M2 3.5h13v7H2zM15 6h5l3.5 3v1.5H15z"></path><circle cx="6" cy="11.5" r="1.8"></circle><circle cx="19" cy="11.5" r="1.8"></circle></svg><div style="flex: 1; min-width: 0"><div style="font-size: 13px; font-weight: 600; color: #FFF6E0">5e Ost de Jourdain et Motere</div><div style="font-size: 10.5px; color: #B7A680; margin-top: 3px; letter-spacing: .06em">Rêverie</div></div><div class="bar2"><i><b style="width: 100%; background: #93D6A5"></b></i><i><b style="width: 100%; background: #E9E1CC"></b></i></div></div>
+<div class="row"><svg width="26" height="14" viewBox="0 0 26 14" fill="none" stroke="#E3C77E" stroke-width="1.3" aria-hidden="true"><path d="M2 3.5h13v7H2zM15 6h5l3.5 3v1.5H15z"></path><circle cx="6" cy="11.5" r="1.8"></circle><circle cx="19" cy="11.5" r="1.8"></circle></svg><div style="flex: 1; min-width: 0"><div style="font-size: 13px; font-weight: 600; color: #F4ECD9">6e Ost d’Aurifort</div><div style="font-size: 10.5px; color: #8F8670; margin-top: 3px; letter-spacing: .06em">Rêverie</div></div><div class="bar2"><i><b style="width: 100%; background: #93D6A5"></b></i><i><b style="width: 100%; background: #E9E1CC"></b></i></div></div>
+<div class="row"><svg width="26" height="14" viewBox="0 0 26 14" fill="none" stroke="#E3C77E" stroke-width="1.3" aria-hidden="true"><path d="M2 3.5h13v7H2zM15 6h5l3.5 3v1.5H15z"></path><circle cx="6" cy="11.5" r="1.8"></circle><circle cx="19" cy="11.5" r="1.8"></circle></svg><div style="flex: 1; min-width: 0"><div style="font-size: 13px; font-weight: 600; color: #F4ECD9">7e Ost d’Éislek</div><div style="font-size: 10.5px; color: #8F8670; margin-top: 3px; letter-spacing: .06em">Charmas City</div></div><div class="bar2"><i><b style="width: 100%; background: #93D6A5"></b></i><i><b style="width: 100%; background: #E9E1CC"></b></i></div></div>
+<div class="row"><svg width="26" height="14" viewBox="0 0 26 14" fill="none" stroke="#E3C77E" stroke-width="1.3" aria-hidden="true"><path d="M2 3.5h13v7H2zM15 6h5l3.5 3v1.5H15z"></path><circle cx="6" cy="11.5" r="1.8"></circle><circle cx="19" cy="11.5" r="1.8"></circle></svg><div style="flex: 1; min-width: 0"><div style="font-size: 13px; font-weight: 600; color: #F4ECD9">8e Ost de Charmas</div><div style="font-size: 10.5px; color: #8F8670; margin-top: 3px; letter-spacing: .06em">Charmas City</div></div><div class="bar2"><i><b style="width: 100%; background: #93D6A5"></b></i><i><b style="width: 100%; background: #E9E1CC"></b></i></div></div>
+<div class="row"><svg width="26" height="14" viewBox="0 0 26 14" fill="none" stroke="#E3C77E" stroke-width="1.3" aria-hidden="true"><path d="M2 3.5h13v7H2zM15 6h5l3.5 3v1.5H15z"></path><circle cx="6" cy="11.5" r="1.8"></circle><circle cx="19" cy="11.5" r="1.8"></circle></svg><div style="flex: 1; min-width: 0"><div style="font-size: 13px; font-weight: 600; color: #F4ECD9">9e Ost de Rochemont</div><div style="font-size: 10.5px; color: #8F8670; margin-top: 3px; letter-spacing: .06em">Rochemont City</div></div><div class="bar2"><i><b style="width: 100%; background: #93D6A5"></b></i><i><b style="width: 100%; background: #E9E1CC"></b></i></div></div>
+<div class="row"><svg width="26" height="14" viewBox="0 0 26 14" fill="none" stroke="#E3C77E" stroke-width="1.3" aria-hidden="true"><path d="M2 3.5h13v7H2zM15 6h5l3.5 3v1.5H15z"></path><circle cx="6" cy="11.5" r="1.8"></circle><circle cx="19" cy="11.5" r="1.8"></circle></svg><div style="flex: 1; min-width: 0"><div style="font-size: 13px; font-weight: 600; color: #F4ECD9">10e Ost de Bérault</div><div style="font-size: 10.5px; color: #8F8670; margin-top: 3px; letter-spacing: .06em">Rochemont City</div></div><div class="bar2"><i><b style="width: 100%; background: #93D6A5"></b></i><i><b style="width: 100%; background: #E9E1CC"></b></i></div></div>
+<div class="row"><svg width="26" height="14" viewBox="0 0 26 14" fill="none" stroke="#E3C77E" stroke-width="1.3" aria-hidden="true"><path d="M2 3.5h13v7H2zM15 6h5l3.5 3v1.5H15z"></path><circle cx="6" cy="11.5" r="1.8"></circle><circle cx="19" cy="11.5" r="1.8"></circle></svg><div style="flex: 1; min-width: 0"><div style="font-size: 13px; font-weight: 600; color: #F4ECD9">11e Ost de Brassard</div><div style="font-size: 10.5px; color: #8F8670; margin-top: 3px; letter-spacing: .06em">Vendée City</div></div><div class="bar2"><i><b style="width: 100%; background: #93D6A5"></b></i><i><b style="width: 100%; background: #E9E1CC"></b></i></div></div>
+<div class="row"><svg width="26" height="14" viewBox="0 0 26 14" fill="none" stroke="#E3C77E" stroke-width="1.3" aria-hidden="true"><path d="M2 3.5h13v7H2zM15 6h5l3.5 3v1.5H15z"></path><circle cx="6" cy="11.5" r="1.8"></circle><circle cx="19" cy="11.5" r="1.8"></circle></svg><div style="flex: 1; min-width: 0"><div style="font-size: 13px; font-weight: 600; color: #F4ECD9">12e Compagnie d’Ordonnance</div><div style="font-size: 10.5px; color: #8F8670; margin-top: 3px; letter-spacing: .06em">Vendée City</div></div><div class="bar2"><i><b style="width: 100%; background: #93D6A5"></b></i><i><b style="width: 100%; background: #E9E1CC"></b></i></div></div>
+<div class="sh" style="margin-top: 8px"><span class="cap" style="font-size: 11px; color: #B7A680">▸&#160; Naval forces</span><span style="font: 700 12px/1 'Josefin Sans'; color: #8F8670">—</span></div>
+<div class="sh" style="border-top: 0"><span class="cap" style="font-size: 11px; color: #B7A680">▸&#160; Research</span><span style="font: 700 12px/1 'Josefin Sans'; color: #E7B75A">2 / 3</span></div>
+<div class="sh" style="border-top: 0"><span class="cap" style="font-size: 11px; color: #B7A680">▸&#160; Construction</span><span style="font: 700 12px/1 'Josefin Sans'; color: #8F8670">Idle</span></div>
+</div>
+
+<!-- ============ STATE VIEW ============ -->
+<div class="panel" style="left: 16px; top: 686px; width: 440px; height: 378px; padding: 0">
+<i class="ck tl"></i><i class="ck tr"></i><i class="ck bl"></i><i class="ck br"></i>
+<div style="position: relative; padding: 20px 22px 14px; background: linear-gradient(180deg, rgba(46,110,96,.32), rgba(46,110,96,0)); border-bottom: 1px solid rgba(201,165,90,.4)">
+<div style="display: flex; align-items: center; gap: 14px">
+<span style="display: block; padding: 2px; background: linear-gradient(180deg, #F1DC9C, #9C7A36); flex: none"><img src="assets/flag_ROU.png" alt="Flag of Rouental" style="display: block; width: 58px; height: 37px"></span>
+<div style="flex: 1">
+<div class="fed gilt" style="font-size: 30px; letter-spacing: .2em; line-height: 1">RÊVERIE</div>
+<div style="margin-top: 6px; font-size: 12.5px; color: #CBBF9F; display: flex; align-items: center; gap: 8px"><svg width="12" height="12" viewBox="0 0 18 18" aria-hidden="true"><path d="M9 1.5l2.1 4.6 5 .5-3.8 3.3 1.2 4.9L9 12.2l-4.5 2.6 1.2-4.9L1.9 6.6l5-.5z" fill="#E3C77E"></path></svg>Capital of Rouental · City</div>
+</div>
+<button aria-label="Close state view" style="width: 26px; height: 26px; align-self: flex-start; padding: 0; border: 1px solid rgba(201,165,90,.6); background: #0B1014; color: #E3C77E; font: 400 16px/1 'Josefin Sans'; cursor: pointer">×</button>
+</div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; padding: 14px 22px 12px; border-bottom: 1px solid rgba(201,165,90,.18)">
+<div><div class="rl">Victory points</div><div class="rv" style="margin-top: 6px">10</div></div>
+<div style="border-left: 1px solid rgba(201,165,90,.25); padding-left: 16px"><div class="rl">Manpower</div><div class="rv" style="margin-top: 6px">21,900</div></div>
+<div style="border-left: 1px solid rgba(201,165,90,.25); padding-left: 16px"><div class="rl">Resources</div><div style="margin-top: 7px; font-size: 13px; color: #8F8670">None</div></div>
+</div>
+<div style="padding: 14px 22px 0">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><span class="rl">Shared building slots</span><span style="font: 700 13px/1 'Josefin Sans'; color: #EBD397">5 / 6</span></div>
+<div style="display: flex; gap: 8px; margin-top: 10px">
+<div class="slot"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#E9E1CC" stroke-width="1.4" aria-label="Civilian factory" role="img"><path d="M3 20.5V11l5 3v-3l5 3v-3l5 3V4.5h3v16z"></path></svg></div>
+<div class="slot"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#E9E1CC" stroke-width="1.4" aria-label="Civilian factory" role="img"><path d="M3 20.5V11l5 3v-3l5 3v-3l5 3V4.5h3v16z"></path></svg></div>
+<div class="slot"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#E9E1CC" stroke-width="1.4" aria-label="Civilian factory" role="img"><path d="M3 20.5V11l5 3v-3l5 3v-3l5 3V4.5h3v16z"></path></svg></div>
+<div class="slot" style="border-color: rgba(231,162,74,.7); background: linear-gradient(180deg, #2B2014, #15100A)"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#E7A24A" stroke-width="1.4" aria-label="Military factory" role="img"><path d="M3 20.5V11l5 3v-3l5 3v-3l5 3V4.5h3v16z"></path><path d="M10 17.5h4"></path></svg></div>
+<div class="slot" style="border-color: rgba(231,162,74,.7); background: linear-gradient(180deg, #2B2014, #15100A)"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#E7A24A" stroke-width="1.4" aria-label="Military factory" role="img"><path d="M3 20.5V11l5 3v-3l5 3v-3l5 3V4.5h3v16z"></path><path d="M10 17.5h4"></path></svg></div>
+<div class="slot" style="border-style: dashed; background: transparent"><span style="font: 300 26px/1 'Josefin Sans'; color: #8F8670">+</span></div>
+</div>
+</div>
+<div style="display: grid; grid-template-columns: 110px 1fr auto; align-items: center; row-gap: 12px; column-gap: 12px; padding: 18px 22px 0">
+<span class="rl">Infrastructure</span><span style="display: flex; gap: 4px"><i class="pip on"></i><i class="pip on"></i><i class="pip on"></i><i class="pip"></i><i class="pip"></i></span><span style="font: 700 13px/1 'Josefin Sans'; color: #F4ECD9">3</span>
+<span class="rl">Air base</span><span style="display: flex; gap: 4px"><i class="pip on"></i><i class="pip on"></i><i class="pip"></i><i class="pip"></i><i class="pip"></i><i class="pip"></i><i class="pip"></i><i class="pip"></i><i class="pip"></i><i class="pip"></i></span><span style="font: 700 13px/1 'Josefin Sans'; color: #F4ECD9">2</span>
+<span class="rl">Core of</span><span style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #DCD2BA"><img src="assets/flag_ROU.png" alt="" style="width: 24px; height: 15px; display: block; outline: 1px solid rgba(201,165,90,.6)">Rouental</span><span></span>
+</div>
+</div>
+
+<!-- ============ MAP MODES ============ -->
+<div style="position: absolute; right: 12px; bottom: 14px; width: 318px">
+<div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; text-shadow: 0 1px 3px #000"><span class="rl" style="color: #CBBF9F">Map mode</span><span class="fed" style="font-size: 14px; letter-spacing: .22em; color: #F4ECD9">POLITICAL</span></div>
+<div style="display: flex; gap: 6px; padding: 6px; background: rgba(11,16,20,.88); border: 1px solid rgba(201,165,90,.55)">
+<button class="mm on" aria-label="Political map mode" aria-pressed="true"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 21V3M6 4h12l-2.4 3.5L18 11H6"></path></svg></span></button>
+<button class="mm" aria-label="Terrain map mode"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2.5 19.5l6.5-11 4 6.5 2.5-3.5 6 8z"></path></svg></span></button>
+<button class="mm" aria-label="Resources map mode"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6.5 4h11l3.5 5-9 11L3 9z"></path><path d="M3 9h18M9.5 4L8 9l4 11 4-11-1.5-5"></path></svg></span></button>
+<button class="mm" aria-label="Supply map mode"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3.5 7.5L12 3.5l8.5 4v9L12 20.5l-8.5-4z"></path><path d="M3.5 7.5L12 11.5l8.5-4M12 11.5v9"></path></svg></span></button>
+<button class="mm" aria-label="Infrastructure map mode"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M7.5 3L4 21M16.5 3L20 21M6.5 8h11M5.5 14h13M4.6 19.5h14.8"></path></svg></span></button>
+<button class="mm" aria-label="Diplomacy map mode"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="9" cy="12" r="5.5"></circle><circle cx="15" cy="12" r="5.5"></circle></svg></span></button>
+<button class="mm" aria-label="Naval map mode"><span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="5" r="2"></circle><path d="M12 7v13.5M8 10.5h8M4.5 13.5a7.5 7.5 0 0 0 15 0"></path></svg></span></button>
+</div>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1920,"height":1080}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

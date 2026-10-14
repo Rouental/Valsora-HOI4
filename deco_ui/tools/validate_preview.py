@@ -1,0 +1,523 @@
+"""Static checks for the PoC mod, then an approximate in-game preview rendered FROM the generated
+.gui/.gfx files (so the preview also checks the coordinates the game will read).
+
+Checks: brace balance; every sprite/font the mod's .gui files use is defined (by the mod or as a
+known vanilla sprite); textures read back as valid DDS/TGA with sane frame widths; fonts' .fnt files
+agree with their atlases; replaced vanilla textures keep vanilla's sizes; engine strings fit their
+boxes; every vanilla element of topbar.gui is still present exactly once.
+"""
+import glob
+import os
+import re
+import sys
+
+import numpy as np
+from PIL import Image
+
+sys.path.insert(0, __import__("os").path.dirname(__import__("os").path.abspath(__file__)))
+from ddsutil import read_dds  # noqa: E402
+import layout as L  # noqa: E402
+
+from paths import MOD as M, VANILLA, ART, BUILD
+problems = []
+
+
+# ------------------------------------------------------------------ Clausewitz parser
+def tokenize(s):
+    s = re.sub(r"#[^\n]*", "", s)
+    return re.findall(r'"[^"]*"|[{}=]|[^\s{}=]+', s)
+
+
+def parse(tokens, i=0):
+    out = []
+    while i < len(tokens):
+        tok = tokens[i]
+        if tok == "}":
+            return out, i + 1
+        if i + 1 < len(tokens) and tokens[i + 1] == "=":
+            val = tokens[i + 2]
+            if val == "{":
+                sub, i = parse(tokens, i + 3)
+                out.append((tok, sub))
+            else:
+                out.append((tok, val.strip('"')))
+                i += 3
+        else:
+            out.append((None, tok.strip('"')))
+            i += 1
+    return out, i
+
+
+def load(path):
+    return parse(tokenize(open(path, encoding="utf-8-sig").read()))[0]
+
+
+def attrs(body):
+    return {k.lower(): v for k, v in body if k and not isinstance(v, list)}
+
+
+def sub(body, key):
+    for k, v in body:
+        if k and k.lower() == key and isinstance(v, list):
+            return v
+    return None
+
+
+def xy(lst):
+    d = {k.lower(): v for k, v in lst}
+    return d.get("x", d.get("width")), d.get("y", d.get("height"))
+
+
+# ------------------------------------------------------------------ braces
+for f in glob.glob(M + "interface/*") + glob.glob(M + "common/**/*.txt", recursive=True):
+    t = re.sub(r"#[^\n]*", "", open(f, encoding="utf-8").read())
+    if t.count("{") != t.count("}"):
+        problems.append(f"brace mismatch in {f}")
+
+# ------------------------------------------------------------------ sprite definitions
+defs = {}
+for f in glob.glob(M + "interface/*.gfx"):
+    for k, body in load(f):
+        if k != "spriteTypes":
+            continue
+        for kind, b in body:
+            a = attrs(b)
+            d = dict(kind=kind, frames=int(a.get("noofframes", 1)))
+            d["tex"] = a.get("texturefile") or a.get("texturefile1")
+            if kind == "maskedShieldType":
+                d["mask"] = a.get("texturefile2")
+            if kind == "progressbartype":
+                d["bg"] = a.get("texturefile2")
+                d["color"] = [float(v) for _, v in sub(b, "color")]
+            sz = sub(b, "size")
+            if sz:
+                d["size"] = tuple(int(v) for v in xy(sz))
+            bs = sub(b, "bordersize")
+            if bs:
+                d["border"] = tuple(int(v) for v in xy(bs))
+            defs[a["name"]] = d
+
+
+def read_tex(rel):
+    p = M + rel
+    return read_dds(p) if p.endswith(".dds") else Image.open(p).convert("RGBA")
+
+
+for n, d in defs.items():
+    if d["kind"] == "pieChartType":
+        continue   # drawn by the game, no texture
+    try:
+        d["img"] = read_tex(d["tex"])
+        if "mask" in d:
+            d["mask_img"] = read_tex(d["mask"])
+            if d["mask_img"].size != d["img"].size:
+                problems.append(f"{n}: mask and overlay sizes differ")
+        if "bg" in d:
+            d["bg_img"] = read_tex(d["bg"])
+    except Exception as e:  # noqa: BLE001
+        problems.append(f"{n}: texture unreadable {d['tex']}: {e}")
+        continue
+    w, h = d["img"].size
+    if w % d["frames"]:
+        problems.append(f"{n}: width {w} not divisible by {d['frames']} frames")
+    if d["kind"] == "corneredTileSpriteType" and d.get("size") != (w, h):
+        problems.append(f"{n}: cornered size {d.get('size')} != texture {(w, h)}")
+    if d["kind"] == "progressbartype" and d.get("size") != (w, h):
+        problems.append(f"{n}: progressbar size {d.get('size')} != texture {(w, h)}")
+
+# vanilla sprite names whose textures the mod replaces at their vanilla paths (the game swaps some of these
+# sprites onto buttons at runtime, so the .gui keeps the vanilla names); previews draw the replacements
+REPLACED = {
+    "GFX_topbar_faction_empty": ("gfx/interface/factions/ui/topbar_faction_empty.dds", 1, "spriteType"),
+    "GFX_topbar_faction": ("gfx/interface/factions/ui/topbar_faction.dds", 1, "spriteType"),
+    "GFX_decisions_glow": ("gfx/interface/decisionview/decisions_glow.dds", 2, "frameAnimatedSpriteType"),
+    "GFX_decisions_glow_blue": ("gfx/interface/decisionview/decisions_glow_blue.dds", 2, "frameAnimatedSpriteType"),
+    "GFX_decisions_glow_yellow": ("gfx/interface/decisionview/decisions_glow_yellow.dds", 2, "frameAnimatedSpriteType"),
+    "GFX_decisions_glow_green": ("gfx/interface/decisionview/decisions_glow_green.dds", 2, "frameAnimatedSpriteType"),
+    "GFX_topbar_international_market": ("gfx/interface/topbar/toolbar/international_market_button.dds", 2, "spriteType"),
+    "GFX_topbar_diplomacy": ("gfx/interface/topbar/toolbar/diplomacy_button.dds", 2, "spriteType"),
+    "GFX_focus_unavailable": ("gfx/interface/focusview/titlebar/focus_unavailable_bg.dds", 1, "spriteType"),
+    "GFX_focus_can_start": ("gfx/interface/focusview/titlebar/focus_can_start_bg.dds", 1, "spriteType"),
+    "GFX_focus_completed": ("gfx/interface/focusview/titlebar/focus_completed_bg.dds", 1, "spriteType"),
+}
+for _n, (_rel, _fr, _kind) in REPLACED.items():
+    if os.path.isfile(M + _rel):
+        defs.setdefault(_n, dict(kind=_kind, frames=_fr, tex=_rel, img=read_tex(_rel), vanilla_path=True))
+
+gui = load(M + "interface/topbar.gui")
+extras = load(M + "interface/valsora_deco_topbar_extras.gui")
+gui_text = "".join(open(f, encoding="utf-8-sig").read() for f in sorted(glob.glob(M + "interface/*.gui")))
+used = set(re.findall(r'"(GFX_valsora_[^"]+)"', gui_text))
+for u in sorted(used - set(defs)):
+    problems.append(f"sprite used but not defined: {u}")
+print("sprites defined", len(defs), "used", len(used), "unused", sorted(set(defs) - used))
+vanilla_gfx = set()
+for f in glob.glob(VANILLA + "interface/**/*.gfx", recursive=True):
+    vanilla_gfx |= set(re.findall(r'name\s*=\s*"?(GFX_[A-Za-z0-9_]+)', open(f, encoding="utf-8-sig", errors="ignore").read()))
+for u in sorted(set(re.findall(r'"(GFX_[A-Za-z0-9_]+)"', gui_text)) - set(defs) - vanilla_gfx):
+    problems.append(f"sprite neither in the mod nor in the game: {u}")
+
+# every vanilla element still present exactly as often: for EVERY .gui the mod ships at a vanilla path
+# (the engine finds elements by name). countrypoliticsview.gui is compared with the Valsora mod's copy
+# when it has one, since that is the base make_politics.py starts from.
+from paths import VALSORA  # noqa: E402
+
+
+def _names(path):
+    src = re.sub(r"#[^\n]*", "", open(path, encoding="utf-8-sig", errors="ignore").read())
+    return re.findall(r'\bname\s*=\s*"?([A-Za-z0-9_.\-]+)"?', src)
+
+
+for mod_gui in sorted(glob.glob(M + "interface/*.gui")):
+    base = os.path.basename(mod_gui)
+    ref = VALSORA + "interface/" + base
+    if not os.path.isfile(ref):
+        ref = VANILLA + "interface/" + base
+    if not os.path.isfile(ref):
+        continue                                          # a new file of the mod's own
+    van, mine = _names(ref), _names(mod_gui)
+    for n in sorted(set(van)):
+        if mine.count(n) != van.count(n):
+            problems.append(f"{base}: vanilla element {n} count changed {van.count(n)} -> {mine.count(n)}")
+    added = sorted(set(mine) - set(van))
+    print(f"{base}: vanilla elements kept {len(set(van))} | added {len(added)}"
+          + (f": {added}" if base == "topbar.gui" else ""))
+
+# ------------------------------------------------------------------ fonts
+fonts_gfx = load(M + "interface/valsora_deco_fonts.gfx")
+fdefs = {}
+for k, body in fonts_gfx:
+    for kind, b in body:
+        a = attrs(b)
+        col = int(a["color"], 16)
+        tc = {k: tuple(int(x) for _, x in v) for k, v in (sub(b, "textcolors") or [])}
+        fdefs[a["name"]] = dict(path=a["path"], color=((col >> 16) & 255, (col >> 8) & 255, col & 255), tc=tc)
+for u in set(re.findall(r'font\s*=\s*"(valsora_[^"]+)"', gui_text)):
+    if u not in fdefs:
+        problems.append(f"font used but not defined: {u}")
+
+
+def load_fnt(base):
+    t = open(base + ".fnt", encoding="utf-8").read()
+    common = dict(re.findall(r"(\w+)=(-?\d+)", t.split("\n")[1]))
+    page = re.search(r'page id=0 file="([^"]+)"', t).group(1)
+    chars = {}
+    for line in t.split("\n"):
+        if line.startswith("char "):
+            d = {k: int(v) for k, v in re.findall(r"(\w+)=(-?\d+)", line)}
+            chars[d["id"]] = d
+    kern = {(int(a), int(b)): int(k) for a, b, k in re.findall(r"kerning first=(\d+)\s+second=(\d+)\s+amount=(-?\d+)", t)}
+    return dict(common=common, page=page, chars=chars, kern=kern, atlas=read_dds(base[: base.rfind("/") + 1] + page))
+
+
+FONTS = {}
+for name, fd in list(fdefs.items()) + [("tahoma_60", dict(path="gfx/fonts/hoi_mapfont4", color=(255, 255, 255)))]:
+    f = load_fnt(M + fd["path"])
+    f["color"] = fd["color"]
+    f["tc"] = fd.get("tc", {})
+    FONTS[name] = f
+    if f["page"] != fd["path"].split("/")[-1] + ".dds":
+        problems.append(f"{name}: page file {f['page']} does not match {fd['path']}")
+    W, H = f["atlas"].size
+    if (W, H) != (int(f["common"]["scaleW"]), int(f["common"]["scaleH"])):
+        problems.append(f"{name}: scaleW/H mismatch")
+    for c in f["chars"].values():
+        if c["x"] < 0 or c["y"] < 0 or c["x"] + c["width"] > W or c["y"] + c["height"] > H:
+            problems.append(f"{name}: char {c['id']} outside atlas")
+    print(f"font {name}: {len(f['chars'])} chars, {len(f['kern'])} kerning pairs, atlas {W}x{H}, line {f['common']['lineHeight']}")
+
+# ------------------------------------------------------------------ replaced vanilla textures keep vanilla sizes
+VANILLA = {
+    "gfx/interface/tiles/tiled_window.dds": (192, 192), "gfx/interface/tiles/tiled_window_2b_border.dds": (192, 192),
+    "gfx/interface/tiles/tiled_window2_2b_border.dds": (192, 192), "gfx/interface/tiles/tiled_window_1b_border.dds": (192, 192),
+    "gfx/interface/tiles/tiled_window2_1b_border.dds": (192, 192), "gfx/interface/tiles/tiled_window_1b_thin_border.dds": (192, 192),
+    "gfx/interface/tiles/tiled_window_thin_border.dds": (192, 192), "gfx/interface/tiles/tiled_window_thin_border2.dds": (192, 192),
+    "gfx/interface/tiles/tiled_window_small.dds": (96, 96), "gfx/interface/tiles/tiled_window_small_small.dds": (48, 48),
+    "gfx/interface/tiles/tiled_mini_dialog.dds": (32, 32),
+}
+for rel, size in VANILLA.items():
+    if read_dds(M + rel).size != size:
+        problems.append(f"{rel} size mismatch")
+for p in glob.glob(M + "gfx/interface/button_*.dds"):
+    w, h = map(int, re.search(r"button_(\d+)x(\d+)", p).groups())
+    if read_dds(p).size != (w, h):
+        problems.append(f"{p} size mismatch")
+
+# every texture in the mod comes from the current build (stale files from older versions are reported)
+import json  # noqa: E402
+_man = {m["path"] for m in json.load(open(BUILD + "texture_manifest.json"))}
+for f in glob.glob(M + "gfx/**/*", recursive=True):
+    rel = f[len(M):].replace(os.sep, "/")
+    if os.path.isfile(f) and not rel.startswith("gfx/fonts/") and rel not in _man:
+        problems.append(f"stale texture not produced by gen_textures.py (delete it): {rel}")
+
+# localisation files have a BOM and define every key the .gui files use
+for f in glob.glob(M + "localisation/*/*.yml"):
+    if not open(f, "rb").read(3) == b"\xef\xbb\xbf":
+        problems.append(f"{f}: missing UTF-8 BOM")
+loc = dict(re.findall(r'^\s*(\w+):0 "(.*)"$', open(M + "localisation/english/valsora_deco_ui_l_english.yml", encoding="utf-8-sig").read(), re.M))
+loc_all = {}
+for f in glob.glob(M + "localisation/english/*.yml"):
+    loc_all.update(re.findall(r'^\s*(\w+):0 "(.*)"$', open(f, encoding="utf-8-sig").read(), re.M))
+for k in set(re.findall(r'text\s*=\s*"(VAL_DECO_[A-Z_]+)"', gui_text)):
+    if k not in loc_all:
+        problems.append(f"loc key missing: {k}")
+for k in []:
+    if k not in loc:
+        problems.append(f"loc key missing: {k}")
+
+
+# ------------------------------------------------------------------ preview renderer
+def _runs(text, base):
+    """Split a string with §X ... §! colour codes into (char, colour-letter) pairs."""
+    out, stack, i = [], [], 0
+    while i < len(text):
+        if text[i] == "\u00a7" and i + 1 < len(text):
+            if text[i + 1] == "!":
+                stack and stack.pop()
+            else:
+                stack.append(text[i + 1])
+            i += 2
+            continue
+        out.append((text[i], stack[-1] if stack else None))
+        i += 1
+    return out
+
+
+def text_width(f, runs):
+    cps = [ord(c) for c, _ in runs if ord(c) in f["chars"]]
+    return sum(f["chars"][c]["xadvance"] for c in cps) + sum(f["kern"].get(p, 0) for p in zip(cps, cps[1:]))
+
+
+def draw_text(canvas, font, text, x, y, max_w=None, fmt="left", color=None, check=None, max_h=None, valign=False):
+    f = FONTS[font]
+    chars = f["chars"]
+    atlas = f.setdefault("_np", np.array(f["atlas"], dtype=np.float32) / 255)
+    runs = _runs(text, None)
+    # word wrap when the box has room for more than one line (as the game does)
+    lh = int(f["common"]["lineHeight"])
+    lines = [runs]
+    if max_w and max_h and max_h >= 2 * lh:
+        words, lines, cur = [], [], []
+        word = []
+        for r in runs + [(" ", None)]:
+            if r[0] == " ":
+                if word:
+                    trial = cur + ([(" ", None)] if cur else []) + word
+                    if cur and text_width(f, trial) > max_w:
+                        lines.append(cur)
+                        cur = word
+                    else:
+                        cur = trial
+                word = []
+            else:
+                word.append(r)
+        lines.append(cur)
+    if check and max_h and len(lines) * lh > max_h + 2:
+        problems.append(f"text needs {len(lines)} lines in {check}: {text!r}")
+    total_h = len(lines) * lh
+    y0 = y + (max_h - total_h) / 2 if (valign and max_h) else y
+    for li, line in enumerate(lines):
+        width = text_width(f, line)
+        if check and max_w and width > max_w:
+            problems.append(f"text overflow in {check}: {text!r} {width}px > {max_w}px")
+        lx = x
+        if max_w and fmt in ("center", "centre"):
+            lx = x + (max_w - width) / 2
+        elif max_w and fmt == "right":
+            lx = x + max_w - width
+        pen, ly, prev = lx, y0 + li * lh, None
+        for ch, code in line:
+            cp = ord(ch)
+            if cp not in chars:
+                continue
+            c = chars[cp]
+            if prev is not None:
+                pen += f["kern"].get((prev, cp), 0)
+            col = np.array((f["tc"].get(code) if code else None) or color or f["color"], np.float32) / 255
+            g = atlas[c["y"]:c["y"] + c["height"], c["x"]:c["x"] + c["width"]]
+            gx, gy = int(round(pen + c["xoffset"])), int(round(ly + c["yoffset"]))
+            h, w = g.shape[:2]
+            if 0 <= gx and 0 <= gy and gx + w <= canvas.shape[1] and gy + h <= canvas.shape[0]:
+                rgb, a = g[..., :3], g[..., 3:4]
+                region = canvas[gy:gy + h, gx:gx + w]
+                canvas[gy:gy + h, gx:gx + w] = region * (1 - a) + (rgb * col) * a
+            pen += c["xadvance"]
+            prev = cp
+    return 0
+
+
+def paste(canvas, img, x, y, frame=0, frames=1, alpha=1.0):
+    a = np.array(img.convert("RGBA"), np.float32) / 255
+    fw = a.shape[1] // frames
+    a = a[:, frame * fw:(frame + 1) * fw]
+    x, y = int(round(x)), int(round(y))
+    h, w = a.shape[:2]
+    x0, y0 = max(0, x), max(0, y)
+    x1, y1 = min(canvas.shape[1], x + w), min(canvas.shape[0], y + h)
+    if x1 <= x0 or y1 <= y0:
+        return
+    s = a[y0 - y:y1 - y, x0 - x:x1 - x]
+    al = s[..., 3:4] * alpha
+    canvas[y0:y1, x0:x1] = canvas[y0:y1, x0:x1] * (1 - al) + s[..., :3] * al
+
+
+def cornered(img, w, h, bx, by):
+    a = np.array(img.convert("RGBA"))
+    H, W = a.shape[:2]
+    xs = np.concatenate([np.arange(bx), bx + (np.arange(max(0, w - 2 * bx)) % max(1, W - 2 * bx)), W - bx + np.arange(bx)])[:w]
+    ys = np.concatenate([np.arange(by), by + (np.arange(max(0, h - 2 * by)) % max(1, H - 2 * by)), H - by + np.arange(by)])[:h]
+    return Image.fromarray(a[ys][:, xs], "RGBA")
+
+
+def standin(kind, w, h):
+    """Neutral stand-ins for vanilla art the mod leaves untouched (drawn so the layout reads)."""
+    im = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    from PIL import ImageDraw
+    d = ImageDraw.Draw(im)
+    if kind == "globe":
+        d.ellipse((1, 1, w - 2, h - 2), fill=(52, 70, 78, 255), outline=(150, 160, 150, 255), width=2)
+        d.ellipse((w * .3, 2, w * .7, h - 3), outline=(150, 160, 150, 160), width=1)
+        d.line((2, h / 2, w - 3, h / 2), fill=(150, 160, 150, 160), width=1)
+        d.pieslice((1, 1, w - 2, h - 2), -90, -40, fill=(200, 120, 70, 200))
+    else:
+        d.rounded_rectangle((1, 1, w - 2, h - 2), 4, fill=(60, 56, 48, 235), outline=(150, 140, 120, 255))
+        if kind == "crate":
+            d.rectangle((5, 6, w - 6, h - 5), outline=(190, 182, 160, 255))
+            d.line((5, 10, w - 6, 10), fill=(190, 182, 160, 255))
+        else:
+            d.text((w / 2 - 3, h / 2 - 6), kind, fill=(210, 200, 180, 255))
+    return im
+
+
+STANDIN = {"GFX_world_tension_icon_big_strip": ("globe", 50, 50), "GFX_equipment_icon": ("crate", 24, 24),
+           "GFX_achievements_button": ("A", 28, 28), "GFX_show_dismissed_alerts_icon": ("!", 28, 28)}
+SKIP = {"reopen_ingame_lobby", "reopen_ingame_lobby_label", "toggle_music_commands_win", "observer_flag_overlay",
+        "pause_button_date_paused", "threat_icon_glow", "decision_view_alert_glow", "production_button_glow",
+        "decisionview_amount_timeout_bg", "decisionview_amount_timeout_items", "decisionview_amount_to_take_bg",
+        "decisionview_amount_to_take_items", "intelview_ops_prepared_or_completed_bg",
+        "intelview_ops_prepared_or_completed_items", "intelview_ops_available_bg", "intelview_ops_available_items",
+        "prototype_rewards_aquired_bg", "prototype_rewards_aquired", "non_delivering_contracts", "delivering_contracts",
+        "faction_icon", "industrial_ratio_bar", "pause_window"}
+SAMPLE = {"valsora_deco_pp_daily": "\u00a7G+1.80\u00a7!",
+          "valsora_deco_factory_counts": "\u00a7W\u25c6\u00a7!3 \u00a7O\u25c6\u00a7!2 \u00a7C\u25c6\u00a7!0",
+          "valsora_deco_country_name_small": "Terrabis-Seran", "pol_power": "47", "stability": "60%", "war_support": "30%", "manpower": "151.2K",
+          "industrial_capacity": "3/2/0", "fuel_value": "4.1K", "supply_value": "92%", "convoys_count": "20",
+          "command_power_value": "18", "experience_value": "12", "navy_experience_value": "8",
+          "air_experience_value": "5", "nukes_value": "2", "initiative_text": "0", "industrial_capacity": "5", "threat_value": "4%", "DateText": "12:00, 1 March, 1936",
+          "valsora_deco_country_name": "Rouental"}
+WORST = {"valsora_deco_pp_daily": "\u00a7G+12.50\u00a7!",
+         "valsora_deco_factory_counts": "\u00a7W\u25c6\u00a7!45 \u00a7O\u25c6\u00a7!30 \u00a7C\u25c6\u00a7!8",
+         "valsora_deco_country_name_small": "Ponchomagnifico", "pol_power": "999", "stability": "100%", "war_support": "100%", "manpower": "12.34M",
+         "industrial_capacity": "120/80/12", "fuel_value": "99.9K", "supply_value": "100%", "convoys_count": "999",
+         "command_power_value": "200", "experience_value": "999", "navy_experience_value": "999",
+         "air_experience_value": "999", "nukes_value": "99", "threat_value": "100%",
+         "DateText": "23:00, 29 September, 1939", "valsora_deco_country_name": "Utopian Republic"}
+FRAME = {"button_speedstep1": 1, "button_speedstep2": 1, "button_speedstep3": 1}
+BOXES = []   # (name, x, y, w, h) for the debug overlay
+
+
+def render(cv, elems, px, py, pr, worst=False):
+    for key, body in elems:
+        kl = key.lower() if key else None
+        if kl not in ("containerwindowtype", "icontype", "buttontype", "instanttextboxtype"):
+            continue
+        d = attrs(body)
+        name = d.get("name")
+        if name in SKIP:
+            continue
+        pos = sub(body, "position")
+        x, y = (int(v) for v in xy(pos)) if pos else (0, 0)
+        ori = d.get("orientation", "UPPER_LEFT").upper()
+        ax = pr + x if ori == "UPPER_RIGHT" else px + x
+        ay = py + y
+        if kl == "containerwindowtype":
+            sz = sub(body, "size")
+            w, h = xy(sz) if sz else (0, 0)
+            w = pr - ax if "%" in str(w) else int(w)
+            h = 1080 if "%" in str(h) else int(h)
+            bg = sub(body, "background")
+            if bg:
+                spr = attrs(bg).get("quadtexturesprite") or attrs(bg).get("spritetype")
+                if spr in defs:
+                    dd = defs[spr]
+                    img = cornered(dd["img"], w, h, *dd["border"]) if dd["kind"] == "corneredTileSpriteType" else dd["img"]
+                    paste(cv, img, ax, ay)
+            if d.get("spritetype") in defs:
+                paste(cv, defs[d["spritetype"]]["img"], ax, ay)
+            render(cv, body, ax, ay, ax + w, worst)
+        elif kl in ("icontype", "buttontype"):
+            spr = d.get("quadtexturesprite") or d.get("spritetype")
+            if name == "threat_value_button":
+                cv[ay:ay + 20, ax:ax + 50] *= 0.55
+                continue
+            if spr in defs:
+                dd = defs[spr]
+                if dd["kind"] == "maskedShieldType":
+                    W, H = dd["img"].size
+                    flag = Image.open(ART + "flag_ROU.png").convert("RGB")
+                    flag = flag.resize((82, 52), Image.LANCZOS).resize((W, H), Image.NEAREST)  # game flag is 82x52, unsmoothed
+                    paste(cv, flag, ax, ay)
+                    paste(cv, dd["img"], ax, ay)
+                elif dd["kind"] == "progressbartype":
+                    W, H = dd["img"].size
+                    paste(cv, dd["bg_img"], ax, ay)
+                    fill = np.array(dd["img"], np.float32)
+                    fill[..., :3] *= np.array(dd["color"], np.float32)
+                    fill = Image.fromarray(fill.clip(0, 255).astype(np.uint8)).crop((0, 0, int(W * .78), H))
+                    paste(cv, fill, ax, ay)
+                else:
+                    paste(cv, dd["img"], ax, ay, FRAME.get(name, 0), dd["frames"])
+                BOXES.append((name, ax, ay, dd["img"].size[0] // dd["frames"], dd["img"].size[1]))
+            elif spr in STANDIN:
+                k, w, h = STANDIN[spr]
+                paste(cv, standin(k, w, h), ax, ay)
+                BOXES.append((name, ax, ay, w, h))
+            elif spr:
+                problems.append(f"preview: no art for {name} ({spr})")
+        else:
+            txt = (WORST if worst else SAMPLE).get(name) or loc.get(d.get("text"), None)
+            if txt is None:
+                continue
+            mw = int(d.get("maxwidth", 0)) or None
+            mh = int(d.get("maxheight", 0)) or None
+            draw_text(cv, d["font"], txt, ax, ay, mw, d.get("format", "left"), check=name if worst else None,
+                      max_h=mh, valign=d.get("vertical_alignment") == "center")
+            BOXES.append((name, ax, ay, mw or 0, int(d.get("maxheight", 0))))
+
+
+SW, SH = 1920, 230
+bg = Image.open(ART + "map_rouental.jpg").convert("RGB").resize((1920, 1080), Image.LANCZOS).crop((0, 0, SW, SH))
+
+
+def build(worst=False):
+    cv = np.array(bg, np.float32) / 255
+    top = gui[0][1]  # guiTypes
+    for k, b in top:
+        if k == "containerWindowType" and attrs(b).get("name") == "topbar":
+            tb = b
+    render(cv, [("containerWindowType", tb)], 0, 0, 1920, worst)
+    # scripted-GUI window: child of the top bar container (origin -4,-1)
+    wins = [(k, b) for k, b in extras[0][1]
+            if worst or attrs(b).get("name") != "valsora_deco_country_name_small_window"]
+    render(cv, wins, -4, -1, 1920, worst)
+    return cv
+
+
+BOXES.clear()
+build(worst=True)          # overflow check with long engine strings
+BOXES.clear()
+cv = build()
+out = Image.fromarray((np.clip(cv, 0, 1) * 255).astype(np.uint8))
+out.save(BUILD + "preview_topbar.png")
+
+# debug overlay: element boxes (to eyeball overlaps)
+dbg = out.copy()
+from PIL import ImageDraw  # noqa: E402
+dd_ = ImageDraw.Draw(dbg)
+for n, x, y, w, h in BOXES:
+    if w and h:
+        dd_.rectangle((x, y, x + w - 1, y + h - 1), outline=(0, 255, 255))
+dbg.save(BUILD + "preview_topbar_boxes.png")
+
+print("PROBLEMS:", problems if problems else "none")

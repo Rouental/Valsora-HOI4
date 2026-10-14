@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<style>
+/* local copies of the Google Fonts the boards used (SIL OFL, in the project's source_fonts/) */
+@font-face{font-family:'Federo';src:url('../../../source_fonts/federo/Federo-Regular.ttf')}
+@font-face{font-family:'Limelight';src:url('../../../source_fonts/limelight/Limelight-Regular.ttf')}
+@font-face{font-family:'Josefin Sans';src:url('../../../source_fonts/josefinsans/JosefinSans[wght].ttf');font-weight:100 700;font-style:normal}
+@font-face{font-family:'Josefin Sans';src:url('../../../source_fonts/josefinsans/JosefinSans-Italic[wght].ttf');font-weight:100 700;font-style:italic}
+@font-face{font-family:'Bodoni Moda';src:url('../../../source_fonts/bodonimoda/BodoniModa[opsz,wght].ttf');font-weight:400 900;font-style:normal}
+@font-face{font-family:'Bodoni Moda';src:url('../../../source_fonts/bodonimoda/BodoniModa-Italic[opsz,wght].ttf');font-weight:400 900;font-style:italic}
+</style>
+<meta charset="utf-8">
+<title>Valsora – Main menu</title>
+
+</head>
+<body>
+<x-dc>
+<helmet>
+
+<style>
+body{margin:0}
+a{color:#E3C77E}a:hover{color:#F6E3A6}
+.fed{font-family:'Federo',serif;font-weight:400}
+.bod{font-family:'Bodoni Moda',serif;font-style:italic}
+.gilt{background:linear-gradient(180deg,#FFF6D6 0%,#F0D58E 38%,#B48A3C 56%,#E7C979 74%,#FBEBBE 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.cn{position:absolute;transform:translate(-50%,-50%);font-family:'Federo',serif;font-size:14px;letter-spacing:.55em;padding:6px 14px 6px calc(14px + .55em);background:radial-gradient(closest-side,rgba(12,26,25,.92) 55%,rgba(12,26,25,0));color:rgba(246,232,190,.82);text-shadow:0 1px 3px #000,0 0 10px rgba(0,0,0,.9);white-space:nowrap;pointer-events:none}
+.mb{height:48px;padding:1px;border:0;margin:0;cursor:pointer;background:linear-gradient(180deg,#E8CD84,#8B6A2C);clip-path:polygon(12px 0,calc(100% - 12px) 0,100% 50%,calc(100% - 12px) 100%,12px 100%,0 50%)}
+.mb>span{display:flex;align-items:center;justify-content:center;height:100%;padding:3px 34px 0;box-sizing:border-box;background:repeating-linear-gradient(90deg,rgba(255,255,255,.025) 0 1px,transparent 1px 7px),linear-gradient(180deg,#1E2930,#0C1317);clip-path:polygon(11.5px 0,calc(100% - 11.5px) 0,100% 50%,calc(100% - 11.5px) 100%,11.5px 100%,0 50%);font:600 13px/1 'Josefin Sans',sans-serif;letter-spacing:.26em;text-transform:uppercase;color:#EBD397;white-space:nowrap}
+</style>
+</helmet>
+<div style="position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #080C0F; font-family: 'Josefin Sans', sans-serif; color: #EFE6D0">
+
+<img src="assets/menu_world.jpg" alt="Engraved gold map of Valsora beneath a sunburst" style="position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; display: block">
+
+<!-- continent names -->
+<div class="cn" style="left: 548px; top: 548px">NONSCIO</div>
+<div class="cn" style="left: 492px; top: 772px">ARASEOS</div>
+<div class="cn" style="left: 1012px; top: 352px">YASTREOVAKIA</div>
+<div class="cn" style="left: 800px; top: 642px; font-size: 12px">AISLADA</div>
+<div class="cn" style="left: 806px; top: 806px">SOLITAS</div>
+<div class="cn" style="left: 1100px; top: 730px">USNISTAN</div>
+<div class="cn" style="left: 1436px; top: 478px">ORIENTALIS</div>
+
+<!-- logotype -->
+<div style="position: absolute; left: 0; right: 0; top: 52px; display: flex; flex-direction: column; align-items: center">
+<div style="display: flex; align-items: center; gap: 14px" aria-hidden="true">
+<i style="width: 90px; height: 1px; background: linear-gradient(90deg, transparent, #D2B064)"></i>
+<i style="width: 9px; height: 9px; background: #E8CD84; transform: rotate(45deg)"></i>
+<i style="width: 90px; height: 1px; background: linear-gradient(270deg, transparent, #D2B064)"></i>
+</div>
+<h1 style="margin: 14px 0 0; font-family: 'Limelight', serif; font-weight: 400; font-size: 132px; line-height: .92; letter-spacing: .1em; padding-left: .1em; text-shadow: 0 0 0 transparent; filter: drop-shadow(0 3px 0 #3B2A10) drop-shadow(0 14px 22px rgba(0,0,0,.75))"><span class="gilt">VALSORA</span></h1>
+<div style="margin-top: 18px; display: flex; align-items: center; gap: 18px">
+<span style="display: flex; flex-direction: column; gap: 3px; width: 110px" aria-hidden="true"><i style="height: 1px; background: linear-gradient(90deg, transparent, #C9A55A)"></i><i style="height: 1px; margin-left: 26px; background: linear-gradient(90deg, transparent, #C9A55A)"></i><i style="height: 1px; margin-left: 52px; background: linear-gradient(90deg, transparent, #C9A55A)"></i></span>
+<span style="font: 600 14px/1 'Josefin Sans'; letter-spacing: .5em; padding-left: .5em; text-transform: uppercase; color: #E7D3A0; padding-top: 2px">A Hearts of Iron IV total conversion</span>
+<span style="display: flex; flex-direction: column; gap: 3px; width: 110px" aria-hidden="true"><i style="height: 1px; background: linear-gradient(270deg, transparent, #C9A55A)"></i><i style="height: 1px; margin-right: 26px; background: linear-gradient(270deg, transparent, #C9A55A)"></i><i style="height: 1px; margin-right: 52px; background: linear-gradient(270deg, transparent, #C9A55A)"></i></span>
+</div>
+<div class="bod" style="margin-top: 12px; font-size: 17px; color: #BFAF86">The world of The East Pacific</div>
+</div>
+
+<!-- menu -->
+<nav aria-label="Main menu" style="position: absolute; left: 0; right: 0; top: 942px; display: flex; justify-content: center; align-items: center; gap: 18px">
+<button class="mb"><span>Tutorial</span></button>
+<button class="mb"><span>Multiplayer</span></button>
+<button style="height: 64px; padding: 1px; border: 0; margin: 0 8px; cursor: pointer; background: linear-gradient(180deg, #FFF3C8, #8B6A2C); clip-path: polygon(16px 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 16px 100%, 0 50%); filter: drop-shadow(0 0 22px rgba(241,220,156,.35))"><span style="display: flex; align-items: center; justify-content: center; gap: 14px; height: 100%; padding: 4px 54px 0; box-sizing: border-box; background: linear-gradient(180deg, #F6E4A8 0%, #D8B66A 46%, #B08B41 54%, #E0C278 100%); clip-path: polygon(15.5px 0, calc(100% - 15.5px) 0, 100% 50%, calc(100% - 15.5px) 100%, 15.5px 100%, 0 50%); font-family: 'Federo', serif; font-size: 22px; letter-spacing: .26em; color: #1A1307; white-space: nowrap"><i style="width: 7px; height: 7px; background: #1A1307; transform: rotate(45deg)"></i>SINGLE PLAYER<i style="width: 7px; height: 7px; background: #1A1307; transform: rotate(45deg)"></i></span></button>
+<button class="mb"><span>Settings</span></button>
+<button class="mb"><span>Credits</span></button>
+</nav>
+<button style="position: absolute; right: 36px; top: 36px; height: 36px; padding: 0 18px; border: 1px solid rgba(201,165,90,.6); background: rgba(8,12,15,.7); color: #CBBF9F; font: 600 11px/1 'Josefin Sans'; letter-spacing: .24em; text-transform: uppercase; cursor: pointer">Quit</button>
+
+<!-- version -->
+<div style="position: absolute; left: 36px; bottom: 30px">
+<div style="font: 600 10.5px/1 'Josefin Sans'; letter-spacing: .24em; text-transform: uppercase; color: #8F8670">Valsora (test map) · v0.2</div>
+<div style="margin-top: 7px; font: 400 12px/1 'Josefin Sans'; color: #6F6857">For Hearts of Iron IV 1.19.*</div>
+</div>
+
+<!-- radio -->
+<div style="position: absolute; right: 30px; bottom: 22px; width: 330px; padding: 1px; background: linear-gradient(180deg, #E8CD84, #8B6A2C); clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px)">
+<div style="display: flex; align-items: center; gap: 14px; padding: 12px 16px; background: repeating-linear-gradient(90deg, rgba(255,255,255,.025) 0 1px, transparent 1px 7px), linear-gradient(180deg, #1A252C, #0B1115); clip-path: polygon(11.5px 0, 100% 0, 100% calc(100% - 11.5px), calc(100% - 11.5px) 100%, 0 100%, 0 11.5px)">
+<button aria-label="Pause music" style="width: 34px; height: 34px; flex: none; padding: 0; border: 1px solid #E3C77E; background: #2E6E60; transform: rotate(45deg); display: flex; align-items: center; justify-content: center; cursor: pointer"><svg width="12" height="12" viewBox="0 0 12 12" style="transform: rotate(-45deg)" aria-hidden="true"><path d="M3.5 2v8M8.5 2v8" stroke="#FBEAB4" stroke-width="2"></path></svg></button>
+<div style="flex: 1; min-width: 0">
+<div style="display: flex; justify-content: space-between"><span style="font: 600 9.5px/1 'Josefin Sans'; letter-spacing: .22em; text-transform: uppercase; color: #B7A680">Valsora Radio</span><span style="font: 700 10px/1 'Josefin Sans'; color: #8F8670">1:12 / 2:34</span></div>
+<div style="margin-top: 6px; font: 700 13.5px/1.1 'Josefin Sans'; color: #F4ECD9; white-space: nowrap">Entry of the Gladiators <span style="font-weight: 400; color: #CBBF9F">· Julius Fučík</span></div>
+<div style="margin-top: 8px; height: 3px; background: #2A363D"><div style="width: 47%; height: 100%; background: linear-gradient(90deg, #B48F44, #F1DC9C)"></div></div>
+</div>
+</div>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1920,"height":1080}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>
