@@ -1318,6 +1318,15 @@ older version (the 2026-09-30 one predated the sea zones and recolours): diff it
 layers against `source/` first, and merge, keeping the current game layers and taking
 their own layers (outlines, rivers, names, references) from the upload.
 
+**Vanilla reference files** (2026-10-14): the author's private repo `Rouental/HOI4-Files`
+holds a copy of their 1.19.3 install under `HOI4 Files/`: common, events, history,
+interface, localisation (every language), map, portraits (with
+`998_scientist_portraits.txt`) and gfx's models, but not yet the rest of `gfx` (leader
+portraits, interface images, minimap, FX shaders). Attach it to a session with the
+Valsora repo and clone it to `/home/user/hoi4-files`; check vanilla there before searching
+mirrors or other mods. It is Paradox's content: never copy it wholesale into this public
+repo (single vanilla files the mod overrides, like `source/interface/`, are fine).
+
 The author tests in-game and reports crashes and `error.log`. They cannot see the
 pipeline, so always say which files changed and how to install:
 1. Delete `mod/valsora_test/` and `mod/valsora_test.mod`.
