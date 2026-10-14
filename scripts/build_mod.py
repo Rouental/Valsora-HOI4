@@ -765,11 +765,13 @@ def main():
     ideology_of = ideologies.ideology_of()
     ruling, recruits, leader_blocks, leader_loc, used_names = {}, {}, [], [], set()
     named_leaders = dict(nations.NAMED_LEADERS)
+    # map colours that differ from the .pdn paint: nations.py's, then the Gazetteer's
+    display_colour = {**nations.DISPLAY_COLOUR, **gazetteer.colours(G)}
     for c in present:
         tag = COUNTRIES[c][0]
         # the Gazetteer's ruling sub-ideology, parties and ruler, over nations.LEADERS
-        subs = gazetteer.leaders(tag, nations.LEADERS.get(tag, []), G.get(tag, {}).get("politics"),
-                                 tag in nations.HAND_MADE, named_leaders)
+        subs = gazetteer.leaders(tag, nations.LEADERS.get(tag, []), G.get(tag),
+                                 tag in nations.HAND_MADE, named_leaders, nations.PORTRAITS)
         blocks, lloc, ids = cultures.leaders(tag, tag_continent[tag], subs, ideology_of, used_names,
                                              named_leaders)
         leader_blocks += blocks
@@ -799,7 +801,7 @@ def main():
         write(f"common/countries/Valsora {fname}.txt",
               f"graphical_culture = {gfx[tag]}_gfx\n"
               f"graphical_culture_2d = {gfx[tag]}_2d\n"
-              "color = rgb {{ {} {} {} }}\n".format(*nations.DISPLAY_COLOUR.get(tag, col)))
+              "color = rgb {{ {} {} {} }}\n".format(*display_colour.get(tag, col)))
         write(f"history/countries/{tag} - {fname}.txt", "\n".join([
             f"capital = {capital_state[c] + 1}",
             "set_research_slots = 3",
@@ -887,7 +889,7 @@ def main():
     # generated colours (in-game, 2026-09-29), so ours replaces vanilla's
     write("common/countries/colors.txt", "#reload countrycolors\n\n" + "".join(
         f"{COUNTRIES[c][0]} = {{\n\tcolor = rgb {{ {r} {g} {b} }}\n\tcolor_ui = rgb {{ {' '.join(map(str, ui_colour((r, g, b))))} }}\n}}\n"
-        for c in present for r, g, b in [nations.DISPLAY_COLOUR.get(COUNTRIES[c][0], COUNTRIES[c][3])]))
+        for c in present for r, g, b in [display_colour.get(COUNTRIES[c][0], COUNTRIES[c][3])]))
     write("common/countries/cosmetic.txt", "".join(
         f"{cosmetic(tag, i)} = {{\n\tcolor = rgb {{ {r} {g} {b} }}\n\tcolor_ui = rgb {{ {' '.join(map(str, ui_colour((r, g, b))))} }}\n}}\n"
         for tag, per in nations.LOOKS.items() for i, (r, g, b) in per.items())

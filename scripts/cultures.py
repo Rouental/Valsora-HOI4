@@ -439,7 +439,8 @@ def leaders(tag, continent, subtypes, ideology_of, used, named=None):
     """Characters for a country's leaders: a name from its culture's list and a generic
     portrait of its culture, per subtype. Returns (character blocks, loc lines, ids).
     Deterministic: the same tag always gets the same people. `named` maps a character
-    id to the author's (name, portrait sprite) for that leader instead."""
+    id to the author's (name, portrait sprite) for that leader instead, and optionally a
+    description (their titles, shown on the portrait); a None keeps the generated one."""
     named = named or {}
     import zlib
     import numpy as np
@@ -461,10 +462,14 @@ def leaders(tag, continent, subtypes, ideology_of, used, named=None):
                 used.add(name)
                 break
         face = pool[rng.integers(len(pool))]
+        desc = None
         if cid in named:  # drawn after the random ones, so other leaders don't change
-            name, own = named[cid]
+            own_name, own, *rest = named[cid]
+            name = own_name or name
             face = own or face  # None: the author named them but drew no portrait
+            desc = rest[0] if rest else None
             used.add(name)
+        desc_line = f'\n\t\t\tdesc = "{cid}_desc"' if desc else ""  # after the ideology, as check_mod.py reads it
         blocks.append(f"""\t{cid} = {{
 \t\tname = {cid}
 \t\tportraits = {{
@@ -473,12 +478,14 @@ def leaders(tag, continent, subtypes, ideology_of, used, named=None):
 \t\t\t}}
 \t\t}}
 \t\tcountry_leader = {{
-\t\t\tideology = {sub}
+\t\t\tideology = {sub}{desc_line}
 \t\t\texpire = "2065.1.1.1"
 \t\t\tid = -1
 \t\t}}
 \t}}
 """)
         loc.append(f' {cid}:0 "{name}"')
+        if desc:
+            loc.append(f' {cid}_desc:0 "{desc}"')
         ids.append(cid)
     return blocks, loc, ids

@@ -5,12 +5,12 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Federo&family=IBM+Plex+Mono:wght@400;500&family=Josefin+Sans:wght@400;600;700&display=swap">
 <style>
 /* Layout: a surveyor's desk. A top bar; the map sheet on the left with its tools above it,
-   the ledger (the selected state's facts) on the right; stacked on phones.
+   the ledger (the facts) on the right; stacked on phones.
    Look: the Valsora deco UI's lacquer and gilt at night, survey paper by day. */
 :root {
   --paper: #e9ece5; --sheet: #f6f7f2; --ink: #17212a; --ink-2: #4c5862; --ink-3: #7b858b;
   --rule: #cdd3c8; --rule-2: #b3bcb0; --gilt: #8e6d27; --jade: #2b6a5b; --jade-2: #d7e8e2;
-  --warn: #ad3f2c; --warn-2: #f5e0d9; --sel: #d6951c;
+  --warn: #ad3f2c; --warn-2: #f5e0d9; --sel: #d6951c; --sug: #a8326e;
   --sea: #b9cdd8; --lake: #a7c4d8; --river: #2c6a98; --other: #d9dcd2; --other-ink: #8a9288;
   --rail: #2e2722; --rail-2: #f6f7f2; --hub: #7a3e8e;
   --st1: #e7d8a3; --st2: #cbdfae; --st3: #f0c9ad; --st4: #d6cae6; --st5: #bddbd4; --st6: #eac5cf; --st7: #dbd3b7; --st8: #c7d6eb;
@@ -24,7 +24,7 @@
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
   --paper: #0f171c; --sheet: #16212a; --ink: #ece4cf; --ink-2: #b2a992; --ink-3: #847d6b;
   --rule: #263540; --rule-2: #35474f; --gilt: #e3c77e; --jade: #6cc0aa; --jade-2: #1a3a34;
-  --warn: #ee8c7e; --warn-2: #3a211d; --sel: #f1c24e;
+  --warn: #ee8c7e; --warn-2: #3a211d; --sel: #f1c24e; --sug: #f08cbc;
   --sea: #1c3442; --lake: #213f58; --river: #7db6dc; --other: #26313a; --other-ink: #7a8690;
   --rail: #e8dec5; --rail-2: #16212a; --hub: #c9a1e8;
   --st1: #5b5131; --st2: #485b39; --st3: #65473a; --st4: #4c4366; --st5: #345b55; --st6: #653f4b; --st7: #595341; --st8: #3d4d66;
@@ -35,7 +35,7 @@
 :root[data-theme="dark"] {
   --paper: #0f171c; --sheet: #16212a; --ink: #ece4cf; --ink-2: #b2a992; --ink-3: #847d6b;
   --rule: #263540; --rule-2: #35474f; --gilt: #e3c77e; --jade: #6cc0aa; --jade-2: #1a3a34;
-  --warn: #ee8c7e; --warn-2: #3a211d; --sel: #f1c24e;
+  --warn: #ee8c7e; --warn-2: #3a211d; --sel: #f1c24e; --sug: #f08cbc;
   --sea: #1c3442; --lake: #213f58; --river: #7db6dc; --other: #26313a; --other-ink: #7a8690;
   --rail: #e8dec5; --rail-2: #16212a; --hub: #c9a1e8;
   --st1: #5b5131; --st2: #485b39; --st3: #65473a; --st4: #4c4366; --st5: #345b55; --st6: #653f4b; --st7: #595341; --st8: #3d4d66;
@@ -86,10 +86,9 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .home-inner { max-width: 1180px; margin: 0 auto; padding-block: 26px 56px; display: grid; gap: 22px; }
 .eyebrow { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--gilt); }
 .intro h2 { margin: 6px 0 8px; font: 400 clamp(28px, 4vw, 40px)/1.08 var(--font-display); text-wrap: balance; }
-.intro p { margin: 0; max-width: 64ch; color: var(--ink-2); }
+.intro p { margin: 0; max-width: 66ch; color: var(--ink-2); }
 .world { position: relative; border: 1px solid var(--rule-2); background: var(--sea); aspect-ratio: 2 / 1; max-width: 100%; cursor: pointer; }
 .world canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
-.world .corner { position: absolute; font: 500 11px var(--font-data); color: var(--ink-2); background: var(--sheet); padding: 2px 6px; border: 1px solid var(--rule); }
 .tip { position: absolute; pointer-events: none; display: flex; align-items: center; gap: 8px; padding: 6px 9px 4px;
   background: var(--sheet); border: 1px solid var(--rule-2); box-shadow: 0 2px 10px rgba(0,0,0,.15); font-weight: 600; white-space: nowrap; z-index: 2; }
 .tip img { width: 41px; height: 26px; image-rendering: pixelated; }
@@ -103,7 +102,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .nrow { display: grid; grid-template-columns: 41px minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 7px 8px 5px;
   border: 1px solid transparent; border-radius: 4px; background: none; text-align: left; cursor: pointer; }
 .nrow:hover { background: var(--sheet); border-color: var(--rule); }
-.nrow img { width: 41px; height: 26px; image-rendering: pixelated; border: 1px solid var(--rule); }
+.nrow img, .noflag { width: 41px; height: 26px; image-rendering: pixelated; border: 1px solid var(--rule); }
+.noflag { display: grid; place-items: center; font: 600 10px var(--font-data); color: var(--ink-3); background: var(--sheet); }
 .nrow .nm { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .nrow .sub { font-size: 12px; color: var(--ink-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .dot { width: 9px; height: 9px; border-radius: 50%; border: 1px solid var(--ink-3); flex: none; }
@@ -112,11 +112,30 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .key { display: flex; gap: 14px; flex-wrap: wrap; font-size: 13px; color: var(--ink-2); align-items: center; }
 .key span { display: inline-flex; align-items: center; gap: 6px; }
 
+/* owner tools */
+.owner { display: grid; gap: 10px; border: 1px solid var(--gilt); border-radius: 6px; padding: 14px 16px; background: var(--sheet); }
+.owner > h3 { margin: 0; font: 400 22px var(--font-display); display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.owner > h3 small { font: 500 12px var(--font-data); color: var(--ink-3); }
+.owner details { border-top: 1px solid var(--rule); padding-top: 8px; }
+.owner summary { cursor: pointer; font-weight: 700; font-size: 14px; letter-spacing: .06em; text-transform: uppercase; color: var(--gilt); }
+.owner .inner { display: grid; gap: 10px; padding-top: 10px; min-width: 0; }
+.pwlist { display: grid; gap: 2px; max-height: 420px; overflow: auto; border: 1px solid var(--rule); border-radius: 4px; }
+.pwrow { display: grid; grid-template-columns: 41px minmax(0, 1fr) minmax(0, 1.2fr) auto; gap: 10px; align-items: center; padding: 6px 8px; border-top: 1px solid var(--rule); }
+.pwrow:first-child { border-top: 0; }
+.pwrow .pw { font: 500 13px var(--font-data); user-select: all; overflow-wrap: anywhere; }
+.pwrow .nm { font-weight: 600; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pwrow .acts { display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; }
+.owner input, .owner select, .owner textarea { padding: 6px 8px 4px; border: 1px solid var(--rule-2); border-radius: 3px; background: var(--paper); min-width: 0; font-size: 14px; }
+.owner .chips input { flex: 1 1 150px; }
+.owner #own-tag { flex: 0 0 76px; font-family: var(--font-data); text-transform: uppercase; }
+.owner > h3 .btn { font: 13px/1.2 var(--font-ui); }
+.lead, .sec > .meta { font: 13px/1.45 var(--font-ui); color: var(--ink-2); }
+
 /* desk */
 #desk { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 390px; }
 .mapcol { display: flex; flex-direction: column; min-width: 0; min-height: 0; padding-block: 10px 8px; gap: 8px; }
 .toolbar { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
-.tool { display: inline-flex; align-items: center; gap: 7px; padding: 6px 10px 4px; border: 1px solid var(--rule-2); border-radius: 4px;
+.tool { display: inline-flex; align-items: center; gap: 6px; padding: 6px 9px 4px; border: 1px solid var(--rule-2); border-radius: 4px;
   background: var(--sheet); cursor: pointer; font-size: 14px; }
 .tool svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 .tool[aria-pressed="true"] { background: var(--ink); color: var(--sheet); border-color: var(--ink); }
@@ -124,7 +143,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .seg button { padding: 6px 10px 4px; border: 0; background: var(--sheet); cursor: pointer; font-size: 13px; border-left: 1px solid var(--rule); }
 .seg button:first-child { border-left: 0; }
 .seg button[aria-pressed="true"] { background: var(--jade); color: var(--sheet); }
-.spacer { flex: 1; }
+.viewctl { display: flex; gap: 6px; align-items: center; margin-left: auto; }
 .subtools { display: flex; gap: 6px 10px; align-items: center; flex-wrap: wrap; min-height: 32px; font-size: 14px; color: var(--ink-2); }
 .subtools .hinttext { white-space: normal; flex: 1 1 auto; min-width: 0; line-height: 1.3; }
 .grow { display: none; }
@@ -134,25 +153,35 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .tchip[aria-pressed="true"] { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); font-weight: 700; }
 .sheetwrap { position: relative; flex: 1; min-height: 0; border: 1px solid var(--rule-2); background: var(--paper); overflow: hidden; touch-action: none; }
 #map { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-.loading { position: absolute; inset: 0; display: grid; place-items: center; font: 400 20px var(--font-display); color: var(--ink-2); background: var(--paper); }
+.loading { position: absolute; inset: 0; display: grid; place-items: center; font: 400 20px var(--font-display); color: var(--ink-2); background: var(--paper); text-align: center; padding: 20px; }
 .mapctl { position: absolute; right: 10px; top: 10px; display: grid; gap: 4px; }
 .mapctl button { width: 34px; height: 34px; border: 1px solid var(--rule-2); background: var(--sheet); border-radius: 4px; cursor: pointer; font: 600 17px var(--font-ui); }
-.parts { position: absolute; left: 10px; top: 10px; display: flex; gap: 4px; flex-wrap: wrap; max-width: calc(100% - 70px); }
-.parts button { padding: 4px 8px 2px; border: 1px solid var(--rule-2); background: var(--sheet); border-radius: 4px; cursor: pointer; font-size: 12px; }
-.parts button[aria-pressed="true"] { background: var(--ink); color: var(--sheet); border-color: var(--ink); }
+/* the nation's other pieces of land (and the world) in a row of boxes along the bottom */
+.insets { position: absolute; right: 10px; bottom: 10px; display: flex; gap: 6px; align-items: flex-end; max-width: calc(100% - 20px); overflow-x: auto; padding: 2px; }
+.inset { flex: none; display: grid; gap: 3px; padding: 4px 4px 3px; background: var(--sheet); border: 1px solid var(--rule-2); border-radius: 4px; cursor: pointer; font-size: 11px; color: var(--ink-2); max-width: 168px; text-align: left; }
+.inset canvas { display: block; background: var(--sea); }
+.inset span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.inset[aria-pressed="true"] { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); color: var(--ink); font-weight: 700; }
 .legend { position: absolute; left: 10px; bottom: 10px; display: flex; gap: 6px 12px; flex-wrap: wrap; max-width: calc(100% - 20px);
   padding: 6px 9px 4px; background: var(--sheet); border: 1px solid var(--rule); font-size: 12px; color: var(--ink-2); }
 .legend span { display: inline-flex; align-items: center; gap: 5px; }
 .legend i { width: 11px; height: 11px; border: 1px solid rgba(0,0,0,.25); }
+.has-insets .legend { top: 10px; bottom: auto; max-width: calc(100% - 70px); }
 .status { font: 400 12.5px var(--font-data); color: var(--ink-2); min-height: 18px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 /* ledger */
 .ledger { border-left: 1px solid var(--rule); background: var(--sheet); display: flex; flex-direction: column; min-height: 0; min-width: 0; }
 .tabs { display: flex; border-bottom: 1px solid var(--rule); }
-.tabs button { flex: 1; padding: 11px 6px 8px; border: 0; background: none; cursor: pointer; font-size: 13px; font-weight: 700;
-  letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); border-bottom: 2px solid transparent; }
+.tabs button { flex: 1; padding: 11px 4px 8px; border: 0; background: none; cursor: pointer; font-size: 12.5px; font-weight: 700;
+  letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); border-bottom: 2px solid transparent; }
 .tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--gilt); }
+.lock { display: grid; gap: 8px; padding: 14px 16px; border-bottom: 1px solid var(--rule); background: var(--paper); }
+.lock b { font: 400 18px var(--font-display); }
+.lock .row { display: flex; gap: 8px; flex-wrap: wrap; }
+.lock input { flex: 1 1 180px; min-width: 0; padding: 7px 9px 5px; border: 1px solid var(--rule-2); border-radius: 3px; background: var(--sheet); font-family: var(--font-data); }
 .pane { flex: 1; overflow: auto; padding: 16px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; align-content: start; }
+fieldset.lockable { border: 0; margin: 0; padding: 0; min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
+fieldset.lockable[disabled] { opacity: .62; }
 .empty { color: var(--ink-3); font-size: 14px; display: grid; gap: 8px; }
 .empty b { color: var(--ink-2); font-weight: 600; }
 .sec { display: grid; gap: 8px; min-width: 0; }
@@ -165,6 +194,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .field { display: grid; gap: 3px; min-width: 0; }
 .field label { font-size: 12px; color: var(--ink-2); }
 .field input, .field select, textarea { width: 100%; min-width: 0; padding: 6px 8px 4px; border: 1px solid var(--rule-2); border-radius: 3px; background: var(--paper); }
+.field input[type="color"] { padding: 2px; height: 34px; }
 .field input.num { font-family: var(--font-data); font-size: 14px; }
 .field input::placeholder, textarea::placeholder { color: var(--ink-3); }
 .field .hint { font-size: 11.5px; color: var(--ink-3); }
@@ -181,6 +211,7 @@ textarea { min-height: 70px; resize: vertical; }
 .item .row { display: flex; gap: 6px; align-items: center; min-width: 0; flex-wrap: wrap; }
 .item input[type="text"] { flex: 1 1 140px; min-width: 0; padding: 5px 7px 3px; border: 1px solid var(--rule-2); border-radius: 3px; background: var(--paper); }
 .item select { padding: 4px 6px 2px; border: 1px solid var(--rule-2); border-radius: 3px; background: var(--paper); font-size: 13px; }
+.item textarea { grid-column: 1 / -1; min-height: 52px; }
 .item .meta { grid-column: 1 / -1; }
 .confirm { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; font-size: 13px; color: var(--warn); }
 .stats { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; font-size: 14px; }
@@ -190,14 +221,23 @@ textarea { min-height: 70px; resize: vertical; }
 .nhead h3 { margin: 0; font: 400 24px/1.1 var(--font-display); }
 .note { font-size: 13px; color: var(--ink-2); background: var(--paper); border: 1px solid var(--rule); padding: 8px 10px 6px; border-radius: 3px; }
 pre.dump { max-height: 160px; overflow: auto; font: 11px/1.4 var(--font-data); background: var(--paper); border: 1px solid var(--rule); padding: 8px; white-space: pre-wrap; word-break: break-all; }
+.full { grid-column: 1 / -1; }
+optgroup { font-style: normal; }
 
-/* politics */
+/* politics, people, flags */
 .ideo { display: grid; gap: 6px; padding: 10px 0; border-top: 1px solid var(--rule); }
 .ideo:first-of-type { border-top: 0; }
 .ideo .lab { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-weight: 700; font-size: 14px; }
 .ideo .lab small { font: 600 11px var(--font-ui); letter-spacing: .1em; text-transform: uppercase; color: var(--jade); }
-.full { grid-column: 1 / -1; }
-optgroup { font-style: normal; }
+.person { display: grid; grid-template-columns: 78px minmax(0, 1fr); gap: 10px; padding: 10px 0; border-top: 1px solid var(--rule); align-items: start; }
+.person:first-of-type { border-top: 0; }
+.person .fields { display: grid; gap: 6px; min-width: 0; }
+.portrait { width: 78px; height: 105px; border: 1px solid var(--rule-2); background: var(--paper) center 20% / cover no-repeat; display: grid; place-items: center;
+  font: 500 10px var(--font-data); color: var(--ink-3); text-align: center; cursor: pointer; padding: 4px; }
+.flagslot { display: grid; grid-template-columns: 84px minmax(0, 1fr); gap: 10px; align-items: center; padding: 6px 0; border-top: 1px solid var(--rule); }
+.flagslot:first-of-type { border-top: 0; }
+.flagbox { width: 84px; height: 54px; border: 1px solid var(--rule-2); background: var(--paper); object-fit: contain; display: grid; place-items: center; font: 500 10px var(--font-data); color: var(--ink-3); }
+.sugtype { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--sug); }
 
 /* requests */
 .reqs { display: grid; gap: 8px; }
@@ -210,11 +250,8 @@ optgroup { font-style: normal; }
 .kind { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--gilt); }
 .state-open { color: var(--gilt); } .state-done { color: var(--jade); } .state-declined { color: var(--ink-3); }
 .reqform { display: grid; gap: 8px; padding: 12px; border: 1px dashed var(--rule-2); border-radius: 4px; }
-.home-reqs { display: grid; gap: 10px; }
-.home-reqs .head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.home-reqs .head h3 { margin-right: auto; }
-.home-reqs h3 { margin: 0; font: 400 22px var(--font-display); }
 
+@media (max-width: 1360px) and (min-width: 861px) { .tool[aria-pressed="false"] span { display: none; } }
 @media (max-width: 860px) {
   #desk { display: flex; flex-direction: column; overflow: auto; }
   .mapcol { flex: none; height: 56%; min-height: 260px; padding-block: 8px 4px; gap: 6px; }
@@ -223,19 +260,25 @@ optgroup { font-style: normal; }
   .subtools > * { flex: none; }
   .subtools > .hinttext { flex: 1 1 auto; font-size: 13px; }
   .tool span { display: none; }
-  .tabs button { letter-spacing: .04em; font-size: 12px; padding-inline: 2px; }
+  .tabs { overflow-x: auto; }
+  .tabs button { letter-spacing: .02em; font-size: 11.5px; padding-inline: 6px; flex: 1 0 auto; }
   .brand h1 { font-size: 20px; }
   .who span { display: none; }
   .status { font-size: 11px; }
   .grow { display: block; flex: none !important; padding-inline: 12px !important; font-size: 15px !important; letter-spacing: 0 !important; }
   body.ledger-big .mapcol { height: 34%; min-height: 200px; }
+  .insets { right: 8px; bottom: 8px; max-width: calc(100% - 16px); gap: 4px; }
+  .inset { grid-template-columns: auto minmax(0, auto); align-items: center; gap: 5px; padding: 3px 7px 2px 3px; max-width: 150px; font-size: 12px; }
+  .pwrow { grid-template-columns: 41px minmax(0, 1fr); }
+  .pwrow .pw, .pwrow .acts { grid-column: 1 / -1; }
+  .pwrow .acts { justify-content: flex-start; }
 }
 @media (max-width: 600px) {
   body.in-nation .brand { display: none; }
   .grid2 { grid-template-columns: minmax(0, 1fr); }
 }
 @media (pointer: coarse) {
-  .tool, .seg button, .tchip, .btn.small, .parts button { min-height: 38px; }
+  .tool, .seg button, .tchip, .btn.small, .inset { min-height: 38px; }
   .mapctl button { width: 42px; height: 42px; }
 }
 @media (prefers-reduced-motion: no-preference) { .btn, .tool, .nrow, .tchip { transition: background .12s, border-color .12s; } }
@@ -261,25 +304,18 @@ optgroup { font-style: normal; }
       <div class="intro">
         <p class="eyebrow">Valsora &middot; Hearts of Iron IV &middot; 2036</p>
         <h2>Fill in your nation</h2>
-        <p>Find your nation on the map or in the list. Name its states, paint its terrain, draw its rivers and railways,
-          place its cities and set its population. What you enter here is saved for the author, who builds it into the mod.</p>
+        <p>Find your nation on the map or in the list and unlock it with the password the author gave you. Name its states,
+          paint its terrain, draw its rivers and railways, place its cities, send its flag and leaders, and suggest what
+          the map should still show. What you enter is saved for the author, who builds it into the mod.</p>
       </div>
+      <section class="owner" id="owner" hidden></section>
       <div class="world" id="world-box">
         <canvas id="world" aria-label="The world of Valsora; click a nation to open it"></canvas>
         <div class="tip" id="world-tip" hidden></div>
       </div>
-      <div class="home-reqs" id="home-reqs" hidden>
-        <div class="head"><h3>Requests to the author</h3>
-          <button class="btn small" id="rq-fold" type="button" aria-expanded="false">Show</button>
-          <div class="seg" role="group" aria-label="Which requests" id="rq-filter">
-            <button type="button" data-rq="open" aria-pressed="true">Open</button>
-            <button type="button" data-rq="all" aria-pressed="false">All</button>
-          </div></div>
-        <div class="reqs" id="all-reqs"></div>
-      </div>
       <div class="list-head">
         <input id="q" type="search" placeholder="Find a nation by name or tag" aria-label="Find a nation">
-        <div class="key"><span><i class="dot"></i>Not started</span><span><i class="dot draft"></i>In progress</span><span><i class="dot done"></i>Finished</span></div>
+        <div class="key" id="status-key" hidden><span><i class="dot"></i>Not started</span><span><i class="dot draft"></i>In progress</span><span><i class="dot done"></i>Finished</span></div>
         <span class="count" id="count"></span>
       </div>
       <div id="list" class="sec"><p class="empty">Loading the nations of Valsora&hellip;</p></div>
@@ -294,21 +330,23 @@ optgroup { font-style: normal; }
         <button class="tool" data-tool="city" aria-pressed="false" title="Place cities (C)"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="8"/></svg><span>Cities</span></button>
         <button class="tool" data-tool="river" aria-pressed="false" title="Draw rivers (R)"><svg viewBox="0 0 24 24"><path d="M3 8c3-3 5 3 8 0s5 3 8 0"/><path d="M3 15c3-3 5 3 8 0s5 3 8 0"/></svg><span>Rivers</span></button>
         <button class="tool" data-tool="rail" aria-pressed="false" title="Draw railways (L)"><svg viewBox="0 0 24 24"><path d="M3 12h18"/><path d="M6 8v8M10 8v8M14 8v8M18 8v8"/></svg><span>Railways</span></button>
-        <button class="tool" data-tool="hub" aria-pressed="false" title="Supply hubs (H)"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12"/><path d="M12 9v6M9 12h6"/></svg><span>Supply hubs</span></button>
-        <span class="spacer"></span>
-        <div class="seg" role="group" aria-label="Map colours">
-          <button data-mode="states" aria-pressed="true">States</button>
-          <button data-mode="terrain" aria-pressed="false">Terrain</button>
-          <button data-mode="pop" aria-pressed="false">Population</button>
+        <button class="tool" data-tool="hub" aria-pressed="false" title="Supply hubs (H)"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12"/><path d="M12 9v6M9 12h6"/></svg><span>Hubs</span></button>
+        <button class="tool" data-tool="suggest" aria-pressed="false" title="Suggest a change to the map (S)"><svg viewBox="0 0 24 24"><path d="M4 20l3-1 11-11-2-2L5 17z"/><path d="M14 6l2 2"/><path d="M15 20h5"/></svg><span>Suggest</span></button>
+        <div class="viewctl">
+          <div class="seg" role="group" aria-label="Map colours" id="modes">
+            <button data-mode="states" aria-pressed="true">States</button>
+            <button data-mode="terrain" aria-pressed="false">Terrain</button>
+            <button data-mode="pop" aria-pressed="false">Population</button>
+          </div>
+          <button class="btn small" id="undo" type="button" title="Undo (Ctrl+Z)" disabled>Undo</button>
         </div>
-        <button class="btn small" id="undo" type="button" title="Undo (Ctrl+Z)" disabled>Undo</button>
       </div>
       <div class="subtools" id="subtools"></div>
       <div class="sheetwrap" id="sheet">
         <canvas id="map"></canvas>
-        <div class="parts" id="parts"></div>
         <div class="mapctl"><button id="zin" title="Zoom in" aria-label="Zoom in">+</button><button id="zout" title="Zoom out" aria-label="Zoom out">&minus;</button><button id="fit" title="Fit the map" aria-label="Fit the map">&#9635;</button><button id="keybtn" title="Show or hide the key" aria-label="Show or hide the key" aria-pressed="true">?</button></div>
         <div class="legend" id="legend"></div>
+        <div class="insets" id="insets"></div>
         <div class="loading" id="loading">Unrolling the map&hellip;</div>
       </div>
       <div class="status" id="status"></div>
@@ -317,19 +355,23 @@ optgroup { font-style: normal; }
       <div class="tabs" role="tablist">
         <button role="tab" data-tab="state" aria-selected="true">State</button>
         <button role="tab" data-tab="cities" aria-selected="false">Cities</button>
-        <button role="tab" data-tab="lines" aria-selected="false">Lines</button>
+        <button role="tab" data-tab="map" aria-selected="false">Map</button>
         <button role="tab" data-tab="politics" aria-selected="false">Politics</button>
+        <button role="tab" data-tab="people" aria-selected="false">People</button>
         <button role="tab" data-tab="nation" aria-selected="false">Nation</button>
         <button class="grow" id="grow" type="button" title="Make the facts bigger or smaller" aria-label="Make the facts bigger or smaller" aria-pressed="false">&#8597;</button>
       </div>
+      <div class="lock" id="lock" hidden></div>
       <div class="pane" id="pane-state" role="tabpanel"></div>
       <div class="pane" id="pane-cities" role="tabpanel" hidden></div>
-      <div class="pane" id="pane-lines" role="tabpanel" hidden></div>
+      <div class="pane" id="pane-map" role="tabpanel" hidden></div>
       <div class="pane" id="pane-politics" role="tabpanel" hidden></div>
+      <div class="pane" id="pane-people" role="tabpanel" hidden></div>
       <div class="pane" id="pane-nation" role="tabpanel" hidden></div>
     </aside>
   </section>
   <input type="file" id="file" accept=".json,application/json" hidden>
+  <input type="file" id="imgfile" accept="image/png,image/jpeg,image/webp,image/gif" hidden>
 </div>
 
 <script>
@@ -352,25 +394,40 @@ const BUILD = [["infra", "Infrastructure", 5, "infrastructure"], ["civ", "Civili
 const RES = [["oil", "Oil"], ["steel", "Steel"], ["aluminium", "Aluminium"], ["rubber", "Rubber"], ["tungsten", "Tungsten"], ["chromium", "Chromium"]];
 const VPS = [[1, "1 · village"], [3, "3 · town"], [5, "5 · city"], [10, "10 · large city"], [15, "15"], [20, "20 · major city"],
   [25, "25"], [30, "30 · metropolis"], [40, "40"], [50, "50 · world city"]];
-const KINDS = ["states", "provinces", "cities", "rivers", "rails", "politics"];
+// a nation's documents in the atlas, each at n/<TAG>/<key>/<kind>; the key comes from its password
+const KINDS = ["states", "provinces", "cities", "rivers", "rails", "politics", "flags", "people", "about", "suggest"];
 const MAX_STATE_POP = 500000000;
 const ERASE_R = 3;
 const REQ_KINDS = [["subideology", "New sub-ideology"], ["subject", "Subject type"], ["map", "Map change"], ["other", "Something else"]];
 const REQ_KIND = Object.fromEntries(REQ_KINDS);
 const REQ_STATUS = { open: "Open", done: "Done", declined: "Declined" };
+const ROLES = [["general", "General"], ["admiral", "Admiral"], ["advisor", "Advisor"], ["other", "Other"]];
+const SUG_TYPES = [["area", "Area"], ["line", "Line"], ["point", "Point"]];
+const CONTINENTS = ["Aislada", "Araseos", "Nonscio", "Orientalis", "Solitas", "Usnistan", "Yastreovakia"];
+// three of these and a number make a password (about 2.4 billion of them)
+const WORDS = ("amber anchor apple arrow aspen autumn badger banner barley basin beacon bear birch bison bloom bluff bramble brass breeze brook " +
+  "bronze buffalo cabin cactus canyon cardinal castle cedar chalk cherry cinder citrus clay cliff clover cobalt comet copper coral cotton " +
+  "crane creek crow crystal cypress dawn delta desert dove dragon dune eagle ember falcon fern fiddle field finch fjord flint forest " +
+  "fox frost garnet glacier glade granite grove gull harbor harvest hawk hazel heath heron hickory hollow honey horizon iris island ivory " +
+  "jade jasper juniper kestrel kettle lagoon lantern larch lark laurel lemon lichen lily linen lotus lynx magpie maple marble marsh meadow " +
+  "mesa mint moss moth nectar nutmeg oak oasis ocean olive onyx orchard orchid osprey otter owl pebble pepper pine plover plum poppy prairie " +
+  "quail quartz quill rain raven reed ridge river robin rook rose rowan ruby saffron sage salmon sand sapphire satin sequoia shale shore " +
+  "silver slate sparrow spruce starling stone storm summit swallow swan tansy teal thistle thorn thrush thunder tide timber topaz tulip " +
+  "tundra valley velvet violet walnut wave willow wind winter wolf wren yarrow zephyr").split(" ");
 
 // ======================================================================= state
 const app = {
-  index: null, worldImg: null, ids: null, idTags: null,
-  db: null, user: null, downloads: null, me: null, canWrite: null, isOwner: false,
+  index: null, worldImg: null, ids: null, idTags: null, byTag: {},
+  db: null, user: null, downloads: null, assets: null, me: null, canWrite: null, isOwner: false,
   mode: "starting",          // shared | readonly | local
-  metas: {}, metaUnsub: null, profiles: {}, requests: {}, reqFilter: "open", reqKind: "subideology",
+  keys: {}, keysLoaded: false, planned: {}, profiles: {}, owner: {}, ownerBusy: false, ownerSug: null,
+  reqKind: "subideology", ownerFilter: "",
   N: null,                   // the open nation
-  docs: {}, pending: {}, inflight: {}, local: {}, cache: {},
+  docs: {}, pending: {}, inflight: {}, local: {}, cache: {}, meta: null, reqs: {},
   timers: {}, flushing: {}, again: {}, unsub: [], claimed: null, lastTouch: 0,
-  undo: [], redo: [], group: null,
-  ui: { tool: "select", terrain: "forest", riverKind: "major", railLevel: 3, mode: "states", part: 0, tab: "state", legend: true,
-        sel: { state: -1, prov: -1, city: null, line: null }, draft: null, hover: null },
+  undo: [], group: null, routes: new Map(),
+  ui: { tool: "select", terrain: "forest", riverKind: "major", railLevel: 3, sugKind: "area", mode: "states", part: 0, tab: "state", legend: true,
+        sel: { state: -1, prov: -1, city: null, line: null, sug: null }, draft: null, hover: null },
   view: { s: 1, ox: 0, oy: 0 },
 };
 
@@ -456,7 +513,23 @@ function simplify(pts, tol) {  // Douglas-Peucker
   }
   return pts.filter((_, i) => keep[i]);
 }
-function cleanName(s) { return String(s || "").replace(/["\u0000-\u001f]/g, "").replace(/\s+/g, " ").trim().slice(0, 60); }
+function cleanName(s, n = 60) { return String(s || "").replace(/["\u0000-\u001f]/g, "").replace(/\s+/g, " ").trim().slice(0, n); }
+function store(k, v) { try { if (v == null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) { /* storage off */ } }
+function recall(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+
+// ---- passwords: a nation's documents live at n/<TAG>/<key>, the key derived from its password,
+// so without the password they can be neither found nor changed
+const normPw = s => String(s || "").toLowerCase().replace(/[\s_.,]+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
+async function keyFor(tag, pw) {
+  const d = new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(`valsora-gazetteer|${tag}|${normPw(pw)}`)));
+  return [...d.slice(0, 16)].map(b => b.toString(16).padStart(2, "0")).join("");
+}
+function newPassword() {
+  const r = new Uint32Array(4);
+  crypto.getRandomValues(r);
+  return [WORDS[r[0] % WORDS.length], WORDS[r[1] % WORDS.length], WORDS[r[2] % WORDS.length], 10 + r[3] % 90].join("-");
+}
+const nPath = (tag, K) => `n/${tag}/${K}`;
 
 // ======================================================================= saving
 function setSave(kind, text, title) {
@@ -468,6 +541,7 @@ function setSave(kind, text, title) {
 function refreshSave() {
   if (app.mode === "local") return setSave("bad", "Kept in this browser", "This page can't reach the shared atlas here. Save a file and send it to the author.");
   if (app.mode === "readonly") return setSave("bad", "View only", "You can look but not save to the shared atlas. Your changes stay in this browser; save a file to send them.");
+  if (app.N && locked()) return setSave("", "Locked", "Enter this nation's password to fill it in.");
   const busy = KINDS.some(k => app.pending[k] || app.inflight[k]) || app.metaPending;
   if (busy) setSave("busy", "Saving…");
   else if (app.mode === "shared") setSave("ok", "Saved", "Everything you entered is in the shared atlas.");
@@ -485,21 +559,15 @@ function setMode(m) {
   else banner(null);
   refreshSave();
 }
-function docRef(kind) { return app.db.doc(`facts/${app.N.tag}-${kind}`); }
+const locked = () => !!(app.N && app.mode === "shared" && !app.N.K);
+function docRef(kind) { return app.db.doc(`${nPath(app.N.tag, app.N.K)}/${kind}`); }
 function localKey() { return "gazetteer:" + app.N.tag; }
-function saveLocal() {
-  try { localStorage.setItem(localKey(), JSON.stringify(app.local)); } catch (e) { /* storage off */ }
-}
-function loadLocal() {
-  try { app.local = JSON.parse(localStorage.getItem(localKey()) || "{}") || {}; } catch (e) { app.local = {}; }
-}
+function saveLocal() { store(localKey(), JSON.stringify(app.local)); }
+function loadLocal() { try { app.local = JSON.parse(recall(localKey()) || "{}") || {}; } catch (e) { app.local = {}; } }
 function backupPending() {
-  try {
-    const p = {};
-    for (const k of KINDS) { const d = merge(app.inflight[k] || {}, app.pending[k] || {}); if (Object.keys(d).length) p[k] = d; }
-    if (Object.keys(p).length) localStorage.setItem("gazetteer-pending:" + app.N.tag, JSON.stringify(p));
-    else localStorage.removeItem("gazetteer-pending:" + app.N.tag);
-  } catch (e) { /* storage off */ }
+  const p = {};
+  for (const k of KINDS) { const d = merge(app.inflight[k] || {}, app.pending[k] || {}); if (Object.keys(d).length) p[k] = d; }
+  store("gazetteer-pending:" + app.N.tag, Object.keys(p).length ? JSON.stringify(p) : null);
 }
 function F(kind) {
   if (app.cache[kind]) return app.cache[kind];
@@ -516,10 +584,12 @@ function defaultCities() {
   return out;
 }
 function edit(kind, delta) {
+  if (locked()) { askPassword(); return false; }
   const inv = inverse(delta, F(kind));
   if (app.group) app.group[kind] = merge(inv, app.group[kind] || {});
-  else { app.undo.push({ [kind]: inv }); app.redo.length = 0; }
+  else app.undo.push({ [kind]: inv });
   apply(kind, delta);
+  return true;
 }
 function apply(kind, delta) {
   if (app.mode === "shared") {
@@ -539,18 +609,19 @@ function apply(kind, delta) {
 }
 function beginGroup() { app.group = {}; }
 function endGroup() {
-  if (app.group && Object.keys(app.group).length) { app.undo.push(app.group); app.redo.length = 0; }
+  if (app.group && Object.keys(app.group).length) app.undo.push(app.group);
   app.group = null;
   $("#undo").disabled = !app.undo.length;
 }
 function undo() {
+  if (locked()) return;
   const rec = app.undo.pop();
   if (!rec) return;
   for (const [kind, delta] of Object.entries(rec)) apply(kind, delta);
   $("#undo").disabled = !app.undo.length;
 }
 async function flush(kind) {
-  if (app.mode !== "shared" || !app.N) return;
+  if (app.mode !== "shared" || !app.N || !app.N.K) return;
   if (app.flushing[kind]) { app.again[kind] = true; return; }
   const delta = app.pending[kind];
   if (!delta) return;
@@ -563,7 +634,7 @@ async function flush(kind) {
   try {
     const d = app.docs[kind];
     if (d && d.exists) await docRef(kind).update(delta);
-    else await docRef(kind).set(compact(merge(d && d.exists ? d.data : (kind === "cities" ? defaultCities() : {}), delta)));
+    else await docRef(kind).set(compact(merge(kind === "cities" ? defaultCities() : {}, delta)));
     if (app.N && app.N.tag === tag) { app.inflight[kind] = null; backupPending(); }
   } catch (e) {
     if (app.N && app.N.tag === tag) {
@@ -582,43 +653,39 @@ function writeFailed(e, kind) {
   const code = e && e.code;
   if (code === "resource_exhausted" || code === "unavailable") {
     setSave("busy", "Retrying…");
-    clearTimeout(app.timers[kind]);
-    app.timers[kind] = setTimeout(() => flush(kind), 2500 + Math.random() * 2000);
+    if (kind) { clearTimeout(app.timers[kind]); app.timers[kind] = setTimeout(() => flush(kind), 2500 + Math.random() * 2000); }
     return;
   }
-  if (code === "quota_exceeded") {
-    setSave("bad", "Atlas full", "The shared atlas is full. Save a file and send it to the author.");
-    return;
-  }
+  if (code === "quota_exceeded") { setSave("bad", "Atlas full", "The shared atlas is full. Save a file and send it to the author."); return; }
   // a refused write: this viewer may not save here; keep everything in this browser
-  for (const k of KINDS) {
-    if (app.pending[k]) { app.local[k] = merge(app.local[k] || {}, app.pending[k]); app.pending[k] = null; }
-    app.cache[k] = null;
+  if (app.N) {
+    for (const k of KINDS) {
+      if (app.pending[k]) { app.local[k] = merge(app.local[k] || {}, app.pending[k]); app.pending[k] = null; }
+      app.cache[k] = null;
+    }
+    saveLocal(); backupPending();
   }
-  saveLocal(); backupPending();
   setMode(app.db ? "readonly" : "local");
 }
 function flushAll() { for (const k of KINDS) { clearTimeout(app.timers[k]); flush(k); } }
 async function claim() {
-  if (app.mode !== "shared" || !app.me || !app.me.id || !app.N) return;
+  if (app.mode !== "shared" || !app.me || !app.me.id || !app.N || !app.N.K) return;
   const now = Date.now(), tag = app.N.tag;
   if (app.claimed === tag && now - app.lastTouch < 120000) return;
   app.claimed = tag; app.lastTouch = now;
-  await writeMeta({ editors: { [app.me.id]: true }, updatedAt: now, updatedBy: app.me.id,
-                    status: (app.metas[tag] && app.metas[tag].status) || "draft" });
+  await writeMeta({ editors: { [app.me.id]: true }, updatedAt: now, updatedBy: app.me.id, status: (app.meta && app.meta.status) || "draft" });
 }
-function metaOf(tag) {  // the nation's status and notes: the atlas's, with this browser's own on top
-  return merge(app.metas[tag] || {}, (app.N && app.N.tag === tag && app.local.__meta) || {});
-}
+function metaOf() { return merge(app.meta || {}, app.local.__meta || {}); }
 async function writeMeta(delta) {
   if (!app.N) return false;
   if (app.mode !== "shared") { app.local.__meta = merge(app.local.__meta || {}, delta); saveLocal(); dirtyPanes("nation"); return true; }
-  if (!app.metasLoaded) { await new Promise(r => setTimeout(r, 500)); return writeMeta(delta); }  // as in flush()
-  const ref = app.db.doc("nations/" + app.N.tag);
+  if (!app.N.K) return false;
+  if (!app.metaLoaded) { await new Promise(r => setTimeout(r, 500)); return writeMeta(delta); }  // as in flush()
+  const ref = app.db.doc(`${nPath(app.N.tag, app.N.K)}/meta`);
   app.metaPending = true; refreshSave();
   try {
-    if (app.metas[app.N.tag]) await ref.update(delta);
-    else await ref.set(compact(delta));
+    if (app.meta) await ref.update(delta);
+    else await ref.set(compact({ t: "meta", ...delta }));
     return true;
   } catch (e) { writeFailed(e, null); return false; }
   finally { app.metaPending = false; refreshSave(); }
@@ -629,8 +696,8 @@ async function initCapabilities() {
   const c = window.claude;
   if (!c || typeof c.use !== "function") { setMode("local"); return; }
   const use = n => c.use(n).catch(() => null);
-  const [db, user, dl] = await Promise.all([use("db"), use("user"), use("downloads")]);
-  app.db = db; app.user = user; app.downloads = dl;
+  const [db, user, dl, assets] = await Promise.all([use("db"), use("user"), use("downloads"), use("assets")]);
+  app.db = db; app.user = user; app.downloads = dl; app.assets = assets;
   if (user) {
     try { app.me = await user.me(); } catch (e) { app.me = null; }
     try { app.canWrite = await user.can("data.write"); } catch (e) { app.canWrite = null; }
@@ -641,41 +708,26 @@ async function initCapabilities() {
   renderWho();
   if (db) {
     try {
-      app.metaUnsub = db.collection("nations").limit(1000).onSnapshot(qs => {
-        const m = {};
-        for (const d of qs.docs) m[d.id] = d.data();
-        app.metas = m;
-        app.metasLoaded = true;
-        renderList(); dirtyPanes("nation");
-        resolveProfiles();
-      }, () => { app.metasLoaded = true; });
-      db.collection("requests").limit(1000).onSnapshot(qs => {
-        const r = {};
-        for (const d of qs.docs) r[d.id] = d.data();
-        app.requests = r;
-        renderRequests();
-        resolveProfiles();
+      db.doc("planned/list").onSnapshot(s => {
+        app.planned = (s.exists && s.data()) || {}; renderList(); renderOwner();
+        const tag = location.hash.slice(1).toUpperCase();  // a link to a nation not on the map yet
+        if (!app.N && app.index && tag && app.planned[tag] && !app.byTag[tag] && $("#desk").hidden) openNation(tag);
       }, () => {});
+      if (app.isOwner && app.me && app.me.id) db.doc(`data/users/${app.me.id}/keys`).onSnapshot(s => {
+        app.keys = (s.exists && s.data()) || {}; app.keysLoaded = true;
+        renderOwner(); loadOwnerData();
+        if (app.N && !app.N.K && app.keys[app.N.tag]) unlockWith(app.keys[app.N.tag], true);
+        else if (app.N) renderLock();
+      }, () => { app.keysLoaded = true; if (app.N) renderLock(); });
     } catch (e) { /* no listing */ }
   }
-  if (app.N) attachNation();
-  renderRequests();
+  if (app.N) openKey();
 }
-async function resolveProfiles() {
-  if (!app.user) return;
-  const ids = new Set();
-  for (const m of Object.values(app.metas)) for (const id of Object.keys((m && m.editors) || {})) ids.add(id);
-  for (const r of Object.values(app.requests)) if (r && r.by) ids.add(r.by);
-  if (!ids.size) return;
-  try { app.profiles = await app.user.profiles([...ids]); } catch (e) { return; }
-  renderList(); renderRequests(); dirtyPanes("nation");
+async function resolveProfiles(ids) {
+  if (!app.user || !ids.size) return;
+  try { Object.assign(app.profiles, await app.user.profiles([...ids])); } catch (e) { /* none */ }
 }
 function personName(id) { return (app.profiles[id] && app.profiles[id].name) || (app.me && id === app.me.id ? "you" : "someone"); }
-function editorsOf(tag) {
-  const m = app.metas[tag];
-  if (!m || !m.editors) return [];
-  return Object.keys(m.editors).filter(k => m.editors[k]).map(id => (app.profiles[id] && app.profiles[id].name) || (app.me && id === app.me.id ? "you" : "someone"));
-}
 function renderWho() {
   const el = $("#who");
   el.replaceChildren();
@@ -692,38 +744,45 @@ async function loadIndex() {
   app.ids = { w: ids.w, h: ids.h, px: new Uint8Array(await inflate(ids.px)) };
   app.idTags = ids.tags;
   app.byTag = Object.fromEntries(app.index.nations.map(n => [n.tag, n]));
+  // where each nation's name goes on the world map
+  app.namePos = {};
+  const acc = {};
+  for (let i = 0; i < app.ids.px.length; i++) { const v = app.ids.px[i]; if (!v) continue; const a = (acc[v] ||= [0, 0, 0]); a[0] += i % ids.w; a[1] += (i / ids.w) | 0; a[2]++; }
+  for (const [v, a] of Object.entries(acc)) app.namePos[app.idTags[v - 1]] = [a[0] / a[2] * W / ids.w, a[1] / a[2] * H / ids.h, a[2]];
   const img = new Image();
   img.src = "world.png";
   await img.decode().catch(() => null);
   app.worldImg = img;
 }
-function statusOf(tag) { const m = app.metas[tag]; return m ? (m.status === "done" ? "done" : "draft") : ""; }
+function plannedList() { return Object.entries(app.planned || {}).filter(([t, v]) => v && !app.byTag[t]).map(([tag, v]) => ({ tag, ...v, planned: true })); }
+function statusOf(tag) { const o = app.owner[tag]; return o && o.meta ? (o.meta.status === "done" ? "done" : "draft") : ""; }
 function renderList() {
   if (!app.index) return;
   const q = $("#q").value.trim().toLowerCase();
   const groups = {};
   let shown = 0;
-  for (const n of app.index.nations) {
+  const all = [...app.index.nations, ...plannedList().map(p => ({ ...p, continent: "Not on the map yet" }))];
+  for (const n of all) {
     if (q && !n.name.toLowerCase().includes(q) && !n.tag.toLowerCase().includes(q)) continue;
     (groups[n.continent || "Elsewhere"] ||= []).push(n);
     shown++;
   }
+  const order = Object.keys(groups).sort((a, b) => (a === "Not on the map yet") - (b === "Not on the map yet") || a.localeCompare(b));
   const out = [];
-  for (const cont of Object.keys(groups).sort()) {
+  for (const cont of order) {
     const rows = groups[cont].sort((a, b) => a.name.localeCompare(b.name)).map(n => {
-      const st = statusOf(n.tag), eds = editorsOf(n.tag);
-      const sub = `${n.states} states · ${n.provinces} provinces` + (eds.length ? ` · ${eds.join(", ")}` : "");
+      const st = app.isOwner ? statusOf(n.tag) : "";
+      const sub = n.planned ? `${n.tag} · not drawn yet` : `${n.states} states · ${n.provinces} provinces`;
       return h("button", { class: "nrow", type: "button", onclick: () => openNation(n.tag), title: n.tag },
-        h("img", { src: n.flag || "", alt: "" }),
+        n.flag ? h("img", { src: n.flag, alt: "" }) : h("span", { class: "noflag", text: n.tag }),
         h("div", { style: "min-width:0" }, h("div", { class: "nm", text: n.name }), h("div", { class: "sub", text: sub })),
-        h("i", { class: "dot " + st, title: st === "done" ? "Finished" : st === "draft" ? "In progress" : "Not started" }));
+        app.isOwner ? h("i", { class: "dot " + st, title: st === "done" ? "Finished" : st === "draft" ? "In progress" : "Not started" }) : h("span"));
     });
     out.push(h("div", { class: "continent" }, h("h3", null, cont, h("small", { text: `${groups[cont].length}` })), h("div", { class: "rows" }, rows)));
   }
   $("#list").replaceChildren(...(out.length ? out : [h("p", { class: "empty", text: "No nation matches that name." })]));
-  const done = Object.values(app.metas).filter(m => m && m.status === "done").length;
-  const started = Object.keys(app.metas).length;
-  $("#count").textContent = `${shown} of ${app.index.nations.length} nations · ${started} started · ${done} finished`;
+  $("#status-key").hidden = !app.isOwner;
+  $("#count").textContent = `${shown} nations`;
 }
 function drawWorld(hoverTag) {
   const cv = $("#world"), box = $("#world-box");
@@ -746,6 +805,11 @@ function drawWorld(hoverTag) {
     ctx.globalAlpha = 0.85; ctx.imageSmoothingEnabled = false;
     ctx.drawImage(app.hl.canvas, 0, 0, cv.width, cv.height);
     ctx.globalAlpha = 1;
+  }
+  if (app.ownerSug) {  // everyone's suggestions, for the owner
+    const s = cv.width / W;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    for (const [tag, items] of Object.entries(app.ownerSug)) for (const it of items) drawSuggestion(ctx, it, ([x, y]) => [x * s, y * s], false, tag);
   }
 }
 function worldTagAt(e) {
@@ -775,73 +839,291 @@ function wireHome() {
   new ResizeObserver(() => drawWorld(app.hoverWorld)).observe(box);
 }
 
+// ======================================================================= owner tools
+function allTags() { return [...app.index.nations.map(n => [n.tag, n.name, n.flag]), ...plannedList().map(p => [p.tag, p.name, null])]; }
+function copyText(btn, text) {
+  navigator.clipboard.writeText(text).then(() => { btn.textContent = "Copied"; setTimeout(() => { btn.textContent = "Copy"; }, 1500); },
+    () => { btn.textContent = "Select it"; });
+}
+function renderOwner() {
+  const el = $("#owner");
+  if (!app.isOwner || !app.db || !app.index || app.mode !== "shared") { el.hidden = true; return; }
+  el.hidden = false;
+  const open = [...el.querySelectorAll("details")].map(d => d.open);
+  const filter = app.ownerFilter.toLowerCase();
+  const n = Object.keys(app.keys).length;
+  const rows = allTags().filter(([t, nm]) => !filter || nm.toLowerCase().includes(filter) || t.toLowerCase().includes(filter))
+    .sort((a, b) => (!!app.keys[b[0]] - !!app.keys[a[0]]) || a[1].localeCompare(b[1])).map(([tag, name, flag]) => {
+      const pw = app.keys[tag], copy = h("button", { class: "btn small", type: "button", onclick: e => copyText(e.target, pw) }, "Copy");
+      const o = app.owner[tag], st = statusOf(tag);
+      return h("div", { class: "pwrow" },
+        flag ? h("img", { src: flag, alt: "", width: 41, height: 26, style: "image-rendering:pixelated" }) : h("span", { class: "noflag", text: tag }),
+        h("div", { style: "min-width:0" }, h("div", { class: "nm", text: name }),
+          h("div", { class: "meta", text: tag + (st ? ` · ${st === "done" ? "finished" : "in progress"}` : "") + (o && o.reqs ? ` · ${o.reqs.filter(r => (r.status || "open") === "open").length} open requests` : "") })),
+        h("div", { class: "pw", text: pw || "no password yet" }),
+        h("div", { class: "acts" }, pw ? copy : null,
+          h("button", { class: "btn small" + (pw ? "" : " primary"), type: "button", onclick: e => { e.target.disabled = true; (pw ? changePassword(tag) : makePassword(tag)).finally(() => { e.target.disabled = false; }); } }, pw ? "New password" : "Make one")));
+    });
+  const reqs = [];
+  for (const [tag, o] of Object.entries(app.owner)) for (const r of (o.reqs || [])) reqs.push([tag, r]);
+  reqs.sort((a, b) => ((a[1].status || "open") === "open" ? 0 : 1) - ((b[1].status || "open") === "open" ? 0 : 1) || (b[1].at || 0) - (a[1].at || 0));
+  // a new nation not on the map yet
+  const nTag = h("input", { id: "own-tag", maxlength: "3", placeholder: "TAG", style: "text-transform:uppercase", "data-keep": true, autocomplete: "off" });
+  const nName = h("input", { id: "own-name", maxlength: "60", placeholder: "Its name", "data-keep": true, autocomplete: "off" });
+  const nCont = h("select", { id: "own-cont" }, h("option", { value: "", text: "Continent (if known)" }), CONTINENTS.map(c => h("option", { value: c, text: c })));
+  // messages live in app.ownerMsg: a snapshot can re-render this section at any moment
+  const nMsg = h("span", { class: "meta", text: app.ownerMsg || "" });
+  const say = t => { app.ownerMsg = t; nMsg.textContent = t; };
+  const add = h("button", { class: "btn small primary", type: "button", onclick: async () => {
+    const tag = nTag.value.trim().toUpperCase(), name = cleanName(nName.value);
+    const taken = app.byTag[tag] || app.planned[tag] || (app.index.earth || []).includes(tag);
+    if (!/^[A-Z][A-Z0-9]{2}$/.test(tag)) { say("A tag is three capital letters (or a letter and two digits)."); return; }
+    if (taken) { say((app.index.earth || []).includes(tag) ? `${tag} is one of the base game's tags; pick another.` : `${tag} is taken.`); return; }
+    if (!name) { say("Give it a name."); return; }
+    try {
+      await app.db.doc("planned/list").set({ ...app.planned, [tag]: { name, continent: nCont.value || null, added: Date.now() } });
+      const known = app.index.known && app.index.known[tag];
+      say(`${name} added. Make it a password under Passwords.` + (known ? ` (${tag} was ${known}, which owns no land now.)` : ""));
+      document.getElementById("own-tag").value = ""; document.getElementById("own-name").value = "";
+    } catch (e) { say("Not saved: only the page's owner can add nations."); }
+  } }, "Add");
+  const planned = plannedList().map(p => h("div", { class: "item" },
+    h("div", { class: "row" }, h("b", { text: p.name }), h("span", { class: "meta", text: `${p.tag}${p.continent ? " · " + p.continent : ""}` })),
+    h("button", { class: "btn small danger", type: "button", onclick: () => { const next = { ...app.planned }; delete next[p.tag]; app.db.doc("planned/list").set(next).catch(() => {}); } }, "Remove")));
+  const sugBtn = h("button", { class: "btn small", type: "button", onclick: toggleOwnerSuggestions }, app.ownerSug ? "Hide them from the world map" : "Show them on the world map");
+  const sugList = [];
+  if (app.ownerSug) for (const [tag, items] of Object.entries(app.ownerSug)) for (const it of items)
+    sugList.push(h("div", { class: "item" }, h("div", { class: "row" }, h("span", { class: "sugtype", text: it.type }), h("b", { text: it.label || "(no label)" }), h("span", { class: "meta", text: tag })),
+      h("button", { class: "btn small", type: "button", onclick: () => openNation(tag, { sug: it.id, at: it.pts[0] }) }, "Open"), it.note ? h("div", { class: "meta", text: it.note }) : null));
+  const build = [
+    h("h3", null, "Owner tools", h("small", { text: `${n} nation${n === 1 ? "" : "s"} with a password` }),
+      h("button", { class: "btn small", type: "button", disabled: app.ownerBusy, onclick: () => loadOwnerData(true) }, app.ownerBusy ? "Loading…" : "Refresh")),
+    h("div", { class: "lead", text: "Only you see this. Hand each player their nation's password; it lets them fill in that nation and no other. A new password locks the old one out and keeps what was entered." }),
+    h("details", null, h("summary", null, "Passwords"), h("div", { class: "inner" },
+      h("input", { id: "own-filter", type: "search", placeholder: "Find a nation", value: app.ownerFilter, oninput: e => { app.ownerFilter = e.target.value; renderOwner(); } }),
+      h("div", { class: "pwlist" }, rows))),
+    h("details", null, h("summary", null, "Nations not on the map yet"), h("div", { class: "inner" },
+      h("div", { class: "lead", text: "A player can send flags, leaders, names and suggestions before you or Merlo draw their land. Use the tag their country will have in the mod." }),
+      h("div", { class: "chips" }, nTag, nName, nCont, add), nMsg, h("div", null, planned))),
+    h("details", null, h("summary", null, `Requests (${reqs.filter(([, r]) => (r.status || "open") === "open").length} open)`), h("div", { class: "inner reqs" },
+      reqs.length ? reqs.map(([tag, r]) => requestCard(tag, r, true)) : h("p", { class: "empty", text: "No requests yet." }))),
+    h("details", null, h("summary", null, "Suggestions"), h("div", { class: "inner" },
+      h("div", { class: "lead", text: "What players drew with the Suggest tool, for when you or Merlo draw the map." }), h("div", null, sugBtn), h("div", null, sugList))),
+    h("div", { class: "chips" }, h("button", { class: "btn small primary", type: "button", onclick: saveAllFile }, "Save every nation as a file"), h("span", { class: "meta", text: app.ownerOut || "" })),
+    h("div", { id: "own-out" }),
+  ];
+  keepFocus(el, () => build);
+  [...el.querySelectorAll("details")].forEach((d, i) => { d.open = !!open[i]; });
+}
+async function makePassword(tag) {
+  const pw = newPassword(), K = await keyFor(tag, pw);
+  try {
+    await app.db.doc(`${nPath(tag, K)}/key`).set({ t: "key", tag, at: Date.now() });
+    await app.db.doc(`data/users/${app.me.id}/keys`).set({ ...app.keys, [tag]: pw });
+  } catch (e) { writeFailed(e, null); }
+}
+async function changePassword(tag) {
+  const old = app.keys[tag], oldK = await keyFor(tag, old), pw = newPassword(), K = await keyFor(tag, pw);
+  try {
+    const qs = await app.db.collection(nPath(tag, oldK)).limit(1000).get();
+    for (const d of qs.docs) await app.db.doc(`${nPath(tag, K)}/${d.id}`).set(d.data());
+    if (!qs.docs.some(d => d.id === "key")) await app.db.doc(`${nPath(tag, K)}/key`).set({ t: "key", tag, at: Date.now() });
+    await app.db.doc(`data/users/${app.me.id}/keys`).set({ ...app.keys, [tag]: pw });
+    for (const d of qs.docs) await app.db.doc(`${nPath(tag, oldK)}/${d.id}`).delete();
+    if (app.N && app.N.tag === tag) { detach(); app.N.K = null; unlockWith(pw, true); }
+  } catch (e) { writeFailed(e, null); }
+}
+async function eachKey(fn) {  // over every nation with a password, a few at a time
+  const tags = Object.keys(app.keys).sort();
+  let i = 0;
+  const worker = async () => { while (i < tags.length) { const tag = tags[i++]; try { await fn(tag, await keyFor(tag, app.keys[tag])); } catch (e) { /* skip */ } } };
+  await Promise.all([worker(), worker(), worker(), worker()]);
+}
+async function loadOwnerData(force) {
+  if (!app.isOwner || !app.db || app.ownerBusy || (!force && app.ownerLoadedAt && Date.now() - app.ownerLoadedAt < 60000)) return;
+  app.ownerBusy = true; renderOwner();
+  const out = {}, ids = new Set();
+  await eachKey(async (tag, K) => {
+    const qs = await app.db.collection(nPath(tag, K)).where("t", "in", ["meta", "req"]).limit(500).get();
+    const o = { meta: null, reqs: [] };
+    for (const d of qs.docs) {
+      const v = d.data();
+      if (v.t === "meta") { o.meta = v; for (const id of Object.keys(v.editors || {})) ids.add(id); }
+      else { o.reqs.push({ ...v, id: d.id }); if (v.by) ids.add(v.by); }
+    }
+    out[tag] = o;
+  });
+  app.owner = out; app.ownerBusy = false; app.ownerLoadedAt = Date.now();
+  await resolveProfiles(ids);
+  renderOwner(); renderList();
+}
+async function toggleOwnerSuggestions() {
+  if (app.ownerSug) { app.ownerSug = null; renderOwner(); drawWorld(null); return; }
+  const all = {};
+  await eachKey(async (tag, K) => {
+    const s = await app.db.doc(`${nPath(tag, K)}/suggest`).get();
+    const items = s.exists ? Object.entries(s.data()).filter(([, v]) => v && v.pts).map(([id, v]) => ({ id, ...v })) : [];
+    if (items.length) all[tag] = items;
+  });
+  app.ownerSug = all; renderOwner(); drawWorld(null);
+}
+
 // ======================================================================= opening a nation
-async function openNation(tag) {
-  const meta = app.byTag[tag];
-  if (!meta) return;
+function plannedNation(tag) {
+  const p = app.planned[tag];
+  const nm = p.name;
+  return { tag, name: nm, adj: nm, colour: "#888888", flag: null, continent: p.continent || "", planned: true,
+    states: [], provs: [], others: [], nb: [], cities: [], parts: [],
+    politics: { names: Object.fromEntries(["", "neutrality", "democratic", "fascism", "communism", "theocracy"].map(i => [i, [nm, nm, nm]])),
+      leaders: [], handmade: false, ruling: "neutrality" } };
+}
+async function openNation(tag, opt = {}) {
+  const meta = app.byTag[tag], planned = !meta && app.planned[tag];
+  if (!meta && !planned) return;
   if (app.N) closeNation();
   $("#home").hidden = true; $("#desk").hidden = false; $("#crumb").hidden = false;
   document.body.classList.add("in-nation");
-  $("#crumb-flag").src = meta.flag || ""; $("#crumb-name").textContent = meta.name;
-  $("#loading").hidden = false;
+  $("#crumb-flag").hidden = !(meta && meta.flag);
+  $("#crumb-flag").src = (meta && meta.flag) || "";
+  $("#crumb-name").textContent = meta ? meta.name : planned.name;
+  $("#loading").hidden = false; $("#loading").textContent = "Unrolling the map…";
   try { if (location.hash.slice(1) !== tag) history.replaceState(null, "", "#" + tag); } catch (e) { /* a frame that keeps its URL */ }
   let N;
-  try {
-    const r = await fetch(`n/${tag}.json`);
-    if (!r.ok) throw new Error(`n/${tag}.json ${r.status}`);
-    N = await r.json();
-    for (const P of N.parts) {
-      P.px = new Uint16Array(await inflate(P.px));
-      P.rv = new Uint8Array(await inflate(P.rv));
+  if (meta) {
+    try {
+      const r = await fetch(`n/${tag}.json`);
+      if (!r.ok) throw new Error(`n/${tag}.json ${r.status}`);
+      N = await r.json();
+      for (const P of N.parts) {
+        P.px = new Uint16Array(await inflate(P.px));
+        P.rv = new Uint8Array(await inflate(P.rv));
+      }
+    } catch (e) {
+      $("#loading").textContent = "This nation's map didn't load. Reload the page to try again.";
+      return;
     }
-  } catch (e) {
-    $("#loading").textContent = "This nation's map didn't load. Reload the page to try again.";
-    return;
-  }
+  } else N = plannedNation(tag);
+  N.parts.push({ world: true, x0: 0, y0: 0, w: W, h: H, states: [], name: "World map" });
   derive(N);
   app.N = N;
-  Object.assign(app, { docs: {}, pending: {}, inflight: {}, local: {}, cache: {}, undo: [], redo: [], routes: new Map() });
-  app.ui.sel = { state: -1, prov: -1, city: null, line: null }; app.ui.draft = null; app.ui.part = 0;
+  Object.assign(app, { docs: {}, pending: {}, inflight: {}, local: {}, cache: {}, undo: [], routes: new Map(), meta: null, reqs: {}, metaLoaded: false });
+  app.ui.sel = { state: -1, prov: -1, city: null, line: null, sug: opt.sug || null }; app.ui.draft = null;
   $("#undo").disabled = true;
   loadLocal();
   // changes that never reached the atlas last time (tab closed while saving)
   try {
-    const p = JSON.parse(localStorage.getItem("gazetteer-pending:" + tag) || "null");
+    const p = JSON.parse(recall("gazetteer-pending:" + tag) || "null");
     if (p) for (const k of KINDS) if (p[k]) app.pending[k] = merge(app.pending[k] || {}, p[k]);
   } catch (e) { /* none */ }
   $("#loading").hidden = true;
-  attachNation();
+  configure();
   resolve();
   showPart(0);
-  setTool(app.ui.tool);
+  setTool(N.planned ? "suggest" : (app.ui.tool === "suggest" ? "select" : app.ui.tool));
+  showTab(N.planned ? "people" : "state");
+  renderLock(); refreshSave();
   renderAllPanes();
+  openKey();
+  // from the owner's list of suggestions: to it at once, selected when the atlas answers
+  app.pendingSug = opt.sug || null;
+  if (opt.sug) { showTab("map"); if (opt.at) locate(opt.at[0], opt.at[1]); }
+}
+function configure() {  // what a nation on the map has that one not drawn yet hasn't
+  const N = app.N, geo = !N.planned;
+  for (const t of ["state", "cities"]) document.querySelector(`[data-tab="${t}"]`).hidden = !geo;
+  $("#modes").hidden = !geo;
+}
+function toolsHere() {
+  const P = app.N.parts[app.ui.part];
+  return app.N.planned || P.world ? ["select", "suggest"] : ["select", "terrain", "city", "river", "rail", "hub", "suggest"];
 }
 function closeNation() {
   flushAll();
-  for (const u of app.unsub) try { u(); } catch (e) { /* gone */ }
-  app.unsub = [];
+  detach();
   app.N = null;
 }
+function detach() { for (const u of app.unsub) try { u(); } catch (e) { /* gone */ } app.unsub = []; }
 function goHome() {
   if (app.N) closeNation();
   $("#desk").hidden = true; $("#home").hidden = false; $("#crumb").hidden = true;
   document.body.classList.remove("in-nation");
   try { history.replaceState(null, "", location.pathname + location.search); } catch (e) { /* as above */ }
-  renderList(); drawWorld(null);
+  renderList(); drawWorld(null); renderOwner(); refreshSave();
 }
-function attachNation() {
-  if (!app.N || !app.db || app.unsub.length) return;
-  const tag = app.N.tag;
+// the nation's key: the owner's, or a password this browser remembers
+async function openKey() {
+  const N = app.N;
+  if (!N || !app.db || N.K) return;
+  if (app.isOwner && app.keys[N.tag]) return unlockWith(app.keys[N.tag], true);
+  const pw = recall("gazetteer-pw:" + N.tag);
+  if (pw && !(await unlockWith(pw, true))) store("gazetteer-pw:" + N.tag, null);
+}
+async function unlockWith(pw, quiet) {
+  const N = app.N;
+  if (!N || !app.db || !normPw(pw)) return false;
+  const K = await keyFor(N.tag, pw);
+  let ok = false;
+  try { ok = (await app.db.doc(`${nPath(N.tag, K)}/key`).get()).exists; } catch (e) { ok = false; }
+  if (!ok || app.N !== N) { if (!quiet) renderLock("That password isn't right for " + N.name + "."); return false; }
+  N.K = K;
+  if (!app.isOwner) store("gazetteer-pw:" + N.tag, normPw(pw));
+  attach();
+  renderLock(); refreshSave(); renderAllPanes();
+  return true;
+}
+function askPassword() {
+  flash("This nation is locked: enter its password first.");
+  const el = document.getElementById("pw-in");
+  if (el) el.focus();
+}
+function renderLock(err) {
+  const el = $("#lock"), N = app.N;
+  if (!N || !app.db || N.K || app.mode === "local" || (app.isOwner && !app.keysLoaded)) { el.hidden = true; return; }
+  el.hidden = false;
+  if (app.isOwner) {
+    el.replaceChildren(h("b", { text: N.name + " has no password yet" }),
+      h("div", { class: "meta", text: "Make one to fill it in yourself or to hand it to its player." }),
+      h("div", { class: "row" }, h("button", { class: "btn primary", type: "button", onclick: async () => { await makePassword(N.tag); } }, "Make a password")));
+    return;
+  }
+  const inp = h("input", { id: "pw-in", type: "text", placeholder: "e.g. amber-falcon-river-42", autocomplete: "off", spellcheck: "false", "aria-label": "Password" });
+  const go = h("button", { class: "btn primary", type: "button", onclick: () => unlockWith(inp.value) }, "Unlock");
+  inp.addEventListener("keydown", e => { if (e.key === "Enter") unlockWith(inp.value); });
+  el.replaceChildren(h("b", { text: "Locked" }),
+    h("div", { class: "meta", text: app.mode === "readonly"
+      ? `Enter the password the author gave you for ${N.name} to see what has been saved for it.`
+      : `Enter the password the author gave you for ${N.name}. You can look around without it, but not change anything.` }),
+    h("div", { class: "row" }, inp, go), ...(err ? [h("div", { class: "warn", text: err })] : []));
+}
+function attach() {
+  const N = app.N;
+  if (!N || !app.db || !N.K || app.unsub.length) return;
+  const tag = N.tag, base = nPath(tag, N.K);
   for (const k of KINDS) {
     try {
-      app.unsub.push(docRef(k).onSnapshot(s => {
-        if (!app.N || app.N.tag !== tag) return;
+      app.unsub.push(app.db.doc(`${base}/${k}`).onSnapshot(s => {
+        if (app.N !== N) return;
         app.docs[k] = { exists: s.exists, data: s.exists ? s.data() : {} };
         app.cache[k] = null;
         changed(k);
       }, e => { if (e && (e.code === "revoked" || e.code === "not_granted")) setMode("local"); }));
     } catch (e) { /* bad path */ }
   }
+  try {
+    app.unsub.push(app.db.collection(base).where("t", "in", ["meta", "req"]).limit(500).onSnapshot(qs => {
+      if (app.N !== N) return;
+      const reqs = {}, ids = new Set();
+      app.meta = null;
+      for (const d of qs.docs) {
+        const v = d.data();
+        if (v.t === "meta") { app.meta = v; for (const id of Object.keys(v.editors || {})) ids.add(id); }
+        else { reqs[d.id] = v; if (v.by) ids.add(v.by); }
+      }
+      app.reqs = reqs; app.metaLoaded = true;
+      resolveProfiles(ids).then(() => dirtyPanes("nation"));
+      dirtyPanes("nation");
+    }, () => { app.metaLoaded = true; }));
+  } catch (e) { /* bad path */ }
   for (const k of KINDS) if (app.pending[k]) { clearTimeout(app.timers[k]); app.timers[k] = setTimeout(() => flush(k), 900); }
 }
 function derive(N) {
@@ -850,11 +1132,12 @@ function derive(N) {
   N.stateOfLabel = new Int32Array(N.nOwn + N.others.length + 2).fill(-1);
   N.prov.forEach((p, i) => { N.stateOfLabel[i + 2] = p.s; });
   N.stateToPart = new Array(N.states.length).fill(0);
-  N.parts.forEach((P, k) => { for (const s of P.states) N.stateToPart[s] = k; P.name = partName(N, P, k); });
+  N.parts.forEach((P, k) => { for (const s of P.states) N.stateToPart[s] = k; if (!P.world) P.name = partName(N, P, k); });
   // map colours of the states: neighbours differ (greedy, by size)
   const adj = N.states.map(() => new Set());
   const nl = N.nOwn + N.others.length + 2;
   for (const P of N.parts) {
+    if (P.world) continue;
     const { w, h: hh, px } = P;
     P.nbPos = {};
     // province centres and which provinces touch, for railways (the build routes them the same way)
@@ -887,8 +1170,9 @@ function derive(N) {
   });
   N.capitalDefault = N.states.findIndex(s => s.capital);
 }
-function partName(N, P, k) {
+function partName(N, P, k) {  // the largest piece is the mainland; the others are named after a state
   if (!P.states.length) return `Part ${k + 1}`;
+  if (k === 0 && N.parts.filter(q => !q.world).length > 1) return "Mainland";
   const first = N.states[P.states[0]].name || `State ${N.states[P.states[0]].id}`;
   return P.states.length > 1 ? `${first} +${P.states.length - 1}` : first;
 }
@@ -918,7 +1202,9 @@ function edges(N, P) {
 function labelAt(gx, gy, k) {  // label at a game pixel in part k (or any part): [label, part] or null
   const N = app.N, list = k == null ? N.parts.keys() : [k];
   for (const j of list) {
-    const P = N.parts[j], lx = mod(gx - P.x0, W), ly = gy - P.y0;
+    const P = N.parts[j];
+    if (P.world) continue;
+    const lx = mod(gx - P.x0, W), ly = gy - P.y0;
     if (lx < P.w && ly >= 0 && ly < P.h) {
       const v = P.px[ly * P.w + lx];
       if (k != null || (v >= 2 && v < N.nOwn + 2)) return [v, j];
@@ -945,7 +1231,7 @@ function resolve() {  // the facts' pixel keys -> this map's states and province
   }
   // cities: which own province each is in
   N.cityList = [];
-  const cs = F("cities");
+  const cs = N.planned ? {} : F("cities");
   for (const id of Object.keys(cs)) {
     const c = cs[id];
     if (!c || !isObj(c) || c.x == null) continue;
@@ -956,39 +1242,45 @@ function resolve() {  // the facts' pixel keys -> this map's states and province
   N.cityInProv = new Map();
   for (const c of N.cityList) if (c.prov >= 0 && !N.cityInProv.has(c.prov)) N.cityInProv.set(c.prov, c);
   N.capitalCity = N.cityList.find(c => c.capital && c.prov >= 0) || null;
+  N.sugList = Object.entries(F("suggest")).filter(([, v]) => v && Array.isArray(v.pts) && v.pts.length).map(([id, v]) => ({ id, ...v }));
 }
 function sf(s) { return app.N.stateFacts[s] || {}; }
 function pf(p) { return app.N.provFacts[p] || {}; }
 function stateName(s) { const f = sf(s); return f.name || app.N.states[s].name || `State ${app.N.states[s].id}`; }
 function statePop(s) { const f = sf(s); return f.pop != null ? f.pop : app.N.states[s].pop; }
 function provTerrain(p) { const t = pf(p).t; return t || app.N.prov[p].t; }
-function editState(s, delta) { edit("states", { [app.N.stateKey[s]]: delta }); }
-function editProv(p, delta) { edit("provinces", { [app.N.provKey[p]]: delta }); }
+function editState(s, delta) { return edit("states", { [app.N.stateKey[s]]: delta }); }
+function editProv(p, delta) { return edit("provinces", { [app.N.provKey[p]]: delta }); }
 
 // what changed -> what to redraw
 function changed(kind) {
   if (!app.N) return;
   resolve();
+  if (kind === "suggest" && app.pendingSug && app.N.sugList.some(x => x.id === app.pendingSug)) {
+    const id = app.pendingSug; app.pendingSug = null; app.ui.sel.sug = id; requestAnimationFrame(() => selectSug(id));
+  }
   if (kind === "states" || kind === "provinces" || kind === "rivers") renderBase();
   else requestDraw();
   renderAllPanes(kind);
 }
 
 // ======================================================================= the map
-const map = { cv: null, ctx: null, dpr: 1, pointers: new Map(), drag: null, lastUp: 0, space: false };
+const map = { cv: null, ctx: null, pointers: new Map(), drag: null, lastUp: 0, space: false };
+const curPart = () => app.N.parts[app.ui.part];
 function showPart(k) {
   app.ui.part = k;
-  const P = app.N.parts[k];
-  if (!P.canvas) { P.canvas = document.createElement("canvas"); P.canvas.width = P.w; P.canvas.height = P.h; P.img = P.canvas.getContext("2d").createImageData(P.w, P.h); }
-  renderParts();
+  for (const P of app.N.parts) {
+    if (P.world || P.canvas) continue;
+    P.canvas = document.createElement("canvas"); P.canvas.width = P.w; P.canvas.height = P.h;
+    P.img = P.canvas.getContext("2d").createImageData(P.w, P.h);
+  }
+  const allowed = toolsHere();
+  for (const b of document.querySelectorAll(".tool")) b.hidden = !allowed.includes(b.dataset.tool);
+  $("#modes").hidden = !!(app.N.planned || app.N.parts[k].world);
+  if (!allowed.includes(app.ui.tool)) setTool("select");
+  else renderSubtools();
   renderBase();
   fit();
-}
-function renderParts() {
-  const N = app.N, el = $("#parts");
-  el.replaceChildren();
-  if (N.parts.length < 2) return;
-  N.parts.forEach((P, k) => el.append(h("button", { type: "button", "aria-pressed": String(k === app.ui.part), onclick: () => showPart(k), text: P.name })));
 }
 function palette() {
   const st = [1, 2, 3, 4, 5, 6, 7, 8].map(i => rgb(css("--st" + i)));
@@ -1004,12 +1296,17 @@ function popClass(N) {  // density classes of the states, by quantiles
   N.popBreaks = q;
   return d.map(v => (v > q[3]) + (v > q[2]) + (v > q[1]) + (v > q[0]));
 }
-function renderBase() {
+function renderBase() {  // every part's picture, the one shown with the selected state outlined
   const N = app.N;
   if (!N) return;
-  const P = N.parts[app.ui.part];
-  if (!P.img) return;
-  const pal = palette(), mode = app.ui.mode, own = N.nOwn + 2, nl = own + N.others.length;
+  const pal = palette();
+  N.parts.forEach((P, k) => { if (!P.world && P.img) renderPart(N, P, k === app.ui.part, pal); });
+  renderLegend(pal);
+  renderInsets();
+  requestDraw();
+}
+function renderPart(N, P, active, pal) {
+  const mode = app.ui.mode, own = N.nOwn + 2, nl = own + N.others.length;
   const pc = mode === "pop" ? popClass(N) : null;
   const fill = new Array(nl), e1 = new Array(nl), e2 = new Array(nl), e4 = new Array(nl);
   fill[0] = pal.sea; fill[1] = pal.lake;
@@ -1041,7 +1338,7 @@ function renderBase() {
     if (rv[i] && v >= 2 && !(erased && erased[i])) c = rv[i] >= 8 ? riverW : riverP;
     u[i] = c;
   }
-  if (sel >= 0 && N.stateToPart[sel] === app.ui.part) {  // the selected state's outline
+  if (active && sel >= 0 && N.stateToPart[sel] === app.ui.part) {  // the selected state's outline
     const hh = P.h;
     for (let i = 0; i < n; i++) {
       const v = px[i];
@@ -1052,8 +1349,35 @@ function renderBase() {
     }
   }
   P.canvas.getContext("2d").putImageData(P.img, 0, 0);
-  renderLegend(pal);
-  requestDraw();
+}
+function renderInsets() {  // the nation's other pieces (overseas land, the whole world) in boxes of their own
+  const N = app.N, el = $("#insets");
+  $("#sheet").classList.toggle("has-insets", N.parts.length > 1);
+  if (N.parts.length < 2) { el.replaceChildren(); el.dataset.sig = ""; return; }
+  const small = matchMedia("(max-width: 860px)").matches, many = N.parts.length > 3;
+  const boxW = small ? 40 : many ? 112 : 156, boxH = small ? 26 : many ? 70 : 96;
+  // the boxes are made once per nation and size: rebuilding them under a finger would lose the tap
+  const sig = `${N.tag}:${N.parts.length}:${boxW}`;
+  if (el.dataset.sig !== sig) {
+    el.dataset.sig = sig;
+    el.replaceChildren(...N.parts.map((P, k) => {
+      const s = Math.min(boxW / P.w, boxH / P.h), cw = Math.max(small ? 18 : 24, Math.round(P.w * s)), ch = Math.max(small ? 14 : 16, Math.round(P.h * s));
+      const cv = h("canvas", { width: cw, height: ch, style: `width:${cw}px;height:${ch}px` });
+      return h("button", { class: "inset", type: "button", title: P.world ? "The whole world (for suggestions)" : P.name,
+        onclick: () => { if (k !== app.ui.part) showPart(k); } }, cv, h("span", { text: P.world ? "World map" : P.name }));
+    }));
+  }
+  [...el.children].forEach((b, k) => {
+    const P = N.parts[k], on = k === app.ui.part, src = P.world ? app.worldImg : P.canvas;
+    if (b.getAttribute("aria-pressed") !== String(on)) {
+      b.setAttribute("aria-pressed", String(on));
+      if (on) b.scrollIntoView({ block: "nearest", inline: "nearest" });
+    }
+    const cv = b.querySelector("canvas"), c = cv.getContext("2d");
+    c.imageSmoothingEnabled = true;
+    c.clearRect(0, 0, cv.width, cv.height);
+    if (src) c.drawImage(src, 0, 0, cv.width, cv.height);
+  });
 }
 function erasedMask(P) {  // river pixels the erase strokes take away (shown at once)
   const rs = F("rivers"), strokes = Object.values(rs).filter(r => r && r.kind === "erase" && Array.isArray(r.pts));
@@ -1080,13 +1404,14 @@ function erasedMask(P) {  // river pixels the erase strokes take away (shown at 
 function renderLegend(pal) {
   const el = $("#legend"), mode = app.ui.mode, sw = (c, t) => h("span", null, h("i", { style: `background:rgb(${c.join(",")})` }), t);
   const items = [];
-  if (mode === "terrain") {
+  const P = curPart();
+  if (P.world) items.push(h("span", { text: "The world as the mod has it now. Draw what you'd like with the Suggest tool." }));
+  else if (mode === "terrain") {
     for (const [k, nm] of TERRAINS) items.push(sw(pal.t[k], nm));
     items.push(sw(mix(pal.t.plains, pal.paper, 0.45), "Not set (plains)"));
   } else if (mode === "pop") {
     const b = app.N.popBreaks || [];
-    const lab = ["lowest", ...b.map(v => `${fmt(v)}+`)];
-    pal.pop.forEach((c, i) => items.push(sw(c, (i === 0 ? "under " + fmt(b[0]) : lab[i]) + (i === 0 ? "" : ""))));
+    pal.pop.forEach((c, i) => items.push(sw(c, i === 0 ? "under " + fmt(b[0]) : `${fmt(b[i - 1])}+`)));
     items.push(h("span", { text: "people per map pixel" }));
   } else {
     items.push(sw(pal.st[0], "Your states"), sw(pal.other, "Neighbours"), sw(pal.sea, "Sea"), sw(pal.river, "River"), sw(pal.sel, "Selected"));
@@ -1098,13 +1423,13 @@ function renderLegend(pal) {
 // ---- view
 function sheetSize() { const r = $("#sheet").getBoundingClientRect(); return [r.width, r.height]; }
 function fit() {
-  const P = app.N.parts[app.ui.part], [sw, sh] = sheetSize();
+  const P = curPart(), [sw, sh] = sheetSize();
   const s = Math.min(8, Math.min(sw / P.w, sh / P.h) * 0.94);  // a one-state nation still shows its neighbours
   app.view = { s, ox: P.w / 2 - sw / 2 / s, oy: P.h / 2 - sh / 2 / s };
   requestDraw();
 }
 function zoomAt(f, sx, sy) {
-  const v = app.view, P = app.N.parts[app.ui.part], [sw, sh] = sheetSize();
+  const v = app.view, P = curPart(), [sw, sh] = sheetSize();
   const min = Math.min(sw / P.w, sh / P.h) * 0.5, s = Math.max(min, Math.min(40, v.s * f));
   const mx = sx / v.s + v.ox, my = sy / v.s + v.oy;
   app.view = { s, ox: mx - sx / s, oy: my - sy / s };
@@ -1113,13 +1438,15 @@ function zoomAt(f, sx, sy) {
 const toLocal = (sx, sy) => [sx / app.view.s + app.view.ox, sy / app.view.s + app.view.oy];
 const toScreen = (lx, ly) => [(lx - app.view.ox) * app.view.s, (ly - app.view.oy) * app.view.s];
 function gToScreen(gx, gy) {  // a game pixel's centre on screen, or null when it isn't in this part
-  const P = app.N.parts[app.ui.part], lx = mod(gx - P.x0, W), ly = gy - P.y0;
-  if (lx > P.w + 40 && lx < W - 40) return null;
-  return toScreen((lx > P.w + 40 ? lx - W : lx) + 0.5, ly + 0.5);
+  const P = curPart(), lx = mod(gx - P.x0, W), ly = gy - P.y0;
+  if (!P.world && lx > P.w + 40 && lx < W - 40) return null;
+  return toScreen((!P.world && lx > P.w + 40 ? lx - W : lx) + 0.5, ly + 0.5);
 }
-function localToG(lx, ly) { const P = app.N.parts[app.ui.part]; return [mod(P.x0 + Math.floor(lx), W), P.y0 + Math.floor(ly)]; }
+function localToG(lx, ly) { const P = curPart(); return [mod(P.x0 + Math.floor(lx), W), Math.max(0, Math.min(H - 1, P.y0 + Math.floor(ly)))]; }
 function labelAtScreen(sx, sy) {
-  const P = app.N.parts[app.ui.part], [lx, ly] = toLocal(sx, sy), x = Math.floor(lx), y = Math.floor(ly);
+  const P = curPart();
+  if (P.world) return -1;
+  const [lx, ly] = toLocal(sx, sy), x = Math.floor(lx), y = Math.floor(ly);
   if (x < 0 || y < 0 || x >= P.w || y >= P.h) return -1;
   return P.px[y * P.w + x];
 }
@@ -1131,84 +1458,93 @@ function draw() {
   if (!N || $("#desk").hidden) return;
   const cv = map.cv, [sw, sh] = sheetSize(), dpr = window.devicePixelRatio || 1;
   if (cv.width !== Math.round(sw * dpr) || cv.height !== Math.round(sh * dpr)) { cv.width = Math.round(sw * dpr); cv.height = Math.round(sh * dpr); }
-  const ctx = map.ctx, P = N.parts[app.ui.part], v = app.view;
+  const ctx = map.ctx, P = curPart(), v = app.view;
   ctx.setTransform(1, 0, 0, 1, 0, 0);
   ctx.fillStyle = css("--paper"); ctx.fillRect(0, 0, cv.width, cv.height);
   ctx.setTransform(dpr * v.s, 0, 0, dpr * v.s, -v.ox * v.s * dpr, -v.oy * v.s * dpr);
-  ctx.imageSmoothingEnabled = false;
-  ctx.drawImage(P.canvas, 0, 0);
+  ctx.imageSmoothingEnabled = !!P.world && v.s < 0.4;
+  if (P.world) { if (app.worldImg) ctx.drawImage(app.worldImg, 0, 0, W, H); }
+  else ctx.drawImage(P.canvas, 0, 0);
   ctx.strokeStyle = css("--rule-2"); ctx.lineWidth = 1 / v.s; ctx.strokeRect(0, 0, P.w, P.h);
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   const ink = css("--ink"), paper = css("--sheet"), river = css("--river"), warn = css("--warn"), sel = css("--sel");
-  // rivers drawn here
-  const rs = F("rivers");
-  for (const [id, r] of Object.entries(rs)) {
-    if (!r || !Array.isArray(r.pts) || r.pts.length < 2) continue;
-    const pts = r.pts.map(([x, y]) => gToScreen(x, y));
-    if (pts.some(p => !p)) continue;
-    ctx.beginPath(); pts.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y));
-    ctx.lineJoin = ctx.lineCap = "round";
-    if (r.kind === "erase") { ctx.setLineDash([5, 4]); ctx.strokeStyle = warn; ctx.lineWidth = Math.max(2, ERASE_R * 2 * v.s * 0.7); ctx.globalAlpha = 0.5; ctx.stroke(); ctx.globalAlpha = 1; ctx.setLineDash([]); }
-    else { ctx.strokeStyle = river; ctx.lineWidth = r.kind === "major" ? Math.max(2.2, 1.3 * v.s) : Math.max(1.3, 0.75 * v.s); ctx.stroke(); }
-    if (app.ui.sel.line === id) { ctx.strokeStyle = sel; ctx.globalAlpha = 0.6; ctx.lineWidth += 5; ctx.stroke(); ctx.globalAlpha = 1; }
-  }
-  // railways
-  const rails = F("rails");
-  for (const [id, r] of Object.entries(rails)) {
-    if (!r || !Array.isArray(r.pts) || r.pts.length < 2) continue;
-    const route = railRoute(r.pts);
-    if (!route) continue;
-    railPath(ctx, route.pts.map(([x, y]) => toScreen(x, y)), r.level || 3, route.ok ? ink : warn, paper, app.ui.sel.line === id ? sel : null);
-  }
-  // supply hubs
-  const hs = Math.max(6, Math.min(12, v.s * 2.4));
-  ctx.lineWidth = 1.5;
-  N.prov.forEach((p, i) => {
-    if (!pf(i).hub || N.stateToPart[p.s] !== app.ui.part) return;
-    const q = gToScreen(p.x, p.y); if (!q) return;
-    ctx.fillStyle = css("--hub"); ctx.strokeStyle = paper;
-    ctx.fillRect(q[0] - hs / 2, q[1] - hs / 2, hs, hs); ctx.strokeRect(q[0] - hs / 2, q[1] - hs / 2, hs, hs);
-  });
-  // labels: states, then cities, then neighbours
   const boxes = [];
   const place = (x, y, w, hh) => { for (const b of boxes) if (x < b[2] && x + w > b[0] && y < b[3] && y + hh > b[1]) return false; boxes.push([x, y, x + w, y + hh]); return true; };
-  // cities first claim their spots
-  const cityFont = `600 ${v.s > 3 ? 13 : 12}px "Josefin Sans", sans-serif`;
-  const cityDraw = [];
-  for (const c of N.cityList) {
-    const q = gToScreen(c.x, c.y); if (!q) continue;
-    const r = c.capital ? 5.5 : 4;
-    ctx.beginPath(); ctx.arc(q[0], q[1], r, 0, Math.PI * 2);
-    ctx.fillStyle = c.prov < 0 ? warn : ink; ctx.fill(); ctx.lineWidth = 1.6; ctx.strokeStyle = paper; ctx.stroke();
-    if (c.capital) { ctx.beginPath(); ctx.arc(q[0], q[1], 2, 0, Math.PI * 2); ctx.fillStyle = paper; ctx.fill(); }
-    if (app.ui.sel.city === c.id) { ctx.beginPath(); ctx.arc(q[0], q[1], r + 4, 0, Math.PI * 2); ctx.strokeStyle = sel; ctx.lineWidth = 2.5; ctx.stroke(); }
-    boxes.push([q[0] - r, q[1] - r, q[0] + r, q[1] + r]);
-    cityDraw.push([c, q]);
-  }
-  ctx.font = cityFont; ctx.textBaseline = "middle";
-  for (const [c, q] of cityDraw) {
-    const t = c.name || "(unnamed)", w = ctx.measureText(t).width;
-    if (place(q[0] + 8, q[1] - 8, w, 16)) halo(ctx, t, q[0] + 8, q[1], c.prov < 0 ? warn : ink, paper);
-  }
-  if (v.s > 0.6) {
-    const big = v.s > 2.5 ? 13 : 11;
-    ctx.font = `700 ${big}px "Josefin Sans", sans-serif`;
-    const order = [...N.states.keys()].filter(s => N.stateToPart[s] === app.ui.part).sort((a, b) => N.states[b].area - N.states[a].area);
-    for (const s of order) {
-      const st = N.states[s], q = gToScreen(st.label[0], st.label[1]); if (!q) continue;
-      const named = !!(sf(s).name);
-      const t = stateName(s).toUpperCase(), w = ctx.measureText(t).width;
-      if (w > Math.sqrt(st.area) * v.s * 2.2 && s !== app.ui.sel.state) continue;
-      if (place(q[0] - w / 2, q[1] - 8, w, 16)) halo(ctx, t, q[0] - w / 2, q[1], named ? ink : css("--ink-2"), paper);
+  if (P.world) {  // nations' names, to find your way
+    ctx.font = `600 12px "Josefin Sans", sans-serif`; ctx.textBaseline = "middle";
+    const names = Object.entries(app.namePos || {}).sort((a, b) => b[1][2] - a[1][2]);
+    for (const [tag, [x, y, n]] of names) {
+      if (n * v.s * v.s * 25 < 1500) continue;
+      const q = toScreen(x, y), t = (app.byTag[tag] ? app.byTag[tag].name : tag).toUpperCase(), w = ctx.measureText(t).width;
+      if (q[0] < -50 || q[1] < -20 || q[0] > sw + 50 || q[1] > sh + 20) continue;
+      if (place(q[0] - w / 2, q[1] - 8, w, 16)) halo(ctx, t, q[0] - w / 2, q[1], css("--ink-2"), paper);
+    }
+  } else {
+    // rivers drawn here
+    const rs = F("rivers");
+    for (const [id, r] of Object.entries(rs)) {
+      if (!r || !Array.isArray(r.pts) || r.pts.length < 2) continue;
+      const pts = r.pts.map(([x, y]) => gToScreen(x, y));
+      if (pts.some(p => !p)) continue;
+      ctx.beginPath(); pts.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y));
+      ctx.lineJoin = ctx.lineCap = "round";
+      if (r.kind === "erase") { ctx.setLineDash([5, 4]); ctx.strokeStyle = warn; ctx.lineWidth = Math.max(2, ERASE_R * 2 * v.s * 0.7); ctx.globalAlpha = 0.5; ctx.stroke(); ctx.globalAlpha = 1; ctx.setLineDash([]); }
+      else { ctx.strokeStyle = river; ctx.lineWidth = r.kind === "major" ? Math.max(2.2, 1.3 * v.s) : Math.max(1.3, 0.75 * v.s); ctx.stroke(); }
+      if (app.ui.sel.line === id) { ctx.strokeStyle = sel; ctx.globalAlpha = 0.6; ctx.lineWidth += 5; ctx.stroke(); ctx.globalAlpha = 1; }
+    }
+    // railways
+    for (const [id, r] of Object.entries(F("rails"))) {
+      if (!r || !Array.isArray(r.pts) || r.pts.length < 2) continue;
+      const route = railRoute(r.pts);
+      if (!route) continue;
+      railPath(ctx, route.pts.map(([x, y]) => toScreen(x, y)), r.level || 3, route.ok ? ink : warn, paper, app.ui.sel.line === id ? sel : null);
+    }
+    // supply hubs
+    const hs = Math.max(6, Math.min(12, v.s * 2.4));
+    ctx.lineWidth = 1.5;
+    N.prov.forEach((p, i) => {
+      if (!pf(i).hub || N.stateToPart[p.s] !== app.ui.part) return;
+      const q = gToScreen(p.x, p.y); if (!q) return;
+      ctx.fillStyle = css("--hub"); ctx.strokeStyle = paper;
+      ctx.fillRect(q[0] - hs / 2, q[1] - hs / 2, hs, hs); ctx.strokeRect(q[0] - hs / 2, q[1] - hs / 2, hs, hs);
+    });
+    // cities claim their label spots first, then states, then neighbours
+    const cityDraw = [];
+    for (const c of N.cityList) {
+      const q = gToScreen(c.x, c.y); if (!q) continue;
+      const r = c.capital ? 5.5 : 4;
+      ctx.beginPath(); ctx.arc(q[0], q[1], r, 0, Math.PI * 2);
+      ctx.fillStyle = c.prov < 0 ? warn : ink; ctx.fill(); ctx.lineWidth = 1.6; ctx.strokeStyle = paper; ctx.stroke();
+      if (c.capital) { ctx.beginPath(); ctx.arc(q[0], q[1], 2, 0, Math.PI * 2); ctx.fillStyle = paper; ctx.fill(); }
+      if (app.ui.sel.city === c.id) { ctx.beginPath(); ctx.arc(q[0], q[1], r + 4, 0, Math.PI * 2); ctx.strokeStyle = sel; ctx.lineWidth = 2.5; ctx.stroke(); }
+      boxes.push([q[0] - r, q[1] - r, q[0] + r, q[1] + r]);
+      cityDraw.push([c, q]);
+    }
+    ctx.font = `600 ${v.s > 3 ? 13 : 12}px "Josefin Sans", sans-serif`; ctx.textBaseline = "middle";
+    for (const [c, q] of cityDraw) {
+      const t = c.name || "(unnamed)", w = ctx.measureText(t).width;
+      if (place(q[0] + 8, q[1] - 8, w, 16)) halo(ctx, t, q[0] + 8, q[1], c.prov < 0 ? warn : ink, paper);
+    }
+    if (v.s > 0.6) {
+      ctx.font = `700 ${v.s > 2.5 ? 13 : 11}px "Josefin Sans", sans-serif`;
+      const order = [...N.states.keys()].filter(s => N.stateToPart[s] === app.ui.part).sort((a, b) => N.states[b].area - N.states[a].area);
+      for (const s of order) {
+        const st = N.states[s], q = gToScreen(st.label[0], st.label[1]); if (!q) continue;
+        const t = stateName(s).toUpperCase(), w = ctx.measureText(t).width;
+        if (w > Math.sqrt(st.area) * v.s * 2.2 && s !== app.ui.sel.state) continue;
+        if (place(q[0] - w / 2, q[1] - 8, w, 16)) halo(ctx, t, q[0] - w / 2, q[1], sf(s).name ? ink : css("--ink-2"), paper);
+      }
+    }
+    ctx.font = `600 12px "Josefin Sans", sans-serif`;
+    for (const [o, q] of Object.entries(P.nbPos || {})) {
+      if (q[2] < 400) continue;
+      const s = toScreen(q[0] / q[2] + 0.5, q[1] / q[2] + 0.5), t = N.nb[o].name.toUpperCase(), w = ctx.measureText(t).width;
+      if (s[0] < 0 || s[1] < 0 || s[0] > sw || s[1] > sh) continue;
+      if (place(s[0] - w / 2, s[1] - 8, w, 16)) halo(ctx, t, s[0] - w / 2, s[1], css("--other-ink"), paper);
     }
   }
-  ctx.font = `600 12px "Josefin Sans", sans-serif`;
-  for (const [o, q] of Object.entries(P.nbPos || {})) {
-    if (q[2] < 400) continue;
-    const s = toScreen(q[0] / q[2] + 0.5, q[1] / q[2] + 0.5), t = N.nb[o].name.toUpperCase(), w = ctx.measureText(t).width;
-    if (s[0] < 0 || s[1] < 0 || s[0] > sw || s[1] > sh) continue;
-    if (place(s[0] - w / 2, s[1] - 8, w, 16)) halo(ctx, t, s[0] - w / 2, s[1], css("--other-ink"), paper);
-  }
+  // suggestions, on every map
+  for (const it of N.sugList) drawSuggestion(ctx, it, ([x, y]) => gToScreen(x, y), app.ui.sel.sug === it.id);
   // the line being drawn
   const d = app.ui.draft;
   if (d && d.pts.length) {
@@ -1220,13 +1556,40 @@ function draw() {
       const line = route ? route.pts.map(([x, y]) => toScreen(x, y)) : pts.slice(0, d.pts.length);
       if (app.ui.hover && !d.free) line.push(app.ui.hover.screen);
       railPath(ctx, line, app.ui.railLevel, ink, paper, sel);
-    }
-    else {
+    } else {
       ctx.beginPath(); pts.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y));
-      ctx.strokeStyle = d.kind === "erase" ? warn : river; ctx.lineWidth = d.kind === "erase" ? Math.max(2, ERASE_R * 2 * v.s * 0.7) : 3; ctx.stroke();
+      if (d.kind === "s-area" && pts.length > 2) ctx.closePath();
+      ctx.strokeStyle = d.kind === "erase" ? warn : d.kind.startsWith("s-") ? css("--sug") : river;
+      ctx.lineWidth = d.kind === "erase" ? Math.max(2, ERASE_R * 2 * v.s * 0.7) : 3; ctx.stroke();
     }
     ctx.setLineDash([]);
     for (const [x, y] of pts.slice(0, d.pts.length)) { ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI * 2); ctx.fillStyle = sel; ctx.fill(); }
+  }
+}
+function drawSuggestion(ctx, it, toS, selected, tag) {
+  const pts = it.pts.map(toS);
+  if (pts.some(p => !p)) return;
+  const c = css("--sug"), paper = css("--sheet");
+  ctx.lineJoin = ctx.lineCap = "round";
+  if (it.type === "point") {
+    const [x, y] = pts[0];
+    ctx.beginPath(); ctx.moveTo(x, y - 7); ctx.lineTo(x + 6, y); ctx.lineTo(x, y + 7); ctx.lineTo(x - 6, y); ctx.closePath();
+    ctx.fillStyle = c; ctx.fill(); ctx.lineWidth = 1.5; ctx.strokeStyle = paper; ctx.stroke();
+  } else if (pts.length > 1) {
+    ctx.beginPath(); pts.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y));
+    if (it.type === "area") { ctx.closePath(); ctx.globalAlpha = 0.18; ctx.fillStyle = c; ctx.fill(); ctx.globalAlpha = 1; }
+    ctx.setLineDash([7, 4]); ctx.strokeStyle = c; ctx.lineWidth = 2.2; ctx.stroke(); ctx.setLineDash([]);
+  }
+  if (selected) {
+    ctx.beginPath(); pts.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y));
+    if (it.type === "area") ctx.closePath();
+    ctx.strokeStyle = css("--sel"); ctx.globalAlpha = 0.6; ctx.lineWidth = it.type === "point" ? 14 : 6; ctx.stroke(); ctx.globalAlpha = 1;
+  }
+  const label = [tag, it.label].filter(Boolean).join(": ");
+  if (label) {
+    const [x, y] = it.type === "area" ? [pts.reduce((a, p) => a + p[0], 0) / pts.length, pts.reduce((a, p) => a + p[1], 0) / pts.length] : pts[0];
+    ctx.font = `700 12px "Josefin Sans", sans-serif`; ctx.textBaseline = "middle";
+    halo(ctx, label, x + (it.type === "area" ? -ctx.measureText(label).width / 2 : 10), y, c, paper);
   }
 }
 // railways run province to province: the shortest way between the provinces under their
@@ -1254,7 +1617,8 @@ function dijkstra(P, a, b) {
   return path.reverse();
 }
 function railRoute(pts) {  // the railway's line through province centres, in part pixels; null if not in this part
-  const k = app.ui.part, P = app.N.parts[k], key = k + ":" + JSON.stringify(pts);
+  const k = app.ui.part, P = curPart(), key = k + ":" + JSON.stringify(pts);
+  if (P.world) return null;
   if (app.routes.has(key)) return app.routes.get(key);
   const loc = ([x, y]) => { const lx = mod(x - P.x0, W), ly = y - P.y0; return lx < P.w && ly >= 0 && ly < P.h ? [lx, ly] : null; };
   const L = pts.map(loc);
@@ -1292,6 +1656,11 @@ function cityAtScreen(sx, sy) {
   for (const c of app.N.cityList) { const q = gToScreen(c.x, c.y); if (!q) continue; const d = Math.hypot(q[0] - sx, q[1] - sy); if (d < bd) { bd = d; best = c; } }
   return best;
 }
+function sugAtScreen(sx, sy) {
+  let best = null, bd = 12;
+  for (const it of app.N.sugList) for (const p of it.pts) { const q = gToScreen(p[0], p[1]); if (!q) continue; const d = Math.hypot(q[0] - sx, q[1] - sy); if (d < bd) { bd = d; best = it; } }
+  return best;
+}
 function snapPoint(sx, sy) {  // railway points snap to cities, hubs and other railway points
   let best = null, bd = 12;
   const consider = (gx, gy) => { const q = gToScreen(gx, gy); if (!q) return; const d = Math.hypot(q[0] - sx, q[1] - sy); if (d < bd) { bd = d; best = [gx, gy]; } };
@@ -1301,9 +1670,14 @@ function snapPoint(sx, sy) {  // railway points snap to cities, hubs and other r
   return best;
 }
 function hoverText(sx, sy) {
-  const N = app.N, v = labelAtScreen(sx, sy);
+  const N = app.N, P = curPart(), [gx, gy] = localToG(...toLocal(sx, sy)), at = ` · ${gx}, ${gy}`;
+  if (P.world) {
+    if (!app.ids) return "";
+    const ix = Math.floor(gx * app.ids.w / W), iy = Math.floor(gy * app.ids.h / H), v = app.ids.px[iy * app.ids.w + ix];
+    return (v ? app.byTag[app.idTags[v - 1]].name : "Sea") + at;
+  }
+  const v = labelAtScreen(sx, sy);
   if (v < 0) return "";
-  const [gx, gy] = localToG(...toLocal(sx, sy)), at = ` · ${gx}, ${gy}`;
   if (v === 0) return "Sea" + at;
   if (v === 1) return "Lake" + at;
   if (v >= N.nOwn + 2) { const o = N.others[v - N.nOwn - 2]; return (o >= 0 ? N.nb[o].name + " (neighbour)" : "Land") + at; }
@@ -1325,7 +1699,7 @@ function wireMap() {
     const tool = app.ui.tool;
     const panning = e.button === 1 || e.button === 2 || map.space;
     map.drag = { kind: panning ? "pan" : "maybe", x0: x, y0: y, view: { ...app.view }, moved: false, button: e.button };
-    if (!panning && tool === "terrain") { beginGroup(); map.drag.kind = "paint"; paintAt(x, y); }
+    if (!panning && tool === "terrain" && !locked()) { beginGroup(); map.drag.kind = "paint"; paintAt(x, y); }
     if (!panning && tool === "city") { const c = cityAtScreen(x, y); if (c) { map.drag.city = c; selectCity(c.id); } }
   });
   cv.addEventListener("pointermove", e => {
@@ -1344,13 +1718,17 @@ function wireMap() {
     if (d.kind === "maybe" && far) {
       d.moved = true;
       const t = app.ui.tool;
-      if (d.city) d.kind = "movecity";
-      else if (t === "river") { d.kind = "free"; if (!app.ui.draft) startDraft(app.ui.riverKind); app.ui.draft.free = true; addPoint(d.x0, d.y0, true); }
+      if (d.city && !locked()) d.kind = "movecity";
+      else if ((t === "river" || (t === "suggest" && app.ui.sugKind !== "point")) && !locked()) {
+        d.kind = "free";
+        if (!app.ui.draft) startDraft(t === "river" ? app.ui.riverKind : "s-" + app.ui.sugKind);
+        app.ui.draft.free = true; addPoint(d.x0, d.y0, true);
+      }
       else d.kind = "pan";
     }
     if (d.kind === "pan") { app.view = { ...d.view, ox: d.view.ox - (x - d.x0) / d.view.s, oy: d.view.oy - (y - d.y0) / d.view.s }; requestDraw(); }
     else if (d.kind === "free") addPoint(x, y, true);
-    else if (d.kind === "movecity") { d.to = [x, y]; previewCityMove(d.city, x, y); }
+    else if (d.kind === "movecity") previewCityMove(d.city, x, y);
   });
   const up = e => {
     if (!map.pointers.has(e.pointerId)) return;
@@ -1374,7 +1752,7 @@ function wireMap() {
   $("#zin").onclick = () => { const [w, hh] = sheetSize(); zoomAt(1.5, w / 2, hh / 2); };
   $("#zout").onclick = () => { const [w, hh] = sheetSize(); zoomAt(1 / 1.5, w / 2, hh / 2); };
   $("#fit").onclick = fit;
-  new ResizeObserver(() => requestDraw()).observe(sheet);
+  new ResizeObserver(() => { if (app.N) renderInsets(); requestDraw(); }).observe(sheet);
 }
 function cancelDrag() { if (map.drag && map.drag.kind === "paint") endGroup(); map.drag = null; }
 function pinchState() {
@@ -1391,25 +1769,32 @@ function pinchMove(d) {
 function clickAt(x, y, dbl) {
   const N = app.N, t = app.ui.tool, v = labelAtScreen(x, y), p = v >= 2 && v < N.nOwn + 2 ? v - 2 : -1;
   if (t === "select") {
+    const it = sugAtScreen(x, y);
+    if (it) { selectSug(it.id); return; }
     const c = cityAtScreen(x, y);
     if (c) { selectCity(c.id); showTab("cities"); return; }
     if (p >= 0) selectState(N.prov[p].s, p);
-    else selectState(-1, -1);
-  } else if (t === "city") {
+    else if (!N.planned) selectState(-1, -1);
+    return;
+  }
+  if (locked()) { askPassword(); return; }
+  if (t === "city") {
     const c = cityAtScreen(x, y);
     if (c) { selectCity(c.id); showTab("cities"); return; }
     if (p < 0) { flash("Cities go on your own land."); return; }
     const there = N.cityInProv.get(p);
     if (there) { flash(`That province already has ${there.name || "a city"}: one city per province.`); selectCity(there.id); return; }
     const [gx, gy] = localToG(...toLocal(x, y)), id = "c-" + uid();
-    edit("cities", { [id]: { x: gx, y: gy, name: "", vp: 5, capital: false } });
-    selectCity(id, true);
+    if (edit("cities", { [id]: { x: gx, y: gy, name: "", vp: 5, capital: false } })) selectCity(id, true);
   } else if (t === "hub") {
     if (p < 0) { flash("Supply hubs go on your own land."); return; }
     editProv(p, { hub: pf(p).hub ? null : true });
-  } else if (t === "river" || t === "rail") {
+  } else if (t === "suggest" && app.ui.sugKind === "point") {
+    const g = localToG(...toLocal(x, y)), id = "s-" + uid();
+    if (edit("suggest", { [id]: { type: "point", pts: [g], label: "", note: "" } })) selectSug(id, true);
+  } else if (t === "river" || t === "rail" || t === "suggest") {
     if (dbl) { const d = app.ui.draft; if (d && d.pts.length > 1) d.pts.pop(); finishDraft(); return; }
-    if (!app.ui.draft) startDraft(t === "rail" ? "rail" : app.ui.riverKind);
+    if (!app.ui.draft) startDraft(t === "rail" ? "rail" : t === "suggest" ? "s-" + app.ui.sugKind : app.ui.riverKind);
     addPoint(x, y, false);
   }
 }
@@ -1439,8 +1824,13 @@ function finishDraft() {
   const d = app.ui.draft;
   app.ui.draft = null;
   renderSubtools();
-  if (!d || d.pts.length < 2) { requestDraw(); return; }
+  if (!d || d.pts.length < 2 || (d.kind === "s-area" && d.pts.length < 3)) { requestDraw(); return; }
   const pts = d.free ? simplify(d.pts, 1.0) : d.pts;
+  if (d.kind.startsWith("s-")) {
+    const id = "s-" + uid();
+    if (edit("suggest", { [id]: { type: d.kind.slice(2), pts, label: "", note: "" } })) selectSug(id, true);
+    return;
+  }
   const id = (d.kind === "rail" ? "r-" : "v-") + uid();
   if (d.kind === "rail") edit("rails", { [id]: { level: app.ui.railLevel, pts } });
   else edit("rivers", { [id]: { kind: d.kind, pts } });
@@ -1450,24 +1840,23 @@ function finishDraft() {
 function cancelDraft() { app.ui.draft = null; renderSubtools(); requestDraw(); }
 function previewCityMove(c, x, y) {
   const g = localToG(...toLocal(x, y));
-  app.cache.cities = null;
-  app.moving = { id: c.id, g };
   const item = app.N.cityList.find(k => k.id === c.id);
   if (item) { item.x = g[0]; item.y = g[1]; }
   requestDraw();
 }
 function dropCity(c, x, y) {
-  app.moving = null;
   const N = app.N, v = labelAtScreen(x, y), p = v >= 2 && v < N.nOwn + 2 ? v - 2 : -1;
   const there = p >= 0 ? N.cityInProv.get(p) : null;
   if (p < 0) { flash("Cities stay on your own land."); changed("cities"); return; }
   if (there && there.id !== c.id) { flash(`That province already has ${there.name || "a city"}.`); changed("cities"); return; }
   const [gx, gy] = localToG(...toLocal(x, y));
-  edit("cities", { [c.id]: { x: gx, y: gy } });
+  if (!edit("cities", { [c.id]: { x: gx, y: gy } })) changed("cities");
 }
 let flashTimer;
 function flash(msg) { const el = $("#status"); el.textContent = msg; clearTimeout(flashTimer); flashTimer = setTimeout(() => { el.textContent = ""; }, 4000); }
 function hint() {
+  const P = app.N && curPart();
+  if (P && P.world && app.ui.tool === "select") return "The whole world. Drag to move, scroll or pinch to zoom; pick Suggest to draw on it.";
   return {
     select: "Click a state to fill in its facts. Drag to move the map; scroll or pinch to zoom.",
     terrain: "Click or drag over provinces to paint the terrain. Right-drag or two fingers move the map.",
@@ -1475,6 +1864,7 @@ function hint() {
     river: "Click to add points, double-click or Enter to finish, Esc to cancel. Or drag to draw freehand.",
     rail: "Click cities or places in order; points snap to cities and hubs. Double-click or Enter to finish.",
     hub: "Click a province to add or remove a supply hub. Hubs need a railway to the capital to work.",
+    suggest: "Show the author what the map should have: draw an area or a line (click points, double-click or Enter to finish; or drag freehand) or drop a point, then say what it is on the Map tab.",
   }[app.ui.tool];
 }
 
@@ -1501,30 +1891,34 @@ function renderSubtools() {
       out.push(h("button", { class: "tchip", type: "button", "aria-pressed": String(app.ui.terrain === k), onclick: () => { app.ui.terrain = k; renderSubtools(); } },
         h("i", { style: c ? `background:rgb(${c.join(",")})` : "background:transparent;border-style:dashed" }), nm));
     }
-  } else if (t === "river" || t === "rail") {
+  } else if (t === "river" || t === "rail" || t === "suggest") {
     if (t === "river") for (const [k, nm] of [["major", "Major river"], ["minor", "Minor river"], ["erase", "Erase rivers"]]) {
       out.push(h("button", { class: "tchip", type: "button", "aria-pressed": String(app.ui.riverKind === k), onclick: () => { app.ui.riverKind = k; if (app.ui.draft) app.ui.draft.kind = k; renderSubtools(); requestDraw(); } }, nm));
-    } else {
+    } else if (t === "rail") {
       out.push(h("span", { text: "Level" }));
       for (let l = 1; l <= 5; l++) out.push(h("button", { class: "tchip", type: "button", "aria-pressed": String(app.ui.railLevel === l), onclick: () => { app.ui.railLevel = l; renderSubtools(); requestDraw(); } }, String(l)));
+    } else for (const [k, nm] of SUG_TYPES) {
+      out.push(h("button", { class: "tchip", type: "button", "aria-pressed": String(app.ui.sugKind === k), onclick: () => { app.ui.sugKind = k; if (app.ui.draft) cancelDraft(); renderSubtools(); } }, nm));
     }
     const d = app.ui.draft;
     if (d) out.push(h("span", { class: "meta", text: `${d.pts.length} point${d.pts.length === 1 ? "" : "s"}` }),
       h("button", { class: "btn small primary", type: "button", onclick: finishDraft, disabled: d.pts.length < 2 }, "Finish"),
       h("button", { class: "btn small", type: "button", onclick: () => { d.pts.pop(); renderSubtools(); requestDraw(); }, disabled: !d.pts.length }, "Undo point"),
       h("button", { class: "btn small", type: "button", onclick: cancelDraft }, "Cancel"));
+    else if (t === "suggest") out.push(h("span", { class: "hinttext", text: hint() }));
   } else out.push(h("span", { class: "hinttext", text: hint() }));
   el.replaceChildren(...out);
 }
 
 // ======================================================================= the ledger
+const TABS = ["state", "cities", "map", "politics", "people", "nation"];
 function showTab(tab) {
   app.ui.tab = tab;
   for (const b of document.querySelectorAll("[data-tab]")) b.setAttribute("aria-selected", String(b.dataset.tab === tab));
-  for (const k of ["state", "cities", "lines", "politics", "nation"]) $("#pane-" + k).hidden = k !== tab;
+  for (const k of TABS) $("#pane-" + k).hidden = k !== tab;
 }
-const PANES = { state: () => renderState(), cities: () => renderCities(), lines: () => renderLines(),
-                politics: () => renderPolitics(), nation: () => renderNation() };
+const PANES = { state: () => renderState(), cities: () => renderCities(), map: () => renderMapPane(),
+                politics: () => renderPolitics(), people: () => renderPeople(), nation: () => renderNation() };
 const dirty = new Set();
 let panesQueued = false;
 function dirtyPanes(...names) {
@@ -1539,12 +1933,18 @@ function flushPanes() {
 }
 function typingIn(pane) {
   const a = document.activeElement;
-  return !!(a && pane.contains(a) && (a.tagName === "TEXTAREA" || (a.tagName === "INPUT" && a.type !== "checkbox" && a.type !== "file")));
+  return !!(a && pane.contains(a) && (a.tagName === "TEXTAREA" || (a.tagName === "INPUT" && !["checkbox", "file", "color"].includes(a.type))));
 }
 function renderAllPanes(kind) {
-  const by = { rails: ["lines", "nation"], rivers: ["lines", "nation"], politics: ["politics", "nation"],
-               provinces: ["state", "lines", "nation"], cities: ["state", "cities", "nation"], states: ["state", "cities", "nation"] };
+  const by = { rails: ["map", "nation"], rivers: ["map", "nation"], suggest: ["map"], politics: ["politics", "people", "nation"],
+               provinces: ["state", "map", "nation"], cities: ["state", "cities", "nation"], states: ["state", "cities", "nation"],
+               flags: ["nation"], about: ["nation"], people: ["people"] };
   dirtyPanes(...(by[kind] || Object.keys(PANES)));
+}
+function paneFrame(content) {  // a pane's fields, greyed out while the nation is locked
+  const fs = h("fieldset", { class: "lockable", disabled: locked() });
+  fs.append(...content.flat().filter(Boolean));
+  return [fs];
 }
 function selectState(s, p) {
   app.ui.sel.state = s; app.ui.sel.prov = p; app.ui.sel.city = null;
@@ -1560,6 +1960,13 @@ function selectCity(id, focus) {
   requestDraw();
   if (focus) { showTab("cities"); setTimeout(() => { const el = document.getElementById("city-name-" + id); if (el) { el.focus(); el.select(); } }, 30); }
 }
+function selectSug(id, focus) {
+  app.ui.sel.sug = id;
+  renderMapPane(true);
+  showTab("map");
+  requestDraw();
+  setTimeout(() => { const el = document.getElementById("sug-label-" + id); if (el) { el.scrollIntoView({ block: "nearest" }); if (focus) el.focus(); } }, 30);
+}
 // inputs that write after a pause; a focused input is never overwritten by a re-render
 function numInput(id, value, placeholder, onval, opts = {}) {
   const el = h("input", { id, class: "num", type: "text", inputmode: "numeric", autocomplete: "off", placeholder, value: value == null ? "" : (opts.commas ? fmt(value) : String(value)) });
@@ -1568,11 +1975,18 @@ function numInput(id, value, placeholder, onval, opts = {}) {
   el.addEventListener("blur", () => { const raw = el.value.replace(/[^0-9]/g, ""); if (opts.commas && raw) el.value = fmt(parseInt(raw, 10)); });
   return el;
 }
-function textInput(id, value, placeholder, onval, cls) {
-  const el = h("input", { id, type: "text", class: cls || "", placeholder, value: value || "", maxlength: "60", autocomplete: "off" });
+function textInput(id, value, placeholder, onval, cls, max = 60) {
+  const el = h("input", { id, type: "text", class: cls || "", placeholder, value: value || "", maxlength: String(max), autocomplete: "off" });
   let t;
-  el.addEventListener("input", () => { clearTimeout(t); t = setTimeout(() => onval(cleanName(el.value) || null), 450); });
-  el.addEventListener("change", () => { clearTimeout(t); onval(cleanName(el.value) || null); });
+  el.addEventListener("input", () => { clearTimeout(t); t = setTimeout(() => onval(cleanName(el.value, max) || null), 450); });
+  el.addEventListener("change", () => { clearTimeout(t); onval(cleanName(el.value, max) || null); });
+  return el;
+}
+function textArea(id, value, placeholder, onval, max = 2000) {
+  const el = h("textarea", { id, placeholder, maxlength: String(max) });
+  el.value = value || "";
+  let t;
+  el.addEventListener("input", () => { clearTimeout(t); t = setTimeout(() => onval(el.value.trim().slice(0, max) || null), 700); });
   return el;
 }
 function keepFocus(pane, build) {  // rebuild a pane, keeping the focused field, its text, and unsent drafts
@@ -1588,6 +2002,7 @@ function keepFocus(pane, build) {  // rebuild a pane, keeping the focused field,
 }
 function renderState(force) {
   const pane = $("#pane-state"), N = app.N, s = app.ui.sel.state;
+  if (N.planned) { pane.replaceChildren(); return; }
   if (!force && typingIn(pane)) { dirtyPanes("state"); return; }
   if (s < 0) {
     pane.replaceChildren(h("div", { class: "empty" },
@@ -1597,7 +2012,7 @@ function renderState(force) {
         h("button", { class: "tchip", type: "button", onclick: () => selectState(k, -1) }, (sf(k).name ? "● " : "") + stateName(k))))));
     return;
   }
-  keepFocus(pane, () => stateForm(s));
+  keepFocus(pane, () => paneFrame(stateForm(s)));
 }
 function stateForm(s) {
   const N = app.N, st = N.states[s], f = sf(s), out = [];
@@ -1605,14 +2020,12 @@ function stateForm(s) {
   nameIn.setAttribute("aria-label", "State name");
   out.push(h("div", { class: "sec" }, nameIn,
     h("div", { class: "meta", text: `State ${st.id} · ${st.provs.length} province${st.provs.length === 1 ? "" : "s"} · ${fmt(st.area)} map px${st.coastal ? " · coastal" : ""}${capitalState() === s ? " · capital" : ""}` })));
-  // population
   const pop = f.pop;
   out.push(h("div", { class: "sec" }, h("h4", null, "Population", h("small", { text: pop != null ? people(pop) : "" })),
     h("div", { class: "field" + (pop != null ? " set" : "") },
       h("label", { for: "st-pop", text: "People living in this state" }),
       numInput("st-pop", pop, fmt(st.pop), v => editState(s, { pop: v }), { commas: true, max: MAX_STATE_POP }),
       h("div", { class: "hint", text: `Map default ${fmt(st.pop)} (from its size). In HOI4 this is the state's manpower pool.` }))));
-  // category, buildings
   const cat = f.cat || null, used = ["civ", "mil", "dock"].reduce((a, k) => a + (bval(s, k) || 0), 0), slots = SLOTS[cat || st.cat];
   const catSel = h("select", { id: "st-cat", onchange: e => editState(s, { cat: e.target.value || null }) },
     h("option", { value: "", text: `Map default: ${CNAME[st.cat]} (${SLOTS[st.cat]} slots)` }),
@@ -1628,13 +2041,11 @@ function stateForm(s) {
     h("div", { class: "meter" + (used > slots ? " over" : "") }, h("i", { style: `width:${Math.min(100, slots ? used / slots * 100 : (used ? 100 : 0))}%` })),
     used > slots ? h("div", { class: "warn", text: `More factories than slots: pick a bigger kind of state, or the build will cut them to ${slots}.` }) : null,
     h("div", { class: "grid2" }, blds)));
-  // resources
   const res = f.res || {};
   out.push(h("div", { class: "sec" }, h("h4", null, "Resources", h("small", { text: "units the state produces" })),
     h("div", { class: "grid2" }, RES.map(([k, nm]) => h("div", { class: "field" + (res[k] != null ? " set" : "") },
       h("label", { for: "st-r-" + k, text: nm }),
       numInput("st-r-" + k, res[k], String(st.res[k] || 0), v => editState(s, { res: { [k]: v == null ? null : Math.min(999, v) } }), { max: 999 }))))));
-  // terrain
   const counts = {};
   for (const p of st.provs) { const t = provTerrain(p); counts[t] = (counts[t] || 0) + 1; }
   const pal = palette();
@@ -1643,7 +2054,6 @@ function stateForm(s) {
     h("div", { class: "chips" }, TERRAINS.map(([k, nm]) => h("button", { class: "tchip", type: "button", onclick: () => {
       beginGroup(); for (const p of st.provs) if (provTerrain(p) !== k || !pf(p).t) editProv(p, { t: k }); endGroup();
     } }, h("i", { style: `background:rgb(${pal.t[k].join(",")})` }), nm)))));
-  // province
   const p = app.ui.sel.prov;
   if (p >= 0 && N.prov[p].s === s) {
     out.push(h("div", { class: "sec" }, h("h4", null, "Selected province", h("small", { text: N.prov[p].key })),
@@ -1651,16 +2061,12 @@ function stateForm(s) {
         h("span", { class: "meta", text: `${TNAME[provTerrain(p)]}${pf(p).t ? "" : " (map default)"} · ${fmt(N.prov[p].area)} px` }),
         h("button", { class: "btn small", type: "button", onclick: () => editProv(p, { hub: pf(p).hub ? null : true }) }, pf(p).hub ? "Remove supply hub" : "Make a supply hub"))));
   }
-  // cities
   const cities = N.cityList.filter(c => c.s === s);
   out.push(h("div", { class: "sec" }, h("h4", null, "Cities", h("small", { text: cities.length ? `${cities.length}` : "none yet" })),
     cities.length ? h("div", { class: "chips" }, cities.map(c => h("button", { class: "tchip", type: "button", onclick: () => selectCity(c.id, true) }, `${c.capital ? "★ " : ""}${c.name || "(unnamed)"} · ${c.vp || 5} VP`)))
       : h("div", { class: "meta", text: "Use the Cities tool to place them. The first city of a state is its victory point." })));
-  // notes
-  const notes = h("textarea", { id: "st-notes", placeholder: "Landmarks, history, anything the author should know about this state", maxlength: "2000" });
-  notes.value = f.note || "";
-  let nt; notes.addEventListener("input", () => { clearTimeout(nt); nt = setTimeout(() => editState(s, { note: notes.value.trim().slice(0, 2000) || null }), 700); });
-  out.push(h("div", { class: "sec" }, h("h4", null, "Notes"), notes));
+  out.push(h("div", { class: "sec" }, h("h4", null, "Notes"),
+    textArea("st-notes", f.note, "Landmarks, history, anything the author should know about this state", v => editState(s, { note: v }))));
   out.push(h("div", { class: "sec" }, resetButton("Reset this state to the map's values", () => editState(s, Object.fromEntries(Object.keys(f).map(k => [k, null]))), !Object.keys(compact(f)).length)));
   return out;
 }
@@ -1676,6 +2082,7 @@ function capitalState() { const N = app.N; return N.capitalCity ? N.capitalCity.
 
 function renderCities(force) {
   const pane = $("#pane-cities"), N = app.N;
+  if (N.planned) { pane.replaceChildren(); return; }
   if (!force && typingIn(pane)) { dirtyPanes("cities"); return; }
   keepFocus(pane, () => {
     const out = [h("div", { class: "sec" }, h("h4", null, "Cities", h("small", { text: `${N.cityList.length}` })),
@@ -1688,7 +2095,7 @@ function renderCities(force) {
       const vp = h("select", { "aria-label": "Victory points", onchange: e => edit("cities", { [c.id]: { vp: +e.target.value } }) }, VPS.map(([v, l]) => h("option", { value: v, text: l })));
       vp.value = String(c.vp || 5);
       const cap = h("button", { class: "btn small", type: "button", title: "Make this the capital", "aria-pressed": String(!!c.capital), onclick: () => makeCapital(c) }, c.capital ? "★ Capital" : "☆ Capital");
-      const del = h("button", { class: "btn small danger", type: "button", title: "Delete this city", onclick: () => { edit("cities", { [c.id]: null }); if (app.ui.sel.city === c.id) app.ui.sel.city = null; } }, "Delete");
+      const del = h("button", { class: "btn small danger", type: "button", title: "Delete this city", onclick: () => { if (edit("cities", { [c.id]: null }) && app.ui.sel.city === c.id) app.ui.sel.city = null; } }, "Delete");
       const where = c.s >= 0 ? stateName(c.s) : "not on your land: move or delete it";
       list.append(h("div", { class: "item" + (app.ui.sel.city === c.id ? " sel" : "") },
         h("div", { class: "row" }, name, vp),
@@ -1698,7 +2105,7 @@ function renderCities(force) {
     out.push(list);
     const dup = dupNames();
     if (dup.length) out.splice(1, 0, h("div", { class: "warn", text: `Two cities share a name: ${dup.join(", ")}.` }));
-    return out;
+    return paneFrame(out);
   });
 }
 function dupNames() { const seen = {}, d = new Set(); for (const c of app.N.cityList) { const k = (c.name || "").toLowerCase(); if (!k) continue; if (seen[k]) d.add(c.name); seen[k] = 1; } return [...d]; }
@@ -1709,35 +2116,53 @@ function makeCapital(c) {
   edit("cities", delta);
 }
 function locate(gx, gy, then) {
-  const r = labelAt(gx, gy);
-  if (r && r[1] !== app.ui.part) showPart(r[1]);
-  const P = app.N.parts[app.ui.part], [sw, sh] = sheetSize(), lx = mod(gx - P.x0, W) + 0.5, ly = gy - P.y0 + 0.5;
-  const s = Math.max(app.view.s, 3);
+  const N = app.N;
+  if (!N.planned) { const r = labelAt(gx, gy); if (r && r[1] !== app.ui.part) showPart(r[1]); else if (!r && !curPart().world) { const w = N.parts.findIndex(P => P.world); if (gToScreen(gx, gy) == null && w >= 0) showPart(w); } }
+  const P = curPart(), [sw, sh] = sheetSize(), lx = mod(gx - P.x0, W) + 0.5, ly = gy - P.y0 + 0.5;
+  const s = Math.max(app.view.s, P.world ? 1 : 3);
   app.view = { s, ox: lx - sw / 2 / s, oy: ly - sh / 2 / s };
   if (then) then();
   requestDraw();
 }
-function renderLines() {
-  const pane = $("#pane-lines"), N = app.N, rv = F("rivers"), rl = F("rails");
+function renderMapPane(force) {
+  const pane = $("#pane-map"), N = app.N, rv = F("rivers"), rl = F("rails");
+  if (!force && typingIn(pane)) { dirtyPanes("map"); return; }
   keepFocus(pane, () => {
     const out = [];
-    const rivers = Object.entries(rv).filter(([, r]) => r && Array.isArray(r.pts));
-    out.push(h("div", { class: "sec" }, h("h4", null, "Rivers you drew", h("small", { text: `${rivers.length}` })),
-      h("div", { class: "meta", text: "Blue lines on the map are the rivers already in the game; draw more with the Rivers tool. A river reaches the sea or a lake by itself if it ends within a few pixels of it. Erase strokes remove the game's rivers under them." }),
-      rivers.length ? h("div", null, rivers.map(([id, r]) => lineItem(id, "rivers", r,
-        h("select", { "aria-label": "River size", onchange: e => edit("rivers", { [id]: { kind: e.target.value } }) },
-          [["major", "Major river"], ["minor", "Minor river"], ["erase", "Erase stroke"]].map(([k, l]) => { const o = h("option", { value: k, text: l }); if (r.kind === k) o.selected = true; return o; }))))) : null));
-    const rails = Object.entries(rl).filter(([, r]) => r && Array.isArray(r.pts));
-    out.push(h("div", { class: "sec" }, h("h4", null, "Railways", h("small", { text: `${rails.length}` })),
-      h("div", { class: "meta", text: "Railways run between the provinces under their points, by the shortest way over land. Supply hubs work only when a railway joins them to the capital." }),
-      rails.length ? h("div", null, rails.map(([id, r]) => lineItem(id, "rails", r,
-        h("select", { "aria-label": "Railway level", onchange: e => edit("rails", { [id]: { level: +e.target.value } }) },
-          [1, 2, 3, 4, 5].map(l => { const o = h("option", { value: l, text: `Level ${l}` }); if ((r.level || 3) === l) o.selected = true; return o; }))))) : null));
-    const hubs = N.prov.map((p, i) => i).filter(i => pf(i).hub);
-    out.push(h("div", { class: "sec" }, h("h4", null, "Supply hubs", h("small", { text: `${hubs.length}` })),
-      hubs.length ? h("div", { class: "chips" }, hubs.map(i => h("button", { class: "tchip", type: "button", onclick: () => locate(N.prov[i].x, N.prov[i].y, () => selectState(N.prov[i].s, i)) }, stateName(N.prov[i].s))))
-        : h("div", { class: "meta", text: "None yet: the game puts one in every state until you place your own (then only yours, plus the capital)." })));
-    return out;
+    // suggestions first: everyone has them
+    out.push(h("div", { class: "sec" }, h("h4", null, "Suggestions", h("small", { text: `${N.sugList.length}` })),
+      h("div", { class: "meta", text: N.planned
+        ? "Your nation isn't on the map yet. Draw where it should be, its borders, mountains, rivers or cities with the Suggest tool, and say what each is; the author and Merlo use them when they draw it."
+        : "Anything the map can't take from you directly (a border to move, an island that should be yours, a mountain range): draw it with the Suggest tool and say what it is." }),
+      N.sugList.length ? h("div", null, N.sugList.map(it => {
+        const lab = textInput("sug-label-" + it.id, it.label, "What is it? (e.g. our northern border)", v => edit("suggest", { [it.id]: { label: v || "" } }), "", 80);
+        lab.setAttribute("aria-label", "What it is");
+        return h("div", { class: "item" + (app.ui.sel.sug === it.id ? " sel" : "") },
+          h("div", { class: "row" }, h("span", { class: "sugtype", text: it.type }), lab),
+          h("div", { class: "row" },
+            h("button", { class: "btn small", type: "button", onclick: () => { app.ui.sel.sug = it.id; locate(it.pts[0][0], it.pts[0][1]); renderMapPane(true); } }, "Show"),
+            h("button", { class: "btn small danger", type: "button", onclick: () => edit("suggest", { [it.id]: null }) }, "Delete")),
+          textArea("sug-note-" + it.id, it.note, "More about it (optional)", v => edit("suggest", { [it.id]: { note: v || "" } }), 1000));
+      })) : h("div", { class: "empty", text: "None yet." })));
+    if (!N.planned) {
+      const rivers = Object.entries(rv).filter(([, r]) => r && Array.isArray(r.pts));
+      out.push(h("div", { class: "sec" }, h("h4", null, "Rivers you drew", h("small", { text: `${rivers.length}` })),
+        h("div", { class: "meta", text: "Blue lines on the map are the rivers already in the game; draw more with the Rivers tool. A river reaches the sea or a lake by itself if it ends within a few pixels of it. Erase strokes remove the game's rivers under them." }),
+        rivers.length ? h("div", null, rivers.map(([id, r]) => lineItem(id, "rivers", r,
+          h("select", { "aria-label": "River size", onchange: e => edit("rivers", { [id]: { kind: e.target.value } }) },
+            [["major", "Major river"], ["minor", "Minor river"], ["erase", "Erase stroke"]].map(([k, l]) => { const o = h("option", { value: k, text: l }); if (r.kind === k) o.selected = true; return o; }))))) : null));
+      const rails = Object.entries(rl).filter(([, r]) => r && Array.isArray(r.pts));
+      out.push(h("div", { class: "sec" }, h("h4", null, "Railways", h("small", { text: `${rails.length}` })),
+        h("div", { class: "meta", text: "Railways run between the provinces under their points, by the shortest way over land. Supply hubs work only when a railway joins them to the capital." }),
+        rails.length ? h("div", null, rails.map(([id, r]) => lineItem(id, "rails", r,
+          h("select", { "aria-label": "Railway level", onchange: e => edit("rails", { [id]: { level: +e.target.value } }) },
+            [1, 2, 3, 4, 5].map(l => { const o = h("option", { value: l, text: `Level ${l}` }); if ((r.level || 3) === l) o.selected = true; return o; }))))) : null));
+      const hubs = N.prov.map((p, i) => i).filter(i => pf(i).hub);
+      out.push(h("div", { class: "sec" }, h("h4", null, "Supply hubs", h("small", { text: `${hubs.length}` })),
+        hubs.length ? h("div", { class: "chips" }, hubs.map(i => h("button", { class: "tchip", type: "button", onclick: () => locate(N.prov[i].x, N.prov[i].y, () => selectState(N.prov[i].s, i)) }, stateName(N.prov[i].s))))
+          : h("div", { class: "meta", text: "None yet: the game puts one in every state until you place your own (then only yours, plus the capital)." })));
+    }
+    return paneFrame(out);
   });
 }
 function lineItem(id, kind, r, control) {
@@ -1749,76 +2174,56 @@ function lineItem(id, kind, r, control) {
     h("div", { class: "row" }, control, h("span", { class: "meta", text: `${r.pts.length} points · ${Math.round(len)} px` })),
     route && !route.ok ? h("div", { class: "warn full", text: "Part of it crosses water: a railway needs land all the way between its points." }) : null,
     h("div", { class: "row" },
-      h("button", { class: "btn small", type: "button", onclick: () => { app.ui.sel.line = id; locate(x, y); renderLines(); } }, "Show"),
+      h("button", { class: "btn small", type: "button", onclick: () => { app.ui.sel.line = id; locate(x, y); renderMapPane(true); } }, "Show"),
       h("button", { class: "btn small danger", type: "button", onclick: () => edit(kind, { [id]: null }) }, "Delete")));
 }
-function renderNation() {
-  const pane = $("#pane-nation"), N = app.N;
-  if (!N) return;
-  keepFocus(pane, () => {
-    const meta = metaOf(N.tag), st = meta.status === "done" ? "done" : "draft";
-    const named = N.states.filter((_, s) => sf(s).name).length, popset = N.states.filter((_, s) => sf(s).pop != null).length;
-    const terr = N.prov.filter((_, p) => pf(p).t).length, total = N.states.reduce((a, _, s) => a + statePop(s), 0);
-    const rivers = Object.values(F("rivers")).filter(r => r && r.pts).length, rails = Object.values(F("rails")).filter(r => r && r.pts).length;
-    const out = [];
-    out.push(h("div", { class: "nhead" }, h("img", { class: "flagbig", src: N.flag || "", alt: "" }),
-      h("div", null, h("h3", { text: N.name }), h("div", { class: "meta", text: `${N.tag} · ${N.continent} · ${N.states.length} states · ${N.nOwn} provinces` }))));
-    const eds = editorsOf(N.tag);
-    out.push(h("div", { class: "sec" }, h("h4", null, "Status"),
-      h("div", { class: "seg", role: "group", "aria-label": "Status" },
-        h("button", { type: "button", "aria-pressed": String(st !== "done"), onclick: () => setStatus("draft") }, "In progress"),
-        h("button", { type: "button", "aria-pressed": String(st === "done"), onclick: () => setStatus("done") }, "Finished")),
-      h("div", { class: "meta", text: eds.length ? `Filled in by ${eds.join(", ")}` : "Nobody has filled anything in yet." })));
-    const reqs = Object.entries(app.requests).filter(([, r]) => r && r.tag === N.tag).sort(myRequestsFirst);
-    out.push(h("div", { class: "sec" }, h("h4", null, "Requests to the author", h("small", { text: reqs.length ? `${reqs.length}` : "" })),
-      h("div", { class: "meta", text: "Ask for what the game doesn't have yet: a new sub-ideology, a kind of subject (like a dominion or a protectorate), a change to the map…" }),
-      requestForm(), reqs.length ? h("div", { class: "reqs" }, reqs.map(([id, r]) => requestCard(id, r, false))) : null));
-    out.push(h("div", { class: "sec" }, h("h4", null, "So far"),
-      h("div", { class: "stats" },
-        "States named", h("b", { text: `${named} / ${N.states.length}` }),
-        "Population set", h("b", { text: `${popset} / ${N.states.length}` }),
-        "Provinces with terrain", h("b", { text: `${terr} / ${N.nOwn}` }),
-        "Cities", h("b", { text: String(N.cityList.length) }),
-        "Capital", h("b", { text: N.capitalCity ? N.capitalCity.name || "(unnamed)" : stateName(N.capitalDefault) + " (map)" }),
-        "Rivers drawn", h("b", { text: String(rivers) }),
-        "Railways", h("b", { text: String(rails) }),
-        "Total population", h("b", { text: people(total) }))));
-    // spread a total
-    const totalIn = numInput("nat-total", null, fmt(total), () => {}, { commas: true, max: 3e9 });
-    totalIn.setAttribute("data-keep", "");
-    const preview = h("div", { class: "meta" });
-    const applyBtn = h("button", { class: "btn small primary", type: "button", disabled: true }, "Apply to every state");
-    let plan = null;
-    totalIn.addEventListener("input", () => {
-      const raw = parseInt(totalIn.value.replace(/[^0-9]/g, ""), 10);
-      plan = raw > 0 ? spread(raw) : null;
-      applyBtn.disabled = !plan;
-      preview.textContent = plan ? `${people(raw)}: the largest state gets ${people(Math.max(...plan))}, the smallest ${people(Math.min(...plan))}.` : "";
-    });
-    applyBtn.onclick = () => { if (!plan) return; const d = {}; plan.forEach((v, s) => { d[N.stateKey[s]] = { pop: v }; }); edit("states", d); applyBtn.disabled = true; preview.textContent = "Done. Adjust single states on the State tab."; };
-    out.push(h("div", { class: "sec" }, h("h4", null, "Spread a total population"),
-      h("div", { class: "meta", text: "Enter the nation's population; each state gets a share by its size, more where it has cities." }),
-      h("div", { class: "field" }, totalIn), preview, h("div", null, applyBtn),
-      total > 3e8 ? h("div", { class: "warn", text: "Over 300 million: HOI4's biggest countries have about 500 million, and very large numbers can break the game's sums." }) : null));
-    // notes
-    const notes = h("textarea", { id: "nat-notes", placeholder: "Anything about the nation's geography for the author", maxlength: "4000" });
-    notes.value = meta.notes || "";
-    let nt; notes.addEventListener("input", () => { clearTimeout(nt); nt = setTimeout(() => writeMeta({ notes: notes.value.trim().slice(0, 4000) || null }), 800); });
-    out.push(h("div", { class: "sec" }, h("h4", null, "Notes for the author"), notes));
-    // files
-    out.push(h("div", { class: "sec" }, h("h4", null, "Files"),
-      h("div", { class: "meta", text: "Save this nation's facts as a file, to keep or to send to the author. Loading a file adds its facts to what is here." }),
-      h("div", { class: "chips" },
-        h("button", { class: "btn small", type: "button", onclick: saveNationFile }, "Save a file"),
-        h("button", { class: "btn small", type: "button", onclick: () => $("#file").click() }, "Load a file"),
-        app.isOwner && app.db ? h("button", { class: "btn small primary", type: "button", onclick: saveAllFile }, "Save every nation") : null),
-      h("div", { id: "file-out" })));
-    if (N.orphans.length) out.push(h("div", { class: "note", text: `${N.orphans.length} saved fact${N.orphans.length === 1 ? "" : "s"} no longer land on this nation's map (its borders changed). They stay saved; the author can see them in the files.` }));
-    out.push(h("div", { class: "sec" }, resetButton("Clear everything entered for this nation", clearNation, false)));
-    return out;
+
+// ---- images: flags and portraits
+let imgCallback = null;
+function pickImage(cb) { imgCallback = cb; $("#imgfile").click(); }
+async function storeImage(file) {
+  if (file.size > 12e6) throw new Error("That picture is over 12 MB.");
+  const bmp = await createImageBitmap(file);
+  const w = bmp.width, hh = bmp.height;
+  if (app.assets && app.mode === "shared") {
+    let blob = file, bw = w, bh = hh;
+    if (file.size > 4e6 || Math.max(w, hh) > 2400) {  // plenty for a flag or a portrait
+      const s = 2400 / Math.max(w, hh);
+      bw = Math.max(1, Math.round(w * Math.min(1, s))); bh = Math.max(1, Math.round(hh * Math.min(1, s)));
+      const cv = h("canvas", { width: bw, height: bh });
+      cv.getContext("2d").drawImage(bmp, 0, 0, bw, bh);
+      blob = await new Promise(r => cv.toBlob(r, "image/png"));
+      if (blob && blob.size > 4e6) blob = await new Promise(r => cv.toBlob(r, "image/jpeg", 0.9));
+      if (!blob) throw new Error("That picture couldn't be read.");
+    }
+    const r = await app.assets.upload(blob);  // the id is the durable pointer; pages show it as /_blob/<id>
+    return { asset: r.id, w: bw, h: bh, name: cleanName(file.name, 80) };
+  }
+  // no shared files here: a smaller copy goes in the facts themselves
+  const s = Math.min(1, 480 / Math.max(w, hh)), cw = Math.max(1, Math.round(w * s)), ch = Math.max(1, Math.round(hh * s));
+  const cv = h("canvas", { width: cw, height: ch });
+  cv.getContext("2d").drawImage(bmp, 0, 0, cw, ch);
+  let data = cv.toDataURL("image/png");
+  if (data.length > 180000) data = cv.toDataURL("image/jpeg", 0.85);
+  return { data, w, h: hh, name: cleanName(file.name, 80) };
+}
+const imgSrc = im => !im ? "" : im.asset ? "/_blob/" + im.asset : (im.data || "");
+function uploadInto(kind, path, label) {
+  if (locked()) { askPassword(); return; }
+  pickImage(async file => {
+    flash(`Sending ${label}…`);
+    try {
+      const im = await storeImage(file);
+      const delta = {}; let d = delta;
+      path.slice(0, -1).forEach(k => { d = d[k] = {}; });
+      d[path[path.length - 1]] = im;
+      edit(kind, delta);
+      flash(`${label[0].toUpperCase() + label.slice(1)} added.`);
+    } catch (e) { flash((e && e.message) || "That picture couldn't be sent."); }
   });
 }
-// ---- politics: names under each government, sub-ideologies, the ruler
+
+// ---- politics: names under each government, the ruling sub-ideology
 function subName(key) {
   for (const list of Object.values(app.index.subtypes)) for (const [k, nm] of list) if (k === key) return nm;
   return key;
@@ -1844,38 +2249,26 @@ function rulingNow() {  // the sub-ideology and ideology the nation starts under
   const sub = f.ruling || (!P.handmade && P.leaders[0] ? P.leaders[0][0] : null);
   return { sub, ideo: sub ? ideoOfSub(sub) : P.ruling };
 }
-function renderPolitics() {
+function askFor(kind) {
+  app.reqKind = kind; showTab("nation");
+  setTimeout(() => { const t = document.getElementById("rq-title"); if (t) { t.scrollIntoView({ block: "center" }); t.focus(); } }, 50);
+}
+function renderPolitics(force) {
   const pane = $("#pane-politics"), N = app.N;
   if (!N || !app.index) return;
+  if (!force && typingIn(pane)) { dirtyPanes("politics"); return; }
   keepFocus(pane, () => {
     const P = N.politics, f = F("politics"), names = f.names || {}, now = rulingNow(), out = [];
-    // government
-    const parties = f.parties || {};
-    const curParty = {};
-    for (const [k, ideo] of P.leaders.slice(P.handmade ? 0 : 1)) curParty[ideo] = k;
     const gov = [h("h4", null, "Government", h("small", { text: `starts ${ideoName(now.ideo)}` }))];
-    if (P.handmade) gov.push(h("div", { class: "note", text: "This nation's leaders are the author's own characters, so its sub-ideologies and ruler stay as the author made them. Its names below can still be changed." }));
+    if (P.handmade) gov.push(h("div", { class: "note", text: "This nation's leaders are the author's own characters, so its sub-ideologies stay as the author made them. Its names below can still be changed." }));
     else {
       const dflt = P.leaders[0] ? `Map default: ${subName(P.leaders[0][0])} (${ideoName(P.leaders[0][1])})` : "Map default: Absolute Monarchy";
       gov.push(h("div", { class: "field" + (f.ruling ? " set" : "") }, h("label", { for: "pol-ruling", text: "Ruling sub-ideology (the nation starts under its ideology)" }),
-        subSelect("pol-ruling", f.ruling, dflt, v => edit("politics", { ruling: v }))));
-      const rulerDefault = P.leaders[0] ? P.leaders[0][2] : "";
-      const ruler = textInput("pol-ruler", f.ruler || "", rulerDefault || "A name from the nation's culture", v => edit("politics", { ruler: v }));
-      gov.push(h("div", { class: "field" + (f.ruler ? " set" : "") }, h("label", { for: "pol-ruler", text: "Head of state" }), ruler,
-        h("div", { class: "hint", text: "Leave it empty to keep " + (rulerDefault ? rulerDefault : "a generated name") + "." })));
+        subSelect("pol-ruling", f.ruling, dflt, v => edit("politics", { ruling: v }))),
+        h("div", { class: "meta", text: "The head of state and the other parties' leaders are on the People tab." }));
     }
-    const others = app.index.ideologies.filter(([ideo]) => ideo !== now.ideo);
-    if (!P.handmade) {
-      gov.push(h("div", { class: "meta", text: "The other parties' sub-ideologies, if you want their leaders set (each gets a leader named from the nation's culture):" }));
-      gov.push(h("div", { class: "grid2" }, others.map(([ideo, nm]) => {
-        const v = parties[ideo] === undefined ? null : parties[ideo];
-        return h("div", { class: "field" + (v ? " set" : "") }, h("label", { for: "pol-p-" + ideo, text: nm }),
-          subSelect("pol-p-" + ideo, v, curParty[ideo] ? `Map default: ${subName(curParty[ideo])}` : "None (the game makes one)", x => edit("politics", { parties: { [ideo]: x } }), ideo));
-      })));
-    }
-    gov.push(h("div", null, h("button", { class: "btn small", type: "button", onclick: () => { app.reqKind = "subideology"; showTab("nation"); setTimeout(() => { const t = document.getElementById("rq-title"); if (t) { t.scrollIntoView({ block: "center" }); t.focus(); } }, 50); } }, "Missing a sub-ideology? Ask for one")));
+    gov.push(h("div", null, h("button", { class: "btn small", type: "button", onclick: () => askFor("subideology") }, "Missing a sub-ideology? Ask for one")));
     out.push(h("div", { class: "sec" }, gov));
-    // names
     const base = names.base || {};
     const blocks = [["base", "Every government"], ...app.index.ideologies];
     out.push(h("div", { class: "sec" }, h("h4", null, "Names and titles"),
@@ -1887,23 +2280,178 @@ function renderPolitics() {
         const ph = i => ideo === "base" || own ? d[i] : ([base.name, base.def, base.adj][i] || d[i]);
         const fld = (k, i, lab, cls) => h("div", { class: "field " + (cls || "") + (cur[k] ? " set" : "") },
           h("label", { for: `pol-n-${ideo}-${k}`, text: lab }),
-          textInput(`pol-n-${ideo}-${k}`, cur[k] || "", ph(i), v => edit("politics", { names: { [ideo]: { [k]: v } } })));
+          textInput(`pol-n-${ideo}-${k}`, cur[k] || "", ph(i), v => edit("politics", { names: { [ideo]: { [k]: v } } }), "", 100));
         return h("div", { class: "ideo" },
           h("div", { class: "lab" }, label, ideo === now.ideo ? h("small", { text: "rules at the start" }) : null),
           h("div", { class: "grid2" }, fld("name", 0, "Name"), fld("adj", 2, "Adjective"), fld("def", 1, "Full title", "full")));
       }))));
-    return out;
+    return paneFrame(out);
   });
 }
 
-// ---- requests to the author
-function myRequestsFirst(a, b) { return (b[1].at || 0) - (a[1].at || 0); }
-function requestCard(id, r, withNation) {
-  const n = app.byTag && app.byTag[r.tag];
+// ---- people: head of state, party leaders, generals and the rest
+function portraitBox(im, onPick, onClear, label) {
+  const box = h("button", { class: "portrait", type: "button", title: im ? "Change the portrait" : "Add a portrait", onclick: onPick,
+    style: im ? `background-image:url("${String(imgSrc(im)).replace(/"/g, "%22")}")` : "" }, im ? "" : label || "Add a portrait");
+  return h("div", { style: "display:grid;gap:4px" }, box, im ? h("button", { class: "btn small", type: "button", onclick: onClear }, "Remove") : null);
+}
+function renderPeople(force) {
+  const pane = $("#pane-people"), N = app.N;
+  if (!N || !app.index) return;
+  if (!force && typingIn(pane)) { dirtyPanes("people"); return; }
+  keepFocus(pane, () => {
+    const P = N.politics, ppl = F("people"), pol = F("politics"), now = rulingNow(), out = [];
+    const ruler = ppl.ruler || {};
+    const rulerDefault = P.leaders[0] ? P.leaders[0][2] : "";
+    // head of state
+    out.push(h("div", { class: "sec" }, h("h4", null, "Head of state", h("small", { text: P.handmade ? "the author's" : ideoName(now.ideo) })),
+      P.handmade ? h("div", { class: "note", text: "This nation's ruler is one of the author's own characters." }) :
+        h("div", { class: "person" },
+          portraitBox(ruler.portrait, () => uploadInto("people", ["ruler", "portrait"], "the portrait"), () => edit("people", { ruler: { portrait: null } })),
+          h("div", { class: "fields" },
+            h("div", { class: "field" + (ruler.name ? " set" : "") }, h("label", { for: "pp-ruler-name", text: "Name" }),
+              textInput("pp-ruler-name", ruler.name, rulerDefault || "A name from the nation's culture", v => edit("people", { ruler: { name: v } }), "", 80)),
+            h("div", { class: "field" + (ruler.desc ? " set" : "") }, h("label", { for: "pp-ruler-desc", text: "Titles or a few words (shown on their portrait in game)" }),
+              textArea("pp-ruler-desc", ruler.desc, "e.g. By the Grace of God, Prince of …", v => edit("people", { ruler: { desc: v } }), 600)))),
+      P.handmade ? null : h("div", { class: "meta", text: "A portrait is cropped to HOI4's 156 × 210 from the top of the picture; send one with the face in the upper half." })));
+    // party leaders
+    if (!P.handmade) {
+      const curParty = {};
+      for (const [k, ideo] of P.leaders.slice(1)) curParty[ideo] = k;
+      const parties = pol.parties || {};
+      out.push(h("div", { class: "sec" }, h("h4", null, "The other parties"),
+        h("div", { class: "meta", text: "Each party can have a set leader. Pick its sub-ideology to give it one; the name and portrait are up to you (empty: a name from the nation's culture)." }),
+        h("div", null, app.index.ideologies.filter(([ideo]) => ideo !== now.ideo).map(([ideo, nm]) => {
+          const sub = parties[ideo] === undefined ? null : parties[ideo], have = sub || curParty[ideo], p = ppl["party-" + ideo] || {};
+          return h("div", { class: "person" },
+            portraitBox(p.portrait, () => uploadInto("people", ["party-" + ideo, "portrait"], "the portrait"), () => edit("people", { ["party-" + ideo]: { portrait: null } })),
+            h("div", { class: "fields" },
+              h("div", { class: "lab", style: "font-weight:700" }, nm),
+              h("div", { class: "field" + (sub ? " set" : "") }, h("label", { for: "pp-sub-" + ideo, text: "Sub-ideology" }),
+                subSelect("pp-sub-" + ideo, sub, curParty[ideo] ? `Map default: ${subName(curParty[ideo])}` : "No set leader", x => edit("politics", { parties: { [ideo]: x } }), ideo)),
+              have ? h("div", { class: "field" + (p.name ? " set" : "") }, h("label", { for: "pp-name-" + ideo, text: "Leader" }),
+                textInput("pp-name-" + ideo, p.name, "A name from the nation's culture", v => edit("people", { ["party-" + ideo]: { name: v } }), "", 80)) : null));
+        }))));
+    }
+    // generals, admirals, advisors
+    const others = Object.entries(ppl).filter(([k, v]) => k.startsWith("c-") && v && isObj(v));
+    out.push(h("div", { class: "sec" }, h("h4", null, "Generals, admirals and others", h("small", { text: `${others.length}` })),
+      h("div", { class: "meta", text: "Characters the author can add to the game by hand: who they are and what they're good at." }),
+      h("div", null, others.map(([id, c]) => h("div", { class: "person" },
+        portraitBox(c.portrait, () => uploadInto("people", [id, "portrait"], "the portrait"), () => edit("people", { [id]: { portrait: null } })),
+        h("div", { class: "fields" },
+          h("div", { class: "row", style: "display:flex;gap:6px;flex-wrap:wrap" },
+            (() => { const s = h("select", { "aria-label": "Role", onchange: e => edit("people", { [id]: { role: e.target.value } }) }, ROLES.map(([k, l]) => h("option", { value: k, text: l }))); s.value = c.role || "general"; return s; })(),
+            h("button", { class: "btn small danger", type: "button", onclick: () => edit("people", { [id]: null }) }, "Delete")),
+          textInput("pp-c-name-" + id, c.name, "Name", v => edit("people", { [id]: { name: v } }), "", 80),
+          textArea("pp-c-note-" + id, c.notes, "Skills, traits, history", v => edit("people", { [id]: { notes: v } }), 1000))))),
+      h("div", null, h("button", { class: "btn small", type: "button", onclick: () => { const id = "c-" + uid(); if (edit("people", { [id]: { role: "general", name: "" } })) setTimeout(() => { const el = document.getElementById("pp-c-name-" + id); if (el) el.focus(); }, 60); } }, "Add a character"))));
+    return paneFrame(out);
+  });
+}
+
+// ---- the nation: status, flags, about, requests, files
+function renderNation(force) {
+  const pane = $("#pane-nation"), N = app.N;
+  if (!N || !app.index) return;
+  if (!force && typingIn(pane)) { dirtyPanes("nation"); return; }
+  keepFocus(pane, () => {
+    const meta = metaOf(), st = meta.status === "done" ? "done" : "draft";
+    const out = [], head = [];
+    const flags = F("flags"), about = F("about");
+    head.push(h("div", { class: "nhead" }, N.flag ? h("img", { class: "flagbig", src: N.flag, alt: "" }) : h("span", { class: "noflag flagbig", text: N.tag }),
+      h("div", null, h("h3", { text: N.name }), h("div", { class: "meta", text: N.planned ? `${N.tag} · not on the map yet${N.continent ? " · " + N.continent : ""}` : `${N.tag} · ${N.continent} · ${N.states.length} states · ${N.nOwn} provinces` }))));
+    const eds = Object.keys(meta.editors || {}).map(personName);
+    out.push(h("div", { class: "sec" }, h("h4", null, "Status"),
+      h("div", { class: "seg", role: "group", "aria-label": "Status" },
+        h("button", { type: "button", "aria-pressed": String(st !== "done"), onclick: () => setStatus("draft") }, "In progress"),
+        h("button", { type: "button", "aria-pressed": String(st === "done"), onclick: () => setStatus("done") }, "Finished")),
+      h("div", { class: "meta", text: eds.length ? `Filled in by ${eds.join(", ")}` : "Nobody has filled anything in yet." })));
+    // flags
+    const slots = [["base", "Flag"], ...app.index.ideologies.map(([i, nm]) => [i, `${nm} flag (optional)`])];
+    out.push(h("div", { class: "sec" }, h("h4", null, "Flags"),
+      h("div", { class: "meta", text: "HOI4 shows flags at 82 × 52 pixels (about 3:2). Send the best picture you have; the author fits other shapes without stretching. A government's flag is used only while it rules." }),
+      h("div", null, slots.map(([k, label]) => {
+        const im = flags[k];
+        return h("div", { class: "flagslot" },
+          im ? h("img", { class: "flagbox", src: imgSrc(im), alt: label }) : h("span", { class: "flagbox", text: k === "base" && N.flag ? "in game" : "none" }),
+          h("div", { style: "display:grid;gap:4px;min-width:0" }, h("b", { text: label, style: "font-size:14px" }),
+            im ? h("span", { class: "meta", text: `${im.w} × ${im.h}${im.name ? " · " + im.name : ""}` }) : null,
+            h("div", { class: "chips" },
+              h("button", { class: "btn small", type: "button", onclick: () => uploadInto("flags", [k], "the flag") }, im ? "Replace" : "Send a picture"),
+              im ? h("button", { class: "btn small danger", type: "button", onclick: () => edit("flags", { [k]: null }) }, "Remove") : null)));
+      }))));
+    // about
+    const colour = about.colour || N.colour || "#888888";
+    const col = h("input", { id: "ab-colour", type: "color", value: colour, onchange: e => edit("about", { colour: e.target.value }) });
+    out.push(h("div", { class: "sec" }, h("h4", null, "About the nation"),
+      h("div", { class: "grid2" },
+        h("div", { class: "field" + (about.colour ? " set" : "") }, h("label", { for: "ab-colour", text: "Map colour" }), col,
+          about.colour ? h("button", { class: "btn small", type: "button", onclick: () => edit("about", { colour: null }) }, "Use the map's") : null),
+        h("div", { class: "field" + (about.culture ? " set" : "") }, h("label", { for: "ab-culture", text: "Culture (for names and faces)" }),
+          textInput("ab-culture", about.culture, "e.g. like Portugal, or Polynesian", v => edit("about", { culture: v }), "", 80))),
+      h("div", { class: "grid2" },
+        h("div", { class: "field" + (about.motto ? " set" : "") }, h("label", { for: "ab-motto", text: "Motto" }), textInput("ab-motto", about.motto, "", v => edit("about", { motto: v }), "", 120)),
+        h("div", { class: "field" + (about.anthem ? " set" : "") }, h("label", { for: "ab-anthem", text: "Anthem" }), textInput("ab-anthem", about.anthem, "Its name, or a link", v => edit("about", { anthem: v }), "", 200))),
+      h("div", { class: "field" + (about.description ? " set" : "") }, h("label", { for: "ab-desc", text: "Description" }),
+        textArea("ab-desc", about.description, "Its history, people and government, in a few paragraphs", v => edit("about", { description: v }), 6000))));
+    // requests
+    const reqs = Object.entries(app.reqs).map(([id, r]) => ({ ...r, id })).sort((a, b) => (b.at || 0) - (a.at || 0));
+    out.push(h("div", { class: "sec" }, h("h4", null, "Requests to the author", h("small", { text: reqs.length ? `${reqs.length}` : "" })),
+      h("div", { class: "meta", text: "Ask for what the game doesn't have yet: a new sub-ideology, a kind of subject (like a dominion or a protectorate), a change to the map…" }),
+      requestForm(), reqs.length ? h("div", { class: "reqs" }, reqs.map(r => requestCard(N.tag, r, false))) : null));
+    if (!N.planned) {
+      const named = N.states.filter((_, s) => sf(s).name).length, popset = N.states.filter((_, s) => sf(s).pop != null).length;
+      const terr = N.prov.filter((_, p) => pf(p).t).length, total = N.states.reduce((a, _, s) => a + statePop(s), 0);
+      const rivers = Object.values(F("rivers")).filter(r => r && r.pts).length, rails = Object.values(F("rails")).filter(r => r && r.pts).length;
+      out.push(h("div", { class: "sec" }, h("h4", null, "So far"),
+        h("div", { class: "stats" },
+          "States named", h("b", { text: `${named} / ${N.states.length}` }),
+          "Population set", h("b", { text: `${popset} / ${N.states.length}` }),
+          "Provinces with terrain", h("b", { text: `${terr} / ${N.nOwn}` }),
+          "Cities", h("b", { text: String(N.cityList.length) }),
+          "Capital", h("b", { text: N.capitalCity ? N.capitalCity.name || "(unnamed)" : (N.capitalDefault >= 0 ? stateName(N.capitalDefault) + " (map)" : "–") }),
+          "Rivers drawn", h("b", { text: String(rivers) }),
+          "Railways", h("b", { text: String(rails) }),
+          "Total population", h("b", { text: people(total) }))));
+      const totalIn = numInput("nat-total", null, fmt(total), () => {}, { commas: true, max: 3e9 });
+      totalIn.setAttribute("data-keep", "");
+      const preview = h("div", { class: "meta" });
+      const applyBtn = h("button", { class: "btn small primary", type: "button", disabled: true }, "Apply to every state");
+      let plan = null;
+      totalIn.addEventListener("input", () => {
+        const raw = parseInt(totalIn.value.replace(/[^0-9]/g, ""), 10);
+        plan = raw > 0 ? spread(raw) : null;
+        applyBtn.disabled = !plan;
+        preview.textContent = plan ? `${people(raw)}: the largest state gets ${people(Math.max(...plan))}, the smallest ${people(Math.min(...plan))}.` : "";
+      });
+      applyBtn.onclick = () => { if (!plan) return; const d = {}; plan.forEach((v, s) => { d[N.stateKey[s]] = { pop: v }; }); if (edit("states", d)) { applyBtn.disabled = true; preview.textContent = "Done. Adjust single states on the State tab."; } };
+      out.push(h("div", { class: "sec" }, h("h4", null, "Spread a total population"),
+        h("div", { class: "meta", text: "Enter the nation's population; each state gets a share by its size, more where it has cities." }),
+        h("div", { class: "field" }, totalIn), preview, h("div", null, applyBtn),
+        total > 3e8 ? h("div", { class: "warn", text: "Over 300 million: HOI4's biggest countries have about 500 million, and very large numbers can break the game's sums." }) : null));
+    }
+    out.push(h("div", { class: "sec" }, h("h4", null, "Notes for the author"),
+      textArea("nat-notes", meta.notes, "Anything else the author should know", v => writeMeta({ notes: v }), 4000)));
+    out.push(h("div", { class: "sec" }, h("h4", null, "Files"),
+      h("div", { class: "meta", text: "Save this nation's facts as a file, to keep or to send to the author. Loading a file adds its facts to what is here." }),
+      h("div", { class: "chips" },
+        h("button", { class: "btn small", type: "button", onclick: saveNationFile }, "Save a file"),
+        h("button", { class: "btn small", type: "button", onclick: () => $("#file").click() }, "Load a file")),
+      h("div", { id: "file-out" })));
+    if (N.orphans && N.orphans.length) out.push(h("div", { class: "note", text: `${N.orphans.length} saved fact${N.orphans.length === 1 ? "" : "s"} no longer land on this nation's map (its borders changed). They stay saved; the author can see them in the files.` }));
+    out.push(h("div", { class: "sec" }, resetButton("Clear everything entered for this nation", clearNation, false)));
+    return [...head, ...paneFrame(out)];
+  });
+}
+
+// ---- requests to the author (kept with the nation, behind its password)
+function requestCard(tag, r, withNation) {
+  const n = app.byTag[tag] || app.planned[tag];
   const mine = app.me && r.by === app.me.id;
   const card = h("div", { class: "req" },
     h("div", { class: "top-line" },
-      withNation && n ? h("img", { src: n.flag || "", alt: "" }) : null,
+      withNation && n ? (n.flag ? h("img", { src: n.flag, alt: "" }) : h("span", { class: "noflag", text: tag })) : null,
       withNation && n ? h("b", { text: n.name }) : null,
       h("span", { class: "kind", text: REQ_KIND[r.kind] || "Request" }),
       h("span", { class: "kind state-" + (r.status || "open"), text: REQ_STATUS[r.status || "open"] })),
@@ -1912,58 +2460,47 @@ function requestCard(id, r, withNation) {
     r.reply ? h("div", { class: "reply", text: r.reply }) : null,
     h("div", { class: "meta", text: `${personName(r.by)} · ${r.at ? new Date(r.at).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" }) : ""}` }));
   if (app.mode === "shared" && (app.isOwner || mine)) {
-    const ctl = h("div", { class: "chips" });
     if (app.isOwner) {
-      for (const st of ["open", "done", "declined"]) ctl.append(h("button", { class: "tchip", type: "button", "aria-pressed": String((r.status || "open") === st), onclick: () => updateRequest(id, { status: st }) }, REQ_STATUS[st]));
+      const ctl = h("div", { class: "chips" });
+      for (const st of ["open", "done", "declined"]) ctl.append(h("button", { class: "tchip", type: "button", "aria-pressed": String((r.status || "open") === st), onclick: () => updateRequest(tag, r.id, { status: st }) }, REQ_STATUS[st]));
       const reply = h("textarea", { placeholder: "Reply (shown under the request)", maxlength: "2000" });
       reply.value = r.reply || "";
-      let t; reply.addEventListener("input", () => { clearTimeout(t); t = setTimeout(() => updateRequest(id, { reply: reply.value.trim().slice(0, 2000) || null }), 800); });
+      let t; reply.addEventListener("input", () => { clearTimeout(t); t = setTimeout(() => updateRequest(tag, r.id, { reply: reply.value.trim().slice(0, 2000) || null }), 800); });
       card.append(ctl, reply);
     }
     const del = h("div", { class: "confirm" });
     const delBtn = h("button", { class: "btn small danger", type: "button", onclick: () => del.replaceChildren(h("span", { text: "Delete this request?" }),
-      h("button", { class: "btn small danger", type: "button", onclick: () => app.db.doc("requests/" + id).delete().catch(e => writeFailed(e, null)) }, "Delete"),
+      h("button", { class: "btn small danger", type: "button", onclick: () => requestRef(tag, r.id).then(ref => ref && ref.delete()).then(() => { if (app.isOwner) loadOwnerData(true); }).catch(e => writeFailed(e, null)) }, "Delete"),
       h("button", { class: "btn small", type: "button", onclick: () => del.replaceChildren(delBtn) }, "Keep")) }, "Delete");
     del.append(delBtn);
     card.append(del);
   }
   return card;
 }
-function updateRequest(id, delta) { app.db.doc("requests/" + id).update(delta).catch(e => writeFailed(e, null)); }
-function renderRequests() {
-  const box = $("#home-reqs");
-  const all = Object.entries(app.requests).filter(([, r]) => r && r.tag);
-  box.hidden = !app.db;
-  if (app.db) {
-    const shown = all.filter(([, r]) => app.reqFilter === "all" || (r.status || "open") === "open").sort(myRequestsFirst);
-    const open = all.filter(([, r]) => (r.status || "open") === "open").length;
-    if (app.reqShow == null && all.length) app.reqShow = !!(app.isOwner && open);
-    const showing = !!app.reqShow;
-    $("#home-reqs h3").textContent = `Requests to the author · ${open} open`;
-    $("#rq-fold").textContent = showing ? "Hide" : "Show";
-    $("#rq-fold").setAttribute("aria-expanded", String(showing));
-    $("#rq-filter").hidden = !showing;
-    $("#all-reqs").hidden = !showing;
-    $("#all-reqs").replaceChildren(...(shown.length ? shown.map(([id, r]) => requestCard(id, r, true))
-      : [h("p", { class: "empty", text: all.length ? "No open requests." : "No requests yet. Open your nation and use “Make a request” on its Nation tab." })]));
-  }
-  dirtyPanes("nation");
+async function requestRef(tag, id) {
+  const K = app.N && app.N.tag === tag && app.N.K ? app.N.K : (app.keys[tag] ? await keyFor(tag, app.keys[tag]) : null);
+  return K ? app.db.doc(`${nPath(tag, K)}/${id}`) : null;
+}
+async function updateRequest(tag, id, delta) {
+  try { const ref = await requestRef(tag, id); if (ref) await ref.update(delta); if (app.isOwner && $("#desk").hidden) loadOwnerData(true); }
+  catch (e) { writeFailed(e, null); }
 }
 function requestForm() {
   const N = app.N;
-  if (app.mode !== "shared") return h("div", { class: "meta", text: "Requests go to the shared atlas, which this view can't save to. Write them in the nation's notes file instead." });
+  if (app.mode !== "shared") return h("div", { class: "meta", text: "Requests go to the shared atlas, which this view can't save to. Put them in the notes of your file instead." });
   const kind = h("select", { id: "rq-kind", onchange: e => { app.reqKind = e.target.value; } }, REQ_KINDS.map(([k, l]) => h("option", { value: k, text: l })));
   kind.value = app.reqKind;
   const title = h("input", { id: "rq-title", type: "text", maxlength: "100", placeholder: "In a few words: what you'd like", "data-keep": true });
   const details = h("textarea", { id: "rq-details", maxlength: "3000", placeholder: "Details: how it should work, names, what it's for", "data-keep": true });
   const msg = h("span", { class: "meta" });
   const send = h("button", { class: "btn small primary", type: "button", onclick: async () => {
+    if (locked()) { askPassword(); return; }
     const t = title.value.trim().slice(0, 100);
     if (!t) { msg.textContent = "Give the request a title first."; title.focus(); return; }
     send.disabled = true;
     try {
-      await app.db.collection("requests").doc("q-" + uid()).set({ tag: N.tag, kind: kind.value, title: t, details: details.value.trim().slice(0, 3000), by: (app.me && app.me.id) || null, at: Date.now(), status: "open" });
-      title.value = ""; details.value = ""; msg.textContent = "Sent. The author sees it on the start page.";
+      await app.db.doc(`${nPath(N.tag, N.K)}/req-${uid()}`).set({ t: "req", tag: N.tag, kind: kind.value, title: t, details: details.value.trim().slice(0, 3000), by: (app.me && app.me.id) || null, at: Date.now(), status: "open" });
+      title.value = ""; details.value = ""; msg.textContent = "Sent. The author sees it with your nation.";
     } catch (e) { msg.textContent = "Not sent: this view can't save to the shared atlas."; writeFailed(e, null); }
     finally { send.disabled = false; }
   } }, "Send request");
@@ -1973,7 +2510,6 @@ function requestForm() {
     h("div", { class: "field" }, h("label", { for: "rq-details", text: "Details" }), details),
     h("div", { class: "chips" }, send, msg));
 }
-
 function spread(total) {
   const N = app.N, w = N.states.map((st, s) => {
     const vp = N.cityList.filter(c => c.s === s).reduce((a, c) => a + (c.vp || 5), 0);
@@ -1982,7 +2518,10 @@ function spread(total) {
   const sum = w.reduce((a, b) => a + b, 0) || 1;
   return w.map(x => Math.max(1000, Math.round(total * x / sum / 1000) * 1000));
 }
-function setStatus(st) { writeMeta({ status: st, updatedAt: Date.now(), ...(app.me && app.me.id ? { updatedBy: app.me.id, editors: { [app.me.id]: true } } : {}) }); }
+function setStatus(st) {
+  if (locked()) { askPassword(); return; }
+  writeMeta({ status: st, updatedAt: Date.now(), ...(app.me && app.me.id ? { updatedBy: app.me.id, editors: { [app.me.id]: true } } : {}) });
+}
 function clearNation() {
   beginGroup();
   for (const k of KINDS) { const all = F(k), d = {}; for (const key of Object.keys(all)) if (all[key] != null) d[key] = null; if (Object.keys(d).length) edit(k, d); }
@@ -1994,35 +2533,40 @@ function nationFacts() {  // cities only once edited: until then the map's own s
   const edited = k => (app.docs[k] && app.docs[k].exists) || app.local[k] || app.pending[k] || app.inflight[k];
   return Object.fromEntries(KINDS.filter(k => k !== "cities" || edited(k)).map(k => [k, compact(F(k))]));
 }
-async function offer(filename, text) {
-  const out = $("#file-out");
+async function offer(filename, text, outId) {
+  const out = $("#" + (outId || "file-out"));
   if (app.downloads) {
-    try { await app.downloads.save({ filename, data: text }); out.replaceChildren(h("div", { class: "meta", text: `Saved ${filename}.` })); return; }
+    try { await app.downloads.save({ filename, data: text }); if (out) out.replaceChildren(h("div", { class: "meta", text: `Saved ${filename}.` })); return; }
     catch (e) { if (e && e.code === "declined") return; }
   }
+  if (!out) return;
   const pre = h("pre", { class: "dump", text: text.length > 400000 ? text.slice(0, 400000) + "…" : text });
   out.replaceChildren(h("div", { class: "meta", text: "This view can't save files. Copy the text below into a file named " + filename + "." }),
     h("button", { class: "btn small", type: "button", onclick: e => { navigator.clipboard.writeText(text).then(() => { e.target.textContent = "Copied"; }, () => { getSelection().selectAllChildren(pre); }); } }, "Copy"), pre);
 }
 function saveNationFile() {
-  const N = app.N, meta = metaOf(N.tag);
-  const doc = { gazetteer: 1, tag: N.tag, name: N.name, saved: new Date().toISOString(), facts: nationFacts(), meta: compact({ status: meta.status, notes: meta.notes }) };
+  const N = app.N, meta = metaOf();
+  const doc = { gazetteer: 2, tag: N.tag, name: N.name, saved: new Date().toISOString(), facts: nationFacts(),
+    meta: compact({ status: meta.status, notes: meta.notes }), requests: Object.entries(app.reqs).map(([id, r]) => ({ ...r, id })) };
   offer(`valsora-${N.tag}-facts.json`, JSON.stringify(doc, null, 1));
 }
 async function saveAllFile() {
-  const out = $("#file-out");
-  out.replaceChildren(h("div", { class: "meta", text: "Collecting every nation's facts…" }));
+  app.ownerOut = "Collecting every nation's facts…"; renderOwner();
   const all = {};
-  const tags = Object.keys(app.metas).sort();
-  for (const tag of tags) {
-    const facts = {};
-    for (const k of KINDS) {
-      try { const s = await app.db.doc(`facts/${tag}-${k}`).get(); if (s.exists) facts[k] = compact(s.data()); } catch (e) { /* skip */ }
+  await eachKey(async (tag, K) => {
+    const qs = await app.db.collection(nPath(tag, K)).limit(1000).get();
+    const facts = {}, requests = [];
+    let meta = {};
+    for (const d of qs.docs) {
+      const v = d.data();
+      if (KINDS.includes(d.id)) facts[d.id] = compact(v);
+      else if (d.id === "meta") meta = compact({ status: v.status, notes: v.notes, updatedAt: v.updatedAt });
+      else if (v && v.t === "req") requests.push({ ...v, id: d.id });
     }
-    const m = app.metas[tag] || {};
-    all[tag] = { facts, meta: compact({ status: m.status, notes: m.notes, updatedAt: m.updatedAt }) };
-  }
-  offer("valsora-gazetteer-all.json", JSON.stringify({ gazetteer: 1, saved: new Date().toISOString(), nations: all }, null, 1));
+    all[tag] = { facts, meta, requests };
+  });
+  app.ownerOut = `${Object.keys(all).length} nations with a password.`; renderOwner();
+  offer("valsora-gazetteer-all.json", JSON.stringify({ gazetteer: 2, saved: new Date().toISOString(), planned: app.planned, nations: all }, null, 1), "own-out");
 }
 function loadFile(file) {
   const r = new FileReader();
@@ -2033,8 +2577,9 @@ function loadFile(file) {
     let facts = null;
     if (d && d.gazetteer && d.tag === N.tag) facts = d.facts;
     else if (d && d.gazetteer && d.nations && d.nations[N.tag]) facts = d.nations[N.tag].facts;
-    else if (d && d.gazetteer && d.tag) { flash(`That file is for ${(app.byTag[d.tag] || {}).name || d.tag}. Open that nation to load it.`); return; }
+    else if (d && d.gazetteer && d.tag) { flash(`That file is for ${(app.byTag[d.tag] || app.planned[d.tag] || {}).name || d.tag}. Open that nation to load it.`); return; }
     if (!facts) { flash("That file has nothing for this nation."); return; }
+    if (locked()) { askPassword(); return; }
     beginGroup();
     for (const k of KINDS) if (isObj(facts[k]) && Object.keys(facts[k]).length) edit(k, facts[k]);
     endGroup();
@@ -2051,6 +2596,7 @@ function wireStatic() {
   for (const b of document.querySelectorAll("[data-tab]")) b.onclick = () => showTab(b.dataset.tab);
   $("#undo").onclick = undo;
   $("#file").addEventListener("change", e => { const f = e.target.files[0]; if (f && app.N) loadFile(f); e.target.value = ""; });
+  $("#imgfile").addEventListener("change", e => { const f = e.target.files[0]; const cb = imgCallback; imgCallback = null; e.target.value = ""; if (f && cb) cb(f); });
   for (const n of Object.keys(PANES)) $("#pane-" + n).addEventListener("focusout", e => {
     if (dirty.has(n) && !e.currentTarget.contains(e.relatedTarget)) setTimeout(() => dirtyPanes(), 0);
   });
@@ -2058,26 +2604,24 @@ function wireStatic() {
   $("#grow").onclick = () => { const on = document.body.classList.toggle("ledger-big"); $("#grow").setAttribute("aria-pressed", String(on)); requestAnimationFrame(() => requestDraw()); };
   $("#keybtn").onclick = () => { app.ui.legend = !app.ui.legend; $("#keybtn").setAttribute("aria-pressed", String(app.ui.legend)); $("#legend").hidden = !app.ui.legend; };
   $("#keybtn").setAttribute("aria-pressed", String(app.ui.legend));
-  $("#rq-fold").onclick = () => { app.reqShow = !app.reqShow; renderRequests(); };
-  for (const b of document.querySelectorAll("[data-rq]")) b.onclick = () => {
-    app.reqFilter = b.dataset.rq;
-    for (const o of document.querySelectorAll("[data-rq]")) o.setAttribute("aria-pressed", String(o === b));
-    renderRequests();
-  };
   document.addEventListener("keydown", e => {
     if (!app.N || $("#desk").hidden) return;
     const typing = /INPUT|TEXTAREA|SELECT/.test((document.activeElement || {}).tagName || "");
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z" && !typing) { e.preventDefault(); undo(); return; }
     if (typing) return;
     if (e.key === " ") { map.space = true; e.preventDefault(); }
-    if (e.key === "Escape") { if (app.ui.draft) cancelDraft(); else selectState(-1, -1); }
+    if (e.key === "Escape") { if (app.ui.draft) cancelDraft(); else if (!app.N.planned) selectState(-1, -1); }
     if (e.key === "Enter" && app.ui.draft) finishDraft();
     if (e.key === "Backspace" && app.ui.draft) { e.preventDefault(); app.ui.draft.pts.pop(); renderSubtools(); requestDraw(); }
-    const t = { v: "select", t: "terrain", c: "city", r: "river", l: "rail", h: "hub" }[e.key.toLowerCase()];
-    if (t && !e.ctrlKey && !e.metaKey && !e.altKey) setTool(t);
+    const t = { v: "select", t: "terrain", c: "city", r: "river", l: "rail", h: "hub", s: "suggest" }[e.key.toLowerCase()];
+    if (t && !e.ctrlKey && !e.metaKey && !e.altKey && toolsHere().includes(t)) setTool(t);
   });
   document.addEventListener("keyup", e => { if (e.key === " ") map.space = false; });
   document.addEventListener("visibilitychange", () => { if (document.hidden) flushAll(); });
+  window.addEventListener("hashchange", () => {  // a link to another nation, opened in this tab
+    const tag = location.hash.slice(1).toUpperCase();
+    if (app.index && tag && tag !== (app.N && app.N.tag) && (app.byTag[tag] || app.planned[tag])) openNation(tag);
+  });
   const redraw = () => { app.hl = null; if (app.N) { renderBase(); renderSubtools(); } drawWorld(app.hoverWorld); };
   matchMedia("(prefers-color-scheme: dark)").addEventListener("change", redraw);
   new MutationObserver(redraw).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
@@ -2090,9 +2634,10 @@ async function boot() {
   try { await loadIndex(); }
   catch (e) { $("#list").replaceChildren(h("p", { class: "empty", text: "The map data didn't load. Reload the page to try again." })); return; }
   renderList(); drawWorld(null);
-  const tag = location.hash.slice(1).toUpperCase();
-  if (tag && app.byTag[tag]) openNation(tag);
   await caps;
+  renderOwner(); renderList();
+  const tag = location.hash.slice(1).toUpperCase();
+  if (tag && (app.byTag[tag] || app.planned[tag])) openNation(tag);
 }
 boot();
 </script>

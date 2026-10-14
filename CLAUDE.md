@@ -199,7 +199,7 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `collages.py` | by hand, after a build: `dist/flags_collage.png` (every custom flag, and the countries still on a placeholder stripe) and `dist/leaders_collage.png` (every custom leader: own portraits at 2×, named ones with base-game portraits as labelled tiles); `--continent NAME` writes only `dist/flags_<name>.png`, the flags of the nations whose capital is on that continent, naming below them those with land there and their capital elsewhere (2026-10-10, Araseos; 2026-10-12, Yastreovakia) |
 | `facts_export.py` | by hand, after a build: the Gazetteer's map data into `work/gazetteer/` (`index.json`, `world.png`, `n/<TAG>.json` per nation: its states, provinces, cities and politics as built, its flag, its land and the neighbours' around it as province numbers per pixel, in parts, with the rivers), published with the page |
 | `gazetteer.html` | the Gazetteer (see below): the shared page where friends fill in their nations' facts, published as a claude.ai artifact with its own database |
-| `gazetteer.py` | `import FILE.json`: the Gazetteer's facts (a file saved from the page) into `source/gazetteer/<TAG>.json`; `pull DIR`: the same from the atlas as the ArtifactData tool saves it (`list` with `out_dir` of `nations`, `facts` and `requests`), listing the open requests; `status`; and the functions `read_layers.py` (terrain, rivers, cities) and `build_mod.py` (state facts, capitals, railways, supply hubs, names, sub-ideologies) call |
+| `gazetteer.py` | the Gazetteer's facts into `source/gazetteer/<TAG>.json` (pictures in `source/gazetteer/assets/`): `paths KEYS.json` (each nation's atlas folder `n/<TAG>/<key>` from the owner's passwords), `pull DIR` (the atlas as the ArtifactData tool saves it, pictures fetched by asset id into `DIR/assets/`), `import FILE.json` (a file saved from the page), `status` (and what is left to do by hand), `suggestions` (`dist/gazetteer_suggestions.png`, a layer for the `.pdn`); and the functions `read_layers.py` (terrain, rivers, cities) and `build_mod.py` (state facts, capitals, railways, supply hubs, names, sub-ideologies, rulers and party leaders with titles and portraits, map colours) call |
 
 **A clean `check_mod.py` run is the bar for shipping a build.** It was mutation-tested
 (CRLF, X-crossing, missing building row, state split across regions, descriptor
@@ -1316,40 +1316,77 @@ The author's request (2026-10-14): a tool their friends open by a link to fill i
 nations once the states are drawn, instead of the `.pdn` ("tedious and hard to keep track of,
 especially with cities"). It is a claude.ai artifact,
 **https://claude.ai/artifact/PqTTD5FuFJhpL4JKp8sumN**: `scripts/gazetteer.html` published with
-`work/gazetteer/` (`facts_export.py`), declaring `db`, `user` (profile) and `downloads`.
-**Republish** to the same URL after map changes (the facts are kept by map pixel): run
-`python3 scripts/facts_export.py`, then the Artifact tool (from another session, read the URL
-first) publishes `scripts/gazetteer.html` with that `url`, `root` = `work/gazetteer` and `files` =
-`index.json`, `world.png` and every `n/<TAG>.json` (163 files today; a nation that no longer owns
-land: its path as `null`); leave `capabilities` out to keep them.
+`work/gazetteer/` (`facts_export.py`), declaring `db` (rule: `planned` written by the owner
+only), `user` (profile), `downloads` and `assets`. **Republish** to the same URL after map
+changes (the facts are kept by map pixel): run `python3 scripts/facts_export.py`, then the
+Artifact tool (from another session, read the URL first) publishes `scripts/gazetteer.html`
+with that `url`, `root` = `work/gazetteer` and `files` = `index.json`, `world.png` and every
+`n/<TAG>.json` (163 files today; a nation that no longer owns land: its path as `null`); leave
+`capabilities` out to keep them.
+- **Version 2** (author, 2026-10-14, latest: "each nation should be locked behind a password I
+  can give them so that people can't make troll edits on each others' nations ... submit
+  flags, leaders, etc ... a function for them to make suggestions ... overseas territory ...
+  displayed in a separate box to their mainland"). The first version's only data was the
+  author's own test edit (one Lanzerac province set to forest, `facts/LZC-provinces` and
+  `nations/LZC`); version 2 doesn't read those collections.
 - **What it edits**, per nation: state names, population, kind of state, buildings (within
   slots and vanilla's caps), resources, notes; province terrain (8 types) and supply hubs;
   cities (one per province, victory points, the capital); rivers (major, minor, erase strokes);
   railways (level 1-5); names, full titles and adjectives under every government and each
-  ideology, the ruling sub-ideology, head of state and the other parties' sub-ideologies
-  (author, 2026-10-14, later: "Full titles of each nation under each ideology; sub ideologies;
-  a 'requests' option"); status and notes. **Requests** (new sub-ideologies, subject types, map
-  changes ...) are a board on the start page; the owner sets them done or declined and replies.
-  Phone and desktop layouts (the author asked for both).
-- **The atlas** (the artifact's database): `nations/<TAG>` (status, notes, `editors` ids),
-  `facts/<TAG>-<kind>` (`states`, `provinces`, `cities`, `rivers`, `rails`, `politics`; keys
-  "x,y" for states and provinces, ids for the rest, `null` = deleted), `requests/<id>`. Friends
-  must be invited by email as Editors, with no public link (outside viewers can't write); a
-  view-only page keeps edits in the browser and saves a file instead. **To pull it:** ArtifactData
-  `list` of `nations`, `facts` and `requests` (limit 1000, page with the cursor) with one
-  `out_dir`, then `python3 scripts/gazetteer.py pull <out_dir>`, then rebuild (and
-  `river_provinces.py` after new rivers); tell the author the open requests it lists.
+  ideology, the ruling sub-ideology; the head of state (name, titles, portrait), each other
+  party's sub-ideology, leader and portrait, generals, admirals and advisors; flags (one per
+  government too); map colour, culture, motto, anthem, description; suggestions (areas, lines
+  and points anywhere on the world, labelled); status, notes and requests (new sub-ideologies,
+  subject types, map changes ...). Overseas parts of a nation and the whole world are boxes in
+  the map's corner. Phone and desktop layouts (the author asked for both).
+- **Passwords.** A nation's documents are at `n/<TAG>/<key>/<kind>`, the key being the first
+  32 hex digits of SHA-256("valsora-gazetteer|TAG|" + the password lowercased, runs of spaces,
+  dots, commas and underscores as one hyphen). The store lists a collection's own documents
+  only, so `n` lists nothing, even to the owner (tested on the live atlas): without the
+  password a nation can be neither found nor changed. `n/<TAG>/<key>/key` marks a real
+  password; `meta` (status, notes, `editors` ids) and `req-<id>` requests sit beside the
+  facts. The owner's passwords are at `data/users/<owner id>/keys` (private to them), made and
+  changed in **Owner tools** (a new password copies the documents and deletes the old ones),
+  and the page unlocks every nation for the owner. Friends must be invited by email as
+  Editors, with no public link (outside viewers can't write); an Editor could still publish a
+  new page version (told to the author). Pictures are the artifact's uploaded assets, stored
+  by id (shown as `/_blob/<id>`); an outside Editor deletes only their own.
+- **Nations not on the map yet**: `planned/list` ({TAG: name, continent}), owner-written; base
+  game tags (`index.json` `earth`) are refused. Their page has Politics, People, Map
+  (suggestions on the world map) and Nation; their facts carry over once they are drawn.
+- **To pull it:** ArtifactData `get` of `data/users/me` / `keys` and of `planned` / `list`,
+  both with `out_dir` `work/gazetteer_pull` (never commit the passwords: `work/` is ignored);
+  `python3 scripts/gazetteer.py paths work/gazetteer_pull/data/users/<id>/keys.json` names each
+  nation's folder; ArtifactData `list` of each with the same `out_dir`; then
+  `python3 scripts/gazetteer.py pull work/gazetteer_pull`. It lists the pictures to download:
+  the Artifact tool's `read` with `path` = the asset id and `out_dir`
+  `work/gazetteer_pull/assets`, then `pull` again. Then rebuild (and `river_provinces.py` after
+  new rivers), run `gazetteer.py suggestions` if there are any, and tell the author the open
+  requests and what `status` lists for doing by hand. Or the author saves **Save every nation
+  as a file** and `gazetteer.py import` it (pictures by id the same way).
 - **In the build** (`source/gazetteer/<TAG>.json`, none yet): a nation's facts win over the `.pdn`
   and `nations.py` for that nation: its cities replace the Cities layer's dots on its land
   (`regions.json` cities then carry victory points and the capital flag), its state names
   replace `state_names.json`'s (the old names still resolve for `nations.CIVIL_WAR` /
   `RELEASABLE`), its capital city replaces `nations.CAPITALS`, its hubs replace the one per
-  state (plus its capital). Railways take the shortest way over land between the provinces
-  under their points, centre to centre (the page draws the same route); shared stretches are
-  written once at the higher level. Hand-made rulers (`HAND_MADE`) keep their leaders. Without
-  facts the build is byte-identical to before. `check_mod.py` checks railways (adjacent, in
-  states, level 1-5), building caps and slots, resources and manpower (mutation-tested, 7 of 7).
-  `GAZETTEER_DIR` points the build at another folder (tests).
+  state (plus its capital), its colour `nations.DISPLAY_COLOUR`. Railways take the shortest
+  way over land between the provinces under their points, centre to centre (the page draws
+  the same route); shared stretches are written once at the higher level. Rulers and party
+  leaders get their names, titles (`desc` after the ideology) and portraits (registered in
+  `nations.PORTRAITS` as `<TAG>_gazetteer_<role>`, 156:210 from the top of the picture).
+  Hand-made rulers (`HAND_MADE`) keep their leaders. A flag in HOI4's 82:52 shape (within 4 %)
+  becomes `source/flags/` at the import, once per picture (`source/gazetteer/installed.json`);
+  others are fitted by hand, as the author's are. Pictures are kept at most 1,200 px, heavy
+  opaque ones as JPEG. Without facts the build is byte-identical to before (checked again for
+  version 2). `check_mod.py` checks railways (adjacent, in states, level 1-5), building caps and
+  slots, resources and manpower (mutation-tested, 7 of 7). `GAZETTEER_DIR` and
+  `GAZETTEER_FLAGS` point the scripts at other folders (tests).
+- **Tests** (Playwright, with a stand-in for claude.ai's runtime that keeps its rules: path
+  grammar, private `data/users`, the owner-only `planned`, queries, `/_blob/` pictures): the
+  owner makes passwords, adds a nation not on the map, fills in Rouental's mainland and
+  islands, Seigne's people and the planned nation's suggestions, changes a password; a
+  friend in another browser is locked out until the password (typed loosely) opens it, an old
+  password no longer does; desktop and phone, light and dark; the view-only and offline modes.
 
 ## Deco UI (`deco_ui/`): part of the mod
 
@@ -1408,7 +1445,11 @@ in git history (commit d2d6cd8, `scripts/cartographic.py`). It used
 
 ## Current state
 
-- 2026-10-14, latest: the Gazetteer (https://claude.ai/artifact/PqTTD5FuFJhpL4JKp8sumN), for friends to fill in their nations; no
+- 2026-10-14, latest: the Gazetteer's version 2 (same link): a password per nation, flags,
+  rulers, party leaders and characters with portraits, colour and culture, suggestions on the
+  map, nations not on the map yet, overseas land in boxes of its own. No facts imported yet, so
+  the build is unchanged.
+- 2026-10-14, later still: the Gazetteer (https://claude.ai/artifact/PqTTD5FuFJhpL4JKp8sumN), for friends to fill in their nations; no
   facts imported yet, so the build is unchanged.
 - 2026-10-14, later: no map changes; the Deco UI (v0.5) is part of the mod: every side panel flush under
   the top bar with the medallion's notch, map modes and a gilt minimap. Not yet seen in game.

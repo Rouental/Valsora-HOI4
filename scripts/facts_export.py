@@ -28,6 +28,7 @@ import numpy as np
 from PIL import Image
 from scipy import ndimage as ndi
 
+import gazetteer
 import ideologies
 import nations
 from common import MAP_W, MAP_H, COUNTRIES, CONTINENTS
@@ -163,8 +164,10 @@ def main():
     terrain = list(p["terrain"])
     city_at = {int(c[0]): c for c in rj.get("cities", [])}
 
+    shown = {**nations.DISPLAY_COLOUR, **gazetteer.colours(gazetteer.load())}  # as the build colours them
+
     def colour(tag):
-        return hexcol(nations.DISPLAY_COLOUR.get(tag, COUNTRIES[by_tag[tag]][3]))
+        return hexcol(shown.get(tag, COUNTRIES[by_tag[tag]][3]))
 
     def key(i):
         return f"{int(anchor[i][1])},{int(anchor[i][0])}"
@@ -290,8 +293,13 @@ def main():
     ids = owner_px[iy][:, ix]
     ids = np.where(ids >= 0, ids + 1, 0).astype(np.uint8)
     subtypes = {ideo: [[k, nm, desc] for k, nm, desc in ideologies.SUBTYPES[ideo]] for ideo, _ in IDEOLOGY_NAMES}
+    # tags a nation not on the map yet may not take (Earth's), and ours that own no land
+    earth = [ln.split("\t")[0] for ln in Path("source/vanilla/index/tags.txt").read_text(encoding="utf-8").splitlines()
+             if ln and not ln.startswith("#")]
+    known = {v[0]: v[1] for v in COUNTRIES.values() if v[0] not in tindex}
     json.dump(dict(built=__import__("datetime").date.today().isoformat(), w=W, h=H,
-                   terrains=TERRAINS, ideologies=IDEOLOGY_NAMES, subtypes=subtypes, nations=index,
+                   terrains=TERRAINS, ideologies=IDEOLOGY_NAMES, subtypes=subtypes, earth=earth, known=known,
+                   nations=index,
                    ids=dict(w=IDS[0], h=IDS[1], tags=tags, px=b64z(ids))),
               open(OUT / "index.json", "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
     total = sum(f.stat().st_size for f in OUT.rglob("*") if f.is_file())

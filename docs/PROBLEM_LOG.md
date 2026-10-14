@@ -412,6 +412,27 @@ screenshot and `error.log`)
 
 ## Map problems found while building
 
+**The Gazetteer's version 2, found while testing it** (2026-10-14, latest)
+- The boxes for a nation's other pieces of land were rebuilt on every redraw (any saved fact),
+  so a tap could land on a box that had just been replaced and do nothing (the phone test).
+  Fix: built once per nation and screen size; a redraw only repaints their pictures.
+- On a phone the boxes stacked over a third of the map. Fix: one row of small chips along
+  the bottom.
+- The lock box showed "null" under its Unlock button: `replaceChildren` writes a null child
+  as text. Fixed, and the lock box stays hidden for the owner until their passwords load
+  (it said "no password yet" for a moment).
+- A locked nation's chip said "Saved". Fix: "Locked" from the moment it opens.
+- A link to a nation not on the map yet (`#QZX`) opened nothing: that list arrives after the
+  page starts. Fix: opened when it arrives; a link changed in the same tab opens too.
+- Uploaded pictures were shown from the URL the upload returned, which the platform says not
+  to keep (other viewers can't use it). Fix: only the asset id is stored, shown as
+  `/_blob/<id>`.
+- Owner tools' messages vanished when a snapshot redrew the section. Fix: kept in the page's
+  state.
+- With the Suggest tool the desktop toolbar wrapped Undo onto a second line at 1440 px. Fix:
+  "Hubs" for "Supply hubs", the colour switch and Undo wrap together, and under 1360 px only
+  the chosen tool shows its label.
+
 **The Gazetteer, found while testing it** (2026-10-14)
 - The ledger rebuilt itself after every saved field, so a field still being typed in could
   lose its text, and a field losing focus during the rebuild threw "The node to be removed

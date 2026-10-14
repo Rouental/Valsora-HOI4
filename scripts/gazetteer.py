@@ -1,25 +1,39 @@
 """The facts friends fill in on the Valsora Gazetteer (the shared page, see docs/GAZETTEER.md)
 into the build.
 
-    python3 scripts/gazetteer.py import FILE.json [FILE.json ...]
-        Files saved from the page: "Save a file" (one nation) or "Save every nation"
-        (all of them), or the shared atlas read back by Claude in the same shape. Each
-        nation's facts replace source/gazetteer/<TAG>.json.
+    python3 scripts/gazetteer.py paths KEYS.json
+        The atlas folder of each nation with a password (n/<TAG>/<key>), from the owner's
+        passwords as the ArtifactData tool saves them (`get data/users/me/keys`).
     python3 scripts/gazetteer.py pull DIR
         The shared atlas as Claude's ArtifactData tool saves it (`list` with `out_dir`):
-        DIR/nations/<TAG>.json, DIR/facts/<TAG>-<kind>.json, DIR/requests/<id>.json. Imported
-        like a "Save every nation" file; the open requests are listed.
+        DIR/n/<TAG>/<key>/<document>.json for each nation, DIR/planned/list.json, and the
+        pictures fetched by asset id into DIR/assets/ (it lists the ones still missing).
+        Imported like a "Save every nation" file.
+    python3 scripts/gazetteer.py import FILE.json [FILE.json ...]
+        Files saved from the page: "Save a file" (one nation) or "Save every nation as a
+        file" (the owner's tools). Each nation's facts replace source/gazetteer/<TAG>.json.
     python3 scripts/gazetteer.py status
         What source/gazetteer/ holds, against the last build: how much each nation has
-        filled in, and facts that no longer land on their nation (borders changed).
+        filled in, facts that no longer land on their nation (borders changed), open
+        requests, characters and anything else for the author to do by hand.
+    python3 scripts/gazetteer.py suggestions
+        Everyone's suggestions (areas, lines and points drawn on the page) as
+        dist/gazetteer_suggestions.png, a transparent 5120x2560 layer to import into the
+        .pdn, and dist/gazetteer_suggestions_preview.png over the map.
 
 source/gazetteer/<TAG>.json is what the build reads: read_layers.py (terrain, rivers,
-cities) and build_mod.py (state facts, capitals, railways, supply hubs, names and
-sub-ideologies) call the functions below. A state or province is named by a map pixel
-"x,y" inside it (ids shift when the map changes); cities, rivers and railways are
-lists of map pixels. A nation's facts win over the .pdn and nations.py for that nation:
-its cities replace the Cities layer's dots on its land, and so on.
+cities) and build_mod.py (state facts, capitals, railways, supply hubs, names,
+sub-ideologies, rulers and party leaders with their titles and portraits, map colours)
+call the functions below. A state or province is named by a map pixel "x,y" inside it
+(ids shift when the map changes); cities, rivers and railways are lists of map pixels.
+A nation's facts win over the .pdn and nations.py for that nation: its cities replace
+the Cities layer's dots on its land, and so on. Pictures (flags, portraits) are kept in
+source/gazetteer/assets/; a flag already in HOI4's 82:52 shape becomes
+source/flags/<TAG>.png (or <TAG>_<ideology>.png) when it is imported, once per picture.
 """
+import base64
+import hashlib
+import io
 import json
 import os
 import re
@@ -34,6 +48,10 @@ from common import MAP_W, MAP_H
 
 W, H = MAP_W, MAP_H
 DIR = Path(os.environ.get("GAZETTEER_DIR", "source/gazetteer"))  # another folder for tests
+FLAGS = Path(os.environ.get("GAZETTEER_FLAGS", "source/flags"))
+TAG = re.compile(r"[A-Z][A-Z0-9]{2}")
+# a nation's documents in the atlas (n/<TAG>/<key>/<kind>), as on the page
+KINDS = ("states", "provinces", "cities", "rivers", "rails", "politics", "flags", "people", "about", "suggest")
 # terrain.bmp palette index of each terrain the page offers (common.TERRAIN_TYPES)
 TERRAIN_INDEX = {"plains": 0, "forest": 1, "hills": 2, "desert": 3, "mountain": 6, "marsh": 9,
                  "urban": 13, "jungle": 21}
@@ -50,15 +68,25 @@ BUILDINGS = {"infra": ("infrastructure", 5), "civ": ("industrial_complex", 20), 
 RESOURCES = ("oil", "steel", "aluminium", "rubber", "tungsten", "chromium")
 VPS = {1, 3, 5, 10, 15, 20, 25, 30, 40, 50}
 IDEOLOGIES = ("democratic", "fascism", "communism", "neutrality", "theocracy")
+ROLES = ("general", "admiral", "advisor", "other")
 MAX_STATE_POP = 500_000_000
 ERASE_R = 3  # erase strokes take away river lines this close (px)
 CITY_REACH = 20  # a city off the coast belongs to the nearest land this close
+PICTURE_MAX = 1200  # px, the longest side of a picture kept in the repo
+PNG_MAX = 1_500_000  # bytes: a heavier picture with nothing see-through is kept as a JPEG
+FLAG_RATIO, FLAG_SLACK = 82 / 52, 0.04  # flags this close to HOI4's shape go straight in
+FLAG_MAX_W = 1180  # as wide as the author's largest (Rouental's original)
 
 
 def clean(s, n=60):
     """A name as the game's localisation can take it: no quotes or control characters."""
     s = re.sub(r'["\x00-\x1f]', "", str(s or ""))
     return re.sub(r"\s+", " ", s).strip()[:n]
+
+
+def text(s, n):
+    """Free text (notes, descriptions): trimmed, at most n characters."""
+    return str(s or "").replace("\x00", "").strip()[:n]
 
 
 def xy(key):
@@ -86,17 +114,104 @@ def points(pts):
     return out
 
 
+def norm_password(pw):
+    """as the page reads a password: case, spaces, dots and underscores don't matter"""
+    s = re.sub(r"[\s_.,]+", "-", str(pw or "").lower())
+    return re.sub(r"-+", "-", s).strip("-")
+
+
+def key(tag, pw):
+    """the folder of a nation's documents in the atlas, n/<TAG>/<key>: from its password"""
+    return hashlib.sha256(f"valsora-gazetteer|{tag}|{norm_password(pw)}".encode()).hexdigest()[:32]
+
+
+# ------------------------------------------------------------------ pictures
+def _store(data, stem):
+    """A picture's bytes into DIR/assets/<stem>.png, at most PICTURE_MAX px on its longest
+    side; a photo (or a picture as heavy as one, with nothing see-through) as .jpg.
+    Returns (path relative to DIR, width, height)."""
+    from PIL import Image
+    im = Image.open(io.BytesIO(data))
+    im.load()
+    photo = im.format == "JPEG"
+    im = im.convert("RGBA")
+    w, h = im.size
+    if max(w, h) > PICTURE_MAX:
+        f = PICTURE_MAX / max(w, h)
+        im = im.resize((max(1, round(w * f)), max(1, round(h * f))), Image.LANCZOS)
+        w, h = im.size
+    solid = im.getchannel("A").getextrema()[0] == 255
+    buf = io.BytesIO()
+    if not photo:
+        (im.convert("RGB") if solid else im).save(buf, "PNG", optimize=True)
+        photo = solid and buf.tell() > PNG_MAX
+    if photo:
+        buf = io.BytesIO()
+        im.convert("RGB").save(buf, "JPEG", quality=90)
+    (DIR / "assets").mkdir(parents=True, exist_ok=True)
+    rel = f"assets/{stem}.{'jpg' if photo else 'png'}"
+    for old in (DIR / "assets").glob(stem + ".*"):  # a picture stored before in the other format
+        old.unlink()
+    (DIR / rel).write_bytes(buf.getvalue())
+    return rel, w, h
+
+
+def picture(v, where, sources, todo):
+    """A picture from the page (an uploaded asset's id, or a small copy inline) as
+    {"file": "assets/...", "w", "h", "name"} under DIR. An asset not downloaded yet stays
+    {"asset": id, ...} and goes on the `todo` list."""
+    if not isinstance(v, dict):
+        return None
+    name = clean(v.get("name"), 80)
+    out = {"name": name} if name else {}
+    if isinstance(v.get("file"), str) and (DIR / v["file"]).is_file():  # imported before
+        return {**out, "file": v["file"], "w": v.get("w"), "h": v.get("h")}
+    data, stem = None, None
+    if isinstance(v.get("data"), str) and v["data"].startswith("data:image/") and "," in v["data"]:
+        try:
+            data = base64.b64decode(v["data"].split(",", 1)[1], validate=False)
+        except ValueError:
+            return None
+        stem = hashlib.sha1(data).hexdigest()[:24]
+    elif isinstance(v.get("asset"), str) and re.fullmatch(r"[0-9a-f]{32}", v["asset"]):
+        stem = v["asset"]
+        found = next((f for d in (DIR / "assets", *sources) for f in sorted(Path(d).glob(stem + ".*"))
+                      if f.is_file()), None)
+        if found is None:
+            todo.append((where, stem))
+            return {**out, "asset": stem, "w": v.get("w"), "h": v.get("h")}
+        data = found.read_bytes()
+    if not data:
+        return None
+    try:
+        rel, w, h = _store(data, stem)
+    except Exception as e:  # not a picture after all
+        print(f"{where}: not a picture ({e}); left out")
+        return None
+    return {**out, "file": rel, "w": w, "h": h}
+
+
+def portrait_box(w, h):
+    """HOI4's 156:210 from the top of a picture, centred across it when it is wider:
+    (left, top, width) for nations.PORTRAITS"""
+    if w * 210 > h * 156:
+        cw = round(h * 156 / 210)
+        return (w - cw) // 2, 0, cw
+    return 0, 0, w
+
+
 # ------------------------------------------------------------------ import
-def normalise(tag, facts, meta):
+def normalise(tag, facts, meta, requests=(), sources=(), todo=None):
     """One nation's facts from the page, checked and tidied: unknown or broken entries
-    are dropped, numbers clamped to what the game takes."""
+    are dropped, numbers clamped to what the game takes, pictures stored."""
     import ideologies
     subs = ideologies.ideology_of()
+    todo = [] if todo is None else todo
     out = {"tag": tag}
     if meta.get("status") in ("draft", "done"):
         out["status"] = meta["status"]
     if meta.get("notes"):
-        out["notes"] = str(meta["notes"])[:4000]
+        out["notes"] = text(meta["notes"], 4000)
     states = {}
     for k, v in (facts.get("states") or {}).items():
         if not isinstance(v, dict):
@@ -119,8 +234,8 @@ def normalise(tag, facts, meta):
                if r in RESOURCES and n is not None and num(n, 0, 999) is not None}
         if res:
             s["res"] = res
-        if str(v.get("note") or "").strip():
-            s["note"] = str(v["note"]).strip()[:2000]
+        if text(v.get("note"), 2000):
+            s["note"] = text(v["note"], 2000)
         if s:
             states[f"{xy(k)[0]},{xy(k)[1]}"] = s
     if states:
@@ -178,32 +293,110 @@ def normalise(tag, facts, meta):
         p["names"] = names
     if pol.get("ruling") in subs:
         p["ruling"] = pol["ruling"]
-    if clean(pol.get("ruler"), 80):
-        p["ruler"] = clean(pol["ruler"], 80)
     parties = {i: s for i, s in (pol.get("parties") or {}).items() if i in IDEOLOGIES and subs.get(s) == i}
     if parties:
         p["parties"] = parties
     if p:
         out["politics"] = p
+    # people: the head of state, the parties' leaders, characters for the author
+    ppl, people = facts.get("people") or {}, {}
+    ruler = dict(ppl.get("ruler") or {}) if isinstance(ppl.get("ruler"), dict) else {}
+    if clean(pol.get("ruler"), 80) and not ruler.get("name"):  # the first version kept it with politics
+        ruler["name"] = pol["ruler"]
+    r = {}
+    if clean(ruler.get("name"), 80):
+        r["name"] = clean(ruler["name"], 80)
+    if clean(ruler.get("desc"), 600):
+        r["desc"] = clean(ruler["desc"], 600)
+    pic = picture(ruler.get("portrait"), f"{tag} ruler's portrait", sources, todo)
+    if pic:
+        r["portrait"] = pic
+    if r:
+        people["ruler"] = r
+    party = {}
+    for ideo in IDEOLOGIES:
+        v = ppl.get(f"party-{ideo}")
+        if not isinstance(v, dict):
+            continue
+        q = {}
+        if clean(v.get("name"), 80):
+            q["name"] = clean(v["name"], 80)
+        pic = picture(v.get("portrait"), f"{tag} {ideo} leader's portrait", sources, todo)
+        if pic:
+            q["portrait"] = pic
+        if q:
+            party[ideo] = q
+    if party:
+        people["parties"] = party
+    chars = []
+    for k, v in sorted(ppl.items()):
+        if not (k.startswith("c-") and isinstance(v, dict)):
+            continue
+        c = {"role": v.get("role") if v.get("role") in ROLES else "general"}
+        if clean(v.get("name"), 80):
+            c["name"] = clean(v["name"], 80)
+        if text(v.get("notes"), 1000):
+            c["notes"] = text(v["notes"], 1000)
+        pic = picture(v.get("portrait"), f"{tag} character's portrait", sources, todo)
+        if pic:
+            c["portrait"] = pic
+        if len(c) > 1:
+            chars.append(c)
+    if chars:
+        people["characters"] = chars
+    if people:
+        out["people"] = people
+    flags = {}
+    for slot, v in (facts.get("flags") or {}).items():
+        if slot in ("base", *IDEOLOGIES):
+            pic = picture(v, f"{tag} {slot} flag", sources, todo)
+            if pic:
+                flags[slot] = pic
+    if flags:
+        out["flags"] = flags
+    ab, about = facts.get("about") or {}, {}
+    if isinstance(ab.get("colour"), str) and re.fullmatch(r"#[0-9a-fA-F]{6}", ab["colour"]):
+        about["colour"] = ab["colour"].lower()
+    for k, n in (("culture", 80), ("motto", 120), ("anthem", 200)):
+        if clean(ab.get(k), n):
+            about[k] = clean(ab[k], n)
+    if text(ab.get("description"), 6000):
+        about["description"] = text(ab["description"], 6000)
+    if about:
+        out["about"] = about
+    sugg = []
+    for v in (facts.get("suggest") or {}).values():
+        if not isinstance(v, dict) or v.get("type") not in ("area", "line", "point"):
+            continue
+        pts = points(v.get("pts"))
+        if len(pts) < {"area": 3, "line": 2, "point": 1}[v["type"]]:
+            continue
+        sugg.append({"type": v["type"], "pts": pts, "label": clean(v.get("label"), 80), "note": text(v.get("note"), 1000)})
+    if sugg:
+        out["suggest"] = sorted(sugg, key=lambda v: (v["type"], v["pts"]))
+    reqs = []
+    for v in requests or ():
+        if isinstance(v, dict) and clean(v.get("title"), 100):
+            reqs.append({"kind": v.get("kind") if v.get("kind") in ("subideology", "subject", "map", "other") else "other",
+                         "title": clean(v["title"], 100), "details": text(v.get("details"), 3000),
+                         "status": v.get("status") if v.get("status") in ("open", "done", "declined") else "open",
+                         "reply": text(v.get("reply"), 2000), "at": num(v.get("at"), 0, 10 ** 14) or 0})
+    if reqs:
+        out["requests"] = sorted(reqs, key=lambda r: (r["at"], r["title"]))
     return out
 
 
-def import_files(files):
+def import_nations(nations, planned=None, sources=()):
+    """{tag: {"facts", "meta", "requests"}} (and the owner's nations not on the map yet)
+    -> source/gazetteer/; then the new flags into source/flags/. Lists pictures still to
+    download."""
     DIR.mkdir(parents=True, exist_ok=True)
-    nations = {}
-    for f in files:
-        d = json.loads(Path(f).read_text(encoding="utf-8"))
-        if not d.get("gazetteer"):
-            sys.exit(f"{f} is not a file saved from the Gazetteer")
-        if d.get("tag"):
-            nations[d["tag"]] = (d.get("facts") or {}, d.get("meta") or {})
-        for tag, v in (d.get("nations") or {}).items():
-            nations[tag] = (v.get("facts") or {}, v.get("meta") or {})
-    for tag, (facts, meta) in sorted(nations.items()):
-        if not re.fullmatch(r"[A-Z][A-Z0-9]{2}", tag):
+    todo = []
+    for tag, v in sorted(nations.items()):
+        if not TAG.fullmatch(tag):
             print(f"skipped {tag!r}: not a country tag")
             continue
-        n = normalise(tag, facts, meta)
+        n = normalise(tag, v.get("facts") or {}, v.get("meta") or {}, v.get("requests") or (), sources, todo)
         path = DIR / f"{tag}.json"
         if len(n) == 1:
             if path.exists():
@@ -212,45 +405,127 @@ def import_files(files):
             continue
         path.write_text(json.dumps(n, ensure_ascii=False, indent=1, sort_keys=True) + "\n", encoding="utf-8")
         print(f"{tag}: {summary(n)}")
+    if planned is not None:
+        keep = {t: {"name": clean(p.get("name")), "continent": clean(p.get("continent"))}
+                for t, p in sorted(planned.items()) if TAG.fullmatch(t) and isinstance(p, dict) and clean(p.get("name"))}
+        f = DIR / "planned.json"
+        if keep:
+            f.write_text(json.dumps(keep, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+        elif f.exists():
+            f.unlink()
+    install_flags(load())
+    if todo:
+        print(f"{len(todo)} pictures to download first (Artifact read with path = the asset id, into "
+              f"assets/ beside the pulled atlas or the file), then run this again:")
+        for where, a in todo:
+            print(f"  {a}  {where}")
+    return todo
+
+
+def import_files(files):
+    nations, planned = {}, None
+    for f in files:
+        d = json.loads(Path(f).read_text(encoding="utf-8"))
+        if not d.get("gazetteer"):
+            sys.exit(f"{f} is not a file saved from the Gazetteer")
+        if d.get("tag"):
+            nations[d["tag"]] = d
+        for tag, v in (d.get("nations") or {}).items():
+            nations[tag] = v
+        if isinstance(d.get("planned"), dict):
+            planned = d["planned"]
+    import_nations(nations, planned, [Path(f).parent / "assets" for f in files])
 
 
 def _body(path):
     """a saved document: its fields, whether the file holds them bare or wrapped with its id"""
     d = json.loads(Path(path).read_text(encoding="utf-8"))
     for k in ("data", "fields", "document"):
-        if isinstance(d.get(k), dict) and set(d) <= {k, "id", "doc_id", "version", "path", "collection",
-                                                         "created_at", "updated_at", "createTime", "updateTime"}:
+        if isinstance(d.get(k), dict) and set(d) <= {k, "id", "doc_id", "version", "path", "collection", "created_at",
+                                                         "updated_at", "createdAt", "updatedAt", "createTime", "updateTime"}:
             return d[k]
     return d
 
 
 def pull(root):
-    """the atlas from an ArtifactData out_dir -> source/gazetteer/, and the open requests"""
+    """the atlas from ArtifactData out_dirs (DIR/n/<TAG>/<key>/...) -> source/gazetteer/"""
     root = Path(root)
-    nations = defaultdict(lambda: {"facts": {}, "meta": {}})
-    for f in sorted((root / "facts").glob("*.json")):
-        tag, _, kind = f.stem.partition("-")
-        nations[tag]["facts"][kind] = _body(f)
-    for f in sorted((root / "nations").glob("*.json")):
-        nations[f.stem]["meta"] = _body(f)
-    out = root / "gazetteer-all.json"
-    out.write_text(json.dumps({"gazetteer": 1, "nations": nations}, ensure_ascii=False), encoding="utf-8")
-    import_files([out])
-    reqs = [_body(f) for f in sorted((root / "requests").glob("*.json"))]
-    open_ = [r for r in reqs if (r.get("status") or "open") == "open"]
-    print(f"{len(reqs)} requests, {len(open_)} open")
-    for r in sorted(open_, key=lambda r: r.get("at") or 0):
-        print(f"  {r.get('tag')} [{r.get('kind')}] {r.get('title')}: {str(r.get('details') or '')[:200]}")
+    keys = {}
+    for f in sorted(root.rglob("keys.json")):  # the owner's passwords, if saved here: the current folders
+        keys.update({t: pw for t, pw in _body(f).items() if TAG.fullmatch(t) and isinstance(pw, str)})
+    nations = {}
+    for tagdir in sorted(p for p in (root / "n").glob("*") if p.is_dir() and TAG.fullmatch(p.name)):
+        tag = tagdir.name
+        dirs = sorted(d for d in tagdir.iterdir() if d.is_dir())
+        if tag in keys:
+            dirs = [d for d in dirs if d.name == key(tag, keys[tag])] or dirs
+        if len(dirs) > 1:  # an old password's documents too: the most recently edited
+            def edited(d):
+                m = d / "meta.json"
+                return (_body(m).get("updatedAt") or 0) if m.exists() else 0
+            dirs.sort(key=edited)
+            print(f"{tag}: {len(dirs)} folders; took {dirs[-1].name}, the last edited")
+        d = dirs[-1]
+        facts = {f.stem: _body(f) for f in sorted(d.glob("*.json")) if f.stem in KINDS}
+        meta = _body(d / "meta.json") if (d / "meta.json").exists() else {}
+        reqs = [_body(f) for f in sorted(d.glob("req-*.json"))]
+        nations[tag] = {"facts": facts, "meta": meta, "requests": reqs}
+    planned_f = root / "planned" / "list.json"
+    todo = import_nations(nations, _body(planned_f) if planned_f.exists() else None, [root / "assets"])
+    reqs = [(t, r) for t, v in nations.items() for r in v["requests"] if (r.get("status") or "open") == "open"]
+    print(f"{len(reqs)} open requests")
+    for t, r in sorted(reqs, key=lambda x: x[1].get("at") or 0):
+        print(f"  {t} [{r.get('kind')}] {r.get('title')}: {str(r.get('details') or '')[:200]}")
+    return todo
+
+
+def paths(keys_file):
+    """n/<TAG>/<key> of every nation in the owner's passwords"""
+    for tag, pw in sorted(_body(keys_file).items()):
+        if TAG.fullmatch(tag) and isinstance(pw, str):
+            print(f"n/{tag}/{key(tag, pw)}")
+
+
+def install_flags(G):
+    """Flags sent on the page into source/flags/, each picture once (so a flag the author
+    changes later stays theirs). Shapes other than HOI4's 82:52 wait to be fitted by hand."""
+    from PIL import Image
+    record_f = DIR / "installed.json"
+    record = json.loads(record_f.read_text(encoding="utf-8")) if record_f.exists() else {}
+    for tag, f in sorted(G.items()):
+        for slot, im in sorted((f.get("flags") or {}).items()):
+            if not im.get("file"):
+                continue
+            k = f"{tag}:{slot}"
+            if record.get(k) == im["file"]:
+                continue
+            w, h = im["w"], im["h"]
+            if abs(w / h / FLAG_RATIO - 1) > FLAG_SLACK:
+                print(f"{tag}: its {slot} flag is {w} x {h}, not HOI4's 82:52; fit it by hand from {DIR / im['file']}")
+                continue
+            from import_flags import opaque
+            a = np.asarray(Image.open(DIR / im["file"]).convert("RGBA"))
+            pic = Image.fromarray(opaque(a))
+            if pic.width > FLAG_MAX_W:
+                pic = pic.resize((FLAG_MAX_W, round(pic.height * FLAG_MAX_W / pic.width)), Image.LANCZOS)
+            FLAGS.mkdir(parents=True, exist_ok=True)
+            out = FLAGS / (f"{tag}.png" if slot == "base" else f"{tag}_{slot}.png")
+            pic.save(out)
+            record[k] = im["file"]
+            print(f"{tag}: {slot} flag -> {out}")
+    if record:
+        record_f.write_text(json.dumps(record, indent=1, sort_keys=True) + "\n", encoding="utf-8")
 
 
 def summary(n):
     parts = []
     for k, what in (("states", "states"), ("provinces", "provinces"), ("cities", "cities"),
-                    ("rivers", "rivers"), ("rails", "railways")):
+                    ("rivers", "rivers"), ("rails", "railways"), ("suggest", "suggestions")):
         if k in n:
             parts.append(f"{len(n[k])} {what}")
-    if "politics" in n:
-        parts.append("politics")
+    for k in ("politics", "people", "flags", "about"):
+        if k in n:
+            parts.append(k)
     if n.get("status") == "done":
         parts.append("finished")
     return ", ".join(parts) or "nothing"
@@ -258,8 +533,8 @@ def summary(n):
 
 def load():
     """{tag: facts} from source/gazetteer/."""
-    return {f.stem: json.loads(f.read_text(encoding="utf-8")) for f in sorted(DIR.glob("*.json"))} \
-        if DIR.exists() else {}
+    return {f.stem: json.loads(f.read_text(encoding="utf-8")) for f in sorted(DIR.glob("*.json"))
+            if TAG.fullmatch(f.stem)} if DIR.exists() else {}
 
 
 # ------------------------------------------------------------------ the build
@@ -515,10 +790,13 @@ def railways(G, lab, kind, centre, adjacency, notes):
     return out
 
 
-def leaders(tag, subs, pol, handmade, named):
+def leaders(tag, subs, facts, handmade, named, portraits):
     """nations.LEADERS' sub-ideologies of a country with the facts' ruling one and parties
-    (first rules), and the ruler's name into the copy of nations.NAMED_LEADERS `named`."""
-    if not pol or handmade:
+    (first rules). The ruler and the party leaders the facts name (with titles and
+    portraits) go into `named`, a copy of nations.NAMED_LEADERS, their portraits into
+    `portraits` (nations.PORTRAITS)."""
+    pol, ppl = (facts or {}).get("politics") or {}, (facts or {}).get("people") or {}
+    if (not pol and not ppl) or handmade:
         return subs
     import ideologies
     of = ideologies.ideology_of()
@@ -529,9 +807,18 @@ def leaders(tag, subs, pol, handmade, named):
     parties.update({i: s for i, s in (pol.get("parties") or {}).items() if s})
     parties.pop(of[ruling], None)
     out = [ruling] + [parties[i] for i in IDEOLOGIES if i in parties]
-    if pol.get("ruler"):
-        cid = f"{tag}_leader_{ruling}"
-        named[cid] = (pol["ruler"], (named.get(cid) or (None, None))[1])
+    people = [(ruling, "ruler", ppl.get("ruler") or {})]
+    people += [(parties[i], f"party_{i}", v) for i, v in sorted((ppl.get("parties") or {}).items()) if i in parties]
+    for sub, role, v in people:
+        cid = f"{tag}_leader_{sub}"
+        name, sprite = (named.get(cid) or (None, None))[:2]
+        pic = v.get("portrait") or {}
+        if pic.get("file") and (DIR / pic["file"]).is_file() and pic.get("w") and pic.get("h"):
+            pname = f"{tag}_gazetteer_{role}"
+            portraits[pname] = (str(DIR / pic["file"]), *portrait_box(pic["w"], pic["h"]), None)
+            sprite = f"GFX_portrait_{pname}"
+        if v.get("name") or v.get("desc") or sprite:
+            named[cid] = (v.get("name") or name, sprite) + ((v["desc"],) if v.get("desc") else ())
     return out
 
 
@@ -549,6 +836,67 @@ def names(tag, base, by_ideology, pol):
     return base, out
 
 
+def colours(G):
+    """{tag: (r, g, b)}: the map colours the facts give, over the .pdn paint (like
+    nations.DISPLAY_COLOUR)"""
+    out = {}
+    for tag, f in G.items():
+        c = (f.get("about") or {}).get("colour")
+        if c:
+            out[tag] = tuple(int(c[i:i + 2], 16) for i in (1, 3, 5))
+    return out
+
+
+# ------------------------------------------------------------------ suggestions
+SUGGEST = (168, 50, 110)  # the page's colour for suggestions
+
+
+def suggestions(out_dir=Path("dist")):
+    """Everyone's suggestions as a transparent map-sized layer for the .pdn, and a preview
+    over the map. Returns how many."""
+    from PIL import Image, ImageDraw, ImageFont
+    G = load()
+    items = [(tag, v) for tag, f in sorted(G.items()) for v in f.get("suggest", [])]
+    layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    fill = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    d, df = ImageDraw.Draw(layer), ImageDraw.Draw(fill)
+    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 15)
+    ink = SUGGEST + (255,)
+    for tag, v in items:
+        pts = _unwrap(v["pts"])
+        for shift in (-W, 0, W):  # whatever crosses the seam shows on both sides
+            q = [(x + shift, y) for x, y in pts]
+            if max(x for x, _ in q) < 0 or min(x for x, _ in q) >= W:
+                continue
+            if v["type"] == "area":
+                df.polygon(q, fill=SUGGEST + (70,))
+                d.line(q + q[:1], fill=ink, width=3, joint="curve")
+            elif v["type"] == "line":
+                d.line(q, fill=ink, width=3, joint="curve")
+            else:
+                x, y = q[0]
+                d.polygon([(x, y - 8), (x + 7, y), (x, y + 8), (x - 7, y)], fill=ink, outline=(255, 255, 255, 255))
+    for tag, v in items:
+        pts = _unwrap(v["pts"])
+        x, y = (sum(p[0] for p in pts) / len(pts), sum(p[1] for p in pts) / len(pts)) if v["type"] == "area" else pts[0]
+        label = f"{tag}: {v['label']}" if v["label"] else tag
+        x = x % W
+        d.text((x + (0 if v["type"] == "area" else 10), y), label, font=font, fill=(30, 20, 30, 255),
+               anchor="mm" if v["type"] == "area" else "lm", stroke_width=3, stroke_fill=(255, 255, 255, 255))
+    layer = Image.alpha_composite(fill, layer)
+    out_dir = Path(out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    layer.save(out_dir / "gazetteer_suggestions.png", optimize=True)
+    base = Path("dist/valsora_countries_5120x2560.png")
+    under = Image.open(base).convert("RGBA") if base.exists() else Image.new("RGBA", (W, H), (185, 205, 216, 255))
+    Image.alpha_composite(under.resize((W, H)), layer).convert("RGB").resize((W // 2, H // 2), Image.LANCZOS) \
+        .save(out_dir / "gazetteer_suggestions_preview.png", optimize=True)
+    print(f"{len(items)} suggestions from {len({t for t, _ in items})} nations: "
+          f"{out_dir / 'gazetteer_suggestions.png'} (import it into the .pdn as a layer), "
+          f"{out_dir / 'gazetteer_suggestions_preview.png'}")
+    return len(items)
+
+
 # ------------------------------------------------------------------ status
 def status():
     G = load()
@@ -556,14 +904,39 @@ def status():
         print(f"{DIR} holds nothing yet.")
         return
     p = np.load("work/provinces.npz")
-    lab, kind = p["prov"], p["kind"]
+    lab = p["prov"]
     reg = np.load("work/regions.npz")
     rj = json.load(open("work/regions.json"))
     own = _owner_of(lab, reg["state_of"], rj["owners"])
+    on_map = set(rj["owners"])
+    planned_f = DIR / "planned.json"
+    planned = json.loads(planned_f.read_text(encoding="utf-8")) if planned_f.exists() else {}
+    record_f = DIR / "installed.json"
+    record = json.loads(record_f.read_text(encoding="utf-8")) if record_f.exists() else {}
+    todo = []
     for tag, f in G.items():
         lost = [k for kind_ in ("states", "provinces") for k in f.get(kind_, {})
                 if own[at(lab, k)] != tag]
-        print(f"{tag}: {summary(f)}" + (f"; {len(lost)} facts no longer on {tag}'s land, e.g. {lost[:3]}" if lost else ""))
+        where = "" if tag in on_map else f" (not on the map yet{': ' + planned[tag]['name'] if tag in planned else ''})"
+        print(f"{tag}{where}: {summary(f)}" + (f"; {len(lost)} facts no longer on {tag}'s land, e.g. {lost[:3]}" if lost else ""))
+        for r in f.get("requests", []):
+            if r["status"] == "open":
+                todo.append(f"{tag} asks [{r['kind']}] {r['title']}: {r['details'][:200]}")
+        for c in (f.get("people") or {}).get("characters", []):
+            todo.append(f"{tag} {c['role']}: {c.get('name', '(no name)')}" + (f" - {c['notes'][:160]}" if c.get("notes") else "")
+                        + (f" [portrait {c['portrait'].get('file') or 'not downloaded'}]" if c.get("portrait") else ""))
+        ab = f.get("about") or {}
+        if ab.get("culture"):
+            todo.append(f"{tag} culture: {ab['culture']}")
+        for slot, im in (f.get("flags") or {}).items():
+            if not im.get("file"):
+                todo.append(f"{tag} {slot} flag: not downloaded yet (asset {im.get('asset')})")
+            elif record.get(f"{tag}:{slot}") != im["file"]:
+                todo.append(f"{tag} {slot} flag: {im['w']} x {im['h']}, to fit to 82:52 by hand ({DIR / im['file']})")
+    if todo:
+        print("\nFor the author (or Claude) to do by hand:")
+        for t in todo:
+            print("  " + t)
 
 
 if __name__ == "__main__":
@@ -571,7 +944,11 @@ if __name__ == "__main__":
         import_files(sys.argv[2:])
     elif len(sys.argv) == 3 and sys.argv[1] == "pull":
         pull(sys.argv[2])
+    elif len(sys.argv) == 3 and sys.argv[1] == "paths":
+        paths(sys.argv[2])
     elif len(sys.argv) == 2 and sys.argv[1] == "status":
         status()
+    elif len(sys.argv) == 2 and sys.argv[1] == "suggestions":
+        suggestions()
     else:
         sys.exit(__doc__)
