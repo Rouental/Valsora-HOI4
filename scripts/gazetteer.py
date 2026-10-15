@@ -386,16 +386,19 @@ def normalise(tag, facts, meta, requests=(), sources=(), todo=None):
     if about:
         out["about"] = about
     sugg = []
-    for v in (facts.get("suggest") or {}).values():
-        if not isinstance(v, dict) or v.get("type") not in ("area", "line", "point"):
+    raw = facts.get("suggest") or {}
+    for k in sorted(raw):  # ids begin with the time: drawn states keep their order (an earlier one wins)
+        v = raw[k]
+        if not isinstance(v, dict) or v.get("type") not in ("state", "area", "line", "point"):
             continue
         pts = points(v.get("pts"))
-        if len(pts) < {"area": 3, "line": 2, "point": 1}[v["type"]]:
+        if len(pts) < {"state": 3, "area": 3, "line": 2, "point": 1}[v["type"]]:
             continue
         sugg.append({"type": v["type"], "pts": pts, "label": clean(v.get("label"), 80), "note": text(v.get("note"), 1000)})
     if sugg:
-        out["suggest"] = sorted(sugg, key=lambda v: (v["type"], v["pts"]))
-    # releasables: their land (provinces by pixel, or drawn areas), names, flag and ruler
+        out["suggest"] = sorted(sugg, key=lambda v: v["type"])
+    # releasables: their land (whole states by pixel; provinces, saved before 2026-10-15 (later);
+    # or drawn areas), names, flag and ruler
     rels = []
     raw = facts.get("releasables") or {}
     for rid in sorted(raw, key=lambda k: (num((raw[k] or {}).get("added") if isinstance(raw[k], dict) else 0, 0, 10 ** 14) or 0, k)):
@@ -426,19 +429,21 @@ def normalise(tag, facts, meta, requests=(), sources=(), todo=None):
             r["leader"] = lead
         if text(v.get("notes"), 2000):
             r["notes"] = text(v["notes"], 2000)
-        provs = set()
-        for k, on in (v.get("provinces") or {}).items():
-            try:
-                if on:
-                    provs.add("%d,%d" % xy(k))
-            except ValueError:
-                continue
-        if provs:
-            r["provinces"] = sorted(provs, key=lambda k: xy(k)[::-1])
+        land = {}
+        for kind_ in ("states", "provinces"):
+            keys = set()
+            for k, on in (v.get(kind_) or {}).items():
+                try:
+                    if on:
+                        keys.add("%d,%d" % xy(k))
+                except ValueError:
+                    continue
+            if keys:
+                land[kind_] = r[kind_] = sorted(keys, key=lambda k: xy(k)[::-1])
         areas = [points(a) for _, a in sorted((v.get("areas") or {}).items()) if isinstance(a, list)]
         if any(len(a) >= 3 for a in areas):
             r["areas"] = [a for a in areas if len(a) >= 3]
-        if r.get("name") or provs or r.get("areas"):
+        if r.get("name") or land or r.get("areas"):
             rels.append(r)
     if rels:
         out["releasables"] = rels
@@ -521,7 +526,8 @@ def import_nations(nations, planned=None, sources=(), unlock=None):
         n = normalise(tag, facts, v.get("meta") or {}, v.get("requests") or (), sources, todo)
         if opened is not None and opened.get(tag) is False:
             dropped = [k for k in MAP_KINDS if n.pop(k, None) is not None]
-            dropped += [f"the provinces of {r.get('name') or r['id']}" for r in n.get("releasables", []) if r.pop("provinces", None)]
+            dropped += [f"the {k} of {r.get('name') or r['id']}" for r in n.get("releasables", [])
+                        for k in ("states", "provinces") if r.pop(k, None)]
             if dropped:
                 print(f"{tag}: its states aren't drawn yet (map tools closed): left out {', '.join(dropped)}")
         path = DIR / f"{tag}.json"
@@ -1032,8 +1038,9 @@ REL_COLOURS = ("#b5543c", "#3c7db5", "#6f9a3a", "#8a4fb0", "#c2912e", "#2f9a93",
 
 def releasables(G, lab, kind, state_of, owners, notes, taken=()):
     """The facts' releasables as the build makes them: countries owning nothing, with cores
-    on the states of their nation they hold at least half of (by its provinces, or the areas
-    drawn before its states were), the largest first (the capital). Each is {tag, parent,
+    on the states of their nation they hold (whole states), or at least half of (by provinces,
+    saved before states were picked whole, or the areas drawn before its states were), the
+    largest first (the capital). Each is {tag, parent,
     name, adj, colour, states, facts}, facts being what the build reads for a nation
     (politics with its names and ruling sub-ideology, its ruler, its colour). `taken`: tags
     of countries already in the mod."""
@@ -1053,9 +1060,13 @@ def releasables(G, lab, kind, state_of, owners, notes, taken=()):
             notes.append(f"Gazetteer: {tag}'s releasable {name} has no tag of its own (import it again); left out")
             continue
         cover = defaultdict(int)  # state -> its pixels the releasable holds
+        for k in r.get("states", []):
+            s_ = int(st[at(lab, k)])
+            if s_ >= 0 and owners[s_] == tag:
+                cover[s_] = int(state_px[s_])
         provs = {at(lab, k) for k in r.get("provinces", [])}
         for p in provs:
-            if kind[p] == 1 and own[p] == tag:
+            if kind[p] == 1 and own[p] == tag and cover[int(st[p])] < state_px[int(st[p])]:
                 cover[int(st[p])] += int(prov_px[p])
         for pts in r.get("areas", []):
             u = _unwrap(pts)
@@ -1109,8 +1120,10 @@ SUGGEST = (168, 50, 110)  # the page's colour for suggestions
 
 def suggestions(out_dir=Path("dist")):
     """Everyone's suggestions as a transparent map-sized layer for the .pdn, and a preview
-    over the map. Returns how many."""
+    over the map. Returns how many. A drawn state is the nation's land inside its line that
+    no state it drew before holds, as the page shows it."""
     from PIL import Image, ImageDraw, ImageFont
+    from scipy import ndimage as ndi
     G = load()
     items = [(tag, v) for tag, f in sorted(G.items()) for v in f.get("suggest", [])]
     layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))
@@ -1118,7 +1131,37 @@ def suggestions(out_dir=Path("dist")):
     d, df = ImageDraw.Draw(layer), ImageDraw.Draw(fill)
     font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 15)
     ink = SUGGEST + (255,)
+    where = {}  # drawn state -> its label's place
+    drawn = [(tag, v) for tag, v in items if v["type"] == "state"]
+    if drawn:
+        p = np.load("work/provinces.npz")
+        lab, kind = p["prov"], p["kind"]
+        own = _owner_of(lab, np.load("work/regions.npz")["state_of"], json.load(open("work/regions.json"))["owners"])
+        tags = sorted({t for t, _ in drawn})
+        code = np.array([tags.index(t) + 1 if t in tags else 0 for t in own.tolist()], np.int32)
+        land_of = np.where(kind[lab] == 1, code[lab], 0)
+        rgba = np.zeros((H, W, 4), np.uint8)
+        taken = {t: np.zeros((H, W), bool) for t in tags}
+        for tag, v in drawn:
+            im = Image.new("1", (W, H), 0)
+            dm = ImageDraw.Draw(im)
+            pts = _unwrap(v["pts"])
+            for shift in (-W, 0, W):
+                dm.polygon([(x + shift, y) for x, y in pts], fill=1, outline=1)
+            m = np.asarray(im) & (land_of == tags.index(tag) + 1) & ~taken[tag]
+            taken[tag] |= m
+            if not m.any():
+                continue
+            rim = m & ~ndi.binary_erosion(m, np.array([[0, 1, 0], [1, 1, 1], [0, 1, 0]]))
+            rgba[m] = SUGGEST + (90,)
+            rgba[rim] = SUGGEST + (255,)
+            ys, xs = np.nonzero(m)
+            where[id(v)] = (float(xs.mean()), float(ys.mean()))
+        fill = Image.alpha_composite(fill, Image.fromarray(rgba))
+        df = ImageDraw.Draw(fill)
     for tag, v in items:
+        if v["type"] == "state":
+            continue
         pts = _unwrap(v["pts"])
         for shift in (-W, 0, W):  # whatever crosses the seam shows on both sides
             q = [(x + shift, y) for x, y in pts]
@@ -1134,11 +1177,14 @@ def suggestions(out_dir=Path("dist")):
                 d.polygon([(x, y - 8), (x + 7, y), (x, y + 8), (x - 7, y)], fill=ink, outline=(255, 255, 255, 255))
     for tag, v in items:
         pts = _unwrap(v["pts"])
-        x, y = (sum(p[0] for p in pts) / len(pts), sum(p[1] for p in pts) / len(pts)) if v["type"] == "area" else pts[0]
+        if v["type"] == "state" and id(v) not in where:
+            continue  # none of its nation's land inside it
+        mid = v["type"] in ("area", "state")
+        x, y = where.get(id(v)) or ((sum(p[0] for p in pts) / len(pts), sum(p[1] for p in pts) / len(pts)) if mid else pts[0])
         label = f"{tag}: {v['label']}" if v["label"] else tag
         x = x % W
-        d.text((x + (0 if v["type"] == "area" else 10), y), label, font=font, fill=(30, 20, 30, 255),
-               anchor="mm" if v["type"] == "area" else "lm", stroke_width=3, stroke_fill=(255, 255, 255, 255))
+        d.text((x + (0 if mid else 10), y), label, font=font, fill=(30, 20, 30, 255),
+               anchor="mm" if mid else "lm", stroke_width=3, stroke_fill=(255, 255, 255, 255))
     layer = Image.alpha_composite(fill, layer)
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -1196,6 +1242,7 @@ def status():
             b_ = by_rel.get(r.get("tag"))
             print(f"  releasable {r.get('name') or r['id']} ({r.get('tag')}): "
                   + (f"cores on {len(b_['states'])} state(s)" if b_ else "not in the build")
+                  + (f", {len(r['states'])} states picked" if r.get("states") else "")
                   + (f", {len(r['provinces'])} provinces" if r.get("provinces") else "")
                   + (f", {len(r['areas'])} drawn areas" if r.get("areas") else ""))
             im = r.get("flag")

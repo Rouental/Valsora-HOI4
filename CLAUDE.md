@@ -166,7 +166,7 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `make_game_pdn.py` / `writepdn.py` | turn a placeholder build into a fresh `HOI4 Mod Map.pdn`; `writepdn` writes any `.pdn` from a template's object graph, and adds layers on top when given more than the template has (2026-10-13, the flag file) |
 | `nrbf.py` | reads a `.pdn`'s .NET object graph into records with their byte spans (used by `writepdn` to add layers) |
 | `apply_outlines.py` | by hand: the author's outline layers → provinces, states, countries in the `.pdn` |
-| `pdn_tools.py` | by hand: `navigable` (lake → sea with its own region), `sea_zones` (regroup and recolour regions; refused on a map with Ocean Province Lines), `give` (whole states to a country), `recolour`, `channel` (reopen a strait: the cheapest water-to-water path between two sea pixels becomes sea), `border` (the land a moved Necessary Borders line encloses → a country), `cede` (the land of one country a moved line cuts off → another, for countries without state lines: only the first country's pixels count, provinces are split along the line; what a split state loses is a state of its own from 600 px (`CEDED_STATE`), smaller slivers join a state that moved whole), `merge_small` (a country's sliver states join a neighbour), `attach` (a state goes to a country and joins its nearest state, regions too: for an islet or sliver too small to be a state), `add_land` (the water under a layer's paint, default "Islands to Add", becomes a country's land: plains, the nearest land's height, continent and region, a province per island, one new state) |
+| `pdn_tools.py` | by hand: `navigable` (lake → sea with its own region), `sea_zones` (regroup and recolour regions; refused on a map with Ocean Province Lines), `give` (whole states to a country), `recolour`, `channel` (reopen a strait: the cheapest water-to-water path between two sea pixels becomes sea), `border` (the land a moved Necessary Borders line encloses → a country), `cede` (the land of one country a moved line cuts off → another, for countries without state lines: only the first country's pixels count, provinces are split along the line; what a split state loses is a state of its own from 600 px (`CEDED_STATE`), smaller slivers join a state that moved whole), `merge_small` (a country's sliver states join a neighbour), `attach` (a state goes to a country and joins its nearest state, regions too: for an islet or sliver too small to be a state), `add_land` (the water under a layer's paint, default "Islands to Add", becomes a country's land: plains, the nearest land's height, continent and region, a province per island, one new state), `recut` (placeholder land the outline runs never reached cut like an outlined patch: the piece of a country's land around a pixel becomes ~1,300 px states (one up to 2,000 px) and ~190 px organic provinces, each new state in the region most of it lies in; `--keep-states` cuts only the provinces), `lakes` (each lake one province, in the region most of it was in) |
 | `strategic_regions.py` | retired 2026-10-12 (refuses to run on a map with Ocean Province Lines, unless `--force`): sea regions = the author's oceans, one each, with names (`source/region_names.json`); land untouched |
 | `sea_provinces.py` | by hand: the sea from the Ocean Province Lines layer (Merlo's): `build` (provinces from the lines, cut to HOI4's size limit, colours and regions kept by overlap), `seam` (borders and regions meet across the left/right wrap), `names` (`source/region_names.json`: "<ocean> <n>" west to east), `check` (report only) |
 | `river_provinces.py` | by hand, after a build: re-cuts the provinces of every state a river crosses so rivers run between provinces |
@@ -264,7 +264,16 @@ scripting (tags targeted, popularities, ideologies) skip vanilla's shipped files
   the seam (the edge half-bricks of odd rows are folded into their neighbour). Pieces under
   25% of a brick merge into the same-kind neighbour with the longest shared border.
   Remaining X-crossings (coasts, seam) are fixed by moving single pixels, never letting a
-  lake touch the sea.
+  lake touch the sea. **No bricks are left** (2026-10-15, author: "there are areas of the map
+  that still have the old placeholder states and provinces"): every lake is one province
+  (`pdn_tools.py lakes`: four lakes had 2-10 squares, 13 merged, among them the lake by Xue and
+  Ungar's), and the land no outline run had reached, 87 brick provinces in 32 px squares and
+  96 px grid states, was cut like an outlined patch (`pdn_tools.py recut`): Arvorenia's and
+  Atrocha's islands (the friend's build of 2026-10-05; Arvorenia 34 → 56 states, Atrocha 14 →
+  26), Kurikia's KU island and Belekria's island group south of the BE islets (their one state
+  each kept, `--keep-states`, so Kurikia's map tools stay open). They are found as provinces
+  whose borders with other land provinces run 60 % or more on the brick grid (organic ones:
+  under 20 %). `dist/preview_recut_20261015.png` shows them before and after.
 - **Straits are traced, not averaged** (`layout.channels`). Shrinking by area filled in
   channels narrower than ~1.5 output px and fused 21 large islands to their neighbours
   (author's report). The water's centre line is traced at source resolution and kept as
@@ -1361,22 +1370,35 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   borders have been set in the mod, full customization would be unlocked"). `gazetteer.finals`
   marks a nation final when no two of its states share an area the Necessary Borders and
   Necessary States lines enclose (the states `apply_outlines.py` cuts from an area left without
-  lines do); one-piece nations count (Claude's suggestion, accepted). 37 of 161 on 2026-10-15:
-  AIS CRD KRK LTH ROU STO and 31 of one piece; Belekria, San Sierra and Placeholdaire are partly
-  drawn, 121 not at all. Until then the page shows the plain land (no cut states), only Map,
-  Politics, People, Releasables and Nation and the Select, Releasables (areas) and Suggest tools;
+  lines do); one-piece nations count (Claude's suggestion, accepted). 39 of 161 on 2026-10-15,
+  later: AIS CRD KRK LNT LTH ROU SSA STO and 31 of one piece (Placeholdaire and San Sierra each had
+  an island without lines in two states, from the placeholder grid and the old 650 px rule:
+  merged with `pdn_tools.py attach`, author: "Placeholdaire has all its provinces defined, yet is
+  not editable"); Belekria is partly drawn, 121 not at all. Until then the page shows the plain
+  land (no cut states), only Map, Politics, People, Releasables and Nation and the Select,
+  Releasables (areas) and Suggest tools;
   `planned/unlock` ({TAG: true | false}, Owner tools › Map tools, or the nation's Map tab)
   overrides the rule. The import drops a closed nation's states, provinces, cities, rivers,
-  railways and releasables' provinces (the file of every nation carries `unlock`).
+  railways and releasables' states (the file of every nation carries `unlock`).
+- **Drawn states** (author, 2026-10-15: "when drawing states they should snap to the borders of
+  the nation and the borders of other states so that they fit together well and don't
+  overlap"): Suggest › State (the default on a closed nation) keeps the nation's own land inside
+  the line that no state drawn before it holds (suggestion ids begin with the time), filled
+  pixel by pixel in the land's picture (`sugFill`), so a player draws past the coast and the
+  borders. **Make it a state** turns an area into one. `gazetteer.py suggestions` clips them the
+  same way for the `.pdn` layer.
 - **Releasables** (author, 2026-10-15: "allow people to select provinces that could be
   releasables, and then the ability to define flags, names, etc."). The `releasables` document:
   `{rl-<id>: {name, adj, def, ruling, colour, flag, leader {name, desc, portrait}, notes,
-  provinces {"x,y": true}, areas {a-<id>: points}, added}}`; a province belongs to one
-  releasable; areas while the map tools are closed. The import gives each a tag (`new_tag`: its
+  states {"x,y": true}, areas {a-<id>: points}, added}}`; whole states (2026-10-15, later; the
+  author asked whether provinces would work in game: HOI4 cores states, for releasables and
+  formables alike), a state belongs to one releasable; areas while the map tools are closed.
+  The first ones held `provinces {"x,y": true}`: the page and the build read those as the
+  states they cover by half, and the page saves them as states once their land changes. The import gives each a tag (`new_tag`: its
   name's letters, never `COUNTRIES`', the base game's (LIB is Liberia's), a planned nation's or
   another releasable's), kept by id. The build (`gazetteer.releasables`) makes each a country
   owning nothing (in `COUNTRIES` as `gazetteer_<tag>` for that build only), with cores on the
-  states it holds at least half of (provinces and areas, by pixels; the largest is its capital;
+  states it holds (whole, or at least half of by provinces and areas, in pixels; the largest is its capital;
   less than half is a note, none at all leaves it out), its names, ruler and colour as facts of
   its tag, its nation's culture, and its nation's ruling sub-ideology when it has none. Its flag
   goes to `source/flags/<tag>.png` at the import like a nation's.
@@ -1529,6 +1551,14 @@ in git history (commit d2d6cd8, `scripts/cartographic.py`). It used
 
 ## Current state
 
+- 2026-10-15, latest: the leftover placeholder bricks are gone (lakes one province each;
+  Arvorenia, Atrocha, the KU island and a Belekria island group cut organically), Placeholdaire's
+  and San Sierra's islands are one state each, so their map tools are open on the Gazetteer (39
+  of 161). 21,078 provinces (20,690 land, 363 sea, 25 lake), 3,149 states, 62,183 province
+  borders, 122 strategic regions, 182 countries. The Gazetteer counts the map's state names as
+  named, shows each government's flag in game, picks releasables by whole states, and clips
+  drawn states to the nation's land and to each other. Rouental's page (the author's test
+  edits, read with its password on 2026-10-15) is not imported.
 - 2026-10-15, later: the Gazetteer keeps a nation's map tools closed until its states are drawn
   (37 of 161 open), lets players define releasables, and has admins (Merlo, once the author adds
   him; the author is to paste the new rules). `docs/HANDOFF_MERLO.md` for Merlo's Claude. No

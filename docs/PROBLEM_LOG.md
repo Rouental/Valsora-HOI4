@@ -6,6 +6,33 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**Leftover placeholder bricks and grid states; Placeholdaire's map tools closed; Gazetteer gaps**
+(2026-10-15, author's screenshots of the `.pdn` and the site)
+- Squares by Xue, around the Associated Cities and Qinguo, and by Ungar: the lakes, still in the
+  placeholder build's 48 px squares (four lakes, 2-10 each). Fix: `pdn_tools.py lakes`, each lake
+  one province.
+- Squares on Arvorenia's and Atrocha's islands and Kurikia's KU island: 87 land provinces still
+  32 px bricks, with 96 px grid states, where no outline run had reached (the friend's build of
+  2026-10-05; islands given whole with `give`). Fix: `pdn_tools.py recut` cuts them like an
+  outlined patch (Kurikia's and a Belekria island group's single states kept). Found by
+  provinces whose borders run 60 % or more on the brick grid; none are left.
+- Placeholdaire was "not editable": an island with no line on it was two states (the edge of an
+  old strategic region; San Sierra had one too, from the old 650 px state size), so the test for
+  drawn states said no. Fix: each merged into one state (`pdn_tools.py attach`).
+- The site counted only names typed on it ("0 / 56 named" for Rouental, named on the map), and
+  showed none of Rouental's government flags. Fix: the export marks the states the map names
+  (`named`) and carries the game's `TAG_<ideology>` flags; the page counts and shows them.
+- Releasables picked provinces, which HOI4 can't core (cores, like formables, are per state).
+  Fix: they pick whole states; the first ones' provinces count as the states they cover by half.
+- Drawn states overlapped and ran into the sea and neighbours. Fix: Suggest › State keeps only the
+  nation's land inside the line that no earlier state holds.
+- Found while testing: on a phone the Suggest tool's hint, beside four chips (State is new), became
+  a narrow column nine lines tall and squeezed the map to 85 px, so a tap landed on the boxes of the
+  nation's other parts. Fix: on a phone the chips scroll in a row of their own and the hint sits
+  below them in two lines (a tap shows the rest); the map keeps 230 px.
+- Found on the way: `country_list.py` listed the 364 Earth tags the build has kept as stand-ins
+  since 2026-10-14 (546 "countries"). Fix: it leaves out the base game's tags that aren't ours.
+
 **Deco UI: the other side panels left a gap under the top bar and covered the medallion; two installs**
 (2026-10-14, author)
 - Every side panel but the politics screen still opened at y 78 (16 px below the band) and, drawn over the top

@@ -62,13 +62,18 @@ hubs on the map) open only once its states are your own lines: drawing them late
 provinces again, and what was entered on the old ones would land in the wrong places. A nation
 counts as ready when no two of its states share an area your Necessary Borders and Necessary
 States lines enclose (the build splits an area you left without state lines into states of about
-1,300 px); a nation of single pieces (one state, islands) counts too. On 2026-10-15, 37 of 161
-nations were ready: Rouental, Cardonia, Kurikia, Merlovich, Leithanien, Selto and 31 nations of
-one piece each (Seigne, Evriches, Guedelon, Devlon, the Holy See ...).
+1,300 px); a nation of single pieces (one state, islands) counts too. On 2026-10-15, 39 of 161
+nations were ready: Rouental, Cardonia, Kurikia, Merlovich, Leithanien, Selto, Placeholdaire,
+San Sierra and 31 nations of one piece each (Seigne, Evriches, Guedelon, Devlon, the Holy See
+...). Placeholdaire and San Sierra each had an island with no line on it cut into two states (an
+old placeholder state and the old 650 px rule); each is one state now.
 
 Until then its player sees its land without the states the build cut, and can fill in its names,
-flags, people and releasables, and suggest its states and cities with the Suggest tool: an area
-for each state (or lines along its borders) and a point for each city, each saying what it is.
+flags, people and releasables, and suggest its states and cities with the Suggest tool: a
+**State** for each (the default there), lines along borders, and a point for each city, each
+saying what it is. A drawn state keeps only the nation's own land inside its line, and none of a
+state drawn before it, so a player draws past the coast and the borders and the states fit
+together without overlapping; **Make it a state** turns an area drawn before into one.
 Use them when you draw (below). When you have drawn a nation's states, its tools open by
 themselves at the next update of the site. **Owner tools › Map tools** opens or closes any
 nation by hand (Automatic, Open, Closed); a nation's own Map tab has the same button for you.
@@ -78,10 +83,14 @@ nation by hand (Automatic, Open, Closed); a nation's own Map tab has the same bu
 On the **Releasables** tab, a player adds the nations that could be released from theirs: its
 name, adjective and full title, its ruling sub-ideology, map colour, flag, ruler (name, titles,
 portrait) and a few words about it, and its land. With the **Releasables** tool they pick its
-provinces on the map (a province belongs to one releasable; **Take them away** removes them),
+states on the map, whole (a state belongs to one releasable; **Take them away** removes them),
 or, while their map tools are closed, draw its land as areas. In the game a releasable is a
-country owning nothing at the start, with cores on its land, so its nation can release it from
-the diplomacy screen.
+country owning nothing at the start, with cores on its states, so its nation can release it
+from the diplomacy screen. HOI4 gives cores on whole states, never on provinces (a formable
+nation works the same way), so a releasable whose border runs through a state needs that state
+split: the player draws the line with the Suggest tool and you draw the state line. The first
+releasables (before this) held provinces; they count as the states those cover by half, and are
+saved as states once their land changes.
 
 A friend whose page can't reach the atlas still gets the whole page: their changes stay in
 their browser, and **Nation › Save a file** gives them a file to send you. Load it with
@@ -97,11 +106,11 @@ their browser, and **Nation › Save a file** gives them a file to send you. Loa
 | Cities tab and tool | cities (one per province), their victory points, the capital | victory points and their names; the capital city's state becomes the capital |
 | map, Railways tool | railways (level 1-5) through cities and places | `map/railways.txt`: the shortest way over land between the provinces under the points, as the page draws it |
 | map, Hubs tool | supply hubs | `map/supply_nodes.txt`: once a nation has its own, only those and its capital |
-| map, Suggest tool | areas, lines and points drawn anywhere on the world (a border, an island that should be theirs, a mountain range, where an undrawn nation goes), each with what it is | nothing by itself: a layer for you (below) |
+| map, Suggest tool | states (their own land inside the line, none of an earlier one's), areas, lines and points drawn anywhere on the world (a border, an island that should be theirs, a mountain range, where an undrawn nation goes), each with what it is | nothing by itself: a layer for you (below) |
 | Politics tab | name, full title and adjective under every government and each ideology; ruling sub-ideology | localisation, `nations.LEADERS` |
 | People tab | head of state (name, titles, portrait); each other party's sub-ideology, leader and portrait; generals, admirals, advisors (name, notes, portrait) | the rulers and party leaders, with their titles shown on the portrait; the characters are a list for you |
-| Releasables tab and tool | releasables: name, adjective, full title, ruling sub-ideology, colour, flag, ruler, notes, land (provinces, or drawn areas) | a country each, owning nothing, with cores on the states it holds at least half of (the largest is its capital), its names, ruler, colour and flag; culture its nation's |
-| Nation tab | status (in progress / finished), flags (one, and one per government if they like), map colour, culture, motto, anthem, description, notes for you, requests | flags into `source/flags/`; the map colour; the rest is for you |
+| Releasables tab and tool | releasables: name, adjective, full title, ruling sub-ideology, colour, flag, ruler, notes, land (whole states, or drawn areas) | a country each, owning nothing, with cores on its states (and those its areas cover by half; the largest is its capital), its names, ruler, colour and flag; culture its nation's |
+| Nation tab | status (in progress / finished), flags (one, and one per government if they like; each slot shows the game's flag until a picture is sent), map colour, culture, motto, anthem, description, notes for you, requests; how far it is (states named counts the names already on your map) | flags into `source/flags/`; the map colour; the rest is for you |
 
 Pictures (flags, portraits) are kept at up to 640 px, plenty for HOI4's 82 × 52 flags and
 156 × 210 portraits.
@@ -150,13 +159,14 @@ with `gazetteer.py paths` and `pull`, which still work.)
   too, or your next flag file would put your old ones back.
 - **Portraits** are cropped to HOI4's 156 × 210 from the top of the picture.
 - **Suggestions**: `dist/gazetteer_suggestions.png` is a transparent 5120 × 2560 picture of
-  every suggestion with its label; import it into the `.pdn` as a layer (it lines up exactly)
-  and draw from it. `dist/gazetteer_suggestions_preview.png` shows them over the map.
+  every suggestion with its label (a drawn state as the page shows it: the nation's land inside
+  its line that an earlier one doesn't hold); import it into the `.pdn` as a layer (it lines up
+  exactly) and draw from it. `dist/gazetteer_suggestions_preview.png` shows them over the map.
 - **Releasables** get a tag each at their first import (from their name, never one in use or
   the base game's), kept from one import to the next. `status` lists their cores; one holding
-  no state by half is left out of the build with a note (draw a state line along its border).
+  no state is left out of the build with a note.
 - **Nations whose map tools are closed**: their states, provinces, cities, rivers and railways,
-  and their releasables' provinces, are left out at the import (the file carries your switches;
+  and their releasables' states, are left out at the import (the file carries your switches;
   the import reads which states are drawn from the last build).
 - **By hand**: requests, generals and admirals, cultures and flags of other shapes; `status`
   lists them.

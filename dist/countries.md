@@ -15,9 +15,9 @@
 | AVN | Arovannea | the Confederative Republics of Arovannea | Democratic | Conservatism | German | Estúr Illger fön Reegen | 26 |  |
 | ARP | Arpino | the United Empire of Arpino | Monarchist | Enlightened Absolutism | Indian | Narenda Hooda | 109 |  |
 | ESC | Artzen | the Wyrhterrepublik of Artzen | Communist | Orthodox Marxism | German | Johann Will | 5 | in The Synthesist Internationale |
-| ARV | Arvorenia | the United Kingdom of Éden, Santo Domingo, and Arovia | Democratic | Constitutional Monarchy | Portuguese | Daniel Maurício | 34 |  |
+| ARV | Arvorenia | the United Kingdom of Éden, Santo Domingo, and Arovia | Democratic | Constitutional Monarchy | Portuguese | Daniel Maurício | 56 |  |
 | ASC | Associated Cities | the Associated Cities of Dahu and Jinhu | Democratic | Liberalism | Chinese | Yu Jiaming | 1 | in The Great Lake Republics |
-| ATR | Atrocha | the Republic of Atrocha | Democratic | Liberalism | Spanish | Astrid Bethancourt | 14 |  |
+| ATR | Atrocha | the Republic of Atrocha | Democratic | Liberalism | Spanish | Astrid Bethancourt | 26 |  |
 | AVE | Avesária | the Avesária Dimokratía | Monarchist | Semi-Constitutional Monarchy | Greek | Nikosanis Coisan II | 6 |  |
 | BLK | Belekria | the Union of Belekrian Republics | Communist | Vanguardism | Russian | Roman Voroshilov | 45 |  |
 | BKA | Belka | the Most Serene State of Belka | Authoritarian | Fascism | Russian | Aleksandr Isayev | 39 |  |
@@ -112,7 +112,7 @@
 | PTK | Peatiktist | the Constitutional Dictatorship of Peatiktist | Authoritarian | Strongman Rule | German | Philipp Gross | 27 |  |
 | PZH | Pinzahao | the Liberated Peoples of Pinzahao | Democratic | Radical Republicanism | Chinese | Yuan Wenzhong | 6 |  |
 | PSC | Piscary | the Duchy of the Piscary | Monarchist | Feudalism | French | Achille Bosquet | 0 | no land at the start (releasable or civil war) |
-| LNT | Placeholdaire | the Republic of Placeholdaire | Democratic | Conservatism | French | Charles Gallieni | 14 |  |
+| LNT | Placeholdaire | the Republic of Placeholdaire | Democratic | Conservatism | French | Charles Gallieni | 13 |  |
 | PLJ | Plaija | the People's Republic of Plaija | Communist | Orthodox Marxism | Vietnamese | Mai Đức Tài | 65 |  |
 | PNC | Ponchomagnifico | the Community of Ponchomagnifico | Authoritarian | Strongman Rule | Spanish | Mauricio Gómez | 6 |  |
 | PAM | Port Almohavid | the Free Port of Almohavid | Democratic | Lordly Republic | Moroccan | Ryan Khayat | 1 |  |
@@ -130,7 +130,7 @@
 | KIL | Royalist Illiricium | the Kingdom of Illiricium | Monarchist | Legitimism | Italian | Beatrice di Alqiro | 2 |  |
 | RSV | Russovichia | the Soyuz Narodnykh Komissarov of Russovichia | Communist | Council Communism | Russian | Amayak Shvetsov | 2 |  |
 | RYS | Ryśny | the United Voivodes of Ryśny | Democratic | Agrarianism | Polish | Marcin Kozłowski | 8 |  |
-| SSA | San Sierra | the People's Republic of San Sierra | Communist | Council Communism | Spanish | Emilio Díaz | 21 |  |
+| SSA | San Sierra | the People's Republic of San Sierra | Communist | Council Communism | Spanish | Emilio Díaz | 20 |  |
 | SNA | Sanada | the United Sanadan Clans | Monarchist | Khanate | Buryat | Bulgan Barannikov | 84 |  |
 | SGT | Sangterre | the Duchy of Sangterre | Monarchist | Feudalism | French | Lucien Anthoine | 0 | no land at the start (releasable or civil war) |
 | SFE | Santa Fe | the Fifth Republic of Santa Fe | Communist | Party Centralism | Latin American | Lázaro Mejía | 7 |  |

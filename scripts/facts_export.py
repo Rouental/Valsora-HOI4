@@ -110,6 +110,12 @@ def flag(tag, medium=False):
     return png_uri(Image.open(f).convert("RGB")) if f.exists() else None
 
 
+def gov_flags(tag):
+    """{ideology: picture}: the flags the game flies only while that ideology rules
+    (TAG_<ideology>.tga; a government without one flies the main flag)"""
+    return {i: flag(f"{tag}_{i}") for i, _ in IDEOLOGY_NAMES if (MOD / "gfx/flags" / f"{tag}_{i}.tga").exists()}
+
+
 def parts_of(mask4, gap4):
     """Groups of a country's land (a mask at 1/4 scale) closer than gap4 to each other,
     across the seam too. Returns lists of (y slice, x0, x1) boxes at 1/4 scale, x1 may run
@@ -234,16 +240,21 @@ def main():
         cities = []
         st_list = []
         cap_state = capital.get(tag, -1)
+        country = COUNTRIES[by_tag[tag]][1]
         for k, s in enumerate(mine):
             g = states[s]
             b = built[s + 1]
+            # named: the author's name (source/state_names.json or the facts), not the build's
+            # "<country> <n>", which numbers a country's states in order (build_mod.py)
+            name = names.get(s + 1, "")
             # where the state's name goes: the anchor of its province nearest its middle
             w_ = np.array([size[i] for i in g], float)
             cy = float(np.average([centre[i][0] for i in g], weights=w_))
             cx = float(np.average([centre[i][1] for i in g], weights=w_))
             lp = min(g, key=lambda i: (anchor[i][0] - cy) ** 2 + (anchor[i][1] - cx) ** 2)
             st_list.append(dict(
-                key=key(max(g, key=lambda i: (size[i], -i))), id=s + 1, name=names.get(s + 1, ""),
+                key=key(max(g, key=lambda i: (size[i], -i))), id=s + 1, name=name,
+                named=bool(name) and name != f"{country} {k + 1}",
                 pop=b["pop"], cat=b["cat"], b=b["b"], naval=b["naval"], res=b["res"],
                 coastal=bool(coastal[g].any()), capital=s == cap_state,
                 provs=[local[i] for i in g], area=int(sum(int(size[i]) for i in g)),
@@ -263,7 +274,7 @@ def main():
                   int(anchor[i][1]), int(anchor[i][0])] for i in own]
         cont = CONTINENTS[int(p["cont"][states[cap_state][0]]) - 1] if cap_state >= 0 else ""
         c = COUNTRIES[by_tag[tag]]
-        nation = dict(tag=tag, name=c[1], adj=c[2], colour=colour(tag), flag=flag(tag),
+        nation = dict(tag=tag, name=c[1], adj=c[2], colour=colour(tag), flag=flag(tag), flags=gov_flags(tag),
                       continent=CONT_NAME.get(cont, cont), final=final[tag], states=st_list, provs=provs,
                       others=others, nb=[dict(tag=o, name=COUNTRIES[by_tag[o]][1], colour=colour(o))
                                          for o in sorted(nb, key=nb.get)],

@@ -126,6 +126,8 @@ All of these are `scripts/pdn_tools.py` commands, and they edit the `.pdn` in pl
 | A country's sliver states, joined to a neighbour | `merge_small COUNTRY MIN_PX` | — |
 | Reopen a strait | `channel X1,Y1,X2,Y2` | — |
 | Lake to sea | `navigable X,Y` | — |
+| Placeholder land cut like an outlined patch (~1,300 px states, ~190 px provinces) | `recut [--keep-states] X,Y …` | `recut 1950,1811` (Arvorenia) |
+| Each lake one province | `lakes` | — |
 
 ### Names
 
@@ -234,17 +236,19 @@ password: https://rouental.github.io/Valsora-HOI4/
 - **A nation's map tools** (states, cities, terrain, rivers, railways, supply hubs) open
   only once its states are the author's own lines.
   - Before that, its player suggests states and cities with the Suggest tool, and fills
-    in names, flags, people and releasables.
+    in names, flags, people and releasables. A drawn state (Suggest › State) keeps only the
+    nation's own land inside the line, and none of a state drawn before it.
   - When you or the author draw a nation's states, its tools open at the next site
     update. "Map tools" in Owner tools can open or close any nation by hand.
 - **Use the suggestions when you draw.** Owner tools › Suggestions › "Show them on the
   world map". Or, in the repository, run `python3 scripts/gazetteer.py suggestions`,
   which writes `dist/gazetteer_suggestions.png`: a transparent 5120 × 2560 layer to
   import into the `.pdn`.
-- **Releasables.** Players can define releasables: their land, names, government, flag
-  and ruler. Once imported, the build makes each a country owning nothing, with cores on
-  the states it holds at least half of. So when you draw a nation's states, follow its
-  releasables' borders where you can.
+- **Releasables.** Players can define releasables: their land (whole states, since HOI4
+  cores states, or drawn areas while the nation's states aren't drawn), names, government,
+  flag and ruler. Once imported, the build makes each a country owning nothing, with cores
+  on its states (and on those its areas cover by half). So when you draw a nation's states,
+  follow its releasables' borders where you can.
 - **Facts come in through the file.** Facts reach the mod through "Save every nation as a
   file" and `python3 scripts/gazetteer.py import <file>` (`docs/GAZETTEER.md`).
   - After map changes, the site is republished from the repository by the author's

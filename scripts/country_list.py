@@ -90,8 +90,13 @@ def rows():
             for m in re.findall(r"add_to_faction = (\w+)", t):
                 faction[m] = (name, False)
     out = []
+    # Earth's tags stay defined, owning nothing, for what vanilla still names (vanilla_parts.py)
+    earth = {ln.split("\t")[0] for ln in Path("source/vanilla/index/tags.txt").read_text(encoding="utf-8").splitlines()}
+    earth -= {v[0] for v in COUNTRIES.values()}
     for f in sorted((MOD / "history/countries").glob("*.txt")):
         tag = f.name[:3]
+        if tag in earth:
+            continue
         t = f.read_text(encoding="utf-8")
         rp = re.search(r"ruling_party\s*=\s*(\w+)", t).group(1)
         leader = next((c for c in re.findall(r"recruit_character\s*=\s*(\w+)", t)

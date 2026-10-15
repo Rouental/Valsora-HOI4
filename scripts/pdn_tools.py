@@ -36,6 +36,19 @@
         Merge COUNTRY's states smaller than MIN_PX into the neighbouring state of the same
         country they share most border with (States layer), e.g. the slivers a moved
         border leaves behind. Provinces stay as they are.
+    python3 scripts/pdn_tools.py recut [--keep-states] X,Y [X,Y ...]
+        Cut placeholder land again the way apply_outlines.py cuts an outlined patch: the
+        piece of a country's land around each pixel (what the Necessary lines enclose, or
+        a whole island) becomes states of about STATE_AREA px (one up to STATE_MAX px), and
+        each state provinces of about PROVINCE_AREA px with organic borders. Countries stay;
+        a new state takes the strategic region most of it lies in. With --keep-states the
+        states stay as they are and only their provinces are cut again. For land the
+        outline runs never reached, still in the placeholder build's 32 px bricks and
+        96 px grid states (2026-10-15: Arvorenia's and Atrocha's islands, from the friend's
+        build of 2026-10-05, and two island groups given whole).
+    python3 scripts/pdn_tools.py lakes
+        Make each lake one province (the placeholder build cut them into 48 px squares),
+        in the strategic region most of it was in.
     python3 scripts/pdn_tools.py blue_seas
         Recolour every sea province on the Provinces layer in its own blue (the author
         wants the sea easy to tell from land there). Colours only: nothing else changes.
@@ -410,6 +423,110 @@ def merge_small(names, L, country, min_px):
             return
 
 
+def recut(names, L, seeds, keep_states=False):
+    from apply_outlines import Colours, organic_split, STATE_MAX, STATE_AREA, PROVINCE_AREA, MIN_LEFTOVER
+    from skimage.measure import label as sklabel
+    t = L["Terrain"][..., :3]
+    land = ~((t == OCEAN).all(-1) | (t == LAKES).all(-1))
+    lines = np.zeros((H, W), bool)
+    for nm in ("Necessary Borders", "Borders", "Necessary States"):
+        if nm in L:
+            lines |= L[nm][..., 3] > 0
+    K = code(L["Countries"][..., :3])
+    P = code(L["Provinces"][..., :3])
+    S = np.where(L["States"][..., 3] > 0, code(L["States"][..., :3]), -1)
+    R = code(L["Strategic Regions"][..., :3])
+    pcols, scols = Colours(P, 1015), Colours(S[S >= 0], 1016)
+    for n, (x, y) in enumerate(seeds):
+        if not land[y, x] or lines[y, x]:
+            sys.exit(f"recut: ({x}, {y}) is not land off the lines")
+        mine = land & (K == K[y, x])
+        cells = sklabel(mine & ~lines, connectivity=1)
+        me = cells[y, x]
+        ys, xs = np.nonzero(cells == me)
+        win = np.s_[max(ys.min() - 40, 0):min(ys.max() + 41, H), max(xs.min() - 40, 0):min(xs.max() + 41, W)]
+        wc = cells[win]
+        M = wc == me
+        wl = lines[win] & mine[win]
+        if wl.any():  # the country's line pixels go to the nearest piece
+            iy, ix = ndi.distance_transform_edt(wc == 0, return_distances=False, return_indices=True)
+            M |= wl & (wc[iy, ix] == me)
+        wP, wS, wR = P[win], S[win], R[win]  # views: edits land in P, S, R
+        old_p = set(np.unique(wP[M]).tolist())
+        yy, xx = np.nonzero(M)
+        if keep_states:
+            groups = [(sc, M & (wS == sc)) for sc in sorted(set(np.unique(wS[M]).tolist()))]
+        else:
+            k = max(1, round(len(yy) / STATE_AREA)) if len(yy) > STATE_MAX else 1
+            st = organic_split(yy, xx, k, seed=1000 + n)
+            groups = []
+            for j in range(k):
+                g = np.zeros(M.shape, bool)
+                g[yy[st == j], xx[st == j]] = True
+                if g.any():
+                    groups.append((scols.new(), g))
+        nprov = 0
+        for sc, g in groups:
+            comp = sklabel(g, connectivity=1)  # each island of a state gets provinces of its own
+            for q in range(1, comp.max() + 1):
+                cy, cx = np.nonzero(comp == q)
+                kp = min(max(1, round(len(cy) / PROVINCE_AREA)), len(cy) // MIN_PROVINCE or 1)
+                parts = organic_split(cy, cx, kp, seed=2000 + 97 * n + q)
+                for j in range(kp):
+                    if (parts == j).any():
+                        wP[cy[parts == j], cx[parts == j]] = pcols.new()
+                        nprov += 1
+            if not keep_states:
+                wS[g] = sc
+                wR[g] = Counter(wR[g].tolist()).most_common(1)[0][0]
+        # what is left of a province cut here beyond the lines: a big piece stays a province,
+        # scraps join the neighbour they share most border with
+        for c in old_p:
+            comp = sklabel((wP == c) & ~M, connectivity=1)
+            if not comp.max():
+                continue
+            sizes = np.bincount(comp.ravel())[1:]
+            for q in np.argsort(-sizes) + 1:
+                pm = comp == q
+                if sizes[q - 1] >= MIN_LEFTOVER:
+                    if q != np.argmax(sizes) + 1:
+                        wP[pm] = pcols.new()
+                    continue
+                ring = ndi.binary_dilation(pm, CROSS) & ~pm & land[win]
+                nb = Counter(v for v in zip(wP[ring].tolist(), wS[ring].tolist()) if v[0] != c)
+                same = {v: k_ for v, k_ in nb.items() if v[1] == wS[pm][0]}
+                if nb:
+                    wP[pm] = max(same or nb, key=(same or nb).get)[0]
+        for nm, arr in (("Provinces", wP), ("States", wS), ("Strategic Regions", wR)):
+            put(L[nm][win], arr, M)
+            L[nm][win][M, 3] = 255
+        put(L["Provinces"][win], wP, land[win] & ~M & np.isin(wP, list(old_p), invert=True) & (code(L["Provinces"][win][..., :3]) != wP))
+        print(f"({x}, {y}): {M.sum()} px of {len(old_p)} provinces -> {len(groups)} state(s){' (kept)' if keep_states else ''}, "
+              f"{nprov} provinces")
+
+
+def lakes(names, L):
+    from skimage.measure import label as sklabel
+    lake = (L["Terrain"][..., :3] == LAKES).all(-1)
+    lab = sklabel(lake, connectivity=1)
+    P = code(L["Provinces"][..., :3])
+    R = code(L["Strategic Regions"][..., :3])
+    merged = 0
+    for k, sl in enumerate(ndi.find_objects(lab), 1):
+        m = lab[sl] == k
+        cols = Counter(P[sl][m].tolist())
+        if len(cols) <= 1:
+            continue
+        if sl[0].stop - sl[0].start >= H // 8 or sl[1].stop - sl[1].start >= W // 8:
+            print(f"lake at ({sl[1].start}, {sl[0].start}) is too big for one province (HOI4: 1/8 of the map); left")
+            continue
+        put(L["Provinces"][sl], np.full(m.shape, cols.most_common(1)[0][0]), m)
+        put(L["Strategic Regions"][sl], np.full(m.shape, Counter(R[sl][m].tolist()).most_common(1)[0][0]), m)
+        merged += len(cols) - 1
+        print(f"lake at ({sl[1].start}, {sl[0].start}), {m.sum()} px: {len(cols)} provinces -> 1")
+    print(f"{merged} lake provinces merged")
+
+
 def blue_seas(names, L):
     P = code(L["Provinces"][..., :3])
     sea = code(L["Terrain"][..., :3]) == code(np.array(OCEAN))
@@ -532,6 +649,11 @@ def main():
         cede(names, L, sys.argv[2], sys.argv[3], [tuple(int(v) for v in a.split(",")) for a in sys.argv[4:]])
     elif cmd == "merge_small":
         merge_small(names, L, sys.argv[2], int(sys.argv[3]))
+    elif cmd == "recut":
+        keep = "--keep-states" in sys.argv
+        recut(names, L, [tuple(int(v) for v in a.split(",")) for a in sys.argv[2:] if a != "--keep-states"], keep)
+    elif cmd == "lakes":
+        lakes(names, L)
     elif cmd == "blue_seas":
         blue_seas(names, L)
     elif cmd == "channel":
