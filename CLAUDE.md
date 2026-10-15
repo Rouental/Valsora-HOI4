@@ -826,8 +826,11 @@ scripting (tags targeted, popularities, ideologies) skip vanilla's shipped files
     its paint (140, 0, 0), dark red like Vilna's new flag (the author's: a crimson field framed by blue bars and
     Stars of David, a menorah over a sword, a line in Hebrew), which came at 1280 × 841 and was fitted to 82:52
     by lengthening the top and bottom bars 23 px at each end (`dist/flag_vilna_20261015.png`; in the flag file
-    as "Vilna", the old layer renamed "Placeholdgrad"). It keeps its formal name, Radical Republicanism and
-    Lithuanian culture. **Russovichia stays in `COUNTRIES`, off the map** (author: "should remain in the code,
+    as "Vilna", the old layer renamed "Placeholdgrad"). It keeps its formal name; then (author, the same day) it
+    is **Conservatism** (Radical Republicanism until then) and **Jewish**: the base game has no Jewish culture, so
+    its nearest, the Israeli name list (ISR, copied into `vanilla_names.txt`; it has some Arab-Israeli surnames),
+    with Europe portraits and eastern European gfx (Lithuanian until then). **Russovichia stays in `COUNTRIES`,
+    off the map** (author: "should remain in the code,
     but be off the map for now"): it owns nothing, so it is left out of the mod like the United States of
     Solitas, with an unused colour from its flag, (153, 47, 45). Vilna's old land (3 states) is
     **Placeholdgrad** PHG, with Vilna's old flag (`PHG.png`) and Radical Republicanism, and Vilna's old green;
@@ -1587,8 +1590,9 @@ in git history (commit d2d6cd8, `scripts/cartographic.py`). It used
 
 ## Current state
 
-- 2026-10-15, latest: **Vilna moved** to Russovichia's land with the author's new flag, **Placeholdgrad** on its old
-  land with its old flag and government, Russovichia off the map (still 183 countries). The Deco UI is v0.6: the
+- 2026-10-15, latest: **Vilna moved** to Russovichia's land with the author's new flag, now Conservative and Jewish
+  (the base game's Israeli names), **Placeholdgrad** on its old land with its old flag and government, Russovichia
+  off the map (still 183 countries). The Deco UI is v0.6: the
   **focus tree after the mockup** (notched under the
   band, the country's title and sub-ideology in the header, medallions and plates per focus state, a gilt halo on
   the focus in progress, gilt links, red exclusive marks, the scale-pattern canvas; the focus icons are the game's,

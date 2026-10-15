@@ -173,7 +173,7 @@
 | UTP | Utopian Republic | the Second Utopian Republic | Democratic | Lordly Republic | English | Albert Plummer | 68 |  |
 | UYZ | Uyizar | the Khanate of Uyizar | Monarchist | Khanate | Uzbek | Po'lat Azamatov | 16 |  |
 | VAI | Vair | the Duchy of Vair | Monarchist | Feudalism | French | François Dubail | 0 | no land at the start (releasable or civil war) |
-| VIL | Vilna | the Free Republic of Vilna | Democratic | Radical Republicanism | Lithuanian | Juras Ivanauskas | 2 |  |
+| VIL | Vilna | the Free Republic of Vilna | Democratic | Conservatism | Jewish (Israeli names) | Yaakov Reuben | 2 |  |
 | VNT | Vineta | the People's Rule Over Vineta | Communist | Party Centralism | Welsh | Rhys Moss | 7 |  |
 | VLN | Volinovia | the Kingdom of Volinovia | Monarchist | Enlightened Absolutism | Portuguese | Fernando Pinto | 16 |  |
 | VSK | Volstokn | the Tsaral Realm of Volstokn | Monarchist | Enlightened Absolutism | Finnish | Petri Mäkinen | 62 |  |

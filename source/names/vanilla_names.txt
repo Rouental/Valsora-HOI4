@@ -1892,3 +1892,20 @@ GAH = {
 	}
 	callsigns = { }
 }
+
+ISR = {
+	male = {
+		names = {
+			David Lavi Ariel Yosef Noam Uri Raphael Ari Moshe Yehuda Abraham Eitan Daniel Yisrael Itai Shmuel Eliya Yehonatan Yitzchak Shimon Yaakov Michael Omer Yonatan Aharon Chaim Imri Adam Shlomo Itamar Ido Yair Yanai Meir Yishai Mordechai Harel Bnaya Nitai Benjamin Eliyahu Liam Beeri Elon Ilay Amit Ben Natan Or Leo Elroi Uriel Shalom Oz Emanuel Dan Levy Yehoshua
+		}
+	}
+	female = {
+		names = {
+			Tamar Maya Abigail Noa Sarah Ayala Adele Yael Shira Chana Lia Romi Libi Agam Ori Yehudit
+		}
+	}
+	surnames = {
+		Cohen Levy Mizrahi Peretz Bitton Dahan Agbaria Avraham Friedman Katz Yosef Omer Mhamid Schwartz David Azulay Malkah Zoabi Jabarin Weiss Gaby Shapiro Chidad Ohayon Reuben Lavyan Mahagna Masarweh Vaknin Khatib Isaac Adri Klein Yaakv Segel Moshe Ashknaziy Tal Hasha Goldstein Hen Suad Golan Suissa Shalom Eliyahu Elbaz Bekher Khoury Mor Attias Shemesh Feldman Sharabi Rabinovitch Samuel Hassan Amsalem Abramov Awad Ibrahim Kadosh Saad Tzur
+	}
+	callsigns = { }
+}

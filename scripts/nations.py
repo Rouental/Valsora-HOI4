@@ -261,7 +261,7 @@ LEADERS = {
     "BKA": ["fascism_ideology"], "WSM": ["leninism"], "SNA": ["khanate"],
     "KMY": ["liberalism"], "VSK": ["enlightened_absolutism"], "BRT": ["synodal_rule"],
     "RYS": ["agrarianism"], "PKT": ["strongman_rule"], "KSK": ["oligarchism"],
-    "ZLZ": ["despotism"], "VIL": ["radical_republicanism"], "SMB": ["lordly_republic"],
+    "ZLZ": ["despotism"], "VIL": ["conservatism"], "SMB": ["lordly_republic"],  # VIL: Radical Republicanism until 2026-10-15
     "SKL": ["agrarian_socialism"], "TKY": ["prophetic_rule"],
     "PHG": ["radical_republicanism"],  # 2026-10-15: Vilna's old land and ideology (author)
     # 2026-10-11 (author)

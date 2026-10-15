@@ -236,7 +236,8 @@ TAG_CULTURE = {
     "PKT": dict(names="SOV", portraits="europe", gfx="eastern_european"),
     "KSK": dict(names="POL", portraits="europe", gfx="eastern_european"),  # a Polish word
     "ZLZ": dict(names="LAT", portraits="europe", gfx="eastern_european"),  # "zeme", land
-    "VIL": dict(names="LIT", portraits="europe", gfx="eastern_european"),  # Vilna, Vilnius
+    # Jewish (author, 2026-10-15; Lithuanian until then): the base game's Israeli list, its nearest
+    "VIL": dict(names="ISR", portraits="europe", gfx="eastern_european"),
     "PHG": dict(names="SOV", portraits="europe", gfx="eastern_european"),  # -grad (2026-10-15)
     "SMB": dict(names="SER", portraits="europe", gfx="eastern_european"),  # a Serbian city
     "SKL": dict(names="GRE", portraits="europe", gfx="eastern_european"),
