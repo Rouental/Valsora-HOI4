@@ -16,8 +16,9 @@ CENTRES = {"EventWindow": (218.5 + 576.5) / 2, "EventWindow_News": (6.5 + 521.5)
            "EventWindow_Operative": 270}
 
 
-# the news page, 528 wide (v0.8.1): the game puts its picture (x 59), headline (x 12, 490 wide) and story (x 39, 460
-# wide) 5-7 px left of the page's middle, which the centred masthead showed up; they are centred on it
+# the news page, 528 wide (v0.8.1): the game puts its picture (x 59) 5.5 px and its headline (x 12, 490 wide) 7 px
+# left of the page's middle, and its story's box (x 39, 460 wide) 5 px right of it, which the centred masthead showed
+# up; they are centred on it
 NEWS_CX = 264
 NEWS_PIC_W, NEWS_TITLE_W, NEWS_TEXT_W = 399, 490, 460     # the picture's box (and its overlay), the headline, the story
 NEWS_PIC_X = int(NEWS_CX - NEWS_PIC_W / 2)                 # 64: the 399 px box centred to half a pixel

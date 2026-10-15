@@ -97,8 +97,8 @@ the middle the name leaned left. The masthead is now **VALSORAN (globe) STANDARD
 width, each placed by its ink the same distance from a medallion that breaks the rules (`layout_events.news_masthead`;
 its rules as wide as the words, clear of the minimize button). The globe is redrawn (`globe_art.globe`): the land
 simplified to what 60 px can show (the old one, lit and with every lake, was a speckled blob), flat gilt, a graticule,
-looking down on open sea with land round it. The game's own news layout was off-centre too (picture, headline and story
-5-7 px left of the page's middle): all centred (`layout_events.NEWS_*`). Other names, drawn by the same code, are in
+looking down on open sea with land round it. The game's own news layout was off-centre too (the picture 5.5 px and
+the headline 7 px left of the page's middle, the story's box 5 px right of it): all centred (`layout_events.NEWS_*`). Other names, drawn by the same code, are in
 `art/proposals/news_masthead/` (`proposals_masthead.py`; switching is `layout_events.NEWS_WORDS`).
 
 | Area | State |
@@ -690,7 +690,8 @@ slots as wide, and each window's `options_grid` is moved so the plates sit in th
 picture (`layout_events.CENTRES`: 12 px either side in a country event); a leader event gets the country event's foot
 and no paper clip (`event_report_bottom_win_2.dds`, `events/clip.dds`); `preview_events.py` draws a leader event too.
 v0.8.1: the news page's picture and overlay (x 64), headline (x 19) and story (x 34) are centred on the page
-(`layout_events.NEWS_*`; the game's sat 5-7 px left of its middle), under the masthead
+(`layout_events.NEWS_*`; the game's picture and headline sat 5-7 px left of its middle, the story's box 5 px right),
+under the masthead
 (`layout_events.news_masthead`: `NEWS_WORDS`, `NEWS_VIEW`, sizes).
 
 **game_fonts.py (v0.8).** The game's 28 fonts redrawn at their paths (`gfx/fonts/<name>.fnt/.dds`), so the screens the

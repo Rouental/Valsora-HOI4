@@ -489,8 +489,8 @@ screenshot and `error.log`)
 
 **Deco UI news: the masthead still looked lopsided** (2026-10-15, the author on v0.8's preview)
 - Cause: WORLD is wider than NEWS, so with the globe in the middle and equal gaps the name leaned left (32 px from
-  the rules' start, 70 from their end). The game's own news page was off-centre as well: its picture, headline and
-  story sit 5-7 px left of the page's middle. And the globe, lit and with every lake and channel, read as a speckled
+  the rules' start, 70 from their end). The game's own news page was off-centre as well: its picture sits 5.5 px and
+  its headline 7 px left of the page's middle, its story's box 5 px right of it. And the globe, lit and with every lake and channel, read as a speckled
   blob at 50 px.
 - Fix (v0.8.1): the paper's name is VALSORAN STANDARD, two words Federo sets to the same width (the author's
   suggestion), each placed by its ink the same distance from the globe (15 px from each word to its rules' end, both

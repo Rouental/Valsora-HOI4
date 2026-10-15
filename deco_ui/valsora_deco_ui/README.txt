@@ -36,7 +36,7 @@ NEW IN v0.8.1
     globe is redrawn: simpler land that reads at its size, flat gilt, a
     graticule, looking down on open sea with land round it. The page under
     it is centred too (the game's picture, headline and story sat a few
-    pixels left). Other names are in art/proposals/news_masthead/.
+    pixels off the middle). Other names are in art/proposals/news_masthead/.
   - For testing (in the Valsora mod): Rouental has a "Test Events"
     decision category with one decision per kind of event window (country,
     long country with four options, state, news, major news, leader,
