@@ -6,7 +6,8 @@ The game's events are paper (a clipboard report, a newspaper) with dark typewrit
 replaced at the game's paths by gen_textures.py (the 'ev_' keys: lacquer, gilt rails, a crest, the superevent's
 style), so the text needs the mod's light fonts: titles in gilt capitals, the text and the options in cream.
 Positions and every element of the game's file are kept: the game sizes the middle to the text and stacks the
-pieces itself. v0.8: each window's options are centred in the room they have (layout_events).
+pieces itself. v0.8: each window's options are centred in the room they have (layout_events). v0.8.1: the news
+page's picture, headline and story are centred on the page, as its masthead is.
 """
 import os
 import sys
@@ -44,5 +45,13 @@ for win in LE.CENTRES:
     x, y = GP.get_pos(t, f"{win}/options_grid")
     t = GP.set_attrs(t, f"{win}/options_grid", position=(LE.grid_x(win), y), size=(W, 30 if win in ("EventWindow", "EventWindow_News") else 0),
                      slotsize=(W, 47))
+# the news page centred on its middle, as its masthead is (v0.8.1): the picture and its overlay, the headline, the story
+for el in ("event_picture", "event_picture_overlay"):
+    x, y = GP.get_pos(t, f"EventWindow_News>top_Window>{el}")
+    t = GP.set_attrs(t, f"EventWindow_News>top_Window>{el}", position=(LE.NEWS_PIC_X, y))
+x, y = GP.get_pos(t, "EventWindow_News>top_Window>Title")
+t = GP.set_attrs(t, "EventWindow_News>top_Window>Title", position=(LE.NEWS_TITLE_X, y), maxWidth=LE.NEWS_TITLE_W)
+x, y = GP.get_pos(t, "EventWindow_News>midsection>Description")
+t = GP.set_attrs(t, "EventWindow_News>midsection>Description", position=(LE.NEWS_TEXT_X, y), maxWidth=LE.NEWS_TEXT_W)
 GP.write_gui(MOD + "interface/eventwindow.gui", t)
 print("eventwindow.gui written")

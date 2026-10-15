@@ -25,6 +25,7 @@ import vanilla_parts
 import minimap
 import nations
 import superevents
+import test_events
 from imgio import write_bmp, write_dds, write_tga, palette_from_header
 
 W, H = MAP_W, MAP_H
@@ -999,6 +1000,9 @@ def main():
         loc += [f' {cos}_{i}{suf}:0 "{v}"' for i in IDEOLOGIES for suf, v in (("", n0), ("_DEF", d0), ("_ADJ", a0))]
     loc += leader_loc
     loc += superevents.write_files(write, OUT, DECO_UI)  # the Deco UI's window when it is on
+    # Rouental's test decisions, one per kind of event window (the author, 2026-10-15): out when testing is done
+    test_events.write_files(write)
+    loc += test_events.LOCALISATION
     write("localisation/english/valsora_l_english.yml", "\n".join(loc) + "\n", bom=True)
     nations.write_files(write, OUT, {nm: s + 1 for nm, s in state_by_name.items()},
                         {nm: int(pid[state_capital[s]]) for nm, s in state_by_name.items()})

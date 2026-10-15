@@ -1583,40 +1583,29 @@ add("ev_minimize", EV + "event_button_minimize.dds", 32, 33,
     'background:#0B1014;box-sizing:border-box"></div>'
     '<svg width="32" height="33" viewBox="0 0 32 33" style="position:absolute;left:0;top:0"><path d="M18,12.5L13.5,16.5L18,20.5" '
     'fill="none" stroke="#E3C77E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>')
-# the World News masthead (v0.8, the user: the heading "looks lopsided. Maybe center the ball in the center and slightly
-# shrink the text so it fits on either side ... maybe make the ball a stylized Valsoran globe?"): a gilt line globe of
-# Valsora (globe_art.py) dead centre between the masthead's rules, WORLD and NEWS in Federo capitals at the same
-# distance either side of it (SVG letter-spacing also follows the last letter, so WORLD, set from its end, is moved
-# by one spacing to keep the two gaps equal)
+# the news masthead (v0.8.1, the user on v0.8's WORLD (globe) NEWS: "it still looks lopsided. I'd like it to be
+# centered, and I like the globe, but it's not quite there yet ... maybe swap to something like "Valsoran Standard" or
+# Clarion or Dispatch or something like that, so both words are the same length while keeping the news theming"): the
+# paper's name in two words of one width (VALSORAN and STANDARD set to the same width in Federo; a narrower word would
+# be tracked out to match), the same distance either side of a medallion of Valsora (globe_art.globe) that breaks the
+# masthead's double rules, the rules ending in small diamonds (layout_events.news_masthead, which proposals_masthead.py
+# also draws other names with).
 import base64 as _b64
 import io as _io
 import globe_art as GA
-_NG = 50                                  # the globe's diameter
 _buf = _io.BytesIO()
-GA.globe(_NG).save(_buf, "PNG")
-_GURI = "data:image/png;base64," + _b64.b64encode(_buf.getvalue()).decode()
-_NCX, _NCY, _NS, _NLS, _NGAP = 264, 52.5, 36, 36 * .12, 16
-_NR = _NG / 2 + 3                         # the globe and its outer ring
-MASTHEAD = (
-    '<svg width="528" height="105" style="position:absolute;left:0;top:0"><defs><linearGradient id="nwg" x1="0" y1="0" '
-    'x2="0" y2="1"><stop offset="0" stop-color="#FFF3C8"/><stop offset=".45" stop-color="#E3C77E"/>'
-    '<stop offset="1" stop-color="#9C7836"/></linearGradient></defs>'
-    f'<image href="{_GURI}" x="{_NCX - _NG / 2}" y="{_NCY - _NG / 2}" width="{_NG}" height="{_NG}"/>'
-    f'<circle cx="{_NCX}" cy="{_NCY}" r="{_NG / 2 - .5}" fill="none" stroke="#C9A55A" stroke-width="1"/>'
-    f'<circle cx="{_NCX}" cy="{_NCY}" r="{_NG / 2 + 2.5}" fill="none" stroke="rgba(201,165,90,.45)" stroke-width="1"/>'
-    f'<text x="{_NCX - _NR - _NGAP + _NLS}" y="{_NCY + 13}" text-anchor="end" font-family="Federo" font-size="{_NS}" '
-    f'letter-spacing="{_NLS}" fill="url(#nwg)">WORLD</text>'
-    f'<text x="{_NCX + _NR + _NGAP}" y="{_NCY + 13}" text-anchor="start" font-family="Federo" font-size="{_NS}" '
-    f'letter-spacing="{_NLS}" fill="url(#nwg)">NEWS</text></svg>')
-# the news: a broadsheet in lacquer and gilt; the picture at (59, 91), 399 x 155; the headline at y 260-292 under a
+GA.globe(LEV.NEWS_GLOBE, LEV.NEWS_VIEW).save(_buf, "PNG")
+MASTHEAD, NEWS_RULES = LEV.news_masthead(LEV.NEWS_WORDS, "data:image/png;base64," + _b64.b64encode(_buf.getvalue()).decode(),
+                                         FONTS_SRC + "federo/Federo-Regular.ttf")
+# the news: a broadsheet in lacquer and gilt; the picture at (64, 91), 399 x 155 (layout_events, centred); the headline at y 260-292 under a
 # rule (the story starts right under the headline, at y 291)
 EV_NEWS = ('<div class="lac" style="position:absolute;inset:0;clip-path:polygon(14px 0,calc(100% - 14px) 0,100% 14px,100% calc(100% - 14px),'
            'calc(100% - 14px) 100%,14px 100%,0 calc(100% - 14px),0 14px)"></div>'
            '<svg width="528" height="595" style="position:absolute;left:0;top:0">'
            '<path d="M14.5,.5H513.5L527.5,14.5V580.5L513.5,594.5H14.5L.5,580.5V14.5Z" fill="none" stroke="#C9A55A"/>'
            '<path d="M16.5,6.5H511.5L521.5,16.5V578.5L511.5,588.5H16.5L6.5,578.5V16.5Z" fill="none" stroke="rgba(201,165,90,.4)"/>'
-           '<path d="M40,22.5H488M40,25.5H488M40,79.5H488M40,82.5H488" stroke="#C9A55A" stroke-width="1"/>'
-           '<rect x="57.5" y="89.5" width="402" height="158" fill="none" stroke="#C9A55A"/>'
+           f'<path d="{NEWS_RULES}" stroke="#C9A55A" stroke-width="1"/>'
+           f'<rect x="{LEV.NEWS_PIC_X - 1.5}" y="89.5" width="{LEV.NEWS_PIC_W + 3}" height="158" fill="none" stroke="#C9A55A"/>'
            '<path d="M60,254.5H468" stroke="rgba(201,165,90,.55)"/>'
            '<path d="M170,492.5H358" stroke="rgba(201,165,90,.55)"/></svg>'
            '<div style="position:absolute;left:259px;top:487.5px;width:10px;height:10px;transform:rotate(45deg);background:#C9A55A"></div>'

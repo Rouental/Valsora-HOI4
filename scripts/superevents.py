@@ -73,6 +73,14 @@ SUPEREVENTS = [
                "area. Every one of them is a communist.",
          author="Aisladan State Radio, Final Broadcast Before the Red One",
          picture="hair_ruffle.png", song="valsora_gladiators"),
+    # for testing (the author, 2026-10-15: "a superevent for testing. The superevent should use the clown music and
+    # placeholder anime girl image"), fired by Rouental's test decisions (test_events.py); the texts are Claude's
+    dict(id="rou_test",
+         title="This Is Only a Test",
+         quote="Had this been a real superevent, you would have been told where to stand, what to wear and whom to "
+               "blame. Please remain calm and enjoy the music.",
+         author="The Ministry of Rehearsals, Rêverie",
+         picture="hair_ruffle.png", song="valsora_gladiators"),
 ]
 
 # song name -> audio file in source/superevents (Ogg Vorbis, like vanilla music)

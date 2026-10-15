@@ -102,6 +102,25 @@ def is_vanilla_part(path, mod):
     return any((Path("source/vanilla") / d / rel).exists() for d in ("files", "curated"))
 
 
+def top_level(text):
+    """(key, body) of each `key = { ... }` at the top level of a file (brace-matched)"""
+    out, depth, i = [], 0, 0
+    head = re.compile(r"([\w.]+)\s*=\s*\{")
+    while i < len(text):
+        m = head.match(text, i) if depth == 0 else None
+        if m:
+            d, j = 1, m.end()
+            while d:
+                d += {"{": 1, "}": -1}.get(text[j], 0)
+                j += 1
+            out.append((m.group(1), text[m.end():j - 1]))
+            i = j
+            continue
+        depth += {"{": 1, "}": -1}.get(text[i], 0)
+        i += 1
+    return out
+
+
 def id_list(body, key):
     b = blocks(body, key)
     return [int(x) for x in b[0].split()] if b else []
@@ -598,9 +617,9 @@ def main(mod):
     for f in (mod / "events").glob("*.txt"):
         events |= set(re.findall(rf"^{kinds}\s*=\s*\{{\s*id\s*=\s*([\w.]+)", strip(f.read_text(encoding="utf-8-sig")),
                                  re.M))
-    scripted = ""      # ours: focus trees, scripted effects, events
+    scripted = ""      # ours: focus trees, scripted effects, events, decisions
     scripted_all = ""  # with vanilla's files the mod ships (source/vanilla)
-    for d in ("common/national_focus", "common/scripted_effects", "events"):
+    for d in ("common/national_focus", "common/scripted_effects", "events", "common/decisions"):
         for f in (mod / d).glob("*.txt"):
             text = strip(f.read_text(encoding="utf-8-sig")) + "\n"
             scripted_all += text
@@ -632,6 +651,26 @@ def main(mod):
         fired |= {e for e in body.split() if "." in e}
     for ev in sorted(fired - events):
         err(f"event {ev} is fired but not defined")
+    # our events' titles, descriptions and options, and our decisions and their categories, are localised: the game
+    # shows a missing key as the key itself (hidden events and never-visible decisions, the stand-ins, need none)
+    for f in sorted((mod / "events").glob("*.txt")):
+        if is_vanilla_part(f, mod):
+            continue
+        for ev_kind, body in top_level(strip(f.read_text(encoding="utf-8-sig"))):
+            if not re.fullmatch(kinds, ev_kind) or re.search(r"\bhidden\s*=\s*yes", body):
+                continue
+            texts = re.findall(r"\b(?:title|desc)\s*=\s*([\w.]+)", body) + [field(o, "name") for o in blocks(body, "option")]
+            for k in texts:
+                if k and k not in keys:
+                    err(f"{f.name}: event {field(body, 'id')}: {k} has no localisation")
+    never = re.compile(r"\bvisible\s*=\s*\{\s*always\s*=\s*no\s*\}")
+    for f in sorted((mod / "common/decisions").rglob("*.txt")):
+        if is_vanilla_part(f, mod):
+            continue
+        for cat, body in top_level(strip(f.read_text(encoding="utf-8-sig"))):
+            for name, b in ([(cat, body)] if f.parent.name == "categories" else top_level(body)):
+                if not never.search(b) and name not in keys:
+                    err(f"{f.relative_to(mod)}: decision {name} has no localisation")
     # songs: defined in a music/**/*.asset next to their file, and (the game ignores them
     # otherwise: "Song doesnt exist") listed in a station .txt with music_station = "..."
     songs, in_station = {}, set()
@@ -819,6 +858,15 @@ def main(mod):
         for pic in re.findall(r"\bpicture\s*=\s*(\w+)", strip(f.read_text(encoding="utf-8-sig"))):
             if f"GFX_idea_{pic}" not in known_sprites:
                 err(f"{f.relative_to(mod)}: idea picture {pic} (GFX_idea_{pic}) is defined neither by the mod nor by the game")
+    # a decision's or category's icon may be a sprite or its short name: generic_x is GFX_decision_generic_x (decisions)
+    # or GFX_decision_category_generic_x (categories); full names are checked with the other sprites above
+    for f in (mod / "common/decisions").rglob("*.txt"):
+        if is_vanilla_part(f, mod):
+            continue
+        prefix = "GFX_decision_category_" if f.parent.name == "categories" else "GFX_decision_"
+        for icon in re.findall(r"\bicon\s*=\s*(\w+)", strip(f.read_text(encoding="utf-8-sig"))):
+            if not icon.startswith("GFX_") and prefix + icon not in known_sprites:
+                err(f"{f.relative_to(mod)}: decision icon {icon} ({prefix}{icon}) is defined neither by the mod nor by the game")
     for f, text in text_of.items():
         rel = f.relative_to(mod)
         for body in blocks(text, "set_technology"):

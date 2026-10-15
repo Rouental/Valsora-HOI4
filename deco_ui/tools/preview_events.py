@@ -104,11 +104,14 @@ def main():
     # a news event: the broadsheet, 528 x 595
     nx, ny = 800, 120
     cv.alpha_composite(img(EV + "event_news_bg.dds"), (nx, ny))
-    cv.alpha_composite(cover(ART + "map_rouental.jpg", 399, 155), (nx + 59, ny + 91))
-    cv.alpha_composite(img(EV + "event_news_pic_overlay.dds"), (nx + 59, ny + 91))
+    px, py = GP.get_pos(GUI, "EventWindow_News>top_Window>event_picture")
+    cv.alpha_composite(cover(ART + "map_rouental.jpg", 399, 155), (nx + px, ny + py))
+    cv.alpha_composite(img(EV + "event_news_pic_overlay.dds"), (nx + px, ny + py))
+    hx, hy = GP.get_pos(GUI, "EventWindow_News>top_Window>Title")
+    sx, sy = GP.get_pos(GUI, "EventWindow_News>midsection>Description")
     cv.alpha_composite(img(EV + "event_button_minimize.dds"), (nx + 10, ny + 10))
-    texts += [(TITLE, SAMPLE["news_title"], nx + 12, ny + 260, 490, 32, "centre", True),
-              (TEXT, SAMPLE["news_text"], nx + 39, ny + 121 + 170, 460, 190, "left", False)]
+    texts += [(TITLE, SAMPLE["news_title"], nx + hx, ny + hy, 490, 32, "centre", True),
+              (TEXT, SAMPLE["news_text"], nx + sx, ny + 121 + sy, 460, 190, "left", False)]
     gx, _ = GP.get_pos(GUI, "EventWindow_News/options_grid")
     for i, o in enumerate(SAMPLE["news_options"]):
         ox, oy = nx + gx, ny + 520 + i * 47       # the game stacks the options under the story

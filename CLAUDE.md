@@ -203,6 +203,7 @@ and what could make both smaller.
 | `deco_ui.py` | the Valsora Deco UI into the build (`common.DECO_UI`; see Deco UI below): Valsora's own copies of what it replaces kept in `work/deco_base/`, its long-name trigger and politics screen made from this build, then `deco_ui/valsora_deco_ui/` copied in (a file both ship stops the build unless the Deco UI replaces it on purpose) |
 | `nations.py` | hand-written per-nation content (leaders, portraits, focus trees), used by `build_mod.py` |
 | `superevents.py` | TNO-style superevent windows, their texts, picture and music |
+| `test_events.py` | Rouental's test decisions (2026-10-15, until the testing is done): one per kind of event window, and the test superevent |
 | `superevents_deco.py` | the superevent window in the Deco UI's style (`DECO_UI`, 2026-10-15): the mockup's board drawn with numpy and Pillow, a title strip per superevent, the texts measured against their boxes |
 | `cultures.py` | generic portraits, name lists and graphical culture per continent / country |
 | `ideologies.py` | the five ideologies: ideology file, renamed localisation, theocracy icon |
@@ -554,6 +555,14 @@ Aislada is the worked example of a built-out nation:
   national spirits): `nations.TEST_SPIRITS`, ideas `DVL_test_spirit_1`..`15` with vanilla's generic
   pictures and no effects, added in Devlon's history. Remove the list and its `HISTORY` entry after
   the test. `check_mod.py` checks every idea's picture exists.
+- **Rouental's test decisions** (author, 2026-10-15: "Give decisions to Rouental to spawn generic events of each type /
+  layout, and a superevent for testing. The superevent should use the clown music and placeholder anime girl image"):
+  `test_events.py`, the category "Test Events" (`ROU_test_events`, for Rouental's player), free and repeatable, each
+  firing a placeholder event (namespace `valsora_test`): a country event; a long one with four options; a state event
+  (from the capital); a news event and a major one (sent to every country); a leader event (a random general of
+  Rouental's: the portrait window); an operative event (an operative created first if there is none; shown only with
+  La Résistance); and the test superevent (`rou_test`, "This Is Only a Test": the anime picture and Entry of the
+  Gladiators). Texts are Claude's; no option does anything. Take the category out when the testing is done.
 - **Opinion modifier names**: `valsora_reibonnaise_ties` is "Seran Ties" and
   `valsora_against_communism` "Seran Biases" (author, 2026-10-04).
 - **Named generated rulers**: `nations.NAMED_LEADERS` gives a generated ruler the
@@ -766,9 +775,10 @@ white via `§W…§!` in their localisation (the typewriter fonts draw dark). Ho
   song (`ValsoraSupereventSong`, "Valsora Radio · Rafael Krux — Epic Church Organ", `valsora_deco_label`). The
   build measures every quote, attribution and song with the Deco UI's font files and stops if one would not fit its
   box (a box too short drops lines silently). Not yet seen in game.
-- **Current set.** Seven superevents: one per Rouental leadership focus (five), the
-  Rouentaise civil war (Execute the Prince; the author's soldier photo) and AIS
-  "Fucking Explode". The quotes are Claude-written except the civil war's (the
+- **Current set.** Eight superevents: one per Rouental leadership focus (five), the
+  Rouentaise civil war (Execute the Prince; the author's soldier photo), AIS
+  "Fucking Explode" and the test one, fired by Rouental's test decisions (`rou_test`, last so the others keep their
+  event ids). The quotes are Claude-written except the civil war's (the
   author's); all but the civil war use the author's anime picture and Entry of the
   Gladiators. The civil war has Rafael Krux's "Epic Church Organ" (`valsora_organ`,
   `epic_church_organ.ogg`, made with the ffmpeg bundled in the `imageio_ffmpeg` Python
@@ -776,7 +786,10 @@ white via `§W…§!` in their localisation (the typewriter fonts draw dark). Ho
   the author didn't like.
 - **Checks.** `check_mod.py` checks scripted effects and events that are used, songs
   and their files, scripted localisation keys, and GUI window, element, sprite and
-  button-text references (mutation-tested).
+  button-text references (mutation-tested). Since 2026-10-15 decisions count among the users of effects and events,
+  our events' titles, descriptions and options and our decisions and categories must be localised (hidden events and
+  never-visible decisions excepted), and a decision's short icon name (`generic_x`) must be a sprite
+  (mutation-tested: 9 breaks, all caught).
 - **error.log on that test** also had 128 pairs of `Icon definition "" / "_small"`
   (icon_entry.cpp) when a second game was started: scientists generated without a
   portrait, one pair per scientist on each load; fixed 2026-10-14 (see Cultures).
@@ -1148,6 +1161,10 @@ it before touching the UI. In short:
   between the picture and the card's edge; a gilt Valsoran globe in the middle of WORLD NEWS. A mockup of **larger
   flags** is in `deco_ui/art/proposals/hd_flags/`, **not in the mod** (author: "Maybe do a mockup of how it could look,
   but don't add anything to do with it into the mod yet"): it needs the seven flags we have only at 82 x 52.
+- **v0.8.1** (2026-10-15, later): the news masthead is **VALSORAN (globe) STANDARD** (the author: WORLD NEWS "still looks
+  lopsided ... maybe swap to something like "Valsoran Standard" or Clarion or Dispatch ... so both words are the same
+  length"), the globe redrawn to read at 60 px, and the news page centred under it. Other names:
+  `deco_ui/art/proposals/news_masthead/`.
 - **Proposals for the side panels' own pictures** (research, production, the market, the overview strip, the
   intelligence agency, the spirit banners) are in `deco_ui/art/proposals/panel_pictures/`, **not in the mod**
   (author, 2026-10-15: "don't put them in the mod yet. I'd like to see and approve them first").
@@ -1159,19 +1176,21 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
 - **The build** (2026-10-15): 21,078 provinces (20,690 land, 363 sea, 25 lakes), 62,183 province borders (HOI4
   draws 65,536: `docs/BORDER_LIMIT.md`), 3,149 states, 122 strategic regions (42 sea); 183 countries in the mod,
   161 of them on the map, 92 of those with a flag of their own (69 fly a stripe in their map colour); the states of
-  39 are the author's own lines (`gazetteer.finals`). Two starts, both on 1 January 2036. The Deco UI is v0.8.
+  39 are the author's own lines (`gazetteer.finals`). Two starts, both on 1 January 2036. The Deco UI is v0.8.1.
+  Rouental has test decisions for every kind of event and a test superevent (`test_events.py`).
   Rouental's Gazetteer page is in the build (`source/gazetteer/ROU.json`); no other nation's yet.
 - **Seen in game last** (2026-10-15): the Deco UI v0.5 and v0.5.1 (the author's video and screenshot) and an
-  error.log of 10 lines, one of them ours (fixed). Not seen yet: the Deco UI v0.5.2 to v0.8 (closed panels
+  error.log of 10 lines, one of them ours (fixed). Not seen yet: the Deco UI v0.5.2 to v0.8.1 (closed panels
   off-screen, the focus tree, the superevent window, the army bar, the events, the game's fonts in the deco faces),
   the two starts, Vilna and Placeholdgrad. The Deco UI's checklist for the author is in
   `deco_ui/valsora_deco_ui/README.txt` (Things to check) and `deco_ui/CLAUDE.md` (section 10).
-- **Waiting on the author:** the panel picture proposals (approve or change: `deco_ui/art/proposals/`), larger flags
-  (the mockup: `deco_ui/art/proposals/hd_flags/`), the tech tree proposal's eight questions, special projects among
-  them (`docs/TECH_TREE_2036.md`), the zip on GitHub's Releases page and the other size options
-  (`docs/SPEED_AND_SIZE.md`), whether to size provinces by terrain once terrain is painted
+- **Waiting on the author:** the news masthead's name (VALSORAN STANDARD in the mod; others in
+  `deco_ui/art/proposals/news_masthead/`), the panel picture proposals (approve or change:
+  `deco_ui/art/proposals/`), larger flags (the mockup: `deco_ui/art/proposals/hd_flags/`), the tech tree proposal's
+  eight questions, special projects among them (`docs/TECH_TREE_2036.md`), the zip on GitHub's Releases page and the
+  other size options (`docs/SPEED_AND_SIZE.md`), whether to size provinces by terrain once terrain is painted
   (`docs/BORDER_LIMIT.md`), the releasable "Test"'s flag (640 × 338, to fit to 82:52 by hand), and the end of Devlon's
-  test spirits (`nations.TEST_SPIRITS`).
+  test spirits (`nations.TEST_SPIRITS`) and Rouental's test decisions (`test_events.py`).
 
 ## Known gaps
 

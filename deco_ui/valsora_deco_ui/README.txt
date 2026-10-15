@@ -1,5 +1,5 @@
-VALSORA DECO UI - v0.8 (for HOI4 1.19)
-======================================
+VALSORA DECO UI - v0.8.1 (for HOI4 1.19)
+========================================
 
 An art deco interface for the Valsora total conversion: core skin and fonts,
 a rebuilt top bar, the politics screen, every side panel, the province panel,
@@ -28,6 +28,23 @@ Valsora repository's scripts/common.py and rebuild (sh scripts/run_all.sh).
 The layout is built for 1920 px of UI width: 1920x1080 at 100% UI scale, or
 2560x1440 at up to 133%.
 
+
+NEW IN v0.8.1
+-------------
+  - The news: the masthead is now VALSORAN STANDARD, the two words the
+    same width either side of the globe, so it sits in the middle. The
+    globe is redrawn: simpler land that reads at its size, flat gilt, a
+    graticule, looking down on open sea with land round it. The page under
+    it is centred too (the game's picture, headline and story sat a few
+    pixels left). Other names are in art/proposals/news_masthead/.
+  - For testing (in the Valsora mod): Rouental has a "Test Events"
+    decision category with one decision per kind of event window (country,
+    long country with four options, state, news, major news, leader,
+    operative) and one for a test superevent.
+
+Things to check in game (v0.8.1):
+  - fire each of Rouental's test decisions and look at each window: the
+    news page and its masthead especially.
 
 NEW IN v0.8
 -----------

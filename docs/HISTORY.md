@@ -10,6 +10,14 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-15, later (the author: "Give decisions to Rouental to spawn generic events of each type / layout, and a
+  superevent for testing ... I'm not a big fan of the way the world news is looking though, it still looks lopsided"):
+  no map changes. **Rouental's test decisions** (`scripts/test_events.py`): a "Test Events" category with one decision
+  per kind of event window (country, a long one with four options, state, news, major news, leader, operative) and one
+  for the **test superevent** ("This Is Only a Test": the anime picture and Entry of the Gladiators). The Deco UI is
+  v0.8.1: the news masthead is **VALSORAN (globe) STANDARD**, two words of one width either side of a redrawn globe,
+  and the news page is centred under it. `check_mod.py` now follows decisions too (the events and effects they use),
+  and checks that our events' texts and our decisions are localised. Not yet seen in game.
 - 2026-10-15, the second night (the author's notes on the previews, and: "try to find ways to improve and speed up
   the modding process without decreasing quality ... could you switch to the art deco fonts throughout the UI?"): no
   map changes. The Deco UI is v0.8: **the game's own fonts redrawn in the deco faces** (28: tooltips, lists, the

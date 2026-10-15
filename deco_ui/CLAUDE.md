@@ -14,7 +14,7 @@ Treat assumed items as hypotheses.
 
 ---------------------------------------------------------------------------------------------------
 
-## 1. Status (v0.8)
+## 1. Status (v0.8.1)
 
 v0.4.3 was the first v0.3/v0.4 build the user launched. The user's reports so far cover only the main
 menu: the Valsora background and the social links in the top-left corner show **(in game)**, but in
@@ -90,6 +90,16 @@ image than it is to the other side of the box"; `layout_events.py`) and a leader
 masthead has a gilt globe of Valsora in the middle with WORLD and NEWS balanced either side ("looks lopsided ...
 maybe make the ball a stylized Valsoran globe?"; `globe_art.py`). A mockup of larger flags, **not in the mod** (the
 user: "don't add anything to do with it into the mod yet"), is in `art/proposals/hd_flags/`.
+**v0.8.1 (2026-10-15, later, not yet seen in game)**, the user on v0.8's masthead: "it still looks lopsided. I'd like it
+to be centered, and I like the globe, but it's not quite there yet ... maybe swap to something like "Valsoran
+Standard" or Clarion or Dispatch ... so both words are the same length". WORLD is wider than NEWS, so with the globe in
+the middle the name leaned left. The masthead is now **VALSORAN (globe) STANDARD**, two words Federo sets to the same
+width, each placed by its ink the same distance from a medallion that breaks the rules (`layout_events.news_masthead`;
+its rules as wide as the words, clear of the minimize button). The globe is redrawn (`globe_art.globe`): the land
+simplified to what 60 px can show (the old one, lit and with every lake, was a speckled blob), flat gilt, a graticule,
+looking down on open sea with land round it. The game's own news layout was off-centre too (picture, headline and story
+5-7 px left of the page's middle): all centred (`layout_events.NEWS_*`). Other names, drawn by the same code, are in
+`art/proposals/news_masthead/` (`proposals_masthead.py`; switching is `layout_events.NEWS_WORDS`).
 
 | Area | State |
 |---|---|
@@ -105,7 +115,7 @@ user: "don't add anything to do with it into the mod yet"), is in `art/proposals
 | Main menu (`interface/frontendmainview.gui` + background) | v0.3; v0.4.5 fixed the invisible button row (a quoted `Orientation`). Background and social links **(in game)**. |
 | Army bar (bottom: `leadergroups.gui`) | v0.7: textures at the game's paths and sizes (`gen_textures.py`, `lg_*`; numbers in `layout_armybar.py`): arched gilt frames over the portraits (jade when selected; an army group's with gilt fans), the plate behind a run of cards, play/stop chips, the battle plan's chevrons, the empty card; `make_leadergroups.py` moves the division counts onto the plaques (centred, `valsora_deco_value_17`); v0.8: the play / stop row on the card's centre line. Preview `build/preview_armybar.png`. |
 | Map modes and minimap (bottom right: `mapmodes_interface.gui`, `minimap.gui`) | v0.5: textures only (layouts are the game's and Valsora's): lacquer column, line-icon medallions for land/air/naval/intel, the game's small icons and toggles recoloured in gilt, deco handle and ping buttons; the minimap's picture and frame in gilt by the Valsora mod (`scripts/minimap.py`, deco style). |
-| Events (`eventwindow.gui`) | v0.7: the report and newspaper textures replaced at the game's paths (`ev_*`): lacquer card with a crest, gilt rails and a picture frame; a WORLD NEWS broadsheet; options as gilt-rimmed plates; `make_events.py` sets the mod's fonts (titles `title_18`, text and options `body_15`). v0.8: the options centred in the room beside the picture (`layout_events.py`), a Valsoran globe on the masthead. Preview `build/preview_events.png` (a country, a news and a leader event). |
+| Events (`eventwindow.gui`) | v0.7: the report and newspaper textures replaced at the game's paths (`ev_*`): lacquer card with a crest, gilt rails and a picture frame; a WORLD NEWS broadsheet; options as gilt-rimmed plates; `make_events.py` sets the mod's fonts (titles `title_18`, text and options `body_15`). v0.8: the options centred in the room beside the picture (`layout_events.py`), a Valsoran globe on the masthead. v0.8.1: the masthead VALSORAN (globe) STANDARD, the news page centred. Preview `build/preview_events.png` (a country, a news and a leader event). |
 | Fonts | The mod's own (`gen_fonts.py`) on its own screens; v0.8: the game's 28 fonts redrawn in the deco faces at their paths (`game_fonts.py`), for everything else. Preview `build/preview_game_fonts.png` (needs the game's font textures: section 7). |
 | Everything else (the panels' own pictures ...) | Only the core skin so far. Proposals for the panels' pictures (not in the mod) in `art/proposals/`. |
 
@@ -242,7 +252,7 @@ tools/
   game_fonts.py             the game's 28 fonts redrawn in the deco faces at their paths; --measure sizes them (v0.8)
   preview_game_fonts.py     build/preview_game_fonts.png: the game's fonts beside ours (needs the game's font textures)
   restore_noise.py          puts back textures that only changed by anti-aliasing noise (v0.8)
-  proposals_*.py            the proposals in art/proposals/ (panel pictures, larger flags): not in the mod
+  proposals_*.py            the proposals in art/proposals/ (panel pictures, larger flags, masthead names): not in the mod
   validate_preview.py       static checks + a preview renderer that reads the generated .gui/.gfx
   preview_screens.py        politics, state panel, focus tree and main menu previews (imports validate_preview)
   preview_panels.py         every side panel (build/preview_panel_<key>.png and _vanilla.png, the game's) and the
@@ -679,6 +689,9 @@ v0.8: the option plate is `layout_events.OPTION_W` (334) wide inside the game's 
 slots as wide, and each window's `options_grid` is moved so the plates sit in the middle of the room beside the
 picture (`layout_events.CENTRES`: 12 px either side in a country event); a leader event gets the country event's foot
 and no paper clip (`event_report_bottom_win_2.dds`, `events/clip.dds`); `preview_events.py` draws a leader event too.
+v0.8.1: the news page's picture and overlay (x 64), headline (x 19) and story (x 34) are centred on the page
+(`layout_events.NEWS_*`; the game's sat 5-7 px left of its middle), under the masthead
+(`layout_events.news_masthead`: `NEWS_WORDS`, `NEWS_VIEW`, sizes).
 
 **game_fonts.py (v0.8).** The game's 28 fonts redrawn at their paths (`gfx/fonts/<name>.fnt/.dds`), so the screens the
 mod hasn't re-laid read in the deco faces: Josefin Sans for Ubuntu, Century Gothic and the typewriter, Federo for
@@ -803,7 +816,10 @@ Check these first in the user's next screenshots and `error.log`:
   screens, settings, window titles): readable, nothing cut short (a box the deco face doesn't fit drops the end of
   its text or its second line); a tooltip of the ruler's portrait (Roland's titles: the user's example).
 - **v0.8 layout fixes**: the army bar's play / stop row centred over each general, the plate behind it; an event's
-  options centred between the picture and the card's edge; the news masthead's globe.
+  options centred between the picture and the card's edge.
+- **v0.8.1 news**: the VALSORAN (globe) STANDARD masthead and the page under it centred (picture, headline, story,
+  option). Rouental's "Test Events" decisions (the Valsora mod's `scripts/test_events.py`) fire one of each event window
+  (country, long country, state, news, major news, leader, operative) and the test superevent.
 
 - **v0.7 army bar**: a selected army (jade frame and plaque), an army group with its armies (one plate from the
   marshal over his armies), the counts centred on the plaques, a battle plan prepared and running (the chevrons), an

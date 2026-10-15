@@ -478,6 +478,25 @@ screenshot and `error.log`)
 
 ## Map problems found while building
 
+**`check_mod.py` didn't look at decisions** (2026-10-15, adding Rouental's test decisions)
+- Cause: the checks of events fired and scripted effects used read focus trees, scripted effects, events and
+  on_actions, not decisions; nothing checked that an event's title, description and options, or a decision's name, had
+  localisation (the game shows a missing key as itself); and a decision's short icon name (`generic_x`) wasn't checked.
+  A decision firing a misspelt event or effect, or a missing text, would only have shown in game.
+- Fix: decisions count among the users of events and effects; our events' texts (hidden ones excepted) and our
+  decisions and categories (never-visible ones excepted) must be localised; short icon names must be sprites. Nine
+  breaks tried, all caught.
+
+**Deco UI news: the masthead still looked lopsided** (2026-10-15, the author on v0.8's preview)
+- Cause: WORLD is wider than NEWS, so with the globe in the middle and equal gaps the name leaned left (32 px from
+  the rules' start, 70 from their end). The game's own news page was off-centre as well: its picture, headline and
+  story sit 5-7 px left of the page's middle. And the globe, lit and with every lake and channel, read as a speckled
+  blob at 50 px.
+- Fix (v0.8.1): the paper's name is VALSORAN STANDARD, two words Federo sets to the same width (the author's
+  suggestion), each placed by its ink the same distance from the globe (15 px from each word to its rules' end, both
+  sides); the picture, headline and story centred on the page; the globe simplified to what 60 px can show, in flat
+  gilt with a graticule.
+
 **The mod's build took four minutes** (2026-10-15, looking for speed at the author's request)
 - Cause: `np.load` gives a lazy `NpzFile` that decompresses an array again on every access, and the unit positions
   asked `work/regions.npz` for the province centres 82,565 times: 200 s of the 238. Three full-map distance

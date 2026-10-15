@@ -490,7 +490,7 @@ guiTypes = {
 			{
 				name ="event_picture"
 				spriteType = "GFX_news_event_001"
-				position = { x = 59 y = 91 }
+				position = { x = 64 y = 91 }
 				Orientation = UPPER_LEFT
 				alwaystransparent = yes
 			}
@@ -498,14 +498,14 @@ guiTypes = {
 			iconType = {
 				name ="event_picture_overlay"
 				spriteType = "GFX_event_news_pic_overlay"
-				position = { x = 59 y = 91 }
+				position = { x = 64 y = 91 }
 				Orientation = UPPER_LEFT
 				alwaystransparent = yes
 			}			
 			
 			instantTextBoxType = {
 				name = "Title"
-				position = { x = 12 y = 260 }
+				position = { x = 19 y = 260 }
 				font = "valsora_deco_title_18"
 				borderSize = {x = 0 y = 0}
 				text = "Title text here!"	
@@ -530,7 +530,7 @@ guiTypes = {
 		
 			instantTextBoxType = {
 				name = "Description"
-				position = { x = 39 y = 170 }
+				position = { x = 34 y = 170 }
 				font = "valsora_deco_body_15"
 				borderSize = {x = 0 y = 0}
 				text = "Long text here!"	
