@@ -142,6 +142,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .viewctl { display: flex; gap: 6px; align-items: center; margin-left: auto; }
 .subtools { display: flex; gap: 6px 10px; align-items: center; flex-wrap: wrap; min-height: 32px; font-size: 14px; color: var(--ink-2); }
 .subtools .hinttext { white-space: normal; flex: 1 1 auto; min-width: 0; line-height: 1.3; }
+.subtools .chiprow { display: contents; }
 .grow { display: none; }
 .tchip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 9px 2px; border: 1px solid var(--rule-2); border-radius: 99px;
   background: var(--sheet); cursor: pointer; font-size: 13px; color: var(--ink); }
@@ -261,9 +262,12 @@ optgroup { font-style: normal; }
   #desk { display: flex; flex-direction: column; overflow: auto; }
   .mapcol { flex: none; height: 56%; min-height: 260px; padding-block: 8px 4px; gap: 6px; }
   .ledger { flex: 1 0 300px; min-height: 0; border-left: 0; border-top: 1px solid var(--rule); }
-  .subtools { flex-wrap: nowrap; overflow-x: auto; min-height: 36px; padding-bottom: 2px; }
-  .subtools > * { flex: none; }
-  .subtools > .hinttext { flex: 1 1 auto; font-size: 13px; }
+  .subtools { flex-wrap: wrap; min-height: 36px; padding-bottom: 2px; gap: 4px; }
+  .subtools .chiprow { display: flex; flex: 1 0 100%; gap: 6px 10px; align-items: center; flex-wrap: nowrap; overflow-x: auto; }
+  .subtools .chiprow:empty { display: none; }
+  .subtools .chiprow > * { flex: none; }
+  .subtools > .hinttext { flex: 1 0 100%; font-size: 12.5px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .subtools > .hinttext.open { display: block; }
   .tool span { display: none; }
   .tabs { overflow-x: auto; }
   .tabs button { letter-spacing: .02em; font-size: 11.5px; padding-inline: 6px; flex: 1 0 auto; }
@@ -413,7 +417,9 @@ const REQ_KINDS = [["subideology", "New sub-ideology"], ["subject", "Subject typ
 const REQ_KIND = Object.fromEntries(REQ_KINDS);
 const REQ_STATUS = { open: "Open", done: "Done", declined: "Declined" };
 const ROLES = [["general", "General"], ["admiral", "Admiral"], ["advisor", "Advisor"], ["other", "Other"]];
-const SUG_TYPES = [["area", "Area"], ["line", "Line"], ["point", "Point"]];
+const SUG_TYPES = [["state", "State"], ["area", "Area"], ["line", "Line"], ["point", "Point"]];
+// states drawn with Suggest › State, one colour each in turn
+const SUG_STATE = ["#c75b8f", "#4f8fc0", "#7fa548", "#c08a3a", "#8d63b8", "#3fa39b", "#c4684b", "#6d7fa0"];
 const CONTINENTS = ["Aislada", "Araseos", "Nonscio", "Orientalis", "Solitas", "Usnistan", "Yastreovakia"];
 // three of these and a number make a password (about 2.4 billion of them)
 const WORDS = ("amber anchor apple arrow aspen autumn badger banner barley basin beacon bear birch bison bloom bluff bramble brass breeze brook " +
@@ -1226,6 +1232,7 @@ async function openNation(tag, opt = {}) {
   app.N = N;
   N.open = mapOpen(N);
   app.ui.rel = null;
+  app.ui.sugKind = !N.planned && !N.open ? "state" : app.ui.sugKind === "state" ? "area" : app.ui.sugKind;
   if (!N.open && app.ui.mode !== "states") {  // its states aren't drawn: the plain land only
     app.ui.mode = "states";
     for (const b of document.querySelectorAll("[data-mode]")) b.setAttribute("aria-pressed", String(b.dataset.mode === "states"));
@@ -1504,14 +1511,25 @@ function resolve() {  // the facts' pixel keys -> this map's states and province
   for (const c of N.cityList) if (c.prov >= 0 && !N.cityInProv.has(c.prov)) N.cityInProv.set(c.prov, c);
   N.capitalCity = N.cityList.find(c => c.capital && c.prov >= 0) || null;
   N.sugList = Object.entries(F("suggest")).filter(([, v]) => v && Array.isArray(v.pts) && v.pts.length).map(([id, v]) => ({ id, ...v }));
-  // releasables, in the order they were added, and which of them holds each province
+  // releasables, in the order they were added, and which of them holds each state (HOI4 gives
+  // cores on whole states). Those saved before held provinces: they hold the states those cover
+  // by half, as the build reads them, until their land is changed (then saved as states).
   N.relList = Object.entries(F("releasables")).filter(([, v]) => v && isObj(v)).map(([id, v]) => ({ id, ...v }))
     .sort((a, b) => (a.added || 0) - (b.added || 0) || a.id.localeCompare(b.id));
   N.relOf = new Map();
-  for (const r of N.relList) for (const [k, on] of Object.entries(r.provinces || {})) {
+  for (const r of N.relList) for (const [k, on] of Object.entries(r.states || {})) {
     if (!on) continue;
-    const [x, y] = keyXY(k), p = ownProvAt(x, y);
-    if (p >= 0 && !N.relOf.has(p)) N.relOf.set(p, [r.id, k]);
+    const [x, y] = keyXY(k), p = ownProvAt(x, y), s = p >= 0 ? N.prov[p].s : -1;
+    if (s >= 0 && !N.relOf.has(s)) N.relOf.set(s, r.id);
+  }
+  for (const r of N.relList) {
+    const cover = new Map();
+    for (const [k, on] of Object.entries(r.provinces || {})) {
+      if (!on) continue;
+      const [x, y] = keyXY(k), p = ownProvAt(x, y);
+      if (p >= 0) cover.set(N.prov[p].s, (cover.get(N.prov[p].s) || 0) + N.prov[p].area);
+    }
+    for (const [s, a] of cover) if (a * 2 >= N.states[s].area && !N.relOf.has(s)) N.relOf.set(s, r.id);
   }
 }
 function sf(s) { return app.N.stateFacts[s] || {}; }
@@ -1529,8 +1547,11 @@ function changed(kind) {
   if (kind === "suggest" && app.pendingSug && app.N.sugList.some(x => x.id === app.pendingSug)) {
     const id = app.pendingSug; app.pendingSug = null; app.ui.sel.sug = id; requestAnimationFrame(() => selectSug(id));
   }
-  if (kind === "states" || kind === "provinces" || kind === "rivers" || kind === "releasables") renderBase();
-  else requestDraw();
+  const sig = kind === "suggest" ? stateSugSig() : null;
+  if (kind === "states" || kind === "provinces" || kind === "rivers" || kind === "releasables" || (sig !== null && sig !== app.sugSig)) {
+    if (sig !== null) app.sugSig = sig;
+    renderBase();
+  } else requestDraw();
   renderAllPanes(kind);
 }
 
@@ -1590,8 +1611,8 @@ function renderPart(N, P, active, pal) {
       else if (mode === "pop") c = pal.pop[pc[s]];
       else c = pal.st[N.colourOf[s]];
       if (!plain && s === app.ui.sel.state) c = mix(c, pal.sel, 0.32);
-      const r = rel && N.relOf.get(p);
-      if (r) c = mix(c, rgb(relColour(r[0])), r[0] === app.ui.rel ? 0.66 : 0.4);
+      const r = rel && N.relOf.get(s);
+      if (r) c = mix(c, rgb(relColour(r)), r === app.ui.rel ? 0.66 : 0.4);
     } else {
       const o = N.others[v - own], nb = o >= 0 ? N.nb[o] : null;
       c = nb ? mix(pal.other, rgb(nb.colour), 0.16) : pal.other;
@@ -1612,6 +1633,17 @@ function renderPart(N, P, active, pal) {
     if (rv[i] && v >= 2 && !(erased && erased[i])) c = rv[i] >= 8 ? riverW : riverP;
     u[i] = c;
   }
+  const sm = sugFill(P);  // states drawn with Suggest › State, over the land
+  if (sm) {
+    const cols = SUG_STATE.map(rgb), selK = (P.sugInfo || []).findIndex(x => x.id === app.ui.sel.sug) + 1;
+    for (let i = 0; i < n; i++) {
+      const k = sm[i];
+      if (!k || (rv[i] && px[i] >= 2)) continue;
+      const x = i % w, c = cols[(k - 1) % cols.length];
+      const rim = (x > 0 && sm[i - 1] !== k) || (x < w - 1 && sm[i + 1] !== k) || (i >= w && sm[i - w] !== k) || (i + w < n && sm[i + w] !== k);
+      u[i] = rim ? (k === selK ? selP : pack(mix(c, pal.ink, 0.45))) : pack(mix(fill[px[i]], c, k === selK ? 0.62 : 0.48));
+    }
+  }
   if (active && sel >= 0 && N.stateToPart[sel] === app.ui.part) {  // the selected state's outline
     const hh = P.h;
     for (let i = 0; i < n; i++) {
@@ -1623,6 +1655,48 @@ function renderPart(N, P, active, pal) {
     }
   }
   P.canvas.getContext("2d").putImageData(P.img, 0, 0);
+}
+// states drawn with Suggest › State: each keeps the nation's own land inside its line that no state
+// drawn before it holds (ids begin with the time), so states drawn side by side fit together
+function stateSugs() { return app.N.sugList.filter(it => it.type === "state" && it.pts.length > 2).sort((a, b) => (a.id < b.id ? -1 : 1)); }
+function stateSugSig() { return app.N ? stateSugs().map(it => it.id + JSON.stringify(it.pts)).join("|") : ""; }
+function sugFill(P) {  // per pixel of a part: 1 + the drawn state holding it, or 0 (null: none drawn)
+  if (P.world) return null;
+  const list = stateSugs(), sig = list.map(it => it.id + JSON.stringify(it.pts)).join("|");
+  if (P.sugSig === sig) return P.sugMask;
+  P.sugSig = sig; P.sugMask = null; P.sugInfo = [];
+  if (!list.length) return null;
+  const m = new Uint16Array(P.w * P.h), own = app.N.nOwn + 2;
+  const cv = document.createElement("canvas"); cv.width = P.w; cv.height = P.h;
+  const ctx = cv.getContext("2d", { willReadFrequently: true });
+  list.forEach((it, k) => {
+    const loc = it.pts.map(([x, y]) => [mod(x - P.x0, W), y - P.y0]);
+    const x0 = Math.max(0, Math.floor(Math.min(...loc.map(q => q[0])))), y0 = Math.max(0, Math.floor(Math.min(...loc.map(q => q[1]))));
+    const x1 = Math.min(P.w, Math.ceil(Math.max(...loc.map(q => q[0]))) + 1), y1 = Math.min(P.h, Math.ceil(Math.max(...loc.map(q => q[1]))) + 1);
+    let sx = 0, sy = 0, n = 0;
+    if (x1 > x0 && y1 > y0) {
+      ctx.clearRect(0, 0, P.w, P.h);
+      ctx.beginPath(); loc.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.closePath();
+      ctx.fillStyle = "#000"; ctx.fill();
+      const a = ctx.getImageData(x0, y0, x1 - x0, y1 - y0).data, bw = x1 - x0;
+      for (let y = y0; y < y1; y++) for (let x = x0; x < x1; x++) {
+        const i = y * P.w + x, v = P.px[i];
+        if (m[i] || v < 2 || v >= own || a[((y - y0) * bw + (x - x0)) * 4 + 3] < 128) continue;
+        m[i] = k + 1; sx += x; sy += y; n++;
+      }
+    }
+    P.sugInfo.push({ id: it.id, n, x: n ? sx / n + 0.5 : 0, y: n ? sy / n + 0.5 : 0 });
+  });
+  P.sugMask = m;
+  return m;
+}
+function sugStateAtScreen(sx, sy) {  // the drawn state under a point of the screen, or null
+  const P = curPart();
+  if (P.world || !P.sugMask) return null;
+  const [lx, ly] = toLocal(sx, sy), x = Math.floor(lx), y = Math.floor(ly);
+  if (x < 0 || y < 0 || x >= P.w || y >= P.h) return null;
+  const k = P.sugMask[y * P.w + x];
+  return k ? P.sugInfo[k - 1].id : null;
 }
 function renderInsets() {  // the nation's other pieces (overseas land, the whole world) in boxes of their own
   const N = app.N, el = $("#insets");
@@ -1693,6 +1767,7 @@ function renderLegend(pal) {
     items.push(sw(pal.st[0], "Your states"), sw(pal.other, "Neighbours"), sw(pal.sea, "Sea"), sw(pal.river, "River"), sw(pal.sel, "Selected"));
   }
   if (!P.world && relView() && app.N.relList.length) items.push(sw(rgb(relColour(relCurrent() || app.N.relList[0].id)), "Releasable"));
+  if (!P.world && (P.sugInfo || []).some(x => x.n)) items.push(sw(rgb(SUG_STATE[0]), "Drawn state"));
   el.replaceChildren(...items);
   el.hidden = !app.ui.legend;
 }
@@ -1802,11 +1877,11 @@ function draw() {
       const t = c.name || "(unnamed)", w = ctx.measureText(t).width;
       if (place(q[0] + 8, q[1] - 8, w, 16)) halo(ctx, t, q[0] + 8, q[1], c.prov < 0 ? warn : ink, paper);
     }
-    if (relView()) {  // releasables' names over their provinces
+    if (relView()) {  // releasables' names over their states
       ctx.font = `700 12px "Josefin Sans", sans-serif`;
       for (const r of N.relList) {
         let sx = 0, sy = 0, n = 0;
-        for (const [p, [id]] of N.relOf) if (id === r.id && N.stateToPart[N.prov[p].s] === app.ui.part) { sx += N.prov[p].x; sy += N.prov[p].y; n++; }
+        for (const [s, id] of N.relOf) if (id === r.id && N.stateToPart[s] === app.ui.part) for (const p of N.states[s].provs) { sx += N.prov[p].x; sy += N.prov[p].y; n++; }
         if (!n) continue;
         const q = gToScreen(sx / n, sy / n), t = (r.name || "(unnamed)").toUpperCase(), w = ctx.measureText(t).width;
         if (q && place(q[0] - w / 2, q[1] - 8, w, 16)) halo(ctx, t, q[0] - w / 2, q[1], relColour(r.id), paper);
@@ -1833,10 +1908,28 @@ function draw() {
   // releasables' land drawn as areas (before the states are drawn, or for a nation not on the map yet)
   for (const r of N.relList) for (const pts of Object.values(r.areas || {})) {
     if (!Array.isArray(pts) || pts.length < 3) continue;
-    drawSuggestion(ctx, { type: "area", pts, label: r.name || "(unnamed)" }, ([x, y]) => gToScreen(x, y), r.id === app.ui.rel && relView(), null, relColour(r.id));
+    drawSuggestion(ctx, { type: "area", pts, label: r.name || "(unnamed)" }, ([x, y]) => gToScreen(x, y), r.id === app.ui.rel && relView(), null, relColour(r.id), place);
   }
-  // suggestions, on every map
-  for (const it of N.sugList) drawSuggestion(ctx, it, ([x, y]) => gToScreen(x, y), app.ui.sel.sug === it.id);
+  // suggestions, on every map; drawn states are filled in the land's picture: their names here,
+  // and the line drawn for the selected one
+  for (const it of N.sugList) {
+    if (it.type !== "state") { drawSuggestion(ctx, it, ([x, y]) => gToScreen(x, y), app.ui.sel.sug === it.id, null, null, place); continue; }
+    if (P.world) { drawSuggestion(ctx, { ...it, type: "area" }, ([x, y]) => gToScreen(x, y), app.ui.sel.sug === it.id, null, null, place); continue; }
+    if (app.ui.sel.sug === it.id) {
+      const pts = it.pts.map(([x, y]) => gToScreen(x, y));
+      if (pts.every(Boolean)) {
+        ctx.beginPath(); pts.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.closePath();
+        ctx.setLineDash([6, 4]); ctx.strokeStyle = css("--sel"); ctx.lineWidth = 1.6; ctx.stroke(); ctx.setLineDash([]);
+      }
+    }
+    const inf = (P.sugInfo || []).find(x => x.id === it.id);
+    if (inf && inf.n) {
+      const q = toScreen(inf.x, inf.y), t = it.label || "State";
+      ctx.font = `700 12px "Josefin Sans", sans-serif`; ctx.textBaseline = "middle";
+      const w = ctx.measureText(t).width;
+      for (const dy of [0, 16, -16, 32]) if (place(q[0] - w / 2, q[1] - 8 + dy, w, 16)) { halo(ctx, t, q[0] - w / 2, q[1] + dy, css("--ink"), css("--sheet")); break; }
+    }
+  }
   // the line being drawn
   const d = app.ui.draft;
   if (d && d.pts.length) {
@@ -1850,7 +1943,7 @@ function draw() {
       railPath(ctx, line, app.ui.railLevel, ink, paper, sel);
     } else {
       ctx.beginPath(); pts.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y));
-      if ((d.kind === "s-area" || d.kind === "r-area") && pts.length > 2) ctx.closePath();
+      if (closedKind(d.kind) && pts.length > 2) ctx.closePath();
       ctx.strokeStyle = d.kind === "erase" ? warn : d.kind.startsWith("s-") ? css("--sug") : d.kind === "r-area" ? relColour(app.ui.rel) : river;
       ctx.lineWidth = d.kind === "erase" ? Math.max(2, ERASE_R * 2 * v.s * 0.7) : 3; ctx.stroke();
     }
@@ -1858,7 +1951,7 @@ function draw() {
     for (const [x, y] of pts.slice(0, d.pts.length)) { ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI * 2); ctx.fillStyle = sel; ctx.fill(); }
   }
 }
-function drawSuggestion(ctx, it, toS, selected, tag, colour) {
+function drawSuggestion(ctx, it, toS, selected, tag, colour, claim) {  // claim: the map's label spots, if given
   const pts = it.pts.map(toS);
   if (pts.some(p => !p)) return;
   const c = colour || css("--sug"), paper = css("--sheet");
@@ -1881,7 +1974,8 @@ function drawSuggestion(ctx, it, toS, selected, tag, colour) {
   if (label) {
     const [x, y] = it.type === "area" ? [pts.reduce((a, p) => a + p[0], 0) / pts.length, pts.reduce((a, p) => a + p[1], 0) / pts.length] : pts[0];
     ctx.font = `700 12px "Josefin Sans", sans-serif`; ctx.textBaseline = "middle";
-    halo(ctx, label, x + (it.type === "area" ? -ctx.measureText(label).width / 2 : 10), y, c, paper);
+    const w = ctx.measureText(label).width, lx = x + (it.type === "area" ? -w / 2 : 10);
+    for (const dy of [0, 16, -16, 32]) if (!claim || claim(lx, y - 8 + dy, w, 16)) { halo(ctx, label, lx, y + dy, c, paper); break; }
   }
 }
 // railways run province to province: the shortest way between the provinces under their
@@ -1973,9 +2067,12 @@ function hoverText(sx, sy) {
   if (v === 0) return "Sea" + at;
   if (v === 1) return "Lake" + at;
   if (v >= N.nOwn + 2) { const o = N.others[v - N.nOwn - 2]; return (o >= 0 ? N.nb[o].name + " (neighbour)" : "Land") + at; }
-  const p = v - 2, s = N.prov[p].s, c = N.cityInProv.get(p), r = N.relOf.get(p);
-  if (!mapOpen()) return `${N.name}${c ? " · " + c.name : ""}${N.prov[p].coastal ? " · coast" : ""}${at}`;
-  return `${stateName(s)}${c ? " · " + c.name : ""}${r ? " · " + relName(r[0]) : ""} · ${TNAME[provTerrain(p)] || provTerrain(p)}${pf(p).hub ? " · supply hub" : ""}${N.prov[p].coastal ? " · coast" : ""}${at}`;
+  const p = v - 2, s = N.prov[p].s, c = N.cityInProv.get(p), r = N.relOf.get(s);
+  if (!mapOpen()) {
+    const ds = sugStateAtScreen(sx, sy), it = ds && N.sugList.find(x => x.id === ds);
+    return `${N.name}${it ? " · " + (it.label || "a drawn state") : ""}${c ? " · " + c.name : ""}${N.prov[p].coastal ? " · coast" : ""}${at}`;
+  }
+  return `${stateName(s)}${c ? " · " + c.name : ""}${r ? " · " + relName(r) : ""} · ${TNAME[provTerrain(p)] || provTerrain(p)}${pf(p).hub ? " · supply hub" : ""}${N.prov[p].coastal ? " · coast" : ""}${at}`;
 }
 function wireMap() {
   map.cv = $("#map"); map.ctx = map.cv.getContext("2d");
@@ -2014,7 +2111,7 @@ function wireMap() {
       if (d.city && !locked()) d.kind = "movecity";
       else if ((t === "river" || (t === "suggest" && app.ui.sugKind !== "point") || (t === "release" && !mapOpen() && relCurrent())) && !locked()) {
         d.kind = "free";
-        if (!app.ui.draft) startDraft(t === "river" ? app.ui.riverKind : t === "release" ? "r-area" : "s-" + app.ui.sugKind);
+        if (!app.ui.draft) startDraft(t === "river" ? app.ui.riverKind : t === "release" ? "r-area" : "s-" + sugKindHere());
         app.ui.draft.free = true; addPoint(d.x0, d.y0, true);
       }
       else d.kind = "pan";
@@ -2066,8 +2163,10 @@ function clickAt(x, y, dbl) {
     if (it) { selectSug(it.id); return; }
     const c = cityAtScreen(x, y);
     if (c) { selectCity(c.id); showTab("cities"); return; }
-    const r = p >= 0 && relView() ? N.relOf.get(p) : null;
-    if (r) { selectRel(r[0]); showTab("release"); return; }
+    const r = p >= 0 && relView() ? N.relOf.get(N.prov[p].s) : null;
+    if (r) { selectRel(r); showTab("release"); return; }
+    const ds = !mapOpen() ? sugStateAtScreen(x, y) : null;
+    if (ds) { selectSug(ds); return; }
     if (!mapOpen()) return;
     if (p >= 0) selectState(N.prov[p].s, p);
     else selectState(-1, -1);
@@ -2076,7 +2175,7 @@ function clickAt(x, y, dbl) {
   if (locked()) { askPassword(); return; }
   if (t === "release") {
     if (!relCurrent()) { flash("Add a releasable on the Releasables tab first, or pick one there."); showTab("release"); return; }
-    if (mapOpen()) return;  // provinces: painted as the pointer went down
+    if (mapOpen()) return;  // states: painted as the pointer went down
     if (dbl) { const d = app.ui.draft; if (d && d.pts.length > 1) d.pts.pop(); finishDraft(); return; }
     if (!app.ui.draft) startDraft("r-area");
     addPoint(x, y, false);
@@ -2098,7 +2197,7 @@ function clickAt(x, y, dbl) {
     if (edit("suggest", { [id]: { type: "point", pts: [g], label: "", note: "" } })) selectSug(id, true);
   } else if (t === "river" || t === "rail" || t === "suggest") {
     if (dbl) { const d = app.ui.draft; if (d && d.pts.length > 1) d.pts.pop(); finishDraft(); return; }
-    if (!app.ui.draft) startDraft(t === "rail" ? "rail" : t === "suggest" ? "s-" + app.ui.sugKind : app.ui.riverKind);
+    if (!app.ui.draft) startDraft(t === "rail" ? "rail" : t === "suggest" ? "s-" + sugKindHere() : app.ui.riverKind);
     addPoint(x, y, false);
   }
 }
@@ -2111,6 +2210,8 @@ function paintAt(x, y) {
   editProv(p, { t });
 }
 function startDraft(kind) { app.ui.draft = { kind, pts: [], free: false }; renderSubtools(); }
+function sugKindHere() { return app.ui.sugKind === "state" && (curPart().world || app.N.planned) ? "area" : app.ui.sugKind; }
+const closedKind = k => k === "s-area" || k === "s-state" || k === "r-area";
 function addPoint(x, y, free) {
   const d = app.ui.draft;
   let g;
@@ -2129,7 +2230,7 @@ function finishDraft() {
   const d = app.ui.draft;
   app.ui.draft = null;
   renderSubtools();
-  if (!d || d.pts.length < 2 || ((d.kind === "s-area" || d.kind === "r-area") && d.pts.length < 3)) { requestDraw(); return; }
+  if (!d || d.pts.length < 2 || (closedKind(d.kind) && d.pts.length < 3)) { requestDraw(); return; }
   const pts = d.free ? simplify(d.pts, 1.0) : d.pts;
   if (d.kind === "r-area") {
     const id = relCurrent();
@@ -2164,11 +2265,14 @@ function dropCity(c, x, y) {
 }
 let flashTimer;
 function flash(msg) { const el = $("#status"); el.textContent = msg; clearTimeout(flashTimer); flashTimer = setTimeout(() => { el.textContent = ""; }, 4000); }
+function hintSpan() {  // on a phone it shows two lines: a tap shows the rest
+  return h("span", { class: "hinttext", text: hint(), onclick: e => e.currentTarget.classList.toggle("open") });
+}
 function hint() {
   const P = app.N && curPart();
   if (P && P.world && app.ui.tool === "select") return "The whole world. Drag to move, scroll or pinch to zoom; pick Suggest to draw on it.";
   if (app.ui.tool === "release") return mapOpen()
-    ? "Click or drag over your provinces to give them to the releasable picked here (or take them away)."
+    ? "Click or drag over your states to give them to the releasable picked here (or take them away). For a border through a state, draw it with Suggest."
     : "Draw the releasable's land: click points around it, double-click or Enter to finish, or drag freehand.";
   return {
     select: "Click a state to fill in its facts. Drag to move the map; scroll or pinch to zoom.",
@@ -2179,7 +2283,9 @@ function hint() {
     hub: "Click a province to add or remove a supply hub. Hubs need a railway to the capital to work.",
     suggest: mapOpen() || !app.N || app.N.planned
       ? "Show the author what the map should have: draw an area or a line (click points, double-click or Enter to finish; or drag freehand) or drop a point, then say what it is on the Map tab."
-      : "Suggest your states and cities: an area for each state (or lines along its borders) and a point for each city; say what each is on the Map tab.",
+      : app.ui.sugKind === "state" && !curPart().world
+      ? "Draw around a state: it keeps only your land inside the line, none of a state drawn before, so draw past your coast and borders and the states fit together. Then name it on the Map tab."
+      : "Suggest your states and cities: a state (or lines along its borders) for each, and a point for each city; say what each is on the Map tab.",
   }[app.ui.tool];
 }
 
@@ -2216,12 +2322,12 @@ function renderSubtools() {
       const sel = h("select", { "aria-label": "Releasable", onchange: e => selectRel(e.target.value) }, list.map(r => h("option", { value: r.id, text: r.name || "(unnamed)" })));
       sel.value = relCurrent() || "";
       out.push(sel);
-      if (mapOpen()) for (const [k, nm] of [["add", "Add provinces"], ["remove", "Take them away"]])
+      if (mapOpen()) for (const [k, nm] of [["add", "Add states"], ["remove", "Take them away"]])
         out.push(h("button", { class: "tchip", type: "button", "aria-pressed": String(app.ui.relMode === k), onclick: () => { app.ui.relMode = k; renderSubtools(); } }, nm));
     }
     const d = app.ui.draft;
     if (d && d.kind === "r-area") out.push(...draftControls(d));
-    else out.push(h("span", { class: "hinttext", text: hint() }));
+    else out.push(hintSpan());
   } else if (t === "river" || t === "rail" || t === "suggest") {
     if (t === "river") for (const [k, nm] of [["major", "Major river"], ["minor", "Minor river"], ["erase", "Erase rivers"]]) {
       out.push(h("button", { class: "tchip", type: "button", "aria-pressed": String(app.ui.riverKind === k), onclick: () => { app.ui.riverKind = k; if (app.ui.draft) app.ui.draft.kind = k; renderSubtools(); requestDraw(); } }, nm));
@@ -2229,13 +2335,16 @@ function renderSubtools() {
       out.push(h("span", { text: "Level" }));
       for (let l = 1; l <= 5; l++) out.push(h("button", { class: "tchip", type: "button", "aria-pressed": String(app.ui.railLevel === l), onclick: () => { app.ui.railLevel = l; renderSubtools(); requestDraw(); } }, String(l)));
     } else for (const [k, nm] of SUG_TYPES) {
-      out.push(h("button", { class: "tchip", type: "button", "aria-pressed": String(app.ui.sugKind === k), onclick: () => { app.ui.sugKind = k; if (app.ui.draft) cancelDraft(); renderSubtools(); } }, nm));
+      if (k === "state" && (curPart().world || app.N.planned)) continue;
+      out.push(h("button", { class: "tchip", type: "button", "aria-pressed": String(sugKindHere() === k), onclick: () => { app.ui.sugKind = k; if (app.ui.draft) cancelDraft(); renderSubtools(); } }, nm));
     }
     const d = app.ui.draft;
     if (d) out.push(...draftControls(d));
-    else if (t === "suggest") out.push(h("span", { class: "hinttext", text: hint() }));
-  } else out.push(h("span", { class: "hinttext", text: hint() }));
-  el.replaceChildren(...out);
+    else if (t === "suggest") out.push(hintSpan());
+  } else out.push(hintSpan());
+  // the chips in a row of their own, the hint after them (on a phone: a scrolling row, the hint below)
+  const hintEls = out.filter(e => e.classList && e.classList.contains("hinttext"));
+  el.replaceChildren(h("div", { class: "chiprow" }, out.filter(e => !hintEls.includes(e))), ...hintEls);
 }
 function draftControls(d) {
   return [h("span", { class: "meta", text: `${d.pts.length} point${d.pts.length === 1 ? "" : "s"}` }),
@@ -2345,7 +2454,7 @@ function renderState(force) {
       h("b", { text: "No state selected." }),
       "Click a state on the map, or pick one here:",
       h("div", { class: "chips" }, [...N.states.keys()].sort((a, b) => stateName(a).localeCompare(stateName(b))).map(k =>
-        h("button", { class: "tchip", type: "button", onclick: () => selectState(k, -1) }, (sf(k).name ? "● " : "") + stateName(k))))));
+        h("button", { class: "tchip", type: "button", onclick: () => selectState(k, -1) }, (sf(k).name || N.states[k].named ? "● " : "") + stateName(k))))));
     return;
   }
   keepFocus(pane, () => paneFrame(stateForm(s)));
@@ -2355,6 +2464,8 @@ function stateForm(s) {
   const nameIn = textInput("st-name", f.name || "", st.name || `State ${st.id}`, v => editState(s, { name: v }), "nameinput");
   nameIn.setAttribute("aria-label", "State name");
   out.push(h("div", { class: "sec" }, nameIn,
+    h("div", { class: "hint", text: f.name ? (st.named ? `Renamed here: the map calls it ${st.name}.` : "")
+      : st.named ? "Named on the map. Type a new name to change it." : `Not named yet: the game calls it ${st.name}.` }),
     h("div", { class: "meta", text: `State ${st.id} · ${st.provs.length} province${st.provs.length === 1 ? "" : "s"} · ${fmt(st.area)} map px${st.coastal ? " · coastal" : ""}${capitalState() === s ? " · capital" : ""}` })));
   const pop = f.pop;
   out.push(h("div", { class: "sec" }, h("h4", null, "Population", h("small", { text: pop != null ? people(pop) : "" })),
@@ -2476,7 +2587,7 @@ function renderMapPane(force) {
       h("div", { class: "meta", text: N.planned
         ? "Your nation isn't on the map yet. Draw where it should be, its borders, mountains, rivers or cities with the Suggest tool, and say what each is; the author and Merlo use them when they draw it."
         : !mapOpen()
-        ? "Your states aren't drawn yet, so the map tools (states, cities, terrain, rivers, railways) wait for them: drawing them cuts your provinces again. Suggest them meanwhile with the Suggest tool, an area for each state (or lines along its borders) and a point for each city, and say what each is. Your names, flags, people and releasables can be filled in now."
+        ? "Your states aren't drawn yet, so the map tools (states, cities, terrain, rivers, railways) wait for them: drawing them cuts your provinces again. Suggest them meanwhile with the Suggest tool: draw around each state with State (it keeps only your land inside the line, and none of a state drawn before, so they fit together), or lines along its borders, and a point for each city, and say what each is. Your names, flags, people and releasables can be filled in now."
         : "Anything the map can't take from you directly (a border to move, an island that should be yours, a mountain range): draw it with the Suggest tool and say what it is." }),
       N.sugList.length ? h("div", null, N.sugList.map(it => {
         const lab = textInput("sug-label-" + it.id, it.label, "What is it? (e.g. our northern border)", v => edit("suggest", { [it.id]: { label: v || "" } }), "", 80);
@@ -2485,6 +2596,8 @@ function renderMapPane(force) {
           h("div", { class: "row" }, h("span", { class: "sugtype", text: it.type }), lab),
           h("div", { class: "row" },
             h("button", { class: "btn small", type: "button", onclick: () => { app.ui.sel.sug = it.id; locate(it.pts[0][0], it.pts[0][1]); renderMapPane(true); } }, "Show"),
+            it.type === "area" && !N.planned ? h("button", { class: "btn small", type: "button", title: "Keep only your land inside it, none of the states drawn before",
+              onclick: () => edit("suggest", { [it.id]: { type: "state" } }) }, "Make it a state") : null,
             h("button", { class: "btn small danger", type: "button", onclick: () => edit("suggest", { [it.id]: null }) }, "Delete")),
           textArea("sug-note-" + it.id, it.note, "More about it (optional)", v => edit("suggest", { [it.id]: { note: v || "" } }), 1000));
       })) : h("div", { class: "empty", text: "None yet." })));
@@ -2575,8 +2688,9 @@ function uploadInto(kind, path, label) {
 }
 
 // ---- releasables: nations that can be released from this one, with their land, names, flag
-// and ruler. Their land is provinces once the nation's states are drawn (a province belongs to
-// one releasable), drawn areas before; the build gives them cores on the states they hold most of.
+// and ruler. Their land is whole states once the nation's states are drawn (HOI4 gives cores on
+// states, not provinces; a state belongs to one releasable), drawn areas before; the build gives
+// them cores on the states they hold, and on those the areas cover by half.
 function relCurrent() { const id = app.ui.rel; return id && app.N && F("releasables")[id] ? id : null; }
 function relName(id) { const r = F("releasables")[id]; return (r && r.name) || "the releasable"; }
 function relColour(id) {
@@ -2593,21 +2707,28 @@ function addRelease() {
   app.ui.rel = id; showTab("release"); renderSubtools();
   setTimeout(() => { const el = document.getElementById("rl-name-" + id); if (el) { el.scrollIntoView({ block: "nearest" }); el.focus(); } }, 60);
 }
-function paintRel(p) {
-  const id = relCurrent(), N = app.N, has = N.relOf.get(p);
-  if (!id) return;
-  if (app.ui.relMode === "remove") { if (has && has[0] === id) edit("releasables", { [id]: { provinces: { [has[1]]: null } } }); return; }
-  if (has && has[0] === id) return;
-  const d = { [id]: { provinces: { [N.prov[p].key]: true } } };
-  if (has) d[has[0]] = { provinces: { [has[1]]: null } };  // a province belongs to one releasable
+function relStates(id) { return [...app.N.relOf].filter(([, v]) => v === id).map(([s]) => s); }
+function paintRel(p) {  // the state of province p to (or from) the releasable picked
+  const id = relCurrent(), N = app.N;
+  if (!id || p < 0) return;
+  const s = N.prov[p].s, has = N.relOf.get(s), all = F("releasables"), remove = app.ui.relMode === "remove";
+  if (remove ? has !== id : has === id) return;
+  const d = {};
+  const statesOf = rid => {  // one saved with provinces is saved as the states it holds first
+    if (!d[rid]) d[rid] = Object.keys((all[rid] || {}).provinces || {}).length
+      ? { provinces: null, states: Object.fromEntries(relStates(rid).map(t => [N.stateKey[t], true])) } : { states: {} };
+    return d[rid].states;
+  };
+  statesOf(id)[N.stateKey[s]] = remove ? null : true;
+  if (!remove && has) statesOf(has)[N.stateKey[s]] = null;  // a state belongs to one releasable
   edit("releasables", d);
 }
 function showRel(id) {
   const N = app.N, r = F("releasables")[id] || {};
-  const p = [...N.relOf].find(([, v]) => v[0] === id);
+  const s = relStates(id)[0];
   const a = Object.values(r.areas || {}).find(x => Array.isArray(x) && x.length);
   selectRel(id);
-  if (p) locate(N.prov[p[0]].x, N.prov[p[0]].y); else if (a) locate(a[0][0], a[0][1]);
+  if (s != null) locate(...N.states[s].label); else if (a) locate(a[0][0], a[0][1]);
 }
 function fieldOf(id, label, input, set, cls) {
   return h("div", { class: "field" + (cls ? " " + cls : "") + (set ? " set" : "") }, h("label", { for: id, text: label }), input);
@@ -2618,7 +2739,7 @@ function renderReleasables(force) {
   if (!force && typingIn(pane)) { dirtyPanes("release"); return; }
   keepFocus(pane, () => {
     const out = [h("div", { class: "sec" }, h("h4", null, "Releasables", h("small", { text: N.relList.length ? String(N.relList.length) : "" })),
-      h("div", { class: "meta", text: "Nations that could be released from yours: in the game they can be set free from the diplomacy screen, on the land they have cores on. Give each its land, names, flag and ruler." }),
+      h("div", { class: "meta", text: "Nations that could be released from yours: in the game they can be set free from the diplomacy screen, on the states they have cores on. Give each its states, names, flag and ruler." }),
       h("div", null, h("button", { class: "btn small primary", type: "button", onclick: addRelease }, "Add a releasable")))];
     for (const r of N.relList) out.push(relCard(r));
     return paneFrame(out);
@@ -2626,10 +2747,10 @@ function renderReleasables(force) {
 }
 function relCard(r) {
   const N = app.N, id = r.id, open = mapOpen(), col = relColour(id), leader = r.leader || {}, flag = r.flag;
-  const provs = [...N.relOf.values()].filter(v => v[0] === id).length;
+  const nst = relStates(id).length;
   const areas = Object.entries(r.areas || {}).filter(([, a]) => Array.isArray(a) && a.length > 2);
   const edit1 = delta => edit("releasables", { [id]: delta });
-  const land = open ? `${provs} province${provs === 1 ? "" : "s"}` + (areas.length ? ` · ${areas.length} drawn area${areas.length === 1 ? "" : "s"}` : "")
+  const land = open ? `${nst} state${nst === 1 ? "" : "s"}` + (areas.length ? ` · ${areas.length} drawn area${areas.length === 1 ? "" : "s"}` : "")
     : areas.length ? `${areas.length} area${areas.length === 1 ? "" : "s"} drawn` : "not drawn yet";
   const card = h("div", { class: "relcard" + (app.ui.rel === id ? " sel" : ""), style: `--rel:${col}` },
     h("div", { class: "relhead" },
@@ -2644,10 +2765,11 @@ function relCard(r) {
       h("div", { class: "row" }, h("b", { text: "Land" }), h("span", { class: "meta", text: land })),
       h("div", { class: "chips" },
         h("button", { class: "btn small", type: "button", onclick: () => { selectRel(id); app.ui.relMode = "add"; setTool("release"); } },
-          open ? (provs ? "Change its provinces" : "Pick its provinces") : (areas.length ? "Draw more of its land" : "Draw its land")),
-        provs || areas.length ? h("button", { class: "btn small", type: "button", onclick: () => showRel(id) }, "Show") : null,
+          open ? (nst ? "Change its states" : "Pick its states") : (areas.length ? "Draw more of its land" : "Draw its land")),
+        nst || areas.length ? h("button", { class: "btn small", type: "button", onclick: () => showRel(id) }, "Show") : null,
         ...areas.map(([aid], i) => h("button", { class: "tchip", type: "button", title: "Delete this area", onclick: () => edit1({ areas: { [aid]: null } }) }, `Area ${i + 1} ✕`))),
-      open ? null : h("div", { class: "meta", text: "Draw it as an area for now: once the author has drawn your states, you pick its exact provinces." })),
+      h("div", { class: "meta", text: open ? "Whole states: HOI4 gives a releasable cores on states, not provinces. For a border through a state, draw it with Suggest and the author can split the state."
+        : "Draw it as an area for now: once the author has drawn your states, you pick its states." })),
     h("div", { class: "flagslot" },
       flag && imgSrc(flag) ? h("img", { class: "flagbox", src: imgSrc(flag), alt: "Its flag" }) : h("span", { class: "flagbox", text: flag ? "loading" : "no flag" }),
       h("div", { style: "display:grid;gap:4px;min-width:0" }, h("b", { text: "Flag", style: "font-size:14px" }),
@@ -2817,11 +2939,14 @@ function renderNation(force) {
     out.push(h("div", { class: "sec" }, h("h4", null, "Flags"),
       h("div", { class: "meta", text: "HOI4 shows flags at 82 × 52 pixels (about 3:2). Send the best picture you have; the author fits other shapes without stretching. A government's flag is used only while it rules." }),
       h("div", null, slots.map(([k, label]) => {
-        const im = flags[k];
+        const im = flags[k], game = k === "base" ? N.flag : (N.flags || {})[k];  // what the game flies now
         return h("div", { class: "flagslot" },
-          im && imgSrc(im) ? h("img", { class: "flagbox", src: imgSrc(im), alt: label }) : h("span", { class: "flagbox", text: im ? "loading" : k === "base" && N.flag ? "in game" : "none" }),
+          im && imgSrc(im) ? h("img", { class: "flagbox", src: imgSrc(im), alt: label })
+            : !im && game ? h("img", { class: "flagbox", src: game, alt: label + " (in game)" })
+            : h("span", { class: "flagbox", text: im ? "loading" : "none" }),
           h("div", { style: "display:grid;gap:4px;min-width:0" }, h("b", { text: label, style: "font-size:14px" }),
-            im ? h("span", { class: "meta", text: `${im.w} × ${im.h}${im.name ? " · " + im.name : ""}` }) : null,
+            h("span", { class: "meta", text: im ? `${im.w} × ${im.h}${im.name ? " · " + im.name : ""}${game ? " · replaces the one in game" : ""}`
+              : game ? "In game now" : N.planned ? "None yet" : "None: the main flag flies under this government" }),
             h("div", { class: "chips" },
               h("button", { class: "btn small", type: "button", onclick: () => uploadInto("flags", [k], "the flag") }, im ? "Replace" : "Send a picture"),
               im ? h("button", { class: "btn small danger", type: "button", onclick: () => edit("flags", { [k]: null }) }, "Remove") : null)));
@@ -2846,12 +2971,13 @@ function renderNation(force) {
       h("div", { class: "meta", text: "Ask for what the game doesn't have yet: a new sub-ideology, a kind of subject (like a dominion or a protectorate), a change to the map…" }),
       requestForm(), reqs.length ? h("div", { class: "reqs" }, reqs.map(r => requestCard(N.tag, r, false))) : null));
     if (mapOpen()) {
-      const named = N.states.filter((_, s) => sf(s).name).length, popset = N.states.filter((_, s) => sf(s).pop != null).length;
+      const named = N.states.filter((st, s) => sf(s).name || st.named).length, popset = N.states.filter((_, s) => sf(s).pop != null).length;
+      const onMap = N.states.filter((st, s) => st.named && !sf(s).name).length;
       const terr = N.prov.filter((_, p) => pf(p).t).length, total = N.states.reduce((a, _, s) => a + statePop(s), 0);
       const rivers = Object.values(F("rivers")).filter(r => r && r.pts).length, rails = Object.values(F("rails")).filter(r => r && r.pts).length;
       out.push(h("div", { class: "sec" }, h("h4", null, "So far"),
         h("div", { class: "stats" },
-          "States named", h("b", { text: `${named} / ${N.states.length}` }),
+          "States named", h("b", { text: `${named} / ${N.states.length}` + (onMap ? ` (${onMap === named ? "all" : onMap} on the map)` : "") }),
           "Population set", h("b", { text: `${popset} / ${N.states.length}` }),
           "Provinces with terrain", h("b", { text: `${terr} / ${N.nOwn}` }),
           "Cities", h("b", { text: String(N.cityList.length) }),
