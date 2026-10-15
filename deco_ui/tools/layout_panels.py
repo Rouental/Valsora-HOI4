@@ -18,6 +18,7 @@ Bottom-anchored elements stay where they are, and boxes that run to the bottom (
 import layout_politics as LP
 
 TOP = LP.TOP                      # 62: the band's bottom
+RISE, OPEN_MS = LP.RISE, LP.OPEN_MS  # a panel rises RISE px into place over OPEN_MS ms (layout_politics)
 NB = LP.NOTCH_BOTTOM              # 106: the header strip's height (the seal's bottom)
 SHIFT = 72                        # how far the game's content moves down (scratchpad survey: 62-72 needed)
 HX = LP.HX                        # 190: the title's left edge (right of the notch)

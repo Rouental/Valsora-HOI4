@@ -157,7 +157,6 @@ def panel(t, key, spec):
     W = int(re.search(r"size\s*=\s*\{\s*width\s*=\s*(\d+)", head).group(1))
     X = int(show.group(1))
     assert (X, W) == (spec.get("x", -6), spec.get("w", 550)), (key, X, W)
-    hidden_x = int(pos_of(head)[0])
     D = spec.get("shift", LPN.SHIFT)
     HW = spec.get("head_w", W)
     HX = LPN.hx(X)
@@ -184,8 +183,11 @@ def panel(t, key, spec):
         t = t[:cs] + with_position(h0, x, y + dy) + rest + t[ce:]
         moved.append(name)
 
-    # 2. the window: flush under the band; a fixed height grows by the shift
-    win = dict(position=(hidden_x, LPN.TOP), show_position=(X, LPN.TOP))
+    # 2. the window: flush under the band, rising into place as it opens (it slid in from the left, across the
+    # flag and the name: layout_politics.RISE); a fixed height grows by the shift
+    win = dict(position=(X, LPN.TOP + LPN.RISE), show_position=(X, LPN.TOP))
+    if re.search(r"animation_time\s*=", head):
+        win["animation_time"] = LPN.OPEN_MS
     if spec.get("height"):
         win["size"] = (W, spec["height"] + D)
     t = GP.set_attrs(t, R, **win)
@@ -254,9 +256,9 @@ def beside(t, names):
     for n in names:
         s, e = window_span(t, n)
         h = own_head(t, s, e)
-        x, _ = pos_of(h)
         sx = int(re.search(r"show_position\s*=\s*\{\s*x\s*=\s*(-?\d+)", h).group(1))
-        t = GP.set_attrs(t, n, position=(int(x), LPN.TOP), show_position=(sx, LPN.TOP))
+        anim = dict(animation_time=LPN.OPEN_MS) if re.search(r"animation_time\s*=", h) else {}
+        t = GP.set_attrs(t, n, position=(sx, LPN.TOP + LPN.RISE), show_position=(sx, LPN.TOP), **anim)
     return t
 
 

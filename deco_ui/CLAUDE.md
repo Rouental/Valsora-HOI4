@@ -14,7 +14,7 @@ Treat assumed items as hypotheses.
 
 ---------------------------------------------------------------------------------------------------
 
-## 1. Status (v0.5)
+## 1. Status (v0.5.1)
 
 v0.4.3 was the first v0.3/v0.4 build the user launched. The user's reports so far cover only the main
 menu: the Valsora background and the social links in the top-left corner show **(in game)**, but in
@@ -48,6 +48,13 @@ minimap are styled (gilt-recoloured game icons, line-icon medallions, a gilt min
 mod); and the **Deco UI is part of the Valsora mod**: the Valsora build copies `valsora_deco_ui/` into its
 own (`scripts/deco_ui.py` there, switched by `DECO_UI` in `scripts/common.py`). There is no separate
 release any more (section 11).
+**(in game, v0.5)** the user's video (2026-10-15, playing Myehn: "I love it so far"): the panels open flush
+with their notch, but a newly opened panel slid in from the left over the flag and the country's name before
+its notch reached them, choppily the first time (the panel's pictures loading) and still across them later;
+switching panels, the old one slid out the same way. **v0.5.1** opens every side panel, and every window
+beside one, by rising 36 px into place over 200 ms (`layout_politics.RISE`, `OPEN_MS`) instead of sliding
+600 px across the screen; it sinks back as it closes. The notch narrows downward, so a panel below its place
+never covers the medallion or the seal (section 6).
 
 | Area | State |
 |---|---|
@@ -291,6 +298,14 @@ Build order matters. `gen_fonts` runs first because `layout.py` measures strings
   a per-panel survey of each element's real size (`build/` scratch, the game's textures) put the needed
   shift at 62-72 px (the faction screen's banner, which starts at y -10, 119). The notch's place in a panel
   depends on the panel's x (`layout_panels.notch_poly(x)`), so each (width, x) has its own header picture.
+- **How a window slides (v0.5.1).** `position` is where a window is while hidden and `show_position` where
+  it shows; `show_animation_type`, `hide_animation_type` (decelerated, accelerated) and `animation_time` (ms)
+  move it between the two. **(in vanilla)** the game hides a window once it has slid back, wherever that is:
+  dropdowns (`*_expanded_window`) slide 25 px and trait boxes 76 px within their parent, on screen, and are
+  gone when closed. The side panels slid from x -606 (the windows beside them from -356) to their place, so
+  their header crossed the top bar's medallion (**(in game, v0.5)**, the user's video). Since v0.5.1 they rise
+  `RISE` px from below their place instead: safe because the notch's every row is no narrower than the row
+  below it, so a panel lower than its place shows more of the medallion and seal, never less.
 - **(inferred from vanilla)** a **negative size** runs to the parent's edge minus that much (the logistics
   list, `height = -98`, ends where its 98 px footer, LOWER_LEFT at y -98, begins), like `100%%` runs to the
   edge; so moving a box down only shortens it, and bottom-anchored elements stay put.
@@ -513,7 +528,7 @@ role; the description trigger file is deleted. `preview_screens` also writes
 `build/preview_politics_many_spirits.png` (15 spirits, as Devlon's test).
 
 **make_panels.py (v0.5).** The 16 other side panels, from the game's files (Valsora ships none of them), as
-the politics screen: window at `layout_panels.TOP` (position and show_position), its background clear and
+the politics screen: window at `layout_panels.TOP` (shown there; hidden `RISE` px lower, v0.5.1), its background clear and
 click-through; new first children (right after the window's own background) draw the panel: a body tile from
 the seal's bottom (`GFX_valsora_deco_pol_body`), clear click-catchers beside the notch, and the header
 picture (`GFX_valsora_deco_panel_head_<w>_<x>`); the game's header picture is hidden, the title moves right of
@@ -638,6 +653,8 @@ GP.write_gui(MOD + "interface/x.gui", t)    # braces checked, engine_safe applie
 
 Check these first in the user's next screenshots and `error.log`:
 
+- **v0.5.1**: a side panel rises a little into place as it opens and sinks as it closes; it never crosses
+  the flag or the name. Check the first opening too (the game loads the panel's pictures then).
 - **v0.5** (the README's checklist has the user-facing version): each side panel's notch (medallion, name and
   seal visible, gilt edge, no map between), its title, close and header buttons, nothing cut off at the
   bottom (logistics, officer corps, faction, research), the construction screen with its list folded, the

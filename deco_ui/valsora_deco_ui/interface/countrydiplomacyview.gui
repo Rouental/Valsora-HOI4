@@ -3,11 +3,11 @@ guiTypes = {
 
 	containerWindowType = {
 		name = "countrydiplomacyview"
-		position = { x = -606 y = 62 }
+		position = { x = -6 y = 98 }
 		show_position = { x = -6 y = 62 }
 		show_animation_type = decelerated
 		hide_animation_type = accelerated
-		animation_time = 300
+		animation_time = 200
 		size = { width=550 height=100%% }
 		verticalScrollbar = "right_vertical_slider"
 		#horizontalScrollbar = "bottom_horizontal_slider"
@@ -3906,7 +3906,7 @@ guiTypes = {
 
 	containerWindowType = {
 		name = "lend_lease_equipment_window"
-		position = { x = 544 y = 62 }
+		position = { x = 544 y = 98 }
 		show_position = { x = 544 y = 62 }
 		size = { width=375 height=560 }
 		moveable = yes
@@ -3999,7 +3999,7 @@ guiTypes = {
 
 	containerWindowType = {
 		name = "incoming_lend_lease_equipment_window"
-		position = { x = 544 y = 62 }
+		position = { x = 544 y = 98 }
 		show_position = { x = 544 y = 62 }
 		size = { width=375 height=560 }
 		moveable = yes

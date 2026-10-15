@@ -28,6 +28,13 @@ PANEL_W = 550
 X0, X1 = 18, 532                                   # content edges
 PANEL_X = -6                                       # vanilla's shown x (the first 6 px are off-screen)
 TOP = 62                                           # screen y of the panel's top: the band ends at 62 (layout.BAND_H)
+# How a panel opens (v0.5.1; the author's video of 2026-10-14: sliding in from the left, a new panel's header
+# crossed the flag and the country's name before its notch reached them). It rises RISE px into place over
+# OPEN_MS ms, and sinks back as it closes. The notch narrows downward, so a panel that is lower than its place
+# never covers the medallion or the seal. (in vanilla) the game hides a window once it has slid back to its
+# position: vanilla's dropdowns (`*_expanded_window`) and trait boxes slide 25-76 px within their parent.
+RISE = 36
+OPEN_MS = 200
 
 
 def local(sx, sy):

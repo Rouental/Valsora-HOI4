@@ -419,8 +419,11 @@ def main():
     # the Gazetteer's cities carry their victory points and the capital
     city_vp = {int(c[0]): int(c[4]) for c in rj.get("cities", []) if len(c) > 4}
     city_capital = [int(c[0]) for c in rj.get("cities", []) if len(c) > 5 and c[5]]
+    city_seat = {int(c[0]) for c in rj.get("cities", []) if len(c) > 6 and c[6]}
     extra_vps = defaultdict(list)
-    for p in sorted(city_of, key=lambda p: p not in city_capital):  # a capital city first in its state
+    # a state's main city: the national capital, else the city marked its state's capital on the
+    # Gazetteer, else the most victory points (the first in the list, northernmost, on a tie)
+    for p in sorted(city_of, key=lambda p: (p not in city_capital, p not in city_seat, -city_vp.get(p, 0))):
         s = int(state_of[p])
         if state_capital[s] in city_of and state_capital[s] != p:
             extra_vps[s].append(p)

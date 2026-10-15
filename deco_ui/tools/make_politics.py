@@ -67,7 +67,7 @@ def new_text(name, text, font, x, y, w, h, fmt="left", valign=True):
 # The panel is drawn over the top bar, so it leaves a notch where the flag medallion and decisions seal
 # hang: its own background is clear and lets clicks through, and the panel's look and its click-catching
 # come from children that stay out of the notch (in game: whether clicks reach the seal through it).
-at(R, position=(LP.PANEL_X - 600, LP.TOP), show_position=(LP.PANEL_X, LP.TOP))
+at(R, position=(LP.PANEL_X, LP.TOP + LP.RISE), show_position=(LP.PANEL_X, LP.TOP), animation_time=LP.OPEN_MS)  # rises into place (v0.5.1)
 t = GP.set_background(t, R, "GFX_valsora_deco_clear")
 t = re.sub(r'(name = "countrypoliticsview".*?background\s*=\s*\{[^{}]*?quadTextureSprite\s*=\s*"GFX_valsora_deco_clear")',
            r'\1\n\t\t\talwaystransparent = yes', t, count=1, flags=re.S)
@@ -232,9 +232,8 @@ for win, header, title in [("manage_subjects_window", "manage_occupied_header_bg
 for win in ("political_ideas_window", "manage_subjects_window", "exiles_window", "manage_occupied_window"):
     s_, e_ = GP.find_block(t, win)
     head_ = GP.own_region(t[s_:e_])[0]
-    hx_, _ = re.search(r"(?<![\w_])position\s*=\s*\{\s*x\s*=\s*(-?\d+)\s*y\s*=\s*(-?\d+)", head_).groups()
     sx_ = re.search(r"show_position\s*=\s*\{\s*x\s*=\s*(-?\d+)", head_).group(1)
-    at(win, position=(int(hx_), LP.TOP), show_position=(int(sx_), LP.TOP))
+    at(win, position=(int(sx_), LP.TOP + LP.RISE), show_position=(int(sx_), LP.TOP), animation_time=LP.OPEN_MS)
 for item, sprite in [("subject_item", "entry_87"), ("collaboration_item", "entry_65"), ("exile_item", "entry_95"),
                      ("occupied_territory_entry", "entry_100")]:
     t = GP.set_background(t, item, D + sprite)

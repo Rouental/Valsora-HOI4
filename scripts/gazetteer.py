@@ -288,6 +288,8 @@ def normalise(tag, facts, meta, requests=(), sources=(), todo=None):
             city = {"x": pt[0][0], "y": pt[0][1], "name": clean(c["name"]), "vp": vp}
             if c.get("capital") and not capital:
                 city["capital"] = capital = True
+            elif c.get("stateCapital"):  # its state's capital (the national capital is its own state's)
+                city["state_capital"] = True
             cities.append(city)
         out["cities"] = cities
     rivers = []
@@ -829,7 +831,7 @@ def rivers(G, lines, rv, lab, kind, state_of, owners):
 
 def cities(G, layer, lab, kind, state_of, owners, notes):
     """The Cities layer's cities, with each nation's own list from the facts in place of
-    the dots on its land: [province, name, x, y, victory points, capital]."""
+    the dots on its land: [province, name, x, y, victory points, capital, its state's capital]."""
     with_cities = {t for t, f in G.items() if "cities" in f}
     if not with_cities:
         return layer
@@ -857,7 +859,7 @@ def cities(G, layer, lab, kind, state_of, owners, notes):
                 notes.append(f"Gazetteer: {tag}'s city {c['name']} at ({x}, {y}) shares a province with another; left out")
                 continue
             taken.add(p)
-            out.append([p, c["name"], x, y, c["vp"], bool(c.get("capital"))])
+            out.append([p, c["name"], x, y, c["vp"], bool(c.get("capital")), bool(c.get("state_capital"))])
     names = defaultdict(list)
     for c in out:
         names[c[1]].append(c)

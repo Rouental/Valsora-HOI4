@@ -6,6 +6,17 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**Deco UI: a newly opened side panel slid over the flag and the country's name** (2026-10-15, author's video)
+- Cause: every side panel slid in from x -606 to its place (vanilla's slide), and the windows beside them from
+  -356; with the panels flush under the top bar since v0.4.8/v0.5, their header crossed the medallion before
+  the notch reached it, choppily the first time a panel opened (its pictures loading), and the old panel slid
+  out the same way when switching.
+- Fix (Deco UI v0.5.1): they rise 36 px into place over 200 ms (`layout_politics.RISE`, `OPEN_MS`) and sink as
+  they close. The notch narrows downward, so a panel lower than its place never covers the medallion or seal.
+  The game hides a window once it has slid back, wherever that is (vanilla's dropdowns slide 25 px).
+- Found while testing the Gazetteer's state capitals: a city's card put its buttons in a column beside its
+  name, which the fourth button squeezed to a few letters; the name and the buttons now each take a row.
+
 **Leftover placeholder bricks and grid states; Placeholdaire's map tools closed; Gazetteer gaps**
 (2026-10-15, author's screenshots of the `.pdn` and the site)
 - Squares by Xue, around the Associated Cities and Qinguo, and by Ungar: the lakes, still in the

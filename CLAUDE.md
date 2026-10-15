@@ -1456,11 +1456,14 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   `python3 scripts/gazetteer.py pull work/gazetteer_pull`. It lists the pictures to download:
   the Artifact tool's `read` with `path` = the asset id and `out_dir`
   `work/gazetteer_pull/assets`, then `pull` again.
-- **In the build** (`source/gazetteer/<TAG>.json`, none yet): a nation's facts win over the `.pdn`
-  and `nations.py` for that nation: its cities replace the Cities layer's dots on its land
-  (`regions.json` cities then carry victory points and the capital flag), its state names
+- **In the build** (`source/gazetteer/<TAG>.json`; Rouental's since 2026-10-15, below): a nation's facts
+  win over the `.pdn` and `nations.py` for that nation: its cities replace the Cities layer's dots on its land
+  (`regions.json` cities then carry victory points, the capital flag and the state-capital flag), its state names
   replace `state_names.json`'s (the old names still resolve for `nations.CIVIL_WAR` /
-  `RELEASABLE`), its capital city replaces `nations.CAPITALS`, its hubs replace the one per
+  `RELEASABLE`), its capital city replaces `nations.CAPITALS`, each state's main city (its first
+  victory point, its supply hub unless the nation placed hubs, where its divisions start) is the
+  national capital, else the city marked its state's capital, else the most victory points (the
+  northernmost on a tie; the Cities layer's own dots keep their order), its hubs replace the one per
   state (plus its capital), its colour `nations.DISPLAY_COLOUR`. Railways take the shortest
   way over land between the provinces under their points, centre to centre (the page draws
   the same route); shared stretches are written once at the higher level. Rulers and party
@@ -1551,6 +1554,15 @@ in git history (commit d2d6cd8, `scripts/cartographic.py`). It used
 
 ## Current state
 
+- 2026-10-15, last: **Rouental's Gazetteer page is in the build** (`source/gazetteer/ROU.json`, read from
+  the site with its password, which the author gave; the author removed its test hub and made Rêverie the
+  capital again first): population 42.3 million over its 56 states, terrain for 132 provinces, 15 cities
+  (Vair 20 VP, Rêverie and Carcarelle 15, eight new ones), one minor river along the Hollier border, a
+  level 2 railway Rêverie–Seraine, the state kinds of Rouental (large city) and Saintiers (city), an
+  admiral for the author's list, and the releasable "Test" (TES, cores on Avarre, Graisivaudan and Hevique;
+  its flag, 640 × 338, still to fit by hand). 183 countries. The Gazetteer has **state capitals** (◆, one per
+  state; the author: "There can be multiple cities in a state ... a way to select both a state and a national
+  capital"). The Deco UI is v0.5.1: side panels rise into place instead of sliding across the flag and name.
 - 2026-10-15, latest: the leftover placeholder bricks are gone (lakes one province each;
   Arvorenia, Atrocha, the KU island and a Belekria island group cut organically), Placeholdaire's
   and San Sierra's islands are one state each, so their map tools are open on the Gazetteer (39

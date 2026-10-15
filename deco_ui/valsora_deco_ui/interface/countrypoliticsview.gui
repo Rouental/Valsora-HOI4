@@ -7,11 +7,11 @@ guiTypes = {
 
 	containerWindowType = {
 		name = "countrypoliticsview"
-		position = { x = -606 y = 62 }	
+		position = { x = -6 y = 98 }	
 		show_position = { x = -6 y = 62 }
 		show_animation_type = decelerated
 		hide_animation_type = accelerated
-		animation_time = 300	
+		animation_time = 200	
 		size = { width=550 height=100%% }
 		
 		#hide_sound = menu_close_window
@@ -1017,11 +1017,11 @@ guiTypes = {
 	
 	containerWindowType = {
 		name = "political_ideas_window"
-		position = { x = -356 y = 62 }	
+		position = { x = 540 y = 98 }	
 		show_position = { x = 540 y = 62 }
 		show_animation_type = decelerated
 		hide_animation_type = accelerated
-		animation_time = 300
+		animation_time = 200
 		size = { width=500 height=590 }
 		show_sound = open_sub_window
 		
@@ -1406,11 +1406,11 @@ guiTypes = {
 	
 	containerWindowType = {
 		name = "manage_subjects_window"
-		position = { x = -356 y = 62 }	
+		position = { x = 537 y = 98 }	
 		show_position = { x = 537 y = 62 }
 		show_animation_type = decelerated
 		hide_animation_type = accelerated
-		animation_time = 300
+		animation_time = 200
 		size = { width= 549 height=620 }
 		clipping = yes
 		show_sound = open_sub_window
@@ -1591,11 +1591,11 @@ guiTypes = {
 
 	containerWindowType = {
 		name = "exiles_window"
-		position = { x = -356 y = 62 }	
+		position = { x = 537 y = 98 }	
 		show_position = { x = 537 y = 62 }
 		show_animation_type = decelerated
 		hide_animation_type = accelerated
-		animation_time = 300
+		animation_time = 200
 		size = { width= 549 height=620 }
 		clipping = yes
 		show_sound = open_sub_window
@@ -1954,11 +1954,11 @@ guiTypes = {
 	
 	containerWindowType = {
 		name = "manage_occupied_window"
-		position = { x = -356 y = 62 }	
+		position = { x = 537 y = 98 }	
 		show_position = { x = 537 y = 62 }
 		show_animation_type = decelerated
 		hide_animation_type = accelerated
-		animation_time = 300
+		animation_time = 200
 		size = { width= 549 height=620 }
 		clipping = yes
 		show_sound = open_sub_window

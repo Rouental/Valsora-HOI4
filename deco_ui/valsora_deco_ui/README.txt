@@ -1,5 +1,5 @@
-VALSORA DECO UI - v0.5 (for HOI4 1.19)
-====================================
+VALSORA DECO UI - v0.5.1 (for HOI4 1.19)
+======================================
 
 An art deco interface for the Valsora total conversion: core skin, a rebuilt
 top bar, the politics screen, every side panel, the province panel, the
@@ -27,6 +27,13 @@ Valsora repository's scripts/common.py and rebuild (sh scripts/run_all.sh).
 
 The layout is built for 1920 px of UI width: 1920x1080 at 100% UI scale, or
 2560x1440 at up to 133%.
+
+
+NEW IN v0.5.1
+-------------
+  - Side panels, and the windows beside them, no longer slide in from the
+    left across the flag and the country's name: they rise a little into
+    place (and sink as they close), quickly, under the medallion.
 
 
 NEW IN v0.5
@@ -226,6 +233,10 @@ DIFFERENCES FROM THE MOCKUP, AND WHY
 
 THINGS TO CHECK IN-GAME
 -----------------------
+  Side panels (v0.5.1)
+  - A panel rises into place as it opens and sinks as it closes, without
+    crossing the flag or the name, the first opening too, and when you
+    switch from one panel to another.
   Side panels (v0.5; one screenshot of each you open is ideal)
   - Each opens right under the top bar; the flag medallion, the country
     name and the decisions seal show above it, with the gilt edge round

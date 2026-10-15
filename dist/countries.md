@@ -1,6 +1,6 @@
 # Valsora: every country
 
-182 countries, 161 owning land at the start. Read from the built mod; regenerate with `python3 scripts/country_list.py`.
+183 countries, 161 owning land at the start. Read from the built mod; regenerate with `python3 scripts/country_list.py`.
 
 | Tag | Name | Full name | Ideology | Sub-ideology | Culture | Leader | States | Notes |
 |---|---|---|---|---|---|---|---|---|
@@ -160,6 +160,7 @@
 | TKY | Tenkyoku | the Remnant of Tenkyoku | Theocratic | Prophetic Rule | Japanese | Tomonosuke Okubo | 1 |  |
 | TBS | Terrabis-Seran | the Commonwealth of Terrabis-Seran | Democratic | Social Democracy | English | Lester Haig | 81 |  |
 | TUP | Terreich und Preußen | the Bundeskaiserreich of Terreich und Preußen | Democratic | Social Democracy | German | Charlotte Gustoff | 83 |  |
+| TES | Test | The Test of Test | Democratic | Constitutional Monarchy | French | President Bean | 0 | no land at the start (releasable or civil war) |
 | TTH | Tethia | the Principality of Tethia | Monarchist | Absolute Monarchy | Polish | Jakub Kowalski | 0 | no land at the start (releasable or civil war) |
 | TEX | Texaria | the Republic of Texaria | Democratic | Liberalism | Russian | Iyun' Savon | 5 |  |
 | FTH | The Faithful | the Faithful Children of the Goddess and Her Saint | Theocratic | Holy Order | French | Jean Gouraud | 0 | no land at the start (releasable or civil war) |

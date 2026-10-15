@@ -215,6 +215,7 @@ textarea { min-height: 70px; resize: vertical; }
 .item select { padding: 4px 6px 2px; border: 1px solid var(--rule-2); border-radius: 3px; background: var(--paper); font-size: 13px; }
 .item textarea { grid-column: 1 / -1; min-height: 52px; }
 .item .meta { grid-column: 1 / -1; }
+.item.city > .row { grid-column: 1 / -1; }
 .confirm { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; font-size: 13px; color: var(--warn); }
 .stats { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; font-size: 14px; }
 .stats b { font: 500 13px var(--font-data); text-align: right; }
@@ -1515,6 +1516,17 @@ function resolve() {  // the facts' pixel keys -> this map's states and province
   N.cityInProv = new Map();
   for (const c of N.cityList) if (c.prov >= 0 && !N.cityInProv.has(c.prov)) N.cityInProv.set(c.prov, c);
   N.capitalCity = N.cityList.find(c => c.capital && c.prov >= 0) || null;
+  // each state's capital (its main city: its supply hub unless you place hubs, where its divisions start):
+  // the national capital if it is there, else the city marked, else the most victory points, the
+  // northernmost first, as scripts/build_mod.py chooses
+  N.seatOf = new Map();
+  const inState = new Map();
+  for (const c of N.cityList) if (c.prov >= 0 && c.s >= 0) { if (!inState.has(c.s)) inState.set(c.s, []); inState.get(c.s).push(c); }
+  for (const [s, cs] of inState) {
+    const o = cs.slice().sort((a, b) => (a.y - b.y) || (a.x - b.x));
+    const pick = o.find(c => c.capital) || o.find(c => c.stateCapital) || o.reduce((m, c) => ((c.vp || 5) > (m.vp || 5) ? c : m), o[0]);
+    N.seatOf.set(s, pick.id);
+  }
   N.sugList = Object.entries(F("suggest")).filter(([, v]) => v && Array.isArray(v.pts) && v.pts.length).map(([id, v]) => ({ id, ...v }));
   // releasables, in the order they were added, and which of them holds each state (HOI4 gives
   // cores on whole states). Those saved before held provinces: they hold the states those cover
@@ -1873,6 +1885,9 @@ function draw() {
       ctx.beginPath(); ctx.arc(q[0], q[1], r, 0, Math.PI * 2);
       ctx.fillStyle = c.prov < 0 ? warn : ink; ctx.fill(); ctx.lineWidth = 1.6; ctx.strokeStyle = paper; ctx.stroke();
       if (c.capital) { ctx.beginPath(); ctx.arc(q[0], q[1], 2, 0, Math.PI * 2); ctx.fillStyle = paper; ctx.fill(); }
+      else if (N.seatOf.get(c.s) === c.id && N.cityList.some(o => o.s === c.s && o.id !== c.id)) {  // its state's capital, among others
+        ctx.beginPath(); ctx.arc(q[0], q[1], r + 2.6, 0, Math.PI * 2); ctx.strokeStyle = ink; ctx.lineWidth = 1.3; ctx.stroke();
+      }
       if (app.ui.sel.city === c.id) { ctx.beginPath(); ctx.arc(q[0], q[1], r + 4, 0, Math.PI * 2); ctx.strokeStyle = sel; ctx.lineWidth = 2.5; ctx.stroke(); }
       boxes.push([q[0] - r, q[1] - r, q[0] + r, q[1] + r]);
       cityDraw.push([c, q]);
@@ -2515,7 +2530,7 @@ function stateForm(s) {
   }
   const cities = N.cityList.filter(c => c.s === s);
   out.push(h("div", { class: "sec" }, h("h4", null, "Cities", h("small", { text: cities.length ? `${cities.length}` : "none yet" })),
-    cities.length ? h("div", { class: "chips" }, cities.map(c => h("button", { class: "tchip", type: "button", onclick: () => selectCity(c.id, true) }, `${c.capital ? "★ " : ""}${c.name || "(unnamed)"} · ${c.vp || 5} VP`)))
+    cities.length ? h("div", { class: "chips" }, cities.map(c => h("button", { class: "tchip", type: "button", onclick: () => selectCity(c.id, true) }, `${c.capital ? "★ " : N.seatOf.get(c.s) === c.id ? "◆ " : ""}${c.name || "(unnamed)"} · ${c.vp || 5} VP`)))
       : h("div", { class: "meta", text: "Use the Cities tool to place them. The first city of a state is its victory point." })));
   out.push(h("div", { class: "sec" }, h("h4", null, "Notes"),
     textArea("st-notes", f.note, "Landmarks, history, anything the author should know about this state", v => editState(s, { note: v }))));
@@ -2538,7 +2553,7 @@ function renderCities(force) {
   if (!force && typingIn(pane)) { dirtyPanes("cities"); return; }
   keepFocus(pane, () => {
     const out = [h("div", { class: "sec" }, h("h4", null, "Cities", h("small", { text: `${N.cityList.length}` })),
-      h("div", { class: "meta", text: "Each city is a victory point. Place them with the Cities tool; one per province. The star marks the capital." }))];
+      h("div", { class: "meta", text: "Each city is a victory point. Place them with the Cities tool, one per province; a state can have several. ★ is the nation's capital. ◆ is a state's capital, its main city: its supply hub (unless you place your own) and where its troops start. The national capital is its state's capital; elsewhere it's the city you mark, or the one with the most victory points." }))];
     if (!N.cityList.length) out.push(h("div", { class: "empty", text: "No cities yet." }));
     const list = h("div", { class: "sec" });
     for (const c of N.cityList) {
@@ -2546,13 +2561,17 @@ function renderCities(force) {
       name.setAttribute("aria-label", "City name");
       const vp = h("select", { "aria-label": "Victory points", onchange: e => edit("cities", { [c.id]: { vp: +e.target.value } }) }, VPS.map(([v, l]) => h("option", { value: v, text: l })));
       vp.value = String(c.vp || 5);
-      const cap = h("button", { class: "btn small", type: "button", title: "Make this the capital", "aria-pressed": String(!!c.capital), onclick: () => makeCapital(c) }, c.capital ? "★ Capital" : "☆ Capital");
+      const cap = h("button", { class: "btn small", type: "button", title: "Make this the nation's capital", "aria-pressed": String(!!c.capital), onclick: () => makeCapital(c) }, c.capital ? "★ Capital" : "☆ Capital");
+      const seat = N.seatOf.get(c.s) === c.id, natHere = N.capitalCity && N.capitalCity.s === c.s;
+      const seatBtn = h("button", { class: "btn small", type: "button", "aria-pressed": String(seat), disabled: c.s < 0 || (natHere && !c.capital) || c.capital,
+        title: c.capital ? "The national capital is its state's capital" : natHere ? "The national capital is this state's capital" : c.stateCapital ? "Click to let the state's capital be chosen by victory points again" : "Make this its state's capital",
+        onclick: () => makeStateCapital(c) }, seat ? "◆ State capital" : "◇ State capital");
       const del = h("button", { class: "btn small danger", type: "button", title: "Delete this city", onclick: () => { if (edit("cities", { [c.id]: null }) && app.ui.sel.city === c.id) app.ui.sel.city = null; } }, "Delete");
       const where = c.s >= 0 ? stateName(c.s) : "not on your land: move or delete it";
-      list.append(h("div", { class: "item" + (app.ui.sel.city === c.id ? " sel" : "") },
+      list.append(h("div", { class: "item city" + (app.ui.sel.city === c.id ? " sel" : "") },
         h("div", { class: "row" }, name, vp),
-        h("div", { class: "row" }, cap, h("button", { class: "btn small", type: "button", onclick: () => locate(c.x, c.y, () => selectCity(c.id)) }, "Show"), del),
-        h("div", { class: "meta", text: `${where} · ${c.x}, ${c.y}` + (!c.name ? " · needs a name" : "") })));
+        h("div", { class: "row" }, cap, seatBtn, h("button", { class: "btn small", type: "button", onclick: () => locate(c.x, c.y, () => selectCity(c.id)) }, "Show"), del),
+        h("div", { class: "meta", text: `${where} · ${c.x}, ${c.y}` + (seat && !c.capital && !c.stateCapital && N.cityList.some(o => o.s === c.s && o.id !== c.id) ? " · state capital by victory points" : "") + (!c.name ? " · needs a name" : "") })));
     }
     out.push(list);
     const dup = dupNames();
@@ -2564,7 +2583,17 @@ function dupNames() { const seen = {}, d = new Set(); for (const c of app.N.city
 function makeCapital(c) {
   const delta = {};
   for (const o of app.N.cityList) if (o.capital && o.id !== c.id) delta[o.id] = { capital: false };
-  delta[c.id] = c.capital ? { capital: false } : { capital: true, vp: Math.max(c.vp || 5, 10) };
+  delta[c.id] = c.capital ? { capital: false } : { capital: true, stateCapital: false, vp: Math.max(c.vp || 5, 10) };
+  if (!c.capital) for (const o of app.N.cityList) if (o.s === c.s && o.stateCapital && o.id !== c.id) delta[o.id] = { ...(delta[o.id] || {}), stateCapital: false };
+  edit("cities", delta);
+}
+function makeStateCapital(c) {  // one per state; a second click goes back to the most victory points
+  const delta = {};
+  if (c.stateCapital) delta[c.id] = { stateCapital: false };
+  else {
+    for (const o of app.N.cityList) if (o.s === c.s && o.stateCapital && o.id !== c.id) delta[o.id] = { stateCapital: false };
+    delta[c.id] = { stateCapital: true };
+  }
   edit("cities", delta);
 }
 function locate(gx, gy, then) {

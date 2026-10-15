@@ -2,12 +2,12 @@
 guiTypes = {
 	containerWindowType = {
 		name = "shipswindow"
-		position = { x = 100 y = 62 }	
+		position = { x = 540 y = 98 }	
 		show_position = { x = 540 y = 62 }
 		size = { width=320 height=70%% }
 		show_animation_type = decelerated
 		hide_animation_type = accelerated
-		animation_time = 300
+		animation_time = 200
 
 		background = {
 			name = "Background"
@@ -167,12 +167,12 @@ guiTypes = {
 	
 	containerWindowType = {
 		name = "planeswindow"
-		position = { x = 100 y = 62 }	
+		position = { x = 540 y = 98 }	
 		show_position = { x = 540 y = 62 }
 		size = { width=320 height=70%% }
 		show_animation_type = decelerated
 		hide_animation_type = accelerated
-		animation_time = 300
+		animation_time = 200
 
 		background = {
 			name = "Background"
