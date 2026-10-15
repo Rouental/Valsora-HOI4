@@ -30,6 +30,8 @@ before you trust any number below.
 - **Read before you start:**
   - `CLAUDE.md`: at least "The editable map", "Rebuilding", "Decisions worth keeping",
     "Current state" and "Working with the author".
+  - `docs/NATIONS.md`: how every nation was made and who decided what; `docs/HISTORY.md`:
+    the build's history, newest first (both moved out of `CLAUDE.md` on 2026-10-15).
   - `docs/EDITING.md`: the `.pdn`'s layers, as the author uses them.
   - `docs/HOI4_MODDING_PRIMER.md`: what HOI4 requires, learned the hard way.
   - `docs/PROBLEM_LOG.md`: newest first.
@@ -71,7 +73,7 @@ before you trust any number below.
     drew; both refuse to run on a map with Ocean Province Lines.
   - The sea comes from `python3 scripts/sea_provinces.py build|seam|names|check`.
 - **Keep under HOI4's border limit.** The limit is 65,536 province borders; the map has
-  about 61,400. `check_mod.py` counts them.
+  about 62,200 (2026-10-15; `docs/BORDER_LIMIT.md`). `check_mod.py` counts them.
   - If new outlines push the count near the limit, run `python3 scripts/merge_provinces.py`.
   - New outlines are cut into provinces of about 190 px.
 
@@ -110,6 +112,8 @@ COUNTRY is a key of `common.COUNTRIES` (snake_case), not a tag. X,Y is a map pix
      vanilla's `00_names.txt`. Our own lists are in `custom_names.txt`.
 5. **Rebuild:** `sh scripts/run_all.sh`. If rivers cross the new land, run
    `python3 scripts/river_provinces.py` and rebuild.
+6. **Write it down** in a dated paragraph at the end of `docs/NATIONS.md`, and the day's
+   work at the top of `docs/HISTORY.md`.
 
 ### Moving land between countries
 
@@ -175,7 +179,8 @@ the name; the build puts "Name: " in front.
 
 - **Record who decided what.** The author's names, governments and formal names are
   theirs. Everything you choose (tag, colour, adjective, culture) is "Claude's".
-  - Write each choice in `CLAUDE.md`'s dated entry for that day, and in a code comment:
+  - Write each choice in that day's paragraph in `docs/NATIONS.md` (the day's work in
+    `docs/HISTORY.md`, rules in `CLAUDE.md`), and in a code comment:
     `# author, 2026-10-13` or `# Claude's guess`.
   - Tell the author what you guessed.
 - **Change only what was asked.** Don't regroup, recolour or improve what wasn't
@@ -212,7 +217,7 @@ Hand it back either way below, and include the notes after the list:
 What the note covers:
 - Which `.pdn` layers you changed. Give the scripts you ran, with their arguments, in
   order.
-- What you decided and who decided it, as you'd write it in `CLAUDE.md`.
+- What you decided and who decided it, as you'd write it in `docs/NATIONS.md` or `CLAUDE.md`.
 - New problem-log entries.
 - `check_mod.py`'s result, and any previews you made in `dist/` (before / after images
   help the author check map work quickly).

@@ -478,6 +478,18 @@ screenshot and `error.log`)
 
 ## Map problems found while building
 
+**Deco UI army bar preview: the plate cut off above the marshal; the plus and the counts off centre** (2026-10-15,
+the author's notes on the first preview)
+- Cause: the plate was the preview's fault: it drew the army group's piece behind both the marshal and his first
+  army, so the plate stopped short over him. The game lays one plate under the whole run: the army group's piece
+  starts it, each army's (80 px) carries it on, the last army's ends it. The other two were real: the game draws
+  the empty card's picture 1.5 px left of the frame's opening, and its count box sat 3 px above the plaque. The
+  army group's piece was also 174 px wide, the game's 175 (two frames of 87.5 px).
+- Fix (Deco UI v0.7): the preview lays the pieces as the game does; the bust and plus are drawn on the opening's
+  centre (`layout_armybar.hole_centre`); `make_leadergroups.py` gives both count boxes the plaque's box, centred
+  both ways; the army group's piece is 175 px (`validate_preview.SAME_SIZE` holds all the army bar's textures to
+  the game's sizes).
+
 **Deco UI: the top bar's date box was too narrow for 20xx dates** (2026-10-15, `validate_preview.py`)
 - Cause: the box (220 px) was sized for 1936-1949; "2" is wider than "1" in the date font, and the widest date
   the game shows from 2036 to 2049, "00:00, 30 September, 2040", is 230 px. The game cuts a longer text short.

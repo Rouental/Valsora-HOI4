@@ -6,19 +6,31 @@ map. Game version: **1.19.3**. The mod installs as `mod/valsora_test` in
 under OneDrive — keep that segment in any absolute path). Valsora takes place in **2036**:
 the game starts on 1 January 2036 (see "2036" under Decisions worth keeping).
 
-This is the second attempt. The current build is deliberately minimal: the real
-geography with **placeholder square provinces**, one placeholder country per continent,
-and only what the game needs to load. Borders, real states and countries come next.
+The map is the author's drawing at game size, 5120×2560: its land, rivers and the countries and states they
+outline region by region (161 nations on the map, 183 countries with the releasables and the civil war's), and the
+sea provinces their friend Merlo drew. Rouental is the built-out nation (leaders, focus tree, civil war, army); the
+rest have set rulers and the game's generic content, moved to 2036. The interface is the author's art deco design,
+the Valsora Deco UI (`deco_ui/`). The Gazetteer, a web site, lets the author's friends fill in their own nations.
+
+**Where things are written down:**
+- this file: the manual (rules, decisions, the pipeline, what HOI4 requires) and where things stand;
+- `docs/NATIONS.md`: every nation, who named and decided what; `docs/HISTORY.md`: the build's history, date by
+  date; `docs/PROBLEM_LOG.md`: every problem, its cause and its fix;
+- `docs/EDITING.md`: the author's guide to the `.pdn`; `docs/GAZETTEER.md`: the Gazetteer;
+  `docs/HANDOFF_MERLO.md`: for Merlo's Claude; `deco_ui/CLAUDE.md`: the interface's own manual;
+- proposals waiting for the author: `docs/TECH_TREE_2036.md`, `docs/BORDER_LIMIT.md`,
+  `deco_ui/art/proposals/`; plans: `docs/ROUENTAL_ARMY.md`, `docs/CIVIL_WAR_NOTES.md`.
 
 ## Layout
 
 ```
-source/     the author's .pdn, reference maps (webp), vanilla BMP palettes
+source/     the author's .pdn files, flags, portraits, names, the Gazetteer's facts, vanilla's changed files
 scripts/    the pipeline (run_all.sh runs it all; common.py holds every setting)
 dist/       what gets committed for the author: the mod zip, drawing canvases, previews
 work/       intermediates, gitignored (decoded .pdn layers are 3.5 GB)
 build/      the unzipped mod, gitignored
-deco_ui/    the Valsora Deco UI, a separate interface mod (its own CLAUDE.md; see below)
+deco_ui/    the Valsora Deco UI, the mod's interface (its own CLAUDE.md; see below)
+docs/       the records (nations, history, problems), the author's guides, proposals
 ```
 
 ## The editable map: `source/HOI4 Mod Map.pdn`
@@ -366,481 +378,29 @@ scripting (tags targeted, popularities, ideologies) skip vanilla's shipped files
     2026-10-09; dark gold before), Cardonia deep purple (kept when its own flag, black,
     white and navy, came on 2026-10-14). Guedelon's blue and Hollier's red are their flags' main colours. `pdn_tools.py recolour Countries OLD=NEW` keeps
     the `.pdn` in step.
-  - Real countries the author drew: Rouental ROU, Seigne SGN, Evriches EVR, Hollier
-    HLR, Selgrave SGV, Lustiana LST, Lanzerac LZC, Guedelon GDN, Cardonia CRD,
-    Romanoddle RMD ("the Romanoddlian Federation"), Selto STO, Placeholdros LNT (a
-    placeholder nation, author; called Linterre until 2026-10-01, the key in
-    `COUNTRIES` is still `linterre`), and
-    (second map of 2026-09-30, all Portuguese: POR names, European portraits) Rastava
-    RST, Volinovia VLN, Estande ESD (flag `source/flags/ESD.png`, map colour the flag's red (153,0,0): the
-    green blended with Rouental),
-    Coraliza CRZ, Placeholdria PLH (theocratic, prophetic rule), and (2026-10-01, east of
-    Estande, Italian names: Claude's guess) Illiricium ILR (map name "Republican
-    Illiricium", "Senatorial" until 2026-10-02; flag `ILR.png`), Côtefer CTF, Entroterra ETR, Mezzogiorno MZG (the three
-    Bleacherist republics, shades of blue, Illiricium's puppets from the start) and
-    Royalist Illiricium KIL (its island; white on the map so it stands out against the
-    blue republics, author 2026-10-01; flag `KIL.png`, the author's original with the
-    transparent gaps filled with the flag's blue; a redraw at 82:52 was rejected;
-    Rouental guarantees its independence from the start, which replaced a
-    non-aggression pact), and (2026-10-01, later,
-    east of Selgrave and Hollier) Kurikia KRK (conservatism, flag `KRK.png`, its navy
-    as map colour) and Fraxhemark FRX (social democracy, capital Fraternal City; map
-    colour raspberry because its flag red would vanish next to Hollier; flag
-    `FRX.png`, the author's own, 2026-10-01). Kurikia also holds the five islands to
-    its north the author's Names layer labels KU (2026-10-02, four states). Kurikia's culture is Claude's
-    guess from its flag (SOV names, Europe portraits, eastern European gfx); Fraxhemark is
-    American (author): USA names, US generals and admirals, Europe politicians (vanilla
-    has no US generic politicians), western European gfx. Locus LCF (2026-10-02; the
-    Worker's Republic of Locus Felicitatis; Council Communism; 3 states around
-    Fraxhemark's lake; colour, culture (American, like Fraxhemark) and the stand-in
-    flag are Claude's): outlined inside Fraxhemark, so `apply_outlines` seeded it
-    (`OWNERS` now wins over a re-cut patch's old country) and left the rest of
-    Fraxhemark alone (`LEAVE`). The unnamed peninsula with the bay east of Fraxhemark is
-    outlined but left as NSC (`LEAVE`). File names are ASCII (`Cotefer`). Formal names are the
-    author's; Selto's "Empire of Seito-Hamborn" was read as Selto-Hamborn.
-    The new three's colours and adjectives are Claude's picks.
-    2026-10-04, south of Estande (the author's names, governments and formal names;
-    colours and adjectives Claude's): San Sierra SSA (Council Communism, flag `SSA.png`,
-    capital Sanhueza, with the SS islands and the archipelago its label points to),
-    Anglost AGL (Constitutional Monarchy, flag `AGL.png`, with every AN island), Normania
-    NRM (Constitutional Monarchy, Anglost's dominion: `autonomy_dominion`), Guardana GRD
-    (Enlightened Absolutism), North Pollana NPL ("the Worker's State of Pollana", Party
-    Centralism; the north tip of S. Pollana's island), South Pollana SPL (Liberalism) and
-    Dremaur DRM ("the Pangolin Empire of Dremaur", Absolute Monarchy, flag `DRM.png`).
-    Cultures (author): SSA GRD Spanish, NPL SPL Latin American (MEX names, vanilla's South
-    American portraits, `southamerican` gfx), AGL NRM English, DRM Dutch (HOL names). The
-    land between Anglost and San Sierra is undecided (author) and stays a placeholder.
-    2026-10-04, later (the author's names, governments and formal names; colours Claude's):
-    in Nonscio's west Wersh WRS (Revanchism, "the Republic of Wersh"), Troc TRC
-    (Liberalism, flag `TRC.png`) and Cascadia CSC (Anarcho-Communism, "the United
-    Forests of Cascadia", with every CS island); between Anglost and San Sierra
-    Sicilianzo SCZ (Constitutional Monarchy, flag `SCZ.png`) and Danelaw DNL ("the
-    Kingdom of Danelaw-Scandinavia", Elective Monarchy; Sweden's flag drawn as a stand-in
-    until the author's own, 2026-10-08);
-    inside Fraxhemark Thorian Dynamics THD (the author's new **Megacorporation**
-    sub-ideology, flag `THD.png`). Cultures are Claude's guesses: DNL Swedish, SCZ
-    Italian, CSC and THD American, WRS TRC the continent's (English). The author wrote
-    "Sicilianzo" and "Danelaw" on Necessary Borders; the letters were moved to Necessary
-    Names. Capitals: Kurikia Markovograd, Fraxhemark Fraternal City (dots now).
-    Map colours by the author (2026-10-04, later): Wersh dark blue, Troc red, Cascadia
-    dark green, Sicilianzo white (an off-white, since Royalist Illiricium is pure white).
-    Kurikia also holds the island off its east coast at (1409, 925), one state (the
-    author's Notes layer colours it Kurikian).
-    2026-10-05, **the author's friend's two sessions**, merged from their build and
-    `.pdn` (no code came with them; our scripts were given the same settings and the
-    build matched theirs file for file, except image encodings): Aislada became
-    **Merlovich** ("the Federation of Merlovich", Merlovian, Liberalism: `RULING`, the
-    character's ideology; its leader is named "PLACEHOLDER" for now, with the author's
-    portrait `source/portraits/merlovich_leader.png`; Communist Merlovich keeps the emu;
-    flag `AIS.png`; state names and 17 more cities; more rivers). Its paint stays the
-    placeholder green (70,170,70); `nations.DISPLAY_COLOUR` shows #2D694F in game.
-    New nations: Hoalepa HOA (two islands north-west of Solitas; Constitutional
-    Monarchy; "the Exteriorem Kingdom of Hoalepa"; George Tupou VII the Generous;
-    capital Nuku'alofa; Australian names, commonwealth gfx) and, south of Solitas,
-    Arvorenia ARV (Constitutional Monarchy, "the United Kingdom of Éden, Santo Domingo,
-    and Arovia", Arovian, Portuguese, capital São Francisco), Atrocha ATR (Liberalism,
-    capital Corales), the United States of Solitas USS (Liberalism, American, capital
-    Tallahassee; removed 2026-10-13), Silvamar SVM (Liberalism, "the New Republic of Silvamar", Silvestran,
-    capital Marcanova) and Ponchomagnifico PNC (Strongman Rule, "the Community of
-    Ponchomagnifico", capital Rosas); ATR SVM PNC Spanish. Leaders' names and portraits
-    are in `NAMED_LEADERS`. Their flags were taken from the build at 82×52 (the
-    originals weren't sent). The friend also swapped some of the author's Merlovich
-    rivers between Major and Minor (author: fine) and split two leftover placeholder
-    states at Corales along the paint.
-    2026-10-05, later (the author's names, governments, formal names and cultures; colours,
-    adjectives and the Welsh/Irish name lists' source Claude's): Guardana renamed
-    **Malvekia** (tag GRD kept); in Araseos' south-west Terrabis-Seran TBS (Social
-    Democracy, "the Commonwealth of Terrabis-Seran", English, flag `TBS.png`, with the TS
-    islands), Gaellia GAE (Absolute Monarchy, "the Kingdom of Gaellia", Irish),
-    Kilkire-Foraois KKB (Elective Monarchy, "the High Kingdom of Kilkire-Foraois",
-    Irish; the author's message said "Kilkire-Battania" at first) and
-    Harwick HWK (Party Centralism, "the People's Rule Over Harwick", Welsh, Vineta's
-    puppet), with Vineta VNT (Party Centralism, "the People's Rule Over Vineta", Welsh,
-    flag `VNT.png`) on the VI islands off them; the Garfield Republics GFR (Fascism, "the
-    United Greater Garfield Republics", Spanish, flag `GFR.png`) on the GR islands south
-    of Malvekia; Devlon DVL (Agrarianism, "the Free State of Devlon", American) on the
-    28 px islet its label sits on, off Fraxhemark. Thorian got the two islets labelled
-    TD, Cascadia every islet labelled CS. San Sierra's border with Sicilianzo moved west
-    (`pdn_tools.py border`): San Sierra took most of Sicilianzo, its state lines
-    continued into it; the slivers left of Sicilianzo's old states were merged
-    (`pdn_tools.py merge_small sicilianzo 400`), leaving it 3 states. The tip of
-    Danelaw's eastern peninsula, cut off by a new line and labelled GR, is Garfield's
-    (the "GR" was written on Necessary Borders; moved to Necessary Names).
-    The bit of coast Gaellia's forked west border closes off at (596, 2222) is
-    **another nation's, later** (author): it stays Araseos (`LEAVE`). Welsh (WLS) and Irish (IRE) names were added to
-    `source/names/vanilla_names.txt` from vanilla. The peninsula east of Thorian is two
-    **exclaves**: Terrabis-Seran's (TS, north) and Cardonia's (CA, south) (author).
-    San Sierra's state lines had two gaps (a pixel at (778, 1263); a line 4 px short of
-    the coast at (890, 1263–1266)), filled. **Rouental's releasables** (author,
-    2026-10-05; `nations.RELEASABLE`, cores from the start, owning nothing, so they can
-    be released by hand; **not** released by the civil war): the Kingdom of Carcarelle
-    CRL (Carcarelle, Nerié, Hyères), the Duchy of the Mountains MTN (Everlon, Tocsin,
-    Rolantelle, Rempart), the Oriflamme Alliance ORF (Oriflamme, Glacierre), the Free
-    State of Ghessone GHS, the Grand Duchy of the Riverraine RVR (Leclerc, Marais
-    Verte) and the Duchy of the Piscary PSC (Belleplaine-sur-Mer, Baie de Torres,
-    Graisivaudan); the author's flags, French culture; governments and colours are
-    Claude's (Absolute Monarchy, Feudalism, Oligarchy, Liberalism, Feudalism,
-    Feudalism). Royalist Illiricium's ruler is **Beatrice di Alqiro** (`NAMED_LEADERS`,
-    `source/portraits/beatrice_di_alqiro.png`). New flags for Romanoddle and South
-    Pollana too. The **Holy See** SEE ("the Kingdom of the Church", Theocratic,
-    Hierocracy; author, 2026-10-05; tag SEE by the author's choice, VAT at first) holds
-    San Sierra's island state 1 at (896, 1184), given with `pdn_tools.py give holy_see`;
-    flag `SEE.png` is the author's ("Kingdom of God" layer of the flag file; it replaced
-    a stand-in Claude drew); Italian culture and the pale gold colour are Claude's.
-    **2026-10-07, the big update** (the author's names, governments and formal names;
-    tags, colours (from the flags where there is one), adjectives and cultures Claude's):
-    Placeholdros renamed **Placeholdaire**; Placeholdria became **Vultuca** PLH
-    (Constitutional Monarchy, "the United Kingdom of Vultuca", flag `PLH.png`); Volinovia
-    is "the Kingdom of Volinovia" (Enlightened Absolutism). New, in Araseos' south and
-    west: Merlgould MGD (the author's new **Personal Union** sub-ideology; "the Kingdom of
-    Merlgould" (written "Melgould"); carved out of Vultuca; Volinovia's puppet),
-    Transcainia TCN (Oligarchy), Peatiktist PTK (Strongman Rule, "the Constitutional
-    Dictatorship of Peatiktist", with the PE islands and an exclave by Transcainia),
-    Serentia SRN (Elective Monarchy, "the High Kingdom of Serentia", flag), Leithanien LTH
-    (Populism, flag; its own state lines: 7 states; cities Rostock, Litzstädt, Thielfurt,
-    Weißadel, Frundsstadt, Kaltsit, Veisheim), Ostaria OST (Absolute Monarchy, "the
-    Archcounty of Ostaria", flag), Großlöwenburg GLB (Feudalism, "the Efeuüberwuchterte
-    Steinsäule of Großlöwenburg", flag), the Kampfian Empire KPF (Absolute Monarchy, "the
-    Iron Empire of Kampf"), Dumas DUM (Holy Order, "the Order of Saint Dumas"), Terreich
-    und Preußen TUP (Social Democracy, "the Bundeskaiserreich of Terreich und Preußen",
-    flag, with the TP islands and the coast patch west of Gaellia), Schteirmark STM
-    (Feudalism, Terreich's puppet), Daravon DRV, Eschland ESC and Hwitland HWT (Orthodox
-    Marxism; Daravon leads **the Synthesist Internationale** with the other two,
-    `faction_template_synthesist_internationale`), Someriania SMR (Vanguardism; SOM is a
-    vanilla tag); in Yastreovakia: Krionik KRI (the author's new **Stratocracy**
-    sub-ideology, Democratic; "the Militariat State of the Kriosnika", "Regency" until
-    2026-10-08; ruled by the **Kriosaivak Council of Marshals**, whose portrait is the
-    author's round emblem of the council (`source/portraits/kri_council_of_marshals.png`,
-    centred on a dark field); with every KR island, the two KR islets west of Araseos
-    and, on its label, a region of Orientalis), Gorbastan GOB and Zukchiva ZUK
-    (Liberalism), Sminishia SMN (Social Democracy, "the Worker's Republic of Sminishia"),
-    Russovichia RSV (Council Communism, with the RU islands). The ES islands east of
-    Terreich are **Estande's**, and the island labelled CA (Cascadia's until then) is
-    **Cardonia's** (author). Cultures (Claude's guesses):
-    German for the new Araseos nations, French for Dumas, Portuguese for Merlgould,
-    Russian for Yastreovakia's. The borders of Sminishia, Gorbastan and Zukchiva were drawn
-    on Necessary Names, and "PE" and "(TP)" were written on Necessary Borders: moved; a
-    one-pixel gap south of Ostaria was closed. New flags: Illiricium's two (kingdom and
-    republic) replaced. Corrections the same day (author): the land north of Peatiktist's
-    exclave is **Transcainia's** (6 states; an old `LEAVE` pixel had kept it Araseos),
-    and four placeholder states changed hands with `pdn_tools.py give`: Araseos 3 →
-    Serentia (452, 1494), Nonscio 7 → Malvekia (1015, 1366), Nonscio 6 → San Sierra
-    (1006, 1239), Nonscio 3 → Kurikia (1257, 664). Leithanien's capital is Thielfurt.
-    Krionik's flag `KRI.png` was redrawn from the author's picture (the file didn't come
-    through) until 2026-10-09, when their flag file's own replaced it; its map colour stays green (the flag's maroon would merge
-    with Russovichia).
-    2026-10-07, later: **five more Rouental releasables** (author; same rules as above):
-    the Alliance of the East AOE (Chirac, Serpette, Maïeul, Moelle; Oligarchy, as when it
-    was a civil-war country; the civil war still gives those states to Lustiana, Hollier
-    and Selgrave), the Principality of the Recolt RCL (La Recolt, Fleurastre, Fourier),
-    the Duchy of Sangterre SGT (Sangterre, Carune la Cœur), the County of Kové KOV and
-    the County of Hevique HVQ (Hevique, Avarre), and the Duchy of Serie SRE (Serie, Verdoyantes;
-    Feudalism; charcoal like its flag). Governments, adjectives and colours
-    Claude's. The author's `New_Mod_Flags.pdn` (490×311, HOI4's 82:52 shape; layers
-    "Carcaraise", "Marcher Lords", "Rouental (Authoritarian)" etc. are `import_flags`
-    aliases) replaced 23 flags, including Rouental's four government flags; the
-    Reibonne's and HMMLA's were copied from the new communist and authoritarian ones.
-    **2026-10-08** (the author's names, governments and formal names; tags, colours,
-    adjectives and cultures Claude's unless noted): in Yastreovakia's north **Belekria**
-    BLK (Vanguardism, "the Union of Belekrian Republics", 44 states, with every BE island:
-    five off its coast, eleven north of Nonscio, two further east), whose region
-    **Tethia** is one state (named "Tethia") and a releasable, the Principality of
-    Tethia TTH (Absolute Monarchy, Polish (author), flag `TTH.png`, colour from it); the
-    box west of Tethia is one state too (both drawn with state lines). In Araseos' far
-    south-west **Merigo** MRG (Conservatism, "the Republic of Merigo", Peatiktist's
-    puppet, Italian), **Zwintern** ZWT (Technocracy, "the State of Zwintern", Dutch) and
-    **Ungar** UNG ("the Grand Duchy of Ungar"; Feudalism is Claude's: the author named
-    it later the same day; Hungarian, the author's, 2026-10-09, German at first); **Ostercoirasreich** OCR (Feudalism, "the
-    Kaiserinnreichfedderation of Ostercoirasreich", German) on the OS islets and
-    **Mahina** MAH (Liberalism, "the Republic of Mahina", Australian names like Hoalepa)
-    on the MA islets. Islets also went to Someriania (SO), Kilkire-Foraois (the west of
-    the SO island, cut off by a line), Kampfian Empire (KE) and Dumas (DU). The author
-    wrote most of those labels on Necessary Borders: moved to Necessary Names (88 marks;
-    only three new lines were real). Their upload predated the Transcainia fix and the
-    four state transfers, so the current game layers were kept. New flags for Hevique,
-    Riverraine, Vair and Fraxhemark came with the flag file. Later that day (author):
-    Merigo renamed **Merikaan** ("the Republic of Merikaan", Merikaans; key `merigo`, tag
-    MRG kept) and Dutch; Mahina **Polynesian**: vanilla has no such culture, so the name
-    list `PLY` is our own (Hawaiian, Maori, Samoan, Tongan, Tahitian names) in
-    `source/names/custom_names.txt`, which `cultures.py` reads alongside the vanilla
-    lists; portraits are South America's generic ones (vanilla has no Pacific ones).
-    Then (author) Krionik, Sminishia, Gorbastan and Zukchiva became Balkan: vanilla has
-    several Balkan name lists, so each gets one (copied into `vanilla_names.txt` from
-    vanilla's `00_names.txt`): Krionik Serbian SER, Sminishia Croatian CRO, Gorbastan
-    Albanian ALB (the author's pick; Bulgarian first), Zukchiva Macedonian MAC.
-    Then a new flag file (58 layers): 18 nations got their first flag (Belekria,
-    Daravon, Dumas, Eschland, Gorbastan, Harwick, Hwitland, the Kampfian Empire (layer
-    "Kampf Empire", an `import_flags` alias), Kilkire-Foraois, Malvekia, Merikaan,
-    Peatiktist, Sminishia, Someriania, Transcainia, Ungar, Zukchiva, Zwintern) and
-    eight were replaced (Danelaw's own for the Swedish stand-in, a new Ostaria, and
-    Vineta, Romanoddle, Terreich, Großlöwenburg, Serentia and Leithanien redrawn at
-    82:52). Harwick's empty top row was filled from the row below. Map colours were
-    not changed to match the new flags.
-    **2026-10-09** (author): the Synthesist Internationale redrawn. Hwitland is renamed
-    **Scealand** (HWT and the key `hwitland` kept; "the Republik of Scealand",
-    Scealändisch) and Eschland **Artzen** (ESC, key `eschland`; "the Wyrhterrepublik of
-    Artzen", Artzener): the formal names follow the new names, the adjectives are
-    Claude's. A new line gives Scealand Eschland's land north of it (`pdn_tools.py cede
-    eschland hwitland 551,1582`: 2 states whole, the north slivers of 2 more joined one
-    of them, 3 provinces split along the line): Scealand 6 states, Artzen 5. The upload
-    was the author's previous file plus these edits, so its game layers predated the
-    2026-10-08 changes; only their own edits were taken (the Necessary Borders and Names
-    pixels where it differed from that previous file). New flags for Lustiana, Evriches,
-    Lanzerac (now purple, white and gold) and Hollier. Lanzerac's map colour followed
-    (author): the flag's own plum purple (145,58,106), since a bluer purple would read as
-    Cardonia's a few pixels north.
-    **2026-10-09, later** (the author's names, governments and formal names; tags,
-    colours (Belka's from its flag), adjectives and cultures Claude's, but Volstokn's
-    Finnish): Yastreovakia's north-east, now all outlined, and two islands off it.
-    Belka BKA (Fascism, "the Most Serene State of Belka", flag `BKA.png`, black like its
-    flag's top band; with every BK island), West Sminishia WSM (Vanguardism, "the
-    Autonomous Region of Western Sminishia", Belekria's puppet; cut out of Sminishia by a
-    new line: `pdn_tools.py cede sminishia w_sminishia 1919,414`), Sanada SNA (the
-    author's new **Khanate** sub-ideology, "the United Sanadan Clans", with every SA
-    island), Kamyachyn KMY (Liberalism), Volstokn VSK (Enlightened Absolutism, "the Tsaral
-    Realm of Volstokn", with the VO islands), Brethren BRT (Synodal Rule, "the Great
-    Congregation of Brethren", with the BT island), Ryśny RYS (Agrarianism, "the United
-    Voivodes of Ryśny"), Pakitsk PKT (Strongman Rule), Kieska KSK (Oligarchy, "the
-    Confederated Kingdoms of Kieska"), Zoluzeme ZLZ (Absolute Monarchy), Vilna VIL (the
-    author's new **Radical Republicanism** sub-ideology, Democratic; "the Free Republic of
-    Vilna"), Sombor SMB (Lordly Republic, "the Free City of Sombor"), Skillia SKL
-    (Agrarian Socialism; its island south-east of Krionik and the SK islet) and, in
-    Orientalis, Tenkyoku TKY (Prophetic Rule, "the Remnant of Tenkyoku"; the island its
-    label sits on, while the peninsula beside it stays Orientalis, `LEAVE`). The islands
-    labelled ES south-west of Tenkyoku are Estande's (6 states). Cultures: Russian (Belka,
-    Pakitsk), Croatian (West Sminishia), Buryat (Sanada: vanilla's Mongolian list is 14
-    Chinese names, and Buryat is Mongolic), Ukrainian (Kamyachyn), German (Brethren),
-    Polish (Ryśny, Kieska), Latvian (Zoluzeme), Lithuanian (Vilna), Serbian (Sombor), Greek
-    (Skillia), Japanese (Tenkyoku); UKR, FIN, LAT, LIT, GRE and BYA were copied into
-    `vanilla_names.txt` from vanilla (its BLR list is part of SOV's, so it was not used).
-    States: Sanada 84, Volstokn 61, Belka 39, Brethren 20, Kieska 13, Pakitsk 9, Ryśny 8,
-    Kamyachyn 5, Skillia 4, Vilna 3, Zoluzeme 2, West Sminishia 2, Sombor 1, Tenkyoku 1
-    (`dist/preview_new_nations_yastreovakia_northeast.png`). Left for the author: the ES
-    on Orientalis' north coast at (4178, 793) had no line around it (it has since
-    2026-10-11), and four unlabelled islets off the new coasts stay Yastreovakia's. The same day's
-    flag file brought Belka's flag and redrawn Artzen and Daravon flags. Its update to
-    Serie's (four gold anchors in the corners) was missed at first: `import_flags.py`
-    called a flag unchanged under a mean difference of 3. With the new test, Krionik
-    also got the author's own flag in place of the redraw, and Garfield, Troc and
-    Terrabis-Seran the file's 82:52 copies of the same pictures (the old ones were
-    490×327); Rouental keeps its 1180×700 original. See-through pixels, which show as
-    holes in game, are now filled on import: Belka's emblem edge, a 1-px frame around
-    Riverraine's and Belekria's flags, a faint row in Garfield's (and, by hand, the top
-    row of Ponchomagnifico's, taken from the friend's build).
-    2026-10-09, later still (author): **the Oriental Territories** ORT, a new Rouental
-    releasable (`nations.RELEASABLE`: Concorde et Volonté, Rouental's islets off Solitas, on
-    the islands north of it since 2026-10-13;
-    "the Oriental Territories", the author's flag `ORT.png`; Oligarchy, French culture
-    and the colour are Claude's, a shade off the flag's plum, which is Lanzerac's map
-    colour exactly). The three isles and three islets the author labelled PE in the
-    Midtierre, between Anglost and Normania (Nonscio's until then), are Peatiktist's: 3
-    states, one per isle (`apply_outlines.py`). The flag file brought 20 first flags
-    (Coraliza, Volinovia, Merlgould, Rastava, North Pollana, Gaellia, Schteirmark, Mahina,
-    Russovichia, and West Sminishia, Pakitsk, Sanada, Brethren, Ryśny, Sombor, Kamyachyn,
-    Kieska, Zoluzeme, Vilna, Skillia) and four redrawn ones (Estande, South Pollana,
-    Dremaur, Sminishia); map colours were not changed to match. Then (author) "Araseos
-    1", a 19 px islet off Terreich's coast and the Araseos placeholder's last land, went
-    to Terreich, joining its nearest state (`pdn_tools.py attach terreich 935,1862`), so
-    ARS is no longer in the mod; and Ungar became Hungarian (HUN names, copied into
-    `vanilla_names.txt` from vanilla).
-    **2026-10-11** (the author's names, governments and formal names; tags, colours,
-    adjectives and cultures Claude's, but Arpino's Indian culture the author's):
-    **Orientalis outlined**, all but its south-west. Gorduchai GOR (Clerical Monarchism,
-    "the Holy Kingdom of Gorduchai", the island west of Orientalis), Sarkis SRK
-    (Revanchism, "the People's State of Sarkis", with the SR islets), Wanea WAN
-    (Agrarianism), **the Great Lake Republics** (`faction_template_great_lake_republics`):
-    Qingou QNG (Liberalism, "the Qingou Republics", its leader; **Qinguo**, "the Qinguo
-    Republics", since 2026-10-13), Xuè XUE (Conservatism;
-    the accent is the author's), Hulinguo HLG (Populism, "the Hulinguo Republic"), the
-    Associated Cities ASC ("the Associated Cities of Dahu and Jinhu", Liberalism) and
-    Haidao HDO ("the Associated City of Haidao", Liberalism); Kuran KRN (Vanguardism, "the
-    Red Mountains of Kuran"), Red Path RDP (Vanguardism, "the People's Republic of
-    Kianhua", the three RP patches), Kianhua KNH (Liberalism, "the United States of
-    Kianhua"; "Kainhua" in the author's message was a typo), Charity CRT (Absolute
-    Monarchy, "the Empire of Charitia", with the AC islands and the peninsula beside
-    Tenkyoku, which was in `LEAVE`), Kaizan KZN (Personal Union, Charity's puppet), Sho
-    SHO (Oligarchy, "the Kingdom of the Sho Dynasty"), Uyizar UYZ and Yatar YTR
-    (Khanate), Myehn MYH (Conservatism, "the Imperial Republic of Myehn"; with the 49
-    islands the author circled in red east of it, and an exclave on Plaija's west tip
-    its label sits on), Tsuruma TSU (Lordly Republic, "the Most Serene Republic of
-    Tsuruma", with the TS islands; the one far south of Arpino is Terrabis-Seran's since
-    2026-10-12: TS is its code too), Daihai DHI
-    (Feudalism, "the Island Principalities of Daihai", the DI islets), Plaija PLJ
-    (Orthodox Marxism), Pinzahao PZH (Radical Republicanism, "the Liberated Peoples of
-    Pinzahao"), Ganden GND (Fascism) and Arpino ARP (Enlightened Absolutism, "the United
-    Empire of Arpino", with the AR islands). Three bits of other countries: TP in
-    Kianhua (Terreich's), KR at the tip of Arpino's south (Krionik's) and the ES cape on
-    the north coast (Estande's, now outlined). Then (author) **Shinnokawa** SHN ("the
-    Empire of Shinnokawa", Absolute Monarchy): the six SH islets east of the circle, one
-    state. The unlabelled land (the south-west's big island and peninsula, the islands
-    between Krionik's and Plaija, about 125,000 px) stays Orientalis for now: the author
-    will fill it later. Cultures: our own Chinese list `CHN` (family name first;
-    vanilla's is family names only) for QNG XUE HLG ASC HDO KRN RDP KNH CRT DHI PZH;
-    Japanese for TSU KZN SHO SHN (Sho after Ryukyu's Shō dynasty), Korean WAN, Buryat GOR (a
-    lamaist Mongol monarchy, like the Bogd Khanate), Armenian SRK, Uzbek UYZ, Kazakh YTR,
-    Burmese MYH, our own Vietnamese `VNM` for PLJ (family name first too), our own
-    Tibetan `TBT` for GND, and Indian ARP (vanilla's Raj names and portraits, commonwealth
-    gfx); KOR ARM UZB KAZ BRM RAJ were copied into `vanilla_names.txt` from vanilla, and
-    its Buryat list's one name in curly quotes was given straight ones (Gorduchai's
-    leader showed them). The members of the Great Lake Republics and of
-    the Synthesist Internationale start with 40 % for their (and their leader's) ideology
-    (`nations.POPULARITIES`), a precaution after Lanzerac and Guedelon. States: Sarkis 198,
-    Arpino 109, Plaija 65, Myehn 63, Charity 56, Kianhua 53, Qingou 24, Uyizar 16, Sho 13,
-    Xuè 12, Yatar 7, Gorduchai, Ganden, Pinzahao, Red Path and Tsuruma 6 each, Wanea 5,
-    Kaizan 4, Hulinguo 3, Kuran 2, the Associated Cities, Haidao, Daihai and Shinnokawa 1
-    each, and one each for Terreich, Krionik and Estande: 667 in all
-    (`dist/preview_new_nations_orientalis.png`). Wanea's line carves a tongue of land
-    south-east of it out to Sarkis, as drawn. The upload predated Araseos 1's move to
-    Terreich, so `pdn_tools.py attach` was run again.
-    **2026-10-12** (the author's names, governments and formal names; tags, colours,
-    adjectives and cultures Claude's): **Usnistan outlined**, Orientalis' south-west and
-    Sennheiser. In Usnistan: the Cultists CUL (Prophetic Rule, "the Cult of the Great
-    Cthulu", the CU archipelago), Arcadia ARC (Conservatism, Terreich's puppet), Muqadasa
-    Salamat MQS (the author's new **Divine Republicanism**, Theocratic; "the Holy
-    Republic of Muqadasa Salamat"), Sarza SRZ (Absolute Monarchy, "the Empire of Sarza"),
-    Leviathan LEV (Populism), Kyras KYS (Liberalism, "the Commonwealth of Kyras", with the
-    RA islands and a coastal exclave by Almohavid), Hulya HLY (Conservatism, "the
-    Territory of Hulya", a 148 px box), Levantinin LVN (Holy Order, "the Crusader State of
-    Levantinin"), Mustawi MST (Strongman Rule), Almohavid AMH (Constitutional Monarchy),
-    Port Almohavid PAM (Lordly Republic, "the Free Port of Almohavid": the 16 px tip of
-    land a short line closes off), Mekele MKL (Anarcho-Communism, "the Mekele Peoples'
-    State"), Kalaistan KLS (Military Junta), Al-Radiyaa RDY (Conservatism), Al-Khabid KHB
-    (Oligarchy), the Humanist State HMN (the author's new **Humanism**, Authoritarian: "an
-    apartheid-style ideology placing humans as superior beings to the other races of
-    Valsora"), South Usnistan SUS (Conservatism), Royabad RYB and Koronista KRS (Absolute
-    Monarchy, sultanates), North Koronista NKR (Strongman Rule; "North Kornista" on the
-    map), Zanzimibia ZNZ (Social Democracy), the Utopian Republic UTP (Lordly Republic,
-    "the Second Utopian Republic"), Soloriania SLN (Liberalism, "the Solorianois
-    Confederacy"), Hohenzburg HZB (Strongman Rule, the Kampfian Empire's puppet), Nuevo
-    Paraíso NPR (Conservatism, the United States of Solitas' dominion), Arklen ARK
-    (Conservatism, "the Arklen Free State", a non-aggression pact with Ostaria), Isigoriya
-    ISG (Military Junta), Kizimwe KZW (Synodal Rule, "the Kizimwe Conference of Bishops"),
-    Lafari LFR (Council Communism, "the Worker's Republic of the Lafari"), Meddacah MDC
-    (Fascism, "the Meddacah River Autonomous Zone"), Khaleeya KHY (Feudalism) and Solaria
-    SLA (Hierocracy, "the Holy State of Solaria": on the map but not in the author's
-    list; named when asked); in Orientalis' south-west Chineasia CNA (Vanguardism, "the
-    People's Republic of Chineasia", with the CH islands as far as Krionik's island; led
-    by the author's **Han Leji**, `source/portraits/han_leji.png`; flag `CNA.png`) and
-    Felter FLT (Liberalism, with the FE islands); Sennheiser SNH (Constitutional Monarchy,
-    "the Sennheiser Union", labelled AK) in Yastreovakia's south-west, a `LEAVE` patch
-    until then. The author's "direct colonies": islets and bits of coast labelled US (the
-    United States of Solitas, 3 states), KR (Krionik, 3), KE (the Kampfian Empire, 1), SR
-    (Sarkis, 2) and KF (Kilkire-Foraois, Claude's reading, 1 islet); the islet the author
-    circled near Myehn's red circle joined Myehn's nearest state (`pdn_tools.py attach`).
-    Cultures: the continent's Persian for Kyras (Kyros is Cyrus), Sarza, Royabad,
-    Kalaistan, South Usnistan, the Cultists and the Humanist State; Arabic for Muqadasa
-    Salamat, Al-Khabid and Khaleeya (SAU names) and Mustawi, Al-Radiyaa and Meddacah
-    (KUW), Moroccan for both Almohavids, Turkish for Hulya and both Koronistas, Ethiopian
-    for Mekele and Lafari, Eritrean for Kizimwe, Nigerian for Zanzimibia, Ghanaian for
-    Isigoriya (with the `arabia` and `africa` portraits, the two halves of the continent's
-    mixed set), Greek for Arcadia, English for Leviathan and the Utopian Republic (Hobbes,
-    More), French for Levantinin and Soloriania, German for Hohenzburg and Sennheiser,
-    Dutch for Arklen (the Orange Free State) and Felter, Latin American for Nuevo
-    Paraíso, Italian for Solaria, Chinese for Chineasia. SAU KUW MOR TUR ETH ERI NGA GAH
-    were copied into `vanilla_names.txt` from vanilla; their heads of state and a few
-    other famous names are in `NOT_SURNAMES` (none of them was in a list already in use,
-    so no older leader changed). States: Chineasia 73, the Utopian Republic 68, Kyras and
-    Sarza 33 each, Royabad 31, Felter and Lafari 29 each, the Humanist State 23,
-    Sennheiser 22, the Cultists 21, Muqadasa Salamat and South Usnistan 19 each, North
-    Koronista 18, Arcadia 17, Levantinin 12, Mustawi 11, Almohavid and Zanzimibia 9 each,
-    Al-Khabid, Hohenzburg and Nuevo Paraíso 8 each, Al-Radiyaa 6, Soloriania 4,
-    Isigoriya, Kalaistan, Kizimwe, Koronista, Meddacah and Solaria 3 each, Arklen, Hulya,
-    Khaleeya, Leviathan, Mekele and Port Almohavid 1 each: 545 with the colonies'
-    (`dist/preview_new_nations_usnistan.png`, `..._orientalis_southwest.png`,
-    `..._sennheiser.png`). Left as placeholders: about 1,700 px of Usnistan islets (most
-    of it the three islands south of it), 300 px of islets off Orientalis and 350 px in
-    Yastreovakia. The CU and RA labels were drawn on Necessary Borders: moved to
-    Necessary Names. Then (author) ten placeholder states changed hands, named as the game
-    showed them: Nonscio 1 (2,696 px, the island group south of the BE islets) to
-    Belekria, Orientalis 4 to Ostercoirasreich, Tsuruma 6 (the TS island far south of
-    Arpino) to Terrabis-Seran, Yastreovakia 1 to Sarkis and Yastreovakia 3 to Volstokn,
-    as states of their own (`pdn_tools.py give`); the islets Usnistan 2, Nonscio 2,
-    Orientalis 3, Yastreovakia 2 and 4 (17-52 px, beside the Cultists', Cascadia's,
-    Charity's, Volstokn's and Sennheiser's land) joined their new owner's nearest state
-    (`attach`). Nonscio and Yastreovakia own nothing now. Left as placeholders: Usnistan
-    1-4 (islets beside Kyras and the Utopian Republic, and the islands south of South
-    Usnistan; the old Usnistan 3-5, renumbered), Orientalis 1-2 (beside Kianhua and Daihai)
-    and Solitas 1-20, the land between the friend's nations. Flags for Sennheiser and
-    Volstokn came the same day (`SNH.png`, `VSK.png`; map colours unchanged).
-    **2026-10-13** (the author's names, governments, formal names and rulers; tags,
-    adjectives, cultures and colours (from the flags where there is one) Claude's):
-    **Solitas outlined.** The upload was the 4a191cb map (after Usnistan, before the ten
-    transfers and the province merge) plus the author's edits, so only those were taken:
-    Necessary Borders, Names and Cities (Tallahassee's dot removed), Even More Reference
-    and a new layer, **Islands to Add**. **The United States of Solitas is removed**
-    ("eventually it will be readded as a formable": it stays in `COUNTRIES`, owning
-    nothing, so it is left out of the mod); its colonies, relabelled AN (six pieces, three
-    states), are Anglost's (`pdn_tools.py give`), and **Nuevo Paraíso is New Paradise**
-    ("the Dominion of New Paradise", now Anglost's dominion and English; key
-    `nuevo_paraiso` kept). Its land on Solitas was repainted as the placeholder's before
-    `apply_outlines.py`, so the new nations were cut afresh. New: Recaxa REC (Agrarianism,
-    "the Republic of Recaxa", Diana Zorreguieta, flag), Surredia SRD (Strongman Rule, "the
-    Republic of Surredia", Sunny Hurricane, flag), Arovannea AVN (Conservatism, "the
-    Confederative Republics of Arovannea", Estúr Illger fön Reegen; code CI, so many
-    pieces), Avesária AVE (the author's new **Semi-Constitutional Monarchy**, "the
-    Avesária Dimokratía", Nikosanis Coisan II; "Aversaria" in the author's message, the
-    map says Avesária), Abalón ABL (Absolute Monarchy, "the Kingdom of Abalón"), Texaria
-    TEX (Liberalism, "the Republic of Texaria", Iyun' Savon, flag), Gran Yucanoa GYC
-    (Liberalism, "the Federation of Gran Yucanoa", ruled by the General Cortes, its
-    parliament, flag), Las Anod LAN (Conservatism, "the United Isle of Las Anod", Michael
-    Ryan) and Bromé BRO (Party Centralism, "the Republic of Bromé", Jose Castañeda); the
-    AV patches are Arvorenia's. **Santa Fe**, labelled but not in the author's list, stayed
-    the placeholder (`LEAVE`) until that evening. Cultures: Latin American for Recaxa, Gran Yucanoa and Bromé,
-    American Surredia, German Arovannea, Greek Avesária, Spanish Abalón, Russian Texaria
-    (Iyun' is June), Irish Las Anod. States: Arovannea 26, Surredia 19, Recaxa 16, Gran
-    Yucanoa 13, Avesária 6, Abalón 5, Texaria 5, Las Anod 5, Arvorenia 2, Bromé 1
-    (`dist/preview_new_nations_solitas.png`). Fixes on the way: Texaria's eastern line
-    stopped 8 px short of the inlet south of it (closed), a "CI" was written on Necessary
-    Borders (moved to Names), and five slivers of a small loop of line by Abalón's coast
-    are Abalón's. **Rouental's eastern territories moved** (author, "to better align with
-    the lore"): the two islands painted on Islands to Add (27 and 45 px, north of
-    Arovannea) are land now (`pdn_tools.py add_land rouental`), one state named Concorde et
-    Volonté, so the Oriental Territories' cores follow; the old islets off Solitas' south
-    are Solitas' again, and their ROU label moved to the islands. The four flags were
-    fitted to 82:52 without stretching (scaled evenly, then plain field added inside the
-    stripes, or Surredia's plain sides trimmed; `dist/flags_new_20261013.png`), and added
-    to the author's flag file as layers (`source/New_Mod_Flags.pdn`, now kept in the repo;
-    `writepdn.py` adds layers on top).
-    **2026-10-13, later** (the author's names, governments and transfers; tag, colours,
-    adjective and culture Claude's): **Santa Fe** SFE ("the Fifth Republic of Santa Fe",
-    Party Centralism, Latin American, gold to stand out from Bromé's crimson and
-    Atrocha's red; its patch, "Solitas 3" and "4" in game, cut by `apply_outlines.py` into
-    7 states like its neighbours); **Bromé** is "the Grand Duchy of Bromé", a
-    Semi-Constitutional Monarchy (Party Centralism until then; Jose Castañeda still rules,
-    the author named no other); **Silvamar**'s map colour is its flag's navy, a little
-    lighter (10, 30, 140): its green was too close to Arvorenia's and Las Anod's. The
-    placeholder states the author named in game went to their neighbours: Solitas 1 (298
-    px) to Hoalepa and Usnistan 3 and 4 (214 and 1,432 px) to Royabad as states of their
-    own (`pdn_tools.py give`); Solitas 5 (the two old Rouental islets, 90 px) to Atrocha,
-    Orientalis 1 and 2 (38 and 95 px) to Kianhua and Daihai, and Usnistan 1 and 2 (31 and
-    17 px) to Kyras and the Utopian Republic, each joining its new owner's nearest state
-    (`attach`). Orientalis and Usnistan own nothing now. The last placeholder land,
-    Solitas 2, a 16 px islet off Recaxa's west coast at (1443, 1832), joined Recaxa's
-    nearest state afterwards (author), so Solitas is left out too
-    (`dist/preview_new_nations_solitas.png`). Then (author) **Qingou is renamed Qinguo**
-    (tag QNG and key `qingou` kept); five first flags, for Qinguo, Kianhua, Tsuruma, Myehn
-    and Ganden (fitted to 82:52 as below, and added to the flag file); Tsuruma's ruler is
-    **Akihiro Tanaka** and its capital **Kishito**, Myehn's capital **Shukumei**
-    (`CITY_NAMES`). Map colours were not changed to match the new flags.
-    **2026-10-14**: Cardonia's first flag (the author's: black, white and navy bands, an
-    owl on a compass star), fitted to 82:52 by trimming 9 px of plain band at each side
-    and added to the flag file (`dist/flag_cardonia_20261014.png`); its map colour stays
-    deep purple.
-    **2026-10-15** (author): **Vilna moved** to Russovichia's land (its 2 states, with the RU islands), taking
-    its paint (140, 0, 0), dark red like Vilna's new flag (the author's: a crimson field framed by blue bars and
-    Stars of David, a menorah over a sword, a line in Hebrew), which came at 1280 × 841 and was fitted to 82:52
-    by lengthening the top and bottom bars 23 px at each end (`dist/flag_vilna_20261015.png`; in the flag file
-    as "Vilna", the old layer renamed "Placeholdgrad"). It keeps its formal name; then (author, the same day) it
-    is **Conservatism** (Radical Republicanism until then) and **Jewish**: the base game has no Jewish culture, so
-    its nearest, the Israeli name list (ISR, copied into `vanilla_names.txt`; it has some Arab-Israeli surnames),
-    with Europe portraits and eastern European gfx (Lithuanian until then). **Russovichia stays in `COUNTRIES`,
-    off the map** (author: "should remain in the code,
-    but be off the map for now"): it owns nothing, so it is left out of the mod like the United States of
-    Solitas, with an unused colour from its flag, (153, 47, 45). Vilna's old land (3 states) is
-    **Placeholdgrad** PHG, with Vilna's old flag (`PHG.png`) and Radical Republicanism, and Vilna's old green;
-    the adjective Placeholdgradian, Russian culture (for the "-grad") and no formal name yet are Claude's.
-    Since the paint moved with the names, the `.pdn` is unchanged.
-    All tags were checked against vanilla `common/country_tags`; new tags must be too.
+  - **Every nation's record**, who drew, named and decided what and when, is `docs/NATIONS.md` (moved out of this
+    file on 2026-10-15). As built: 183 countries in the mod, the 161 on the map and 22 that own nothing at the start
+    (Rouental's 13 releasables and Belekria's Tethia, the civil war's 7, the Gazetteer's releasable "Test");
+    `dist/countries.md` lists every country's names, government, culture, ruler and states. Off the map but kept in
+    `COUNTRIES`, and so left out of the mod: the United States of Solitas (to come back as a formable) and
+    Russovichia (author, 2026-10-15).
+  - **A new or changed nation** (the rules the record kept to):
+    - The author's are the names, governments, formal names and rulers, and whatever else they name. Claude picks
+      the rest (tag, map colour, adjective, culture), says so in the record and in a code comment (`# Claude's
+      guess`), and tells the author.
+    - It needs `COUNTRIES` (`common.py`: tag, name, adjective, map colour), `FORMAL_NAMES`, `LEADERS` (every ruler
+      is a set character), a culture (`cultures.TAG_CULTURE`) and a flag (`source/flags/TAG.png`; without one, a
+      stripe in its map colour), and a dated paragraph in `docs/NATIONS.md`.
+    - All tags were checked against vanilla `common/country_tags`; new tags must be too: not the base game's
+      (`source/vanilla/index/tags.txt`) nor ours. File names are ASCII (`Cotefer`).
+    - Its land is cut from the author's outlines by `apply_outlines.py` (`OWNERS` seeds by pixel, `LEAVE` for land
+      the lines close off by accident); islands go with the labels the author writes beside them, and labels
+      written on Necessary Borders are moved to Necessary Names. Land changes hands with `pdn_tools.py`: `give`
+      (whole states), `attach` (a piece joins the new owner's nearest state), `border` and `cede` (along a moved
+      line).
+    - A map colour comes from the flag where there is one, and moves off a neighbour's it would merge with. A flag
+      that comes later doesn't change the colour unless the author asks.
+    - Flags in another shape are fitted to 82:52 without stretching (Flags, under Nation content).
   - The adjectives of the neighbours are guesses; the author may rename them.
 - **State names** are the author's, in `source/state_names.json` ("x,y" of a pixel
   inside the state → name, since ids shift; `build_mod.py` stops if a pixel is in no
@@ -1567,161 +1127,52 @@ it before touching the UI. In short:
   the old `mod/valsora_deco_ui/` and `mod/valsora_deco_ui.mod` and take it out of the playset: left in, it
   loads after Valsora and puts its older files back.
 - Its `reference/` (the game's files, git-ignored) must never be committed: it is Paradox's content.
-
-## Atlas submod (removed)
-
-A "Valsora: Atlas" graphics submod (2026-10-07, `scripts/atlas_mod.py`, in git history,
-last at commit 8a03ebf) tried to make the map look like a printed atlas with our own
-textures: paper colour maps, engraved waterlines, sea lettering, compass rose and
-cartouche, paper terrain tiles, ink border strips, a Cinzel map font (OFL), defines.
-**Removed at the author's request after two in-game tests** ("maybe we'll come back to
-it later"). What the tests taught (see `docs/PROBLEM_LOG.md`):
-- Zoomed out, HOI4 draws a flat, shader-drawn map that no texture reaches; the look
-  needs shader changes, which need the author's vanilla `gfx/FX` files.
-- A flattened heightmap (a cliff at every coast) is drawn as stair steps and squares;
-  `GRADIENT_BORDERS_FIELD/THICKNESS_COUNTRY_*` overrides draw a coarse grid.
-- Country names didn't show with the replacement map font; the cause was never found.
-It replaced the 2026-10-06 **Victorianization patch** (`victorianization_patch.py`,
-graph-paper colour maps for Victorianization at Valsora's size; also in git history).
-
-## Cartographic submod (removed)
-
-A flat, HOI3-style "Valsora: Cartographic Map" submod was tried on 2026-10-01 and
-removed at the author's request ("it wasn't great"); they may come back to it. It is
-in git history (commit d2d6cd8, `scripts/cartographic.py`). It used
-`GRADIENT_BORDERS_THICKNESS_COUNTRY_LOW/HIGH` = 2000 for solid country fill, a flat
-`world_normal.bmp`, a khaki land colormap and a grey-blue sea with a 15° graticule.
+- **v0.6 and v0.7** (2026-10-15, not yet seen in game): the focus tree after its mockup (v0.6; the focus icons are
+  the game's, as the author asked); the army bar (`make_leadergroups.py`, textures `lg_*`, numbers in
+  `layout_armybar.py`) and the events (`make_events.py`, textures `ev_*`) in the deco style at the game's paths and
+  sizes (v0.7). Their previews, `deco_ui/build/preview_armybar.png` and `preview_events.png`, show the game's art
+  beside ours, so they stay in the git-ignored `build/` and are only sent to the author.
+- **Proposals for the side panels' own pictures** (research, production, the market, the overview strip, the
+  intelligence agency, the spirit banners) are in `deco_ui/art/proposals/panel_pictures/`, **not in the mod**
+  (author, 2026-10-15: "don't put them in the mod yet. I'd like to see and approve them first").
 
 ## Current state
 
-- 2026-10-15, latest: **Vilna moved** to Russovichia's land with the author's new flag, now Conservative and Jewish
-  (the base game's Israeli names), **Placeholdgrad** on its old land with its old flag and government, Russovichia
-  off the map (still 183 countries). The Deco UI is v0.6: the
-  **focus tree after the mockup** (notched under the
-  band, the country's title and sub-ideology in the header, medallions and plates per focus state, a gilt halo on
-  the focus in progress, gilt links, red exclusive marks, the scale-pattern canvas; the focus icons are the game's,
-  as the author asked) and v0.5.2's fix: closed side panels stayed on screen (the author's screenshot), so they rest
-  off-screen again and open at once; the menu's career profile star moved off its label. The **superevent window**
-  follows the mockup (`superevents_deco.py`). **Two starts** (Valsora: Rouental and Merlovich recommended; the Vale
-  of Reibonne: the Association), so Back on the country screen returns to the scenario screen instead of looping.
-  `on_startup` called the Reibonnaise opinions effect without a scope (the one line of the author's 10-line
-  error.log that was ours, down from 2,081): it runs in a country scope now, and `check_mod.py` checks for it.
-  Not yet seen in game.
-- 2026-10-15, last: **Rouental's Gazetteer page is in the build** (`source/gazetteer/ROU.json`, read from
-  the site with its password, which the author gave; the author removed its test hub and made Rêverie the
-  capital again first): population 42.3 million over its 56 states, terrain for 132 provinces, 15 cities
-  (Vair 20 VP, Rêverie and Carcarelle 15, eight new ones), one minor river along the Hollier border, a
-  level 2 railway Rêverie–Seraine, the state kinds of Rouental (large city) and Saintiers (city), an
-  admiral for the author's list, and the releasable "Test" (TES, cores on Avarre, Graisivaudan and Hevique;
-  its flag, 640 × 338, still to fit by hand). 183 countries. The Gazetteer has **state capitals** (◆, one per
-  state; the author: "There can be multiple cities in a state ... a way to select both a state and a national
-  capital"). The Deco UI is v0.5.1: side panels rise into place instead of sliding across the flag and name.
-- 2026-10-15, latest: the leftover placeholder bricks are gone (lakes one province each;
-  Arvorenia, Atrocha, the KU island and a Belekria island group cut organically), Placeholdaire's
-  and San Sierra's islands are one state each, so their map tools are open on the Gazetteer (39
-  of 161). 21,078 provinces (20,690 land, 363 sea, 25 lake), 3,149 states, 62,183 province
-  borders, 122 strategic regions, 182 countries. The Gazetteer counts the map's state names as
-  named, shows each government's flag in game, picks releasables by whole states, and clips
-  drawn states to the nation's land and to each other. Rouental's page (the author's test
-  edits, read with its password on 2026-10-15) is not imported.
-- 2026-10-15, later: the Gazetteer keeps a nation's map tools closed until its states are drawn
-  (37 of 161 open), lets players define releasables, and has admins (Merlo, once the author adds
-  him; the author is to paste the new rules). `docs/HANDOFF_MERLO.md` for Merlo's Claude. No
-  facts imported yet, so the build is unchanged.
-- 2026-10-15: the Gazetteer moved to its own web site, https://rouental.github.io/Valsora-HOI4/
-  (GitHub Pages and the author's Firebase project); the author is to paste the database rules.
-  No facts imported yet, so the build is unchanged.
-- 2026-10-14, latest: the Gazetteer's version 2 (same link): a password per nation, flags,
-  rulers, party leaders and characters with portraits, colour and culture, suggestions on the
-  map, nations not on the map yet, overseas land in boxes of its own. No facts imported yet, so
-  the build is unchanged.
-- 2026-10-14, later still: the Gazetteer (https://claude.ai/artifact/PqTTD5FuFJhpL4JKp8sumN), for friends to fill in their nations; no
-  facts imported yet, so the build is unchanged.
-- 2026-10-14, later: no map changes; the Deco UI (v0.5) is part of the mod: every side panel flush under
-  the top bar with the medallion's notch, map modes and a gilt minimap. Not yet seen in game.
-- 2026-10-14: no map changes; the game starts in 2036, vanilla's generic events, AI
-  strategies and on_actions are back, and stand-ins should take about 1,900 lines out
-  of the 2,081-line error.log (decisions, Earth's histories, AI theaters, unit
-  positions). Not yet seen in game.
-- 20,817 provinces (20,416 land, 363 sea, 38 lakes), 61,400 province borders, 3,117
-  states, 122 strategic regions (42 sea), 182 countries (2026-10-13, later: Santa Fe cut
-  into 7 states, the last placeholder states given to their neighbours, so Orientalis,
-  Usnistan and Solitas are left out; `dist/nations_by_continent.png`). Before: 20,778 provinces (20,377 land), 61,283
-  borders, 184 countries (2026-10-13: Solitas outlined,
-  nine new nations, the United States of Solitas removed, two islands added). Before:
-  20,454 provinces (20,053 land), 60,318 borders, 3,065 states, 176 countries
-  (2026-10-12, last: 4,313 small
-  provinces merged for HOI4's border limit; before: 24,767 provinces (24,366 land),
-  73,231 borders (2026-10-12, later still: ten placeholder states to their new
-  owners; before: 3,070 states, 178 countries (2026-10-12, later: Usnistan outlined, 35
-  new nations, 545 new states; before: 21,084 provinces (20,683 land), 2,629 states, 143 countries
-  (2026-10-12: Merlo's sea, the wrap made seamless; before:
-  21,366 provinces (645 sea), 91 strategic regions (11 sea) (2026-10-11: Orientalis
-  outlined, 24 new nations, 667 new states; before: 16,646 provinces, 2,073 states, 119 countries (Araseos' last islet to
-  Terreich); before: 2,074 states, 120
-  countries (2026-10-09, later still: the Oriental Territories, and the
-  Midtierre isles re-cut for Peatiktist); before: 16,625 provinces, 2,073 states, 119
-  countries (2026-10-09, later: fourteen new); before: 14,812 provinces
-  (two more from the Scealand line, 2026-10-09), 1,866 states,
-  105 countries (2026-10-08: seven new; before: 14,334 provinces, 1,823 states,
-  98 countries (with six more releasables, 2026-10-07, later; before: 92 (2026-10-07: twenty new nations, 521 new states; `dist/preview_new_nations_*.png`)).
-  Before: 10,644 provinces, 1,377 states, 72 countries (with Rouental's six releasables and the Holy See). 2026-10-05, later: Terrabis-Seran 76 states, Kilkire-Battania 28, Garfield 10,
-  Gaellia 7, Vineta 7, Harwick 1, Devlon 1 (`dist/state_numbers_araseos_southwest.png`,
-  `state_numbers_garfield.png`, `state_numbers_san_sierra.png`). Before: 1,271 states (Llainfair's three became one),
-  58 countries (2026-10-05, with the friend's Merlovich, Hoalepa and five nations south of
-  Solitas). 2026-10-04, later: six more nations (Cascadia 37 states, Wersh 21, Troc
-  15, Sicilianzo 14, Danelaw 20, Thorian 4) and the author's state lines kept as drawn
-  (`regroup_states.py`): 1,346 states became 1,208. La Recolt and Réveillé became one
-  state ("La Recolt"; the author's lines join them). 2026-10-04: the seven nations south of Estande (San Sierra 60 states,
-  Anglost 55, Guardana 8, Normania 5, the Pollanas and Dremaur 1 each), Aislada's 13 drawn
-  states with its rivers and 14 cities (capital Hirane, which replaced the joke name
-  "The Great and Noble City of Merlovia"), four more Rouental cities (Seraine, Saintiers,
-  Grande Reliette (misread as "Rebette" at first), Torres), and two more fused islands cut free (`pdn_tools.py channel`:
-  the AN island at (654, 1430) and its neighbour, and a bridge at (932, 1492)). The
-  author's upload had older game layers in the north-east (no Locus, no Moelle); the
-  current ones were kept and only their own layers taken (author: Locus stays).
-  2026-10-01, later: Kurikia 143 states, Fraxhemark 149; six Cardonian
-  and two Royalist Illiricium states re-cut where new state lines split them; rivers
-  edited (72 states re-cut along rivers, 92 % of river pixels on a province border);
-  the first nine cities. 2026-10-01: Illiricium 18 states, Entroterra 9, Côtefer 5, Mezzogiorno 5,
-  Royalist Illiricium 1, Rouental's islets 1; sea provinces recoloured blue on the
-  Provinces layer (`pdn_tools.py blue_seas`). Second map of 2026-09-30: Estande 62 states (with 11 ES islands), Placeholdria
-  28 (7 PC islands), Volinovia 16, Rastava 13, Coraliza 6, three RO islets to
-  Romanoddle; a 1-2 px state-line nudge in Rouental (14 px moved by hand, too small for
-  the split detection) and river edits (provinces re-cut: 47 states, 89 % of river
-  pixels on a border). First map of 2026-09-30 added Romanoddle (90 states, with the islands the author's
-  Names layer labels RO), Linterre (24, plus three LT islands), Selto (7: its outline
-  plus five coastal Linterre states, author's correction from the Notes layer's older
-  drawing), 13 re-cut Rouental states and new rivers in Rouental and Linterre. The
-  island at (300, 785) was fused to Romanoddle's by 2-4 px land bridges that closed its
-  strait into a lake; the strait was reopened (sea, its neighbour's sea region) and the
-  island is Nonscio's own state (author). Earlier: Real: Rouental and its seven neighbours (56 states, about 175
-  provinces), and Cardonia to the north (67 states, about 300 provinces). Cardonia is
-  17 outlined patches plus nine islands the author's References layer colours
-  Cardonian (seeded by hand). Everything else is still placeholder bricks. Two rivers
-  in Rouental.
-- **Rouental build loads and plays** (author, 2026-09-29): its error.log had nothing from
-  our map or files, only vanilla noise and the name/portrait generation lines.
-- **Loads in-game without crashing** (first build, confirmed by the author). Its
-  `error.log` was vanilla-reference noise (decisions, missions, ai_faction_theaters
-  region ids) plus the rivers.bmp palette warning above, which the biClrUsed fix
-  silenced. Second build: only a trailing newline in `buildings.txt` (read as a
-  malformed empty row, now removed) and "failed to generate a name/portrait" for our
-  countries, which have no name lists or scientist portraits yet.
+Where things stand; the history, date by date, is `docs/HISTORY.md` (add each day's entry at its top).
+
+- **The build** (2026-10-15): 21,078 provinces (20,690 land, 363 sea, 25 lakes), 62,183 province borders (HOI4
+  draws 65,536: `docs/BORDER_LIMIT.md`), 3,149 states, 122 strategic regions (42 sea); 183 countries in the mod,
+  161 of them on the map, 92 of those with a flag of their own (69 fly a stripe in their map colour); the states of
+  39 are the author's own lines (`gazetteer.finals`). Two starts, both on 1 January 2036. The Deco UI is v0.7.
+  Rouental's Gazetteer page is in the build (`source/gazetteer/ROU.json`); no other nation's yet.
+- **Seen in game last** (2026-10-15): the Deco UI v0.5 and v0.5.1 (the author's video and screenshot) and an
+  error.log of 10 lines, one of them ours (fixed). Not seen yet: the Deco UI v0.5.2 to v0.7 (closed panels
+  off-screen, the focus tree, the superevent window, the army bar, the events), the two starts, Vilna and
+  Placeholdgrad. The Deco UI's checklist for the author is in `deco_ui/valsora_deco_ui/README.txt` (Things to
+  check) and `deco_ui/CLAUDE.md` (section 10).
+- **Waiting on the author:** the panel picture proposals (approve or change: `deco_ui/art/proposals/`), the tech
+  tree proposal's six questions (`docs/TECH_TREE_2036.md`), whether to size provinces by terrain once terrain is
+  painted (`docs/BORDER_LIMIT.md`), the releasable "Test"'s flag (640 × 338, to fit to 82:52 by hand), and the end
+  of Devlon's test spirits (`nations.TEST_SPIRITS`).
 
 ## Known gaps
 
-1. Outside Rouental, provinces, states and regions are placeholders. The author is
-   outlining countries region by region (see `apply_outlines.py`). The old `.pdn`'s
-   country colours, moved to the new layout, are its Notes layer.
-2. Terrain is plains everywhere; there are no rivers, railways or trees; the relief is
-   noise. A generated terrain (with its own relief) exists as a test only,
-   `terrain_test.py` (2026-10-12): the author said not to add it to the mod yet. It
-   follows the author's geography where they gave it (the Vale of Reibonne).
-3. Lakes vs. inland seas (see Decisions).
-4. Country content: only Aislada has a leader and focus tree; the rest use generated
-   leaders and the generic tree. No units; flags only for Rouental and its neighbours.
-   Generic portraits and name lists exist (see Cultures), scientists' too since 2026-10-14.
+1. **States**: 122 of the 161 nations on the map (121, and Belekria in part) have states Claude cut from their
+   outlines (`apply_outlines.py`, about 1,300 px each), not lines of the author's; their Gazetteer map tools stay
+   closed until the author draws them. The old `.pdn`'s country colours, moved to the new layout, are its Notes
+   layer.
+2. **Terrain** is plains everywhere but Rouental's provinces (from its Gazetteer page); there are no trees, and the
+   relief is noise. A generated terrain (with its own relief) exists as a test only, `terrain_test.py`
+   (2026-10-12): the author said not to add it to the mod yet. It follows the author's geography where they gave
+   it (the Vale of Reibonne). Rivers are only where the author or their friend drew them; railways wait (the
+   author, 2026-10-15), but for Rouental's one from its Gazetteer page.
+3. **Country content**: Rouental (leaders, focus tree, civil war, royal host) and Merlovich (focus tree) are built
+   out; every other country has its set ruler, generated characters, the generic focus tree and a generic infantry
+   army. Generic portraits and name lists exist (see Cultures), scientists' too since 2026-10-14.
+4. **What still reads as the 1940s**: the tech tree's names, descriptions and pictures (its dates are 2036's;
+   `docs/TECH_TREE_2036.md` is a proposal), the 3D models, and the game's own pictures inside the side panels (the
+   Deco UI's proposals wait for approval).
+5. **Province borders**: 3,353 left under HOI4's limit for new outlines (`docs/BORDER_LIMIT.md`).
 
 ## Working with the author
 
