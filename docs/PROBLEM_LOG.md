@@ -412,6 +412,27 @@ screenshot and `error.log`)
 
 ## Map problems found while building
 
+**The Gazetteer moved to a web site of its own** (2026-10-15)
+- On claude.ai only friends invited by email as Editors could save; visitors through a public
+  link can only view, and the author didn't want to ask everyone for an email. Fix: the same
+  page as a web site (GitHub Pages, the `gh-pages` branch) with its atlas in the author's
+  Firebase project; players need only their nation's password.
+- Firestore keeps no array directly inside another, and rivers, railways and suggestions are
+  lists of points. Fix: the page's store stores each point as `{"_a": [x, y]}` and reads it
+  back as a list.
+- Firebase's Cloud Storage now needs the paid plan. Fix: pictures (at most 640 px) are
+  documents beside the facts, which the rules cap at 800,000 characters; a saved file carries
+  them as `images` (`gazetteer.py import` reads them).
+- Marking a nation finished wrote `true` over the player's name among its editors. Fix: both
+  writes go through one function.
+- Firebase's error codes have hyphens (`permission-denied`), claude.ai's underscores. Fix: the
+  store turns them into claude.ai's, so the rest of the page is the same on both.
+- Google's sign-in window can't load in Claude's sandbox (apis.google.com is blocked). Fix for
+  the tests: a build for the local emulators (only) signs in with the emulator's unsigned
+  tokens.
+- `pkill -f "firebase emulators:start"` killed the shell running it, whose command line held
+  the same words. Fix: stop background tasks by their task id.
+
 **The Gazetteer's version 2, found while testing it** (2026-10-14, latest)
 - The boxes for a nation's other pieces of land were rebuilt on every redraw (any saved fact),
   so a tap could land on a box that had just been replaced and do nothing (the phone test).

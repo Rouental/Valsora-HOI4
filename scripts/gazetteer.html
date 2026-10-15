@@ -111,6 +111,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .dot.done { background: var(--jade); border-color: var(--jade); }
 .key { display: flex; gap: 14px; flex-wrap: wrap; font-size: 13px; color: var(--ink-2); align-items: center; }
 .key span { display: inline-flex; align-items: center; gap: 6px; }
+.signin { display: flex; gap: 8px 12px; align-items: center; flex-wrap: wrap; padding-top: 14px; border-top: 1px solid var(--rule); font-size: 13.5px; color: var(--ink-2); }
 
 /* owner tools */
 .owner { display: grid; gap: 10px; border: 1px solid var(--gilt); border-radius: 6px; padding: 14px 16px; background: var(--sheet); }
@@ -319,6 +320,7 @@ optgroup { font-style: normal; }
         <span class="count" id="count"></span>
       </div>
       <div id="list" class="sec"><p class="empty">Loading the nations of Valsora&hellip;</p></div>
+      <div class="signin" id="signin" hidden></div>
     </div>
   </section>
 
@@ -420,6 +422,7 @@ const app = {
   index: null, worldImg: null, ids: null, idTags: null, byTag: {},
   db: null, user: null, downloads: null, assets: null, me: null, canWrite: null, isOwner: false,
   mode: "starting",          // shared | readonly | local
+  fb: null, player: null, signedIn: null, keysUnsub: null, names: {}, imgs: {},
   keys: {}, keysLoaded: false, planned: {}, profiles: {}, owner: {}, ownerBusy: false, ownerSug: null,
   reqKind: "subideology", ownerFilter: "",
   N: null,                   // the open nation
@@ -665,6 +668,16 @@ function writeFailed(e, kind) {
     }
     saveLocal(); backupPending();
   }
+  if (app.fb) {
+    if (code === "permission_denied" && app.N && app.N.K && !app.isOwner) {
+      // on the web site everyone may write: a refusal means the author gave this nation a new password
+      const N = app.N;
+      N.K = null; detach(); store("gazetteer-pw:" + N.tag, null);
+      renderLock("This nation's password has changed: ask the author for the new one. What you entered since is kept on this device and saved once you unlock it.");
+      refreshSave(); renderAllPanes();
+    } else setSave("bad", "Not saved", `The atlas refused it (${code}). It is kept on this device.`);
+    return;
+  }
   setMode(app.db ? "readonly" : "local");
 }
 function flushAll() { for (const k of KINDS) { clearTimeout(app.timers[k]); flush(k); } }
@@ -673,7 +686,10 @@ async function claim() {
   const now = Date.now(), tag = app.N.tag;
   if (app.claimed === tag && now - app.lastTouch < 120000) return;
   app.claimed = tag; app.lastTouch = now;
-  await writeMeta({ editors: { [app.me.id]: true }, updatedAt: now, updatedBy: app.me.id, status: (app.meta && app.meta.status) || "draft" });
+  await writeMeta({ editors: { [app.me.id]: editorMark() }, updatedAt: now, updatedBy: app.me.id, status: (app.meta && app.meta.status) || "draft" });
+}
+function editorMark() {  // what a nation's list of editors keeps for this person: on the web site, their name
+  return (app.fb && app.me && app.me.name) || true;
 }
 function metaOf() { return merge(app.meta || {}, app.local.__meta || {}); }
 async function writeMeta(delta) {
@@ -692,7 +708,14 @@ async function writeMeta(delta) {
 }
 
 // ======================================================================= capabilities
+// The page runs on claude.ai, as an artifact with its own database, or on the web site that
+// scripts/gazetteer_site.py builds, where a Firebase project keeps the atlas: there FIREBASE
+// holds the project's settings, players need no account (a nation's password is enough) and
+// the author signs in with Google for the owner's tools.
+const FIREBASE = null;  // the web site's build fills this in
+const keysPath = () => app.fb ? "owner/keys" : `data/users/${app.me.id}/keys`;
 async function initCapabilities() {
+  if (FIREBASE) return initFirebase();
   const c = window.claude;
   if (!c || typeof c.use !== "function") { setMode("local"); return; }
   const use = n => c.use(n).catch(() => null);
@@ -706,31 +729,142 @@ async function initCapabilities() {
   if (!db) setMode("local");
   else setMode(app.canWrite === false ? "readonly" : "shared");
   renderWho();
-  if (db) {
-    try {
-      db.doc("planned/list").onSnapshot(s => {
-        app.planned = (s.exists && s.data()) || {}; renderList(); renderOwner();
-        const tag = location.hash.slice(1).toUpperCase();  // a link to a nation not on the map yet
-        if (!app.N && app.index && tag && app.planned[tag] && !app.byTag[tag] && $("#desk").hidden) openNation(tag);
-      }, () => {});
-      if (app.isOwner && app.me && app.me.id) db.doc(`data/users/${app.me.id}/keys`).onSnapshot(s => {
-        app.keys = (s.exists && s.data()) || {}; app.keysLoaded = true;
-        renderOwner(); loadOwnerData();
-        if (app.N && !app.N.K && app.keys[app.N.tag]) unlockWith(app.keys[app.N.tag], true);
-        else if (app.N) renderLock();
-      }, () => { app.keysLoaded = true; if (app.N) renderLock(); });
-    } catch (e) { /* no listing */ }
-  }
+  if (db) watchShared();
   if (app.N) openKey();
+}
+function watchShared() {
+  try {
+    app.db.doc("planned/list").onSnapshot(s => {
+      app.planned = (s.exists && s.data()) || {}; renderList(); renderOwner();
+      const tag = location.hash.slice(1).toUpperCase();  // a link to a nation not on the map yet
+      if (!app.N && app.index && tag && app.planned[tag] && !app.byTag[tag] && $("#desk").hidden) openNation(tag);
+    }, () => {});
+  } catch (e) { /* no listing */ }
+  watchOwner();
+}
+function watchOwner() {  // the owner's passwords
+  if (!app.isOwner || !app.me || !app.me.id || app.keysUnsub) return;
+  try {
+    app.keysUnsub = app.db.doc(keysPath()).onSnapshot(s => {
+      app.keys = (s.exists && s.data()) || {}; app.keysLoaded = true;
+      renderOwner(); loadOwnerData();
+      if (app.N && !app.N.K && app.keys[app.N.tag]) unlockWith(app.keys[app.N.tag], true);
+      else if (app.N) renderLock();
+    }, () => { app.keysLoaded = true; if (app.N) renderLock(); });
+  } catch (e) { /* no store */ }
+}
+
+// ---- the web site: Firebase
+async function initFirebase() {
+  let fb;
+  try { fb = await import(FIREBASE.sdk); } catch (e) { setMode("local"); return; }
+  const fapp = fb.initializeApp(FIREBASE.config);
+  const fs = fb.initializeFirestore(fapp, { ignoreUndefinedProperties: true }), auth = fb.getAuth(fapp);
+  if (FIREBASE.emulator) {  // tests only
+    fb.connectFirestoreEmulator(fs, FIREBASE.emulator.host, FIREBASE.emulator.firestore);
+    fb.connectAuthEmulator(auth, `http://${FIREBASE.emulator.host}:${FIREBASE.emulator.auth}`, { disableWarnings: true });
+    window.__fb = { fb, auth };  // tests sign in through the emulator without Google's window
+  }
+  app.fb = { fb, fs, auth };
+  app.db = firestoreStore(fb, fs);
+  app.downloads = { save: async ({ filename, data }) => {
+    const a = h("a", { href: URL.createObjectURL(new Blob([data], { type: "application/json" })), download: filename });
+    document.body.append(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+  } };
+  app.canWrite = true;
+  // players don't sign in: a random id per browser marks what they enter, with the name they give
+  let id = recall("gazetteer-id");
+  if (!id) { id = "p-" + uid(); store("gazetteer-id", id); }
+  app.player = { id, name: recall("gazetteer-name") || "", avatarUrl: "", isOwner: false };
+  app.me = app.player;
+  setMode("shared");
+  renderWho(); renderSignIn();
+  watchShared();
+  fb.onAuthStateChanged(auth, async u => {
+    if (app.keysUnsub) { app.keysUnsub(); app.keysUnsub = null; }
+    app.signedIn = u ? { name: u.displayName || u.email || "", email: u.email || "", avatarUrl: u.photoURL || "" } : null;
+    let owner = false;
+    if (u) try { await fb.getDoc(fb.doc(fs, "owner/keys")); owner = true; } catch (e) { owner = false; }  // the rules decide
+    app.isOwner = owner;
+    app.me = owner ? { id: u.uid, name: u.displayName || "", avatarUrl: u.photoURL || "", isOwner: true } : app.player;
+    if (!owner) { app.keys = {}; app.keysLoaded = false; app.owner = {}; app.ownerSug = null; }
+    watchOwner();
+    renderWho(); renderSignIn(); renderOwner(); renderList(); drawWorld(app.hoverWorld);
+    if (app.N) { renderLock(); renderAllPanes(); }
+  });
+  if (app.N) openKey();
+}
+// claude.ai's store and Firestore work alike; these are the differences. update() merges
+// nested objects into the document (set with merge), errors carry claude.ai's codes, and
+// Firestore keeps no array directly inside an array, so lines' points go in as {_a: [x, y]}.
+function firestoreStore(fb, fs) {
+  const code = e => String((e && e.code) || "unknown").replace(/-/g, "_");
+  const fix = p => p.catch(e => { throw { code: code(e), message: e && e.message }; });
+  const enc = v => Array.isArray(v) ? v.map(x => Array.isArray(x) ? { _a: enc(x) } : enc(x))
+    : isObj(v) ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, enc(x)])) : v;
+  const dec = v => Array.isArray(v) ? v.map(dec)
+    : isObj(v) ? (Object.keys(v).length === 1 && Array.isArray(v._a) ? dec(v._a) : Object.fromEntries(Object.entries(v).map(([k, x]) => [k, dec(x)]))) : v;
+  const snap = s => ({ id: s.id, exists: s.exists(), data: () => (s.exists() ? dec(s.data()) : undefined) });
+  const many = qs => ({ docs: qs.docs.map(snap), size: qs.size, empty: qs.empty });
+  const doc = path => {
+    const r = fb.doc(fs, path);
+    return { id: r.id, path,
+      get: () => fix(fb.getDoc(r)).then(snap),
+      set: d => fix(fb.setDoc(r, enc(d))),
+      update: d => fix(fb.setDoc(r, enc(d), { merge: true })),
+      delete: () => fix(fb.deleteDoc(r)),
+      onSnapshot: (next, err) => fb.onSnapshot(r, s => next(snap(s)), e => err && err({ code: code(e) })) };
+  };
+  const query = (path, cons) => ({
+    where: (f, op, v) => query(path, [...cons, fb.where(f, op, v)]),
+    limit: n => query(path, [...cons, fb.limit(n)]),
+    get: () => fix(fb.getDocs(fb.query(fb.collection(fs, path), ...cons))).then(many),
+    onSnapshot: (next, err) => fb.onSnapshot(fb.query(fb.collection(fs, path), ...cons), qs => next(many(qs)), e => err && err({ code: code(e) })),
+  });
+  return { doc, collection: path => query(path, []) };
+}
+async function signIn() {
+  const { fb, auth } = app.fb;
+  app.signInError = "";
+  try { await fb.signInWithPopup(auth, new fb.GoogleAuthProvider()); }
+  catch (e) {
+    const c = (e && e.code) || "";
+    app.signInError = c === "auth/popup-closed-by-user" || c === "auth/cancelled-popup-request" ? ""
+      : c === "auth/popup-blocked" ? "The browser blocked the sign-in window: allow pop-ups for this page and try again."
+      : c === "auth/unauthorized-domain" ? `This address isn't on the Firebase project's authorized domains: add ${location.hostname} under Authentication › Settings.`
+      : "Sign-in didn't work (" + (c || (e && e.message) || "unknown") + ").";
+    renderSignIn();
+  }
+}
+function renderSignIn() {  // the author's way in, at the foot of the start page
+  const el = $("#signin");
+  if (!app.fb) { el.hidden = true; return; }
+  el.hidden = false;
+  const out = () => h("button", { class: "btn small", type: "button", onclick: () => app.fb.fb.signOut(app.fb.auth) }, "Sign out");
+  if (!app.signedIn) el.replaceChildren(h("span", { text: "Players don't sign in: your nation's password is all you need. The author:" }),
+    h("button", { class: "btn small", type: "button", onclick: signIn }, "Sign in with Google"),
+    ...(app.signInError ? [h("span", { class: "warn", text: app.signInError })] : []));
+  else if (app.isOwner) el.replaceChildren(h("span", { text: `Signed in as ${app.signedIn.name}, the author.` }), out());
+  else el.replaceChildren(h("span", { class: "warn", text: `${app.signedIn.email || app.signedIn.name} isn't the author's account here.` }), out());
 }
 async function resolveProfiles(ids) {
   if (!app.user || !ids.size) return;
   try { Object.assign(app.profiles, await app.user.profiles([...ids])); } catch (e) { /* none */ }
 }
-function personName(id) { return (app.profiles[id] && app.profiles[id].name) || (app.me && id === app.me.id ? "you" : "someone"); }
+// names: claude.ai's profiles, or on the web site the names players give (kept with the nation)
+function personName(id) { return (app.profiles[id] && app.profiles[id].name) || app.names[id] || (app.me && id === app.me.id ? "you" : "someone"); }
+function learnNames(v) {
+  for (const [id, nm] of Object.entries((v && v.editors) || {})) if (typeof nm === "string" && nm) app.names[id] = nm;
+  if (v && v.by && v.byName) app.names[v.by] = v.byName;
+}
 function renderWho() {
   const el = $("#who");
   el.replaceChildren();
+  if (app.fb) {
+    if (app.signedIn && app.isOwner) el.append(...(app.signedIn.avatarUrl ? [h("img", { src: app.signedIn.avatarUrl, alt: "" })] : []), h("span", { text: app.signedIn.name + " · owner" }));
+    return;
+  }
   if (!app.me) return;
   el.append(h("img", { src: app.me.avatarUrl, alt: "" }), h("span", { text: (app.me.name || "You") + (app.isOwner ? " · owner" : "") }));
 }
@@ -872,8 +1006,8 @@ function renderOwner() {
   const nName = h("input", { id: "own-name", maxlength: "60", placeholder: "Its name", "data-keep": true, autocomplete: "off" });
   const nCont = h("select", { id: "own-cont" }, h("option", { value: "", text: "Continent (if known)" }), CONTINENTS.map(c => h("option", { value: c, text: c })));
   // messages live in app.ownerMsg: a snapshot can re-render this section at any moment
-  const nMsg = h("span", { class: "meta", text: app.ownerMsg || "" });
-  const say = t => { app.ownerMsg = t; nMsg.textContent = t; };
+  const nMsg = h("span", { id: "own-msg", class: "meta", text: app.ownerMsg || "" });
+  const say = t => { app.ownerMsg = t; const el = document.getElementById("own-msg"); if (el) el.textContent = t; };
   const add = h("button", { class: "btn small primary", type: "button", onclick: async () => {
     const tag = nTag.value.trim().toUpperCase(), name = cleanName(nName.value);
     const taken = app.byTag[tag] || app.planned[tag] || (app.index.earth || []).includes(tag);
@@ -919,7 +1053,7 @@ async function makePassword(tag) {
   const pw = newPassword(), K = await keyFor(tag, pw);
   try {
     await app.db.doc(`${nPath(tag, K)}/key`).set({ t: "key", tag, at: Date.now() });
-    await app.db.doc(`data/users/${app.me.id}/keys`).set({ ...app.keys, [tag]: pw });
+    await app.db.doc(keysPath()).set({ ...app.keys, [tag]: pw });
   } catch (e) { writeFailed(e, null); }
 }
 async function changePassword(tag) {
@@ -928,8 +1062,9 @@ async function changePassword(tag) {
     const qs = await app.db.collection(nPath(tag, oldK)).limit(1000).get();
     for (const d of qs.docs) await app.db.doc(`${nPath(tag, K)}/${d.id}`).set(d.data());
     if (!qs.docs.some(d => d.id === "key")) await app.db.doc(`${nPath(tag, K)}/key`).set({ t: "key", tag, at: Date.now() });
-    await app.db.doc(`data/users/${app.me.id}/keys`).set({ ...app.keys, [tag]: pw });
-    for (const d of qs.docs) await app.db.doc(`${nPath(tag, oldK)}/${d.id}`).delete();
+    await app.db.doc(keysPath()).set({ ...app.keys, [tag]: pw });
+    for (const d of qs.docs) if (d.id !== "key") await app.db.doc(`${nPath(tag, oldK)}/${d.id}`).delete();
+    await app.db.doc(`${nPath(tag, oldK)}/key`).delete();  // last: until then the old folder still takes writes
     if (app.N && app.N.tag === tag) { detach(); app.N.K = null; unlockWith(pw, true); }
   } catch (e) { writeFailed(e, null); }
 }
@@ -948,6 +1083,7 @@ async function loadOwnerData(force) {
     const o = { meta: null, reqs: [] };
     for (const d of qs.docs) {
       const v = d.data();
+      learnNames(v);
       if (v.t === "meta") { o.meta = v; for (const id of Object.keys(v.editors || {})) ids.add(id); }
       else { o.reqs.push({ ...v, id: d.id }); if (v.by) ids.add(v.by); }
     }
@@ -1068,8 +1204,18 @@ async function unlockWith(pw, quiet) {
   N.K = K;
   if (!app.isOwner) store("gazetteer-pw:" + N.tag, normPw(pw));
   attach();
+  adoptLocal();
   renderLock(); refreshSave(); renderAllPanes();
   return true;
+}
+function adoptLocal() {  // facts kept on this device (offline, or locked out by a new password) join the atlas
+  if (app.mode !== "shared") return;
+  let any = false;
+  for (const k of KINDS) if (app.local[k] && Object.keys(app.local[k]).length) {
+    app.pending[k] = merge(app.local[k], app.pending[k] || {}); delete app.local[k]; app.cache[k] = null; any = true;
+    clearTimeout(app.timers[k]); app.timers[k] = setTimeout(() => flush(k), 900);
+  }
+  if (any) { saveLocal(); backupPending(); }
 }
 function askPassword() {
   flash("This nation is locked: enter its password first.");
@@ -1110,18 +1256,23 @@ function attach() {
     } catch (e) { /* bad path */ }
   }
   try {
-    app.unsub.push(app.db.collection(base).where("t", "in", ["meta", "req"]).limit(500).onSnapshot(qs => {
+    // pictures are documents of their own on the web site (img-<id>), too big to sit in the facts
+    app.unsub.push(app.db.collection(base).where("t", "in", ["meta", "req", "img"]).limit(500).onSnapshot(qs => {
       if (app.N !== N) return;
       const reqs = {}, ids = new Set();
+      let pics = false;
       app.meta = null;
       for (const d of qs.docs) {
         const v = d.data();
+        learnNames(v);
         if (v.t === "meta") { app.meta = v; for (const id of Object.keys(v.editors || {})) ids.add(id); }
+        else if (v.t === "img") { if (!app.imgs[d.id.slice(4)]) pics = true; app.imgs[d.id.slice(4)] = v; }
         else { reqs[d.id] = v; if (v.by) ids.add(v.by); }
       }
       app.reqs = reqs; app.metaLoaded = true;
       resolveProfiles(ids).then(() => dirtyPanes("nation"));
       dirtyPanes("nation");
+      if (pics) dirtyPanes("people", "nation");
     }, () => { app.metaLoaded = true; }));
   } catch (e) { /* bad path */ }
   for (const k of KINDS) if (app.pending[k]) { clearTimeout(app.timers[k]); app.timers[k] = setTimeout(() => flush(k), 900); }
@@ -2199,15 +2350,22 @@ async function storeImage(file) {
     const r = await app.assets.upload(blob);  // the id is the durable pointer; pages show it as /_blob/<id>
     return { asset: r.id, w: bw, h: bh, name: cleanName(file.name, 80) };
   }
-  // no shared files here: a smaller copy goes in the facts themselves
-  const s = Math.min(1, 480 / Math.max(w, hh)), cw = Math.max(1, Math.round(w * s)), ch = Math.max(1, Math.round(hh * s));
+  // no shared files here: a smaller copy goes in a document of its own (the web site) or in the facts
+  const web = !!(app.fb && app.mode === "shared" && app.N && app.N.K);
+  const s = Math.min(1, (web ? 640 : 480) / Math.max(w, hh)), cw = Math.max(1, Math.round(w * s)), ch = Math.max(1, Math.round(hh * s));
   const cv = h("canvas", { width: cw, height: ch });
   cv.getContext("2d").drawImage(bmp, 0, 0, cw, ch);
   let data = cv.toDataURL("image/png");
-  if (data.length > 180000) data = cv.toDataURL("image/jpeg", 0.85);
+  if (data.length > (web ? 400000 : 180000)) data = cv.toDataURL("image/jpeg", web ? 0.88 : 0.85);
+  if (web) {
+    const id = uid(), pic = { t: "img", data, w: cw, h: ch, name: cleanName(file.name, 80), at: Date.now() };
+    await app.db.doc(`${nPath(app.N.tag, app.N.K)}/img-${id}`).set(pic);
+    app.imgs[id] = pic;
+    return { img: id, w, h: hh, name: pic.name };
+  }
   return { data, w, h: hh, name: cleanName(file.name, 80) };
 }
-const imgSrc = im => !im ? "" : im.asset ? "/_blob/" + im.asset : (im.data || "");
+const imgSrc = im => !im ? "" : im.img ? ((app.imgs[im.img] || {}).data || "") : im.asset ? "/_blob/" + im.asset : (im.data || "");
 function uploadInto(kind, path, label) {
   if (locked()) { askPassword(); return; }
   pickImage(async file => {
@@ -2291,8 +2449,9 @@ function renderPolitics(force) {
 
 // ---- people: head of state, party leaders, generals and the rest
 function portraitBox(im, onPick, onClear, label) {
+  const src = imgSrc(im);
   const box = h("button", { class: "portrait", type: "button", title: im ? "Change the portrait" : "Add a portrait", onclick: onPick,
-    style: im ? `background-image:url("${String(imgSrc(im)).replace(/"/g, "%22")}")` : "" }, im ? "" : label || "Add a portrait");
+    style: src ? `background-image:url("${String(src).replace(/"/g, "%22")}")` : "" }, im ? (src ? "" : "loading") : label || "Add a portrait");
   return h("div", { style: "display:grid;gap:4px" }, box, im ? h("button", { class: "btn small", type: "button", onclick: onClear }, "Remove") : null);
 }
 function renderPeople(force) {
@@ -2366,7 +2525,9 @@ function renderNation(force) {
       h("div", { class: "seg", role: "group", "aria-label": "Status" },
         h("button", { type: "button", "aria-pressed": String(st !== "done"), onclick: () => setStatus("draft") }, "In progress"),
         h("button", { type: "button", "aria-pressed": String(st === "done"), onclick: () => setStatus("done") }, "Finished")),
-      h("div", { class: "meta", text: eds.length ? `Filled in by ${eds.join(", ")}` : "Nobody has filled anything in yet." })));
+      h("div", { class: "meta", text: eds.length ? `Filled in by ${eds.join(", ")}` : "Nobody has filled anything in yet." }),
+      app.fb && !app.isOwner ? h("div", { class: "field" + (app.player.name ? " set" : "") }, h("label", { for: "my-name", text: "Your name, so the author knows who filled this in" }),
+        textInput("my-name", app.player.name, "e.g. your Discord name", v => { app.player.name = v || ""; store("gazetteer-name", v || null); app.claimed = null; claim(); }, "", 60)) : null));
     // flags
     const slots = [["base", "Flag"], ...app.index.ideologies.map(([i, nm]) => [i, `${nm} flag (optional)`])];
     out.push(h("div", { class: "sec" }, h("h4", null, "Flags"),
@@ -2374,7 +2535,7 @@ function renderNation(force) {
       h("div", null, slots.map(([k, label]) => {
         const im = flags[k];
         return h("div", { class: "flagslot" },
-          im ? h("img", { class: "flagbox", src: imgSrc(im), alt: label }) : h("span", { class: "flagbox", text: k === "base" && N.flag ? "in game" : "none" }),
+          im && imgSrc(im) ? h("img", { class: "flagbox", src: imgSrc(im), alt: label }) : h("span", { class: "flagbox", text: im ? "loading" : k === "base" && N.flag ? "in game" : "none" }),
           h("div", { style: "display:grid;gap:4px;min-width:0" }, h("b", { text: label, style: "font-size:14px" }),
             im ? h("span", { class: "meta", text: `${im.w} × ${im.h}${im.name ? " · " + im.name : ""}` }) : null,
             h("div", { class: "chips" },
@@ -2499,7 +2660,7 @@ function requestForm() {
     if (!t) { msg.textContent = "Give the request a title first."; title.focus(); return; }
     send.disabled = true;
     try {
-      await app.db.doc(`${nPath(N.tag, N.K)}/req-${uid()}`).set({ t: "req", tag: N.tag, kind: kind.value, title: t, details: details.value.trim().slice(0, 3000), by: (app.me && app.me.id) || null, at: Date.now(), status: "open" });
+      await app.db.doc(`${nPath(N.tag, N.K)}/req-${uid()}`).set({ t: "req", tag: N.tag, kind: kind.value, title: t, details: details.value.trim().slice(0, 3000), by: (app.me && app.me.id) || null, byName: (app.fb && app.me.name) || null, at: Date.now(), status: "open" });
       title.value = ""; details.value = ""; msg.textContent = "Sent. The author sees it with your nation.";
     } catch (e) { msg.textContent = "Not sent: this view can't save to the shared atlas."; writeFailed(e, null); }
     finally { send.disabled = false; }
@@ -2520,7 +2681,7 @@ function spread(total) {
 }
 function setStatus(st) {
   if (locked()) { askPassword(); return; }
-  writeMeta({ status: st, updatedAt: Date.now(), ...(app.me && app.me.id ? { updatedBy: app.me.id, editors: { [app.me.id]: true } } : {}) });
+  writeMeta({ status: st, updatedAt: Date.now(), ...(app.me && app.me.id ? { updatedBy: app.me.id, editors: { [app.me.id]: editorMark() } } : {}) });
 }
 function clearNation() {
   beginGroup();
@@ -2544,9 +2705,14 @@ async function offer(filename, text, outId) {
   out.replaceChildren(h("div", { class: "meta", text: "This view can't save files. Copy the text below into a file named " + filename + "." }),
     h("button", { class: "btn small", type: "button", onclick: e => { navigator.clipboard.writeText(text).then(() => { e.target.textContent = "Copied"; }, () => { getSelection().selectAllChildren(pre); }); } }, "Copy"), pre);
 }
+function picturesIn(facts) {  // the pictures the facts name, for a file
+  const out = {}, walk = v => { if (Array.isArray(v)) v.forEach(walk); else if (isObj(v)) { if (v.img && app.imgs[v.img]) { const p = app.imgs[v.img]; out[v.img] = { data: p.data, w: p.w, h: p.h, name: p.name }; } Object.values(v).forEach(walk); } };
+  walk(facts);
+  return out;
+}
 function saveNationFile() {
-  const N = app.N, meta = metaOf();
-  const doc = { gazetteer: 2, tag: N.tag, name: N.name, saved: new Date().toISOString(), facts: nationFacts(),
+  const N = app.N, meta = metaOf(), facts = nationFacts();
+  const doc = { gazetteer: 2, tag: N.tag, name: N.name, saved: new Date().toISOString(), facts, images: picturesIn(facts),
     meta: compact({ status: meta.status, notes: meta.notes }), requests: Object.entries(app.reqs).map(([id, r]) => ({ ...r, id })) };
   offer(`valsora-${N.tag}-facts.json`, JSON.stringify(doc, null, 1));
 }
@@ -2555,15 +2721,16 @@ async function saveAllFile() {
   const all = {};
   await eachKey(async (tag, K) => {
     const qs = await app.db.collection(nPath(tag, K)).limit(1000).get();
-    const facts = {}, requests = [];
+    const facts = {}, requests = [], images = {};
     let meta = {};
     for (const d of qs.docs) {
       const v = d.data();
       if (KINDS.includes(d.id)) facts[d.id] = compact(v);
-      else if (d.id === "meta") meta = compact({ status: v.status, notes: v.notes, updatedAt: v.updatedAt });
+      else if (d.id === "meta") meta = compact({ status: v.status, notes: v.notes, updatedAt: v.updatedAt, editors: v.editors });
       else if (v && v.t === "req") requests.push({ ...v, id: d.id });
+      else if (v && v.t === "img") images[d.id.slice(4)] = { data: v.data, w: v.w, h: v.h, name: v.name };
     }
-    all[tag] = { facts, meta, requests };
+    all[tag] = { facts, meta, requests, images };
   });
   app.ownerOut = `${Object.keys(all).length} nations with a password.`; renderOwner();
   offer("valsora-gazetteer-all.json", JSON.stringify({ gazetteer: 2, saved: new Date().toISOString(), planned: app.planned, nations: all }, null, 1), "own-out");
@@ -2574,12 +2741,17 @@ function loadFile(file) {
     let d;
     try { d = JSON.parse(r.result); } catch (e) { flash("That file isn't a Gazetteer file."); return; }
     const N = app.N;
-    let facts = null;
-    if (d && d.gazetteer && d.tag === N.tag) facts = d.facts;
-    else if (d && d.gazetteer && d.nations && d.nations[N.tag]) facts = d.nations[N.tag].facts;
+    let facts = null, images = {};
+    if (d && d.gazetteer && d.tag === N.tag) { facts = d.facts; images = d.images || {}; }
+    else if (d && d.gazetteer && d.nations && d.nations[N.tag]) { facts = d.nations[N.tag].facts; images = d.nations[N.tag].images || {}; }
     else if (d && d.gazetteer && d.tag) { flash(`That file is for ${(app.byTag[d.tag] || app.planned[d.tag] || {}).name || d.tag}. Open that nation to load it.`); return; }
     if (!facts) { flash("That file has nothing for this nation."); return; }
     if (locked()) { askPassword(); return; }
+    for (const [id, p] of Object.entries(images)) {  // pictures first, so the facts find them
+      if (!isObj(p) || typeof p.data !== "string" || app.imgs[id]) continue;
+      app.imgs[id] = { t: "img", ...p };
+      if (app.fb && app.mode === "shared" && N.K) app.db.doc(`${nPath(N.tag, N.K)}/img-${id}`).set({ t: "img", data: p.data, w: p.w || 0, h: p.h || 0, name: cleanName(p.name, 80), at: Date.now() }).catch(() => {});
+    }
     beginGroup();
     for (const k of KINDS) if (isObj(facts[k]) && Object.keys(facts[k]).length) edit(k, facts[k]);
     endGroup();

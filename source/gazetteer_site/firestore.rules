@@ -1,0 +1,41 @@
+rules_version = '2';
+// The Valsora Gazetteer's atlas on the web site (docs/GAZETTEER.md). Paste it into the
+// Firebase console (Firestore Database › Rules) with the author's Google address in place
+// of OWNER_EMAIL, and publish.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // the author, signed in with Google
+    function isOwner() {
+      return request.auth != null
+        && request.auth.token.email == "OWNER_EMAIL"
+        && request.auth.token.email_verified == true;
+    }
+    // the author's passwords
+    match /owner/{doc} {
+      allow read, write: if isOwner();
+    }
+    // nations not on the map yet: everyone reads the list, the author changes it
+    match /planned/{doc} {
+      allow read: if true;
+      allow write: if isOwner();
+    }
+    // a nation's documents sit in a folder named after its password, n/<TAG>/<key>/<document>.
+    // Nothing lists n or n/<TAG>, so only the password finds them, and a folder takes writes
+    // only once the author has made its key document.
+    match /n/{tag}/{key}/{doc} {
+      function unlocked() {
+        return exists(/databases/$(database)/documents/n/$(tag)/$(key)/key);
+      }
+      function known() {
+        return doc in ["states", "provinces", "cities", "rivers", "rails", "politics", "flags",
+                       "people", "about", "suggest", "meta"]
+          || doc.matches("req-[a-z0-9]{6,40}")
+          || (doc.matches("img-[a-z0-9]{6,40}") && request.resource.data.data is string
+              && request.resource.data.data.size() < 800000);
+      }
+      allow get, list: if true;
+      allow create, update: if isOwner() || (doc != "key" && unlocked() && known());
+      allow delete: if isOwner() || (doc != "key" && unlocked());
+    }
+  }
+}

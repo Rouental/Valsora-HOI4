@@ -10,8 +10,9 @@ into the build.
         pictures fetched by asset id into DIR/assets/ (it lists the ones still missing).
         Imported like a "Save every nation" file.
     python3 scripts/gazetteer.py import FILE.json [FILE.json ...]
-        Files saved from the page: "Save a file" (one nation) or "Save every nation as a
-        file" (the owner's tools). Each nation's facts replace source/gazetteer/<TAG>.json.
+        Files saved from the page or the web site: "Save a file" (one nation) or "Save
+        every nation as a file" (the owner's tools), pictures and all. Each nation's facts
+        replace source/gazetteer/<TAG>.json.
     python3 scripts/gazetteer.py status
         What source/gazetteer/ holds, against the last build: how much each nation has
         filled in, facts that no longer land on their nation (borders changed), open
@@ -189,6 +190,22 @@ def picture(v, where, sources, todo):
         print(f"{where}: not a picture ({e}); left out")
         return None
     return {**out, "file": rel, "w": w, "h": h}
+
+
+def with_pictures(v, images, missing):
+    """The facts with each picture the web site keeps apart ({"img": id}, an img-<id>
+    document beside the facts) put back inline from `images` (a file's or a pull's)."""
+    if isinstance(v, list):
+        return [with_pictures(x, images, missing) for x in v]
+    if not isinstance(v, dict):
+        return v
+    if isinstance(v.get("img"), str):
+        p = images.get(v["img"]) if isinstance(images, dict) else None
+        if isinstance(p, dict) and isinstance(p.get("data"), str):
+            return {"data": p["data"], "w": p.get("w"), "h": p.get("h"), "name": v.get("name") or p.get("name")}
+        missing.append(v["img"])
+        return v
+    return {k: with_pictures(x, images, missing) for k, x in v.items()}
 
 
 def portrait_box(w, h):
@@ -387,16 +404,20 @@ def normalise(tag, facts, meta, requests=(), sources=(), todo=None):
 
 
 def import_nations(nations, planned=None, sources=()):
-    """{tag: {"facts", "meta", "requests"}} (and the owner's nations not on the map yet)
-    -> source/gazetteer/; then the new flags into source/flags/. Lists pictures still to
-    download."""
+    """{tag: {"facts", "meta", "requests", "images"}} (and the owner's nations not on the
+    map yet) -> source/gazetteer/; then the new flags into source/flags/. Lists pictures
+    still to download."""
     DIR.mkdir(parents=True, exist_ok=True)
     todo = []
     for tag, v in sorted(nations.items()):
         if not TAG.fullmatch(tag):
             print(f"skipped {tag!r}: not a country tag")
             continue
-        n = normalise(tag, v.get("facts") or {}, v.get("meta") or {}, v.get("requests") or (), sources, todo)
+        missing = []
+        facts = with_pictures(v.get("facts") or {}, v.get("images") or {}, missing)
+        if missing:
+            print(f"{tag}: {len(missing)} pictures are not in the file; left out")
+        n = normalise(tag, facts, v.get("meta") or {}, v.get("requests") or (), sources, todo)
         path = DIR / f"{tag}.json"
         if len(n) == 1:
             if path.exists():
@@ -469,7 +490,8 @@ def pull(root):
         facts = {f.stem: _body(f) for f in sorted(d.glob("*.json")) if f.stem in KINDS}
         meta = _body(d / "meta.json") if (d / "meta.json").exists() else {}
         reqs = [_body(f) for f in sorted(d.glob("req-*.json"))]
-        nations[tag] = {"facts": facts, "meta": meta, "requests": reqs}
+        imgs = {f.stem[4:]: _body(f) for f in sorted(d.glob("img-*.json"))}
+        nations[tag] = {"facts": facts, "meta": meta, "requests": reqs, "images": imgs}
     planned_f = root / "planned" / "list.json"
     todo = import_nations(nations, _body(planned_f) if planned_f.exists() else None, [root / "assets"])
     reqs = [(t, r) for t, v in nations.items() for r in v["requests"] if (r.get("status") or "open") == "open"]

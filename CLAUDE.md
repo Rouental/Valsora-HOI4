@@ -198,8 +198,9 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `nation_sheet.py` | by hand, after a build: `dist/nations_by_continent.png`, every nation in the game under the continent of its capital: flag, ruler at the start (portrait of our own, or a "placeholder" box for a base-game one), full name, ideology and sub-ideology, culture, and a strip of its map colour (author, 2026-10-13) |
 | `collages.py` | by hand, after a build: `dist/flags_collage.png` (every custom flag, and the countries still on a placeholder stripe) and `dist/leaders_collage.png` (every custom leader: own portraits at 2×, named ones with base-game portraits as labelled tiles); `--continent NAME` writes only `dist/flags_<name>.png`, the flags of the nations whose capital is on that continent, naming below them those with land there and their capital elsewhere (2026-10-10, Araseos; 2026-10-12, Yastreovakia) |
 | `facts_export.py` | by hand, after a build: the Gazetteer's map data into `work/gazetteer/` (`index.json`, `world.png`, `n/<TAG>.json` per nation: its states, provinces, cities and politics as built, its flag, its land and the neighbours' around it as province numbers per pixel, in parts, with the rivers), published with the page |
-| `gazetteer.html` | the Gazetteer (see below): the shared page where friends fill in their nations' facts, published as a claude.ai artifact with its own database |
-| `gazetteer.py` | the Gazetteer's facts into `source/gazetteer/<TAG>.json` (pictures in `source/gazetteer/assets/`): `paths KEYS.json` (each nation's atlas folder `n/<TAG>/<key>` from the owner's passwords), `pull DIR` (the atlas as the ArtifactData tool saves it, pictures fetched by asset id into `DIR/assets/`), `import FILE.json` (a file saved from the page), `status` (and what is left to do by hand), `suggestions` (`dist/gazetteer_suggestions.png`, a layer for the `.pdn`); and the functions `read_layers.py` (terrain, rivers, cities) and `build_mod.py` (state facts, capitals, railways, supply hubs, names, sub-ideologies, rulers and party leaders with titles and portraits, map colours) call |
+| `gazetteer.html` | the Gazetteer (see below): the page where friends fill in their nations' facts; the web site's (`gazetteer_site.py`), or a claude.ai artifact with its own database (the first version) |
+| `gazetteer_site.py` | the Gazetteer's web site into `work/gazetteer_site/` (the page with the Firebase project's settings, the SDK bundle from `source/gazetteer_site/`, `facts_export.py`'s map data), committed alone on the `gh-pages` branch, which GitHub Pages serves; `--emulator` builds it for Firebase's local emulators (tests) |
+| `gazetteer.py` | the Gazetteer's facts into `source/gazetteer/<TAG>.json` (pictures in `source/gazetteer/assets/`): `paths KEYS.json` (each nation's atlas folder `n/<TAG>/<key>` from the owner's passwords), `pull DIR` (the atlas as the ArtifactData tool saves it, pictures fetched by asset id into `DIR/assets/`), `import FILE.json` (a file saved from the page or the site, pictures inside), `status` (and what is left to do by hand), `suggestions` (`dist/gazetteer_suggestions.png`, a layer for the `.pdn`); and the functions `read_layers.py` (terrain, rivers, cities) and `build_mod.py` (state facts, capitals, railways, supply hubs, names, sub-ideologies, rulers and party leaders with titles and portraits, map colours) call |
 
 **A clean `check_mod.py` run is the bar for shipping a build.** It was mutation-tested
 (CRLF, X-crossing, missing building row, state split across regions, descriptor
@@ -1314,15 +1315,41 @@ Left loaded on purpose, and noisy in `error.log`:
 
 The author's request (2026-10-14): a tool their friends open by a link to fill in their own
 nations once the states are drawn, instead of the `.pdn` ("tedious and hard to keep track of,
-especially with cities"). It is a claude.ai artifact,
-**https://claude.ai/artifact/PqTTD5FuFJhpL4JKp8sumN**: `scripts/gazetteer.html` published with
-`work/gazetteer/` (`facts_export.py`), declaring `db` (rule: `planned` written by the owner
-only), `user` (profile), `downloads` and `assets`. **Republish** to the same URL after map
-changes (the facts are kept by map pixel): run `python3 scripts/facts_export.py`, then the
-Artifact tool (from another session, read the URL first) publishes `scripts/gazetteer.html`
-with that `url`, `root` = `work/gazetteer` and `files` = `index.json`, `world.png` and every
-`n/<TAG>.json` (163 files today; a nation that no longer owns land: its path as `null`); leave
-`capabilities` out to keep them.
+especially with cities"). **Since 2026-10-15 it is a web site,
+https://rouental.github.io/Valsora-HOI4/**: GitHub Pages serves the `gh-pages` branch, which
+holds only the site (the author allowed that branch for it: "it's ok to put it on a new
+branch"; pushing it switched Pages on), and the atlas is the Firestore database of the
+author's Firebase project `valsora-hoi4` (free Spark plan). Players need no account; only the
+author signs in, with Google. It moved because on claude.ai only friends invited by email as
+Editors can save (a public link's visitors can only view), and the author didn't want to ask
+everyone for an email. The first home, the claude.ai artifact
+**https://claude.ai/artifact/PqTTD5FuFJhpL4JKp8sumN** (`scripts/gazetteer.html` published with
+`work/gazetteer/`, declaring `db` (rule: `planned` written by the owner only), `user`
+(profile), `downloads` and `assets`), still works with an atlas of its own, but is no longer
+used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
+`gazetteer_site.py` for the site.
+- **Republish the site** after map changes (the facts are kept by map pixel):
+  `python3 scripts/facts_export.py`, `python3 scripts/gazetteer_site.py`, then commit
+  `work/gazetteer_site/` alone as the next commit of `gh-pages` and push it:
+  `git fetch origin gh-pages && git worktree add work/gh-pages origin/gh-pages`; in
+  `work/gh-pages`: `git rm -rq . && cp -r ../gazetteer_site/. . && git add -A && git commit`
+  and `git push origin HEAD:gh-pages`; then `git worktree remove work/gh-pages`. Pages
+  redeploys in a minute or two (the "pages build and deployment" run in Actions; github.io
+  itself can't be reached from Claude's sandbox).
+- **Firebase** (set up by the author, 2026-10-15): Firestore (Standard, production mode), Google
+  sign-in with `rouental.github.io` among the authorized domains, the web app's settings in
+  `source/gazetteer_site/firebase-config.json` (not secret). The rules,
+  `source/gazetteer_site/firestore.rules`, are pasted in the console by the author with their
+  Google address for `OWNER_EMAIL`, which is never committed: change the file, then ask them to
+  paste it again. They allow `get` and `list` inside a nation's folder but nothing on `n` and
+  no `{path=**}` match, so neither `n`, a nation's folders nor a collection-group query can be
+  listed; writes need the folder's `key` document (only the owner writes those) and a known
+  kind; `owner/*` is the owner's alone; `planned` is read by all, written by the owner. Cloud
+  Storage needs the paid plan, so pictures are documents beside the facts (`img-<id>`: a data
+  URL of at most 640 px, JPEG over 400 kB; the rules cap them at 800,000 characters).
+  Firestore keeps no array directly inside an array: lines' points are stored as
+  `{"_a": [x, y]}`. The SDK is Google's, bundled into one module
+  (`source/gazetteer_site/README.md`).
 - **Version 2** (author, 2026-10-14, latest: "each nation should be locked behind a password I
   can give them so that people can't make troll edits on each others' nations ... submit
   flags, leaders, etc ... a function for them to make suggestions ... overseas territory ...
@@ -1347,23 +1374,28 @@ with that `url`, `root` = `work/gazetteer` and `files` = `index.json`, `world.pn
   password; `meta` (status, notes, `editors` ids) and `req-<id>` requests sit beside the
   facts. The owner's passwords are at `data/users/<owner id>/keys` (private to them), made and
   changed in **Owner tools** (a new password copies the documents and deletes the old ones),
-  and the page unlocks every nation for the owner. Friends must be invited by email as
-  Editors, with no public link (outside viewers can't write); an Editor could still publish a
-  new page version (told to the author). Pictures are the artifact's uploaded assets, stored
-  by id (shown as `/_blob/<id>`); an outside Editor deletes only their own.
+  and the page unlocks every nation for the owner. On the site the passwords are at
+  `owner/keys`, the owner is whoever may read it (the rules decide), and a player is a random id
+  per browser (`gazetteer-id`) with the name they give on the Nation tab (`meta.editors` keeps
+  names on the site, ids on claude.ai). On claude.ai friends had to be invited by email as
+  Editors, with no public link (outside viewers can't write), and an Editor could publish a new
+  page version; pictures there are the artifact's uploaded assets, stored by id (shown as
+  `/_blob/<id>`).
 - **Nations not on the map yet**: `planned/list` ({TAG: name, continent}), owner-written; base
   game tags (`index.json` `earth`) are refused. Their page has Politics, People, Map
   (suggestions on the world map) and Nation; their facts carry over once they are drawn.
-- **To pull it:** ArtifactData `get` of `data/users/me` / `keys` and of `planned` / `list`,
+- **To pull it** from the site: the author's **Save every nation as a file**
+  (`valsora-gazetteer-all.json`, each nation's pictures inside as `images`), then
+  `python3 scripts/gazetteer.py import` it (Claude can't sign in to the author's Firebase).
+  Then rebuild (and `river_provinces.py` after new rivers), run `gazetteer.py suggestions` if
+  there are any, and tell the author the open requests and what `status` lists for doing by
+  hand. From the claude.ai atlas (the first version): ArtifactData `get` of `data/users/me` / `keys` and of `planned` / `list`,
   both with `out_dir` `work/gazetteer_pull` (never commit the passwords: `work/` is ignored);
   `python3 scripts/gazetteer.py paths work/gazetteer_pull/data/users/<id>/keys.json` names each
   nation's folder; ArtifactData `list` of each with the same `out_dir`; then
   `python3 scripts/gazetteer.py pull work/gazetteer_pull`. It lists the pictures to download:
   the Artifact tool's `read` with `path` = the asset id and `out_dir`
-  `work/gazetteer_pull/assets`, then `pull` again. Then rebuild (and `river_provinces.py` after
-  new rivers), run `gazetteer.py suggestions` if there are any, and tell the author the open
-  requests and what `status` lists for doing by hand. Or the author saves **Save every nation
-  as a file** and `gazetteer.py import` it (pictures by id the same way).
+  `work/gazetteer_pull/assets`, then `pull` again.
 - **In the build** (`source/gazetteer/<TAG>.json`, none yet): a nation's facts win over the `.pdn`
   and `nations.py` for that nation: its cities replace the Cities layer's dots on its land
   (`regions.json` cities then carry victory points and the capital flag), its state names
@@ -1387,6 +1419,15 @@ with that `url`, `root` = `work/gazetteer` and `files` = `index.json`, `world.pn
   islands, Seigne's people and the planned nation's suggestions, changes a password; a
   friend in another browser is locked out until the password (typed loosely) opens it, an old
   password no longer does; desktop and phone, light and dark; the view-only and offline modes.
+  The site is tested the same way against Firebase's own emulators (firebase-tools 15, Java 21;
+  `gazetteer_site.py --emulator 127.0.0.1:8080:9099 --project demo-...`, the rules loaded with a
+  test owner), plus the rules attacked straight over REST (listing `n`, a nation's folders or
+  every `states` document, reading `owner/keys`, writing `planned`, making, replacing or
+  deleting a `key`, writing without a password or an unknown document: all refused; writing
+  with the password allowed) and another Google account getting no owner tools. Tests sign in
+  with the emulator's unsigned tokens (`window.__fb`, only in an emulator build): Google's
+  sign-in window can't load in the sandbox. A file saved from the site imports with its
+  pictures.
 
 ## Deco UI (`deco_ui/`): part of the mod
 
@@ -1445,6 +1486,9 @@ in git history (commit d2d6cd8, `scripts/cartographic.py`). It used
 
 ## Current state
 
+- 2026-10-15: the Gazetteer moved to its own web site, https://rouental.github.io/Valsora-HOI4/
+  (GitHub Pages and the author's Firebase project); the author is to paste the database rules.
+  No facts imported yet, so the build is unchanged.
 - 2026-10-14, latest: the Gazetteer's version 2 (same link): a password per nation, flags,
   rulers, party leaders and characters with portraits, colour and culture, suggestions on the
   map, nations not on the map yet, overseas land in boxes of its own. No facts imported yet, so
