@@ -19,7 +19,7 @@ GAME_DIR = sys.argv[1] if len(sys.argv) > 1 else None
 LABEL = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
 ROWS = [
     ("hoi_18mbs", "lists, names, values", ["Political Advisor: Industrial Expansion", "Rouental — 42.3M population, 56 states"]),
-    ("hoi_16mbs", "small text, requirements", ["Requires: Has completed National Focus", "Construction speed +10%, Stability −5%"]),
+    ("hoi_16mbs", "small text, requirements", ["Requires: Has completed National Focus", "Construction speed +10%, Stability -5%"]),
     ("hoi_18", "light text", ["Infantry Division (8 infantry, 1 artillery)", "Available in 32 days"]),
     ("hoi_20b", "bold labels", ["Army Group Vale of Reibonne", "Field Marshal Serelle Cahun"]),
     ("cg_16b", "tooltips", ["Roland II Cahun, Sovereign Prince of Rouental,", "Duke of Carcarelle, Count of Vair and Hevique."]),
