@@ -1,4 +1,4 @@
-"""Layout of the events (interface/eventwindow.gui, v0.7.1): the option plates, shared by the texture
+"""Layout of the events (interface/eventwindow.gui, v0.8): the option plates, shared by the texture
 (gen_textures.py, 'ev_option'), make_events.py and preview_events.py.
 
 The game draws every option the same way (one event_option_entry for all event windows): its picture at the entry's

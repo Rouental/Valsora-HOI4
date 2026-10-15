@@ -142,7 +142,7 @@ def vanilla_font_px(font):
 def clean_loc(s):
     s = re.sub(r"§.", "", s or "")
     s = re.sub(r"\$[^$]*\$|\[[^\]]*\]|£\w+", "", s)
-    return s.replace("\\n", " ").strip()
+    return s.replace("\\n", " ").replace("\n", " ").strip()
 
 
 def draw_ttf(cv, text, x, y, w, h, fmt, font):
@@ -282,7 +282,11 @@ class Panel:
 
     def text(self, cv, text, font, x, y, w, h, fmt, name, valign=False):
         font = (font or "").strip('"')
-        if font in V.FONTS:
+        text = LOC.get(str(text).strip('"'), str(text).strip('"'))
+        # the game's variables as a sample number, its \\n as a line break
+        text = re.sub(r"\$[^$\s]*\$", "12", text).replace("\\n", "\n")
+        # the game's look: its own fonts (whose textures the repository doesn't have) approximated, unchecked
+        if font in V.FONTS and not (self.vanilla_only and font in V.GAME_W):
             V.draw_text(cv, font, text, x, y, w, fmt, max_h=h, valign=valign, check=name)
         else:
             s = clean_loc(text)

@@ -478,6 +478,52 @@ screenshot and `error.log`)
 
 ## Map problems found while building
 
+**The mod's build took four minutes** (2026-10-15, looking for speed at the author's request)
+- Cause: `np.load` gives a lazy `NpzFile` that decompresses an array again on every access, and the unit positions
+  asked `work/regions.npz` for the province centres 82,565 times: 200 s of the 238. Three full-map distance
+  transforms were spare too: one computed and thrown away (the land side, in normal mode), one computed twice (the
+  water's distance from land), and one only asked whether a province edge was within 2 or 3 px.
+- Fix: `reg = dict(np.load(...))` (read once), the water's distance reused, the edge test by erosion (the 3x3 and
+  5x5 blocks). 26 s; the build's files are the same, byte for byte.
+
+**Every build made a new zip for git, changed or not** (2026-10-15)
+- Cause: a zip stores each file's modification time, and the build rewrites every file.
+- Fix: `package.py` gives every entry one fixed date (1980-01-01) and the same permissions; the same mod now gives
+  the same bytes.
+
+**Deco UI: a texture build stirred every texture** (2026-10-15)
+- Cause: `gen_textures.py` redrew all 240 textures on every run, and a redraw differs from the last by a few
+  anti-aliased pixels, so every texture changed in git; they were put back by hand.
+- Fix: a signature per texture (its HTML, size, fonts and embedded files) in the manifest, so only textures whose
+  drawing changed are redrawn (`--all` redraws all); `tools/restore_noise.py` puts back textures a redraw changed
+  only by such noise.
+
+**Deco UI previews: over a hundred text warnings once the game's fonts were redrawn** (2026-10-15)
+- Cause: the side panels' preview measured button texts as their raw keys ("ARMY_SORT_GROUP"), didn't fill
+  `$VARIABLES$` or break lines at `\n`, checked its "game's look" render (now drawn in our fonts), and flagged boxes
+  the game's own text overflows too (the logistics panel's "Military Factories": an 80 px box, 107 px in the game's
+  font, 95 px in ours).
+- Fix: texts looked up in the game's localisation, variables filled, line breaks kept; the game's look drawn with an
+  approximation and unchecked; a game font's text flagged only when it is wider than the box and than the game's own
+  (by 5 %), or needs more lines (`validate_preview.GAME_W`). No regressions were left: every warning was one of these.
+
+**Deco UI events: the options sat much closer to the picture than to the card's edge** (2026-10-15, the author's note
+on the preview)
+- Cause: the game's options grid starts just right of the picture (its 300 px entries left-aligned in the room
+  beside it), and the mod's plate overhung the entry to the right as the game's picture does.
+- Fix (v0.8): the plate and the entries 334 px wide, each window's options grid moved so the plates sit in the
+  middle of the room beside the picture (`deco_ui/tools/layout_events.py`: 12 px either side in a country event).
+
+**Deco UI army bar: the play / stop row not centred over the general** (2026-10-15, the author's note on the preview)
+- Cause: the game's `leadergroups.gui` puts the row (and the buttons on it) 4 px right of the portrait's opening.
+- Fix (v0.8): `layout_armybar.MOVES` moves the row and what sits on it 4 px left, and the army group's extra buttons
+  with it, so frame, plaque, count and row share one centre line.
+
+**Deco UI news: the WORLD NEWS masthead looked lopsided** (2026-10-15, the author's note on the preview)
+- Cause: the ball sat off the page's centre, with WORLD and NEWS at different distances from it.
+- Fix (v0.8): a gilt globe of Valsora (`deco_ui/tools/globe_art.py`, from the built map) on the centre line, WORLD and
+  NEWS a little smaller, at the same gap either side.
+
 **Deco UI previews: centred text looked badly spaced ("Postpon e th e count.")** (2026-10-15, the event preview)
 - Cause: the previews' text renderer (`deco_ui/tools/validate_preview.draw_text`), not the fonts: it rounded each
   glyph's position on its own, and centred text starts half a pixel in when its box has an odd number of pixels to

@@ -10,6 +10,18 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-15, the second night (the author's notes on the previews, and: "try to find ways to improve and speed up
+  the modding process without decreasing quality ... could you switch to the art deco fonts throughout the UI?"): no
+  map changes. The Deco UI is v0.8: **the game's own fonts redrawn in the deco faces** (28: tooltips, lists, the
+  designer, leader and unit screens, settings, window titles), a size or two under the game's so its text keeps
+  fitting; the army bar's play / stop row centred over each general; event options centred between the picture and
+  the card's edge; a gilt Valsoran globe in the middle of WORLD NEWS. A **mockup of larger flags**
+  (`deco_ui/art/proposals/hd_flags/`, not in the mod) and **special projects** in the tech tree proposal (mechs, an
+  orbital kinetic strike that works like a nuke: `docs/TECH_TREE_2036.md`, now eight questions). **Builds take a
+  minute** instead of five, with the same files (`build_mod.py` 238 s → 26 s, `read_layers.py` skipped while the map
+  is unchanged, the zip reproducible, the Deco UI's textures redrawn only when their drawing changes):
+  `docs/SPEED_AND_SIZE.md`, with the repository's size (370 MB on GitHub, a third of it old copies of the zip) and
+  options for the author. Not yet seen in game.
 - 2026-10-15, overnight (the author's list: "Do the army bar, the event window, and a written proposal for the 2036
   tech tree. Tidy up the notes as well, and [find] the room under the border limit ... do the panel pictures, but
   don't put them in the mod yet"): no map changes. The Deco UI is v0.7: the **army bar** (the cards along the bottom)

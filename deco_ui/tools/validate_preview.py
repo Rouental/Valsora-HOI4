@@ -370,7 +370,8 @@ for p in glob.glob(M + "gfx/interface/button_*.dds"):
 
 # every texture in the mod comes from the current build (stale files from older versions are reported)
 import json  # noqa: E402
-_man = {m["path"] for m in json.load(open(BUILD + "texture_manifest.json"))}
+from paths import MANIFEST  # noqa: E402
+_man = {m["path"] for m in json.load(open(MANIFEST))}
 for f in glob.glob(M + "gfx/**/*", recursive=True):
     rel = f[len(M):].replace(os.sep, "/")
     if os.path.isfile(f) and not rel.startswith("gfx/fonts/") and rel not in _man:
@@ -414,37 +415,63 @@ def text_width(f, runs):
     return sum(f["chars"][c]["xadvance"] for c in cps) + sum(f["kern"].get(p, 0) for p in zip(cps, cps[1:]))
 
 
-def draw_text(canvas, font, text, x, y, max_w=None, fmt="left", color=None, check=None, max_h=None, valign=False):
-    f = FONTS[font]
-    chars = f["chars"]
-    atlas = f.setdefault("_np", np.array(f["atlas"], dtype=np.float32) / 255)
-    runs = _runs(text, None)
-    # word wrap when the box has room for more than one line (as the game does)
-    lh = int(f["common"]["lineHeight"])
-    lines = [runs]
-    if max_w and max_h and max_h >= 2 * lh:
-        words, lines, cur = [], [], []
-        word = []
-        for r in runs + [(" ", None)]:
-            if r[0] == " ":
+def wrap(runs, max_w, width):
+    """the game's greedy word wrap: forced breaks at newlines, then words onto a line while it fits"""
+    out = []
+    para = []
+    for r in runs + [("\n", None)]:
+        if r[0] != "\n":
+            para.append(r)
+            continue
+        cur, word = [], []
+        for q in para + [(" ", None)]:
+            if q[0] == " ":
                 if word:
                     trial = cur + ([(" ", None)] if cur else []) + word
-                    if cur and text_width(f, trial) > max_w:
-                        lines.append(cur)
+                    if cur and max_w and width(trial) > max_w:
+                        out.append(cur)
                         cur = word
                     else:
                         cur = trial
                 word = []
             else:
-                word.append(r)
-        lines.append(cur)
-    if check and max_h and len(lines) * lh > max_h + 2:
+                word.append(q)
+        out.append(cur)
+        para = []
+    return out
+
+
+# the game's own widths for the fonts the mod redraws: a box the game's text overflows too is the game's, not ours
+GAME_W = {}
+for _n in _GFN.GAME:
+    try:
+        GAME_W[_n] = _GFN.game_widths(_n)
+    except OSError:
+        pass
+
+
+def draw_text(canvas, font, text, x, y, max_w=None, fmt="left", color=None, check=None, max_h=None, valign=False):
+    f = FONTS[font]
+    chars = f["chars"]
+    atlas = f.setdefault("_np", np.array(f["atlas"], dtype=np.float32) / 255)
+    runs = _runs(text, None)
+    lh = int(f["common"]["lineHeight"])
+    # word wrap when the box has room for more than one line (as the game does); newlines always break
+    multi = bool(max_w and max_h and max_h >= 2 * lh)
+    ours = lambda rs: text_width(f, rs)
+    lines = wrap(runs, max_w if multi else None, ours)
+    game = GAME_W.get(font)
+    as_game = (lambda rs: game("".join(c for c, _ in rs))) if game else None
+    game_lines = wrap(runs, max_w if multi else None, as_game) if game else None
+    if check and max_h and len(lines) * lh > max_h + 2 and not (game_lines and len(game_lines) >= len(lines)):
         problems.append(f"text needs {len(lines)} lines in {check}: {text!r}")
     total_h = len(lines) * lh
     y0 = y + (max_h - total_h) / 2 if (valign and max_h) else y
     for li, line in enumerate(lines):
         width = text_width(f, line)
-        if check and max_w and width > max_w:
+        # flagged when wider than the box and than the game's own text (by 5 %): where the game's overflows too, ours
+        # may as well
+        if check and max_w and width > max_w and (not as_game or width > max(max_w, as_game(line) * 1.05)):
             problems.append(f"text overflow in {check}: {text!r} {width}px > {max_w}px")
         lx = x
         if max_w and fmt in ("center", "centre"):

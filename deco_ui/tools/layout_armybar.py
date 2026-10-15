@@ -7,7 +7,7 @@ An army card: its frame at the portrait window's (-1, -12), 84 x 117, over the p
 portrait at (8, -15) (0.45); the empty card at (8, -15). The plate behind a run of cards is the game's: the army
 group's piece starts it (its left edge the only soft one), each army's piece carries it on, the last army's ends it.
 
-One centre line per card (v0.7.1, the user: the play / stop row "aren't centered above the general"): the game puts
+One centre line per card (v0.8, the user: the play / stop row "aren't centered above the general"): the game puts
 the portrait 2-4 px left of the middle of its frame and of its button row. The cards are drawn symmetric round the
 opening (the army card 77 px wide, as wide as the button plate above it), and make_leadergroups.py moves the row and
 the buttons over it (MOVES) so they share the opening's centre: x 38.5 on an army card, 43 on an army group's.

@@ -1,4 +1,4 @@
-"""Valsora's land for the Deco UI's globes (v0.7.1): art/valsora_land.png and the gilt line globe gen_textures.py
+"""Valsora's land for the Deco UI's globes (v0.8): art/valsora_land.png and the gilt line globe gen_textures.py
 draws from it (the World News masthead).
 
     python globe_art.py          -> art/valsora_land.png, from the Valsora build's terrain.bmp (run after map changes)

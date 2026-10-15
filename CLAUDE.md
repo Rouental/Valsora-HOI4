@@ -162,9 +162,15 @@ for the author. Unknown layer names are ignored.
 
 ## Rebuilding
 
-`sh scripts/run_all.sh` from the repo root: about 1 minute from `HOI4 Mod Map.pdn`. Placeholder
-mode (used when that file is absent) takes about 2.5 minutes, plus about 2 minutes for the
-one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`. Output is deterministic.
+`sh scripts/run_all.sh` from the repo root: about 2 minutes from `HOI4 Mod Map.pdn` (2026-10-15: `read_layers.py`
+57 s, `build_mod.py` 31 s, `package.py` 14 s, `check_mod.py` 13 s, the rest 7 s), about 1 minute when the map hasn't
+changed: `read_layers.py` is skipped while nothing it reads has changed (`scripts/stamp.py`: the script and the modules
+of `scripts/` it imports, the files in `source/` and `source/gazetteer/`, the decoded layers by size and time).
+`FORCE=1 sh scripts/run_all.sh` reruns it. Placeholder mode (used when that file is absent) takes about 2.5 minutes,
+plus about 2 minutes for the one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`. Output is
+deterministic, the zip included (`package.py` gives every entry one fixed date, so the same mod gives the same bytes and
+a rebuild that changed nothing adds nothing to git). `docs/SPEED_AND_SIZE.md` has the timings, the repository's size
+and what could make both smaller.
 
 | step | does |
 |---|---|
@@ -207,7 +213,8 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `pdxscript.py` | a reader for Paradox script (nested `key = value` blocks), used by `vanilla_sync.py` |
 | `check_mod.py` | re-reads the built files and checks every rule below |
 | `export_canvas.py` | previews in `dist/` |
-| `package.py` | `dist/valsora_test.zip` |
+| `package.py` | `dist/valsora_test.zip` (reproducible: fixed dates and permissions, sorted) |
+| `stamp.py` | `fresh` / `save` a step's inputs, so `run_all.sh` skips `read_layers.py` while they are unchanged (`FORCE=1` reruns it) |
 | `country_list.py` | by hand, after a build: `dist/world_map_labelled.png` (every country labelled) and `dist/countries.md` / `.csv` (name, full name, ideology, sub-ideology, culture, leader, states), read from the built mod |
 | `nation_sheet.py` | by hand, after a build: `dist/nations_by_continent.png`, every nation in the game under the continent of its capital: flag, ruler at the start (portrait of our own, or a "placeholder" box for a base-game one), full name, ideology and sub-ideology, culture, and a strip of its map colour (author, 2026-10-13) |
 | `collages.py` | by hand, after a build: `dist/flags_collage.png` (every custom flag, and the countries still on a placeholder stripe) and `dist/leaders_collage.png` (every custom leader: own portraits at 2×, named ones with base-game portraits as labelled tiles); `--continent NAME` writes only `dist/flags_<name>.png`, the flags of the nations whose capital is on that continent, naming below them those with land there and their capital elsewhere (2026-10-10, Araseos; 2026-10-12, Yastreovakia) |
@@ -1115,8 +1122,9 @@ it before touching the UI. In short:
 - Everything else (textures, fonts, the game screens it patches) is built by hand with the game's files at
   hand: `CHROMIUM_PATH=/opt/pw-browsers/chromium python3 tools/build_all.py` in `deco_ui/`, after the
   vanilla links its section 3 lists (`deco_ui/reference/valsora` is `build/valsora_test`); then rebuild
-  Valsora. `validate_preview.py` must end with `PROBLEMS: none`. Rendering noise: restore textures that only
-  changed by a few anti-aliased pixels (`git checkout`).
+  Valsora. `validate_preview.py` must end with `PROBLEMS: none`. `gen_textures.py` redraws only the textures whose
+  drawing changed (`--all` redraws all); after a redraw, `python3 tools/restore_noise.py` puts back those that changed
+  only by anti-aliasing noise.
 - `check_mod.py` checks the merged mod: the Deco UI's localisation in the game's 9 languages (only its files
   may be other than English), its politics screen's five 19 px party rows, every kind of sprite in a .gfx, and
   sprites the game's own .gui files name without defining (`source/vanilla/index/gui_undefined_sprites.txt`).
@@ -1132,6 +1140,14 @@ it before touching the UI. In short:
   `layout_armybar.py`) and the events (`make_events.py`, textures `ev_*`) in the deco style at the game's paths and
   sizes (v0.7). Their previews, `deco_ui/build/preview_armybar.png` and `preview_events.png`, show the game's art
   beside ours, so they stay in the git-ignored `build/` and are only sent to the author.
+- **v0.8** (2026-10-15, the second night, not yet seen in game): **the game's own fonts** redrawn in the deco faces at
+  their paths (`deco_ui/tools/game_fonts.py`, 28 fonts: tooltips, lists, the designer, leader and unit screens,
+  settings, window titles; the author: "could you switch to the art deco fonts throughout the UI? for example,
+  currently the title of Roland is displayed in the base game's font"), a size or two under the game's so its text
+  keeps fitting the game's boxes; the army bar's play / stop row centred over each general; event options centred
+  between the picture and the card's edge; a gilt Valsoran globe in the middle of WORLD NEWS. A mockup of **larger
+  flags** is in `deco_ui/art/proposals/hd_flags/`, **not in the mod** (author: "Maybe do a mockup of how it could look,
+  but don't add anything to do with it into the mod yet"): it needs the seven flags we have only at 82 x 52.
 - **Proposals for the side panels' own pictures** (research, production, the market, the overview strip, the
   intelligence agency, the spirit banners) are in `deco_ui/art/proposals/panel_pictures/`, **not in the mod**
   (author, 2026-10-15: "don't put them in the mod yet. I'd like to see and approve them first").
@@ -1143,17 +1159,19 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
 - **The build** (2026-10-15): 21,078 provinces (20,690 land, 363 sea, 25 lakes), 62,183 province borders (HOI4
   draws 65,536: `docs/BORDER_LIMIT.md`), 3,149 states, 122 strategic regions (42 sea); 183 countries in the mod,
   161 of them on the map, 92 of those with a flag of their own (69 fly a stripe in their map colour); the states of
-  39 are the author's own lines (`gazetteer.finals`). Two starts, both on 1 January 2036. The Deco UI is v0.7.
+  39 are the author's own lines (`gazetteer.finals`). Two starts, both on 1 January 2036. The Deco UI is v0.8.
   Rouental's Gazetteer page is in the build (`source/gazetteer/ROU.json`); no other nation's yet.
 - **Seen in game last** (2026-10-15): the Deco UI v0.5 and v0.5.1 (the author's video and screenshot) and an
-  error.log of 10 lines, one of them ours (fixed). Not seen yet: the Deco UI v0.5.2 to v0.7 (closed panels
-  off-screen, the focus tree, the superevent window, the army bar, the events), the two starts, Vilna and
-  Placeholdgrad. The Deco UI's checklist for the author is in `deco_ui/valsora_deco_ui/README.txt` (Things to
-  check) and `deco_ui/CLAUDE.md` (section 10).
-- **Waiting on the author:** the panel picture proposals (approve or change: `deco_ui/art/proposals/`), the tech
-  tree proposal's six questions (`docs/TECH_TREE_2036.md`), whether to size provinces by terrain once terrain is
-  painted (`docs/BORDER_LIMIT.md`), the releasable "Test"'s flag (640 × 338, to fit to 82:52 by hand), and the end
-  of Devlon's test spirits (`nations.TEST_SPIRITS`).
+  error.log of 10 lines, one of them ours (fixed). Not seen yet: the Deco UI v0.5.2 to v0.8 (closed panels
+  off-screen, the focus tree, the superevent window, the army bar, the events, the game's fonts in the deco faces),
+  the two starts, Vilna and Placeholdgrad. The Deco UI's checklist for the author is in
+  `deco_ui/valsora_deco_ui/README.txt` (Things to check) and `deco_ui/CLAUDE.md` (section 10).
+- **Waiting on the author:** the panel picture proposals (approve or change: `deco_ui/art/proposals/`), larger flags
+  (the mockup: `deco_ui/art/proposals/hd_flags/`), the tech tree proposal's eight questions, special projects among
+  them (`docs/TECH_TREE_2036.md`), the zip on GitHub's Releases page and the other size options
+  (`docs/SPEED_AND_SIZE.md`), whether to size provinces by terrain once terrain is painted
+  (`docs/BORDER_LIMIT.md`), the releasable "Test"'s flag (640 × 338, to fit to 82:52 by hand), and the end of Devlon's
+  test spirits (`nations.TEST_SPIRITS`).
 
 ## Known gaps
 

@@ -1,10 +1,10 @@
-VALSORA DECO UI - v0.7 (for HOI4 1.19)
+VALSORA DECO UI - v0.8 (for HOI4 1.19)
 ======================================
 
-An art deco interface for the Valsora total conversion: core skin, a rebuilt
-top bar, the politics screen, every side panel, the province panel, the
-focus tree, the army bar, the events, the map modes and minimap, and the main
-menu, laid out like the Valsora mockups.
+An art deco interface for the Valsora total conversion: core skin and fonts,
+a rebuilt top bar, the politics screen, every side panel, the province panel,
+the focus tree, the army bar, the events, the map modes and minimap, and the
+main menu, laid out like the Valsora mockups.
 
 
 INSTALL
@@ -28,6 +28,33 @@ Valsora repository's scripts/common.py and rebuild (sh scripts/run_all.sh).
 The layout is built for 1920 px of UI width: 1920x1080 at 100% UI scale, or
 2560x1440 at up to 133%.
 
+
+NEW IN v0.8
+-----------
+  - The art deco fonts throughout. The game's own fonts are redrawn in the
+    Deco UI's faces, so the screens the Deco UI hasn't re-laid read like the
+    rest: tooltips (Roland's titles on his portrait, for one), lists, the
+    division designer, the leader and unit screens, settings, window titles.
+    Josefin Sans for text and numbers, Federo for headings and the game's
+    serif menus. The game's boxes were made for its own fonts, and Josefin
+    is wider than the game's, so the text is a size or two smaller than the
+    game's; lines keep the game's spacing.
+  - The army bar: the play / stop buttons and the plate behind them are
+    centred over the general, on one line with the frame, the plaque and
+    the division count.
+  - Events: the options sit centred between the picture and the card's right
+    edge (they were much closer to the picture). A leader event's foot
+    matches the country event's.
+  - The news: WORLD NEWS has a small gilt globe of Valsora in the middle,
+    with WORLD and NEWS at the same distance either side.
+
+Things to check in game (v0.8):
+  - text everywhere: readable at its new sizes, nothing cut off (a word
+    missing at the end of a line or button means a box the new font doesn't
+    fit: a screenshot names it); tooltips (a leader portrait, a law, a
+    building);
+  - the army bar's buttons over the generals; an event's options; a news
+    event's masthead.
 
 NEW IN v0.7
 -----------

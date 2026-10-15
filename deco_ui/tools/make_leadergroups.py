@@ -5,7 +5,7 @@
 The army bar is re-skinned by textures at the game's paths (gen_textures.py, the 'lg_' keys); the one thing a
 texture can't do is place the game's count, which sat 3 px above the plaque and 1 px left of its centre (the user,
 from the v0.7 preview: "nor are the numbers [centred]"). Both counts, an army's and an army group's, get the plaque's
-box (layout_armybar), centred both ways, in the mod's value font. v0.7.1: the play / stop row and what sits on it
+box (layout_armybar), centred both ways, in the mod's value font. v0.8: the play / stop row and what sits on it
 move to the portrait's centre line (layout_armybar.MOVES). Every element of the game's file is kept.
 """
 import os

@@ -14,7 +14,7 @@ Treat assumed items as hypotheses.
 
 ---------------------------------------------------------------------------------------------------
 
-## 1. Status (v0.7)
+## 1. Status (v0.8)
 
 v0.4.3 was the first v0.3/v0.4 build the user launched. The user's reports so far cover only the main
 menu: the Valsora background and the social links in the top-left corner show **(in game)**, but in
@@ -78,6 +78,18 @@ over the empty general isn't quite centered, nor are the numbers" (the game draw
 opening, and its count 3 px above the plaque: both fixed). The **events** (country, leader, operative, news)
 re-skinned the same way, with `make_events.py` giving them the mod's fonts. Panel picture proposals, for the user's
 approval and **not in the mod**, are in `art/proposals/`.
+**v0.8 (2026-10-15, the second night, not yet seen in game)**, the user's notes on the v0.7 previews and their
+request "could you switch to the art deco fonts throughout the UI? for example, currently the title of Roland is
+displayed in the base game's font": the **game's own fonts** (28: the tooltips', the lists', the typewriter of the unit,
+leader and designer screens, the Garamond of settings and menus, the Orator of window titles) are redrawn in the deco
+faces at the game's paths (`game_fonts.py`, section 7), so every screen the mod hasn't re-laid reads in Josefin and
+Federo. The army bar's play / stop row and its plate sit on the card's centre line ("aren't centered above the
+general": the game draws each row 4 px right of the portrait's opening; `layout_armybar.MOVES`); the events' options
+are centred between the picture and the card's right edge ("the decision box is shown significantly closer to the
+image than it is to the other side of the box"; `layout_events.py`) and a leader event's foot matches; the news
+masthead has a gilt globe of Valsora in the middle with WORLD and NEWS balanced either side ("looks lopsided ...
+maybe make the ball a stylized Valsoran globe?"; `globe_art.py`). A mockup of larger flags, **not in the mod** (the
+user: "don't add anything to do with it into the mod yet"), is in `art/proposals/hd_flags/`.
 
 | Area | State |
 |---|---|
@@ -91,9 +103,10 @@ approval and **not in the mod**, are in `art/proposals/`.
 | Focus tree (`interface/nationalfocusview.gui`, `.gfx`) | v0.6 (the FocusTree mockup): flush under the band with the notch; header with the scripted title and subtitle, chips, search, zoom, close; scale-pattern canvas in a gilt frame; medallion + plate per focus state (unavailable, available, in progress, completed); halo, search glow, links, exclusive marks, continuous focus marks, legend. Focus icons untouched. |
 | Superevent (Valsora's `valsora_superevent.gui`) | v0.6: drawn by the Valsora mod (`scripts/superevents_deco.py`) from the Superevent board when `DECO_UI` is on: a veil over the map, gilt frame, crest, title strip, framed picture with corner fans, quote, button, now-playing tab. |
 | Main menu (`interface/frontendmainview.gui` + background) | v0.3; v0.4.5 fixed the invisible button row (a quoted `Orientation`). Background and social links **(in game)**. |
-| Army bar (bottom: `leadergroups.gui`) | v0.7: textures at the game's paths and sizes (`gen_textures.py`, `lg_*`; numbers in `layout_armybar.py`): arched gilt frames over the portraits (jade when selected; an army group's with gilt fans), the plate behind a run of cards, play/stop chips, the battle plan's chevrons, the empty card; `make_leadergroups.py` moves the division counts onto the plaques (centred, `valsora_deco_value_17`). Preview `build/preview_armybar.png`. |
+| Army bar (bottom: `leadergroups.gui`) | v0.7: textures at the game's paths and sizes (`gen_textures.py`, `lg_*`; numbers in `layout_armybar.py`): arched gilt frames over the portraits (jade when selected; an army group's with gilt fans), the plate behind a run of cards, play/stop chips, the battle plan's chevrons, the empty card; `make_leadergroups.py` moves the division counts onto the plaques (centred, `valsora_deco_value_17`); v0.8: the play / stop row on the card's centre line. Preview `build/preview_armybar.png`. |
 | Map modes and minimap (bottom right: `mapmodes_interface.gui`, `minimap.gui`) | v0.5: textures only (layouts are the game's and Valsora's): lacquer column, line-icon medallions for land/air/naval/intel, the game's small icons and toggles recoloured in gilt, deco handle and ping buttons; the minimap's picture and frame in gilt by the Valsora mod (`scripts/minimap.py`, deco style). |
-| Events (`eventwindow.gui`) | v0.7: the report and newspaper textures replaced at the game's paths (`ev_*`): lacquer card with a crest, gilt rails and a picture frame; a WORLD NEWS broadsheet; options as gilt-rimmed plates; `make_events.py` sets the mod's fonts (titles `title_18`, text and options `body_15`). Preview `build/preview_events.png`. |
+| Events (`eventwindow.gui`) | v0.7: the report and newspaper textures replaced at the game's paths (`ev_*`): lacquer card with a crest, gilt rails and a picture frame; a WORLD NEWS broadsheet; options as gilt-rimmed plates; `make_events.py` sets the mod's fonts (titles `title_18`, text and options `body_15`). v0.8: the options centred in the room beside the picture (`layout_events.py`), a Valsoran globe on the masthead. Preview `build/preview_events.png` (a country, a news and a leader event). |
+| Fonts | The mod's own (`gen_fonts.py`) on its own screens; v0.8: the game's 28 fonts redrawn in the deco faces at their paths (`game_fonts.py`), for everything else. Preview `build/preview_game_fonts.png` (needs the game's font textures: section 7). |
 | Everything else (the panels' own pictures ...) | Only the core skin so far. Proposals for the panels' pictures (not in the mod) in `art/proposals/`. |
 
 **HOI4 has no outliner.** The mockup's "Outliner" panel was a design idea. The closest things in the
@@ -184,15 +197,19 @@ the tools read Valsora's originals from `../work/deco_base/` (`paths.VALSORA_BAS
 and `make_politics.py` stops if its base is the Deco UI's own output.
 
 `CHROMIUM_PATH` points Playwright at the machine's pre-installed Chromium, whose version may not match
-the pip package's (`playwright install` is not needed then). The full build takes under a minute.
-Regenerated textures can differ from the shipped ones by a few anti-aliased pixels; restore the
-shipped files (`git checkout`) when only that changed, so each release changes only what it meant to.
+the pip package's (`playwright install` is not needed then). The full build takes about a minute.
+`gen_textures.py` redraws only the textures whose drawing changed since the last run (v0.8: a signature of each one's
+HTML, size, fonts and embedded files, kept in `texture_manifest.json`, which is committed, so a fresh clone redraws
+nothing); `--all` redraws every one, and `gen_textures.py <prefix> ...` those whose key starts with a prefix. A redrawn texture can differ from the shipped one
+by a few anti-aliased pixels: `python3 tools/restore_noise.py` (`--dry` to list) puts back every changed texture that
+differs from the committed one only by such noise, so each release changes only what it meant to.
 
 ## 4. Project map
 
 ```
 valsora_deco_ui/            the built mod (shipped). Generated, so do not hand-edit .gui/.gfx/.yml here; change the tools
 valsora_deco_ui.mod         launcher descriptor (path="mod/valsora_deco_ui")
+texture_manifest.json       each texture's path, size and signature (gen_textures.py: what to redraw)
 tools/
   paths.py                  all locations (see above)
   build_all.py              runs every step in order
@@ -215,6 +232,17 @@ tools/
   make_panels.py            the 16 side panels' .gui files (the game's, patched) + the windows beside them + panels .gfx
   long_names.py             the long-name trigger (which names need the medallion's small font); make_topbar and the
                             Valsora build run it
+  layout_armybar.py         army bar numbers (v0.7): the cards, plate pieces, plaques, counts; MOVES (v0.8)
+  make_leadergroups.py      leadergroups.gui: the counts on the plaques, the play / stop row on the centre line
+  preview_armybar.py        build/preview_armybar.png (+ _zoom): the game's look and the mod's, read from the .gui
+  layout_events.py          the events' option plate and each window's options centre (v0.8)
+  make_events.py            eventwindow.gui: fonts, option entries, each window's options grid
+  preview_events.py         build/preview_events.png: a country, a news and a leader event
+  globe_art.py              art/valsora_land.png (Valsora's land from the built map) and the gilt line globe (v0.8)
+  game_fonts.py             the game's 28 fonts redrawn in the deco faces at their paths; --measure sizes them (v0.8)
+  preview_game_fonts.py     build/preview_game_fonts.png: the game's fonts beside ours (needs the game's font textures)
+  restore_noise.py          puts back textures that only changed by anti-aliasing noise (v0.8)
+  proposals_*.py            the proposals in art/proposals/ (panel pictures, larger flags): not in the mod
   validate_preview.py       static checks + a preview renderer that reads the generated .gui/.gfx
   preview_screens.py        politics, state panel, focus tree and main menu previews (imports validate_preview)
   preview_panels.py         every side panel (build/preview_panel_<key>.png and _vanilla.png, the game's) and the
@@ -449,6 +477,13 @@ Build order matters. `gen_fonts` runs first because `layout.py` measures strings
   `gfx/fonts/hoi_mapfont4.fnt/.dds`, without touching its definition.
 - `line_extra` in `gen_fonts.build` adjusts the line height (Bodoni Moda's is very loose: the italic
   description font uses -5 to fit five lines).
+- **The game's own fonts** (v0.8) are defined in its `interface/core.gfx` (`fontfiles`) by file path, so a font file
+  of the same path in the mod replaces one everywhere, as `hoi_mapfont4` has since v0.3. **(inferred from the game's
+  files)** the engine loads the texture named like the `.fnt` (`gfx/fonts/hoi_18mbs.dds`), not the `page` named
+  inside it: the game's own `.fnt` files name `hoi_18mbs_0.dds`, which the game doesn't ship. Tooltips use `cg_16b`
+  (Century Gothic: `ToolTip` in `core.gui`); the rest are Ubuntu (`hoi_*`), Orator (`hoi_24header`, `_30header`,
+  `_36header`: window titles), Garamond (`garamond_*`, `vic_*`, `standard*`: settings, menus, chat, the news feed) and
+  the AFL typewriter (`hoi4_typewriter*`: the unit, leader, designer and scientist screens; `_inverted` is white).
 
 ### Main menu
 
@@ -640,9 +675,32 @@ it at y 291) and its picture overlay; a leader event's arched portrait frame (17
 (the game's typewriter fonts are dark, for paper): titles `valsora_deco_title_18`, the text and the options
 `valsora_deco_body_15` (in the menu's tracked capitals 811 of the game's 10,171 options would need a third line,
 which the 40 px box cuts off; 4 in the body font). `preview_events.py` draws a country event and a news event.
+v0.8: the option plate is `layout_events.OPTION_W` (334) wide inside the game's 352 px picture, the entry and the grid's
+slots as wide, and each window's `options_grid` is moved so the plates sit in the middle of the room beside the
+picture (`layout_events.CENTRES`: 12 px either side in a country event); a leader event gets the country event's foot
+and no paper clip (`event_report_bottom_win_2.dds`, `events/clip.dds`); `preview_events.py` draws a leader event too.
 
-**gen_textures.py `prefix ...`** renders only the textures whose key starts with a prefix (`lg_`, `ev_` ...) and
-merges the manifest: a full run changes a few anti-aliased pixels in every texture.
+**game_fonts.py (v0.8).** The game's 28 fonts redrawn at their paths (`gfx/fonts/<name>.fnt/.dds`), so the screens the
+mod hasn't re-laid read in the deco faces: Josefin Sans for Ubuntu, Century Gothic and the typewriter, Federo for
+Garamond, Federo capitals for Orator. `GAME` holds each one's face, weight, rim (the game's shadowed `..mbs`/`..bs`),
+capitals, tracking and size. The sizes come from `--measure`: the largest whose text is no wider than the game's for
+95 % of 4,000 of the game's English strings, and at most 5 % wider for 99 %. The deco faces are wide with a small
+x-height, so they come out 2-5 px under the game's nominal sizes (Josefin bold costs another half pixel, so text is
+600, not 700); tooltips grow with their text, so `cg_16b` keeps the Deco UI's 15 px. Each keeps the game's line height
+with its capitals centred where the game's are (`gen_fonts.build(line=...)`), on the smallest atlas that fits
+(`gen_fonts.fit_atlas`). Only `gen_fonts.CHARS` is drawn (Latin); the game's Cyrillic and CJK files stay its own.
+`validate_preview` loads them with the mod's fonts, and judges their text against the game's own widths
+(`GAME_W`, section 9). `preview_game_fonts.py DIR` draws each beside the game's, given the game's font textures in
+DIR (the sparse copy of the game leaves them out: fetch the `gfx/fonts/*.dds` needed into a scratch folder, never
+into the repository).
+
+**gen_textures.py** (v0.8) redraws only what changed: each texture's signature (its HTML, size, format, fonts, CSS and
+the files it embeds, with the project's own folder written `<root>`, so it is the same in any clone) is kept in
+`texture_manifest.json` (committed with the textures; `validate_preview` reports a texture in the mod that it doesn't
+list as stale), and a texture whose signature matches and whose file exists is skipped. `--all` redraws all;
+`gen_textures.py <prefix> ...` those whose key starts with a prefix (`lg_`, `ev_` ...); `--sign` draws nothing and
+records the textures on disk as drawn from today's code (after a change to the signature itself). A redraw changes a
+few anti-aliased pixels: `restore_noise.py` puts those textures back.
 
 **make_menu.py.**
 
@@ -729,10 +787,23 @@ GP.write_gui(MOD + "interface/x.gui", t)    # braces checked, engine_safe applie
   glyph's half-pixel position on its own (Python's `round()` takes .5 to the even number), so centred text read
   "Postpon e th e count."; a line now starts on a whole pixel, as the game draws it. The fonts' advances are whole
   pixels, and Pillow draws glyphs only at whole pixels too (an offset under .5 is ignored).
+- A box narrower than its text says nothing by itself: many of the game's are narrower than the game's own text (the
+  logistics panel's "Military Factories": an 80 px box, 107 px in the game's font). Since v0.8 the checks judge a game
+  font's text against the game's own width (`validate_preview.GAME_W`, from the game's `.fnt`) and flag it only when
+  ours is wider than the box and than the game's (by 5 %), or needs more lines than the game's; the side panels'
+  "game's look" previews draw the game's fonts in an approximation and don't check them (their textures aren't in the
+  repository). `preview_panels` looks up button texts in the game's localisation, fills `$VARIABLES$` with "12" and
+  breaks lines at `\n`: before v0.8 it measured the raw keys ("ARMY_SORT_GROUP").
 
 ## 10. Open items and things to check in game
 
 Check these first in the user's next screenshots and `error.log`:
+
+- **v0.8 fonts**: text everywhere the game's own fonts draw it (tooltips, lists, the designer, the leader and unit
+  screens, settings, window titles): readable, nothing cut short (a box the deco face doesn't fit drops the end of
+  its text or its second line); a tooltip of the ruler's portrait (Roland's titles: the user's example).
+- **v0.8 layout fixes**: the army bar's play / stop row centred over each general, the plate behind it; an event's
+  options centred between the picture and the card's edge; the news masthead's globe.
 
 - **v0.7 army bar**: a selected army (jade frame and plaque), an army group with its armies (one plate from the
   marshal over his armies), the counts centred on the plaques, a battle plan prepared and running (the chevrons), an
@@ -847,9 +918,10 @@ The user asked (2026-10-14) for one install, keeping the option of going back to
 
 ## 12. Next steps (in order)
 
-1. Process the user's screenshots and `error.log` of v0.5 (section 10 and the README's checklist): the side
-   panels' notch and headers, the construction screen folded, the map modes and minimap.
-2. The army bar (v0.7) and the events (v0.7), after the user's screenshots.
+1. Process the user's screenshots and `error.log` of v0.5.2 to v0.8 (section 10 and the README's checklist): the
+   side panels, the focus tree, the army bar, the events, the fonts.
+2. Any text the deco faces don't fit in game: shrink that font in `game_fonts.GAME` (or widen the box in the screen's
+   `make_*.py`), rebuild.
 3. Politics extras still missing from the Government mockup: faction member flags (needs a scripted
    GUI dynamic list over the faction's members; not verified that one exists) and a one-spirit card
    with its modifiers. The user does not want "The Court" panel.
@@ -861,7 +933,8 @@ The user asked (2026-10-14) for one install, keeping the option of going back to
 5. Focus tree, after the user's screenshots of v0.6: what the mockup has that the game's window lacks (the focus in
    progress and its days in the header, a progress bar under the focus, the "on completion" list in the tooltip)
    needs scripted GUIs or can't be done; the superevent is done (Valsora's `scripts/superevents_deco.py`).
-6. HD flags experiment (section 6), only if the user wants it.
+6. HD flags experiment (section 6), only if the user wants it: the mockup and what it would take are in
+   `art/proposals/hd_flags/`.
 
 For every new screen, follow this pattern:
 

@@ -6,7 +6,7 @@ The game's events are paper (a clipboard report, a newspaper) with dark typewrit
 replaced at the game's paths by gen_textures.py (the 'ev_' keys: lacquer, gilt rails, a crest, the superevent's
 style), so the text needs the mod's light fonts: titles in gilt capitals, the text and the options in cream.
 Positions and every element of the game's file are kept: the game sizes the middle to the text and stacks the
-pieces itself. v0.7.1: each window's options are centred in the room they have (layout_events).
+pieces itself. v0.8: each window's options are centred in the room they have (layout_events).
 """
 import os
 import sys
