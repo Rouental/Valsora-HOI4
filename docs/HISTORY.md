@@ -10,6 +10,11 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-15, the sixth round (the author: "Please give me the downloads for the mods, as well as everything else
+  prepared since last night", then "Yes, please switch to using releases"): every file of the day sent again (the
+  mods, the reports, the guides, the previews and design sheets, the map and flag files). The switch to GitHub's
+  Releases page stopped at the first step: this session type may not create releases (HTTP 403). The author's choice:
+  the zip stays in `dist/` for now; releases, by hand, for more substantial builds.
 - 2026-10-15, the fifth round (the author: "Also allow people to create political advisors and companies on the
   gazetteer"): no map changes, the mod byte-identical (no nation has companies yet). **The Gazetteer's People tab**
   has a section for political advisors (with the political advisors' traits) and one for **companies**: an arms maker

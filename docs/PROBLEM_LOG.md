@@ -518,6 +518,14 @@ screenshot and `error.log`)
 
 ## Map problems found while building
 
+**The first release couldn't be published from the session** (2026-10-15, the author: "Yes, please switch to using
+releases")
+- Cause: GitHub's proxy for this kind of session refuses releases: "Creating, editing, or deleting releases is not
+  permitted for this session type" (HTTP 403, on creating a draft; nothing was made). It is the session type's rule,
+  not the author's GitHub access.
+- Fix: none from a session, and no way round it. The author keeps the zip in `dist/` for now and will publish releases
+  by hand for more substantial builds.
+
 **The Gazetteer's company kinds lacked the helicopter maker, and the check its list of templates** (2026-10-15)
 - Cause: `vanilla_sync.py` read the game's English names with a pattern wanting one leading space; the helicopter
   organisation's line has none in the game's file, so it read as unnamed and was left out. And `companies.json` was

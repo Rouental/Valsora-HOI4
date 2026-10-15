@@ -271,6 +271,11 @@ in `scripts/mutation_test.py` (50, every one caught): run it after any change to
 - **Province sizes by terrain** (author, 2026-10-15, on `docs/BORDER_LIMIT.md`: "For cases like desert, yes. But for
   others like Rouental, keep it dense"): when the Terrain layer is painted, deserts and land like them may get larger
   provinces to free borders; Rouental keeps its ~190 px ones.
+- **The mod's zip stays in `dist/`, committed** (author, 2026-10-15: "Keep it as is. When we start getting to more
+  substantial builds, I'll start transferring to the releases page"), and is sent in the chat too. A session like this
+  one can't publish releases: GitHub's proxy answers "Creating, editing, or deleting releases is not permitted for this
+  session type" (HTTP 403), so the Releases page, when it comes, is the author's to publish by hand (Claude gives them
+  the zip and the notes). Don't work around that rule (no workflow or tag that publishes for the session).
 - **Test content until the first public build** (author, 2026-10-15: "I'll remove all the test stuff before the first
   public build"): Devlon's spirits and Rouental's test decisions stay until the author takes them out.
 - **Map size 5120×2560.** HOI4 needs both sides to be multiples of 256 and the area to stay
@@ -1078,10 +1083,10 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   author is in `deco_ui/valsora_deco_ui/README.txt` (Things to check) and `deco_ui/CLAUDE.md` (section 10).
 - **Waiting on the author:** the larger flags' test version (`docs/HD_FLAGS_TEST.md`); the panel picture proposals (on
   hold, the author: "I don't want to move ahead with the panel pictures just yet"); the tech tree proposal's eight
-  questions (`docs/TECH_TREE_2036.md`: "I'll get back to you on that"); the zip on GitHub's Releases page and the other
-  size options (`docs/SPEED_AND_SIZE.md`; the author asked what the Releases page is, 2026-10-15, and was told); the
-  `error.log` behind the 8 errors of their last test. Settled (2026-10-15): the news masthead stays VALSORAN STANDARD,
-  its globe the ringed one, the event cards' crest the keystone.
+  questions (`docs/TECH_TREE_2036.md`: "I'll get back to you on that"); the other size options
+  (`docs/SPEED_AND_SIZE.md`); the `error.log` behind the 8 errors of their last test. Settled (2026-10-15): the news
+  masthead stays VALSORAN STANDARD, its globe the ringed one, the event cards' crest the keystone; the zip stays in
+  `dist/` (Decisions worth keeping, "The mod's zip").
 
 ## Known gaps
 

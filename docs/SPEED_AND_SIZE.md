@@ -81,7 +81,11 @@ What could be done (none of it done, but the first):
    its zip attached; release files don't count towards the repository's size. The author would download from the
    Releases page (`https://github.com/Rouental/Valsora-HOI4/releases/latest` always points at the newest) instead of
    `dist/`. Claude would publish them through GitHub's API (not yet tried from a session). This changes where the
-   author gets the mod, so it waits for their go-ahead.
+   author gets the mod, so it waits for their go-ahead. **Tried 2026-10-15, at the author's go-ahead:** a session
+   like ours can't create releases (GitHub's proxy: "Creating, editing, or deleting releases is not permitted for this
+   session type", HTTP 403). The author's choice then: "Keep it as is. When we start getting to more substantial
+   builds, I'll start transferring to the releases page" (publishing them by hand, from the zip and notes Claude
+   gives them).
 3. **Fewer committed previews:** the routine previews (`dist/preview_*.png`, rewritten by every build) could stay
    in the ignored `work/`, with only the pictures made for the author committed. Also the author's call: they may
    browse `dist/` on GitHub.
