@@ -232,6 +232,9 @@ scripting (tags targeted, popularities, ideologies) skip vanilla's shipped files
   (`LICENSE_IC_COST_YEAR_INCREASE`), so moving it would only make licences dearer.
   `check_mod.py` fails on any 18xx or 19xx date, `start_year` or tech tree label in the
   built files, and on a start date or bookmark outside 2036 (mutation-tested).
+- **Railways wait** (author, 2026-10-15: "Let's leave railways off for now. The location of cities might change,
+  and the mod doesn't need to be playable yet"): the map has only the lines drawn on the Gazetteer (one, Rouental's),
+  so supply hubs away from a capital aren't connected. Don't generate a network until the author asks.
 - **Map size 5120×2560.** HOI4 needs both sides to be multiples of 256 and the area to stay
   under ~13,238,272 px. 5120×2560 = 13,107,200 is the largest size under that cap, and
   2:1 matches the author's canvas. It is proven in the wild (the Mappa Mundi mod ships this
