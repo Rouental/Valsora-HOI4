@@ -148,6 +148,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
   background: var(--sheet); cursor: pointer; font-size: 13px; color: var(--ink); }
 .tchip i { width: 12px; height: 12px; border-radius: 2px; border: 1px solid rgba(0,0,0,.25); }
 .tchip[aria-pressed="true"] { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); font-weight: 700; }
+.tchip .x { border: 0; background: none; padding: 0 0 0 2px; font: inherit; line-height: 1; cursor: pointer; color: var(--ink-3); }
+.tchip .x:hover { color: var(--ink); }
 .sheetwrap { position: relative; flex: 1; min-height: 0; border: 1px solid var(--rule-2); background: var(--paper); overflow: hidden; touch-action: none; }
 #map { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .loading { position: absolute; inset: 0; display: grid; place-items: center; font: 400 20px var(--font-display); color: var(--ink-2); background: var(--paper); text-align: center; padding: 20px; }
@@ -414,7 +416,8 @@ const KINDS = ["states", "provinces", "cities", "rivers", "rails", "politics", "
 const REL_COLOURS = ["#b5543c", "#3c7db5", "#6f9a3a", "#8a4fb0", "#c2912e", "#2f9a93", "#b04f7c", "#5c6670"];
 const MAX_STATE_POP = 500000000;
 const ERASE_R = 3;
-const REQ_KINDS = [["subideology", "New sub-ideology"], ["subject", "Subject type"], ["map", "Map change"], ["other", "Something else"]];
+const REQ_KINDS = [["subideology", "New sub-ideology"], ["trait", "New trait"], ["subject", "Subject type"], ["map", "Map change"], ["other", "Something else"]];
+const MAX_TRAITS = 6;   // a leader's traits from the base game (2026-10-15)
 const REQ_KIND = Object.fromEntries(REQ_KINDS);
 const REQ_STATUS = { open: "Open", done: "Done", declined: "Declined" };
 const ROLES = [["general", "General"], ["admiral", "Admiral"], ["advisor", "Advisor"], ["other", "Other"]];
@@ -2889,6 +2892,51 @@ function portraitBox(im, onPick, onClear, label) {
     style: src ? `background-image:url("${String(src).replace(/"/g, "%22")}")` : "" }, im ? (src ? "" : "loading") : label || "Add a portrait");
   return h("div", { style: "display:grid;gap:4px" }, box, im ? h("button", { class: "btn small", type: "button", onclick: onClear }, "Remove") : null);
 }
+// a leader's traits: the base game's (index.traits, from scripts/vanilla_sync.py), as chips with a list to add more
+function traitList(role, slot) {
+  const T = app.index.traits || {};
+  if (role === "ruler") return T.ruler || [];
+  if (role === "general" || role === "admiral") return T[role] || [];
+  if (role === "advisor") return (T.advisor || {})[slot] || [];
+  return [];
+}
+function traitPicker(id, list, chosen, onval) {
+  const names = Object.fromEntries(list.map(t => [t[0], t[1]]));
+  const have = (Array.isArray(chosen) ? chosen : []).filter(k => names[k]);
+  const chips = h("div", { class: "chips" }, have.map(k => h("span", { class: "tchip", "aria-pressed": "true" }, names[k],
+    h("button", { class: "x", type: "button", title: "Remove " + names[k], "aria-label": "Remove " + names[k],
+      onclick: () => { const v = have.filter(x => x !== k); onval(v.length ? v : null); } }, "×"))));
+  if (have.length >= MAX_TRAITS) return h("div", { class: "field" }, h("label", { text: `Traits (at most ${MAX_TRAITS})` }), chips);
+  const sel = h("select", { id, onchange: e => { const k = e.target.value; if (k) onval([...have, k]); } }, h("option", { value: "", text: have.length ? "Add another trait…" : "Add a trait…" }));
+  const groups = {};
+  for (const [k, nm, g] of list) {
+    if (have.includes(k)) continue;
+    const parent = g ? (groups[g] = groups[g] || sel.appendChild(h("optgroup", { label: g }))) : sel;
+    parent.append(h("option", { value: k, text: nm }));
+  }
+  return h("div", { class: "field" + (have.length ? " set" : "") }, h("label", { for: id, text: "Traits, from the base game" }), chips, sel);
+}
+function traitAsk(id, who) {  // ask the author for a trait the base game doesn't have
+  const box = h("div", { class: "reqform", hidden: true });
+  const open = h("button", { class: "btn small", type: "button", onclick: () => { box.hidden = !box.hidden; if (!box.hidden) nm.focus(); } }, "Ask for a new trait");
+  const nm = h("input", { id: id + "-name", type: "text", maxlength: "60", placeholder: "The trait's name", "data-keep": true });
+  const what = h("textarea", { id: id + "-what", maxlength: "1500", placeholder: "What it should do (e.g. +10% defence in hills, cheaper advisors …)", "data-keep": true });
+  const msg = h("span", { class: "meta" });
+  if (app.mode !== "shared") box.append(h("div", { class: "meta", text: "Requests go to the shared atlas, which this view can't save to: describe the trait in the notes instead." }));
+  else {
+    const send = h("button", { class: "btn small primary", type: "button", onclick: async () => {
+      if (locked()) { askPassword(); return; }
+      const t = nm.value.trim();
+      if (!t) { msg.textContent = "Name the trait first."; nm.focus(); return; }
+      send.disabled = true;
+      try { await sendRequest("trait", `New trait: ${t}`, `For ${who}. ${what.value.trim()}`); nm.value = ""; what.value = ""; msg.textContent = "Sent. The author sees it with your nation's requests."; }
+      catch (e) { msg.textContent = "Not sent: this view can't save to the shared atlas."; writeFailed(e, null); }
+      finally { send.disabled = false; }
+    } }, "Send");
+    box.append(h("div", { class: "field" }, h("label", { for: id + "-name", text: "New trait" }), nm), what, h("div", { class: "chips" }, send, msg));
+  }
+  return h("div", { style: "display:grid;gap:6px" }, h("div", null, open), box);
+}
 function renderPeople(force) {
   const pane = $("#pane-people"), N = app.N;
   if (!N || !app.index) return;
@@ -2906,7 +2954,9 @@ function renderPeople(force) {
             h("div", { class: "field" + (ruler.name ? " set" : "") }, h("label", { for: "pp-ruler-name", text: "Name" }),
               textInput("pp-ruler-name", ruler.name, rulerDefault || "A name from the nation's culture", v => edit("people", { ruler: { name: v } }), "", 80)),
             h("div", { class: "field" + (ruler.desc ? " set" : "") }, h("label", { for: "pp-ruler-desc", text: "Titles or a few words (shown on their portrait in game)" }),
-              textArea("pp-ruler-desc", ruler.desc, "e.g. By the Grace of God, Prince of …", v => edit("people", { ruler: { desc: v } }), 600)))),
+              textArea("pp-ruler-desc", ruler.desc, "e.g. By the Grace of God, Prince of …", v => edit("people", { ruler: { desc: v } }), 600)),
+            traitPicker("pp-ruler-traits", traitList("ruler"), ruler.traits, v => edit("people", { ruler: { traits: v } })),
+            traitAsk("pp-ruler-ask", "the head of state" + (ruler.name ? ` (${ruler.name})` : "")))),
       P.handmade ? null : h("div", { class: "meta", text: "A portrait is cropped to HOI4's 156 × 210 from the top of the picture; send one with the face in the upper half." })));
     // party leaders
     if (!P.handmade) {
@@ -2924,21 +2974,30 @@ function renderPeople(force) {
               h("div", { class: "field" + (sub ? " set" : "") }, h("label", { for: "pp-sub-" + ideo, text: "Sub-ideology" }),
                 subSelect("pp-sub-" + ideo, sub, curParty[ideo] ? `Map default: ${subName(curParty[ideo])}` : "No set leader", x => edit("politics", { parties: { [ideo]: x } }), ideo)),
               have ? h("div", { class: "field" + (p.name ? " set" : "") }, h("label", { for: "pp-name-" + ideo, text: "Leader" }),
-                textInput("pp-name-" + ideo, p.name, "A name from the nation's culture", v => edit("people", { ["party-" + ideo]: { name: v } }), "", 80)) : null));
+                textInput("pp-name-" + ideo, p.name, "A name from the nation's culture", v => edit("people", { ["party-" + ideo]: { name: v } }), "", 80)) : null,
+              have ? traitPicker("pp-traits-" + ideo, traitList("ruler"), p.traits, v => edit("people", { ["party-" + ideo]: { traits: v } })) : null));
         }))));
     }
     // generals, admirals, advisors
     const others = Object.entries(ppl).filter(([k, v]) => k.startsWith("c-") && v && isObj(v));
     out.push(h("div", { class: "sec" }, h("h4", null, "Generals, admirals and others", h("small", { text: `${others.length}` })),
-      h("div", { class: "meta", text: "Characters the author can add to the game by hand: who they are and what they're good at." }),
+      h("div", { class: "meta", text: "Generals and admirals join the nation's army and navy at the start, and advisors its political screen (pick their post). Give them traits from the base game, or ask the author for a new one; the notes are for the author." }),
       h("div", null, others.map(([id, c]) => h("div", { class: "person" },
         portraitBox(c.portrait, () => uploadInto("people", [id, "portrait"], "the portrait"), () => edit("people", { [id]: { portrait: null } })),
         h("div", { class: "fields" },
           h("div", { class: "row", style: "display:flex;gap:6px;flex-wrap:wrap" },
-            (() => { const s = h("select", { "aria-label": "Role", onchange: e => edit("people", { [id]: { role: e.target.value } }) }, ROLES.map(([k, l]) => h("option", { value: k, text: l }))); s.value = c.role || "general"; return s; })(),
+            (() => { const s = h("select", { "aria-label": "Role", onchange: e => edit("people", { [id]: { role: e.target.value, traits: null, slot: null } }) }, ROLES.map(([k, l]) => h("option", { value: k, text: l }))); s.value = c.role || "general"; return s; })(),
+            (c.role || "general") === "advisor" ? (() => {
+              const s = h("select", { "aria-label": "Post", onchange: e => edit("people", { [id]: { slot: e.target.value || null, traits: null } }) },
+                h("option", { value: "", text: "Their post…" }), ((app.index.traits || {}).slots || []).map(([k, l]) => h("option", { value: k, text: l })));
+              s.value = c.slot || ""; return s; })() : null,
             h("button", { class: "btn small danger", type: "button", onclick: () => edit("people", { [id]: null }) }, "Delete")),
           textInput("pp-c-name-" + id, c.name, "Name", v => edit("people", { [id]: { name: v } }), "", 80),
-          textArea("pp-c-note-" + id, c.notes, "Skills, traits, history", v => edit("people", { [id]: { notes: v } }), 1000))))),
+          (c.role || "general") === "other" ? null :
+            (c.role === "advisor" && !c.slot) ? h("div", { class: "meta", text: "Pick the advisor's post to give them traits." }) :
+            traitPicker("pp-c-traits-" + id, traitList(c.role || "general", c.slot), c.traits, v => edit("people", { [id]: { traits: v } })),
+          (c.role || "general") === "other" ? null : traitAsk("pp-c-ask-" + id, `${ROLES.find(r => r[0] === (c.role || "general"))[1].toLowerCase()} ${c.name || "(no name yet)"}`),
+          textArea("pp-c-note-" + id, c.notes, "Notes for the author: skills, history", v => edit("people", { [id]: { notes: v } }), 1000))))),
       h("div", null, h("button", { class: "btn small", type: "button", onclick: () => { const id = "c-" + uid(); if (edit("people", { [id]: { role: "general", name: "" } })) setTimeout(() => { const el = document.getElementById("pp-c-name-" + id); if (el) el.focus(); }, 60); } }, "Add a character"))));
     return paneFrame(out);
   });
@@ -3085,6 +3144,10 @@ async function updateRequest(tag, id, delta) {
   try { const ref = await requestRef(tag, id); if (ref) await ref.update(delta); if (app.isOwner && $("#desk").hidden) loadOwnerData(true); }
   catch (e) { writeFailed(e, null); }
 }
+async function sendRequest(kind, title, details) {  // a request to the author, kept with the nation behind its password
+  const N = app.N;
+  await app.db.doc(`${nPath(N.tag, N.K)}/req-${uid()}`).set({ t: "req", tag: N.tag, kind, title: title.slice(0, 100), details: (details || "").trim().slice(0, 3000), by: (app.me && app.me.id) || null, byName: (app.fb && app.me.name) || null, at: Date.now(), status: "open" });
+}
 function requestForm() {
   const N = app.N;
   if (app.mode !== "shared") return h("div", { class: "meta", text: "Requests go to the shared atlas, which this view can't save to. Put them in the notes of your file instead." });
@@ -3099,7 +3162,7 @@ function requestForm() {
     if (!t) { msg.textContent = "Give the request a title first."; title.focus(); return; }
     send.disabled = true;
     try {
-      await app.db.doc(`${nPath(N.tag, N.K)}/req-${uid()}`).set({ t: "req", tag: N.tag, kind: kind.value, title: t, details: details.value.trim().slice(0, 3000), by: (app.me && app.me.id) || null, byName: (app.fb && app.me.name) || null, at: Date.now(), status: "open" });
+      await sendRequest(kind.value, t, details.value);
       title.value = ""; details.value = ""; msg.textContent = "Sent. The author sees it with your nation.";
     } catch (e) { msg.textContent = "Not sent: this view can't save to the shared atlas."; writeFailed(e, null); }
     finally { send.disabled = false; }
