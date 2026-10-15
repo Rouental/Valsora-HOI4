@@ -108,7 +108,7 @@ def scene(root, title):
 
 def main():
     a = scene(VANILLA, "the game's army bar")
-    b = scene(MOD, "Valsora Deco UI, v0.7")
+    b = scene(MOD, "Valsora Deco UI, v0.8")
     out = Image.new("RGB", (a.width, a.height * 2 + 6), (20, 24, 27))
     out.paste(a.convert("RGB"), (0, 0))
     out.paste(b.convert("RGB"), (0, a.height + 6))
