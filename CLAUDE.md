@@ -17,7 +17,7 @@ the Valsora Deco UI (`deco_ui/`). The Gazetteer, a web site, lets the author's f
 - `docs/NATIONS.md`: every nation, who named and decided what; `docs/HISTORY.md`: the build's history, date by
   date; `docs/PROBLEM_LOG.md`: every problem, its cause and its fix;
 - `docs/EDITING.md`: the author's guide to the `.pdn`; `docs/GAZETTEER.md`: the Gazetteer (and how it works, for Claude:
-  `docs/GAZETTEER_INTERNALS.md`);
+  `docs/GAZETTEER_INTERNALS.md`; every function of the site, for the author to sort: `docs/GAZETTEER_FUNCTIONS.md`);
   `docs/HANDOFF_MERLO.md`: for Merlo's Claude; `deco_ui/CLAUDE.md`: the interface's own manual;
 - proposals waiting for the author: `docs/TECH_TREE_2036.md`, `docs/BORDER_LIMIT.md`,
   `deco_ui/art/proposals/`, the larger flags' test version (`docs/HD_FLAGS_TEST.md`); plans: `docs/ROUENTAL_ARMY.md`,
@@ -222,11 +222,11 @@ and what could make both smaller.
 | `export_canvas.py` | previews in `dist/` |
 | `package.py` | `dist/valsora_test.zip` (reproducible: fixed dates and permissions, sorted) |
 | `stamp.py` | `fresh` / `save` a step's inputs, so `run_all.sh` skips `read_layers.py` while they are unchanged (`FORCE=1` reruns it) |
-| `mutation_test.py` | by hand, after changing `check_mod.py`: breaks hard-linked copies of the build in 50 known ways (map files, history, content, files), runs `check_mod.py` on each batch side by side, and fails unless every break is reported (a miss is retried alone, in case another break hid it); 30 s. Add a break for every new check (2026-10-15: it found our on_actions' scripted effects unchecked) |
+| `mutation_test.py` | by hand, after changing `check_mod.py`: breaks hard-linked copies of the build in 52 known ways (map files, history, content, files), runs `check_mod.py` on each batch side by side, and fails unless every break is reported (a miss is retried alone, in case another break hid it); 30 s. Add a break for every new check (2026-10-15: it found our on_actions' scripted effects unchecked) |
 | `fit_flag.py` | by hand: a flag the author sends in another shape → `source/flags/TAG.png` at 82:52 without resampling (plain field trimmed round an emblem, vertical bands made longer, stripes lengthened or made taller, a screenshot's frame cropped; quarters, crosses and borders refused) and `work/flag_fit_TAG.png` to check |
 | `build_flags15.sh` | by hand: the larger flags' test version (`docs/HD_FLAGS_TEST.md`) beside the mod: the Deco UI drawn for it in `work/deco_flags15/`, the mod in `work/build_flags15/`, `work/valsora_test_flags15.zip`; `build/` and `dist/` untouched |
 | `publish_site.sh` | by hand: the Gazetteer's site (`facts_export.py`, `gazetteer_site.py`) as the next commit of `gh-pages`, pushed; nothing when unchanged |
-| `tests/gazetteer/` | by hand, after `facts_export.py`: the Gazetteer page driven in Chromium with a stand-in for claude.ai's runtime: `run.py` (owner, friend, passwords, desktop and phone, light and dark), `traits.py` (traits and their requests), `companies.py` (political advisors, companies and their requests); `harness.py` builds the test site in `work/gazetteer_test/` |
+| `tests/gazetteer/` | by hand, after `facts_export.py`: the Gazetteer page driven in Chromium with a stand-in for claude.ai's runtime: `run.py` (owner, friend, passwords, desktop and phone, light and dark), `traits.py` (traits and their requests), `companies.py` (political advisors, companies and their requests), `ingame.py` (the game's own characters and releasables, commanders' stats, cities' size); `harness.py` builds the test site in `work/gazetteer_test/` |
 | `country_list.py` | by hand, after a build: `dist/world_map_labelled.png` (every country labelled) and `dist/countries.md` / `.csv` (name, full name, ideology, sub-ideology, culture, leader, states), read from the built mod |
 | `nation_sheet.py` | by hand, after a build: `dist/nations_by_continent.png`, every nation in the game under the continent of its capital: flag, ruler at the start (portrait of our own, or a "placeholder" box for a base-game one), full name, ideology and sub-ideology, culture, and a strip of its map colour (author, 2026-10-13) |
 | `collages.py` | by hand, after a build: `dist/flags_collage.png` (every custom flag, and the countries still on a placeholder stripe) and `dist/leaders_collage.png` (every custom leader: own portraits at 2×, named ones with base-game portraits as labelled tiles); `--continent NAME` writes only `dist/flags_<name>.png`, the flags of the nations whose capital is on that continent, naming below them those with land there and their capital elsewhere (2026-10-10, Araseos; 2026-10-12, Yastreovakia) |
@@ -243,7 +243,7 @@ equipment, modules, battalions, ideas, defines, the map files the mod inherits, 
 stand-ins for Earth's decisions and tags, every event fired (by focus, effect, event or
 on_action) and 2036 (mutation-tested: 19 breaks, all caught). The checks that judge our
 scripting (tags targeted, popularities, ideologies) skip vanilla's shipped files. Since 2026-10-15 the breaks are kept
-in `scripts/mutation_test.py` (50, every one caught): run it after any change to `check_mod.py`.
+in `scripts/mutation_test.py` (52, every one caught): run it after any change to `check_mod.py`.
 
 ## Decisions worth keeping
 
@@ -974,9 +974,11 @@ Left loaded on purpose, and noisy in `error.log`:
 
 A web site, **https://rouental.github.io/Valsora-HOI4/**, where the author's friends fill in their own nations (author,
 2026-10-14), each behind a password the author gives them: names and governments, rulers, party leaders, political
-advisors, generals, admirals and other advisors with the base game's traits, companies of the base game's kinds (arms
-makers as military-industrial organisations and designers, industrial concerns), flags, releasables, suggestions and
-requests; once a nation's states
+advisors, generals, admirals and other advisors with the base game's traits (commanders with their skill and stats),
+companies of the base game's kinds (arms makers as military-industrial organisations and designers, industrial
+concerns), flags, releasables, suggestions and requests, and what the game already has (the author's own characters,
+as Roland and Serelle, and the releasables and civil war risers of `nations.py`), changed over the game's; once a
+nation's states
 are the author's own lines, its map facts too (state names and buildings, cities, terrain, rivers, railways, supply
 hubs). `scripts/gazetteer.html` is the page (`gazetteer_site.py` builds the site, `facts_export.py` its map data); the
 atlas is the author's Firebase project `valsora-hoi4` (Firestore). Read `docs/GAZETTEER_INTERNALS.md` before changing
@@ -992,12 +994,14 @@ the page, its rules or its import.
     closed nation's map facts.
   - Only the author's Claude publishes the site (`gh-pages`, allowed for it alone: "it's ok to put it on a new branch").
 - **Republish** after map changes: `sh scripts/publish_site.sh "message"`; test the page first, after
-  `python3 scripts/facts_export.py`: `python3 tests/gazetteer/run.py`, `traits.py` and `companies.py` (same folder).
+  `python3 scripts/facts_export.py`: `python3 tests/gazetteer/run.py`, `traits.py`, `companies.py` and `ingame.py`
+  (same folder).
 - **Into the mod:** the author's **Save every nation as a file**, then `python3 scripts/gazetteer.py import FILE`
   (`source/gazetteer/<TAG>.json`, pictures in `source/gazetteer/assets/`, flags of HOI4's shape into `source/flags/`),
   a rebuild (`river_provinces.py` first after new rivers), `gazetteer.py suggestions` if there are any, and
   `gazetteer.py status`, which lists the open requests and what is left to do by hand: tell the author those. A
-  nation's facts win over the `.pdn` and `nations.py` for that nation; hand-made rulers (`HAND_MADE`) keep theirs.
+  nation's facts win over the `.pdn` and `nations.py` for that nation; hand-made characters (`HAND_MADE`) are changed
+  where they are, within their ideology (`gazetteer.patch_characters`), and their copies (`nations.COPIES`) follow.
   Without facts the build is byte-identical. `GAZETTEER_DIR` / `GAZETTEER_FLAGS` point the scripts at other folders
   (tests: never import a test file into `source/gazetteer/`).
 
@@ -1075,7 +1079,9 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   Rouental's Gazetteer page is in the build (`source/gazetteer/ROU.json`), its admiral among its characters; no
   other nation's yet. The Gazetteer offers the base game's traits for every leader and takes requests for new ones,
   and has political advisors and companies (arms makers and industrial concerns of the base game's kinds, with logos;
-  requests for new kinds) (published 2026-10-15). The test version with 1.5 times larger flags is built beside the mod by
+  requests for new kinds); since 2026-10-15 (later) it shows what the game already has, editable (the author's own
+  characters with their stats; Rouental's 13 releasables, its civil war's 7 risers and Belekria's Tethia), commanders'
+  skill and stats, and cities' size apart from their victory points (now labelled by importance). The test version with 1.5 times larger flags is built beside the mod by
   `sh scripts/build_flags15.sh` and sent as its own zip (`docs/HD_FLAGS_TEST.md`), not put into the mod.
 - **Seen in game last** (2026-10-15, the third round): the Deco UI v0.8.1 with Rouental's test decisions (the
   author's screenshots): the country, long, news and leader events and the news page worked; the state and operative

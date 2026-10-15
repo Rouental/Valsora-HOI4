@@ -281,6 +281,18 @@ password: https://rouental.github.io/Valsora-HOI4/
   their kind without Arms Against Tyranny) and industrial concerns, with a logo; new kinds are
   requests of the kind "New kind of company". The build writes them
   (`gazetteer.companies`); `check_mod.py` checks them.
+- **What the game already has** (2026-10-15, later). The People tab shows the author's own
+  characters (Roland, Serelle, Mahaut ...) as the game has them, every field editable over
+  the game's (a sub-ideology only within its ideology: the focus trees name the ideologies;
+  generals' and admirals' rank, skill and stats too), and the Releasables tab the
+  releasables `nations.py` already has (Rouental's 13, Belekria's Tethia) and Rouental's
+  civil war risers, editable the same way. The build patches the hand-made characters where
+  they are (`gazetteer.patch_characters`; copies, `nations.COPIES`, follow) and makes the
+  changed releasables facts of their own tags (`gazetteer.game_releasables`). Cities have a
+  size apart from their victory points: victory points are how much a place matters, size
+  only shares out a population.
+- **Every function of the site**, where it sits: `docs/GAZETTEER_FUNCTIONS.md` (the author
+  is sorting them into a final layout; a tutorial follows).
 
 ## 7. Working fast without losing quality
 
@@ -291,11 +303,11 @@ steps relied on someone remembering.
 |---|---|---|
 | Build the mod | `sh scripts/run_all.sh` | about 1 minute when the map hasn't changed; the checks, previews and zip run side by side; the zip is replaced only when `check_mod.py` passes |
 | Build the Deco UI | `CHROMIUM_PATH=/opt/pw-browsers/chromium python3 deco_ui/tools/build_all.py` | only after changing `deco_ui/tools/` (then `sh scripts/run_all.sh` takes it in); 31 s, independent steps side by side, only changed textures redrawn |
-| Test `check_mod.py` itself | `python3 scripts/mutation_test.py` | after any change to `check_mod.py`: 50 known breaks, each must be caught; 35 s. Add a break for every new check |
+| Test `check_mod.py` itself | `python3 scripts/mutation_test.py` | after any change to `check_mod.py`: 52 known breaks, each must be caught; 35 s. Add a break for every new check |
 | Fit a flag | `python3 scripts/fit_flag.py TAG picture` | look at `work/flag_fit_TAG.png` before committing |
 | The larger flags' test version | `sh scripts/build_flags15.sh` | beside the mod (`work/`), never over it: no rebuild afterwards |
 | Publish the Gazetteer | `sh scripts/publish_site.sh "message"` | the author's Claude only |
-| Test the Gazetteer page | `python3 tests/gazetteer/run.py`, `traits.py`, `companies.py` (same folder) | after `python3 scripts/facts_export.py`; every change to `scripts/gazetteer.html` |
+| Test the Gazetteer page | `python3 tests/gazetteer/run.py`, `traits.py`, `companies.py`, `ingame.py` (same folder) | after `python3 scripts/facts_export.py`; every change to `scripts/gazetteer.html` |
 
 Habits that save a session's time and keep its quality:
 - **Read the manual by section.** `CLAUDE.md` is long; search it (`grep -n`) for the part

@@ -10,6 +10,22 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-15, the seventh round (the author: "Rouental's capital should be worth more VPs than Vair for example, even
+  though Vair is bigger, right?", "give me a list of every function of the gazetteer", "Releasables already in the game
+  should be represented on the site", "Leaders already in the game should be represented and editable, for example
+  Roland or Serelle. Their stats should be editable as well as their traits"): no map changes, the mod byte-identical
+  (the facts of Rouental's page have none of the new fields yet). **The Gazetteer**: victory points are labelled by what
+  they mean (1 minor to 50 foremost, with the base game's examples), and a city has a size of its own (village to
+  metropolis) that shares out a total population; the characters the game already has are on the People tab (the
+  author's own, as Roland, Serelle and Mahaut, with every field, a sub-ideology within its ideology, and a commander's
+  rank, skill and stats; generated rulers and party leaders as the defaults of their fields), and generals and
+  admirals made on the site have a rank, skill and stats too; the Releasables tab has the releasables the game already
+  has (Rouental's 13, Belekria's Tethia) and Rouental's civil war risers (7), each editable over the game's (names,
+  government, colour, flag, ruler, states). The build patches the author's characters where they are (copies follow)
+  and makes changed releasables facts of their own tags; `check_mod.py` checks commanders' skills and stats
+  (`mutation_test.py`: 52 breaks, all caught). `docs/GAZETTEER_FUNCTIONS.md` lists every function of the site for the
+  author to sort. Tested in the browser (`tests/gazetteer/ingame.py`, with `run.py`, `traits.py`, `companies.py`) and
+  through an import and a build of the test's file (check_mod clean). The site is republished.
 - 2026-10-15, the sixth round (the author: "Please give me the downloads for the mods, as well as everything else
   prepared since last night", then "Yes, please switch to using releases"): every file of the day sent again (the
   mods, the reports, the guides, the previews and design sheets, the map and flag files). The switch to GitHub's

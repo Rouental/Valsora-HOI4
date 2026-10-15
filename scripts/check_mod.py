@@ -604,6 +604,15 @@ def main(mod):
                         for t in tb.split():
                             if t not in known:
                                 err(f"character {cid}: {role} trait {t} is not one of the base game's")
+                    if role in ("corps_commander", "field_marshal", "navy_leader"):
+                        # a commander's skill and stats (2026-10-15: the Gazetteer's, on the page 1-9 and 0-9): its
+                        # kind's, whole numbers in range (the base game's start at skill 1-5, stats 0-6)
+                        own = ("maneuvering", "coordination") if role == "navy_leader" else ("planning", "logistics")
+                        for k, v in re.findall(r"\b(\w+_skill|skill)\s*=\s*(-?\d+)", rbody):
+                            if k != "skill" and k[:-6] not in ("attack", "defense", *own):
+                                err(f"character {cid}: {role} has {k}, not one of its kind's stats")
+                            elif not (1 if k == "skill" else 0) <= int(v) <= 9:
+                                err(f"character {cid}: {role} {k} = {v} is out of range")
                     if role == "advisor":
                         slot = re.search(r"\bslot\s*=\s*(\w+)", rbody)
                         tok = re.search(r"\bidea_token\s*=\s*(\w+)", rbody)

@@ -6,6 +6,7 @@ DDS: uncompressed A8R8G8B8, one mip level, rows top-down - the same layout as th
 vanilla colormap_rgb_cityemissivemask_a.dds.
 """
 import struct
+from pathlib import Path
 
 import numpy as np
 
@@ -69,6 +70,15 @@ def write_dds(path, rgba):
     with open(path, "wb") as f:
         f.write(header)
         f.write(np.ascontiguousarray(bgra).tobytes())
+
+
+def read_dds(path):
+    """An uncompressed 32-bit DDS as write_dds writes it, back as HxWx4 RGBA (row 0 = north)."""
+    data = Path(path).read_bytes()
+    magic, size, _flags, h, w = struct.unpack_from("<4sIIII", data, 0)
+    if magic != b"DDS " or size != 124 or len(data) < 128 + w * h * 4:
+        raise ValueError(f"{path}: not an uncompressed 32-bit DDS")
+    return np.frombuffer(data, np.uint8, w * h * 4, 128).reshape(h, w, 4)[..., [2, 1, 0, 3]].copy()
 
 
 def write_tga(path, rgba):

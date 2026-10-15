@@ -305,6 +305,16 @@ def m_idea_loc(mod):
     return "idea ROU_mutant_bank has no localisation"
 
 
+def m_skill_range(mod):
+    edit(mod, "common/characters/ROU.txt", lambda t: t.replace("\t\t\tattack_skill = 4\n", "\t\t\tattack_skill = 12\n", 1))
+    return "character ROU_serelle_cahun: corps_commander attack_skill = 12 is out of range"
+
+
+def m_skill_kind(mod):
+    edit(mod, "common/characters/ROU.txt", lambda t: t.replace("\t\t\tlogistics_skill = 3\n", "\t\t\tcoordination_skill = 3\n", 1))
+    return "character ROU_serelle_cahun: corps_commander has coordination_skill, not one of its kind's stats"
+
+
 def m_recruit_unknown(mod):
     edit(mod, rou_history(mod), lambda t: t.replace("recruit_character = ROU_roland_cahun", "recruit_character = ROU_roland_cahun\nrecruit_character = ROU_no_such_person", 1))
     return "recruits unknown character ROU_no_such_person"
@@ -398,7 +408,7 @@ BATCHES = {
                 m_ruling_party, m_recruit_unknown, m_faction_template, m_bookmark, m_descriptor],
     "content": [m_decision_stand_in, m_event_stand_in, m_old_date, m_tree_label, m_start_year, m_trait, m_advisor_slot,
                 m_prerequisite, m_state_loc, m_decision_loc, m_trigger_for, m_scripted_effect, m_war_goal, m_song,
-                m_company_include, m_company_tag, m_company_loc, m_concern_trait, m_idea_loc],
+                m_company_include, m_company_tag, m_company_loc, m_concern_trait, m_idea_loc, m_skill_range, m_skill_kind],
     "files": [m_no_bom, m_gui_sprite, m_texture_missing, m_minimap, m_globe, m_case_clash, m_ascii_name],
 }
 

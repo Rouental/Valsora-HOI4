@@ -386,6 +386,9 @@ RELEASABLE = {
     # 2026-10-09, later (author): Rouental's islets off Solitas
     "ORT": ["Concorde et Volonté"],
 }
+# Characters who are another one at the head of a civil war faction (author, 2026-10-02: "the same two women"): one
+# person, so what the Gazetteer changes on the original (name, titles, portrait, traits, skills) goes to the copy too
+COPIES = {"BRL_mahaut_vi": "ROU_mahaut_vi", "RLA_serelle_cahun": "ROU_serelle_cahun"}
 # exist only through the civil war (author): no cores until the Prince is executed, so
 # they can't be released any other way
 CIVIL_WAR_ONLY = {"FTH", "RLA"}

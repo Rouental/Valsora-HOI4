@@ -33,7 +33,9 @@ from scipy import ndimage as ndi
 import gazetteer
 import ideologies
 import nations
+import pdxscript
 from common import MAP_W, MAP_H, COUNTRIES, CONTINENTS
+from imgio import read_dds
 
 W, H = MAP_W, MAP_H
 OUT = Path("work/gazetteer")
@@ -105,6 +107,90 @@ def politics(tag, loc):
                 ruling=(nations.RULING.get(tag, "neutrality") if hand or not subs else of[subs[0]]))
 
 
+def read_characters():
+    """The characters of the built mod (common/characters/): id -> {sprite, leader {sub, desc, traits}, general / admiral
+    {rank, traits, skill, attack, ...}, advisor {slot, traits}}"""
+    def fields(body):
+        return {k: str(v) for k, _, v in body if k and not isinstance(v, list)}
+
+    def traits(body):
+        return [str(t) for k, _, v in body if k == "traits" and isinstance(v, list) for _, _, t in v if t]
+    out = {}
+    for f in sorted((MOD / "common/characters").glob("*.txt")):
+        for top, _, body in pdxscript.parse(f.read_text(encoding="utf-8-sig")):
+            if top != "characters" or not isinstance(body, list):
+                continue
+            for cid, _, c in body:
+                if not cid or not isinstance(c, list):
+                    continue
+                d = {}
+                for k, _, v in c:
+                    if not isinstance(v, list):
+                        continue
+                    if k == "portraits":
+                        for _, _, pv in v:
+                            for k2, _, v2 in (pv if isinstance(pv, list) else []):
+                                if k2 == "large" and "sprite" not in d:
+                                    d["sprite"] = str(v2)
+                    elif k == "country_leader":
+                        fl = fields(v)
+                        d["leader"] = dict(sub=fl.get("ideology"), desc=fl.get("desc"), traits=traits(v))
+                    elif k in ("corps_commander", "field_marshal", "navy_leader"):
+                        fl = fields(v)
+                        d["admiral" if k == "navy_leader" else "general"] = dict(
+                            rank=k, traits=traits(v), **{gazetteer.STAT_NAME[sk]: int(fl[sk]) for sk in gazetteer.STAT_NAME
+                                                         if sk in fl and fl[sk].isdigit()})
+                    elif k == "advisor":
+                        d["advisor"] = dict(slot=fields(v).get("slot"), traits=traits(v))
+                out[cid] = d
+    return out
+
+
+def read_histories():
+    """tag -> (ruling party, [characters recruited]) from the built country histories"""
+    out = {}
+    for f in (MOD / "history/countries").glob("*.txt"):
+        t = f.read_text(encoding="utf-8-sig")
+        party = re.search(r"\bruling_party = (\w+)", t)
+        out[f.name[:3]] = (party.group(1) if party else "neutrality", re.findall(r"^recruit_character = (\w+)", t, re.M))
+    return out
+
+
+def our_sprites():
+    """GFX_portrait_... -> the built mod's DDS of every portrait of ours (interface/*.gfx)"""
+    out = {}
+    for f in (MOD / "interface").glob("*.gfx"):
+        for nm, tex in re.findall(r'name = "(GFX_portrait_[^"]+)"\s*texturefile = "([^"]+)"', f.read_text(encoding="utf-8-sig")):
+            if (MOD / tex).exists():
+                out[nm] = MOD / tex
+    return out
+
+
+def portrait_uri(path):
+    """a portrait of ours as a small JPEG for the page (the base game's are Paradox's, never published)"""
+    buf = io.BytesIO()
+    Image.fromarray(read_dds(path)).convert("RGB").save(buf, "JPEG", quality=84, optimize=True)
+    return "data:image/jpeg;base64," + base64.b64encode(buf.getvalue()).decode()
+
+
+def character(cid, c, loc, sprites, ruling, of):
+    """What the page shows of a character in the game (2026-10-15, the author: "Leaders already in the game should be
+    represented and editable"): names, titles, portrait (ours; a base-game one only marked), roles, traits, stats"""
+    lead = c.get("leader")
+    ideo = of.get(lead["sub"]) if lead else None
+    out = dict(id=cid, name=loc.get(cid, cid), portrait=portrait_uri(sprites[c["sprite"]]) if c.get("sprite") in sprites else None,
+               base=bool(c.get("sprite")) and c.get("sprite") not in sprites, ruler=bool(lead) and ideo == ruling,
+               copyOf=nations.COPIES.get(cid))
+    if lead:
+        out.update(sub=lead["sub"], ideo=ideo, desc=loc.get(lead["desc"], "") if lead.get("desc") else "", traits=lead["traits"])
+    if cid in nations.REGNAL_NAMES:
+        out["regnal"] = loc.get(nations.REGNAL_NAMES[cid][1], "")
+    for k in ("general", "admiral", "advisor"):
+        if c.get(k):
+            out[k] = c[k]
+    return out
+
+
 def flag(tag, medium=False):
     f = MOD / "gfx/flags" / ("medium" if medium else "") / f"{tag}.tga"
     return png_uri(Image.open(f).convert("RGB")) if f.exists() else None
@@ -172,6 +258,8 @@ def main():
     terrain = list(p["terrain"])
     city_at = {int(c[0]): c for c in rj.get("cities", [])}
 
+    chars, hist, sprites, of = read_characters(), read_histories(), our_sprites(), ideologies.ideology_of()
+    game_rel = json.loads(gazetteer.GAME_RELEASABLES.read_text(encoding="utf-8")) if gazetteer.GAME_RELEASABLES.exists() else {}
     shown = {**nations.DISPLAY_COLOUR, **gazetteer.colours(gazetteer.load())}  # as the build colours them
     final = gazetteer.finals(lab, kind, states, owners)  # states drawn: the map tools open
 
@@ -274,11 +362,26 @@ def main():
                   int(anchor[i][1]), int(anchor[i][0])] for i in own]
         cont = CONTINENTS[int(p["cont"][states[cap_state][0]]) - 1] if cap_state >= 0 else ""
         c = COUNTRIES[by_tag[tag]]
+        # its characters in the game (not the Gazetteer's own, which its page holds), and the countries the game
+        # releases from it (2026-10-15): names, flag, colour, government, ruler and states as built
+        ruling, recruited = hist.get(tag, ("neutrality", []))
+        people = [character(i, chars[i], loc, sprites, ruling, of) for i in recruited if i in chars and "_gazetteer_" not in i]
+        rels = []
+        for t, v in sorted(game_rel.items(), key=lambda kv: (kv[1]["kind"] != "releasable", kv[0])):
+            if v["parent"] != tag or t not in by_tag:
+                continue
+            r_ruling, r_rec = hist.get(t, ("neutrality", []))
+            lead = next((character(i, chars[i], loc, sprites, r_ruling, of) for i in r_rec if i in chars
+                         and chars[i].get("leader") and of.get(chars[i]["leader"]["sub"]) == r_ruling), None)
+            rels.append(dict(tag=t, kind=v["kind"], warOnly=v["war_only"], name=loc.get(t, ""), adj=loc.get(f"{t}_ADJ", ""),
+                             **{"def": loc.get(f"{t}_DEF", "")}, colour=colour(t), flag=flag(t), ideo=r_ruling,
+                             sub=lead["sub"] if lead else None, ruler=lead,
+                             states=[key(max(states[s_], key=lambda i: (size[i], -i))) for s_ in v["states"]]))
         nation = dict(tag=tag, name=c[1], adj=c[2], colour=colour(tag), flag=flag(tag), flags=gov_flags(tag),
                       continent=CONT_NAME.get(cont, cont), final=final[tag], states=st_list, provs=provs,
                       others=others, nb=[dict(tag=o, name=COUNTRIES[by_tag[o]][1], colour=colour(o))
                                          for o in sorted(nb, key=nb.get)],
-                      cities=cities, politics=politics(tag, loc), parts=parts)
+                      cities=cities, politics=politics(tag, loc), characters=people, gameReleasables=rels, parts=parts)
         text = json.dumps(nation, ensure_ascii=False, separators=(",", ":"))
         (OUT / "n" / f"{tag}.json").write_text(text, encoding="utf-8")
         index.append(dict(tag=tag, name=c[1], colour=colour(tag), continent=nation["continent"],

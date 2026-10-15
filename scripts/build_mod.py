@@ -409,6 +409,16 @@ def main():
         if f.get("name"):
             named[s] = state_name[s] = f["name"]
     state_by_name = {**by_old_name, **{nm: s for s, nm in named.items()}}
+    # the Gazetteer's changes to the countries the game releases (2026-10-15): their names, government, ruler and
+    # colour as facts of their own tags, and their land in place of nations.py's lists (by name, the first the capital)
+    gfacts_rel, gland = gazetteer.game_releasables(G, lab, state_of, rj["owners"], states, size, state_by_name,
+                                                     gnotes) if G else ({}, {})
+    for tag, f in gfacts_rel.items():
+        G[tag] = gazetteer.merge_facts(G.get(tag), f)
+    for tag, land in gland.items():
+        for s in land:
+            state_by_name.setdefault(state_name[s], s)
+        (nations.CIVIL_WAR if tag in nations.CIVIL_WAR else nations.RELEASABLE)[tag] = [state_name[s] for s in land]
     # cores of countries released later (nations.CIVIL_WAR), by state name
     extra_cores = defaultdict(list)
     for tag, names in (*nations.CIVIL_WAR.items(), *nations.RELEASABLE.items()):
@@ -417,6 +427,13 @@ def main():
                 raise SystemExit(f"nations.CIVIL_WAR / RELEASABLE: no state named {nm!r} for {tag}")
             if tag not in nations.CIVIL_WAR_ONLY:  # those get their cores in the focus
                 extra_cores[state_by_name[nm]].append(tag)
+    # which nation each comes from and its states (the first the capital), for the Gazetteer's page (facts_export.py)
+    # and its import (gazetteer.game_parents)
+    Path("work/game_releasables.json").write_text(json.dumps({
+        tag: {"kind": "civil_war" if tag in nations.CIVIL_WAR else "releasable", "war_only": tag in nations.CIVIL_WAR_ONLY,
+              "parent": rj["owners"][state_by_name[names[0]]], "states": [int(state_by_name[nm]) for nm in names]}
+        for tag, names in (*nations.CIVIL_WAR.items(), *nations.RELEASABLE.items())}, sort_keys=True) + "\n",
+        encoding="utf-8")
     for r in grel:  # the Gazetteer's, by state
         for s in r["states"]:
             extra_cores[s].append(r["tag"])
@@ -794,6 +811,14 @@ def main():
     ruling, recruits, leader_blocks, leader_loc, used_names = {}, {}, [], [], set()
     company_ideas, company_mios, company_logos = {}, [], []
     named_leaders = dict(nations.NAMED_LEADERS)
+    # the game's own characters changed on the Gazetteer (2026-10-15): the hand-made ones in their files (their copies
+    # too), the generated ones of a nation of hand-made rulers by name; their names and titles into the localisation
+    gchars, char_loc = gazetteer.game_characters(G), {}
+    if gchars:
+        nations.ROU_CHARACTERS = gazetteer.patch_characters(nations.ROU_CHARACTERS, gchars, char_loc, nations.PORTRAITS,
+                                                            gnotes)
+        nations.CHARACTERS = gazetteer.patch_characters(nations.CHARACTERS, gchars, char_loc, nations.PORTRAITS, gnotes)
+        gazetteer.game_character_names(gchars, named_leaders, nations.PORTRAITS, nations.HAND_MADE)
     # map colours that differ from the .pdn paint: nations.py's, then the Gazetteer's
     display_colour = {**nations.DISPLAY_COLOUR, **gazetteer.colours(G)}
     for c in present:
@@ -1026,7 +1051,7 @@ def main():
             ' VALSORA_HISTORY_ASSOCIATION:0 "A member of the Association of Reibonnaise States, the Vale of Reibonne\'s '
             'alliance under Rouental."',
             ' VALSORA_OTHER_DESC:0 "Any other nation of Valsora."']
-    loc += nations.LOCALISATION
+    loc += gazetteer.patch_loc(nations.LOCALISATION, char_loc) if char_loc else nations.LOCALISATION
     # cosmetic tags need their own names, for every ideology
     for c in present:
         tag, name, adj, _ = COUNTRIES[c]

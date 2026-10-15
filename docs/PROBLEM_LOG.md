@@ -518,6 +518,31 @@ screenshot and `error.log`)
 
 ## Map problems found while building
 
+**A test pressed a portrait instead of the Send button** (2026-10-15, `tests/gazetteer/traits.py` after the game's
+characters came to the People tab)
+- Cause: a portrait box for a base-game portrait first read "Base-game portrait: send one", and the test finds the
+  request form's button by the text "Send"; the portrait box came first and was pressed.
+- Fix: the box reads "Base-game portrait: add your own", so the request's button is the only control in the card
+  that says "Send".
+
+**The changes to the author's characters first landed out of order** (2026-10-15, the first build of the test's file)
+- Cause: `gazetteer.patch_characters` looked for a leader's traits before its titles, and wrote titles after the
+  traits; `check_mod.py` and `country_list.py` read a leader's `ideology` first and `desc` right after it. A changed
+  stat could also be one the role doesn't have (an admiral's coordination on Serelle, a general).
+- Fix: titles go right after the ideology, traits after them; a commander takes only its role's stats (the page sends
+  only those, and the import keeps only those). The build was checked against an unchanged one: characters nobody
+  changed stay byte for byte.
+
+**Painting the last state off a game releasable broke the Releasables tool** (2026-10-15, writing the in-game test)
+- Cause: the message for it called `toast`, which the page doesn't have (it has `flash`): an error, and the stroke
+  stopped.
+- Fix: `flash("A releasable needs a state: give it another first")`; the test paints such a state.
+
+**Every stat of a commander showed the "changed" mark when one was set** (2026-10-15, the test's screenshots)
+- Cause: the mark is drawn after the label of a field set by hand (`.field.set label::after`); the skill and stats are
+  labels inside one field, so all five got it.
+- Fix: only the field's own label (`.field.set > label::after`).
+
 **The first release couldn't be published from the session** (2026-10-15, the author: "Yes, please switch to using
 releases")
 - Cause: GitHub's proxy for this kind of session refuses releases: "Creating, editing, or deleting releases is not

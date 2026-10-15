@@ -58,6 +58,12 @@ KINDS = ("states", "provinces", "cities", "rivers", "rails", "politics", "flags"
 # facts drawn on a nation's provinces: taken only once its states are the author's (finals)
 MAP_KINDS = ("states", "provinces", "cities", "rivers", "rails")
 REL_ID = re.compile(r"rl-[a-z0-9]{6,40}")
+GAME_CHAR = re.compile(r"[A-Z][A-Z0-9]{2}_[A-Za-z0-9_]{1,60}")   # a character of the game's, by its id (ch-<id> on the page)
+# a commander's skill and stats on the page (2026-10-15, the author: "Their stats should be editable"): the base game's
+# start at skill 1-5 and stats 0-6; the page takes skill 1-9 and stats 0-9
+STATS = {"general": ("skill", "attack", "defense", "planning", "logistics"),
+         "admiral": ("skill", "attack", "defense", "maneuvering", "coordination")}
+RANKS = ("corps_commander", "field_marshal")
 # terrain.bmp palette index of each terrain the page offers (common.TERRAIN_TYPES)
 TERRAIN_INDEX = {"plains": 0, "forest": 1, "hills": 2, "desert": 3, "mountain": 6, "marsh": 9,
                  "urban": 13, "jungle": 21}
@@ -73,6 +79,8 @@ BUILDINGS = {"infra": ("infrastructure", 5), "civ": ("industrial_complex", 20), 
              "naval": ("naval_base", 10)}
 RESOURCES = ("oil", "steel", "aluminium", "rubber", "tungsten", "chromium")
 VPS = {1, 3, 5, 10, 15, 20, 25, 30, 40, 50}
+CITY_SIZES = ("village", "town", "city", "large", "metropolis")   # as the page's: how big a city is, apart from its
+# victory points (author, 2026-10-15); the page shares a nation's population out by them, the build doesn't read them
 IDEOLOGIES = ("democratic", "fascism", "communism", "neutrality", "theocracy")
 ROLES = ("general", "admiral", "advisor", "other")
 REQ_KINDS = ("subideology", "subject", "trait", "company", "map", "other")   # as the page's
@@ -115,6 +123,17 @@ def company_kind(kind):
     return None
 
 
+def stats_of(v, kind):
+    """A commander's skill and stats from the page ({skill, attack, ...}), each a whole number in range; missing ones
+    left out"""
+    out = {}
+    for k in STATS.get(kind, ()):
+        n = num(v.get(k), 1 if k == "skill" else 0, 9) if v.get(k) is not None else None
+        if n is not None:
+            out[k] = int(n)
+    return out
+
+
 def keep_traits(v, allowed):
     """a leader's traits from the page: the base game's for its role, each once, at most MAX_TRAITS"""
     out = []
@@ -122,6 +141,8 @@ def keep_traits(v, allowed):
         if isinstance(k, str) and k in allowed and k not in out:
             out.append(k)
     return out[:MAX_TRAITS]
+
+
 MAX_STATE_POP = 500_000_000
 ERASE_R = 3  # erase strokes take away river lines this close (px)
 CITY_REACH = 20  # a city off the coast belongs to the nearest land this close
@@ -334,6 +355,8 @@ def normalise(tag, facts, meta, requests=(), sources=(), todo=None):
                 continue
             vp = c.get("vp") if c.get("vp") in VPS else 5
             city = {"x": pt[0][0], "y": pt[0][1], "name": clean(c["name"]), "vp": vp}
+            if c.get("size") in CITY_SIZES:
+                city["size"] = c["size"]
             if c.get("capital") and not capital:
                 city["capital"] = capital = True
             elif c.get("stateCapital"):  # its state's capital (the national capital is its own state's)
@@ -424,10 +447,46 @@ def normalise(tag, facts, meta, requests=(), sources=(), todo=None):
         tr = keep_traits(v.get("traits"), allowed)
         if tr:
             c["traits"] = tr
+        if c["role"] in STATS:   # skill and stats (2026-10-15), a general's rank
+            c.update(stats_of(v, c["role"]))
+            if c["role"] == "general" and v.get("rank") == "field_marshal":
+                c["rank"] = "field_marshal"
         if len(c) > 1:
             chars.append(c)
     if chars:
         people["characters"] = chars
+    # the nation's own characters in the game (2026-10-15, the author: "Leaders already in the game should be
+    # represented and editable, for example Roland or Serelle"), changed: ch-<character id>, only its own (TAG_...)
+    game = {}
+    for k, v in sorted(ppl.items()):
+        cid = k[3:]
+        if not (k.startswith("ch-") and isinstance(v, dict) and GAME_CHAR.fullmatch(cid) and cid.startswith(tag + "_")):
+            continue
+        g = {}
+        for f_, n in (("name", 80), ("regnal", 80)):
+            if clean(v.get(f_), n):
+                g[f_] = clean(v[f_], n)
+        if clean(v.get("desc"), 600):
+            g["desc"] = clean(v["desc"], 600)
+        pic = picture(v.get("portrait"), f"{tag} {cid}'s portrait", sources, todo)
+        if pic:
+            g["portrait"] = pic
+        if v.get("sub") in subs:
+            g["sub"] = v["sub"]
+        if isinstance(v.get("traits"), list):   # an empty list takes the game's traits away
+            g["traits"] = keep_traits(v["traits"], trait_index()["ruler"])
+        kind_ = "admiral" if v.get("unit") == "admiral" else "general"
+        if isinstance(v.get("unitTraits"), list):
+            g["unit_traits"] = keep_traits(v["unitTraits"], trait_index()[kind_])
+        st_ = stats_of(v, kind_)
+        if st_:
+            g["stats"] = st_
+        if v.get("rank") in RANKS:
+            g["rank"] = v["rank"]
+        if g:
+            game[cid] = g
+    if game:
+        people["game_characters"] = game
     cos = []   # companies (2026-10-15): of the base game's kinds, kept in the people document as co-<id>
     for k, v in sorted(ppl.items()):
         if not (k.startswith("co-") and isinstance(v, dict)):
@@ -506,6 +565,9 @@ def normalise(tag, facts, meta, requests=(), sources=(), todo=None):
         pic = picture(ld.get("portrait"), f"{label}: ruler's portrait", sources, todo)
         if pic:
             lead["portrait"] = pic
+        tr = keep_traits(ld.get("traits"), trait_index()["ruler"])
+        if tr:
+            lead["traits"] = tr
         if lead:
             r["leader"] = lead
         if text(v.get("notes"), 2000):
@@ -528,6 +590,53 @@ def normalise(tag, facts, meta, requests=(), sources=(), todo=None):
             rels.append(r)
     if rels:
         out["releasables"] = rels
+    # the countries the game releases from this nation (2026-10-15, the author: "Releasables already in the game should
+    # be represented on the site"), changed on its page: g-<TAG>, only those the last build has coming from it
+    parents, game_rel = game_parents(), {}
+    for rid, v in sorted(raw.items()):
+        t = str(rid)[2:]
+        if not (str(rid).startswith("g-") and isinstance(v, dict) and TAG.fullmatch(t)):
+            continue
+        if parents.get(t) != tag:
+            print(f"{tag}: changes to {t}, which the last build doesn't release from {tag}, left out")
+            continue
+        g = {}
+        for k, n in (("name", 60), ("adj", 60), ("def", 100)):
+            if clean(v.get(k), n):
+                g[k] = clean(v[k], n)
+        if v.get("ruling") in subs:
+            g["ruling"] = v["ruling"]
+        if isinstance(v.get("colour"), str) and re.fullmatch(r"#[0-9a-fA-F]{6}", v["colour"]):
+            g["colour"] = v["colour"].lower()
+        pic = picture(v.get("flag"), f"{tag}'s releasable {t}: flag", sources, todo)
+        if pic:
+            g["flag"] = pic
+        ld, lead = v.get("leader") if isinstance(v.get("leader"), dict) else {}, {}
+        for k, n in (("name", 80), ("desc", 600)):
+            if clean(ld.get(k), n):
+                lead[k] = clean(ld[k], n)
+        pic = picture(ld.get("portrait"), f"{tag}'s releasable {t}: ruler's portrait", sources, todo)
+        if pic:
+            lead["portrait"] = pic
+        if isinstance(ld.get("traits"), list):
+            lead["traits"] = keep_traits(ld["traits"], trait_index()["ruler"])
+        if lead:
+            g["leader"] = lead
+        if text(v.get("notes"), 2000):
+            g["notes"] = text(v["notes"], 2000)
+        keys = set()
+        for k, on in (v.get("states") or {}).items():
+            try:
+                if on:
+                    keys.add("%d,%d" % xy(k))
+            except ValueError:
+                continue
+        if keys:
+            g["states"] = sorted(keys, key=lambda k: xy(k)[::-1])
+        if g:
+            game_rel[t] = g
+    if game_rel:
+        out["game_releasables"] = game_rel
     reqs = []
     for v in requests or ():
         if isinstance(v, dict) and clean(v.get("title"), 100):
@@ -716,6 +825,8 @@ def install_flags(G):
     record = json.loads(record_f.read_text(encoding="utf-8")) if record_f.exists() else {}
     sent = [(tag, slot, im) for tag, f in sorted(G.items()) for slot, im in sorted((f.get("flags") or {}).items())]
     sent += [(r["tag"], "base", r["flag"]) for f in G.values() for r in f.get("releasables", []) if r.get("tag") and r.get("flag")]
+    sent += [(t, "base", g["flag"]) for f in G.values() for t, g in sorted((f.get("game_releasables") or {}).items())
+             if g.get("flag")]   # the game's releasables, changed on their nation's page (2026-10-15)
     for tag, slot, im in sent:  # nations' flags, and their releasables'
         if not im.get("file"):
             continue
@@ -751,6 +862,10 @@ def summary(n):
             parts.append(k)
     if n.get("releasables"):
         parts.append("releasables " + ", ".join(f"{r.get('name') or r['id']} ({r['tag']})" for r in n["releasables"]))
+    if n.get("game_releasables"):
+        parts.append("the game's releasables " + ", ".join(sorted(n["game_releasables"])))
+    if (n.get("people") or {}).get("game_characters"):
+        parts.append("the game's characters " + ", ".join(sorted(n["people"]["game_characters"])))
     if n.get("status") == "done":
         parts.append("finished")
     return ", ".join(parts) or "nothing"
@@ -1101,6 +1216,8 @@ def leaders(tag, subs, facts, handmade, named, portraits):
     return out
 
 
+STAT_NAME = {"skill": "skill", "attack_skill": "attack", "defense_skill": "defense", "planning_skill": "planning",
+             "logistics_skill": "logistics", "maneuvering_skill": "maneuvering", "coordination_skill": "coordination"}
 COMMANDER = {"general": ("army", "corps_commander", (("skill", 3), ("attack_skill", 3), ("defense_skill", 3),
                                                      ("planning_skill", 2), ("logistics_skill", 2))),
              "admiral": ("navy", "navy_leader", (("skill", 3), ("attack_skill", 3), ("defense_skill", 3),
@@ -1110,7 +1227,8 @@ COMMANDER = {"general": ("army", "corps_commander", (("skill", 3), ("attack_skil
 def characters(tag, facts, portraits, small=None, generic=None):
     """The facts' generals, admirals and advisors as characters the country has from the start (2026-10-15: the
     author couldn't find Rouental's admiral in game; until then the page's characters were only listed for the
-    author): a corps commander or an admiral of skill 3, an advisor in the post the page gives (the slot's usual cost,
+    author): a corps commander (or field marshal) or an admiral of the page's skill and stats (where not given, skill 3
+    and the stats below), an advisor in the post the page gives (the slot's usual cost,
     the ledger the base game gives its first trait), with the base game's traits the page picked and the portrait it
     holds (into `portraits`, nations.PORTRAITS; an advisor's also small, into `small`). The notes stay a comment for
     the author. An advisor without a post, and others, stay on `status`'s list. A general or admiral without a portrait
@@ -1147,6 +1265,9 @@ def characters(tag, facts, portraits, small=None, generic=None):
                     f"\t\t\t\tsmall = {sprite}_small\n\t\t\t}}\n\t\t}}\n") if sprite else ""
         else:
             kind, role, skills = COMMANDER[role_]
+            skills = [(k, c.get(STAT_NAME[k], v)) for k, v in skills]   # the page's skill and stats (2026-10-15)
+            if role_ == "general" and c.get("rank") == "field_marshal":
+                role = "field_marshal"
             pool = (generic or {}).get(kind) or []
             if not sprite and pool:
                 sprite = pool[zlib.crc32(cid.encode()) % len(pool)]
@@ -1158,6 +1279,144 @@ def characters(tag, facts, portraits, small=None, generic=None):
         loc.append(f' {cid}:0 "{c["name"]}"')
         ids.append(cid)
     return blocks, loc, ids
+
+
+def game_characters(G):
+    """{character id: changes} from the facts' people.game_characters (2026-10-15, the author: "Leaders already in the
+    game should be represented and editable, for example Roland or Serelle. Their stats should be editable as well as
+    their traits"): a nation's own characters only (ids TAG_...), and the original's changes on its copies too
+    (nations.COPIES: the same person at the head of a civil war faction)."""
+    import nations
+    out = {}
+    for tag, f in sorted(G.items()):
+        for cid, g in sorted(((f.get("people") or {}).get("game_characters") or {}).items()):
+            if cid.startswith(tag + "_"):
+                out[cid] = g
+    for copy, orig in nations.COPIES.items():
+        if orig in out and copy not in out:
+            out[copy] = out[orig]
+    return out
+
+
+def _span(text, head, start=0, end=None):
+    """(start, end) of the block opening with the line `head` (a regex) in text[start:end], its closing brace's line
+    included, by counting braces; None if there is none"""
+    m = re.compile(head, re.M).search(text, start, len(text) if end is None else end)
+    if not m:
+        return None
+    depth, i = 0, m.start()
+    while True:
+        c = text[i]
+        if c == "{":
+            depth += 1
+        elif c == "}":
+            depth -= 1
+            if depth == 0:
+                j = text.find("\n", i)
+                return m.start(), (len(text) if j < 0 else j + 1)
+        i += 1
+
+
+def patch_characters(text, changes, loc, portraits, notes):
+    """A file of hand-made characters (nations.ROU_CHARACTERS, CHARACTERS) with the Gazetteer's changes to them: the
+    ruling sub-ideology (within its ideology: the focus trees name the ideologies), titles (desc, after the ideology,
+    as check_mod.py reads it), leader traits, and a commander's rank, traits and skills. Names, titles and the name
+    taken on coming to rule (nations.REGNAL_NAMES) go into `loc` ({key: text}), a new portrait into `portraits`
+    (nations.PORTRAITS, under the sprite's own name, so a copy shows it too). Unchanged characters stay as they are,
+    byte for byte."""
+    import ideologies
+    import nations
+    of = ideologies.ideology_of()
+    stat_key = {v: k for k, v in STAT_NAME.items()}
+    for cid, g in sorted(changes.items()):
+        span = _span(text, rf"^\t{re.escape(cid)} = \{{$")
+        if not span:
+            continue
+        a, b = span
+        block = text[a:b]
+        if g.get("name"):
+            loc[cid] = g["name"]
+        if g.get("regnal") and cid in nations.REGNAL_NAMES:
+            loc[nations.REGNAL_NAMES[cid][1]] = g["regnal"]
+        pic = g.get("portrait") or {}
+        sprite = re.search(r"large = GFX_portrait_(\w+)", block)
+        if sprite and pic.get("file") and (DIR / pic["file"]).is_file() and pic.get("w") and pic.get("h"):
+            portraits[sprite.group(1)] = (str(DIR / pic["file"]), *portrait_box(pic["w"], pic["h"]), None)
+        cl = _span(block, r"^\t\tcountry_leader = \{$")
+        if cl:
+            c0, c1 = cl
+            lead = block[c0:c1]
+            ideo = re.search(r"\n\t\t\tideology = (\w+)\n", lead)
+            if ideo and g.get("sub") and g["sub"] != ideo.group(1):
+                if of.get(g["sub"]) == of.get(ideo.group(1)):
+                    lead = lead.replace(ideo.group(0), f"\n\t\t\tideology = {g['sub']}\n", 1)
+                else:
+                    notes.append(f"Gazetteer: {cid} can't become {g['sub']}: only another sub-ideology of "
+                                 f"{of.get(ideo.group(1))} (the focus trees name the ideology); kept")
+            if g.get("desc"):
+                key = re.search(r'\n\t\t\tdesc = "(\w+)"', lead)
+                if not key:
+                    lead = re.sub(r"(\n\t\t\tideology = \w+)\n", rf'\1\n\t\t\tdesc = "{cid}_desc"\n', lead, count=1)
+                loc[key.group(1) if key else f"{cid}_desc"] = g["desc"]
+            if "traits" in g:   # the page's list, an empty one taking the game's away
+                lead = re.sub(r"\n\t\t\ttraits = \{[^}]*\}", "", lead)
+                if g["traits"]:
+                    after = re.search(r'\n\t\t\tdesc = "\w+"', lead) or re.search(r"\n\t\t\tideology = \w+", lead)
+                    if after:
+                        lead = lead[:after.end()] + f"\n\t\t\ttraits = {{ {' '.join(g['traits'])} }}" + lead[after.end():]
+            block = block[:c0] + lead + block[c1:]
+        un = _span(block, r"^\t\t(corps_commander|field_marshal|navy_leader) = \{$")
+        if un and ("unit_traits" in g or g.get("stats") or g.get("rank")):
+            u0, u1 = un
+            unit = block[u0:u1]
+            role = re.match(r"\t\t(\w+)", unit).group(1)
+            if g.get("rank") in RANKS and role in RANKS and g["rank"] != role:
+                unit = unit.replace(role, g["rank"], 1)
+            if "unit_traits" in g:
+                unit = re.sub(r"\n\t\t\ttraits = \{[^}]*\}", "", unit)
+                if g["unit_traits"]:
+                    unit = unit.replace(" = {\n", f" = {{\n\t\t\ttraits = {{ {' '.join(g['unit_traits'])} }}\n", 1)
+            for k, v in (g.get("stats") or {}).items():
+                game_key = stat_key.get(k)
+                if game_key and k in STATS["admiral" if role == "navy_leader" else "general"]:
+                    unit, n = re.subn(rf"(\n\t\t\t{game_key} = )\d+", rf"\g<1>{v}", unit)
+                    if not n:
+                        unit = unit.replace("\n\t\t}", f"\n\t\t\t{game_key} = {v}\n\t\t}}", 1)
+            block = block[:u0] + unit + block[u1:]
+        text = text[:a] + block + text[b:]
+    return text
+
+
+def game_character_names(changes, named, portraits, handmade):
+    """The generated characters of a nation of hand-made rulers (Rouental's democrat and communist leaders, whose ids
+    its focus tree names), changed on the page: their names, titles, portraits and traits into `named` (as
+    nations.NAMED_LEADERS for cultures.leaders), their portraits into `portraits`."""
+    for cid, g in sorted(changes.items()):
+        m = re.fullmatch(r"([A-Z][A-Z0-9]{2})_leader_\w+", cid)
+        if not m or m.group(1) not in handmade:
+            continue
+        name, sprite, *rest = named.get(cid) or (None, None)
+        desc = rest[0] if rest else None
+        traits = rest[1] if len(rest) > 1 else ()
+        pic = g.get("portrait") or {}
+        if pic.get("file") and (DIR / pic["file"]).is_file() and pic.get("w") and pic.get("h"):
+            portraits[cid] = (str(DIR / pic["file"]), *portrait_box(pic["w"], pic["h"]), None)
+            sprite = f"GFX_portrait_{cid}"
+        named[cid] = (g.get("name") or name, sprite, g.get("desc") or desc,
+                      tuple(g["traits"]) if "traits" in g else traits)
+
+
+def patch_loc(lines, changes):
+    """Localisation lines (' KEY:0 "text"') with `changes` ({key: text}): a key's line replaced, a new key added"""
+    out, done = [], set()
+    for ln in lines:
+        m = re.match(r" (\w+):0 ", ln)
+        if m and m.group(1) in changes:
+            out.append(f' {m.group(1)}:0 "{changes[m.group(1)]}"')
+            done.add(m.group(1))
+        else:
+            out.append(ln)
+    return out + [f' {k}:0 "{v}"' for k, v in sorted(changes.items()) if k not in done]
 
 
 def companies(tag, facts):
@@ -1296,6 +1555,72 @@ def releasables(G, lab, kind, state_of, owners, notes, taken=()):
     return out
 
 
+GAME_RELEASABLES = Path("work/game_releasables.json")   # the countries the game releases, as the last build made them
+
+
+def game_parents():
+    """{tag: the nation it comes from} for the countries the game releases (nations.RELEASABLE and the civil war's), as
+    the last build has them (work/game_releasables.json, written by build_mod.py); {} without a build"""
+    if not GAME_RELEASABLES.exists():
+        return {}
+    return {t: v["parent"] for t, v in json.loads(GAME_RELEASABLES.read_text(encoding="utf-8")).items()}
+
+
+def merge_facts(a, b):
+    """b's facts over a's: blocks (dicts) merged, everything else replaced"""
+    if not isinstance(a, dict) or not isinstance(b, dict):
+        return b if b is not None else a
+    out = dict(a)
+    for k, v in b.items():
+        out[k] = merge_facts(a.get(k), v) if isinstance(v, dict) else v
+    return out
+
+
+def game_releasables(G, lab, state_of, owners, states, size, state_by_name, notes):
+    """The Gazetteer's changes to the countries the game already releases (2026-10-15, the author: "Releasables
+    already in the game should be represented on the site"): nations.RELEASABLE's and the civil war's
+    (nations.CIVIL_WAR), changed on the page of the nation they come from (the owner of their first state; another
+    nation's page can't). Each becomes facts of its own tag, what the build reads for a nation: its names, ruling
+    sub-ideology, ruler and colour. New land (whole states of that nation) replaces its list of states, the game's
+    first (the capital) kept first if it is still in, the rest largest first. Returns ({tag: facts}, {tag: [state
+    indices]})."""
+    import nations
+    facts, land = {}, {}
+    px = [sum(int(size[i]) for i in g) for g in states]
+    st = np.asarray(state_of)
+    for parent, f in sorted(G.items()):
+        for tag, v in sorted((f.get("game_releasables") or {}).items()):
+            table = nations.CIVIL_WAR if tag in nations.CIVIL_WAR else nations.RELEASABLE if tag in nations.RELEASABLE else None
+            first = state_by_name.get(table[tag][0]) if table else None
+            if first is None or owners[first] != parent:
+                notes.append(f"Gazetteer: {parent}'s page changes {tag}, which is not one of its releasables; left out")
+                continue
+            ff = {}
+            names = {k: v[k] for k in ("name", "def", "adj") if v.get(k)}
+            if names:
+                ff.setdefault("politics", {})["names"] = {"base": names}
+            if v.get("ruling"):
+                ff.setdefault("politics", {})["ruling"] = v["ruling"]
+            if v.get("leader"):
+                ff["people"] = {"ruler": v["leader"]}
+            if v.get("colour"):
+                ff["about"] = {"colour": v["colour"]}
+            if ff:
+                facts[tag] = ff
+            keys = v.get("states") or []
+            mine = []
+            for k in keys:
+                s_ = int(st[at(lab, k)])
+                if s_ >= 0 and owners[s_] == parent and s_ not in mine:
+                    mine.append(s_)
+            if keys and not mine:
+                notes.append(f"Gazetteer: {parent}'s releasable {tag} was given no state of {parent}'s; it keeps the game's")
+            elif mine:
+                head = [first] if first in mine else []
+                land[tag] = head + sorted((s_ for s_ in mine if s_ not in head), key=lambda s_: (-px[s_], s_))
+    return facts, land
+
+
 def colours(G):
     """{tag: (r, g, b)}: the map colours the facts give, over the .pdn paint (like
     nations.DISPLAY_COLOUR)"""
@@ -1424,7 +1749,8 @@ def status():
             built = c.get("name") and (c["role"] in COMMANDER or (c["role"] == "advisor" and c.get("slot") in trait_index()["slots"]))
             if built:   # in the build (characters()); the notes are the author's
                 if c.get("notes"):
-                    what = "skill 3" if c["role"] in COMMANDER else trait_index()["slots"][c["slot"]][0].lower()
+                    what = (f"skill {c.get('skill') or 3}" + (", field marshal" if c.get("rank") == "field_marshal" else "")
+                            if c["role"] in COMMANDER else trait_index()["slots"][c["slot"]][0].lower())
                     tr = ", ".join(c.get("traits") or []) or "no traits"
                     said = " / ".join(ln.strip() for ln in c["notes"].splitlines() if ln.strip())
                     todo.append(f"{tag} {c['role']} {c['name']} is in the game ({what}; {tr}); notes: {said[:160]}")

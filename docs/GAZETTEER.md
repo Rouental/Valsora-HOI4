@@ -1,15 +1,21 @@
 # The Valsora Gazetteer
 
 A web site where friends fill in the facts of their own nations: once you have drawn its
-states on the `.pdn`, state names, terrain, rivers, cities, population, railways, supply hubs,
-resources and buildings; at any time, its names and titles under each government, its
-sub-ideologies, its flags, its ruler and party leaders (names, titles, portraits, traits), its
-political advisors, generals, admirals and other advisors (with the base game's traits), its
+states on the `.pdn`, state names, terrain, rivers, cities (their victory points and size),
+population, railways, supply hubs, resources and buildings; at any time, its names and titles
+under each government, its sub-ideologies, its flags, its ruler and party leaders (names,
+titles, portraits, traits), the characters it already has in the game (Roland and Serelle,
+Rouental's, among them, their skills and stats too), its political advisors, generals, admirals
+and other advisors (with the base game's traits, and the commanders' skill and stats), its
 companies (arms makers and industrial concerns, with their logos), its colour, culture, motto
-and anthem, its releasables (their land, names, government, flag and ruler), suggestions for
-the map (its states and cities among them, before you draw them), and requests for things the
-game doesn't have yet (a new trait or kind of company among them). Each nation is locked behind
-a password you give its player, so nobody can change anyone else's nation.
+and anthem, its releasables (their land, names, government, flag and ruler), the ones already
+in the game among them (Rouental's, the risers of its civil war, Belekria's Tethia),
+suggestions for the map (its states and cities among them, before you draw them), and requests
+for things the game doesn't have yet (a new trait or kind of company among them). Each nation is
+locked behind a password you give its player, so nobody can change anyone else's nation.
+
+**Every function of the site**, where it sits and what it does in the game, is listed in
+`docs/GAZETTEER_FUNCTIONS.md` (2026-10-15), for sorting them into the final layout.
 
 **Address:** https://rouental.github.io/Valsora-HOI4/
 
@@ -94,6 +100,17 @@ split: the player draws the line with the Suggest tool and you draw the state li
 releasables (before this) held provinces; they count as the states those cover by half, and are
 saved as states once their land changes.
 
+**The ones already in the game** are on the same tab: under **In the game**, those the mod lets
+the nation release (Rouental's 13, Belekria's Tethia), and under **In the civil war**, those that
+rise in it (Rouental's seven). Each card shows the game's names, government, colour, flag, ruler
+and states in grey, and anything filled in replaces them: a new name, a flag, a ruler, other
+states (with the Releasables tool, while the nation's map tools are open). **Undo every change
+to it** puts the game's back. A state can belong to a releasable and to a riser of the civil war
+at once, as cores can overlap in HOI4; one of the game's releasables always keeps a state. A
+riser led by one of your own characters (Brillagne's Mahaut, HMMLA's Serelle) points to the
+People tab: she is changed there, and her copy follows. The changes are made on the page of the
+nation the releasable comes from (the owner of its first state), never on another's.
+
 A friend whose page can't reach the atlas still gets the whole page: their changes stay in
 their browser, and **Nation › Save a file** gives them a file to send you. Load it with
 **Nation › Load a file** on that nation and it joins the atlas.
@@ -105,13 +122,13 @@ their browser, and **Nation › Save a file** gives them a file to send you. Loa
 | State tab | name, population, kind of state (building slots), infrastructure, civilian and military factories, dockyards, air base, anti-air, naval base, resources, notes | the state's history file; factories and dockyards are cut to the slots, island bases to vanilla's caps |
 | map, Terrain tool | each province's terrain (plains, forest, hills, mountains, desert, marsh, jungle, urban) | `definition.csv` and `terrain.bmp` |
 | map, Rivers tool | major and minor rivers as lines; erase strokes take away rivers already in the game | drawn into the river layers before `rivers.py` traces them, exactly like yours |
-| Cities tab and tool | cities (one per province, as many as they like in a state), their victory points, the national capital (★) and each state's capital (◆) | victory points and their names; the capital city's state becomes the capital; each state's capital is its main city: its first victory point, its supply hub (unless they place their own) and where its troops start. Unmarked, a state's capital is the national capital if it's there, else the city with the most victory points |
+| Cities tab and tool | cities (one per province, as many as they like in a state), their victory points (how much the place matters: 1 minor to 50 foremost), their size (village to metropolis), the national capital (★) and each state's capital (◆) | victory points and their names; the capital city's state becomes the capital; each state's capital is its main city: its first victory point, its supply hub (unless they place their own) and where its troops start. Unmarked, a state's capital is the national capital if it's there, else the city with the most victory points. Size only shares out a total population (Nation tab) |
 | map, Railways tool | railways (level 1-5) through cities and places | `map/railways.txt`: the shortest way over land between the provinces under the points, as the page draws it |
 | map, Hubs tool | supply hubs | `map/supply_nodes.txt`: once a nation has its own, only those and its capital |
 | map, Suggest tool | states (their own land inside the line, none of an earlier one's), areas, lines and points drawn anywhere on the world (a border, an island that should be theirs, a mountain range, where an undrawn nation goes), each with what it is | nothing by itself: a layer for you (below) |
 | Politics tab | name, full title and adjective under every government and each ideology; ruling sub-ideology | localisation, `nations.LEADERS` |
-| People tab | head of state (name, titles, portrait, traits); each other party's sub-ideology, leader, portrait and traits; political advisors (a section of their own); generals, admirals and other advisors (name, portrait, traits, an advisor's post, notes); traits are the base game's (up to six each, picked from lists by kind: a ruler's, a general's, an admiral's, each advisor post's), and **Ask for a new trait** sends you a request for one the game doesn't have; companies (name, logo, kind, notes): an arms maker of one of the base game's 28 kinds (tanks, ships, aircraft, land equipment) or an industrial concern of one of its 14, and **Ask for a new kind of company** sends you a request | the rulers and party leaders, with their titles shown on the portrait and their traits; generals and admirals as characters from the start (skill 3, their traits, their portraits or a generic one of the nation's culture); advisors in their post on the political screen (the post's usual cost, their traits); an arms maker as a military-industrial organisation of its kind (with Arms Against Tyranny) and, without that DLC, the designer of its kind in the political screen; a concern in the political screen's industrial concern slot, with its kind's trait and research bonus; logos as the company's icon (the whole logo fitted into 64 × 64), else the game's for its kind; the notes are a list for you |
-| Releasables tab and tool | releasables: name, adjective, full title, ruling sub-ideology, colour, flag, ruler, notes, land (whole states, or drawn areas) | a country each, owning nothing, with cores on its states (and those its areas cover by half; the largest is its capital), its names, ruler, colour and flag; culture its nation's |
+| People tab | head of state (name, titles, portrait, traits); each other party's sub-ideology, leader, portrait and traits; the characters already in the game (for your own nations' characters, as Roland and Serelle: name, the name taken on coming to rule, titles, sub-ideology within its ideology, traits, portrait, and a commander's rank, skill and stats); political advisors (a section of their own); generals, admirals and other advisors (name, portrait, traits, an advisor's post, a general's rank, a commander's skill and stats, notes); traits are the base game's (up to six each, picked from lists by kind: a ruler's, a general's, an admiral's, each advisor post's), and **Ask for a new trait** sends you a request for one the game doesn't have; companies (name, logo, kind, notes): an arms maker of one of the base game's 28 kinds (tanks, ships, aircraft, land equipment) or an industrial concern of one of its 14, and **Ask for a new kind of company** sends you a request | the rulers and party leaders, with their titles shown on the portrait and their traits; your characters changed where they are (a copy, as Mahaut at Brillagne, changes with them); generals and admirals as characters from the start (their skill and stats, skill 3 where not given; their traits; their portraits or a generic one of the nation's culture); advisors in their post on the political screen (the post's usual cost, their traits); an arms maker as a military-industrial organisation of its kind (with Arms Against Tyranny) and, without that DLC, the designer of its kind in the political screen; a concern in the political screen's industrial concern slot, with its kind's trait and research bonus; logos as the company's icon (the whole logo fitted into 64 × 64), else the game's for its kind; the notes are a list for you |
+| Releasables tab and tool | releasables: name, adjective, full title, ruling sub-ideology, colour, flag, ruler, notes, land (whole states, or drawn areas); the game's own and the civil war's risers: the same, over the game's | a country each, owning nothing, with cores on its states (and those its areas cover by half; the largest is its capital), its names, ruler, colour and flag; culture its nation's. The game's own keep their tags, with what was changed |
 | Nation tab | status (in progress / finished), flags (one, and one per government if they like; each slot shows the game's flag until a picture is sent), map colour, culture, motto, anthem, description, notes for you, requests; how far it is (states named counts the names already on your map) | flags into `source/flags/`; the map colour; the rest is for you |
 
 Pictures (flags, portraits) are kept at up to 640 px, plenty for HOI4's 82 × 52 flags and
@@ -127,8 +144,10 @@ other: its player can fill in its names, titles, sub-ideologies, flags and peopl
 the world map where it should be, until you or Merlo draw it. When it is on the map, its
 facts carry over.
 
-Nations whose leaders are your own characters (Rouental, Merlovich, Brillagne, HMMLA) keep
-their sub-ideologies and rulers; their names can still be changed.
+Nations whose leaders are your own characters (Rouental, Merlovich) show them on the People
+tab as the game has them, and every field can be changed but the ideology, which the focus tree
+names: a sub-ideology stays within it. Their generated party leaders (Rouental's democrat and
+communist) are changed the same way. The ruling sub-ideology isn't on their Politics tab.
 
 ## Your tools on the start page
 
@@ -170,8 +189,8 @@ with `gazetteer.py paths` and `pull`, which still work.)
 - **Nations whose map tools are closed**: their states, provinces, cities, rivers and railways,
   and their releasables' states, are left out at the import (the file carries your switches;
   the import reads which states are drawn from the last build).
-- **By hand**: requests (new traits and kinds of company among them), advisors without a post, the generals' and
-  admirals' skills, companies' notes, cultures and flags of other shapes; `status` lists them.
+- **By hand**: requests (new traits and kinds of company among them), advisors without a post, characters' and
+  companies' notes, cultures and flags of other shapes; `status` lists them.
 - **Traits** are the base game's (`source/vanilla/index/traits.json`, made by `scripts/vanilla_sync.py` from your copy of
   the game: the ones its own characters have, Earth's one-country ones left out); the import keeps only those of the right
   kind, and `check_mod.py` checks every trait in the mod against the game's.
@@ -228,8 +247,9 @@ them.
   whether its states are drawn (`final`, from `gazetteer.finals`), sub-ideologies, the world's
   owners for the start page's map, the base game's tags),
   `world.png`, and `n/<TAG>.json` per nation (its states, provinces, cities and politics as
-  the build has them, its flag, and its land in parts with the neighbours' around it, as
-  province numbers per pixel, plus the rivers).
+  the build has them, its characters and the releasables the game has for it, its flag, and
+  its land in parts with the neighbours' around it, as province numbers per pixel, plus the
+  rivers). Portraits of ours are on the site; the base game's are Paradox's and never are.
 - `scripts/gazetteer.html`: the page. On the web site its atlas is the Firestore database:
   each nation's documents at `n/<TAG>/<key>/<kind>` (`states`, `provinces`, `cities`,
   `rivers`, `rails`, `politics`, `flags`, `people`, `about`, `suggest`, `releasables`, plus

@@ -24,7 +24,8 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   `work/gazetteer_site/` alone as the next commit of `gh-pages` through a worktree, pushed;
   nothing is committed when the site is unchanged). Pages redeploys in a minute or two (the
   "pages build and deployment" run in Actions; github.io itself can't be reached from
-  Claude's sandbox). Test the page first: `python3 tests/gazetteer/run.py`, `traits.py` and `companies.py`.
+  Claude's sandbox). Test the page first: `python3 tests/gazetteer/run.py`, `traits.py`, `companies.py` and
+  `ingame.py`.
 - **Firebase** (set up by the author, 2026-10-15): Firestore (Standard, production mode), Google
   sign-in with `rouental.github.io` among the authorized domains, the web app's settings in
   `source/gazetteer_site/firebase-config.json` (not secret). The rules,
@@ -80,6 +81,44 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   less than half is a note, none at all leaves it out), its names, ruler and colour as facts of
   its tag, its nation's culture, and its nation's ruling sub-ideology when it has none. Its flag
   goes to `source/flags/<tag>.png` at the import like a nation's.
+- **Victory points and city size** (2026-10-15, later; the author: "Rouental's capital should be worth more VPs than
+  Vair for example, even though Vair is bigger, right?"). A city's victory points are how much it matters (HOI4's
+  surrender share, war score, the AI's targets, the size of its marker and name), labelled on the page by what each
+  value means (1 minor … 50 foremost, from the base game's: London 50, Washington 40, New York 30, Gibraltar 10,
+  Manchester 5); its **size** (`size`: village, town, city, large, metropolis; unset is a town) is apart and only
+  weighs the population spread (Nation › Spread a total population: a state's share is area^0.9 × (1 + the weights
+  of its cities' sizes, 1 / 3 / 8 / 20 / 50, over 8)). The import keeps `size`; the build doesn't use it.
+- **Characters and releasables already in the game** (2026-10-15, later; the author: "Releasables already in the game
+  should be represented on the site. For example, Rouental's releasables and revolters, or Tethia in Belekria.
+  Leaders already in the game should be represented and editable, for example Roland or Serelle. Their stats should
+  be editable as well as their traits"). `facts_export.py` gives each nation `characters` (the ones its history
+  recruits, read from the built `common/characters/` with `pdxscript`, the Gazetteer's own left out: name, the name
+  taken on coming to rule (`nations.REGNAL_NAMES`), titles, sub-ideology and ideology, ruler or party leader, leader
+  traits, a commander's rank, skill, stats and traits, an advisor's post, `copyOf` (`nations.COPIES`), and its portrait
+  as a small JPEG when it is ours; a base-game portrait is only marked `base`, never published) and `gameReleasables`
+  (the countries the game releases from it, from `work/game_releasables.json`, which `build_mod.py` writes: Rouental's
+  13 and Belekria's Tethia (`nations.RELEASABLE`, kind `releasable`) and the civil war's 7 (`nations.CIVIL_WAR`, kind
+  `civil_war`, `warOnly` for `CIVIL_WAR_ONLY`), with names, colour, flag, government, ruler and states). The page shows
+  them on the People tab (the author's own characters as cards, `gameCharCard`; a generated ruler's and party
+  leaders' names and portraits as the grey defaults of the fields they had) and the Releasables tab (sections "In the
+  game" and "In the civil war", `gameRelCard`; a releasable's land and a revolter's are kept apart, as HOI4 lets
+  cores overlap; a game releasable keeps its last state). Changes are kept beside the rest, so the rules needed
+  nothing new: `ch-<character id>` in `people` (`{name, regnal, desc, portrait, sub, traits, unit, rank, skill, attack,
+  defense, planning, logistics, maneuvering, coordination, unitTraits}`, an empty list of traits kept as `[]`) and
+  `g-<TAG>` in `releasables` (`{name, adj, def, ruling, colour, flag, leader {name, desc, portrait, traits}, notes,
+  states {"x,y": true}}`, the states replacing the game's whole). The import keeps `people.game_characters` (only ids
+  of the nation's own tag) and `game_releasables` (only those whose parent, by `work/game_releasables.json`, is the
+  nation: another nation's page can't change them). The build: `gazetteer.game_releasables` makes each changed one
+  facts of its own tag (names, ruling sub-ideology, ruler, colour, merged into the facts), and new land replaces its
+  states in `nations.CIVIL_WAR` / `RELEASABLE` by name (the game's capital kept first while it is still in, the rest
+  largest first); `gazetteer.patch_characters` patches the hand-made characters' text (`nations.ROU_CHARACTERS`,
+  `CHARACTERS`): sub-ideology within its ideology (the focus trees name the ideologies), titles (`desc` after the
+  ideology), traits, a commander's rank, skill, stats (its role's only) and traits, names through the localisation
+  (`patch_loc`), a new portrait under the sprite's own name, so a copy (Mahaut at Brillagne, Serelle at HMMLA) changes
+  with the original; `game_character_names` gives the generated leaders of a hand-made nation (Rouental's democrat and
+  communist, whose ids its focus tree names) their names, titles, portraits and traits through `NAMED_LEADERS`.
+  Unchanged characters stay byte for byte, and without facts the build is byte-identical. `check_mod.py` checks every
+  commander's skill (1–9) and stats (0–9), and that they are its role's (mutation-tested, 2 of 2).
 - **Admins** (author, 2026-10-15: "How would I go about making Merlo an admin on the Gazetteer
   as well, so he can manage passwords and such"): Owner tools › Admins (the author adds or
   removes a Google address: `admins/<address>`); an admin signs in with Google and gets every
@@ -96,12 +135,14 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   `nations/LZC`); version 2 doesn't read those collections.
 - **What it edits**, per nation: state names, population, kind of state, buildings (within
   slots and vanilla's caps), resources, notes; province terrain (8 types) and supply hubs;
-  cities (one per province, victory points, the capital); rivers (major, minor, erase
-  strokes); railways (level 1-5); names, full titles and adjectives under every government and
-  each ideology, the ruling sub-ideology; the head of state (name, titles, portrait, traits),
-  each other party's sub-ideology, leader, portrait and traits, political advisors (a section
-  of their own), generals, admirals and other advisors (traits, an advisor's post); companies
-  (name, logo, kind, notes); flags (one per government too); map colour, culture,
+  cities (one per province, victory points, size, the capital, state capitals); rivers (major,
+  minor, erase strokes); railways (level 1-5); names, full titles and adjectives under every
+  government and each ideology, the ruling sub-ideology; the head of state (name, titles,
+  portrait, traits), each other party's sub-ideology, leader, portrait and traits, the
+  characters already in the game (below), political advisors (a section of their own),
+  generals, admirals and other advisors (traits, an advisor's post, a commander's rank, skill and
+  stats); companies (name, logo, kind, notes); releasables, the game's own and the civil war's
+  among them (below); flags (one per government too); map colour, culture,
   motto, anthem, description; suggestions (areas, lines and points anywhere on the world,
   labelled); status, notes and requests (new sub-ideologies, subject types, traits, kinds of
   company, map changes ...).
@@ -152,8 +193,9 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   `nations.PORTRAITS` as `<TAG>_gazetteer_<role>`, 156:210 from the top of the picture).
   Hand-made rulers (`HAND_MADE`) keep their leaders. Its generals and admirals (2026-10-15: the author couldn't find
   Rouental's admiral, James Navy) are characters from the start (`gazetteer.characters`, `<TAG>_gazetteer_admiral_1`
-  ...): corps commanders and navy leaders of skill 3 (the page has no skill fields; the notes stay in a comment and
-  on `status`'s list for the author), with their portraits, or a generic one of the nation's culture
+  ...): corps commanders (field marshals if the page says so) and navy leaders of the page's skill and stats
+  (2026-10-15, later; where not given, skill 3, attack and defence 3, the others 2; the notes stay in a comment and on
+  `status`'s list for the author), with their portraits, or a generic one of the nation's culture
   (`cultures.unit_portraits`); advisors with a post (2026-10-15, later) in that slot (the post's usual cost, the ledger
   of their first trait, `allowed` their nation); others stay on that list. **Traits** (author, 2026-10-15: "add the
   option to add base-game traits to leaders, as well as the option to request new traits"): rulers, party leaders,
@@ -210,3 +252,10 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   `tests/gazetteer/companies.py`: the People tab's sections, a political advisor with the political advisors'
   traits, an arms company with a logo, a concern with notes, a request for a new kind, a company deleted, the file;
   that file imported and built (check_mod clean: organisation, designer, concern, logo and political advisor as above).
+  `tests/gazetteer/ingame.py`: on Rouental, Roland's name, sub-ideology and a trait, Serelle's rank, skill and stats and
+  a trait taken away, a site general's skill (and a stat held to 9); the Releasables tab's sections (13 in the game, 7
+  in the civil war), Carcarelle renamed and given Ghessone's only state (which Ghessone keeps: a game releasable keeps
+  its last state), Brillagne's ruler pointing to Mahaut, a revolter picked showing the civil war's land apart; a city's
+  victory points and size; Belekria's Tethia while its map is closed; the file of every nation. That file imported and built: Roland's sub-ideology, titles kept, trait and new name; Serelle and
+  her HMMLA copy a field marshal of skill 5; the general's logistics 9; Carcarelle Libre with cores on its four states
+  (one shared with Ghessone); check_mod clean.
