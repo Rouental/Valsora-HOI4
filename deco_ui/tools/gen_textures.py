@@ -1288,12 +1288,233 @@ add("thumb", "thumbnail.png", 512, 256,
     '<div style="position:absolute;left:176px;right:176px;top:196px;height:5px;border-top:1px solid #C9A55A;border-bottom:1px solid rgba(201,165,90,.45)"></div>', fmt="png")
 
 
+# ---------------------------------------------------------------- army bar (v0.7: interface/leadergroups.gui)
+# The armies along the bottom of the screen (the user, after v0.2: "The armies at the bottom of the screen ... don't
+# have the same custom touch as the rest of the UI"). Replaced at the game's paths, sizes and frame counts only: the
+# game's leadergroups.gui and .gfx stay as they are. Each card frame is drawn over the portrait (the game puts the
+# portrait at the frame's (9, 7), 61 x 82 for an army; (9, 6), 70 x 94 for an army group), so its arched opening
+# shows the portrait and its plaque holds the division count. Frames keep the game's order: army cards normal,
+# selected, then the same without the plaque; army groups normal, selected, plain. Selected is jade, as everywhere.
+UC = "gfx/interface/unitcontrol/"
+LG_GOLD = ('<linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F1DC9C"/>'
+           '<stop offset="1" stop-color="#8B6A2C"/></linearGradient>'
+           '<linearGradient id="gb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFF3C8"/>'
+           '<stop offset="1" stop-color="#C9A55A"/></linearGradient>'
+           '<linearGradient id="pf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1E2A31"/>'
+           '<stop offset="1" stop-color="#0B1014"/></linearGradient>'
+           '<linearGradient id="pj" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2C665A"/>'
+           '<stop offset="1" stop-color="#123029"/></linearGradient>'
+           '<pattern id="pin" width="8" height="8" patternUnits="userSpaceOnUse"><rect width="8" height="8" fill="#11191E"/>'
+           '<rect width="1" height="8" fill="#1A2329"/></pattern>')
+
+
+def _cham(x0, y0, x1, y1, c):
+    return f"M{x0 + c},{y0}L{x1 - c},{y0}L{x1},{y0 + c}L{x1},{y1 - c}L{x1 - c},{y1}L{x0 + c},{y1}L{x0},{y1 - c}L{x0},{y0 + c}Z"
+
+
+def _arch(x0, x1, top, sh, bottom):
+    return f"M{x0},{bottom}L{x0},{sh}A{(x1 - x0) / 2},{sh - top} 0 0 1 {x1},{sh}L{x1},{bottom}Z"
+
+
+def lg_frame(W, H, hole, body, plaque, selected, flat=False, marshal=False):
+    """a leader card frame: lacquer with an arched opening for the portrait, gilt rims, the plaque for the count"""
+    x0, x1, top, sh, bottom = hole
+    bx0, by0, bx1, by1 = body
+    px0, py0, px1, py1 = plaque
+    rim = "url(#gb)" if selected else "url(#g)"
+    b, inner = _cham(bx0, by0, bx1, by1, 5), _cham(bx0 + 3, by0 + 3, bx1 - 3, by1 - 3, 3.5)
+    h = _arch(x0, x1, top, sh, bottom)
+    s = [f'<svg width="{W}" height="{H}" viewBox="0 0 {W} {H}" style="position:absolute;left:0;top:0"><defs>{LG_GOLD}'
+         f'<clipPath id="bc"><path d="{b}{h}" clip-rule="evenodd"/></clipPath></defs>',
+         f'<path d="{b}{h}" fill="url(#pin)" fill-rule="evenodd"/>']
+    if marshal and not flat:     # an army group's card: gilt fans in the top corners, beside the arch
+        for cx, sx in ((bx0 + 1, 1), (bx1 - 1, -1)):
+            for a in range(8, 90, 9):
+                import math
+                r = 16
+                s.append(f'<line x1="{cx}" y1="{by0 + 1}" x2="{cx + sx * r * math.cos(math.radians(a)):.2f}" '
+                         f'y2="{by0 + 1 + r * math.sin(math.radians(a)):.2f}" stroke="rgba(227,199,126,.38)" '
+                         f'stroke-width=".8" clip-path="url(#bc)"/>')
+    if selected:                 # jade: a lit line inside the rim and a glow round the opening; the plaque jade
+        s.append(f'<path d="{_cham(bx0 + 2, by0 + 2, bx1 - 2, by1 - 2, 4)}" fill="none" stroke="#6CC2A9" '
+                 f'stroke-width="2"/>')
+        s.append(f'<path d="{h}" fill="none" stroke="#6CC2A9" stroke-width="4" opacity=".75" clip-path="url(#bc)"/>')
+    s.append(f'<path d="{b}" fill="none" stroke="{rim}" stroke-width="{2 if selected else 1.2}"/>')
+    s.append(f'<path d="{inner}" fill="none" stroke="rgba(201,165,90,{.75 if marshal else .4})" stroke-width="1"/>')
+    s.append(f'<path d="{h}" fill="none" stroke="{rim}" stroke-width="1.4"/>')
+    pfill = "url(#pj)" if selected else "url(#pf)"
+    if flat:
+        s.append(f'<rect x="{px0}" y="{py0}" width="{px1 - px0}" height="{py1 - py0}" fill="{pfill}"/>'
+                 f'<line x1="{px0}" y1="{py0 + .5}" x2="{px1}" y2="{py0 + .5}" stroke="{rim}" stroke-width="1"/>')
+    else:
+        m = (py0 + py1) / 2
+        pts = f"{px0},{m} {px0 + 7},{py0} {px1 - 7},{py0} {px1},{m} {px1 - 7},{py1} {px0 + 7},{py1}"
+        s.append(f'<polygon points="{pts}" fill="{pfill}" stroke="{rim}" stroke-width="1.1"/>')
+        if marshal:              # small diamonds at the plaque's points
+            for x in (px0 - 1, px1 + 1):
+                s.append(f'<rect x="{x - 2.2}" y="{m - 2.2}" width="4.4" height="4.4" transform="rotate(45 {x} {m})" '
+                         f'fill="{rim}"/>')
+    return "".join(s) + "</svg>"
+
+
+ARMY = dict(hole=(10, 69, 8, 21, 88), body=(2, 2, 82, 112), plaque=(6, 90, 78, 110))
+GROUP = dict(hole=(10, 78, 7, 22, 99), body=(2, 2, 88, 123), plaque=(6, 101, 84, 121))
+add("lg_frame", UC + "leader_group_frame.dds", 336, 117, frames(336, 117,
+    lg_frame(84, 117, selected=False, **ARMY), lg_frame(84, 117, selected=True, **ARMY),
+    lg_frame(84, 117, selected=False, flat=True, **ARMY), lg_frame(84, 117, selected=True, flat=True, **ARMY)))
+add("lg_group_frame", UC + "leader_army_group_frame.dds", 270, 126, frames(270, 126,
+    lg_frame(90, 126, selected=False, marshal=True, **GROUP), lg_frame(90, 126, selected=True, marshal=True, **GROUP),
+    lg_frame(90, 126, selected=False, flat=True, marshal=True, **GROUP)))
+
+
+def lg_strip(w, h, lit, chamfer=None):
+    """the plate behind a run of armies: lacquer fading into the map below, a gilt rule along its top"""
+    op = .9 if lit else .64
+    clip = ""
+    if chamfer == "right":
+        clip = f"clip-path:polygon(0 0,{w - 12}px 0,{w}px 12px,{w}px 100%,0 100%);"
+    elif chamfer == "left":
+        clip = f"clip-path:polygon(12px 0,{w}px 0,{w}px 100%,0 100%,0 12px);"
+    rule = f"rgba(201,165,90,{.85 if lit else .6})"
+    s = (f'<div style="position:absolute;inset:0;{clip}-webkit-mask:linear-gradient(180deg,#000 0,#000 58%,transparent 100%)">'
+         f'<div class="lac" style="position:absolute;inset:0;opacity:{op}"></div>'
+         f'<div style="position:absolute;left:0;right:0;top:0;height:1px;background:{rule}"></div>'
+         f'<div style="position:absolute;left:0;right:0;top:3px;height:1px;background:rgba(201,165,90,{.3 if lit else .18})"></div>')
+    if chamfer == "right":
+        s += (f'<svg width="{w}" height="{h}" style="position:absolute;left:0;top:0"><path d="M{w - 12},0.5L{w - .5},12V{h}" '
+              f'fill="none" stroke="{rule}" stroke-width="1"/></svg>')
+    elif chamfer == "left":
+        s += (f'<svg width="{w}" height="{h}" style="position:absolute;left:0;top:0"><path d="M12,0.5L.5,12V{h}" '
+              f'fill="none" stroke="{rule}" stroke-width="1"/></svg>')
+    return s + "</div>"
+
+
+add("lg_strip_mid", UC + "army_mid_bg.dds", 160, 149, frames(160, 149, lg_strip(80, 149, False), lg_strip(80, 149, True)))
+add("lg_strip_end", UC + "army_end_bg.dds", 168, 150, frames(168, 150, lg_strip(84, 150, False, "right"),
+                                                            lg_strip(84, 150, True, "right")))
+# the game's is 175 px wide, two frames of 87.5 px
+add("lg_strip_back", UC + "army_group_back_bg.dds", 175, 151, "".join(
+    f'<div style="position:absolute;left:{i * 87.5}px;top:0;width:87.5px;height:151px">{lg_strip(87.5, 151, lit, "left")}</div>'
+    for i, lit in enumerate((False, True))))
+
+HATCH = "repeating-linear-gradient(135deg,rgba(201,165,90,.16) 0 2px,transparent 2px 6px)"
+
+
+def lg_button(w, h, glyph, state):
+    """the execute / stop chips: 1 normal, 2 hatched, 3 lit, 4 lit and hatched (the game's order and look)"""
+    lit = state in (3, 4)
+    s = lit_bar(4) if lit else bar(c=4, shine=.15)
+    if state in (2, 4):
+        s += f'<div style="position:absolute;inset:1px;clip-path:{chamfer(3.6)};background:{HATCH}"></div>'
+    col = {1: "#E3C77E", 2: "#9C8A62", 3: "#FBEAB4", 4: "#D9C48E"}[state]
+    return s + glyph(w, h, col, state)
+
+
+def g_play(w, h, col, st, double=False):
+    cx, cy = w / 2, h / 2
+    if double:
+        d = (f"M{cx - 8},{cy - 5.5}L{cx - 1},{cy}L{cx - 8},{cy + 5.5}Z" f"M{cx},{cy - 5.5}L{cx + 7},{cy}L{cx},{cy + 5.5}Z")
+    else:
+        d = f"M{cx - 4},{cy - 6}L{cx + 6},{cy}L{cx - 4},{cy + 6}Z"
+    return f'<svg width="{w}" height="{h}" style="position:absolute;left:0;top:0"><path d="{d}" fill="{col}"/></svg>'
+
+
+def g_stop(w, h, col, st, double=False):
+    coral = {1: "#D8705F", 2: "#8E4F45", 3: "#EE8C7E", 4: "#B4675B"}[st]
+    cx, cy = w / 2, h / 2
+    sq = [(cx - 4.5, cy - 4.5)] if not double else [(cx - 6.5, cy - 6), (cx - 2.5, cy - 2.5)]
+    return (f'<svg width="{w}" height="{h}" style="position:absolute;left:0;top:0">'
+            + "".join(f'<rect x="{x}" y="{y}" width="9" height="9" fill="{coral}" stroke="{col}" stroke-width=".9"/>'
+                      for x, y in sq) + "</svg>")
+
+
+add("lg_play", UC + "execute_btn_play_small.dds", 172, 23, frames(172, 23, *[lg_button(43, 23, g_play, s) for s in (1, 2, 3, 4)]))
+add("lg_play_ag", UC + "execute_btn_play_small_ag.dds", 172, 23, frames(172, 23, *[
+    lg_button(43, 23, (lambda w, h, c, st: g_play(w, h, c, st, st > 2)), s) for s in (1, 2, 3, 4)]))
+add("lg_stop", UC + "execute_btn_stop_small.dds", 112, 23, frames(112, 23, *[lg_button(28, 23, g_stop, s) for s in (1, 2, 3, 4)]))
+add("lg_stop_ag", UC + "execute_btn_stop_small_ag.dds", 112, 23, frames(112, 23, *[
+    lg_button(28, 23, (lambda w, h, c, st: g_stop(w, h, c, st, st > 2)), s) for s in (1, 2, 3, 4)]))
+add("lg_buttons_bg", UC + "execute_stop_small_bg.dds", 78, 26, bar(DIM_FILL, c=5, shine=.12))
+add("lg_border_war_bg", UC + "excecute_stop_border_war_bg.dds", 73, 27,
+    bar(DIM_FILL, "#E7B75A", 5, .12) + f'<div style="position:absolute;inset:1px;clip-path:{chamfer(4.6)};'
+    'background:repeating-linear-gradient(135deg,rgba(231,183,90,.28) 0 3px,transparent 3px 8px)"></div>')
+add("lg_no_order", UC + "execute_button_no_order.dds", 82, 37, bar(c=6, shine=.15))
+# the battle plan in progress, over the execute button: gilt chevrons running right on jade (12 frames, a loop)
+add("lg_plan_anim", UC + "active_battleplan_anim.dds", 528, 20, frames(528, 20, *[
+    lit_bar(4) + '<svg width="44" height="20" style="position:absolute;left:0;top:0"><defs><clipPath id="ca">'
+    f'<path d="{_cham(1, 1, 43, 19, 3.6)}"/></clipPath></defs><g clip-path="url(#ca)">'
+    + "".join(f'<path d="M{x - 3},5L{x + 2},10L{x - 3},15" fill="none" stroke="#F1DC9C" stroke-width="2" '
+              f'stroke-linecap="round" stroke-linejoin="round" opacity="{.45 + .55 * ((x - 2) / 46)}"/>'
+              for x in [2 + k * 11 + i * 11 / 12 for k in range(-1, 5)]) + "</g></svg>" for i in range(12)]))
+add("lg_point_out", UC + "execute_button_point_out_mode.dds", 45, 26,
+    f'<svg width="45" height="26" style="position:absolute;left:0;top:0"><path d="{_cham(1.5, 1.5, 43.5, 24.5, 4)}" fill="none" '
+    'stroke="#E7B75A" stroke-width="1.5"/></svg>'
+    '<svg width="45" height="26" style="position:absolute;left:0;top:0"><path d="M31,3L35,7L31,11M36,3L40,7L36,11" '
+    'fill="none" stroke="#F1DC9C" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>')
+add("lg_expand", UC + "army_group_expand_collapse.dds", 28, 20, frames(28, 20,
+    chip(14, 20, False) + '<svg width="14" height="20" style="position:absolute;left:0;top:0"><path d="M5,6L10,10L5,14Z" fill="#E3C77E"/></svg>',
+    chip(14, 20, False) + '<svg width="14" height="20" style="position:absolute;left:0;top:0"><path d="M9,6L4,10L9,14Z" fill="#E3C77E"/></svg>'))
+add("lg_power", UC + "comm_group_plan_power_bar.dds", 59, 6,
+    '<div style="position:absolute;inset:0;background:linear-gradient(180deg,#8FD0BB,#3E8E7A)"></div>'
+    '<div style="position:absolute;left:0;right:0;top:0;height:1px;background:rgba(241,220,156,.7)"></div>')
+add("lg_power_bg", UC + "comm_group_plan_power_bar_bg.dds", 59, 6,
+    '<div style="position:absolute;inset:0;background:linear-gradient(180deg,#C46A5C,#6E2E26)"></div>'
+    '<div style="position:absolute;left:0;right:0;top:0;height:1px;background:rgba(241,220,156,.35)"></div>')
+add("lg_disband", UC + "disband_orders_group.dds", 16, 16,
+    '<div style="position:absolute;left:2.5px;top:2.5px;width:11px;height:11px;transform:rotate(45deg);background:#0B1014;'
+    'border:1px solid #C9A55A;box-sizing:border-box"></div>'
+    '<svg width="16" height="16" style="position:absolute;left:0;top:0"><path d="M5.6,5.6L10.4,10.4M10.4,5.6L5.6,10.4" '
+    'stroke="#F1DC9C" stroke-width="1.3" stroke-linecap="round"/></svg>')
+add("lg_air_bg", "gfx/interface/attached_air_bg.dds", 39, 45, bar(c=4, shine=.15))
+
+
+def lg_add(w, h, lit, plus=True):
+    """the empty card asking for a commander: a gilt line bust under an arch, a plus medallion"""
+    cx = w / 2
+    hr, hy = w * .18, h * .36
+    sh = h * .58
+    s = (f'<div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,#1E2A31,#0B1014 75%)"></div>'
+         f'<svg width="{w}" height="{h}" style="position:absolute;left:0;top:0">'
+         f'<circle cx="{cx}" cy="{hy}" r="{hr}" fill="none" stroke="rgba(227,199,126,.55)" stroke-width="1.3"/>'
+         f'<path d="M{w * .14},{h * .92}C{w * .14},{sh + 6} {cx - hr - 4},{sh} {cx},{sh}C{cx + hr + 4},{sh} {w * .86},{sh + 6} '
+         f'{w * .86},{h * .92}" fill="none" stroke="rgba(227,199,126,.55)" stroke-width="1.3"/>')
+    if plus:
+        r = 9
+        my = h * .75
+        fill, rim, pc = ("#2C665A", "#F1DC9C", "#FBEAB4") if lit else ("#11191E", "#C9A55A", "#E3C77E")
+        s += (f'<rect x="{cx - r}" y="{my - r}" width="{2 * r}" height="{2 * r}" transform="rotate(45 {cx} {my})" fill="{fill}" '
+              f'stroke="{rim}" stroke-width="1"/>'
+              f'<path d="M{cx - 5},{my}H{cx + 5}M{cx},{my - 5}V{my + 5}" stroke="{pc}" stroke-width="1.8" stroke-linecap="round"/>')
+    return s + "</svg>"
+
+
+add("lg_add_bg", UC + "group_add_leader_bg.dds", 61, 83, lg_add(61, 83, False))
+add("lg_add", UC + "group_add_leader.dds", 122, 83, frames(122, 83, lg_add(61, 83, False), lg_add(61, 83, True)))
+add("lg_add_marshal_bg", UC + "group_add_marshal_bg.dds", 70, 96, lg_add(70, 96, False))
+add("lg_add_marshal", UC + "group_add_marshal.dds", 140, 96, frames(140, 96, lg_add(70, 96, False), lg_add(70, 96, True)))
+# a commander's headquarters needs attention: frame 2 (frame 1 is the game's blank, the blink)
+add("lg_hq_alert", UC + "hq_alert.dds", 122, 83, frames(122, 83, "",
+    f'<div style="position:absolute;inset:0;background:rgba(238,140,126,.16);box-shadow:inset 0 0 0 2px #EE8C7E"></div>'
+    '<div style="position:absolute;left:44px;top:5px;width:12px;height:12px;transform:rotate(45deg);background:#EE8C7E"></div>'
+    '<svg width="61" height="83" style="position:absolute;left:0;top:0"><path d="M50,6.5V12.5" stroke="#1A0E0B" stroke-width="1.8" '
+    'stroke-linecap="round"/><circle cx="50" cy="15.3" r="1" fill="#1A0E0B"/></svg>'))
+add("lg_hq_badge", UC + "hq_badge.dds", 18, 27, img_tag(gilt(vanilla_frames(UC + "hq_badge.dds", 1)[0], 1.05)))
+_gr = vanilla_frames(UC + "give_role_leader_strip.dds", 2)
+add("lg_give_role", UC + "give_role_leader_strip.dds", 56, 28, frames(56, 28, img_tag(gilt(_gr[0])),
+    '<div style="position:absolute;inset:1px;border:1px solid #5FB39C;border-radius:3px"></div>' + img_tag(gilt(_gr[1], 1.15))))
+
 # ---------------------------------------------------------------- render
 G = FONTS_SRC
 FONTS = f"""@font-face{{font-family:'Limelight';src:url('file://{G}limelight/Limelight-Regular.ttf')}}
 @font-face{{font-family:'Federo';src:url('file://{G}federo/Federo-Regular.ttf')}}
 @font-face{{font-family:'Bodoni Moda';font-style:italic;src:url('file://{G}bodonimoda/BodoniModa-Italic[opsz,wght].ttf')}}
 @font-face{{font-family:'Josefin Sans';src:url('file://{G}josefinsans/JosefinSans[wght].ttf');font-weight:100 700}}"""
+# python gen_textures.py lg_ ev_   renders only the textures whose key starts with one of those prefixes (the others
+# keep their files and manifest entries: re-rendering everything changes a few anti-aliased pixels everywhere)
+ONLY = [a for a in sys.argv[1:] if not a.startswith("-")]
+if ONLY:
+    SPRITES = [s for s in SPRITES if s[0].startswith(tuple(ONLY))]
+    assert SPRITES, f"no texture key starts with {ONLY}"
 body = []
 y = 0
 for key, rel, w, h, html, fmt in SPRITES:
@@ -1324,5 +1545,8 @@ with sync_playwright() as p:
             im.convert("RGB").save(dest)
         manifest.append({"key": key, "path": rel, "w": w, "h": h})
     b.close()
+if ONLY and os.path.isfile(BUILD + "texture_manifest.json"):
+    done = {m["key"] for m in manifest}
+    manifest = [m for m in json.load(open(BUILD + "texture_manifest.json")) if m["key"] not in done] + manifest
 json.dump(manifest, open(BUILD + "texture_manifest.json", "w"), indent=1)
 print(len(manifest), "textures written")

@@ -321,7 +321,16 @@ SAME_SIZE = ["gfx/interface/pol_view_bg.dds", "gfx/interface/pol_view_bg_no_dlc.
                  "up_down", "left_right", "down_left", "down_right", "up_left", "up_right", "down_left_right",
                  "up_down_left", "up_down_right", "up_left_right", "up_down_left_right", "exclusive")],
              "gfx/interface/focusview/focus_exlusive_link_line1.dds", "gfx/interface/focusview/focus_exlusive_link_line2.dds",
-             "gfx/interface/cont_focus_check_icon.dds"]
+             "gfx/interface/cont_focus_check_icon.dds",
+             # the army bar (v0.7): the game cuts these into frames and lays the cards out by their sizes
+             *[f"gfx/interface/unitcontrol/{k}.dds" for k in (
+                 "leader_group_frame", "leader_army_group_frame", "army_mid_bg", "army_end_bg", "army_group_back_bg",
+                 "execute_btn_play_small", "execute_btn_play_small_ag", "execute_btn_stop_small", "execute_btn_stop_small_ag",
+                 "execute_stop_small_bg", "excecute_stop_border_war_bg", "execute_button_no_order", "active_battleplan_anim",
+                 "execute_button_point_out_mode", "army_group_expand_collapse", "comm_group_plan_power_bar",
+                 "comm_group_plan_power_bar_bg", "disband_orders_group", "group_add_leader_bg", "group_add_leader",
+                 "group_add_marshal_bg", "group_add_marshal", "hq_alert", "hq_badge", "give_role_leader_strip")],
+             "gfx/interface/attached_air_bg.dds"]
 VG = VANILLA + "gfx/"
 if os.path.isdir(VG):
     resized = []
