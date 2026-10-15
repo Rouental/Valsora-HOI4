@@ -116,6 +116,15 @@ def set_attrs(src, path, **attrs):
     return text[:s] + head + rest + text[e:]
 
 
+def get_pos(text, path):
+    """(x, y): the element's own position"""
+    s, e = find_block(text, path)
+    head, _ = own_region(text[s:e])
+    m = re.search(r"\bposition\s*=\s*\{\s*x\s*=\s*(-?\d+)\s*y\s*=\s*(-?\d+)\s*\}", _strip_comments(head))
+    assert m, (path, "no position")
+    return int(m.group(1)), int(m.group(2))
+
+
 def remove_attr(text, path, key):
     s, e = find_block(text, path)
     block = text[s:e]

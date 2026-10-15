@@ -195,7 +195,7 @@ guiTypes = {
 			name = "divisions_count"
 			position = { x = 5 y = 78 }
 			font = "valsora_deco_value_17"
-			maxWidth = 72
+			maxWidth = 67
 			maxHeight = 20
 			format = centre
 			text = "-"
@@ -205,18 +205,18 @@ guiTypes = {
 		iconType = {
 			name ="small_button_bg"
 			spriteType = "GFX_execute_stop_small_bg"
-			position = { x= 4 y = -34 }
+			position = { x = 0 y = -34 }
 		}
 
 		iconType = {
 			name ="small_button_border_conflict_bg"
 			spriteType = "GFX_excecute_stop_border_war_bg"
-			position = { x= 3 y = -25 }
+			position = { x = 2 y = -25 }
 		}
 		
 		buttonType = {
 			name = "btn_execute"
-			position = {x=36 y=-32}	
+			position = { x = 32 y = -32 }	
 			spriteType = "GFX_execute_button_play_small"
 			#spriteType = "GFX_execute_button_execute_order"
 			#buttonFont = "hoi_16mbs"
@@ -234,7 +234,7 @@ guiTypes = {
 
 		iconType = {
 			name = "btn_execute_anim"
-			position = {x=36 y=-31}	
+			position = { x = 32 y = -31 }	
 			spriteType = "GFX_active_battleplan_anim"
 			alwaystransparent = yes
 		}		
@@ -242,7 +242,7 @@ guiTypes = {
 		iconType ={
 			name ="execute_battle_plan_tutorial_glow"
 			spriteType = "GFX_execute_battle_plan_glow"
-			position = { x= 33 y = -35 }
+			position = { x = 29 y = -35 }
 			hide = yes
 			alwaystransparent = yes
 		}		
@@ -278,7 +278,7 @@ guiTypes = {
 		
 		buttonType = {
 			name = "btn_stop"
-			position = {x=6 y=-32}	
+			position = { x = 2 y = -32 }	
 			spriteType = "GFX_execute_button_stop_small"
 			#spriteType = "GFX_execute_button_execute_order"
 			#buttonFont = "hoi_16mbs"
@@ -288,7 +288,7 @@ guiTypes = {
 		
 		buttonType = {
 			name = "btn_stop_training" #When the group is training
-			position = {x=6 y=-32}	
+			position = { x = 2 y = -32 }	
 			spriteType = "GFX_execute_button_stop_small"
 			buttonFont = "hoi_16mbs"
 #			buttonText = "UNITS_VIEW_BTN_STOP_TRAINING"
@@ -298,14 +298,14 @@ guiTypes = {
 		iconType = {
 			name = "training_marker"
 			quadTextureSprite = "GFX_exercise_icon_anim_strip"
-			position = { x=35 y=-33 }
+			position = { x = 31 y = -33 }
 			pdx_tooltip = "UNITS_VIEW_EXERCISING"
 		}
 
 		iconType = {
 			name = "icn_exercise_stop_at_max"
 			spriteType = "GFX_exercise_stop_at_max"
-			position = { x=35 y=-32 }
+			position = { x = 31 y = -32 }
 			scale = 0.8
 			alwaystransparent = yes
 		}
@@ -313,21 +313,21 @@ guiTypes = {
 		iconType = {
 			name = "defending_marker"
 			spriteType = "GFX_area_defense_active"
-			position = { x=60 y=-30 }
+			position = { x = 56 y = -30 }
 			pdx_tooltip = "UNITS_DEFENDING_AREA"
 		}		
 		
 		iconType = {
 			name = "icon_execute_point_out"
 			spriteType = "GFX_execute_button_point_out_mode"
-			position = {x=35 y=-34}	
+			position = { x = 31 y = -34 }	
 			alwaystransparent = yes
 		}
 
 		iconType = {
 			name = "plan_evaluation"
 			quadTextureSprite ="GFX_plan_value_strip"
-			position = { x=37 y=-31 }
+			position = { x = 33 y = -31 }
 			frame = 1
 			alwaystransparent = yes	
 		}
@@ -469,7 +469,7 @@ guiTypes = {
 		ButtonType = {
 			name ="disband_leader_btn"
 			spriteType = "GFX_LG_disband_group_btn"	
-			position = {x=68 y=-15}
+			position = { x = 66 y = -15 }
 			clicksound = disband
 		}
 		
@@ -484,7 +484,7 @@ guiTypes = {
 			name = "divisions_count"
 			position = { x = 5 y = 80 }
 			font = "valsora_deco_value_17"
-			maxWidth = 78
+			maxWidth = 76
 			maxHeight = 20
 			format = centre
 			text = "-"
@@ -494,7 +494,7 @@ guiTypes = {
 		iconType = {
 			name ="small_button_bg"
 			spriteType = "GFX_execute_stop_small_bg"
-			position = { x= 8 y = -44 }
+			position = { x = 4 y = -44 }
 		}
 
 		buttonType = {
@@ -516,7 +516,7 @@ guiTypes = {
 		
 		buttonType = {
 			name = "btn_execute"
-			position = {x=40 y=-42}	
+			position = { x = 36 y = -42 }	
 			spriteType = "GFX_execute_button_play_small_ag"
 			#spriteType = "GFX_execute_button_execute_order"
 			#buttonFont = "hoi_16mbs"
@@ -526,7 +526,7 @@ guiTypes = {
 
 		iconType = {
 			name = "btn_execute_anim"
-			position = {x=40 y=-41}	
+			position = { x = 36 y = -41 }	
 			spriteType = "GFX_active_battleplan_anim"
 			alwaystransparent = yes
 		}		
@@ -534,7 +534,7 @@ guiTypes = {
 		iconType ={
 			name ="execute_battle_plan_tutorial_glow"
 			spriteType = "GFX_execute_battle_plan_glow"
-			position = { x= 39 y = -45 }
+			position = { x = 35 y = -45 }
 			hide = yes
 			alwaystransparent = yes
 		}		
@@ -557,20 +557,20 @@ guiTypes = {
 		iconType = {
 			name = "plan_unit_power_bar"
 			spriteType = "GFX_plan_unit_power"
-			position = { x=15 y=92 }	
+			position = { x = 13 y = 92 }	
 			#alwaystransparent = yes
 		}
 
 		iconType = {
 			name = "plan_frame"
 			spriteType = "GFX_plan_frame"
-			position = { x=12 y=92 }	
+			position = { x = 10 y = 92 }	
 			alwaystransparent = yes
 		}		
 		
 		buttonType = {
 			name = "btn_stop"
-			position = {x=10 y=-42}	
+			position = { x = 6 y = -42 }	
 			spriteType = "GFX_execute_button_stop_small_ag"
 			#spriteType = "GFX_execute_button_execute_order"
 			#buttonFont = "hoi_16mbs"
@@ -580,7 +580,7 @@ guiTypes = {
 		
 		buttonType = {
 			name = "btn_stop_training" #When the group is training
-			position = {x=12 y=-42}	
+			position = { x = 8 y = -42 }	
 			spriteType = "GFX_execute_button_stop_small"
 			buttonFont = "hoi_16mbs"
 #			buttonText = "UNITS_VIEW_BTN_STOP_TRAINING"
@@ -590,14 +590,14 @@ guiTypes = {
 		iconType = {
 			name = "training_marker"
 			quadTextureSprite = "GFX_exercise_icon_anim_strip"
-			position = { x=41 y=-43 }
+			position = { x = 37 y = -43 }
 			pdx_tooltip = "UNITS_VIEW_EXERCISING"
 		}
 
 		iconType = {
 			name = "icn_exercise_stop_at_max"
 			spriteType = "GFX_exercise_stop_at_max"
-			position = { x=41 y=-42 }
+			position = { x = 37 y = -42 }
 			scale = 0.8
 			alwaystransparent = yes
 		}
@@ -605,28 +605,28 @@ guiTypes = {
 		iconType = {
 			name = "defending_marker"
 			spriteType = "GFX_area_defense_active"
-			position = { x=60 y=-40 }
+			position = { x = 56 y = -40 }
 			pdx_tooltip = "UNITS_DEFENDING_AREA"
 		}		
 		
 		iconType = {
 			name = "icon_execute_point_out"
 			spriteType = "GFX_execute_button_point_out_mode"
-			position = {x=41 y=-44}	
+			position = { x = 37 y = -44 }	
 			alwaystransparent = yes
 		}
 
 		iconType = {
 			name = "plan_evaluation"
 			quadTextureSprite ="GFX_plan_value_strip"
-			position = { x=43 y=-41 }
+			position = { x = 39 y = -41 }
 			frame = 1
 			alwaystransparent = yes	
 		}
 		
 		buttonType = {
 			name = "expand"
-			position = {x=73 y=-15}
+			position = { x = 71 y = -15 }
 			quadTextureSprite = "GFX_LG_expand_group_btn"
 			font = "hoi_16mbs"
 			frame = 2

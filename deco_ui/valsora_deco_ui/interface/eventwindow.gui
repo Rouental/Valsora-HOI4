@@ -114,9 +114,9 @@ guiTypes = {
 
 			gridBoxType = {
 				name = "options_grid"
-				position = { x = 215 y = -1 }
-				size = { width = 300 height = 30 }
-				slotsize = { width = 300 height = 47 }
+				position = { x = 230 y = -1 }
+				size = { width = 334 height = 30 }
+				slotsize = { width = 334 height = 47 }
 				max_slots_horizontal = 1
 				format = "UPPER_LEFT"
 			}
@@ -298,9 +298,9 @@ guiTypes = {
 
 			gridBoxType = {
 				name = "options_grid"
-				position = { x = 90 y = 120 }
-				size = { width = 300 height = 0 }
-				slotsize = { width = 300 height = 47 }
+				position = { x = 103 y = 120 }
+				size = { width = 334 height = 0 }
+				slotsize = { width = 334 height = 47 }
 				max_slots_horizontal = 1
 				Orientation = UPPER_LEFT
 			}
@@ -437,9 +437,9 @@ guiTypes = {
 
 			gridBoxType = {
 				name = "options_grid"
-				position = { x = 115 y = 10 }
-				size = { width = 300 height = 0 }
-				slotsize = { width = 300 height = 47 }
+				position = { x = 123 y = 10 }
+				size = { width = 334 height = 0 }
+				slotsize = { width = 334 height = 47 }
 				max_slots_horizontal = 1
 				Orientation = UPPER_LEFT
 			}
@@ -549,9 +549,9 @@ guiTypes = {
 
 			gridBoxType = {
 				name = "options_grid"
-				position = { x = 80 y = -1 }
-				size = { width = 300 height = 30 }
-				slotsize = { width = 300 height = 47 }
+				position = { x = 97 y = -1 }
+				size = { width = 334 height = 30 }
+				slotsize = { width = 334 height = 47 }
 				max_slots_horizontal = 1
 				format = "UPPER_LEFT"
 			}
@@ -560,7 +560,7 @@ guiTypes = {
 	
 	containerWindowType = {
 		name = "event_option_entry"
-		size = { width = 300 height = 47 }
+		size = { width = 334 height = 47 }
 		clipping = no
 		
 		background = {
@@ -570,9 +570,9 @@ guiTypes = {
 		
 		instantTextBoxType = {
 			name = "Name"
-			position = { x = 5 y = 0 }
+			position = { x = 10 y = 0 }
 			font = "valsora_deco_body_15"
-			maxWidth = 340
+			maxWidth = 314
 			maxHeight = 40
 			format = center
 			vertical_alignment = center

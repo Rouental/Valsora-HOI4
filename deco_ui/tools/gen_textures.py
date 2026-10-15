@@ -1434,7 +1434,8 @@ add("lg_play_ag", UC + "execute_btn_play_small_ag.dds", 172, 23, frames(172, 23,
 add("lg_stop", UC + "execute_btn_stop_small.dds", 112, 23, frames(112, 23, *[lg_button(28, 23, g_stop, s) for s in (1, 2, 3, 4)]))
 add("lg_stop_ag", UC + "execute_btn_stop_small_ag.dds", 112, 23, frames(112, 23, *[
     lg_button(28, 23, (lambda w, h, c, st: g_stop(w, h, c, st, st > 2)), s) for s in (1, 2, 3, 4)]))
-add("lg_buttons_bg", UC + "execute_stop_small_bg.dds", 78, 26, bar(DIM_FILL, c=5, shine=.12))
+add("lg_buttons_bg", UC + "execute_stop_small_bg.dds", 78, 26,
+    f'<div style="position:absolute;left:0;top:0;width:{LAB.BUTTONS_PLATE_W}px;height:26px">{bar(DIM_FILL, c=5, shine=.12)}</div>')
 add("lg_border_war_bg", UC + "excecute_stop_border_war_bg.dds", 73, 27,
     bar(DIM_FILL, "#E7B75A", 5, .12) + f'<div style="position:absolute;inset:1px;clip-path:{chamfer(4.6)};'
     'background:repeating-linear-gradient(135deg,rgba(231,183,90,.28) 0 3px,transparent 3px 8px)"></div>')
@@ -1559,20 +1560,55 @@ EV_BOTTOM = ('<div class="lac" style="position:absolute;left:0;right:0;top:0;bot
              '<rect x="1.5" y="1.5" width="217" height="183" fill="none" stroke="rgba(201,165,90,.3)"/></svg>'
              '<i class="ck sm bl" style="left:8px;bottom:13px"></i><i class="ck sm br" style="right:8px;bottom:13px"></i>')
 add("ev_bottom", EV + "event_report_bottom_win.dds", 581, 206, EV_BOTTOM)
-# an option: a chamfered lacquer plate with a gilt rim (352 wide, under a 300 px entry: it overhangs to the right)
+# an option: a chamfered lacquer plate with a gilt rim, as wide as its entry (layout_events: make_events.py widens the
+# entry to it and centres it in each window); the rest of the game's 352 px picture is clear
+import layout_events as LEV
+_OW = LEV.OPTION_W
 add("ev_option", EV + "event_option_entry.dds", 352, 48,
-    f'<div style="position:absolute;left:0;top:2px;width:352px;height:44px">{bar("linear-gradient(180deg,#1E2A31,#0E1519)", GOLD, 9, .25)}</div>'
-    '<div class="frame" style="left:16px;right:16px;top:41px;height:1px;background:rgba(201,165,90,.25)"></div>')
+    f'<div style="position:absolute;left:0;top:2px;width:{_OW}px;height:44px">{bar("linear-gradient(180deg,#1E2A31,#0E1519)", GOLD, 9, .25)}</div>'
+    f'<div class="frame" style="left:16px;width:{_OW - 32}px;top:41px;height:1px;background:rgba(201,165,90,.25)"></div>')
 add("ev_clip", EV + "event_pic_clip.dds", 55, 30, "")        # the paper clip: none on lacquer
+add("ev_clip2", EV + "events/clip.dds", 53, 29, "")          # the leader and operative events' clip too
+# a leader event's foot (its bottom_window_end, 581 x 59): the country event's chamfered foot and corner brackets
+add("ev_bottom_end", EV + "event_report_bottom_win_2.dds", 581, 59,
+    '<div class="lac" style="position:absolute;left:0;right:0;top:0;bottom:6px;'
+    'clip-path:polygon(0 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px))"></div>'
+    '<svg width="581" height="59" style="position:absolute;left:0;top:0">'
+    '<path d="M.5,0V42.5L10.5,52.5H570.5L580.5,42.5V0" fill="none" stroke="#C9A55A"/>'
+    '<path d="M4.5,0V40.5L12.5,48.5H568.5L576.5,40.5V0" fill="none" stroke="rgba(201,165,90,.35)"/></svg>'
+    '<i class="ck sm bl" style="left:8px;bottom:13px"></i><i class="ck sm br" style="right:8px;bottom:13px"></i>')
 add("ev_minimize", EV + "event_button_minimize.dds", 32, 33,
     '<div style="position:absolute;left:5px;top:5.5px;width:22px;height:22px;transform:rotate(45deg);border:1px solid #E3C77E;'
     'background:#0B1014;box-sizing:border-box"></div>'
     '<svg width="32" height="33" viewBox="0 0 32 33" style="position:absolute;left:0;top:0"><path d="M18,12.5L13.5,16.5L18,20.5" '
     'fill="none" stroke="#E3C77E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>')
+# the World News masthead (v0.7.1, the user: the heading "looks lopsided. Maybe center the ball in the center and slightly
+# shrink the text so it fits on either side ... maybe make the ball a stylized Valsoran globe?"): a gilt line globe of
+# Valsora (globe_art.py) dead centre between the masthead's rules, WORLD and NEWS in Federo capitals at the same
+# distance either side of it (SVG letter-spacing also follows the last letter, so WORLD, set from its end, is moved
+# by one spacing to keep the two gaps equal)
+import base64 as _b64
+import io as _io
+import globe_art as GA
+_NG = 50                                  # the globe's diameter
+_buf = _io.BytesIO()
+GA.globe(_NG).save(_buf, "PNG")
+_GURI = "data:image/png;base64," + _b64.b64encode(_buf.getvalue()).decode()
+_NCX, _NCY, _NS, _NLS, _NGAP = 264, 52.5, 36, 36 * .12, 16
+_NR = _NG / 2 + 3                         # the globe and its outer ring
+MASTHEAD = (
+    '<svg width="528" height="105" style="position:absolute;left:0;top:0"><defs><linearGradient id="nwg" x1="0" y1="0" '
+    'x2="0" y2="1"><stop offset="0" stop-color="#FFF3C8"/><stop offset=".45" stop-color="#E3C77E"/>'
+    '<stop offset="1" stop-color="#9C7836"/></linearGradient></defs>'
+    f'<image href="{_GURI}" x="{_NCX - _NG / 2}" y="{_NCY - _NG / 2}" width="{_NG}" height="{_NG}"/>'
+    f'<circle cx="{_NCX}" cy="{_NCY}" r="{_NG / 2 - .5}" fill="none" stroke="#C9A55A" stroke-width="1"/>'
+    f'<circle cx="{_NCX}" cy="{_NCY}" r="{_NG / 2 + 2.5}" fill="none" stroke="rgba(201,165,90,.45)" stroke-width="1"/>'
+    f'<text x="{_NCX - _NR - _NGAP + _NLS}" y="{_NCY + 13}" text-anchor="end" font-family="Federo" font-size="{_NS}" '
+    f'letter-spacing="{_NLS}" fill="url(#nwg)">WORLD</text>'
+    f'<text x="{_NCX + _NR + _NGAP}" y="{_NCY + 13}" text-anchor="start" font-family="Federo" font-size="{_NS}" '
+    f'letter-spacing="{_NLS}" fill="url(#nwg)">NEWS</text></svg>')
 # the news: a broadsheet in lacquer and gilt; the picture at (59, 91), 399 x 155; the headline at y 260-292 under a
 # rule (the story starts right under the headline, at y 291)
-NEWS_TITLE = ('<span style="background:linear-gradient(180deg,#FFF3C8,#E3C77E 45%,#9C7836);-webkit-background-clip:text;'
-              'color:transparent">{}</span>')
 EV_NEWS = ('<div class="lac" style="position:absolute;inset:0;clip-path:polygon(14px 0,calc(100% - 14px) 0,100% 14px,100% calc(100% - 14px),'
            'calc(100% - 14px) 100%,14px 100%,0 calc(100% - 14px),0 14px)"></div>'
            '<svg width="528" height="595" style="position:absolute;left:0;top:0">'
@@ -1583,11 +1619,7 @@ EV_NEWS = ('<div class="lac" style="position:absolute;inset:0;clip-path:polygon(
            '<path d="M60,254.5H468" stroke="rgba(201,165,90,.55)"/>'
            '<path d="M170,492.5H358" stroke="rgba(201,165,90,.55)"/></svg>'
            '<div style="position:absolute;left:259px;top:487.5px;width:10px;height:10px;transform:rotate(45deg);background:#C9A55A"></div>'
-           '<div style="position:absolute;left:0;right:0;top:29px;height:46px;display:flex;align-items:center;justify-content:center;'
-           "gap:26px;font:400 40px/1 Federo;letter-spacing:.16em\">" + NEWS_TITLE.format("WORLD")
-           + '<span style="position:relative;width:44px;height:44px;border-radius:50%;background:repeating-conic-gradient('
-             'rgba(227,199,126,.7) 0deg 3deg,transparent 3deg 15deg),#11191E;box-shadow:0 0 0 1px #C9A55A"></span>'
-           + NEWS_TITLE.format("NEWS") + '</div>')
+           + MASTHEAD)
 add("ev_news", EV + "event_news_bg.dds", 528, 595, EV_NEWS)
 add("ev_news_overlay", EV + "event_news_pic_overlay.dds", 399, 155,
     '<div style="position:absolute;inset:0;box-shadow:inset 0 0 22px rgba(11,16,20,.55),inset 0 0 0 1px rgba(241,220,156,.35)"></div>')

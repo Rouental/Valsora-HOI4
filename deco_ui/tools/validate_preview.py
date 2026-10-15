@@ -335,7 +335,8 @@ SAME_SIZE = ["gfx/interface/pol_view_bg.dds", "gfx/interface/pol_view_bg_no_dlc.
              # the events (v0.7): the game stacks and stretches these by their sizes
              *[f"gfx/interface/{k}.dds" for k in (
                  "event_report_top_win", "event_report_tileable_midsection", "event_report_bottom_win", "event_option_entry",
-                 "event_pic_clip", "event_button_minimize", "event_news_bg", "event_news_pic_overlay", "event_leader_frame")]]
+                 "event_pic_clip", "event_button_minimize", "event_news_bg", "event_news_pic_overlay", "event_leader_frame",
+                 "event_report_bottom_win_2", "events/clip")]]
 VG = VANILLA + "gfx/"
 if os.path.isdir(VG):
     resized = []
