@@ -1607,7 +1607,7 @@
   "path": "gfx/interface/event_report_top_win.dds",
   "w": 581,
   "h": 121,
-  "sig": "4b98c173ae2f6efea20f1886705fbf84d5348cecc75687a62724f8d99173e821"
+  "sig": "7e9ba612ff20b1203210f985c0f0572aff4136a94fcad7c758239ac57d42aa20"
  },
  {
   "key": "ev_mid",
@@ -1663,7 +1663,7 @@
   "path": "gfx/interface/event_news_bg.dds",
   "w": 528,
   "h": 595,
-  "sig": "bc8cd36e900d36064f024cd29d6daa3fd1fc93d85c13877a9b5f9ded2dbf6da3"
+  "sig": "a30f025886e428d7a4ff69f9900a3e4e19d0d2e5f4dc6ad5e01abe89cd444ab0"
  },
  {
   "key": "ev_news_overlay",

@@ -570,10 +570,10 @@ guiTypes = {
 		
 		instantTextBoxType = {
 			name = "Name"
-			position = { x = 10 y = 0 }
-			font = "valsora_deco_body_15"
+			position = { x = 10 y = 3 }
+			font = "valsora_deco_option_14"
 			maxWidth = 314
-			maxHeight = 40
+			maxHeight = 42
 			format = center
 			vertical_alignment = center
 			alwaystransparent = yes

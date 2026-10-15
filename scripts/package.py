@@ -4,6 +4,7 @@ the launcher's valsora_test.mod, ready to unzip into Hearts of Iron IV/mod/.
 The zip is reproducible: the same mod gives the same bytes. Every entry carries one fixed date (1 January 1980, the
 earliest a zip can hold, as reproducible builds do) and the same permissions, in sorted order, because the build
 rewrites every file and their times would otherwise make each build's zip new to git even when nothing changed."""
+import os
 import zipfile
 from pathlib import Path
 
@@ -12,7 +13,8 @@ from common import MOD_DIR_NAME
 DATE = (1980, 1, 1, 0, 0, 0)
 
 build = Path("build")
-out = Path("dist") / f"{MOD_DIR_NAME}.zip"
+# VALSORA_ZIP: another file for a test version (it holds the same mod folder, so it installs in the mod's place)
+out = Path(os.environ.get("VALSORA_ZIP") or Path("dist") / f"{MOD_DIR_NAME}.zip")
 out.parent.mkdir(exist_ok=True)
 
 

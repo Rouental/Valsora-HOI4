@@ -6,6 +6,46 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**The superevent's title was "all jumbled together"** (2026-10-15, the author's screenshot of the test superevent)
+- Cause: the Deco UI's superevent window has a baked title strip per superevent, and the scripted GUI gave a
+  visibility trigger to each picture but none to the titles, so all eight drew over each other.
+- Fix: `superevents.py` writes `valsora_superevent_title_<id>_visible` (the superevent's flag) when the window is the
+  Deco UI's.
+
+**A long event option's third line spilled out of its plate** (2026-10-15, the author's screenshot)
+- Cause: the options were set in `valsora_deco_body_15` (a 20 px line) in a box made for two lines.
+- Fix (Deco UI v0.8.2): `valsora_deco_option_14`, a 14 px line, and the text box the plate's height (42 px): three
+  lines fit.
+
+**The state test event did nothing** (2026-10-15)
+- Cause: a `state_event` fired from a country needs `trigger_for` (the country it is shown to); without it the game
+  shows it to no one.
+- Fix: `trigger_for = controller`. Check: every `state_event` our files fire names `trigger_for`.
+
+**The operative test event did nothing** (2026-10-15; the author: "Maybe because I have no intelligence agency?")
+- Cause: right: without an agency there is no operative to fire it from.
+- Fix: the decision gives Rouental an agency (`create_intelligence_agency`) and an operative first when it has none.
+
+**Long names under the flag showed only their first word** ("KAMPFIAN ...", "UTOPIAN ...", 2026-10-15)
+- Cause: the name's box was exactly two lines of the large letters high (2 x 20 px), and the game showed one line
+  and "..." (Terrabis-Seran, one line, was fine).
+- Fix (Deco UI v0.8.2): the box reaches 4 px above and below (`layout.NAME_SLACK`), so two lines fit; one or two
+  lines land where they did.
+
+**The selected armies' badges were covered by the flag medallion** (2026-10-15: "the army tab is covered up by the
+country tab")
+- Cause: the game puts them (unitview.gui's `armies_view`, "Request Expeditionaries" with it) at y 79, under its own
+  top bar; the Deco UI's medallion hangs down to y 169 there. The air wings' and operatives' views sat there too.
+- Fix (Deco UI v0.8.2): `make_mapviews.py` moves all three below the medallion and its seal
+  (`layout.BELOW_MEDALLION`, y 173).
+
+**Rouental's admiral, James Navy, wasn't in the game** (2026-10-15: "I can't seem to find John Navy anywhere")
+- Cause: the Gazetteer's generals, admirals and advisors were only listed for the author (`gazetteer.py status`);
+  the build made none of them.
+- Fix: `gazetteer.characters` makes the generals corps commanders and the admirals navy leaders (skill 3, no traits:
+  the page has no fields for them), with their portraits, recruited at the start. Advisors and others still need a
+  slot and traits the page doesn't ask for.
+
 **Deco UI: a closed division overview stayed on screen, headerless, over the map** (2026-10-15, author's screenshot)
 - Cause: the game does not hide a closed side panel; it moves it back to its `position` and leaves it drawn there.
   Vanilla's `position` is off-screen (x -606), so nothing shows. v0.5.1 had set it 36 px below the panel's place, on
@@ -477,6 +517,13 @@ screenshot and `error.log`)
 - Fix: no trailing newline.
 
 ## Map problems found while building
+
+**`check_mod.py`: Seigne "had no leader" once the Gazetteer's admiral was built** (2026-10-15)
+- Cause: the check read each character's ruling sub-ideology with one regular expression from a character's name to
+  the next `country_leader = { ideology = ...`. The admiral has no country_leader role, so the expression ran on into
+  the next character (Seigne's ruler) and took its ideology, and Seigne's own ruler was skipped.
+- Fix: the check takes the characters' file block by block (brace-matched) and reads each one's own role. A country
+  without a leader is still caught (tried).
 
 **`check_mod.py` didn't look at decisions** (2026-10-15, adding Rouental's test decisions)
 - Cause: the checks of events fired and scripted effects used read focus trees, scripted effects, events and

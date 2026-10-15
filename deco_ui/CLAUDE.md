@@ -14,7 +14,7 @@ Treat assumed items as hypotheses.
 
 ---------------------------------------------------------------------------------------------------
 
-## 1. Status (v0.8.1)
+## 1. Status (v0.8.2)
 
 v0.4.3 was the first v0.3/v0.4 build the user launched. The user's reports so far cover only the main
 menu: the Valsora background and the social links in the top-left corner show **(in game)**, but in
@@ -100,6 +100,21 @@ simplified to what 60 px can show (the old one, lit and with every lake, was a s
 looking down on open sea with land round it. The game's own news layout was off-centre too (the picture 5.5 px and
 the headline 7 px left of the page's middle, the story's box 5 px right of it): all centred (`layout_events.NEWS_*`). Other names, drawn by the same code, are in
 `art/proposals/news_masthead/` (`proposals_masthead.py`; switching is `layout_events.NEWS_WORDS`).
+**v0.8.2 (2026-10-15, the third round, not yet seen in game)**, from the user's screenshots of v0.8.1 with Rouental's
+test decisions: the superevent's title was "all jumbled together" (the scripted GUI had a visibility trigger for each
+picture but none for the eight baked title strips, so all drew at once: the Valsora mod's `superevents.py` now writes
+`valsora_superevent_title_<id>_visible`); "the guillotine logo won't be suited for all superevents" (its crest is
+Valsora rising, the top half of the masthead's globe on a lacquer medallion: `superevents_deco.EMBLEM`); "the logo at
+the top of country / leader / long events doesn't read so well at this size" (a stepped keystone with a diamond:
+`crests.py`, `EV_CREST`); a long option spilled its third line (`valsora_deco_option_14`, a 14 px line, three to the
+plate); names like KAMPFIAN EMPIRE showed "KAMPFIAN ..." (the name's box was exactly two 20 px lines high and the game
+showed one: `layout.NAME_SLACK` gives it 4 px above and below); "the army tab is covered up by the country tab" (the
+selected armies' badges, the air wings and the operatives start under the medallion: `make_mapviews.py`,
+`layout.BELOW_MEDALLION`). The globe is lit again (the user wasn't "quite satisfied"); the first globe, v0.8.1's and
+three other ideas are in `art/proposals/news_globe/` (`proposals_globes.py`), the crests' other designs in
+`art/proposals/crests/` (`proposals_crests.py`). A test version of the Valsora mod with 1.5 times larger flags is
+built with `VALSORA_FLAG_SCALE=1.5` (`layout.FLAG_SCALE`: the medallion 26 px taller, the flag 123 x 78 at 1:1; the
+Valsora repository's `docs/HD_FLAGS_TEST.md`); the mod itself stays at 82 x 52.
 
 | Area | State |
 |---|---|
@@ -115,7 +130,7 @@ the headline 7 px left of the page's middle, the story's box 5 px right of it): 
 | Main menu (`interface/frontendmainview.gui` + background) | v0.3; v0.4.5 fixed the invisible button row (a quoted `Orientation`). Background and social links **(in game)**. |
 | Army bar (bottom: `leadergroups.gui`) | v0.7: textures at the game's paths and sizes (`gen_textures.py`, `lg_*`; numbers in `layout_armybar.py`): arched gilt frames over the portraits (jade when selected; an army group's with gilt fans), the plate behind a run of cards, play/stop chips, the battle plan's chevrons, the empty card; `make_leadergroups.py` moves the division counts onto the plaques (centred, `valsora_deco_value_17`); v0.8: the play / stop row on the card's centre line. Preview `build/preview_armybar.png`. |
 | Map modes and minimap (bottom right: `mapmodes_interface.gui`, `minimap.gui`) | v0.5: textures only (layouts are the game's and Valsora's): lacquer column, line-icon medallions for land/air/naval/intel, the game's small icons and toggles recoloured in gilt, deco handle and ping buttons; the minimap's picture and frame in gilt by the Valsora mod (`scripts/minimap.py`, deco style). |
-| Events (`eventwindow.gui`) | v0.7: the report and newspaper textures replaced at the game's paths (`ev_*`): lacquer card with a crest, gilt rails and a picture frame; a WORLD NEWS broadsheet; options as gilt-rimmed plates; `make_events.py` sets the mod's fonts (titles `title_18`, text and options `body_15`). v0.8: the options centred in the room beside the picture (`layout_events.py`), a Valsoran globe on the masthead. v0.8.1: the masthead VALSORAN (globe) STANDARD, the news page centred. Preview `build/preview_events.png` (a country, a news and a leader event). |
+| Events (`eventwindow.gui`) | v0.7: the report and newspaper textures replaced at the game's paths (`ev_*`): lacquer card with a crest, gilt rails and a picture frame; a WORLD NEWS broadsheet; options as gilt-rimmed plates; `make_events.py` sets the mod's fonts (titles `title_18`, text and options `body_15`). v0.8: the options centred in the room beside the picture (`layout_events.py`), a Valsoran globe on the masthead. v0.8.1: the masthead VALSORAN (globe) STANDARD, the news page centred. v0.8.2: the card's crest a keystone (`crests.py`), options in `option_14` (three lines to a plate), the globe lit. Preview `build/preview_events.png` (a country, a news and a leader event). |
 | Fonts | The mod's own (`gen_fonts.py`) on its own screens; v0.8: the game's 28 fonts redrawn in the deco faces at their paths (`game_fonts.py`), for everything else. Preview `build/preview_game_fonts.png` (needs the game's font textures: section 7). |
 | Everything else (the panels' own pictures ...) | Only the core skin so far. Proposals for the panels' pictures (not in the mod) in `art/proposals/`. |
 
@@ -244,15 +259,20 @@ tools/
                             Valsora build run it
   layout_armybar.py         army bar numbers (v0.7): the cards, plate pieces, plaques, counts; MOVES (v0.8)
   make_leadergroups.py      leadergroups.gui: the counts on the plaques, the play / stop row on the centre line
+  make_mapviews.py          unitview.gui, airselectionview.gui, operativeleader.gui: the left-edge views moved
+                            below the medallion (v0.8.2, layout.BELOW_MEDALLION)
   preview_armybar.py        build/preview_armybar.png (+ _zoom): the game's look and the mod's, read from the .gui
   layout_events.py          the events' option plate and each window's options centre (v0.8)
   make_events.py            eventwindow.gui: fonts, option entries, each window's options grid
   preview_events.py         build/preview_events.png: a country, a news and a leader event
-  globe_art.py              art/valsora_land.png (Valsora's land from the built map) and the gilt line globe (v0.8)
+  globe_art.py              art/valsora_land.png (Valsora's land from the built map), the masthead's globe (v0.8, lit
+                            again in v0.8.2) and the other globes proposals_globes.py shows
+  crests.py                 the event card's crest (v0.8.2: EV_CREST, a keystone) and the card's top piece (ev_top)
   game_fonts.py             the game's 28 fonts redrawn in the deco faces at their paths; --measure sizes them (v0.8)
   preview_game_fonts.py     build/preview_game_fonts.png: the game's fonts beside ours (needs the game's font textures)
   restore_noise.py          puts back textures that only changed by anti-aliasing noise (v0.8)
-  proposals_*.py            the proposals in art/proposals/ (panel pictures, larger flags, masthead names): not in the mod
+  proposals_*.py            the proposals in art/proposals/ (panel pictures, larger flags, masthead names, the news
+                            globe, the crests): not in the mod
   validate_preview.py       static checks + a preview renderer that reads the generated .gui/.gfx
   preview_screens.py        politics, state panel, focus tree and main menu previews (imports validate_preview)
   preview_panels.py         every side panel (build/preview_panel_<key>.png and _vanilla.png, the game's) and the
@@ -813,6 +833,9 @@ GP.write_gui(MOD + "interface/x.gui", t)    # braces checked, engine_safe applie
 
 Check these first in the user's next screenshots and `error.log`:
 
+- **v0.8.2**: one title on a superevent and its globe crest; the keystone on an event card; a long option's three
+  lines inside the plate; a two-line name under the flag (Kampf, the Utopian Republic); an army's badge (select some
+  divisions), the air wings and an operative below the medallion.
 - **v0.8 fonts**: text everywhere the game's own fonts draw it (tooltips, lists, the designer, the leader and unit
   screens, settings, window titles): readable, nothing cut short (a box the deco face doesn't fit drops the end of
   its text or its second line); a tooltip of the ruler's portrait (Roland's titles: the user's example).

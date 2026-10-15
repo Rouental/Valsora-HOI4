@@ -24,7 +24,8 @@ CREST = 40                 # panel rows above the frame (the crest rises 36 px o
 TAB = 35                   # panel rows below it (the now-playing tab, 34 px)
 PW, PH = FW, CREST + FH + TAB
 PIC_X, PIC_Y, PIC_W, PIC_H = 30, 62, 840, 420     # in the frame
-TITLE_Y, TITLE_H = 18, 40  # the title strip in the frame (the mockup's 32 px row at y 22, with room round it)
+TITLE_Y, TITLE_H = 21, 40  # the title strip in the frame (the mockup's 32 px row at y 22, with room round it; 3 px
+                           # lower since the crest's globe, whose bright foot met the capitals' tops)
 QUOTE = (60, 500, 780, 70)
 AUTHOR = (60, 572, 780, 20)
 BUTTON = (339, 598, 222, 36)
@@ -145,8 +146,145 @@ def svg_strokes(w, h, segments, width, colour, scale, ox, oy, ss=SS):
     return out
 
 
+# ---------------------------------------------------------------- the crest
+# The crest over the frame is a half disc of gilt rays round a medallion, of which the top half shows (the mockup's).
+# Its emblem was the mockup's guillotine until 2026-10-15 (the author: "the guillotine logo won't be suited for all
+# superevents. Maybe come up with something else?"): EMBLEM picks one of EMBLEMS, which proposals_crests.py
+# (deco_ui/tools) shows side by side.
+CREST_W, CREST_H = 120, 60      # the crest's picture; the medallion's centre is its bottom middle
+MED_R = 38                      # the medallion's radius (its top half shows)
+EMBLEMS = ("star", "globe", "hourglass", "laurel", "guillotine")
+EMBLEM = "globe"
+
+
+def gilt_fill(h, w, y0, y1):
+    """the gilt gradient from pale at row y0 to deep at row y1, as an HxWx3 array"""
+    yy = np.mgrid[0:h, 0:w][0].astype(np.float32) + .5
+    return ramp((yy - y0) / max(y1 - y0, 1), [(0, hex_rgb("#FFF3C8")), (.4, hex_rgb("#E8CD84")), (1, hex_rgb("#8B6A2C"))])
+
+
+def star_points(cx, cy, r_main, r_diag, r_in, turn=0.0):
+    """an eight-pointed star's points: [(centre, left, tip, right, long?)], the long ones north, east, south, west"""
+    out = []
+    for k in range(8):
+        a = np.radians(turn + k * 45)
+        r = r_main if k % 2 == 0 else r_diag
+        tip = (cx + r * np.sin(a), cy - r * np.cos(a))
+        left = (cx + r_in * np.sin(a - np.radians(22.5)), cy - r_in * np.cos(a - np.radians(22.5)))
+        right = (cx + r_in * np.sin(a + np.radians(22.5)), cy - r_in * np.cos(a + np.radians(22.5)))
+        out.append(((cx, cy), left, tip, right, k % 2 == 0))
+    return out
+
+
+def draw_star(dst, cx, cy, r_main, r_diag, r_in, dark="#8B6A2C"):
+    """a compass star: the short points behind the long ones, each point's left half light and right half dark,
+    parted from what is under it by a thin lacquer edge"""
+    h, w = dst.shape[:2]
+    pale = gilt_fill(h, w, cy - r_main, cy + r_main)
+    for long_first in (False, True):
+        for c, left, tip, right, is_long in star_points(cx, cy, r_main, r_diag, r_in):
+            if is_long != long_first:
+                continue
+            kite = poly_mask(w, h, [c, left, tip, right])
+            grown = np.clip(ndi_grow(kite), 0, 1)
+            paint(dst, grown, hex_rgb("#0B1115"), .9)
+            paint(dst, poly_mask(w, h, [c, left, tip]), pale)
+            paint(dst, poly_mask(w, h, [c, tip, right]), hex_rgb(dark) if is_long else hex_rgb("#A9843E"))
+
+
+def ndi_grow(mask, px=1):
+    """the mask grown by about px pixels (a soft max filter), for an edge round a shape"""
+    from scipy import ndimage as ndi
+    return ndi.maximum_filter(mask, size=2 * px + 1)
+
+
+def crest(emblem=None):
+    """the crest's picture (CREST_W x CREST_H, straight alpha floats)"""
+    emblem = emblem or EMBLEM
+    cw, ch = CREST_W, CREST_H
+    cx, cy = cw / 2, ch
+    out = layer(cw, ch)
+    rays_base = np.where(disc(cw, ch, cx, cy, 34.5)[..., None] > .5, hex_rgb("#1B262D"), hex_rgb("#0B1115"))
+    outer = disc(cw, ch, cx, cy, 59.5)
+    paint(out, outer, rays_base)
+    paint(out, outer * conic_rays(cw, ch, cx, cy, 0, 2.5, 10), hex_rgb("#E8CD84"))
+    yy, xx = np.mgrid[0:ch, 0:cw].astype(np.float32)
+    dd = np.hypot(xx + .5 - cx, yy + .5 - cy)
+    if emblem == "guillotine":       # the mockup's: a red medallion
+        fill = ramp(dd / 36, [(0, hex_rgb("#2A1210")), (1, hex_rgb("#120807"))])
+    else:                            # lacquer, for any superevent
+        fill = ramp(dd / 36, [(0, hex_rgb("#22323B")), (1, hex_rgb("#0E161B"))])
+    paint(out, disc(cw, ch, cx, cy, MED_R), fill)
+    paint(out, ring(cw, ch, cx, cy, MED_R, MED_R - 1.5), hex_rgb("#E8CD84"))
+    if emblem == "star":
+        draw_star(out, cx, 41, 17.5, 10.5, 4.8)
+    elif emblem == "globe":
+        # Valsora rising: the top half of the Deco UI's globe (deco_ui/tools/globe_art.py), as the news masthead's
+        import sys
+        tools = str(Path(__file__).resolve().parent.parent / "deco_ui" / "tools")
+        if tools not in sys.path:
+            sys.path.append(tools)       # last: its layout.py and package.py are not the build's
+        import globe_art
+        d = 2 * (MED_R - 4)
+        g = np.asarray(globe_art.globe(d, globe_art.VIEW), np.float32)
+        g = g[: d // 2]
+        sub = out[int(cy) - d // 2:int(cy), int(cx) - d // 2:int(cx) - d // 2 + d]
+        paint(sub, g[..., 3] / 255, g[..., :3])
+        paint(out, ring(cw, ch, cx, cy, MED_R - 4, MED_R - 5), hex_rgb("#E8CD84"), .9)
+    elif emblem == "hourglass":
+        hx, top, bot, half = cx, 26, 58, 11
+        pale = gilt_fill(ch, cw, top, bot)
+        for y in (top, bot - 2.5):                               # the caps
+            paint(out, poly_mask(cw, ch, [(hx - half - 2, y), (hx + half + 2, y), (hx + half + 2, y + 2.5),
+                                          (hx - half - 2, y + 2.5)]), pale)
+        for x in (hx - half - .5, hx + half - 1):                 # the posts
+            paint(out, poly_mask(cw, ch, [(x, top + 2.5), (x + 1.5, top + 2.5), (x + 1.5, bot - 2.5), (x, bot - 2.5)]), pale)
+        mid = (top + bot) / 2
+        glass = [(hx - half + 2, top + 3.5), (hx + half - 2, top + 3.5), (hx + 1, mid), (hx + half - 2, bot - 3.5),
+                 (hx - half + 2, bot - 3.5), (hx - 1, mid)]
+        paint(out, poly_mask(cw, ch, glass), hex_rgb("#E8CD84"), .35)
+        inner = [(hx - half + 3.3, top + 4.5), (hx + half - 3.3, top + 4.5), (hx, mid - .5), (hx + half - 3.3, bot - 4.5),
+                 (hx - half + 3.3, bot - 4.5), (hx, mid + .5)]
+        paint(out, poly_mask(cw, ch, inner), hex_rgb("#0E161B"))
+        paint(out, poly_mask(cw, ch, [(hx - 3.2, mid - 4.5), (hx + 3.2, mid - 4.5), (hx, mid - .8)]), pale)   # sand above
+        paint(out, poly_mask(cw, ch, [(hx - .5, mid), (hx + .5, mid), (hx + .5, bot - 6), (hx - .5, bot - 6)]), pale)
+        paint(out, poly_mask(cw, ch, [(hx - half + 3.5, bot - 4.5), (hx + half - 3.5, bot - 4.5), (hx, bot - 9.5)]), pale)
+    elif emblem == "laurel":
+        # two laurel branches up the medallion's sides round a small star: leaves on alternate sides of the stem,
+        # smaller towards the top
+        pale = gilt_fill(ch, cw, 26, 60)
+        r = 27.5
+        for side in (-1, 1):
+            th = np.radians(np.linspace(6, 74, 40))
+            stem = [(cx + side * r * np.cos(t), cy - 1 - r * np.sin(t)) for t in th]
+            paint(out, svg_strokes(cw, ch, [stem], 1.1, hex_rgb("#C9A55A"), 1, 0, 0)[..., 3], hex_rgb("#C9A55A"))
+            for i in range(7):
+                t = np.radians(10 + 10 * i)
+                bx, by = cx + side * r * np.cos(t), cy - 1 - r * np.sin(t)
+                tx, ty = -side * np.sin(t), -np.cos(t)                 # along the stem, upwards
+                nx, ny = side * np.cos(t), -np.sin(t)                   # outwards
+                o = 2.4 if i % 2 == 0 else -2.4
+                ln, wd = 4.6 - .25 * i, 1.9 - .08 * i
+                lx, ly = bx + nx * o + tx * 1.2, by + ny * o + ty * 1.2
+                ax, ay = tx + nx * (.45 if o > 0 else -.45), ty + ny * (.45 if o > 0 else -.45)
+                norm = np.hypot(ax, ay)
+                ax, ay = ax / norm, ay / norm
+                pts = [(lx + ax * ln * np.cos(a) - ay * wd * np.sin(a), ly + ay * ln * np.cos(a) + ax * wd * np.sin(a))
+                       for a in np.linspace(0, 2 * np.pi, 24, endpoint=False)]
+                paint(out, poly_mask(cw, ch, pts), pale)
+        draw_star(out, cx, 43, 10, 6, 2.8)
+    elif emblem == "guillotine":
+        icon = svg_strokes(cw, ch, [[(13, 44), (13, 4)], [(35, 44), (35, 4)], [(11, 4), (37, 4)],
+                                    [(13, 10), (35, 16), (35, 21), (13, 21), (13, 10)]],
+                           2.6 * 30 / 48, hex_rgb("#F6E3A6"), 30 / 48, 45, 30)
+        paint(out, icon[..., 3], icon[..., :3])
+    else:
+        raise ValueError(f"no emblem {emblem!r}: {EMBLEMS}")
+    return out
+
+
 # ---------------------------------------------------------------- the panel picture
-def panel():
+def panel(emblem=None):
     img = layer(PW, PH)
     fy = CREST
     # the frame: lacquer (a glow at the top, 7 px hairline stripes, dark to darker), then its edge
@@ -175,26 +313,11 @@ def panel():
         m[y0:y1, x0:x1] = 1
         m[y0 + 1:y1 - 1, x0 + 1:x1 - 1] = 0
         paint(frame, m, rgb, a)
-    # the crest: a half disc of gilt rays round a red medallion with a banner, rising 36 px over the frame
-    cw, ch = 120, 60
-    cx, cy = 60, 60
-    crest = layer(cw, ch)
-    rays_base = np.where(disc(cw, ch, cx, cy, 34.5)[..., None] > .5, hex_rgb("#1B262D"), hex_rgb("#0B1115"))
-    outer = disc(cw, ch, cx, cy, 59.5)
-    paint(crest, outer, rays_base)
-    paint(crest, outer * conic_rays(cw, ch, cx, cy, 0, 2.5, 10), hex_rgb("#E8CD84"))
-    yy, xx = np.mgrid[0:ch, 0:cw].astype(np.float32)
-    dd = np.hypot(xx + .5 - cx, yy + .5 - cy)
-    red = ramp(dd / 36, [(0, hex_rgb("#2A1210")), (1, hex_rgb("#120807"))])
-    paint(crest, disc(cw, ch, cx, cy, 38), red)
-    paint(crest, ring(cw, ch, cx, cy, 38, 36.5), hex_rgb("#E8CD84"))
-    icon = svg_strokes(cw, ch, [[(13, 44), (13, 4)], [(35, 44), (35, 4)], [(11, 4), (37, 4)],
-                                [(13, 10), (35, 16), (35, 21), (13, 21), (13, 10)]],
-                       2.6 * 30 / 48, hex_rgb("#F6E3A6"), 30 / 48, 45, 30)
-    paint(crest, icon[..., 3], icon[..., :3])
-    x0 = (PW - cw) // 2
-    sub = img[fy - 36:fy - 36 + ch, x0:x0 + cw]
-    paint(sub, crest[..., 3], crest[..., :3])
+    # the crest: a half disc of gilt rays round a medallion with an emblem (EMBLEM), rising 36 px over the frame
+    x0 = (PW - CREST_W) // 2
+    sub = img[fy - 36:fy - 36 + CREST_H, x0:x0 + CREST_W]
+    c = crest(emblem)
+    paint(sub, c[..., 3], c[..., :3])
     # the now-playing tab under the frame: a trapezoid, gilt on three sides, with a music note at each end
     tx, tw, th = TAB_X, TAB_W, 34
     tab = layer(tw, th)

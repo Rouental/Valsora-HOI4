@@ -59,13 +59,31 @@ SHADOW_H = 8                     # click-through soft shadow below the band
 MED = dict(x=14, y=0, w=156, h=148)               # vanilla "background" icon
 MED_STEPS = (122, 135)                            # y where the plate steps in to 12%/88%, then 26%/74%
 FLAG = dict(x=51, y=18, w=82, h=52)               # player_flag (own 82x52 masked shield, 1:1)
-FLAG_FRAME = dict(x=FLAG["x"] - 8, y=FLAG["y"] - 8, w=FLAG["w"] + 16, h=FLAG["h"] + 16)  # gilt + mat + gilt
 NAME = dict(x=16, y=78, w=152, h=40)              # scripted-GUI country name, 1-2 lines, centred both ways
+# a test version with larger flags (VALSORA_FLAG_SCALE, the Valsora mod's common.FLAG_SCALE; v0.8.2): the flag at
+# 1:1 in the medallion's middle, the medallion as much taller as the flag is, and what hangs under it with it
+FLAG_SCALE = float(os.environ.get("VALSORA_FLAG_SCALE", "1"))
+if FLAG_SCALE != 1:
+    _fw, _fh = round(82 * FLAG_SCALE), round(52 * FLAG_SCALE)
+    _dy = _fh - 52
+    FLAG = dict(x=MED["x"] + (MED["w"] - _fw) // 2, y=18, w=_fw, h=_fh)
+    MED = dict(MED, h=MED["h"] + _dy)
+    MED_STEPS = (MED_STEPS[0] + _dy, MED_STEPS[1] + _dy)
+    NAME = dict(NAME, y=NAME["y"] + _dy)
+FLAG_FRAME = dict(x=FLAG["x"] - 8, y=FLAG["y"] - 8, w=FLAG["w"] + 16, h=FLAG["h"] + 16)  # gilt + mat + gilt
+# the name's text box reaches this much further above and below NAME (v0.8.2): in a box exactly two lines of the large
+# font high (2 x 20 px), the game showed only the first line ("KAMPFIAN ...", "UTOPIAN ...": the user's screenshot,
+# 2026-10-15); centred in the taller box, one or two lines land where they did
+NAME_SLACK = 4
 NAME_FONTS = ("valsora_deco_name_big", "valsora_deco_name")   # big for most names, small for long words
 # v0.4: the seal hanging from the medallion is the DECISIONS button (used far more than factions);
 # the faction button moved into the crown row (first slot)
-SEAL = dict(x=70, y=125, w=44, h=44)              # decisions seal (octagon, 2 frames like vanilla)
+SEAL = dict(x=70, y=125 + MED["h"] - 148, w=44, h=44)   # decisions seal (octagon, 2 frames like vanilla)
 SEAL_GLOW = 10                                    # the decisions alert glow is drawn this much larger all round
+# the game's views at the screen's left edge under the top bar (the selected armies, air wings, operatives) start this
+# far down, under the medallion and its seal, instead of at the game's y 77-80 (v0.8.2: make_mapviews.py; the user,
+# 2026-10-15: "the army tab is covered up by the country tab")
+BELOW_MEDALLION = SEAL["y"] + SEAL["h"] + 4
 # the decision counters (vanilla's 17 px badges, 20 px text) sit on the plate's lower step either side of the
 # seal (v0.4.8; until then both were on its right edge, partly below the plate): the politics panel, drawn
 # over the top bar, leaves the plate and the seal uncovered (layout_politics.NOTCH), so they stay visible

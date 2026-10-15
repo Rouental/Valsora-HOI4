@@ -12,6 +12,7 @@ options_grid is moved so the plate sits in the middle of the room it has (the us
 """
 OPTION_W = 334              # the plate; the game's picture is 352 wide
 OPTION_PAD = 10             # the text's margin inside the plate
+OPTION_TEXT_Y, OPTION_TEXT_H = 3, 42   # the text's box: the plate's height (it is drawn at y 2-46), three 14 px lines
 CENTRES = {"EventWindow": (218.5 + 576.5) / 2, "EventWindow_News": (6.5 + 521.5) / 2, "EventWindow_leader": 290,
            "EventWindow_Operative": 270}
 
@@ -33,15 +34,16 @@ def grid_x(window):
 
 # the news masthead (v0.8.1): the paper's name in two words of one width either side of a globe of Valsora
 NEWS_WORDS = ("VALSORAN", "STANDARD")
-NEWS_VIEW = (-30.0, 25.0)        # the globe looks down on open sea with land round it (globe_art)
+NEWS_VIEW = (-95.0, 18.0)        # the globe (globe_art.globe): above Nonscio and Araseos, as the tension globe (v0.8.2)
 NEWS_SIZE, NEWS_GLOBE = 27, 60   # the words' size (Federo), the globe's diameter
 NEWS_CY, NEWS_GAP = 52.5, 13     # the band's middle (between the rules at 25.5 and 79.5), the words' gap to the medallion
 
 
-def news_masthead(words, globe_uri, font_path, size=NEWS_SIZE, d=NEWS_GLOBE):
+def news_masthead(words, globe_uri, font_path, size=NEWS_SIZE, d=NEWS_GLOBE, rim=True):
     """(the masthead's SVG, 528 x 105; the path of its double rules) for two words: both set to the wider one's width
     (the narrower is tracked out), each placed by its ink (Pillow's measure of the font the page uses), the same distance
-    either side of the medallion; the rules as wide as the words' ink, broken round the medallion, ending in diamonds"""
+    either side of the medallion; the rules as wide as the words' ink, broken round the medallion, ending in diamonds.
+    rim: a gilt line round the globe (not for a globe drawn with a ring round it)"""
     from PIL import ImageFont
     f = ImageFont.truetype(font_path, size)
     cx, cy, r = NEWS_CX, NEWS_CY, d / 2
@@ -62,7 +64,7 @@ def news_masthead(words, globe_uri, font_path, size=NEWS_SIZE, d=NEWS_GLOBE):
                      for x in (cx - r - 8, cx + r + 8) for y in (24, 81))
            + f'<circle cx="{cx}" cy="{cy}" r="{r + 3.5}" fill="#0B1014" stroke="#C9A55A" stroke-width="1"/>'
            f'<image href="{globe_uri}" x="{cx - r}" y="{cy - r}" width="{d}" height="{d}"/>'
-           f'<circle cx="{cx}" cy="{cy}" r="{r - .5}" fill="none" stroke="#E3C77E" stroke-width="1"/>'
+           + (f'<circle cx="{cx}" cy="{cy}" r="{r - .5}" fill="none" stroke="#E3C77E" stroke-width="1"/>' if rim else "")
            + "".join(f'<text x="{x - ink(word, tr)[1]}" y="{base}" font-family="Federo" font-size="{size}" '
                      f'letter-spacing="{tr}" fill="url(#nwg)">{word}</text>' for word, x, tr in zip(words, (lx, rx), tracks))
            + '</svg>')

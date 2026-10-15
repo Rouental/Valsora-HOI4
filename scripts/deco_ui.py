@@ -22,7 +22,7 @@ from pathlib import Path
 from common import DECO_UI, MOD_DIR_NAME
 
 OUT = Path("build") / MOD_DIR_NAME
-DECO = Path("deco_ui")
+DECO = Path(os.environ.get("VALSORA_DECO_ROOT") or "deco_ui")   # another copy of it for a test version
 DECO_MOD = DECO / "valsora_deco_ui"
 BASE = Path("work/deco_base")
 SKIP = {"descriptor.mod", "README.txt", "thumbnail.png"}       # the Deco UI's own, as a separate mod

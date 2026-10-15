@@ -1021,6 +1021,41 @@ def leaders(tag, subs, facts, handmade, named, portraits):
     return out
 
 
+COMMANDER = {"general": ("army", "corps_commander", (("skill", 3), ("attack_skill", 3), ("defense_skill", 3),
+                                                     ("planning_skill", 2), ("logistics_skill", 2))),
+             "admiral": ("navy", "navy_leader", (("skill", 3), ("attack_skill", 3), ("defense_skill", 3),
+                                                 ("maneuvering_skill", 2), ("coordination_skill", 2)))}
+
+
+def characters(tag, facts, portraits):
+    """The facts' generals and admirals as characters the country has from the start (2026-10-15: the author couldn't
+    find Rouental's admiral in game; until then the page's characters were only listed for the author): a corps
+    commander or an admiral of skill 3 without traits (the page has no fields for them: the notes are the author's to
+    act on), with the portrait the page holds (into `portraits`, nations.PORTRAITS). Advisors and others need a slot
+    and traits the page doesn't ask for, so they stay on `status`'s list. Returns (character blocks, loc lines, ids)."""
+    blocks, loc, ids = [], [], []
+    n = defaultdict(int)
+    for c in ((facts or {}).get("people") or {}).get("characters", []):
+        if c.get("role") not in COMMANDER or not c.get("name"):
+            continue
+        kind, role, skills = COMMANDER[c["role"]]
+        n[c["role"]] += 1
+        cid = f"{tag}_gazetteer_{c['role']}_{n[c['role']]}"
+        pic, sprite = c.get("portrait") or {}, None
+        if pic.get("file") and (DIR / pic["file"]).is_file() and pic.get("w") and pic.get("h"):
+            portraits[cid] = (str(DIR / pic["file"]), *portrait_box(pic["w"], pic["h"]), None)
+            sprite = f"GFX_portrait_{cid}"
+        notes = " / ".join(ln.strip() for ln in (c.get("notes") or "").splitlines() if ln.strip())
+        blocks.append(f"\t{cid} = {{\n"
+                      + (f"\t\t# the Gazetteer's notes: {notes}\n" if notes else "")
+                      + f"\t\tname = {cid}\n"
+                      + (f"\t\tportraits = {{\n\t\t\t{kind} = {{\n\t\t\t\tlarge = {sprite}\n\t\t\t}}\n\t\t}}\n" if sprite else "")
+                      + f"\t\t{role} = {{\n" + "".join(f"\t\t\t{k} = {v}\n" for k, v in skills) + "\t\t}\n\t}\n")
+        loc.append(f' {cid}:0 "{c["name"]}"')
+        ids.append(cid)
+    return blocks, loc, ids
+
+
 def names(tag, base, by_ideology, pol):
     """The country's (name, formal name, adjective), and per ideology, with the facts'
     names over the build's: base = (name, formal, adj); by_ideology = nations.IDEOLOGY_NAMES[tag]."""
@@ -1230,6 +1265,10 @@ def status():
             if r["status"] == "open":
                 todo.append(f"{tag} asks [{r['kind']}] {r['title']}: {r['details'][:200]}")
         for c in (f.get("people") or {}).get("characters", []):
+            if c["role"] in COMMANDER and c.get("name"):   # in the build (characters()); the notes are the author's
+                if c.get("notes"):
+                    todo.append(f"{tag} {c['role']} {c['name']} is in the game (skill 3, no traits); notes: {c['notes'][:160]}")
+                continue
             todo.append(f"{tag} {c['role']}: {c.get('name', '(no name)')}" + (f" - {c['notes'][:160]}" if c.get("notes") else "")
                         + (f" [portrait {c['portrait'].get('file') or 'not downloaded'}]" if c.get("portrait") else ""))
         ab = f.get("about") or {}

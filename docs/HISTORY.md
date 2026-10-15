@@ -10,6 +10,19 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-15, the third round (the author's answers and screenshots of the test decisions): no map changes. Fixed
+  from the screenshots: the **state** and **operative** test events (a state event needs `trigger_for`; Rouental
+  now gets an intelligence agency and an operative first), a long event option's **third line** spilling out (a 14 px
+  option font), the superevent's **eight titles drawn over each other**, names like **KAMPFIAN EMPIRE** cut to their
+  first word under the flag, and the **selected armies' badges under the flag medallion** (they, the air wings and
+  the operatives start below it now). The Gazetteer's **generals and admirals are in the game** (Rouental's admiral,
+  James Navy, wasn't: they were only listed for the author). The Deco UI is v0.8.2: the superevent's crest is
+  **Valsora rising** instead of the guillotine, the event cards' a **stepped keystone**, the news globe **lit**; the
+  other crests and globes (the first globe among them) wait in `deco_ui/art/proposals/crests/` and `news_globe/`.
+  The releasable "Test"'s flag is fitted to 82:52 (its stripes' fly trimmed). A **test version with 1.5 times larger
+  flags** (`docs/HD_FLAGS_TEST.md`) went to the author as its own zip, not into the mod. The author's answers: the
+  VALSORAN STANDARD masthead stays; the panel pictures wait; terrain-sized provinces for deserts and the like, Rouental
+  kept dense; the tech tree questions later; the author takes the test content out before the first public build.
 - 2026-10-15, later (the author: "Give decisions to Rouental to spawn generic events of each type / layout, and a
   superevent for testing ... I'm not a big fan of the way the world news is looking though, it still looks lopsided"):
   no map changes. **Rouental's test decisions** (`scripts/test_events.py`): a "Test Events" category with one decision

@@ -401,6 +401,8 @@ wings = ""
 for dy, ln in [(-6, 18), (0, 13), (6, 8)]:
     for side in (0, 1):
         x = fx - 5 - ln if side == 0 else fx + FR["w"] + 5
+        if x < 0 or x + ln > W:      # no room beside a larger flag (layout.FLAG_SCALE)
+            continue
         grad = "90deg,transparent,#C9A55A" if side == 0 else "90deg,#C9A55A,transparent"
         wings += f'<div style="position:absolute;left:{x}px;top:{cy + dy}px;width:{ln}px;height:1px;background:linear-gradient({grad})"></div>'
 add("tb_medallion", D + "topbar_medallion.dds", W, H,
@@ -1521,33 +1523,10 @@ RAIL = ('<div class="frame" style="left:0;top:{t}px;bottom:{b}px;width:1px;backg
         '<div class="frame" style="right:4px;top:{t2}px;bottom:{b2}px;width:1px;background:rgba(201,165,90,.35)"></div>')
 
 
-def ev_crest(cx, base, r):
-    """a half sunburst rising from the card's top edge, as the superevent's crest"""
-    return (f'<div style="position:absolute;left:{cx - r}px;top:{base - r}px;width:{2 * r}px;height:{r}px;overflow:hidden">'
-            f'<div style="position:absolute;left:0;top:0;width:{2 * r}px;height:{2 * r}px;border-radius:50%;'
-            'background:repeating-conic-gradient(from -90deg,rgba(227,199,126,.55) 0deg 2.5deg,transparent 2.5deg 12deg),'
-            'radial-gradient(circle,#1E2A31 0 55%,#11191E 56%)"></div>'
-            f'<div style="position:absolute;left:{r * .38}px;top:{r * .38}px;width:{r * 1.24}px;height:{r * 1.24}px;border-radius:50%;'
-            'border:1px solid #C9A55A;box-sizing:border-box"></div></div>'
-            f'<div style="position:absolute;left:{cx - 5}px;top:{base - r * .55 - 5}px;width:10px;height:10px;transform:rotate(45deg);'
-            'background:linear-gradient(135deg,#F1DC9C,#8B6A2C)"></div>')
-
-
-EVT = 30     # the card's top edge in the top piece (the crest rises above it)
-EV_TOP = (ev_crest(290.5, EVT, 28)
-          + f'<div class="lac" style="position:absolute;left:0;right:0;top:{EVT}px;bottom:0;'
-            f'clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%,0 10px)"></div>'
-          + f'<svg width="581" height="121" style="position:absolute;left:0;top:0"><path d="M.5,121V{EVT + 10}L10.5,{EVT + .5}'
-            f'H{290.5 - 30}M{290.5 + 30},{EVT + .5}H570.5L580.5,{EVT + 10}V121" fill="none" stroke="url(#evg)" stroke-width="1"/>'
-            '<defs><linearGradient id="evg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F1DC9C"/>'
-            '<stop offset="1" stop-color="#C9A55A"/></linearGradient></defs>'
-            f'<path d="M4.5,121V{EVT + 12}L12.5,{EVT + 4.5}H568.5L576.5,{EVT + 12}V121" fill="none" stroke="rgba(201,165,90,.35)"/></svg>'
-          # the title's band (the title is centred at y 70-102): a gilt hairline above and below, fading at the ends
-          + '<div class="frame" style="left:46px;right:46px;top:63px;height:1px;'
-            'background:linear-gradient(90deg,transparent,#C9A55A 18%,#C9A55A 82%,transparent)"></div>'
-          + '<div class="frame" style="left:46px;right:46px;top:107px;height:1px;'
-            'background:linear-gradient(90deg,transparent,rgba(201,165,90,.6) 18%,rgba(201,165,90,.6) 82%,transparent)"></div>'
-          + f'<i class="ck tr" style="top:{EVT + 6}px;right:8px"></i>')
+# the top, with the crest on its edge (v0.8.2: crests.py, a keystone in place of v0.7's half sunburst, which "doesn't
+# read so well at this size"; crests.ev_top also draws the other designs for proposals_crests.py)
+import crests as CRESTS
+EV_TOP = CRESTS.ev_top(CRESTS.EV_CREST)
 add("ev_top", EV + "event_report_top_win.dds", 581, 121, EV_TOP)
 add("ev_mid", EV + "event_report_tileable_midsection.dds", 580, 66,
     '<div class="lac" style="position:absolute;inset:0"></div>' + RAIL.format(t=0, b=0, t2=0, b2=0))

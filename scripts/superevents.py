@@ -311,6 +311,11 @@ def write_files(write, out, deco=False):
         trig += [f"\t\t\tvalsora_superevent_pic_{Path(pic).stem}_visible = {{",
                  "\t\t\t\tOR = {", *[f"\t\t\t\t\thas_global_flag = {f}" for f in users],
                  "\t\t\t\t}", "\t\t\t}"]
+    if deco:
+        # the Deco UI's window has a title strip per superevent (baked pictures): only the open one's may show,
+        # or all of them draw over each other (the author's screenshot, 2026-10-15)
+        trig += [f"\t\t\tvalsora_superevent_title_{se['id']}_visible = {{ has_global_flag = {flag(se)} }}"
+                 for se in SUPEREVENTS]
     write("common/scripted_guis/valsora_superevent_gui.txt", "\n".join([
         "scripted_gui = {",
         "\tvalsora_superevent = {",

@@ -3,8 +3,8 @@
 guiTypes = {
 	containerWindowType = {
 		name = "valsora_deco_country_name_window"
-		position = { x = 20 y = 79 }
-		size = { width = 152 height = 40 }
+		position = { x = 20 y = 75 }
+		size = { width = 152 height = 48 }
 		Orientation = UPPER_LEFT
 		clipping = no
 
@@ -15,7 +15,7 @@ guiTypes = {
 			text = "VAL_DECO_TB_COUNTRY_NAME"
 			format = centre
 			maxWidth = 152
-			maxHeight = 40
+			maxHeight = 48
 			fixedsize = yes
 			vertical_alignment = center
 			alwaystransparent = yes
@@ -24,8 +24,8 @@ guiTypes = {
 
 	containerWindowType = {
 		name = "valsora_deco_country_name_small_window"
-		position = { x = 20 y = 79 }
-		size = { width = 152 height = 40 }
+		position = { x = 20 y = 75 }
+		size = { width = 152 height = 48 }
 		Orientation = UPPER_LEFT
 		clipping = no
 
@@ -36,7 +36,7 @@ guiTypes = {
 			text = "VAL_DECO_TB_COUNTRY_NAME"
 			format = centre
 			maxWidth = 152
-			maxHeight = 40
+			maxHeight = 48
 			fixedsize = yes
 			vertical_alignment = center
 			alwaystransparent = yes

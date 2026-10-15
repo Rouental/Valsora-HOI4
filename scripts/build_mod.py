@@ -16,7 +16,7 @@ import numpy as np
 from PIL import Image
 from scipy import ndimage as ndi
 
-from common import MAP_W, MAP_H, CONTINENTS, MOD_NAME, MOD_DIR_NAME, COUNTRIES, PLACEHOLDERS, DECO_UI
+from common import MAP_W, MAP_H, CONTINENTS, MOD_NAME, MOD_DIR_NAME, COUNTRIES, PLACEHOLDERS, DECO_UI, FLAG_SIZE
 import cultures
 import gazetteer
 import ideologies
@@ -805,6 +805,11 @@ def main():
         leader_blocks += blocks
         leader_loc += lloc
         recruits[tag] = [f"recruit_character = {i}" for i in ids]
+        # the Gazetteer's generals and admirals, hand-made rulers or not
+        blocks, lloc, ids = gazetteer.characters(tag, G.get(tag), nations.PORTRAITS)
+        leader_blocks += blocks
+        leader_loc += lloc
+        recruits[tag] += [f"recruit_character = {i}" for i in ids]
         ruling[tag] = ideology_of[subs[0]] if subs and tag not in nations.HAND_MADE else \
             nations.RULING.get(tag, "neutrality")
     write("common/characters/valsora_leaders.txt",
@@ -864,15 +869,21 @@ def main():
             if src.exists():
                 big = Image.open(src).convert("RGBA")
             else:
-                flag = np.zeros((52, 82, 4), np.uint8)
+                fw, fh = FLAG_SIZE
+                flag = np.zeros((fh, fw, 4), np.uint8)
                 flag[..., 3] = 255
                 flag[..., :3] = col
-                flag[18:34, :, :3] = 255
+                flag[round(fh * 18 / 52):round(fh * 34 / 52), :, :3] = 255
                 big = Image.fromarray(flag)
-            for path, (w, h) in (("", (82, 52)), ("medium/", (41, 26)), ("small/", (10, 7))):
+            for path, (w, h) in (("", FLAG_SIZE), ("medium/", (41, 26)), ("small/", (10, 7))):
                 img = np.asarray(big.resize((w, h), Image.LANCZOS if src.exists() else Image.BOX))
                 (OUT / f"gfx/flags/{path}").mkdir(parents=True, exist_ok=True)
                 write_tga(OUT / f"gfx/flags/{path}{name}.tga", img)
+    if FLAG_SIZE != (82, 52):   # a test version with larger flags (common.FLAG_SCALE): the game is told their size
+        write("common/defines/valsora_flags.lua",
+              "-- the large flags' size (common.FLAG_SCALE): a test version of the mod with larger flags\n"
+              f"NDefines_Graphics.NGraphics.COUNTRY_FLAG_TEX_WIDTH = {FLAG_SIZE[0]}\n"
+              f"NDefines_Graphics.NGraphics.COUNTRY_FLAG_TEX_HEIGHT = {FLAG_SIZE[1]}\n")
     write("common/country_tags/valsora_countries.txt",
           "".join(f'{COUNTRIES[c][0]} = "countries/Valsora {country_file(c)}.txt"\n' for c in present))
 

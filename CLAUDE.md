@@ -19,7 +19,8 @@ the Valsora Deco UI (`deco_ui/`). The Gazetteer, a web site, lets the author's f
 - `docs/EDITING.md`: the author's guide to the `.pdn`; `docs/GAZETTEER.md`: the Gazetteer;
   `docs/HANDOFF_MERLO.md`: for Merlo's Claude; `deco_ui/CLAUDE.md`: the interface's own manual;
 - proposals waiting for the author: `docs/TECH_TREE_2036.md`, `docs/BORDER_LIMIT.md`,
-  `deco_ui/art/proposals/`; plans: `docs/ROUENTAL_ARMY.md`, `docs/CIVIL_WAR_NOTES.md`.
+  `deco_ui/art/proposals/`, the larger flags' test version (`docs/HD_FLAGS_TEST.md`); plans: `docs/ROUENTAL_ARMY.md`,
+  `docs/CIVIL_WAR_NOTES.md`.
 
 ## Layout
 
@@ -256,6 +257,11 @@ scripting (tags targeted, popularities, ideologies) skip vanilla's shipped files
 - **Railways wait** (author, 2026-10-15: "Let's leave railways off for now. The location of cities might change,
   and the mod doesn't need to be playable yet"): the map has only the lines drawn on the Gazetteer (one, Rouental's),
   so supply hubs away from a capital aren't connected. Don't generate a network until the author asks.
+- **Province sizes by terrain** (author, 2026-10-15, on `docs/BORDER_LIMIT.md`: "For cases like desert, yes. But for
+  others like Rouental, keep it dense"): when the Terrain layer is painted, deserts and land like them may get larger
+  provinces to free borders; Rouental keeps its ~190 px ones.
+- **Test content until the first public build** (author, 2026-10-15: "I'll remove all the test stuff before the first
+  public build"): Devlon's spirits and Rouental's test decisions stay until the author takes them out.
 - **Map size 5120×2560.** HOI4 needs both sides to be multiples of 256 and the area to stay
   under ~13,238,272 px. 5120×2560 = 13,107,200 is the largest size under that cap, and
   2:1 matches the author's canvas. It is proven in the wild (the Mappa Mundi mod ships this
@@ -562,7 +568,10 @@ Aislada is the worked example of a built-out nation:
   (from the capital); a news event and a major one (sent to every country); a leader event (a random general of
   Rouental's: the portrait window); an operative event (an operative created first if there is none; shown only with
   La Résistance); and the test superevent (`rou_test`, "This Is Only a Test": the anime picture and Entry of the
-  Gladiators). Texts are Claude's; no option does anything. Take the category out when the testing is done.
+  Gladiators). Texts are Claude's; no option does anything. Take the category out when the testing is done (the
+  author will, before the first public build). Fixed after the first test (2026-10-15): the state event names
+  `trigger_for = controller` (without it the game shows a state event to no one: `check_mod.py` checks it), and the
+  operative decision first gives Rouental an intelligence agency (`create_intelligence_agency`) and an operative.
 - **Opinion modifier names**: `valsora_reibonnaise_ties` is "Seran Ties" and
   `valsora_against_communism` "Seran Biases" (author, 2026-10-04).
 - **Named generated rulers**: `nations.NAMED_LEADERS` gives a generated ruler the
@@ -774,7 +783,11 @@ white via `§W…§!` in their localisation (the typewriter fonts draw dark). Ho
   `§W`), the attribution (`valsora_deco_section_11`), the gilt "History Marches On" button (Esc closes it too) and the
   song (`ValsoraSupereventSong`, "Valsora Radio · Rafael Krux — Epic Church Organ", `valsora_deco_label`). The
   build measures every quote, attribution and song with the Deco UI's font files and stops if one would not fit its
-  box (a box too short drops lines silently). Not yet seen in game.
+  box (a box too short drops lines silently). **Seen in game** (2026-10-15, the test superevent): all eight titles
+  drew at once (only the pictures had visibility triggers; each title has its own since, from the superevent's
+  flag), and the author asked for something other than the guillotine: the crest's medallion is lacquer and holds
+  **Valsora rising** (the top half of the Deco UI's globe, `globe_art.globe`), `superevents_deco.EMBLEM`; a compass
+  star, an hourglass and a laurel wreath are `EMBLEMS` too, shown in `deco_ui/art/proposals/crests/`.
 - **Current set.** Eight superevents: one per Rouental leadership focus (five), the
   Rouentaise civil war (Execute the Prince; the author's soldier photo), AIS
   "Fucking Explode" and the test one, fired by Rouental's test decisions (`rou_test`, last so the others keep their
@@ -1086,7 +1099,11 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   the same route); shared stretches are written once at the higher level. Rulers and party
   leaders get their names, titles (`desc` after the ideology) and portraits (registered in
   `nations.PORTRAITS` as `<TAG>_gazetteer_<role>`, 156:210 from the top of the picture).
-  Hand-made rulers (`HAND_MADE`) keep their leaders. A flag in HOI4's 82:52 shape (within 4 %)
+  Hand-made rulers (`HAND_MADE`) keep their leaders. Its generals and admirals (2026-10-15: the author couldn't find
+  Rouental's admiral, James Navy) are characters from the start (`gazetteer.characters`, `<TAG>_gazetteer_admiral_1`
+  ...): corps commanders and navy leaders of skill 3 without traits (the page has no fields for them; the notes stay
+  in a comment and on `status`'s list for the author), with their portraits; advisors and others need a slot and
+  traits the page doesn't ask for, so they stay on that list. A flag in HOI4's 82:52 shape (within 4 %)
   becomes `source/flags/` at the import, once per picture (`source/gazetteer/installed.json`);
   others are fitted by hand, as the author's are. Pictures are kept at most 1,200 px, heavy
   opaque ones as JPEG. Without facts the build is byte-identical to before (checked again for
@@ -1164,7 +1181,13 @@ it before touching the UI. In short:
 - **v0.8.1** (2026-10-15, later): the news masthead is **VALSORAN (globe) STANDARD** (the author: WORLD NEWS "still looks
   lopsided ... maybe swap to something like "Valsoran Standard" or Clarion or Dispatch ... so both words are the same
   length"), the globe redrawn to read at 60 px, and the news page centred under it. Other names:
-  `deco_ui/art/proposals/news_masthead/`.
+  `deco_ui/art/proposals/news_masthead/`. The author kept it (2026-10-15).
+- **v0.8.2** (2026-10-15, the third round, from the author's screenshots of v0.8.1): the superevent shows one title
+  and Valsora rising in its crest; the event cards' crest is a stepped keystone (`deco_ui/tools/crests.py`); a long
+  option's three lines fit (`valsora_deco_option_14`); a name of two lines shows both under the flag
+  (`layout.NAME_SLACK`); the selected armies' badges, the air wings and the operatives start below the medallion
+  (`make_mapviews.py`); the news globe is lit. Options for the globe and the crests: `deco_ui/art/proposals/news_globe/`
+  and `crests/`. The larger flags' test version is drawn from the same tools (`VALSORA_FLAG_SCALE`).
 - **Proposals for the side panels' own pictures** (research, production, the market, the overview strip, the
   intelligence agency, the spirit banners) are in `deco_ui/art/proposals/panel_pictures/`, **not in the mod**
   (author, 2026-10-15: "don't put them in the mod yet. I'd like to see and approve them first").
@@ -1176,21 +1199,24 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
 - **The build** (2026-10-15): 21,078 provinces (20,690 land, 363 sea, 25 lakes), 62,183 province borders (HOI4
   draws 65,536: `docs/BORDER_LIMIT.md`), 3,149 states, 122 strategic regions (42 sea); 183 countries in the mod,
   161 of them on the map, 92 of those with a flag of their own (69 fly a stripe in their map colour); the states of
-  39 are the author's own lines (`gazetteer.finals`). Two starts, both on 1 January 2036. The Deco UI is v0.8.1.
+  39 are the author's own lines (`gazetteer.finals`). Two starts, both on 1 January 2036. The Deco UI is v0.8.2.
   Rouental has test decisions for every kind of event and a test superevent (`test_events.py`).
-  Rouental's Gazetteer page is in the build (`source/gazetteer/ROU.json`); no other nation's yet.
-- **Seen in game last** (2026-10-15): the Deco UI v0.5 and v0.5.1 (the author's video and screenshot) and an
-  error.log of 10 lines, one of them ours (fixed). Not seen yet: the Deco UI v0.5.2 to v0.8.1 (closed panels
-  off-screen, the focus tree, the superevent window, the army bar, the events, the game's fonts in the deco faces),
-  the two starts, Vilna and Placeholdgrad. The Deco UI's checklist for the author is in
+  Rouental's Gazetteer page is in the build (`source/gazetteer/ROU.json`), its admiral among its characters; no
+  other nation's yet. A test version with 1.5 times larger flags went to the author as its own zip
+  (`docs/HD_FLAGS_TEST.md`), not into the mod.
+- **Seen in game last** (2026-10-15, the third round): the Deco UI v0.8.1 with Rouental's test decisions (the
+  author's screenshots): the country, long, news and leader events and the news page worked; the state and operative
+  events, a long option, the superevent's title, long names under the flag and the army badges under the medallion
+  didn't (all fixed in v0.8.2, not yet seen). The in-game error counter showed 8 errors: their `error.log` wasn't sent.
+  Not seen yet: the Deco UI v0.8.2, the two starts, Vilna and Placeholdgrad. The Deco UI's checklist for the author is in
   `deco_ui/valsora_deco_ui/README.txt` (Things to check) and `deco_ui/CLAUDE.md` (section 10).
-- **Waiting on the author:** the news masthead's name (VALSORAN STANDARD in the mod; others in
-  `deco_ui/art/proposals/news_masthead/`), the panel picture proposals (approve or change:
-  `deco_ui/art/proposals/`), larger flags (the mockup: `deco_ui/art/proposals/hd_flags/`), the tech tree proposal's
-  eight questions, special projects among them (`docs/TECH_TREE_2036.md`), the zip on GitHub's Releases page and the
-  other size options (`docs/SPEED_AND_SIZE.md`), whether to size provinces by terrain once terrain is painted
-  (`docs/BORDER_LIMIT.md`), the releasable "Test"'s flag (640 × 338, to fit to 82:52 by hand), and the end of Devlon's
-  test spirits (`nations.TEST_SPIRITS`) and Rouental's test decisions (`test_events.py`).
+- **Waiting on the author:** the news globe (the lit one in the mod; the first and four others in
+  `deco_ui/art/proposals/news_globe/`) and the crests (`deco_ui/art/proposals/crests/`); the larger flags' test
+  version (`docs/HD_FLAGS_TEST.md`); the panel picture proposals (on hold, the author: "I don't want to move ahead
+  with the panel pictures just yet"); the tech tree proposal's eight questions (`docs/TECH_TREE_2036.md`: "I'll get
+  back to you on that"); the zip on GitHub's Releases page and the other size options (`docs/SPEED_AND_SIZE.md`; the
+  author asked what the Releases page is, 2026-10-15, and was told); the `error.log` behind the 8 errors of their
+  last test. The news masthead stays VALSORAN STANDARD (author, 2026-10-15).
 
 ## Known gaps
 

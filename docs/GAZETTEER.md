@@ -108,7 +108,7 @@ their browser, and **Nation › Save a file** gives them a file to send you. Loa
 | map, Hubs tool | supply hubs | `map/supply_nodes.txt`: once a nation has its own, only those and its capital |
 | map, Suggest tool | states (their own land inside the line, none of an earlier one's), areas, lines and points drawn anywhere on the world (a border, an island that should be theirs, a mountain range, where an undrawn nation goes), each with what it is | nothing by itself: a layer for you (below) |
 | Politics tab | name, full title and adjective under every government and each ideology; ruling sub-ideology | localisation, `nations.LEADERS` |
-| People tab | head of state (name, titles, portrait); each other party's sub-ideology, leader and portrait; generals, admirals, advisors (name, notes, portrait) | the rulers and party leaders, with their titles shown on the portrait; the characters are a list for you |
+| People tab | head of state (name, titles, portrait); each other party's sub-ideology, leader and portrait; generals, admirals, advisors (name, notes, portrait) | the rulers and party leaders, with their titles shown on the portrait; generals and admirals as characters from the start (skill 3, no traits, their portraits; since 2026-10-15); advisors and the notes are a list for you |
 | Releasables tab and tool | releasables: name, adjective, full title, ruling sub-ideology, colour, flag, ruler, notes, land (whole states, or drawn areas) | a country each, owning nothing, with cores on its states (and those its areas cover by half; the largest is its capital), its names, ruler, colour and flag; culture its nation's |
 | Nation tab | status (in progress / finished), flags (one, and one per government if they like; each slot shows the game's flag until a picture is sent), map colour, culture, motto, anthem, description, notes for you, requests; how far it is (states named counts the names already on your map) | flags into `source/flags/`; the map colour; the rest is for you |
 
@@ -168,7 +168,7 @@ with `gazetteer.py paths` and `pull`, which still work.)
 - **Nations whose map tools are closed**: their states, provinces, cities, rivers and railways,
   and their releasables' states, are left out at the import (the file carries your switches;
   the import reads which states are drawn from the last build).
-- **By hand**: requests, generals and admirals, cultures and flags of other shapes; `status`
+- **By hand**: requests, advisors, the generals' and admirals' traits and skills, cultures and flags of other shapes; `status`
   lists them.
 
 After new rivers, run `python3 scripts/river_provinces.py` and rebuild, so provinces follow

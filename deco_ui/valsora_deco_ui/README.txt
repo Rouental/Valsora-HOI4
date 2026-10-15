@@ -1,4 +1,4 @@
-VALSORA DECO UI - v0.8.1 (for HOI4 1.19)
+VALSORA DECO UI - v0.8.2 (for HOI4 1.19)
 ========================================
 
 An art deco interface for the Valsora total conversion: core skin and fonts,
@@ -28,6 +28,34 @@ Valsora repository's scripts/common.py and rebuild (sh scripts/run_all.sh).
 The layout is built for 1920 px of UI width: 1920x1080 at 100% UI scale, or
 2560x1440 at up to 133%.
 
+
+NEW IN v0.8.2
+-------------
+  - Superevents: only the open superevent's title shows (all eight titles
+    were drawn over each other). The crest over the frame holds Valsora
+    rising, the top half of the news masthead's globe, on lacquer, in place
+    of the mockup's red guillotine. Other emblems (a compass star, an
+    hourglass, a laurel wreath) are in art/proposals/crests/.
+  - Events: the crest on the card's top edge is a stepped keystone with a
+    gilt diamond, in place of the half sunburst whose thin rays blurred at
+    its size. Other designs are in art/proposals/crests/. An option's text
+    is a size smaller, so three lines fit its plate (the third spilled out).
+  - The news: the globe is lit (pale to deep gilt land, a bright edge on the
+    lit side), its grid over the sea only, seen above Nonscio and Araseos.
+    The first globe, the one before this and three other ideas are in
+    art/proposals/news_globe/.
+  - Country names under the flag: a name that needs two lines in the large
+    letters shows both (KAMPFIAN EMPIRE, UTOPIAN REPUBLIC showed only their
+    first word and "...").
+  - The selected armies' badges ("Request Expeditionaries" with them), the
+    selected air wings and the operatives start below the flag medallion
+    and its seal: the medallion covered them.
+
+Things to check in game (v0.8.2):
+  - a superevent (Rouental's test decision): one title, the new crest;
+  - an event with the keystone; a long option on three lines;
+  - Kampf or the Utopian Republic: the whole name under the flag;
+  - select some divisions: their army's badge below the medallion.
 
 NEW IN v0.8.1
 -------------

@@ -384,10 +384,10 @@ extras = ("# Valsora Deco UI - extra top bar windows driven by scripted GUIs\n"
           "# (common/scripted_guis/valsora_deco_topbar.txt). Positions are relative to the top bar.\n"
           "guiTypes = {"
           # country name: large tracked capitals, or a smaller cut for names with very long words
-          + window("valsora_deco_country_name", N["x"], N["y"], N["w"], N["h"], L.NAME_FONTS[0],
-                   "VAL_DECO_TB_COUNTRY_NAME", "centre", True)
-          + window("valsora_deco_country_name_small", N["x"], N["y"], N["w"], N["h"], L.NAME_FONTS[1],
-                   "VAL_DECO_TB_COUNTRY_NAME", "centre", True)
+          + window("valsora_deco_country_name", N["x"], N["y"] - L.NAME_SLACK, N["w"], N["h"] + 2 * L.NAME_SLACK,
+                   L.NAME_FONTS[0], "VAL_DECO_TB_COUNTRY_NAME", "centre", True)
+          + window("valsora_deco_country_name_small", N["x"], N["y"] - L.NAME_SLACK, N["w"], N["h"] + 2 * L.NAME_SLACK,
+                   L.NAME_FONTS[1], "VAL_DECO_TB_COUNTRY_NAME", "centre", True)
           # political power: daily gain, right-aligned under the label (the game's own number stays left)
           + window("valsora_deco_pp_daily", pp["text_x"], L.box_y_for_caps(L.SEC_FONT, 32), pp["text_w"], 18,
                    L.SEC_FONT, "VAL_DECO_TB_PP_DAILY", "right")
@@ -577,6 +577,7 @@ FONTS = [("valsora_deco_value_17", "0xfff4ecd9", "readout values (U+25C6 is a di
          ("valsora_deco_section_11", "0xffebd397", "screens: section labels (tracked capitals)"),
          ("valsora_deco_body_15", "0xffe8dfc8", "screens: body text"),
          ("valsora_deco_body_13", "0xffd9cfb6", "screens: small body text"),
+         ("valsora_deco_option_14", "0xffe8dfc8", "event options: three lines fit the plate"),
          ("valsora_deco_menu_15", "0xffe7d3a0", "main menu buttons"),
          ("valsora_deco_menu_big", "0xff2a1e0a", "main menu: the gold Single Player button (dark text)")]
 fg = ("# Valsora Deco UI - bitmap fonts (top bar and screens).\n"

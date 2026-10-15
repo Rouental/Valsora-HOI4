@@ -16,9 +16,10 @@ import guipatch as GP
 import layout_events as LE
 from paths import MOD, VANILLA as VANILLA_DIR
 
-# options in the body font: in the menu's tracked capitals 811 of the game's 10,171 options would need a third line,
-# which the 40 px box cuts off (4 in the body font)
-TITLE, TEXT, OPTION, NAME = "valsora_deco_title_18", "valsora_deco_body_15", "valsora_deco_body_15", "valsora_deco_heading_22"
+# options: in the menu's tracked capitals 811 of the game's 10,171 options would need a third line (4 in the body
+# font); since v0.8.2 their own font (Josefin 14 on a 14 px line) fits three lines on the plate, where the body font's
+# third line spilled over it (the user's screenshot of the long test event)
+TITLE, TEXT, OPTION, NAME = "valsora_deco_title_18", "valsora_deco_body_15", "valsora_deco_option_14", "valsora_deco_heading_22"
 FONTS = {
     "EventWindow>top_Window>Title": TITLE,
     "EventWindow>midsection>Description": TEXT,
@@ -40,7 +41,8 @@ for path, font in FONTS.items():
 # the options: the entry as wide as its plate, the text centred on it, each window's grid centred in its room
 W, PAD = LE.OPTION_W, LE.OPTION_PAD
 t = GP.set_attrs(t, "event_option_entry", size=(W, 47))
-t = GP.set_attrs(t, "event_option_entry>Name", position=(PAD, 0), maxWidth=W - 2 * PAD)
+t = GP.set_attrs(t, "event_option_entry>Name", position=(PAD, LE.OPTION_TEXT_Y), maxWidth=W - 2 * PAD,
+                 maxHeight=LE.OPTION_TEXT_H)
 for win in LE.CENTRES:
     x, y = GP.get_pos(t, f"{win}/options_grid")
     t = GP.set_attrs(t, f"{win}/options_grid", position=(LE.grid_x(win), y), size=(W, 30 if win in ("EventWindow", "EventWindow_News") else 0),

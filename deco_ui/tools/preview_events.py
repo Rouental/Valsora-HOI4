@@ -19,14 +19,18 @@ EV = MOD + "gfx/interface/"
 GUI = open(MOD + "interface/eventwindow.gui", encoding="utf-8-sig").read()
 NAME_X = GP.get_pos(GUI, "event_option_entry>Name")[0]
 NAME_W = int(re.search(r"maxWidth\s*=\s*(\d+)", GUI[GUI.index('name = "Name"', GUI.index('name = "event_option_entry"')):]).group(1))
-TITLE, TEXT, OPTION = "valsora_deco_title_18", "valsora_deco_body_15", "valsora_deco_body_15"
+TITLE, TEXT, OPTION = "valsora_deco_title_18", "valsora_deco_body_15", "valsora_deco_option_14"
+import layout_events as LE
+OY, OH = LE.OPTION_TEXT_Y, LE.OPTION_TEXT_H      # the option text's box on its entry
 PHOTO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "source", "superevents", "rou_civil_war.jpg")
 SAMPLE = dict(
     title="Elections in Rouental",
     text=("The Principality's assemblies have been called to elect a new chancellor. Across the Vale of Reibonne the "
           "parties have filled the squares of Rêverie and Carcarelle, and the old families watch the count with "
           "unease. Whatever the result, the Crown will have to work with the new government."),
-    options=["The people have spoken.", "Postpone the count."],
+    # four options, one long (the long test event's: the user's screenshot showed its third line spilling over the plate)
+    options=["The people have spoken.", "A second option, a good deal longer than the others, to see how it wraps onto "
+             "a second line.", "Postpone the count.", "And a fourth."],
     news_title="The Association Stands Together",
     news_text=("Envoys of the eight Reibonnaise states met in Rêverie today and renewed the Association's charter for "
                "another decade. Observers across Nonscio call it the strongest bond in the Vale since the old wars."),
@@ -100,7 +104,7 @@ def main():
     for i, o in enumerate(SAMPLE["options"]):
         ox, oy = ex + gx, by + gy + i * 47
         cv.alpha_composite(img(EV + "event_option_entry.dds"), (ox, oy))
-        texts.append((OPTION, o, ox + NAME_X, oy, NAME_W, 40, "centre", True))
+        texts.append((OPTION, o, ox + NAME_X, oy + OY, NAME_W, OH, "centre", True))
     # a news event: the broadsheet, 528 x 595
     nx, ny = 800, 120
     cv.alpha_composite(img(EV + "event_news_bg.dds"), (nx, ny))
@@ -116,7 +120,7 @@ def main():
     for i, o in enumerate(SAMPLE["news_options"]):
         ox, oy = nx + gx, ny + 520 + i * 47       # the game stacks the options under the story
         cv.alpha_composite(img(EV + "event_option_entry.dds"), (ox, oy))
-        texts.append((OPTION, o, ox + NAME_X, oy, NAME_W, 40, "centre", True))
+        texts.append((OPTION, o, ox + NAME_X, oy + OY, NAME_W, OH, "centre", True))
     # a leader event: the top, the middle (235 px: the portrait at 0.85 in its arched frame, the text beside it), the
     # options on the middle's tile, the foot (bottom_window_end)
     lx, ly = 70, 600
@@ -136,7 +140,7 @@ def main():
     for i, o in enumerate(SAMPLE["leader_options"]):
         ox, oy = lx + gx, ly + 356 + gy + i * 47
         cv.alpha_composite(img(EV + "event_option_entry.dds"), (ox, oy))
-        texts.append((OPTION, o, ox + NAME_X, oy, NAME_W, 40, "centre", True))
+        texts.append((OPTION, o, ox + NAME_X, oy + OY, NAME_W, OH, "centre", True))
     cv.alpha_composite(img(EV + "event_report_bottom_win_2.dds"), (lx, ly + 356 + bh))
     arr = np.asarray(cv.convert("RGB"), dtype=np.float32) / 255
     for font, s, x, y, w, h, fmt, valign in texts:

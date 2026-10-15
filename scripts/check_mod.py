@@ -582,8 +582,13 @@ def main(mod):
     # leaders, so no subtype is left to chance)
     sub_ideo = {}
     for f in (mod / "common/characters").glob("*.txt"):
-        for cid, sub in re.findall(r"^\t(\w+) = \{.*?country_leader = \{\s*ideology = (\w+)", f.read_text(), re.S | re.M):
-            sub_ideo[cid] = sub
+        # character by character (brace-matched): a character with no country_leader role (a general, an admiral)
+        # must not lend the next character's ideology to itself
+        for _, body in top_level(strip(f.read_text())):
+            for cid, cbody in top_level(body):
+                m = re.search(r"country_leader\s*=\s*\{\s*ideology\s*=\s*(\w+)", cbody)
+                if m:
+                    sub_ideo[cid] = m.group(1)
     import ideologies
     io = {**ideologies.ideology_of(), **{k: i for i, v in ideologies.HIDDEN.items() for k in v}}
     for f in (mod / "history/countries").glob("*.txt"):
@@ -651,6 +656,11 @@ def main(mod):
         fired |= {e for e in body.split() if "." in e}
     for ev in sorted(fired - events):
         err(f"event {ev} is fired but not defined")
+    # a state event goes only to the country its trigger_for names (owner, controller, ...): without one nobody gets it
+    # (2026-10-15: Rouental's test decision did nothing in the author's game; the game's own always name the controller)
+    for body in re.findall(r"\bstate_event\s*=\s*\{([^{}]*)\}", scripted):
+        if re.search(r"\bid\s*=", body) and not re.search(r"\b(?:title|desc)\s*=", body) and "trigger_for" not in body:
+            err(f"state_event {{{body.strip()}}} is fired without trigger_for: no country would get it")
     # our events' titles, descriptions and options, and our decisions and their categories, are localised: the game
     # shows a missing key as the key itself (hidden events and never-visible decisions, the stand-ins, need none)
     for f in sorted((mod / "events").glob("*.txt")):

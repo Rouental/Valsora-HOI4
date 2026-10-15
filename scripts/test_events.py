@@ -6,11 +6,13 @@ A decision category, "Test Events", shown to Rouental when a player leads it: on
 the game has, free and repeatable, each firing a placeholder event at once:
   - a country event, the report window most of the game's events use (title, picture, text, options);
   - a long country event with four options (the window stretches with its text; a long option takes two lines);
-  - a state event, fired from Rouental's capital (the report window, the state as its subject);
+  - a state event, fired from Rouental's capital for its controller (`trigger_for`: without it nobody gets a state
+    event, which is why the first version did nothing in the author's test);
   - a news event (the broadsheet), and a major news event (the broadsheet, sent to every country);
   - a leader event, about one of Rouental's generals (the window with the leader's portrait);
-  - an operative event (the dossier window; an operative is created first if Rouental has none; needs La
-    Résistance, so the decision shows only with it);
+  - an operative event (the dossier window; an intelligence agency and an operative are created first if Rouental
+    has none, since operatives need the agency: the first version did nothing; needs La Résistance, so the decision
+    shows only with it);
   - the test superevent (`superevents.py`, "rou_test": the anime picture and Entry of the Gladiators).
 The texts are Claude's placeholders; no option does anything. Take the category out (`write_files`' call in
 build_mod.py and its LOCALISATION) when the testing is done, like Devlon's test spirits.
@@ -58,7 +60,7 @@ EVENTS = [
                   b="A second option, a good deal longer than the others, to see how it wraps onto a second line.",
                   c="A third option.", d="And a fourth.")),
     dict(n=3, decision="ROU_test_state_event", name="Test: a State Event", icon="GFX_decision_generic_construction",
-         fire=f"capital_scope = {{ state_event = {{ id = {NS}.3 }} }}",
+         fire=f"capital_scope = {{ state_event = {{ id = {NS}.3 trigger_for = controller }} }}",
          event=f"""state_event = {{
 	id = {NS}.3
 	title = {NS}.3.t
@@ -119,6 +121,10 @@ EVENTS = [
                   a="Dismissed.")),
     dict(n=7, decision="ROU_test_operative_event", name="Test: an Operative Event", icon="GFX_decision_generic_operation",
          fire=f"""if = {{
+				limit = {{ has_intelligence_agency = no }}
+				create_intelligence_agency = yes
+			}}
+			if = {{
 				limit = {{ num_of_operatives < 1 }}
 				create_operative_leader = {{ bypass_recruitment = yes }}
 			}}

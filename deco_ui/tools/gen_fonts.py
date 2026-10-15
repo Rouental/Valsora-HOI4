@@ -264,6 +264,10 @@ if __name__ == "__main__":
     # body text: Josefin Sans
     out.append(build("valsora_deco_body_15", JOS, 15, 0, "ui", weight=600, kern_set=ALNUM, atlas=(512, 256)))
     out.append(build("valsora_deco_body_13", JOS, 13, 0, "ui", weight=500, kern_set=ALNUM, atlas=(512, 256)))
+    # event options (v0.8.2): Josefin 14 on a 14 px line, so three lines (42 px) fit the option's 44 px plate (the body
+    # font's 16 px line let a third line spill over it: the user's screenshot of the long test event)
+    out.append(build("valsora_deco_option_14", JOS, 14, 0, "ui", weight=600, kern_set=ALNUM, atlas=(512, 256),
+                     line=(14, 7)))
     # main menu buttons: tracked Josefin capitals; the big button uses Federo
     out.append(build("valsora_deco_menu_15", JOS, 15, 0, "ui", weight=600, caps=True, tracking=3, kern_set=ALNUM,
                      atlas=(512, 256)))

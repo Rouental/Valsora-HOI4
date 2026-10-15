@@ -330,3 +330,10 @@ MOD_NAME = "Valsora (test map)"
 # True: scripts/deco_ui.py copies it into the build, and the minimap and start date picture are drawn in its
 # style. False: the game's own interface, Valsora's parchment minimap, and none of the Deco UI's files.
 DECO_UI = True
+
+# The size of the game's large flags (the top bar's, the diplomacy screen's ...): HOI4's 82 x 52 times FLAG_SCALE.
+# A test version with larger flags (the author, 2026-10-15: "Maybe make a test version of the mod with the flag at
+# 1.5?") is built with VALSORA_FLAG_SCALE=1.5 (docs/HD_FLAGS_TEST.md); the mod itself stays at 1.
+import os as _os
+FLAG_SCALE = float(_os.environ.get("VALSORA_FLAG_SCALE", "1"))
+FLAG_SIZE = (round(82 * FLAG_SCALE), round(52 * FLAG_SCALE))
