@@ -10,6 +10,8 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-15, later still: the author's flags of **Côtefer**, **Entroterra** and **Mezzogiorno**, fitted to 82:52
+  without stretching (`docs/NATIONS.md`); 95 of the 161 nations on the map have a flag of their own.
 - 2026-10-15, the third round (the author's answers and screenshots of the test decisions): no map changes. Fixed
   from the screenshots: the **state** and **operative** test events (a state event needs `trigger_for`; Rouental
   now gets an intelligence agency and an operative first), a long event option's **third line** spilling out (a 14 px

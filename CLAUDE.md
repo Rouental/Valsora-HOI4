@@ -1198,7 +1198,7 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
 
 - **The build** (2026-10-15): 21,078 provinces (20,690 land, 363 sea, 25 lakes), 62,183 province borders (HOI4
   draws 65,536: `docs/BORDER_LIMIT.md`), 3,149 states, 122 strategic regions (42 sea); 183 countries in the mod,
-  161 of them on the map, 92 of those with a flag of their own (69 fly a stripe in their map colour); the states of
+  161 of them on the map, 95 of those with a flag of their own (66 fly a stripe in their map colour); the states of
   39 are the author's own lines (`gazetteer.finals`). Two starts, both on 1 January 2036. The Deco UI is v0.8.2.
   Rouental has test decisions for every kind of event and a test superevent (`test_events.py`).
   Rouental's Gazetteer page is in the build (`source/gazetteer/ROU.json`), its admiral among its characters; no

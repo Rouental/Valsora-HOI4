@@ -538,3 +538,14 @@ Solitas, with an unused colour from its flag, (153, 47, 45). Vilna's old land (3
 **Placeholdgrad** PHG, with Vilna's old flag (`PHG.png`) and Radical Republicanism, and Vilna's old green;
 the adjective Placeholdgradian, Russian culture (for the "-grad") and no formal name yet are Claude's.
 Since the paint moved with the names, the `.pdn` is unchanged.
+
+## 2026-10-15, later: the Bleacherist republics' flags
+
+**2026-10-15** (author): the first flags of **Côtefer** CTF (a yellow field, a diamond of blue, crimson, white,
+black and orange bands at the hoist's top with four white flowers), **Entroterra** ETR (black, white and blue
+bands, three white flowers on the white) and **Mezzogiorno** MZG (black, white and blue vertical bands, a white
+flower at the hoist's top). They came as screenshots, each with a 3 px frame (cut off) and wider than 82:52,
+fitted by Claude without stretching: Côtefer's plain yellow fly trimmed (1124 × 713), Entroterra's bands each made
+taller with plain rows to three equal bands, the flowers centred in the white (1218 × 772), Mezzogiorno's bands
+lengthened at the foot so they keep their widths and the flower its place (1252 × 794)
+(`dist/flags_new_20261015.png`). Their map colours stay the three shades of blue.
