@@ -8,7 +8,7 @@ https://rouental.github.io/Valsora-HOI4/ (docs/GAZETTEER.md).
     python3 scripts/gazetteer_site.py --out DIR --emulator 127.0.0.1:8080:9099 --project demo-x
         the same against Firebase's local emulators, for tests.
 
-Publishing is a commit of DIR's files on the gh-pages branch (CLAUDE.md, The Gazetteer).
+Publishing is a commit of DIR's files on the gh-pages branch: scripts/publish_site.sh (docs/GAZETTEER_INTERNALS.md).
 """
 import argparse
 import json

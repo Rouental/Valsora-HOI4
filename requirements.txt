@@ -1,0 +1,9 @@
+# What the pipeline needs (Python 3.11): pip install -r requirements.txt
+# The versions the builds in the repository were made with: the same versions give the same files, byte for byte.
+numpy==2.4.6
+scipy==1.17.1
+pillow==12.3.0          # built with libraqm (kerning in the Deco UI's fonts): python3 -c "from PIL import features; print(features.check('raqm'))"
+scikit-image==0.26.0
+# Only for the Deco UI's textures (deco_ui/tools/gen_textures.py) and the Gazetteer's tests (tests/gazetteer/):
+# with a Chromium of your own, set CHROMIUM_PATH instead of running "playwright install chromium"
+playwright==1.64.0

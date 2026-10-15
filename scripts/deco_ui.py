@@ -19,12 +19,12 @@ import subprocess
 import sys
 from pathlib import Path
 
-from common import DECO_UI, MOD_DIR_NAME
+from common import BUILD, DECO_UI, MOD_DIR_NAME
 
-OUT = Path("build") / MOD_DIR_NAME
+OUT = BUILD / MOD_DIR_NAME
 DECO = Path(os.environ.get("VALSORA_DECO_ROOT") or "deco_ui")   # another copy of it for a test version
 DECO_MOD = DECO / "valsora_deco_ui"
-BASE = Path("work/deco_base")
+BASE = Path("work/deco_base") if BUILD == Path("build") else Path("work") / f"deco_base_{BUILD.name}"   # per build
 SKIP = {"descriptor.mod", "README.txt", "thumbnail.png"}       # the Deco UI's own, as a separate mod
 REPLACES = {"interface/countrypoliticsview.gui"}               # built by the Deco UI from Valsora's own
 MARK = "Valsora Deco UI"                                       # the first lines of the Deco UI's files say so

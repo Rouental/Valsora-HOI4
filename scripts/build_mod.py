@@ -16,7 +16,7 @@ import numpy as np
 from PIL import Image
 from scipy import ndimage as ndi
 
-from common import MAP_W, MAP_H, CONTINENTS, MOD_NAME, MOD_DIR_NAME, COUNTRIES, PLACEHOLDERS, DECO_UI, FLAG_SIZE
+from common import MAP_W, MAP_H, CONTINENTS, MOD_NAME, MOD_DIR_NAME, COUNTRIES, PLACEHOLDERS, DECO_UI, FLAG_SIZE, BUILD
 import cultures
 import gazetteer
 import ideologies
@@ -29,7 +29,7 @@ import test_events
 from imgio import write_bmp, write_dds, write_tga, palette_from_header
 
 W, H = MAP_W, MAP_H
-OUT = Path("build") / MOD_DIR_NAME
+OUT = BUILD / MOD_DIR_NAME
 PAL = Path("source/palettes")
 FLAGS = Path("source/flags")
 POP_PER_PX = 300  # state population per map pixel
@@ -1046,7 +1046,7 @@ def main():
             f'name="{MOD_NAME}"', 'supported_version="1.19.*"', 'picture="thumbnail.png"']
     desc += [f'replace_path="{rp}"' for rp in REPLACE_PATHS]
     write("descriptor.mod", "\n".join(desc) + "\n")
-    Path("build", f"{MOD_DIR_NAME}.mod").write_text(
+    (BUILD / f"{MOD_DIR_NAME}.mod").write_text(
         "\n".join(desc + [f'path="mod/{MOD_DIR_NAME}"']) + "\n")
     thumb = np.where(pix_kind[..., None] == 1, np.array([96, 140, 70]),
                      np.array([35, 60, 105])).astype(np.uint8)

@@ -324,6 +324,11 @@ MIN_SEA_REGION_PROVINCES = 4
 # name the launcher shows. The folder name matches the previous test build's.
 MOD_DIR_NAME = "valsora_test"
 MOD_NAME = "Valsora (test map)"
+# Where the mod is built: build/valsora_test/ and build/valsora_test.mod. VALSORA_BUILD gives another folder, so a
+# test version (scripts/build_flags15.sh) is built beside the mod instead of over it.
+import os as _os
+from pathlib import Path as _Path
+BUILD = _Path(_os.environ.get("VALSORA_BUILD") or "build")
 
 # The Valsora Deco UI (deco_ui/, the author's art deco interface) is part of the mod since 2026-10-14 (author:
 # "simplify things to only have the one install", and they may want the game's own interface back one day).
@@ -334,6 +339,5 @@ DECO_UI = True
 # The size of the game's large flags (the top bar's, the diplomacy screen's ...): HOI4's 82 x 52 times FLAG_SCALE.
 # A test version with larger flags (the author, 2026-10-15: "Maybe make a test version of the mod with the flag at
 # 1.5?") is built with VALSORA_FLAG_SCALE=1.5 (docs/HD_FLAGS_TEST.md); the mod itself stays at 1.
-import os as _os
 FLAG_SCALE = float(_os.environ.get("VALSORA_FLAG_SCALE", "1"))
 FLAG_SIZE = (round(82 * FLAG_SCALE), round(52 * FLAG_SCALE))

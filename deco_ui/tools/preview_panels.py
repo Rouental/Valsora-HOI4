@@ -385,20 +385,48 @@ def preview_corner():
         cv = render_corner(vanilla=van)
         out = Image.fromarray((np.clip(cv, 0, 1) * 255).astype(np.uint8)).crop((1520, 780, 1920, 1080))
         out.resize((out.width * 2, out.height * 2), Image.NEAREST).save(BUILD + name)
-    print("corner preview written (map modes and minimap, 2x)")
+
+
+def preview_panel(key):
+    """one panel, the mod's and the game's; returns the problems found while drawing it"""
+    n = len(V.problems)
+    spec = LPN.PANELS[key]
+    cv, (sx, sy, W), p = render_panel(spec)
+    save(cv, f"preview_panel_{key}.png", sx + W + max(40, spec.get("extra_w", 0)) + 40)
+    if os.path.isfile(VANILLA + "interface/" + spec["file"]):
+        cvv, (vx, vy, VW), _ = render_panel(spec, vanilla=True)
+        save(cvv, f"preview_panel_{key}_vanilla.png", vx + VW + max(40, spec.get("extra_w", 0)) + 40)
+    return V.problems[n:]
+
+
+def _job(key):
+    if key == "corner":
+        preview_corner()
+        return []
+    return preview_panel(key)
 
 
 if __name__ == "__main__":
     only = set(sys.argv[1:]) - {"corner"}
-    for key, spec in LPN.PANELS.items():
-        if only and key not in only:
-            continue
-        cv, (sx, sy, W), p = render_panel(spec)
-        save(cv, f"preview_panel_{key}.png", sx + W + max(40, spec.get("extra_w", 0)) + 40)
-        if os.path.isfile(VANILLA + "interface/" + spec["file"]):
-            cvv, (vx, vy, VW), _ = render_panel(spec, vanilla=True)
-            save(cvv, f"preview_panel_{key}_vanilla.png", vx + VW + max(40, spec.get("extra_w", 0)) + 40)
-        print("panel preview:", key)
-    print("panel previews written; problems:", [q for q in V.problems if "overflow" in q or "lines" in q])
+    keys = [k for k in LPN.PANELS if not only or k in only]
     if not only or "corner" in sys.argv[1:]:
-        preview_corner()
+        keys.append("corner")
+    # each panel on its own core (2026-10-15: 41 s one after another, 13 s on four); the loaded sprites, fonts and
+    # localisation are shared by forking, so the pictures are the same as drawn one by one
+    import multiprocessing as mp
+    try:
+        ctx = mp.get_context("fork")
+    except ValueError:   # no fork (Windows): one by one
+        ctx = None
+    if ctx and len(keys) > 1:
+        with ctx.Pool(min(len(keys), os.cpu_count() or 1)) as pool:
+            found = pool.map(_job, keys, chunksize=1)
+    else:
+        found = [_job(k) for k in keys]
+    for key, probs in zip(keys, found):
+        V.problems.extend(probs)
+        if key != "corner":
+            print("panel preview:", key)
+    print("panel previews written; problems:", [q for q in V.problems if "overflow" in q or "lines" in q])
+    if "corner" in keys:
+        print("corner preview written (map modes and minimap, 2x)")

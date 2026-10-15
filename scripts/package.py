@@ -8,11 +8,11 @@ import os
 import zipfile
 from pathlib import Path
 
-from common import MOD_DIR_NAME
+from common import BUILD, MOD_DIR_NAME
 
 DATE = (1980, 1, 1, 0, 0, 0)
 
-build = Path("build")
+build = BUILD
 # VALSORA_ZIP: another file for a test version (it holds the same mod folder, so it installs in the mod's place)
 out = Path(os.environ.get("VALSORA_ZIP") or Path("dist") / f"{MOD_DIR_NAME}.zip")
 out.parent.mkdir(exist_ok=True)

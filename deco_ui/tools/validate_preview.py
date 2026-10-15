@@ -641,11 +641,13 @@ def render(cv, elems, px, py, pr, worst=False):
 
 
 SW, SH = 1920, 230
-bg = Image.open(ART + "map_rouental.jpg").convert("RGB").resize((1920, 1080), Image.LANCZOS).crop((0, 0, SW, SH))
+_BG = []
 
 
 def build(worst=False):
-    cv = np.array(bg, np.float32) / 255
+    if not _BG:
+        _BG.append(Image.open(ART + "map_rouental.jpg").convert("RGB").resize((1920, 1080), Image.LANCZOS).crop((0, 0, SW, SH)))
+    cv = np.array(_BG[0], np.float32) / 255
     top = gui[0][1]  # guiTypes
     for k, b in top:
         if k == "containerWindowType" and attrs(b).get("name") == "topbar":
@@ -658,20 +660,27 @@ def build(worst=False):
     return cv
 
 
-BOXES.clear()
-build(worst=True)          # overflow check with long engine strings
-BOXES.clear()
-cv = build()
-out = Image.fromarray((np.clip(cv, 0, 1) * 255).astype(np.uint8))
-out.save(BUILD + "preview_topbar.png")
+def topbar_preview():
+    """the top bar, drawn from the generated files: first with long engine strings (the overflow check), then with
+    the usual ones (build/preview_topbar.png, and its boxes for eyeballing overlaps)"""
+    BOXES.clear()
+    build(worst=True)          # overflow check with long engine strings
+    BOXES.clear()
+    cv = build()
+    out = Image.fromarray((np.clip(cv, 0, 1) * 255).astype(np.uint8))
+    out.save(BUILD + "preview_topbar.png")
+    dbg = out.copy()
+    from PIL import ImageDraw
+    dd_ = ImageDraw.Draw(dbg)
+    for n, x, y, w, h in BOXES:
+        if w and h:
+            dd_.rectangle((x, y, x + w - 1, y + h - 1), outline=(0, 255, 255))
+    dbg.save(BUILD + "preview_topbar_boxes.png")
 
-# debug overlay: element boxes (to eyeball overlaps)
-dbg = out.copy()
-from PIL import ImageDraw  # noqa: E402
-dd_ = ImageDraw.Draw(dbg)
-for n, x, y, w, h in BOXES:
-    if w and h:
-        dd_.rectangle((x, y, x + w - 1, y + h - 1), outline=(0, 255, 255))
-dbg.save(BUILD + "preview_topbar_boxes.png")
 
-print("PROBLEMS:", problems if problems else "none")
+# The checks above run whenever this is imported (the previews import it for its loaders and renderer); the top bar
+# preview and the verdict only when it runs itself (build_all.py's step), so the previews, run side by side, don't
+# all write the same picture.
+if __name__ == "__main__":
+    topbar_preview()
+    print("PROBLEMS:", problems if problems else "none")

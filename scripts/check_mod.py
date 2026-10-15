@@ -658,7 +658,10 @@ def main(mod):
                 scripted += text
     on_actions_all = "".join(strip(f.read_text(encoding="utf-8-sig")) + "\n"
                              for f in (mod / "common/on_actions").glob("*.txt"))
-    for name in set(re.findall(r"\b(valsora_\w+)\s*=\s*yes", scripted)):
+    # our on_actions call our effects too (2026-10-15: scripts/mutation_test.py found a misspelt one there passed)
+    on_actions_ours = "".join(strip(f.read_text(encoding="utf-8-sig")) + "\n"
+                              for f in (mod / "common/on_actions").glob("*.txt") if not is_vanilla_part(f, mod))
+    for name in set(re.findall(r"\b(valsora_\w+)\s*=\s*yes", scripted + on_actions_ours)):
         if name not in effects:
             err(f"scripted effect {name} is used but not defined")
     # on_startup runs without a scope, and a scripted effect needs one (error.log, 2026-10-15: "Invalid Scope ...
@@ -979,4 +982,5 @@ def main(mod):
 
 
 if __name__ == "__main__":
-    main(sys.argv[1] if len(sys.argv) > 1 else "build/valsora_test")
+    from common import BUILD, MOD_DIR_NAME
+    main(sys.argv[1] if len(sys.argv) > 1 else str(BUILD / MOD_DIR_NAME))

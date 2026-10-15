@@ -2,22 +2,58 @@
 and previews. Usage:  python tools/build_all.py            (uses reference/ and art/ under the project)
 Textures need Playwright with Chromium (pip install playwright; playwright install chromium);
 everything else is plain Python 3 + Pillow + numpy.
+
+    python tools/build_all.py gen_textures.py ...   skips the steps named (e.g. the slow texture step)
+
+Steps in the same stage don't depend on each other and run side by side (2026-10-15: 81 s one after another, about
+35 s so); each step's output is printed whole, in order, once its stage is done. The files are the same either way.
 """
 import os
 import subprocess
 import sys
+import time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-steps = ["gen_fonts.py", "game_fonts.py", "gen_textures.py", "make_topbar.py", "make_politics.py", "make_stateview.py",
-         "make_focus.py", "make_menu.py", "make_panels.py", "make_leadergroups.py", "make_mapviews.py", "make_events.py",
-         "validate_preview.py", "preview_screens.py", "preview_panels.py", "preview_focus.py", "preview_armybar.py", "preview_events.py",
-         "preview_game_fonts.py"]
-skip = set(sys.argv[1:])           # e.g.  python build_all.py gen_textures.py   to skip the slow step
-for s in steps:
-    if s in skip:
+STAGES = [
+    ["gen_fonts.py", "game_fonts.py"],                       # the mod's fonts and the game's, redrawn
+    ["gen_textures.py"],                                     # sizes come from the fonts' metrics
+    ["make_topbar.py", "make_politics.py", "make_stateview.py", "make_focus.py", "make_menu.py", "make_panels.py",
+     "make_leadergroups.py", "make_mapviews.py", "make_events.py"],
+    ["validate_preview.py"],                                 # the checks, before any preview
+    ["preview_screens.py", "preview_panels.py", "preview_focus.py", "preview_armybar.py", "preview_events.py",
+     "preview_game_fonts.py"],
+]
+# the generators write files the next ones read (make_topbar writes the fonts' .gfx, make_politics reads Valsora's
+# screen ...), so they stay one after another
+SEQUENTIAL = {2}
+steps = [s for stage in STAGES for s in stage]           # the order, for anyone reading the list
+skip = set(sys.argv[1:])
+unknown = skip - set(steps)
+if unknown:
+    sys.exit(f"no such step: {', '.join(sorted(unknown))} (steps: {', '.join(steps)})")
+start = time.time()
+for n, stage in enumerate(STAGES):
+    todo = [s for s in stage if s not in skip]
+    if n in SEQUENTIAL or len(todo) < 2:
+        for s in todo:
+            print(f"== {s}", flush=True)
+            t = time.time()
+            r = subprocess.run([sys.executable, os.path.join(HERE, s)], cwd=HERE)
+            if r.returncode:
+                sys.exit(f"{s} failed")
+            print(f"   ({time.time() - t:.1f} s)", flush=True)
         continue
-    print(f"== {s}", flush=True)
-    r = subprocess.run([sys.executable, os.path.join(HERE, s)], cwd=HERE)
-    if r.returncode:
-        sys.exit(f"{s} failed")
-print("done")
+    t = time.time()
+    runs = [(s, subprocess.Popen([sys.executable, os.path.join(HERE, s)], cwd=HERE, stdout=subprocess.PIPE,
+                                 stderr=subprocess.STDOUT, text=True)) for s in todo]
+    failed = []
+    for s, p in runs:
+        out, _ = p.communicate()
+        print(f"== {s}", flush=True)
+        print(out, end="" if out.endswith("\n") or not out else "\n", flush=True)
+        if p.returncode:
+            failed.append(s)
+    print(f"   ({', '.join(todo)}: {time.time() - t:.1f} s side by side)", flush=True)
+    if failed:
+        sys.exit(f"{', '.join(failed)} failed")
+print(f"done ({time.time() - start:.0f} s)")
