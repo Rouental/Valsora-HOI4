@@ -38,7 +38,7 @@ their Earth-specific parts. Dates are moved like `files/`.
 
 ## `index/`: vanilla's names
 
-Lists made by `vanilla_sync.py`, one name per line:
+Lists made by `vanilla_sync.py`, one name per line (`traits.json` is JSON):
 
 | file | holds | used by |
 |---|---|---|
@@ -48,3 +48,4 @@ Lists made by `vanilla_sync.py`, one name per line:
 | `technologies.txt`, `equipment.txt`, `modules.txt`, `subunits.txt`, `ideas.txt`, `defines.txt` | vanilla's names of each | `check_mod.py` |
 | `map_files.txt` | the files of vanilla's `map` folder | `check_mod.py` (map files the mod inherits) |
 | `year_names.yml` | generic names with a year ("1936 Cruiser Hull") | renamed for 2036 |
+| `traits.json` | the traits the game's own characters have, by kind (ruler, general, admiral) and advisor post, with their names, groups and ledgers, Earth's one-country ones left out; and every trait the game defines (`defined`) | the Gazetteer's trait lists (`facts_export.py`), the import, `check_mod.py` |

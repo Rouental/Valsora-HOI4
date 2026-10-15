@@ -1,13 +1,14 @@
 # The Valsora Gazetteer
 
 A web site where friends fill in the facts of their own nations: once you have drawn its
-states on the `.pdn`, state names, terrain, rivers, cities, population, railways, supply
-hubs, resources and buildings; at any time, its names and titles under each government, its
-sub-ideologies, its flags, its ruler and party leaders (names, titles, portraits), its
-generals and admirals, its colour, culture, motto and anthem, its releasables (their land,
-names, government, flag and ruler), suggestions for the map (its states and cities among
-them, before you draw them), and requests for things the game doesn't have yet. Each nation
-is locked behind a password you give its player, so nobody can change anyone else's nation.
+states on the `.pdn`, state names, terrain, rivers, cities, population, railways, supply hubs,
+resources and buildings; at any time, its names and titles under each government, its
+sub-ideologies, its flags, its ruler and party leaders (names, titles, portraits, traits), its
+generals, admirals and advisors (with the base game's traits), its colour, culture, motto and
+anthem, its releasables (their land, names, government, flag and ruler), suggestions for the
+map (its states and cities among them, before you draw them), and requests for things the game
+doesn't have yet (a new trait among them). Each nation is locked behind a password you give
+its player, so nobody can change anyone else's nation.
 
 **Address:** https://rouental.github.io/Valsora-HOI4/
 
@@ -108,7 +109,7 @@ their browser, and **Nation › Save a file** gives them a file to send you. Loa
 | map, Hubs tool | supply hubs | `map/supply_nodes.txt`: once a nation has its own, only those and its capital |
 | map, Suggest tool | states (their own land inside the line, none of an earlier one's), areas, lines and points drawn anywhere on the world (a border, an island that should be theirs, a mountain range, where an undrawn nation goes), each with what it is | nothing by itself: a layer for you (below) |
 | Politics tab | name, full title and adjective under every government and each ideology; ruling sub-ideology | localisation, `nations.LEADERS` |
-| People tab | head of state (name, titles, portrait); each other party's sub-ideology, leader and portrait; generals, admirals, advisors (name, notes, portrait) | the rulers and party leaders, with their titles shown on the portrait; generals and admirals as characters from the start (skill 3, no traits, their portraits; since 2026-10-15); advisors and the notes are a list for you |
+| People tab | head of state (name, titles, portrait, traits); each other party's sub-ideology, leader, portrait and traits; generals, admirals and advisors (name, portrait, traits, an advisor's post, notes); traits are the base game's (up to six each, picked from lists by kind: a ruler's, a general's, an admiral's, each advisor post's), and **Ask for a new trait** sends you a request for one the game doesn't have | the rulers and party leaders, with their titles shown on the portrait and their traits; generals and admirals as characters from the start (skill 3, their traits, their portraits or a generic one of the nation's culture); advisors in their post on the political screen (the post's usual cost, their traits); the notes are a list for you |
 | Releasables tab and tool | releasables: name, adjective, full title, ruling sub-ideology, colour, flag, ruler, notes, land (whole states, or drawn areas) | a country each, owning nothing, with cores on its states (and those its areas cover by half; the largest is its capital), its names, ruler, colour and flag; culture its nation's |
 | Nation tab | status (in progress / finished), flags (one, and one per government if they like; each slot shows the game's flag until a picture is sent), map colour, culture, motto, anthem, description, notes for you, requests; how far it is (states named counts the names already on your map) | flags into `source/flags/`; the map colour; the rest is for you |
 
@@ -168,8 +169,11 @@ with `gazetteer.py paths` and `pull`, which still work.)
 - **Nations whose map tools are closed**: their states, provinces, cities, rivers and railways,
   and their releasables' states, are left out at the import (the file carries your switches;
   the import reads which states are drawn from the last build).
-- **By hand**: requests, advisors, the generals' and admirals' traits and skills, cultures and flags of other shapes; `status`
-  lists them.
+- **By hand**: requests (new traits among them), advisors without a post, the generals' and admirals' skills, cultures
+  and flags of other shapes; `status` lists them.
+- **Traits** are the base game's (`source/vanilla/index/traits.json`, made by `scripts/vanilla_sync.py` from your copy of
+  the game: the ones its own characters have, Earth's one-country ones left out); the import keeps only those of the right
+  kind, and `check_mod.py` checks every trait in the mod against the game's.
 
 After new rivers, run `python3 scripts/river_provinces.py` and rebuild, so provinces follow
 them as they follow yours.

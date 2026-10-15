@@ -335,6 +335,12 @@ def culture(tag, continent):
     return TAG_CULTURE.get(tag) or CONTINENT_CULTURE[continent]
 
 
+def unit_portraits(tag, continent):
+    """the base game's generic generals' and admirals' portraits of a country's culture"""
+    r = REGIONS[culture(tag, continent)["portraits"]]
+    return {"army": r["army"], "navy": r["navy"]}
+
+
 def _portrait_body(region, indent):
     r = REGIONS[region]
     t = "\t" * indent
@@ -464,14 +470,16 @@ def leaders(tag, continent, subtypes, ideology_of, used, named=None):
                 used.add(name)
                 break
         face = pool[rng.integers(len(pool))]
-        desc = None
+        desc, traits = None, ()
         if cid in named:  # drawn after the random ones, so other leaders don't change
             own_name, own, *rest = named[cid]
             name = own_name or name
             face = own or face  # None: the author named them but drew no portrait
             desc = rest[0] if rest else None
+            traits = rest[1] if len(rest) > 1 else ()   # the base game's, from the Gazetteer (2026-10-15)
             used.add(name)
         desc_line = f'\n\t\t\tdesc = "{cid}_desc"' if desc else ""  # after the ideology, as check_mod.py reads it
+        desc_line += f"\n\t\t\ttraits = {{ {' '.join(traits)} }}" if traits else ""
         blocks.append(f"""\t{cid} = {{
 \t\tname = {cid}
 \t\tportraits = {{

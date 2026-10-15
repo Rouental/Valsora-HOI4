@@ -10,6 +10,7 @@ neither needs the game's files. Only these are kept: Paradox's files are not cop
 wholesale into this repository (CLAUDE.md, "Vanilla reference files").
 """
 import glob
+import json
 import os
 import re
 import shutil
@@ -102,6 +103,97 @@ def referenced(V, names):
             if isinstance(v, str) and v in names:
                 found.add(v)
     return found
+
+
+# the Gazetteer's trait groups (unit leader trait_type): how a player sees them
+TRAIT_GROUPS = {"personality_trait": "Personality", "basic_trait": "Basic", None: "Basic", "basic_terrain_trait": "Terrain",
+                "assignable_trait": "Learned", "assignable_terrain_trait": "Terrain, learned"}
+ADVISOR_SLOTS = [("political_advisor", "Political advisor"), ("theorist", "Theorist"), ("army_chief", "Chief of army"),
+                 ("navy_chief", "Chief of navy"), ("air_chief", "Chief of air force"), ("high_command", "High command")]
+
+
+def loc_names(V):
+    """English localisation: key -> text without the game's colour and icon codes"""
+    out = {}
+    for f in sorted(glob.glob(str(V / "localisation/english/**/*.yml"), recursive=True)):
+        for line in Path(f).read_text(encoding="utf-8-sig", errors="replace").splitlines():
+            m = re.match(r'^ ([\w.\-]+):\d* "(.*)"', line)
+            if m and m[1] not in out:
+                out[m[1]] = re.sub(r"\s+", " ", re.sub(r"§.|£\w+|\[[^]]*\]|\\n", " ", m[2])).strip()
+    return out
+
+
+def traits(V, earth):
+    """The base game's traits the Gazetteer offers its leaders (2026-10-15, the author: "add the option to add
+    base-game traits to leaders"): generals' and admirals' from the generic unit leader traits (00_traits.txt; the
+    country-specific files left out), rulers' those the game's own country leaders have, advisors' those its advisors
+    have in each slot (with the slot's usual cost and each trait's ledger). Traits named for one of Earth's countries
+    (their keys start with a tag in capitals: GER_..., trait_SPA_...) and those without an English name are left out, and so are rulers' and political
+    advisors' traits only one of Earth's countries has (flavour such as a monarch's titles): those kept are the game's
+    generic ones. `defined` lists every trait the game defines, for check_mod.py."""
+    loc = loc_names(V)
+    # a country's own traits start with its tag in capitals (GER_..., trait_SPA_..., JUNO_...)
+    earthy = lambda k: bool(re.match(r"(?:trait_)?[A-Z][A-Z0-9]{1,4}_", k))
+    named = lambda k: bool(loc.get(k)) and "$" not in loc[k] and not earthy(k)
+    unit = {}
+    for f in sorted(glob.glob(str(V / "common/unit_leader/*.txt"))):
+        for top, _, body in read(f):
+            if top == "leader_traits" and isinstance(body, list):
+                for k, _, v in body:
+                    if k and isinstance(v, list):
+                        d = {kk: vv for kk, _, vv in v if isinstance(vv, str)}
+                        unit[k] = (d.get("type"), d.get("trait_type"), Path(f).name == "00_traits.txt")
+    country = set()
+    for f in sorted(glob.glob(str(V / "common/country_leader/*.txt"))):
+        for top, _, body in read(f):
+            if top == "leader_traits" and isinstance(body, list):
+                country |= {k for k, _, v in body if k and isinstance(v, list)}
+    ruler, slots = {}, {s: {} for s, _ in ADVISOR_SLOTS}
+    costs = {s: {} for s, _ in ADVISOR_SLOTS}
+    who = {}            # (role or slot, trait) -> the countries whose characters have it
+    for f in sorted(glob.glob(str(V / "common/characters/*.txt"))):
+        for top, _, body in read(f):
+            if top != "characters" or not isinstance(body, list):
+                continue
+            for cid, _, c in body:
+                if not isinstance(c, list):
+                    continue
+                for role, _, r in c:
+                    if not isinstance(r, list):
+                        continue
+                    ts = [t for k, _, v in r if k == "traits" and isinstance(v, list) for _, _, t in v if t in country]
+                    if role == "country_leader":
+                        for t in ts:
+                            ruler[t] = ruler.get(t, 0) + 1
+                            who.setdefault(("ruler", t), set()).add((cid or "")[:3])
+                    elif role == "advisor":
+                        d = {k: v for k, _, v in r if isinstance(v, str)}
+                        slot = d.get("slot")
+                        if slot not in slots:
+                            continue
+                        if d.get("cost", "").isdigit():
+                            costs[slot][int(d["cost"])] = costs[slot].get(int(d["cost"]), 0) + 1
+                        for t in ts:
+                            who.setdefault((slot, t), set()).add((cid or "")[:3])
+                            led = slots[slot].setdefault(t, {})
+                            led[d.get("ledger")] = led.get(d.get("ledger"), 0) + 1
+
+    def unit_list(kinds):
+        out = [[k, loc[k], TRAIT_GROUPS[tt]] for k, (t, tt, generic) in unit.items()
+               if generic and t in kinds and tt in TRAIT_GROUPS and named(k)]
+        order = list(TRAIT_GROUPS.values())
+        return sorted(out, key=lambda x: (order.index(x[2]), x[1].lower()))
+    return {
+        "general": unit_list({"land", "all", "corps_commander"}),
+        "admiral": unit_list({"navy", "all"}),
+        "ruler": sorted(([k, loc[k]] for k in ruler if named(k) and len(who[("ruler", k)]) > 1),
+                        key=lambda x: x[1].lower()),
+        "slots": [[s, nm, max(costs[s], key=costs[s].get) if costs[s] else 150] for s, nm in ADVISOR_SLOTS],
+        "advisor": {s: sorted(([k, loc[k], max(led, key=led.get) or ""] for k, led in slots[s].items()
+                               if named(k) and (s != "political_advisor" or len(who[(s, k)]) > 1)),
+                              key=lambda x: x[1].lower()) for s, _ in ADVISOR_SLOTS},
+        "defined": {"unit": sorted(unit), "country": sorted(country)},
+    }
 
 
 def main():
@@ -217,11 +309,18 @@ def main():
             names.append(f' {key}: "{m[2]}"')
     put("year_names.yml", names, "generic localisation with years: key and text")
 
+    tr = traits(V, earth)
+    (idx / "traits.json").write_text(json.dumps(dict(_="the base game's traits the Gazetteer offers its leaders, and every "
+                                                      "trait it defines (vanilla 1.19.3, scripts/vanilla_sync.py)", **tr),
+                                                 ensure_ascii=False, indent=0, sort_keys=False) + "\n", encoding="utf-8")
+
     n = sum(1 for _ in (OUT / "files").rglob("*") if _.is_file())
     print(f"source/vanilla: {n} files, {len(tags)} tags, {len(used)} decisions referenced, {len(sprites)} sprites, "
           f"{len(techs)} technologies, {len(equipment)} equipment, {len(modules)} modules, {len(subunits)} sub-units, "
           f"{len(ideas)} ideas, "
-          f"{len(defines)} defines, {len(names)} names with years")
+          f"{len(defines)} defines, {len(names)} names with years; traits: {len(tr['general'])} generals', "
+          f"{len(tr['admiral'])} admirals', {len(tr['ruler'])} rulers', "
+          f"{sum(len(v) for v in tr['advisor'].values())} advisors'")
 
 
 if __name__ == "__main__":

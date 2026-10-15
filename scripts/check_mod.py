@@ -4,6 +4,7 @@ Reads only the files on disk (not the pipeline's intermediates), so it also catc
 writer bugs. Usage: python3 scripts/check_mod.py [build/valsora_test]
 Exits non-zero if any error is found.
 """
+import json
 import re
 import struct
 import sys
@@ -589,6 +590,31 @@ def main(mod):
                 m = re.search(r"country_leader\s*=\s*\{\s*ideology\s*=\s*(\w+)", cbody)
                 if m:
                     sub_ideo[cid] = m.group(1)
+    # every trait our characters have is the base game's (2026-10-15: the Gazetteer's picks; a misspelt trait is only an
+    # error.log line, and the leader goes without it); an advisor's slot is the game's, its idea token its own
+    tdef = json.loads(Path("source/vanilla/index/traits.json").read_text(encoding="utf-8"))["defined"]
+    slots_ok = {"political_advisor", "theorist", "army_chief", "navy_chief", "air_chief", "high_command"}
+    tokens = {}
+    for f in (mod / "common/characters").glob("*.txt"):
+        for _, body in top_level(strip(f.read_text())):
+            for cid, cbody in top_level(body):
+                for role, rbody in top_level(cbody):
+                    known = set(tdef["country"]) if role in ("country_leader", "advisor") else set(tdef["unit"])
+                    for tb in re.findall(r"\btraits\s*=\s*\{([^{}]*)\}", rbody):
+                        for t in tb.split():
+                            if t not in known:
+                                err(f"character {cid}: {role} trait {t} is not one of the base game's")
+                    if role == "advisor":
+                        slot = re.search(r"\bslot\s*=\s*(\w+)", rbody)
+                        tok = re.search(r"\bidea_token\s*=\s*(\w+)", rbody)
+                        if not slot or slot.group(1) not in slots_ok:
+                            err(f"character {cid}: advisor without one of the game's slots")
+                        if not tok:
+                            err(f"character {cid}: advisor without an idea_token")
+                        elif tok.group(1) in tokens:
+                            err(f"advisors {tokens[tok.group(1)]} and {cid} share the idea_token {tok.group(1)}")
+                        else:
+                            tokens[tok.group(1)] = cid
     import ideologies
     io = {**ideologies.ideology_of(), **{k: i for i, v in ideologies.HIDDEN.items() for k in v}}
     for f in (mod / "history/countries").glob("*.txt"):

@@ -311,8 +311,13 @@ def main():
     earth = [ln.split("\t")[0] for ln in Path("source/vanilla/index/tags.txt").read_text(encoding="utf-8").splitlines()
              if ln and not ln.startswith("#")]
     known = {v[0]: v[1] for v in COUNTRIES.values() if v[0] not in tindex}
+    # the base game's traits a nation's leaders may have (2026-10-15: vanilla_sync.py's index, without the list of
+    # every trait the game defines, which only check_mod.py needs)
+    traits = {k: v for k, v in json.loads(Path("source/vanilla/index/traits.json").read_text(encoding="utf-8")).items()
+              if k not in ("_", "defined")}
     json.dump(dict(built=__import__("datetime").date.today().isoformat(), w=W, h=H,
                    terrains=TERRAINS, ideologies=IDEOLOGY_NAMES, subtypes=subtypes, earth=earth, known=known,
+                   traits=traits,
                    nations=index,
                    ids=dict(w=IDS[0], h=IDS[1], tags=tags, px=b64z(ids))),
               open(OUT / "index.json", "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))

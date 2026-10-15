@@ -39,6 +39,7 @@ import json
 import os
 import re
 import sys
+import zlib
 from collections import defaultdict
 from heapq import heappop, heappush
 from pathlib import Path
@@ -74,6 +75,31 @@ RESOURCES = ("oil", "steel", "aluminium", "rubber", "tungsten", "chromium")
 VPS = {1, 3, 5, 10, 15, 20, 25, 30, 40, 50}
 IDEOLOGIES = ("democratic", "fascism", "communism", "neutrality", "theocracy")
 ROLES = ("general", "admiral", "advisor", "other")
+REQ_KINDS = ("subideology", "subject", "trait", "map", "other")   # as the page's
+TRAITS_FILE = Path("source/vanilla/index/traits.json")   # the base game's traits for leaders (vanilla_sync.py)
+MAX_TRAITS = 6
+
+
+def trait_index():
+    """the base game's traits a leader may have, by role (index.traits on the page): {"ruler": {key: name}, "general":
+    ..., "admiral": ..., "advisor": {slot: {key: (name, ledger)}}, "slots": {slot: (name, cost)}, "defined": ...}"""
+    if not hasattr(trait_index, "cache"):
+        t = json.loads(TRAITS_FILE.read_text(encoding="utf-8")) if TRAITS_FILE.exists() else {}
+        trait_index.cache = {
+            **{r: {k: nm for k, nm, *_ in t.get(r, [])} for r in ("ruler", "general", "admiral")},
+            "advisor": {sl: {k: (nm, led) for k, nm, led in v} for sl, v in (t.get("advisor") or {}).items()},
+            "slots": {sl: (nm, cost) for sl, nm, cost in t.get("slots", [])},
+            "defined": {k: set(v) for k, v in (t.get("defined") or {}).items()}}
+    return trait_index.cache
+
+
+def keep_traits(v, allowed):
+    """a leader's traits from the page: the base game's for its role, each once, at most MAX_TRAITS"""
+    out = []
+    for k in v if isinstance(v, list) else []:
+        if isinstance(k, str) and k in allowed and k not in out:
+            out.append(k)
+    return out[:MAX_TRAITS]
 MAX_STATE_POP = 500_000_000
 ERASE_R = 3  # erase strokes take away river lines this close (px)
 CITY_REACH = 20  # a city off the coast belongs to the nearest land this close
@@ -334,6 +360,9 @@ def normalise(tag, facts, meta, requests=(), sources=(), todo=None):
     pic = picture(ruler.get("portrait"), f"{tag} ruler's portrait", sources, todo)
     if pic:
         r["portrait"] = pic
+    tr = keep_traits(ruler.get("traits"), trait_index()["ruler"])
+    if tr:
+        r["traits"] = tr
     if r:
         people["ruler"] = r
     party = {}
@@ -347,6 +376,9 @@ def normalise(tag, facts, meta, requests=(), sources=(), todo=None):
         pic = picture(v.get("portrait"), f"{tag} {ideo} leader's portrait", sources, todo)
         if pic:
             q["portrait"] = pic
+        tr = keep_traits(v.get("traits"), trait_index()["ruler"])
+        if tr:
+            q["traits"] = tr
         if q:
             party[ideo] = q
     if party:
@@ -363,6 +395,13 @@ def normalise(tag, facts, meta, requests=(), sources=(), todo=None):
         pic = picture(v.get("portrait"), f"{tag} character's portrait", sources, todo)
         if pic:
             c["portrait"] = pic
+        ti = trait_index()
+        if c["role"] == "advisor" and v.get("slot") in ti["slots"]:
+            c["slot"] = v["slot"]
+        allowed = ti["advisor"].get(c.get("slot"), {}) if c["role"] == "advisor" else ti.get(c["role"], {})
+        tr = keep_traits(v.get("traits"), allowed)
+        if tr:
+            c["traits"] = tr
         if len(c) > 1:
             chars.append(c)
     if chars:
@@ -452,7 +491,7 @@ def normalise(tag, facts, meta, requests=(), sources=(), todo=None):
     reqs = []
     for v in requests or ():
         if isinstance(v, dict) and clean(v.get("title"), 100):
-            reqs.append({"kind": v.get("kind") if v.get("kind") in ("subideology", "subject", "map", "other") else "other",
+            reqs.append({"kind": v.get("kind") if v.get("kind") in REQ_KINDS else "other",
                          "title": clean(v["title"], 100), "details": text(v.get("details"), 3000),
                          "status": v.get("status") if v.get("status") in ("open", "done", "declined") else "open",
                          "reply": text(v.get("reply"), 2000), "at": num(v.get("at"), 0, 10 ** 14) or 0})
@@ -1016,8 +1055,9 @@ def leaders(tag, subs, facts, handmade, named, portraits):
             pname = f"{tag}_gazetteer_{role}"
             portraits[pname] = (str(DIR / pic["file"]), *portrait_box(pic["w"], pic["h"]), None)
             sprite = f"GFX_portrait_{pname}"
-        if v.get("name") or v.get("desc") or sprite:
-            named[cid] = (v.get("name") or name, sprite) + ((v["desc"],) if v.get("desc") else ())
+        traits = tuple(t for t in v.get("traits") or [] if t in trait_index()["ruler"])
+        if v.get("name") or v.get("desc") or sprite or traits:
+            named[cid] = (v.get("name") or name, sprite, v.get("desc"), traits)
     return out
 
 
@@ -1027,30 +1067,54 @@ COMMANDER = {"general": ("army", "corps_commander", (("skill", 3), ("attack_skil
                                                  ("maneuvering_skill", 2), ("coordination_skill", 2)))}
 
 
-def characters(tag, facts, portraits):
-    """The facts' generals and admirals as characters the country has from the start (2026-10-15: the author couldn't
-    find Rouental's admiral in game; until then the page's characters were only listed for the author): a corps
-    commander or an admiral of skill 3 without traits (the page has no fields for them: the notes are the author's to
-    act on), with the portrait the page holds (into `portraits`, nations.PORTRAITS). Advisors and others need a slot
-    and traits the page doesn't ask for, so they stay on `status`'s list. Returns (character blocks, loc lines, ids)."""
+def characters(tag, facts, portraits, small=None, generic=None):
+    """The facts' generals, admirals and advisors as characters the country has from the start (2026-10-15: the
+    author couldn't find Rouental's admiral in game; until then the page's characters were only listed for the
+    author): a corps commander or an admiral of skill 3, an advisor in the post the page gives (the slot's usual cost,
+    the ledger the base game gives its first trait), with the base game's traits the page picked and the portrait it
+    holds (into `portraits`, nations.PORTRAITS; an advisor's also small, into `small`). The notes stay a comment for
+    the author. An advisor without a post, and others, stay on `status`'s list. A general or admiral without a portrait
+    gets one of `generic`'s ({"army": [...], "navy": [...]}: the base game's generic portraits of the nation's culture,
+    cultures.unit_portraits), picked by its id, as the game's own generated ones are; an advisor without one shows the
+    game's silhouette, as 44 of the base game's do. Returns (character blocks, loc lines, ids)."""
     blocks, loc, ids = [], [], []
     n = defaultdict(int)
+    ti = trait_index()
     for c in ((facts or {}).get("people") or {}).get("characters", []):
-        if c.get("role") not in COMMANDER or not c.get("name"):
+        role_ = c.get("role")
+        if not c.get("name") or not (role_ in COMMANDER or (role_ == "advisor" and c.get("slot") in ti["slots"])):
             continue
-        kind, role, skills = COMMANDER[c["role"]]
-        n[c["role"]] += 1
-        cid = f"{tag}_gazetteer_{c['role']}_{n[c['role']]}"
+        n[role_] += 1
+        cid = f"{tag}_gazetteer_{role_}_{n[role_]}"
         pic, sprite = c.get("portrait") or {}, None
         if pic.get("file") and (DIR / pic["file"]).is_file() and pic.get("w") and pic.get("h"):
             portraits[cid] = (str(DIR / pic["file"]), *portrait_box(pic["w"], pic["h"]), None)
             sprite = f"GFX_portrait_{cid}"
         notes = " / ".join(ln.strip() for ln in (c.get("notes") or "").splitlines() if ln.strip())
-        blocks.append(f"\t{cid} = {{\n"
-                      + (f"\t\t# the Gazetteer's notes: {notes}\n" if notes else "")
-                      + f"\t\tname = {cid}\n"
-                      + (f"\t\tportraits = {{\n\t\t\t{kind} = {{\n\t\t\t\tlarge = {sprite}\n\t\t\t}}\n\t\t}}\n" if sprite else "")
-                      + f"\t\t{role} = {{\n" + "".join(f"\t\t\t{k} = {v}\n" for k, v in skills) + "\t\t}\n\t}\n")
+        traits = c.get("traits") or []
+        tr = f"\t\t\ttraits = {{ {' '.join(traits)} }}\n" if traits else ""
+        if role_ == "advisor":
+            slot = c["slot"]
+            ledger = ti["advisor"].get(slot, {}).get(traits[0], ("", ""))[1] if traits else ""
+            if sprite and small is not None:
+                small.add(cid)
+            body = ("\t\tadvisor = {\n"
+                    f"\t\t\tslot = {slot}\n\t\t\tidea_token = {cid}\n"
+                    + (f"\t\t\tledger = {ledger}\n" if ledger else "")
+                    + f"\t\t\tallowed = {{ original_tag = {tag} }}\n" + tr
+                    + f"\t\t\tcost = {ti['slots'][slot][1]}\n\t\t\tai_will_do = {{ factor = 1 }}\n\t\t}}\n")
+            port = (f"\t\tportraits = {{\n\t\t\tcivilian = {{\n\t\t\t\tlarge = {sprite}\n"
+                    f"\t\t\t\tsmall = {sprite}_small\n\t\t\t}}\n\t\t}}\n") if sprite else ""
+        else:
+            kind, role, skills = COMMANDER[role_]
+            pool = (generic or {}).get(kind) or []
+            if not sprite and pool:
+                sprite = pool[zlib.crc32(cid.encode()) % len(pool)]
+            body = f"\t\t{role} = {{\n" + tr + "".join(f"\t\t\t{k} = {v}\n" for k, v in skills) + "\t\t}\n"
+            port = (f"\t\tportraits = {{\n\t\t\t{kind} = {{\n\t\t\t\tlarge = {sprite}\n\t\t\t}}\n\t\t}}\n"
+                    if sprite else "")
+        blocks.append(f"\t{cid} = {{\n" + (f"\t\t# the Gazetteer's notes: {notes}\n" if notes else "")
+                      + f"\t\tname = {cid}\n" + port + body + "\t}\n")
         loc.append(f' {cid}:0 "{c["name"]}"')
         ids.append(cid)
     return blocks, loc, ids
@@ -1265,9 +1329,13 @@ def status():
             if r["status"] == "open":
                 todo.append(f"{tag} asks [{r['kind']}] {r['title']}: {r['details'][:200]}")
         for c in (f.get("people") or {}).get("characters", []):
-            if c["role"] in COMMANDER and c.get("name"):   # in the build (characters()); the notes are the author's
+            built = c.get("name") and (c["role"] in COMMANDER or (c["role"] == "advisor" and c.get("slot") in trait_index()["slots"]))
+            if built:   # in the build (characters()); the notes are the author's
                 if c.get("notes"):
-                    todo.append(f"{tag} {c['role']} {c['name']} is in the game (skill 3, no traits); notes: {c['notes'][:160]}")
+                    what = "skill 3" if c["role"] in COMMANDER else trait_index()["slots"][c["slot"]][0].lower()
+                    tr = ", ".join(c.get("traits") or []) or "no traits"
+                    said = " / ".join(ln.strip() for ln in c["notes"].splitlines() if ln.strip())
+                    todo.append(f"{tag} {c['role']} {c['name']} is in the game ({what}; {tr}); notes: {said[:160]}")
                 continue
             todo.append(f"{tag} {c['role']}: {c.get('name', '(no name)')}" + (f" - {c['notes'][:160]}" if c.get("notes") else "")
                         + (f" [portrait {c['portrait'].get('file') or 'not downloaded'}]" if c.get("portrait") else ""))

@@ -1214,6 +1214,9 @@ faction_template_reibonnaise_association = {
 # Leader portraits: sprite name -> (source image, crop left, crop top, crop width,
 # recolour). The crop keeps HOI4's 156x210 shape and is scaled down to it; each one
 # becomes gfx/leaders/VAL/<name>.dds plus a GFX_portrait_<name> sprite.
+# large portraits that also get a small one (advisors': gazetteer.characters)
+SMALL_PORTRAITS = set()
+
 PORTRAITS = {
     "ROU_mahaut_vi": ("source/portraits/mahaut_vi.jpg", 210, 40, 1000, None),
     # the author's portrait (2026-10-05, a ready-made 156x210 .dds from the friend's build);
@@ -1410,4 +1413,9 @@ def write_files(write, out, state_ids, state_vp):
         write_dds(path, rgba)
         sprites.append(f'\tspriteType = {{\n\t\tname = "GFX_portrait_{name}"\n'
                        f'\t\ttexturefile = "gfx/leaders/VAL/{name}.dds"\n\t}}\n')
+        if name in SMALL_PORTRAITS:   # an advisor's: head and shoulders at the advisors' list's 65 x 67
+            small = np.asarray(Image.fromarray(rgba[:161]).resize((65, 67), Image.LANCZOS))
+            write_dds(out / f"gfx/leaders/VAL/{name}_small.dds", small)
+            sprites.append(f'\tspriteType = {{\n\t\tname = "GFX_portrait_{name}_small"\n'
+                           f'\t\ttexturefile = "gfx/leaders/VAL/{name}_small.dds"\n\t}}\n')
     write("interface/valsora_portraits.gfx", "spriteTypes = {\n" + "".join(sprites) + "}\n")

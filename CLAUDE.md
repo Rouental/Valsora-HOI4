@@ -211,7 +211,7 @@ and what could make both smaller.
 | `minimap.py` | the minimap (lower right): Valsora's land on parchment instead of vanilla's Earth, its frame, window and slide (2026-10-13); with the Deco UI (`DECO_UI`) gilt land and coasts on lacquer in a gilt frame, same sizes, and the start date picture the same (2026-10-14); the Vale of Reibonne start's picture, the Vale close up (2026-10-15) |
 | `globe.py` | the world tension globe (top bar, 10 frames) and its small icon: Valsora instead of Earth (2026-10-14), cracking into lava as tension grows (redrawn the same day: the first flames "didn't come out too well"); run alone, `dist/tension_globe_preview.png` |
 | `vanilla_parts.py` | vanilla's parts in the mod, for `build_mod.py`: the vanilla files it ships moved to 2036, the stand-ins for what Earth's content still names (decisions, events, country histories), the start and end dates, the AI's faction theaters |
-| `vanilla_sync.py` | by hand, after a game update: refreshes `source/vanilla/` from the author's copy of the game (`Rouental/HOI4-Files`): the vanilla files the mod ships changed, and lists of vanilla's names |
+| `vanilla_sync.py` | by hand, after a game update: refreshes `source/vanilla/` from the author's copy of the game (`Rouental/HOI4-Files`): the vanilla files the mod ships changed, and lists of vanilla's names (and its traits, `index/traits.json`, for the Gazetteer) |
 | `pdxscript.py` | a reader for Paradox script (nested `key = value` blocks), used by `vanilla_sync.py` |
 | `check_mod.py` | re-reads the built files and checks every rule below |
 | `export_canvas.py` | previews in `dist/` |
@@ -1048,14 +1048,15 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   `nations/LZC`); version 2 doesn't read those collections.
 - **What it edits**, per nation: state names, population, kind of state, buildings (within
   slots and vanilla's caps), resources, notes; province terrain (8 types) and supply hubs;
-  cities (one per province, victory points, the capital); rivers (major, minor, erase strokes);
-  railways (level 1-5); names, full titles and adjectives under every government and each
-  ideology, the ruling sub-ideology; the head of state (name, titles, portrait), each other
-  party's sub-ideology, leader and portrait, generals, admirals and advisors; flags (one per
-  government too); map colour, culture, motto, anthem, description; suggestions (areas, lines
-  and points anywhere on the world, labelled); status, notes and requests (new sub-ideologies,
-  subject types, map changes ...). Overseas parts of a nation and the whole world are boxes in
-  the map's corner. Phone and desktop layouts (the author asked for both).
+  cities (one per province, victory points, the capital); rivers (major, minor, erase
+  strokes); railways (level 1-5); names, full titles and adjectives under every government and
+  each ideology, the ruling sub-ideology; the head of state (name, titles, portrait, traits),
+  each other party's sub-ideology, leader, portrait and traits, generals, admirals and
+  advisors (traits, an advisor's post); flags (one per government too); map colour, culture,
+  motto, anthem, description; suggestions (areas, lines and points anywhere on the world,
+  labelled); status, notes and requests (new sub-ideologies, subject types, map changes ...).
+  Overseas parts of a nation and the whole world are boxes in the map's corner. Phone and
+  desktop layouts (the author asked for both).
 - **Passwords.** A nation's documents are at `n/<TAG>/<key>/<kind>`, the key being the first
   32 hex digits of SHA-256("valsora-gazetteer|TAG|" + the password lowercased, runs of spaces,
   dots, commas and underscores as one hyphen). The store lists a collection's own documents
@@ -1101,9 +1102,16 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   `nations.PORTRAITS` as `<TAG>_gazetteer_<role>`, 156:210 from the top of the picture).
   Hand-made rulers (`HAND_MADE`) keep their leaders. Its generals and admirals (2026-10-15: the author couldn't find
   Rouental's admiral, James Navy) are characters from the start (`gazetteer.characters`, `<TAG>_gazetteer_admiral_1`
-  ...): corps commanders and navy leaders of skill 3 without traits (the page has no fields for them; the notes stay
-  in a comment and on `status`'s list for the author), with their portraits; advisors and others need a slot and
-  traits the page doesn't ask for, so they stay on that list. A flag in HOI4's 82:52 shape (within 4 %)
+  ...): corps commanders and navy leaders of skill 3 (the page has no skill fields; the notes stay in a comment and
+  on `status`'s list for the author), with their portraits, or a generic one of the nation's culture
+  (`cultures.unit_portraits`); advisors with a post (2026-10-15, later) in that slot (the post's usual cost, the ledger
+  of their first trait, `allowed` their nation); others stay on that list. **Traits** (author, 2026-10-15: "add the
+  option to add base-game traits to leaders, as well as the option to request new traits"): rulers, party leaders,
+  generals, admirals and advisors take up to six of the base game's (`source/vanilla/index/traits.json`, made by
+  `vanilla_sync.py`: the traits the game's own characters have, by kind and advisor post, Earth's one-country ones
+  left out; `facts_export.py` puts them in `index.json`), and **Ask for a new trait** is a request of kind `trait`.
+  `check_mod.py` checks every trait of ours against the game's own (country leader traits for rulers and advisors,
+  unit leader traits for commanders), each advisor's slot and its own `idea_token` (mutation-tested, 6 of 6). A flag in HOI4's 82:52 shape (within 4 %)
   becomes `source/flags/` at the import, once per picture (`source/gazetteer/installed.json`);
   others are fitted by hand, as the author's are. Pictures are kept at most 1,200 px, heavy
   opaque ones as JPEG. Without facts the build is byte-identical to before (checked again for

@@ -805,8 +805,9 @@ def main():
         leader_blocks += blocks
         leader_loc += lloc
         recruits[tag] = [f"recruit_character = {i}" for i in ids]
-        # the Gazetteer's generals and admirals, hand-made rulers or not
-        blocks, lloc, ids = gazetteer.characters(tag, G.get(tag), nations.PORTRAITS)
+        # the Gazetteer's generals, admirals and advisors, hand-made rulers or not
+        blocks, lloc, ids = gazetteer.characters(tag, G.get(tag), nations.PORTRAITS, nations.SMALL_PORTRAITS,
+                                                 cultures.unit_portraits(tag, tag_continent[tag]))
         leader_blocks += blocks
         leader_loc += lloc
         recruits[tag] += [f"recruit_character = {i}" for i in ids]
