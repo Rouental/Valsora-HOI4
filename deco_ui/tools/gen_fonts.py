@@ -50,13 +50,48 @@ def gilt_ramp(t):
     return [c / 255 for c in stops[-1][1]]
 
 
+def fit_atlas(glyphs):
+    """the smallest power-of-two atlas the glyphs pack into (game_fonts.py: the mod ships every texture uncompressed)"""
+    best = None
+    for W in (256, 512, 1024, 2048):
+        need = _pack(glyphs, W, dry=True)
+        if need is None:
+            continue
+        H = 1 << max(0, (need - 1).bit_length())
+        if best is None or W * H < best[0] * best[1]:
+            best = (W, H)
+    return best
+
+
+def _pack(glyphs, W, dry=False):
+    """shelf packing, tallest first: the height used (None if a glyph is wider than W)"""
+    order = sorted(glyphs, key=lambda g: -g["h"])
+    x = y = 1
+    shelf = 0
+    for g in order:
+        if g["w"] + 2 > W:
+            return None
+        if x + g["w"] + 1 > W:
+            x = 1
+            y += shelf + 1
+            shelf = 0
+        if not dry:
+            g["x"], g["y"] = x, y
+        x += g["w"] + 1
+        shelf = max(shelf, g["h"])
+    return y + shelf + 1
+
+
 def build(name, primary, size, outline, mode, weight=None, fallback=None, fb_weight=None, tracking=0,
-          atlas=(512, 512), line_extra=0, kern_set=None, caps=False, gilt=False, diamond=False, blank=False):
+          atlas=(512, 512), line_extra=0, kern_set=None, caps=False, gilt=False, diamond=False, blank=False, line=None):
     """mode 'ui' or 'map'. caps: lowercase code points get the uppercase glyph (small-caps-free
     all-caps setting, so engine strings like the date or a country name render in capitals).
     gilt: bake the gilt gradient into the glyph colour (use with font colour white).
     diamond: add a filled diamond at U+25C6 (used for the factory counts, coloured with § codes).
-    blank: same metrics, invisible glyphs (hides an engine string while keeping its box and tooltip)."""
+    blank: same metrics, invisible glyphs (hides an engine string while keeping its box and tooltip).
+    atlas: (width, height), or fit_atlas for the smallest that fits.
+    line: (line height, where the capitals' centre sits below the line's top): another font's vertical metrics, so
+    this one can replace it in the boxes laid out for it (game_fonts.py)."""
     fp = load(primary, size, weight)
     ffb = load(fallback, size, fb_weight) if fallback else None
     asc, desc = fp.getmetrics()
@@ -101,21 +136,17 @@ def build(name, primary, size, outline, mode, weight=None, fallback=None, fb_wei
         mid = cap_top + cap_h / 2
         glyphs.append(dict(cp=0x25C6, glyph=glyph, ol=ol, w=im.width, h=im.height, xoff=1 - pad,
                            yoff=int(round(mid - im.height / 2)), adv=d + 3 + tracking))
+    if line is not None:          # another font's line: same height, the capitals centred where its are
+        shift = int(round(line[1] - (asc - cap_h / 2)))
+        for g in glyphs:
+            g["yoff"] += shift
+        asc, desc, line_extra = asc + shift, line[0] - asc - shift, 0
     # shelf packing, tallest first
+    if callable(atlas):
+        atlas = atlas(glyphs)
     W, H = atlas
-    order = sorted(glyphs, key=lambda g: -g["h"])
-    x = y = 1
-    shelf = 0
-    for g in order:
-        if x + g["w"] + 1 > W:
-            x = 1
-            y += shelf + 1
-            shelf = 0
-        g["x"], g["y"] = x, y
-        x += g["w"] + 1
-        shelf = max(shelf, g["h"])
-    need_h = y + shelf + 1
-    assert need_h <= H, (name, "atlas too small", need_h, H)
+    need_h = _pack(glyphs, W)
+    assert need_h is not None and need_h <= H, (name, "atlas too small", need_h, H)
     tex = np.zeros((H, W, 4), np.float32)
     for g in glyphs:
         sl = (slice(g["y"], g["y"] + g["h"]), slice(g["x"], g["x"] + g["w"]))

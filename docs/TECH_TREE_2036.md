@@ -1,7 +1,8 @@
 # A tech tree for 2036: proposal
 
-The author's request (2026-10-15): "a written proposal for the 2036 tech tree". Nothing here is built yet; it is a
-plan to react to. The questions at the end decide most of it.
+The author's request (2026-10-15): "a written proposal for the 2036 tech tree", and later the same night: special
+projects, "for example, mechs. Or maybe an orbital kinetic bombardment weapon that acts sort of like a nuke". Nothing here
+is built yet; it is a plan to react to. The questions at the end decide most of it.
 
 ## Where it stands
 
@@ -150,8 +151,82 @@ become Modular Construction and Resource Extraction.
 | Base Strike | Carrier Strike Groups |
 | Special Forces (quantity / quality) | Special Operations (mass / elite) |
 
-**Special projects**: nuclear weapons, rockets and jets become hypersonic missiles, directed-energy air defence,
-reconnaissance satellites, and autonomous swarms.
+**Special projects**: see the next section.
+
+## Special projects
+
+The author (2026-10-15, later): "also take into account special projects. For example, mechs. Or maybe an orbital
+kinetic bombardment weapon that acts sort of like a nuke."
+
+**How the game's system works** (the Götterdämmerung DLC's; `common/special_projects/` in the game):
+a country builds **special project facilities** in its states (Valsora's map already has a facility site in every land
+province), assigns a **scientist** (a character with traits) to each, and runs a **project** there. A project has a
+specialisation (nuclear, naval, air, land), a prototype time, a **complexity** (how many prototype iterations it
+takes), a resource cost, breakthrough points, requirements, and an output: effects when it completes (equipment,
+a design template, a technology, modifiers, anything a script can do). The game ships 49 projects; ours would be the
+same machinery with 2036 subjects, so the scientist roster, facilities and their screens all keep working.
+
+**The game's projects, in 2036** (renamed and re-pictured; mechanics kept):
+
+| specialisation | the game's | 2036 |
+|---|---|---|
+| nuclear | reactor, commercial reactor, nuclear engines, atomic bomb, thermonuclear bomb, warheads | small modular reactors, naval reactors, tactical and strategic warheads, missile warheads |
+| rockets | flying bomb, ballistic missiles (short, medium, long range), surface-to-air missile, rocket interceptor | cruise missiles, ballistic missiles, **hypersonic glide vehicles**, integrated air and missile defence |
+| air | bouncing and earthquake bombs, intercontinental bomber, mothership aircraft, jet engines, supersonic jet, helicopter | bunker busters, **stealth bomber**, drone mothership, adaptive-cycle engines, sixth-generation fighter, tiltrotor |
+| radar | radar | AESA radar, over-the-horizon radar |
+| land | flamethrower tank, engineering vehicles, land cruiser, super-heavy howitzers and railway gun, stronghold network, kinetic sabot | thermobaric launcher, combat engineering vehicles, **mechs** (below), long-range fires, hardened bunker network, **railgun** |
+| naval | the submarine line, nuclear torpedo, AIP engine, super-heavy and modern battleships, carriers, replenishment, proximity fuze, support ships, escort carrier | drone submarines, **arsenal ship** (or the dreadnought, question 2), supercarrier, drone carrier, fleet replenishment, smart munitions |
+
+### Mechs
+
+A **land** project line, built on the game's land cruiser project (`sp_land_land_cruiser`: an "insane" complexity
+project whose output is a design template in the tank designer, or the equipment itself without No Step Back):
+
+1. **Powered Exoskeletons** (medium complexity): infantry and special forces get soft attack, breakthrough and
+   march speed (`equipment_bonus` / `unit_bonus` outputs, as the game's projects give).
+2. **Light Walker** (complex): a recon and fire-support walker as a new support company: very good in hills,
+   mountains, forests and cities, where tracks are slow.
+3. **Assault Mech** (insane, like the land cruiser): a heavy walker as a battalion, from its own chassis in the tank
+   designer (modules: armour, main gun or missile pods, an "AI co-pilot" module), slow to build, few per army.
+4. **Mech Doctrine** (a subdoctrine in the land doctrine's tracks): bonuses for armies with mechs.
+
+Each step needs the one before it; the Assault Mech also needs a high industry technology, so only industrial powers
+field them. What it takes: a new equipment archetype and sub-unit (`common/units`), a chassis for the tank designer,
+its counter and icon (the Deco UI's line style), names, AI templates; 3D models later, the counter meanwhile.
+
+### Orbital bombardment
+
+A short **space** line (a new project tag inside the nuclear or air specialisation, since the game has four fixed
+specialisations), ending in a weapon that **acts like a nuke**:
+
+1. **Orbital Launch Capability**: a spaceport (a state building) and launch decisions.
+2. **Reconnaissance Satellites**: intelligence (the agency's upgrades), weather and targeting bonuses.
+3. **Anti-Satellite Weapons**: lets a country blind another's satellites (a targeted decision with a cooldown).
+4. **Orbital Kinetic Bombardment** ("rods from God"): tungsten rods dropped from orbit.
+
+How the strike would work, as near to a nuke as the game allows:
+- a **targeted decision** on an enemy state ("Kinetic Strike on [State]"), available at war once the project is done;
+- it consumes one **rod** (a stockpile kept as a country variable, built by a production decision at a cost in
+  steel, tungsten and civilian factories, or the game's own nuke stockpile, so the game's nuke counter shows it);
+- it calls the game's scripted nuke, the `launch_nuke` effect, on the state's main province (to be checked against
+  the game's effects documentation, not in our reference copy), so the damage is the game's: infrastructure, buildings,
+  units, war support, the world's reaction and world tension;
+- a long cooldown (e.g. 120 days), a world tension cost, and counters: the target's **Anti-Satellite Weapons** or
+  missile defence give a chance the strike misses (scripted, with a superevent when the first strike lands);
+- the kinetic strike leaves no fallout: an event may add "Kinetic devastation" in place of the game's nuclear
+  modifiers, if the game's nuke modifiers can be lifted off afterwards.
+
+### Others worth a project
+
+- **Hypersonic missiles** (rockets): the ballistic missile line's last step; fast, hard to intercept.
+- **Directed-energy air defence** (radar or rockets): anti-air and anti-drone bonuses for states and ships.
+- **Autonomous swarms** (air): the attack drones' last step, a swarm "plane" that ignores pilots and losses.
+- **Naval railgun** (naval): a ship module, from the kinetic sabot project.
+- **Military AI** (radar or a new tag): planning speed, max planning, and the AI co-pilot module above.
+- **Cyber warfare** (radar): the encryption and decryption techs' last steps, as intelligence agency upgrades.
+
+The art: every project needs an icon and a blueprint picture in the game's facility screen; ours in the Deco UI's line
+style. The scientist roster and facility screens would get the deco look with the rest of the panels.
 
 ## The few new things
 
@@ -188,8 +263,10 @@ Each new unit needs its definition, icon, AI template and costs, checked like th
 3. **Pictures** in the Deco line style. Two or three sessions.
 4. **The new things** (drones, EW, air defence, satellites and cyber), one at a time, with a balance pass each.
    Two or three sessions.
-5. **Doctrines**: names, descriptions, perhaps a few modifiers that fit a modern war. One session.
-6. **Models**, when there are any.
+5. **Special projects**: the game's 49 renamed (part of step 1), then mechs, then the orbital line, each with its
+   icons, units and a balance pass. Two or three sessions.
+6. **Doctrines**: names, descriptions, perhaps a few modifiers that fit a modern war. One session.
+7. **Models**, when there are any.
 
 ## Questions for the author
 
@@ -201,3 +278,7 @@ Each new unit needs its definition, icon, AI template and costs, checked like th
 5. **DLCs**: do you and your friends have No Step Back, Man the Guns and By Blood Alone? Without them the game shows
    the classic trees, so both would be renamed either way, but the new things would go into the designers.
 6. **Drones**: a light touch (the three items above) or a branch of their own?
+7. **Special projects**: mechs and orbital bombardment in the first round of new things, or after the renaming? Who
+   may build them: anyone with the industry, or only great powers (tier 1)?
+8. **The orbital strike**: as strong as a nuke (the game's devastation), or weaker and more frequent? Should a target
+   be able to shoot it down (anti-satellite weapons, missile defence)?

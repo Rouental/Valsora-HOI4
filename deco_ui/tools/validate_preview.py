@@ -268,7 +268,10 @@ def load_fnt(base):
 
 
 FONTS = {}
-for name, fd in list(fdefs.items()) + [("tahoma_60", dict(path="gfx/fonts/hoi_mapfont4", color=(255, 255, 255)))]:
+# the game's own fonts the mod redraws (game_fonts.py): not defined by the mod, but checked like its own
+import game_fonts as _GFN
+_game = [(n, dict(path=f"gfx/fonts/{n}", color=(255, 255, 255))) for n in _GFN.GAME]
+for name, fd in list(fdefs.items()) + [("tahoma_60", dict(path="gfx/fonts/hoi_mapfont4", color=(255, 255, 255)))] + _game:
     f = load_fnt(M + fd["path"])
     f["color"] = fd["color"]
     f["tc"] = fd.get("tc", {})
