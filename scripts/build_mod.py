@@ -347,7 +347,11 @@ def main():
     write_bmp(OUT / "map/world_normal.bmp", normal_map(height))
     textures(pix_kind, height, d_sea)
     minimap.write_files(write, OUT, pix_kind == 1, DECO_UI)  # Valsora, not vanilla's Earth
-    minimap.write_bookmark(write, OUT, pix_kind == 1, DECO_UI)  # the start date's picture too
+    # the start date's pictures too: Valsora, and the Vale of Reibonne's (its Association's land, lit)
+    vale_of_state = np.array([nations.REIBONNAISE.index(o) + 1 if o in nations.REIBONNAISE else 0
+                              for o in rj["owners"]] + [0])
+    vale = vale_of_state[state_of[lab]]        # a province in no state (state_of -1) takes the last, 0
+    minimap.write_bookmark(write, OUT, pix_kind == 1, DECO_UI, vale)
     globe.write_files(OUT, pix_kind == 1)  # the world tension globe too
 
     def world_y(y, x):
@@ -775,8 +779,7 @@ def main():
           + frame("frame_border_logo_entity", "frame_border_logo_entity_top", 300, W // 2, 0, H + 82))
 
     # ---------------------------------------------------------------- countries
-    # the bookmark recommends only the placeholder countries, to keep the list short
-    tags = [COUNTRIES[c][0] for c in present if c in PLACEHOLDERS]
+    present_tags = {COUNTRIES[c][0] for c in present}
     # generic portraits, name lists and graphical culture by the capital's continent
     tag_continent = {COUNTRIES[c][0]: CONTINENTS[int(cont[states[capital_state[c]][0]]) - 1]
                      for c in present}
@@ -868,21 +871,24 @@ def main():
     write("common/country_tags/valsora_countries.txt",
           "".join(f'{COUNTRIES[c][0]} = "countries/Valsora {country_file(c)}.txt"\n' for c in present))
 
-    write("common/bookmarks/valsora.txt", "\n".join([
-        "bookmarks = {",
-        "\tbookmark = {",
-        '\t\tname = "VALSORA_BOOKMARK"',
-        '\t\tdesc = "VALSORA_BOOKMARK_DESC"',
-        f"\t\tdate = {vanilla_parts.START_DATE}",
-        '\t\tpicture = "GFX_select_date_valsora"',
-        f'\t\tdefault_country = "{tags[0]}"',
-        "\t\tdefault = yes",
-        *[f'\t\t{t} = {{ history = "VALSORA_PLACEHOLDER_DESC" ideology = neutrality }}' for t in tags],
-        '\t\t"---" = { history = "VALSORA_PLACEHOLDER_DESC" }',
-        "\t\teffect = { randomize_weather = 22345 }",
-        "\t}",
-        "}",
-        ""]))
+    # Two starts on 1 January 2036. With only one, the game skips its scenario screen, so Back on the country
+    # screen went to it and was sent straight on again: no way back to the menu (the author's video, 2026-10-15).
+    # Valsora recommends Rouental (the author's, 2026-10-15) and Merlovich; the Vale of Reibonne, Rouental and
+    # the rest of the Association of Reibonnaise States.
+    def bookmark(key, picture, recommended, default):
+        rows = [f'\t\t{t} = {{ history = "VALSORA_HISTORY_{"ASSOCIATION" if t in nations.ASSOCIATION else t}" '
+                f'ideology = {ruling[t]} }}' for t in recommended]
+        return ["\tbookmark = {", f'\t\tname = "{key}"', f'\t\tdesc = "{key}_DESC"',
+                f"\t\tdate = {vanilla_parts.START_DATE}", f'\t\tpicture = "{picture}"',
+                f'\t\tdefault_country = "{recommended[0]}"', *(["\t\tdefault = yes"] if default else []),
+                *rows, '\t\t"---" = { history = "VALSORA_OTHER_DESC" }', "\t\teffect = { randomize_weather = 22345 }",
+                "\t}"]
+    starts = [("VALSORA_BOOKMARK", "GFX_select_date_valsora", [t for t in ("ROU", "AIS") if t in present_tags]),
+              ("VALSORA_BOOKMARK_VALE", "GFX_select_date_valsora_vale",
+               [t for t in nations.REIBONNAISE if t in present_tags])]
+    write("common/bookmarks/valsora.txt", "\n".join(
+        ["bookmarks = {"] + [ln for i, (k, pic, rec) in enumerate(starts) if rec for ln in bookmark(k, pic, rec, i == 0)]
+        + ["}", ""]))
 
     # ---------------------------------------------------------------- vanilla switches
     # Folders we replace must still contain a valid file.
@@ -903,7 +909,9 @@ def main():
         # the Reibonnaise nations' opinions follow who is communist (nations.py)
         "\t\t\tvalsora_reibonnaise_opinions = yes",
         "\t\t}", "\t}",
-        "\ton_startup = {", "\t\teffect = {", "\t\t\tvalsora_reibonnaise_opinions = yes", "\t\t}", "\t}",
+        # on_startup has no scope, and a scripted effect needs one (error.log, 2026-10-15: "Invalid Scope ...
+        # provided: None"); the effect goes through every country itself, so any country will do
+        "\ton_startup = {", "\t\teffect = {", "\t\t\trandom_country = { valsora_reibonnaise_opinions = yes }", "\t\t}", "\t}",
         "}", ""]))
     # the map colour comes from colors.txt, not the country file: tags missing there get
     # generated colours (in-game, 2026-09-29), so ours replaces vanilla's
@@ -963,7 +971,14 @@ def main():
     loc += [f' VAL_REGION_{r + 1}:0 "{region_name[r]}"' for r in range(len(regions))]
     loc += [' VALSORA_BOOKMARK:0 "Valsora"',
             ' VALSORA_BOOKMARK_DESC:0 "The world of Valsora, 1 January 2036."',
-            ' VALSORA_PLACEHOLDER_DESC:0 "A placeholder country, until the real ones are drawn."']
+            ' VALSORA_BOOKMARK_VALE:0 "The Vale of Reibonne"',
+            ' VALSORA_BOOKMARK_VALE_DESC:0 "Rouental and the Association of Reibonnaise States, 1 January 2036."',
+            ' VALSORA_HISTORY_ROU:0 "The Sacred Principality of Rouental rules the Vale of Reibonne from R\u00eaverie '
+            'under Prince Roland II Cahun, and leads the Association of Reibonnaise States."',
+            ' VALSORA_HISTORY_AIS:0 "The Federation of Merlovich."',
+            ' VALSORA_HISTORY_ASSOCIATION:0 "A member of the Association of Reibonnaise States, the Vale of Reibonne\'s '
+            'alliance under Rouental."',
+            ' VALSORA_OTHER_DESC:0 "Any other nation of Valsora."']
     loc += nations.LOCALISATION
     # cosmetic tags need their own names, for every ideology
     for c in present:
@@ -979,7 +994,7 @@ def main():
         loc += [f' {cos}:0 "{n0}"', f' {cos}_DEF:0 "{d0}"', f' {cos}_ADJ:0 "{a0}"']
         loc += [f' {cos}_{i}{suf}:0 "{v}"' for i in IDEOLOGIES for suf, v in (("", n0), ("_DEF", d0), ("_ADJ", a0))]
     loc += leader_loc
-    loc += superevents.write_files(write, OUT)
+    loc += superevents.write_files(write, OUT, DECO_UI)  # the Deco UI's window when it is on
     write("localisation/english/valsora_l_english.yml", "\n".join(loc) + "\n", bom=True)
     nations.write_files(write, OUT, {nm: s + 1 for nm, s in state_by_name.items()},
                         {nm: int(pid[state_capital[s]]) for nm, s in state_by_name.items()})

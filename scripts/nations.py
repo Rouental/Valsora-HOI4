@@ -263,6 +263,7 @@ LEADERS = {
     "RYS": ["agrarianism"], "PKT": ["strongman_rule"], "KSK": ["oligarchism"],
     "ZLZ": ["despotism"], "VIL": ["radical_republicanism"], "SMB": ["lordly_republic"],
     "SKL": ["agrarian_socialism"], "TKY": ["prophetic_rule"],
+    "PHG": ["radical_republicanism"],  # 2026-10-15: Vilna's old land and ideology (author)
     # 2026-10-11 (author)
     "GOR": ["clerical_monarchism"], "SRK": ["revanchism"], "WAN": ["agrarianism"],
     "QNG": ["liberalism"], "XUE": ["conservatism"], "HLG": ["populism"], "ASC": ["liberalism"],

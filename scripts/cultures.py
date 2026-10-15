@@ -237,6 +237,7 @@ TAG_CULTURE = {
     "KSK": dict(names="POL", portraits="europe", gfx="eastern_european"),  # a Polish word
     "ZLZ": dict(names="LAT", portraits="europe", gfx="eastern_european"),  # "zeme", land
     "VIL": dict(names="LIT", portraits="europe", gfx="eastern_european"),  # Vilna, Vilnius
+    "PHG": dict(names="SOV", portraits="europe", gfx="eastern_european"),  # -grad (2026-10-15)
     "SMB": dict(names="SER", portraits="europe", gfx="eastern_european"),  # a Serbian city
     "SKL": dict(names="GRE", portraits="europe", gfx="eastern_european"),
     "TKY": dict(names="JAP", portraits="asia", gfx="asian"),

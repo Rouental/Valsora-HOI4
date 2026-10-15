@@ -641,35 +641,35 @@ guiTypes = {
 			buttonType = {
 				name = "button_speedstep1"
 				quadTextureSprite = "GFX_valsora_deco_speed_step"
-				position = { x = 280 y = 14 }
+				position = { x = 286 y = 14 }
 				clicksound = click_default
 			}
 			
 			buttonType = {
 				name = "button_speedstep2"
 				quadTextureSprite = "GFX_valsora_deco_speed_step"
-				position = { x = 292 y = 14 }
+				position = { x = 298 y = 14 }
 				clicksound = click_default
 			}
 			
 			buttonType = {
 				name = "button_speedstep3"
 				quadTextureSprite = "GFX_valsora_deco_speed_step"
-				position = { x = 304 y = 14 }
+				position = { x = 310 y = 14 }
 				clicksound = click_default
 			}
 			
 			buttonType = {
 				name = "button_speedstep4"
 				quadTextureSprite = "GFX_valsora_deco_speed_step"
-				position = { x = 316 y = 14 }
+				position = { x = 322 y = 14 }
 				clicksound = click_default
 			}
 			
 			buttonType = {
 				name = "button_speedstep5"
 				quadTextureSprite = "GFX_valsora_deco_speed_step"
-				position = { x = 328 y = 14 }
+				position = { x = 334 y = 14 }
 				clicksound = click_default
 			}
 		
@@ -685,11 +685,11 @@ guiTypes = {
 			
 			instantTextBoxType = {
 				name = "DateText"
-				position = { x = 58 y = 14 }
+				position = { x = 55 y = 14 }
 				textureFile = ""
 				font = "valsora_deco_date"
 				text = "7:00 29, September 1939"
-				maxWidth = 220
+				maxWidth = 230
 				maxHeight = 22
 				format = centre
 				Orientation = UPPER_LEFT	

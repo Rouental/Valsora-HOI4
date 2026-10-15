@@ -957,63 +957,224 @@ CW2, CH2 = LS.CHIP["w"], LS.CHIP["h"]
 add("sv_chip", SVP + "chip.dds", CW2, CH2,
     plate([(6, 0), (CW2 - 6, 0), (CW2, CH2 / 2), (CW2 - 6, CH2), (6, CH2), (0, CH2 / 2)], "linear-gradient(180deg,#1E2930,#0B1014)"))
 
-# ---------------------------------------------------------------- national focus tree (v0.4)
+# ---------------------------------------------------------------- national focus tree (v0.6: the FocusTree mockup)
 import layout_focus as LF
 
 NF = "gfx/interface/valsora_deco/focus/"
-# header band (corneredTile stretched to the window width): jade wash, gilt rule at the bottom
-add("nf_header", NF + "header.dds", 196, LF.HEADER_H,
-    f'<div style="position:absolute;inset:0;background:{LAC},linear-gradient(180deg,rgba(46,110,96,.30),rgba(23,32,38,.95) 70%,#111A1F)"></div>'
-    f'<div style="position:absolute;left:0;right:0;top:{LF.HEADER_H - 3}px;height:1px;background:#C9A55A"></div>'
-    f'<div style="position:absolute;left:0;right:0;top:{LF.HEADER_H - 1}px;height:1px;background:rgba(201,165,90,.35)"></div>')
-# tree background: lacquer with a faint 32 px grid (tiles seamlessly in the cornered centre)
-TT = LF.TREE_TILE
-add("nf_tree_bg", NF + "tree_bg.dds", TT, TT,
-    f'<div style="position:absolute;inset:0;background:'
-    'repeating-linear-gradient(90deg,rgba(201,165,90,.06) 0 1px,transparent 1px 32px),'
-    'repeating-linear-gradient(180deg,rgba(201,165,90,.06) 0 1px,transparent 1px 32px),'
-    'repeating-linear-gradient(90deg,rgba(255,255,255,.02) 0 1px,transparent 1px 8px),#0E1519"></div>')
-# vignette over the tree (cornered: the corners stay, the edges stretch)
+FV = "gfx/interface/focusview/"          # the game's own paths, for the textures replaced in place
+
+
+def nf_header():
+    """the header: a cornered tile stretched to the window's width. Its left 260 px hold the notch round the top
+    bar's medallion and seal (with the panels' gilt edge), its right 260 px the frame's end and bracket, the 96 px
+    between repeat. Lacquer, the jade wash, and a gilt rule along its foot (the mockup's border under the header)."""
+    w, h = LF.HEAD_TILE_W, LF.HEAD_H
+    notch = path_d(LPN.notch_outline(0, LF.WIN_X))
+    lac = ('<div class="lac" style="position:absolute;inset:0;opacity:.97"></div>'
+           f'<div style="position:absolute;left:0;top:0;width:{w}px;height:{h}px;'
+           'background:linear-gradient(180deg,rgba(46,110,96,.22),rgba(46,110,96,0))"></div>'
+           f'<div style="position:absolute;left:0;top:0;width:{w}px;height:12px;'
+           'background:linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,0))"></div>')
+    out = (f'<div style="position:absolute;left:0;top:0;width:{w}px;height:{h}px;'
+           f"clip-path:path(evenodd,'M0 0 H{w} V{h} H0 Z {notch}')\">{lac}</div>")
+    for x, col in ((0, "rgba(0,0,0,.6)"), (1, "#B8954F"), (5, "rgba(201,165,90,.45)")):
+        for xx in (x, w - 1 - x):
+            out += f'<div style="position:absolute;left:{xx}px;top:0;width:1px;height:{h}px;background:{col}"></div>'
+    for d_out, d_in, fill in ((1, 0, "#C9A55A"), (2, 1, "rgba(0,0,0,.45)"), (5, 4, "rgba(201,165,90,.45)")):
+        out += (f'<div style="position:absolute;left:0;top:0;width:{w}px;height:{h}px;background:{fill};'
+                f"clip-path:path(evenodd,'{path_d(LPN.notch_outline(d_out, LF.WIN_X))} "
+                f"{path_d(LPN.notch_outline(d_in, LF.WIN_X))}')\"></div>")
+    out += f'<div style="position:absolute;left:0;top:0;width:{w}px;height:{h}px"><i class="ck tr"></i></div>'
+    return out + hrule(0, h - 2, w, "rgba(201,165,90,.6)") + hrule(0, h - 1, w, "#0B1014")
+
+
+add("nf_header", NF + "header.dds", LF.HEAD_TILE_W, LF.HEAD_H, nf_header())
+# the tree's canvas: the mockup's scales (rings of 25.5 and 31.5 px round the foot of each 64 x 32 tile, a second
+# layer shifted by 32, 16) on dark jade; 192 px repeats seamlessly in the cornered tile's centre
+_RINGS = ("radial-gradient(circle at 50% 100%,transparent 0 25px,rgba(201,165,90,.10) 25px 26px,transparent 26px 31px,"
+          "rgba(201,165,90,.06) 31px 32px,transparent 32px)")
+add("nf_tree_bg", NF + "tree_bg.dds", LF.TREE_TILE, LF.TREE_TILE,
+    f'<div style="position:absolute;inset:0;background-image:{_RINGS},{_RINGS};background-size:64px 32px,64px 32px;'
+    'background-position:0 0,32px 16px;background-color:#111B1B"></div>')
+# over the tree: the vignette (the mockup's canvas darkens to #0B1113 at its edges) and the panel's frame, its
+# verticals and foot with the big corner brackets (a cornered tile: the corners stay, the edges stretch)
 add("nf_vignette", NF + "vignette.dds", 512, 512,
     '<div style="position:absolute;inset:0;background:'
     'linear-gradient(90deg,rgba(5,8,10,.55),rgba(5,8,10,0) 26%,rgba(5,8,10,0) 74%,rgba(5,8,10,.55)),'
-    'linear-gradient(180deg,rgba(5,8,10,.35),rgba(5,8,10,0) 22%,rgba(5,8,10,0) 78%,rgba(5,8,10,.5))"></div>')
+    'linear-gradient(180deg,rgba(5,8,10,.25),rgba(5,8,10,0) 18%,rgba(5,8,10,0) 76%,rgba(5,8,10,.55))"></div>'
+    + "".join(f'<div style="position:absolute;left:{xx}px;top:0;width:1px;height:512px;background:{col}"></div>'
+              for x, col in ((0, "rgba(0,0,0,.6)"), (1, "#B8954F"), (5, "rgba(201,165,90,.45)")) for xx in (x, 511 - x))
+    + "".join(f'<div style="position:absolute;left:0;top:{yy}px;width:512px;height:1px;background:{col}"></div>'
+              for yy, col in ((511, "rgba(0,0,0,.6)"), (510, "#B8954F"), (506, "rgba(201,165,90,.45)")))
+    + '<i class="ck bl"></i><i class="ck br"></i>')
+
+# a focus: the medallion behind its icon and the plate under it, one picture per state (the game swaps the bg
+# button's sprite: unavailable, can start, current (in progress), completed; the first three at the game's paths,
+# the current one at ours, since the game draws it from the can-start picture: make_focus patches its sprite)
+BW, BH = LF.BG["w"], LF.BG["h"]
+MD = LF.MEDALLION
+MX, MY = BW / 2 - MD / 2, (LF.ICON_C[1] - LF.BG["y"]) - MD / 2
+_OCT = "polygon(29% 0,71% 0,100% 29%,100% 71%,71% 100%,29% 100%,0 71%,0 29%)"
+_CH = "polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%,0 10px)"
+_CH_IN = "polygon(9.5px 0,calc(100% - 9.5px) 0,100% 9.5px,100% 100%,0 100%,0 9.5px)"
 
 
-# name plates under the focus icons: the game swaps these three sprites by state, so they are replaced at
-# their vanilla paths (single frame each)
-def nf_plate(fill, rim, glow=""):
-    w, h, c = LF.PLATE["w"], LF.PLATE["h"], 8
-    pts = [(c, 0), (w - c, 0), (w, c), (w, h - c), (w - c, h), (c, h), (0, h - c), (0, c)]
-    return (plate(pts, fill, rim, 1.2) + glow
-            + f'<div style="position:absolute;left:{w / 2 - 3}px;top:-1px;width:6px;height:6px;transform:rotate(45deg);background:{"#F1DC9C" if glow else "#C9A55A"}"></div>')
+def nf_node(rim, inner, plate_rim, plate_fill, extra="", filt=""):
+    py, ph = LF.PLATE["y"], LF.PLATE["h"]
+    return (f'<div style="position:absolute;inset:0;{filt}">'
+            f'<div style="position:absolute;left:{MX}px;top:{MY}px;width:{MD}px;height:{MD}px;padding:2px;box-sizing:border-box;'
+            f'background:{rim};clip-path:{_OCT}"><div style="width:100%;height:100%;clip-path:{_OCT};background:{inner}"></div></div>'
+            f'<div style="position:absolute;left:0;top:{py}px;width:{BW}px;height:{ph}px;padding:1px;box-sizing:border-box;'
+            f'background:{plate_rim};clip-path:{_CH}"><div style="width:100%;height:100%;clip-path:{_CH_IN};'
+            f'background:{LAC},{plate_fill}"></div></div>{extra}</div>')
 
 
-PW_, PH_ = LF.PLATE["w"], LF.PLATE["h"]
-for key, fill, rim, glow in [
-    ("unavailable", "linear-gradient(180deg,#1A2329,#0C1215)", "linear-gradient(180deg,#8F8670,#4A4434)", ""),
-    ("can_start", "linear-gradient(180deg,#2E6E60,#123A31)", "linear-gradient(180deg,#FFF3C8,#B48F44)",
-     '<div style="position:absolute;inset:3px;box-shadow:inset 0 0 8px rgba(241,220,156,.35)"></div>'),
-    ("completed", "linear-gradient(180deg,#7A5E26,#3A2C10)", "linear-gradient(180deg,#FFF3C8,#C9A55A)",
-     '<div style="position:absolute;inset:2px;background:linear-gradient(180deg,rgba(255,240,190,.18),rgba(255,240,190,0) 60%)"></div>'),
-]:
-    add("nf_plate_" + key, f"gfx/interface/focusview/titlebar/focus_{key}_bg.dds", PW_, PH_, nf_plate(fill, rim, glow))
-# medallion behind every focus icon: faint octagon with a sunburst
-M_ = LF.MEDALLION
-mo = oct_(M_, 23)
-add("nf_medallion", NF + "medallion.dds", M_, M_,
-    f'<div style="position:absolute;inset:0;clip-path:{poly(mo)};background:radial-gradient(circle,rgba(30,44,50,.85),rgba(12,18,22,.85) 70%)"></div>'
-    f'<div style="position:absolute;inset:0;clip-path:{poly(mo)};background:repeating-conic-gradient(from 0deg,rgba(227,199,126,.22) 0deg 5deg,transparent 5deg 15deg);'
-    '-webkit-mask:radial-gradient(circle,transparent 0 40%,#000 75%)"></div>'
-    f'<svg width="{M_}" height="{M_}" style="position:absolute;left:0;top:0"><polygon points="{" ".join(f"{x},{y}" for x, y in inset_poly(mo, .6))}" '
-    'fill="none" stroke="rgba(201,165,90,.75)" stroke-width="1.2"/></svg>')
-# search box, zoom, filter chips, close
+_RAYS = "repeating-conic-gradient({c} 0deg 5deg,transparent 5deg 15deg)"
+_GILT_RIM = "linear-gradient(180deg,#F1DC9C,#8B6A2C)"
+_BRIGHT_RIM = "linear-gradient(180deg,#FFF3C8,#C9A55A)"
+_DARK_PLATE = "linear-gradient(180deg,#1E2930,#0E1519)"
+_JADE = _RAYS.format(c="rgba(227,199,126,.2)") + ",radial-gradient(circle,#27493F 0%,#0E1A18 72%)"
+_CHECK = (f'<div style="position:absolute;left:{BW / 2 + 22}px;top:{MY + 6}px;width:20px;height:20px;transform:rotate(45deg);'
+          'background:linear-gradient(180deg,#2E6E60,#153730);border:1px solid #F6E3A6;box-sizing:border-box"></div>'
+          f'<svg width="20" height="20" viewBox="0 0 24 24" style="position:absolute;left:{BW / 2 + 22}px;top:{MY + 6}px" '
+          'fill="none" stroke="#F6E3A6" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">'
+          '<path d="M7 12.5l3.2 3.2L17 9"/></svg>')
+_NODES = {
+    "can_start": nf_node(_GILT_RIM, _JADE, GOLD_V, _DARK_PLATE),
+    "unavailable": nf_node(_GILT_RIM, _JADE, GOLD_V, _DARK_PLATE, filt="filter:grayscale(.85) brightness(.5)"),
+    # completed: the mockup's gold medallion; the plate a deep gold, since the game's name stays cream
+    "completed": nf_node(_BRIGHT_RIM, _RAYS.format(c="rgba(255,248,220,.4)") + ",radial-gradient(circle,#F6E3A6 0%,#B48F44 78%)",
+                         "linear-gradient(180deg,#FFF3C8,#B48F44)",
+                         "linear-gradient(180deg,rgba(255,240,190,.20),rgba(255,240,190,0) 45%),linear-gradient(180deg,#8C6C2C,#5E4718 55%,#46340F)",
+                         extra=_CHECK),
+    "current": nf_node(_BRIGHT_RIM, _RAYS.format(c="rgba(246,227,166,.32)") + ",radial-gradient(circle,#6B2B26 0%,#2A0F0D 75%)",
+                       "linear-gradient(180deg,#FFF3C8,#B48F44)", _DARK_PLATE),
+}
+for _k in ("unavailable", "can_start", "completed"):
+    add("nf_node_" + _k, FV + f"titlebar/focus_{_k}_bg.dds", BW, BH, _NODES[_k])
+add("nf_node_current", NF + "current_bg.dds", BW, BH, _NODES["current"])
+# the completed focus's shine (the game's scrolling gold streaks, added where this mask is white): sparkles on the
+# medallion's rays and along the plate's top
+import random as _random
+_rng = _random.Random(7)
+_spark = ""
+for _ in range(34):
+    if _rng.random() < .55:
+        _x, _y = MX + 8 + _rng.random() * (MD - 16), MY + 8 + _rng.random() * (MD - 16)
+    else:
+        _x, _y = 6 + _rng.random() * (BW - 12), LF.PLATE["y"] + 3 + _rng.random() * 8
+    _r = 1 + _rng.random() * 1.6
+    _spark += (f'<div style="position:absolute;left:{_x - 3 * _r:.1f}px;top:{_y - 3 * _r:.1f}px;width:{6 * _r:.1f}px;'
+               f'height:{6 * _r:.1f}px;border-radius:50%;background:radial-gradient(circle,#fff 0,rgba(255,255,255,.6) 18%,transparent 60%)"></div>')
+add("nf_completed_mask", FV + "titlebar/focus_completed_mask.dds", BW, BH,
+    f'<div style="position:absolute;inset:0;background:#000"></div>{_spark}')
+
+# the in-progress halo (the game's GFX_ongoing_focus_goal behind the current focus; 3 frames it blends, 1 a second):
+# the mockup's ring of gilt rays round the medallion, and its glow
+H_ = LF.HALO
+
+
+def nf_halo(rot, glow, ray="rgba(246,227,166,.55)", glow_rgb="241,220,156"):
+    c = H_ / 2
+    return (f'<div style="position:absolute;inset:0;background:radial-gradient(circle,rgba({glow_rgb},{glow}) 0 34%,rgba({glow_rgb},0) 70%)"></div>'
+            f'<div style="position:absolute;left:{c - 70}px;top:{c - 70}px;width:140px;height:140px;border-radius:50%;'
+            f'background:repeating-conic-gradient(from {rot}deg,{ray} 0deg 3deg,transparent 3deg 12deg);'
+            '-webkit-mask:radial-gradient(circle,transparent 46px,#000 47px,#000 60px,transparent 70px)"></div>')
+
+
+add("nf_halo", "gfx/interface/ongoing_focus_goal.dds", 3 * H_, H_,
+    "".join(f'<div style="position:absolute;left:{i * H_}px;top:0;width:{H_}px;height:{H_}px">{nf_halo(4 + 4 * i, g)}</div>'
+            for i, g in enumerate((.30, .40, .32))))
+# the search result's highlight (GFX_highlight_focus_goal): the same ring in jade
+add("nf_search_glow", "gfx/interface/search_current_focus.dds", 3 * H_, H_,
+    "".join(f'<div style="position:absolute;left:{i * H_}px;top:0;width:{H_}px;height:{H_}px">'
+            f'{nf_halo(2 + 4 * i, g, "rgba(170,230,200,.55)", "70,160,135")}</div>'
+            for i, g in enumerate((.35, .48, .38))))
+
+
+# the links between focuses: the game draws them from 16 px tiles, 4 frames each (frames 1-2: the game's green,
+# 3-4: its blue-grey; 2 and 4 dashed), a 4 px line through columns / rows 6-9. Gilt here: bright with a glow, then
+# dim bronze. One div per pixel, so junctions do not double their alpha.
+def link_tile(arms, frame):
+    bright, dashed = frame in (1, 2), frame in (2, 4)
+    prof = ({-1: "rgba(241,220,156,.16)", 0: "#8A6B32", 1: "#F6E3A6", 2: "#E3C77E", 3: "#8A6B32", 4: "rgba(241,220,156,.16)"}
+            if bright else {0: "rgba(110,84,38,.35)", 1: "rgba(176,140,70,.62)", 2: "rgba(176,140,70,.62)", 3: "rgba(110,84,38,.35)"})
+    rank = {"rgba(241,220,156,.16)": 0, "rgba(110,84,38,.35)": 1, "#8A6B32": 2, "rgba(176,140,70,.62)": 3, "#E3C77E": 4, "#F6E3A6": 5}
+    out = ""
+    for y in range(16):
+        for x in range(16):
+            best = None
+            for arm in arms:
+                vertical = arm in ("up", "down")
+                c, t = (x - 6, y) if vertical else (y - 6, x)
+                lo, hi = {"up": (0, 9), "down": (6, 15), "left": (0, 9), "right": (6, 15)}[arm]
+                if c not in prof or not lo <= t <= hi:
+                    continue
+                if dashed and not ((t + 2) % 8) < 4:
+                    continue
+                col = prof[c]
+                if best is None or rank[col] > rank[best]:
+                    best = col
+            if best:
+                out += f'<div style="position:absolute;left:{x}px;top:{y}px;width:1px;height:1px;background:{best}"></div>'
+    return out
+
+
+for _name, _arms in (("up_down", ("up", "down")), ("left_right", ("left", "right")), ("down_left", ("down", "left")),
+                     ("down_right", ("down", "right")), ("up_left", ("up", "left")), ("up_right", ("up", "right")),
+                     ("down_left_right", ("down", "left", "right")), ("up_down_left", ("up", "down", "left")),
+                     ("up_down_right", ("up", "down", "right")), ("up_left_right", ("up", "left", "right")),
+                     ("up_down_left_right", ("up", "down", "left", "right"))):
+    add(f"nf_link_{_name}", FV + f"focus_link_{_name}.dds", 64, 16,
+        "".join(f'<div style="position:absolute;left:{16 * f}px;top:0;width:16px;height:16px">{link_tile(_arms, f + 1)}</div>'
+                for f in range(4)))
+
+
+# mutually exclusive focuses: the line between them (two layers, 4 frames: 1 and 4 solid, 2 and 3 dashed, as the
+# game's) in red, and the mockup's red diamond with a cross in the middle; small red diamonds at the ends
+def excl_line(core, soft):
+    out = ""
+    for f in range(4):
+        for x in range(16):
+            if f in (1, 2) and not ((x + 2) % 8) < 5:
+                continue
+            for y, col in ((6, soft), (7, core), (8, core), (9, soft)):
+                out += f'<div style="position:absolute;left:{16 * f + x}px;top:{y}px;width:1px;height:1px;background:{col}"></div>'
+    return out
+
+
+add("nf_excl_line1", FV + "focus_exlusive_link_line1.dds", 64, 16, excl_line("rgba(180,71,60,.85)", "rgba(124,42,38,.45)"))
+add("nf_excl_line2", FV + "focus_exlusive_link_line2.dds", 64, 16, excl_line("#E8877A", "rgba(180,71,60,.6)"))
+
+
+def excl_diamond(cx, cy, d, cross):
+    out = (f'<div style="position:absolute;left:{cx - d / 2}px;top:{cy - d / 2}px;width:{d}px;height:{d}px;transform:rotate(45deg);'
+           'background:linear-gradient(180deg,#7C2A26,#3E1412);border:1px solid #E8877A;box-sizing:border-box"></div>')
+    if cross:
+        out += (f'<svg width="12" height="12" viewBox="0 0 12 12" style="position:absolute;left:{cx - 6}px;top:{cy - 6}px" '
+                'fill="none" stroke="#F6D0C8" stroke-width="1.6" stroke-linecap="round"><path d="M3 3l6 6M9 3l-6 6"/></svg>')
+    return out
+
+
+add("nf_excl", FV + "focus_link_exclusive.dds", 96, 32,
+    f'<div style="position:absolute;left:0;top:0;width:32px;height:32px">{excl_diamond(16, 16, 18, True)}</div>'
+    f'<div style="position:absolute;left:32px;top:0;width:32px;height:32px">{excl_diamond(7, 16, 8, False)}</div>'
+    f'<div style="position:absolute;left:64px;top:0;width:32px;height:32px">{excl_diamond(25, 16, 8, False)}</div>')
+# the continuous focus window's progress marks (2 frames: to come, done)
+add("nf_cont_check", "gfx/interface/cont_focus_check_icon.dds", 64, 32,
+    '<div style="position:absolute;left:7px;top:7px;width:18px;height:18px;transform:rotate(45deg);background:#0B1014;'
+    'border:1px solid rgba(201,165,90,.7);box-sizing:border-box"></div>'
+    '<div style="position:absolute;left:39px;top:7px;width:18px;height:18px;transform:rotate(45deg);'
+    'background:linear-gradient(180deg,#2E6E60,#153730);border:1px solid #F6E3A6;box-sizing:border-box"></div>'
+    '<svg width="18" height="18" viewBox="0 0 24 24" style="position:absolute;left:39px;top:7px" fill="none" stroke="#F6E3A6" '
+    'stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 12.5l3.2 3.2L17 9"/></svg>')
+# search box, zoom, filter chips
 SW_, SH_ = LF.SEARCH["w"], LF.SEARCH["h"]
 add("nf_search", NF + "search.dds", SW_, SH_,
     plate([(10, 0), (SW_ - 10, 0), (SW_, SH_ / 2), (SW_ - 10, SH_), (10, SH_), (0, SH_ / 2)], "linear-gradient(180deg,#0E1519,#0A0F12)")
     + f'<div style="position:absolute;left:12px;top:{SH_ / 2 - 9}px;width:18px;height:18px">{svg("search", 18)}</div>'
     + f'<div style="position:absolute;left:36px;top:9px;width:1px;height:{SH_ - 18}px;background:rgba(201,165,90,.45)"></div>')
-Z_ = LF.ZOOM
+Z_ = LF.ZOOM_D
 
 
 def zoom_btn(glyph):
@@ -1028,9 +1189,10 @@ FL = LF.FILTER
 
 
 def filter_chip(on):
+    # the mockup's chips: lacquer with a faint gilt edge, jade with a bright one when on
     o = oct_(FL, 9)
-    return plate(o, "radial-gradient(circle,#2E6E60,#123A31)" if on else "linear-gradient(180deg,#1E2930,#0E1519)",
-                 "linear-gradient(180deg,#FFF3C8,#B48F44)" if on else GOLD_V)
+    return plate(o, "linear-gradient(180deg,#2E6E60,#153730)" if on else "linear-gradient(180deg,#121B20,#0E1519)",
+                 "linear-gradient(180deg,#FFF3C8,#E3C77E)" if on else "linear-gradient(180deg,rgba(201,165,90,.75),rgba(201,165,90,.45))")
 
 
 add("nf_filter", NF + "filter_chip.dds", 2 * FL, FL,
@@ -1043,26 +1205,23 @@ add("nf_reward_bar", NF + "reward_bar.dds", 382, 30,
     '<div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(201,165,90,0),rgba(201,165,90,.16) 50%,rgba(201,165,90,0))"></div>'
     + hrule(0, 0, 382, "linear-gradient(90deg,transparent,#C9A55A 20%,#C9A55A 80%,transparent)")
     + hrule(0, 29, 382, "linear-gradient(90deg,transparent,rgba(201,165,90,.45) 20%,rgba(201,165,90,.45) 80%,transparent)"))
-# legend (lower right): the three plate states and an exclusive-link mark, with English labels
+# legend (lower right): the mockup's four marks, with English labels
 LGW, LGH = LF.LEGEND["w"], LF.LEGEND["h"]
-
-
-def leg_swatch(fill, rim):
-    o = [(4, 0), (22, 0), (26, 4), (26, 12), (22, 16), (4, 16), (0, 12), (0, 4)]
-    return f'<div style="position:relative;width:26px;height:16px;flex:none">{plate(o, fill, rim)}</div>'
-
-
-items = [(leg_swatch("linear-gradient(180deg,#7A5E26,#3A2C10)", "linear-gradient(180deg,#FFF3C8,#C9A55A)"), "Completed"),
-         (leg_swatch("linear-gradient(180deg,#2E6E60,#123A31)", "linear-gradient(180deg,#FFF3C8,#B48F44)"), "Available"),
-         (leg_swatch("linear-gradient(180deg,#1A2329,#0C1215)", "linear-gradient(180deg,#8F8670,#4A4434)"), "Unavailable"),
-         ('<div style="width:10px;height:10px;transform:rotate(45deg);background:#EE8C7E;margin:0 5px;flex:none"></div>', "Mutually exclusive")]
+_LEG = [('<div style="width:12px;height:12px;border-radius:50%;background:radial-gradient(circle,#F6E3A6,#B48F44);'
+         'box-shadow:0 0 0 1px #8B6A2C"></div>', "Completed"),
+        ('<div style="width:12px;height:12px;border-radius:50%;box-sizing:border-box;border:2px solid #F1DC9C;'
+         'background:radial-gradient(circle,#6B2B26,#2A0F0D)"></div>', "In progress"),
+        (f'<div style="width:13px;height:13px;clip-path:{_OCT};background:{_GILT_RIM};padding:1.5px;box-sizing:border-box">'
+         f'<div style="width:100%;height:100%;clip-path:{_OCT};background:radial-gradient(circle,#27493F,#0E1A18)"></div></div>', "Available"),
+        ('<div style="width:10px;height:10px;transform:rotate(45deg);background:linear-gradient(180deg,#7C2A26,#3E1412);'
+         'border:1px solid #E8877A;box-sizing:border-box;margin:0 2px"></div>', "Mutually exclusive")]
 add("nf_legend", NF + "legend.dds", LGW, LGH,
     plate([(8, 0), (LGW - 8, 0), (LGW, 8), (LGW, LGH - 8), (LGW - 8, LGH), (8, LGH), (0, LGH - 8), (0, 8)],
           "linear-gradient(180deg,rgba(23,32,38,.95),rgba(11,17,21,.95))")
-    + '<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:16px;'
+    + '<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:20px;'
       "font:600 10px/1 'Josefin Sans';letter-spacing:.14em;text-transform:uppercase;color:#CBBF9F\">"
-    + "".join(f'<div style="display:flex;align-items:center;gap:7px">{sw}<span style="padding-top:2px">{lab}</span></div>'
-              for sw, lab in items) + '</div>')
+    + "".join(f'<div style="display:flex;align-items:center;gap:8px"><div style="flex:none">{sw}</div>'
+              f'<span style="padding-top:2px">{lab}</span></div>' for sw, lab in _LEG) + '</div>')
 
 # ---------------------------------------------------------------- main menu
 MENU = "gfx/interface/valsora_deco/menu/"

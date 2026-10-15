@@ -64,7 +64,9 @@ for name, w in small:
     button(f"mainmenu_panel_bottom>{name}", D + "mm_button_small", x, 100, MENU)
     x += w + 16
 cx, cy, cw = pos["career_profile_button"]
-at("mainmenu_panel_bottom>career_profile_button_star", position=(cx + cw - 26, cy + 24), Orientation="UPPER_LEFT")
+# the game's career profile star (GFX_icon_best_in_career, 36 px, centred on its position): a small badge on the
+# button's upper right corner (at its right end, cy + 24, it covered the label: the author's screenshot, v0.5.1)
+at("mainmenu_panel_bottom>career_profile_button_star", position=(cx + cw - 18, cy + 1), Orientation="UPPER_LEFT", scale=0.6)
 sx, sy, sw = pos["single_player_button"]
 at("mainmenu_panel_bottom>single_player_button_warn", position=(sx + sw - 46, sy + 16))
 at("mainmenu_panel_bottom>version_label", position=(0, 108), font="valsora_deco_label", maxWidth=400, format="left")

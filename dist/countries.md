@@ -113,6 +113,7 @@
 | PZH | Pinzahao | the Liberated Peoples of Pinzahao | Democratic | Radical Republicanism | Chinese | Yuan Wenzhong | 6 |  |
 | PSC | Piscary | the Duchy of the Piscary | Monarchist | Feudalism | French | Achille Bosquet | 0 | no land at the start (releasable or civil war) |
 | LNT | Placeholdaire | the Republic of Placeholdaire | Democratic | Conservatism | French | Charles Gallieni | 13 |  |
+| PHG | Placeholdgrad | Placeholdgrad | Democratic | Radical Republicanism | Russian | Bagrat Gelashvili | 3 |  |
 | PLJ | Plaija | the People's Republic of Plaija | Communist | Orthodox Marxism | Vietnamese | Mai Đức Tài | 65 |  |
 | PNC | Ponchomagnifico | the Community of Ponchomagnifico | Authoritarian | Strongman Rule | Spanish | Mauricio Gómez | 6 |  |
 | PAM | Port Almohavid | the Free Port of Almohavid | Democratic | Lordly Republic | Moroccan | Ryan Khayat | 1 |  |
@@ -128,7 +129,6 @@
 | ROU | Rouental | The Sacred Principality of Rouental | Monarchist | Feudalism | French | Roland II Cahun | 56 | leads The Association of Reibonnaise States |
 | RYB | Royabad | the Sultanate of Royabad | Monarchist | Absolute Monarchy | Persian | Omid Ahura | 33 |  |
 | KIL | Royalist Illiricium | the Kingdom of Illiricium | Monarchist | Legitimism | Italian | Beatrice di Alqiro | 2 |  |
-| RSV | Russovichia | the Soyuz Narodnykh Komissarov of Russovichia | Communist | Council Communism | Russian | Amayak Shvetsov | 2 |  |
 | RYS | Ryśny | the United Voivodes of Ryśny | Democratic | Agrarianism | Polish | Marcin Kozłowski | 8 |  |
 | SSA | San Sierra | the People's Republic of San Sierra | Communist | Council Communism | Spanish | Emilio Díaz | 20 |  |
 | SNA | Sanada | the United Sanadan Clans | Monarchist | Khanate | Buryat | Bulgan Barannikov | 84 |  |
@@ -173,7 +173,7 @@
 | UTP | Utopian Republic | the Second Utopian Republic | Democratic | Lordly Republic | English | Albert Plummer | 68 |  |
 | UYZ | Uyizar | the Khanate of Uyizar | Monarchist | Khanate | Uzbek | Po'lat Azamatov | 16 |  |
 | VAI | Vair | the Duchy of Vair | Monarchist | Feudalism | French | François Dubail | 0 | no land at the start (releasable or civil war) |
-| VIL | Vilna | the Free Republic of Vilna | Democratic | Radical Republicanism | Lithuanian | Juras Ivanauskas | 3 |  |
+| VIL | Vilna | the Free Republic of Vilna | Democratic | Radical Republicanism | Lithuanian | Juras Ivanauskas | 2 |  |
 | VNT | Vineta | the People's Rule Over Vineta | Communist | Party Centralism | Welsh | Rhys Moss | 7 |  |
 | VLN | Volinovia | the Kingdom of Volinovia | Monarchist | Enlightened Absolutism | Portuguese | Fernando Pinto | 16 |  |
 | VSK | Volstokn | the Tsaral Realm of Volstokn | Monarchist | Enlightened Absolutism | Finnish | Petri Mäkinen | 62 |  |

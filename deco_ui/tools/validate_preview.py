@@ -120,12 +120,14 @@ if not vanilla_keys:
 # ------------------------------------------------------------------ sprite definitions
 defs = {}
 for f in glob.glob(M + "interface/*.gfx"):
+    # a copy of one of the game's .gfx files (the focus view's, v0.6): its other sprites keep the game's textures
+    game_copy = os.path.isfile(VANILLA + "interface/" + os.path.basename(f))
     for k, body in load(f):
         if k != "spriteTypes":
             continue
         for kind, b in body:
             a = attrs(b)
-            d = dict(kind=kind, frames=int(a.get("noofframes", 1)))
+            d = dict(kind=kind, frames=int(a.get("noofframes", 1)), game_copy=game_copy)
             d["tex"] = a.get("texturefile") or a.get("texturefile1")
             if kind == "maskedShieldType":
                 d["mask"] = a.get("texturefile2")
@@ -149,6 +151,8 @@ def read_tex(rel):
 for n, d in defs.items():
     if d["kind"] == "pieChartType":
         continue   # drawn by the game, no texture
+    if d["game_copy"] and not os.path.isfile(M + re.sub(r"/+", "/", d["tex"] or "")):
+        continue   # a sprite of the game's own, in a copy of its file: its texture is the game's
     try:
         d["img"] = read_tex(d["tex"])
         if "mask" in d:
@@ -163,7 +167,7 @@ for n, d in defs.items():
     w, h = d["img"].size
     if w % d["frames"]:
         problems.append(f"{n}: width {w} not divisible by {d['frames']} frames")
-    if d["kind"] == "corneredTileSpriteType" and d.get("size") != (w, h):
+    if d["kind"] == "corneredTileSpriteType" and d.get("size") != (w, h) and not (d["game_copy"] and "size" not in d):
         problems.append(f"{n}: cornered size {d.get('size')} != texture {(w, h)}")
     if d["kind"] == "progressbartype" and d.get("size") != (w, h):
         problems.append(f"{n}: progressbar size {d.get('size')} != texture {(w, h)}")
@@ -311,7 +315,13 @@ SAME_SIZE = ["gfx/interface/pol_view_bg.dds", "gfx/interface/pol_view_bg_no_dlc.
              "gfx/interface/intel_ledger/tab_bg.dds", "gfx/interface/diplo_details_header.dds",
              "gfx/interface/generic_text_bg_108.dds", "gfx/interface/tiles/tiling_sort_button.dds",
              "gfx/interface/tab_large.dds", "gfx/interface/intel_ledger/tab.dds", "gfx/interface/diplo_filter_entry.dds",
-             "gfx/interface/sort_button_100x29_2.dds", "gfx/interface/generic_checkbox.dds"]
+             "gfx/interface/sort_button_100x29_2.dds", "gfx/interface/generic_checkbox.dds",
+             # the focus tree's links and exclusive marks (v0.6): the game cuts them into 16 and 32 px frames
+             *[f"gfx/interface/focusview/focus_link_{k}.dds" for k in (
+                 "up_down", "left_right", "down_left", "down_right", "up_left", "up_right", "down_left_right",
+                 "up_down_left", "up_down_right", "up_left_right", "up_down_left_right", "exclusive")],
+             "gfx/interface/focusview/focus_exlusive_link_line1.dds", "gfx/interface/focusview/focus_exlusive_link_line2.dds",
+             "gfx/interface/cont_focus_check_icon.dds"]
 VG = VANILLA + "gfx/"
 if os.path.isdir(VG):
     resized = []
@@ -501,7 +511,7 @@ SAMPLE = {"valsora_deco_pp_daily": "\u00a7G+1.80\u00a7!",
           "valsora_deco_country_name_small": "Terrabis-Seran", "pol_power": "47", "stability": "60%", "war_support": "30%", "manpower": "151.2K",
           "industrial_capacity": "3/2/0", "fuel_value": "4.1K", "supply_value": "92%", "convoys_count": "20",
           "command_power_value": "18", "experience_value": "12", "navy_experience_value": "8",
-          "air_experience_value": "5", "nukes_value": "2", "initiative_text": "0", "industrial_capacity": "5", "threat_value": "4%", "DateText": "12:00, 1 March, 1936",
+          "air_experience_value": "5", "nukes_value": "2", "initiative_text": "0", "industrial_capacity": "5", "threat_value": "4%", "DateText": "12:00, 1 March, 2036",
           "valsora_deco_country_name": "Rouental"}
 WORST = {"valsora_deco_pp_daily": "\u00a7G+12.50\u00a7!",
          "valsora_deco_factory_counts": "\u00a7W\u25c6\u00a7!45 \u00a7O\u25c6\u00a7!30 \u00a7C\u25c6\u00a7!8",
@@ -509,7 +519,7 @@ WORST = {"valsora_deco_pp_daily": "\u00a7G+12.50\u00a7!",
          "industrial_capacity": "120/80/12", "fuel_value": "99.9K", "supply_value": "100%", "convoys_count": "999",
          "command_power_value": "200", "experience_value": "999", "navy_experience_value": "999",
          "air_experience_value": "999", "nukes_value": "99", "threat_value": "100%",
-         "DateText": "23:00, 29 September, 1939", "valsora_deco_country_name": "Utopian Republic"}
+         "DateText": "00:00, 30 September, 2040", "valsora_deco_country_name": "Utopian Republic"}
 FRAME = {"button_speedstep1": 1, "button_speedstep2": 1, "button_speedstep3": 1}
 BOXES = []   # (name, x, y, w, h) for the debug overlay
 

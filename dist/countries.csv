@@ -107,6 +107,7 @@ ORF,Oriflamme,the Oriflamme Alliance,Monarchist,Oligarchy,French,Gustave Humbert
 ORT,Oriental Territories,the Oriental Territories,Monarchist,Oligarchy,French,Julien de MacMahon,0,no land at the start (releasable or civil war)
 OST,Ostaria,the Archcounty of Ostaria,Monarchist,Absolute Monarchy,German,Adolf Göttmann,4,
 PAM,Port Almohavid,the Free Port of Almohavid,Democratic,Lordly Republic,Moroccan,Ryan Khayat,1,
+PHG,Placeholdgrad,Placeholdgrad,Democratic,Radical Republicanism,Russian,Bagrat Gelashvili,3,
 PKT,Pakitsk,the Republic of Pakitsk,Authoritarian,Strongman Rule,Russian,Aslan Selin,9,
 PLH,Vultuca,the United Kingdom of Vultuca,Democratic,Constitutional Monarchy,Portuguese,Abel Ivens,26,
 PLJ,Plaija,the People's Republic of Plaija,Communist,Orthodox Marxism,Vietnamese,Mai Đức Tài,65,
@@ -124,7 +125,6 @@ RLT,Reliette,the Grand Duchy of Reliette,Monarchist,Feudalism,French,Félix Bou�
 RMD,Romanoddle,the Romanoddlian Federation,Democratic,Social Democracy,English,Max Cockburn,93,
 ROU,Rouental,The Sacred Principality of Rouental,Monarchist,Feudalism,French,Roland II Cahun,56,leads The Association of Reibonnaise States
 RST,Rastava,Rastava,Authoritarian,Revanchism,Portuguese,Caetano Amaral,13,
-RSV,Russovichia,the Soyuz Narodnykh Komissarov of Russovichia,Communist,Council Communism,Russian,Amayak Shvetsov,2,
 RVR,Riverraine,the Grand Duchy of the Riverraine,Monarchist,Feudalism,French,Denis Bourbaki,0,no land at the start (releasable or civil war)
 RYB,Royabad,the Sultanate of Royabad,Monarchist,Absolute Monarchy,Persian,Omid Ahura,33,
 RYS,Ryśny,the United Voivodes of Ryśny,Democratic,Agrarianism,Polish,Marcin Kozłowski,8,
@@ -169,7 +169,7 @@ UNG,Ungar,the Grand Duchy of Ungar,Monarchist,Feudalism,Hungarian,Bertalan Baros
 UTP,Utopian Republic,the Second Utopian Republic,Democratic,Lordly Republic,English,Albert Plummer,68,
 UYZ,Uyizar,the Khanate of Uyizar,Monarchist,Khanate,Uzbek,Po'lat Azamatov,16,
 VAI,Vair,the Duchy of Vair,Monarchist,Feudalism,French,François Dubail,0,no land at the start (releasable or civil war)
-VIL,Vilna,the Free Republic of Vilna,Democratic,Radical Republicanism,Lithuanian,Juras Ivanauskas,3,
+VIL,Vilna,the Free Republic of Vilna,Democratic,Radical Republicanism,Lithuanian,Juras Ivanauskas,2,
 VLN,Volinovia,the Kingdom of Volinovia,Monarchist,Enlightened Absolutism,Portuguese,Fernando Pinto,16,
 VNT,Vineta,the People's Rule Over Vineta,Communist,Party Centralism,Welsh,Rhys Moss,7,
 VSK,Volstokn,the Tsaral Realm of Volstokn,Monarchist,Enlightened Absolutism,Finnish,Petri Mäkinen,62,

@@ -1,4 +1,4 @@
-VALSORA DECO UI - v0.5.1 (for HOI4 1.19)
+VALSORA DECO UI - v0.6 (for HOI4 1.19)
 ======================================
 
 An art deco interface for the Valsora total conversion: core skin, a rebuilt
@@ -29,11 +29,48 @@ The layout is built for 1920 px of UI width: 1920x1080 at 100% UI scale, or
 2560x1440 at up to 133%.
 
 
+NEW IN v0.6
+-----------
+  - The focus tree, after the mockup: it opens flush under the top bar with
+    the flag medallion and decisions seal in a notch (it covered them), with
+    the country's focus tree title and its full name and sub-ideology in the
+    header, the filters, search, zoom and close on one row, a scale-pattern
+    canvas in a gilt frame, and an octagon medallion and plate under every
+    focus: grey when unavailable, jade when it can start, red with a gilt
+    halo when in progress, gold with a check when completed. Gilt links,
+    red marks between mutually exclusive focuses, a new legend. The focus
+    icons are the game's, as before.
+  - The superevent window is the mockup's (the Valsora mod draws it): the map
+    veiled, a gilt frame and crest, the title between stepped hairlines, the
+    picture framed with gilt fans, the quote in italics, the gilt button and
+    the song in a tab below.
+  - The date in the top bar has room for the widest date of 2036-2049
+    ("00:00, 30 September, 2040"); its box was sized for 1936 and would
+    have cut it short. The speed arrows sit 6 px further right.
+
+Things to check in game:
+  - the focus tree: the medallion and seal in the notch, no map between; the
+    title and subtitle (if they are missing, tell me); a focus in each state;
+    the links and the exclusive marks; the filters, search, zoom and close.
+  - a superevent (the focus "Execute the Prince" on the communist path, or
+    any of the five leadership focuses): the veil, the window, the song tab;
+    the button and Esc close it.
+
+NEW IN v0.5.2
+-------------
+  - v0.5.1 made closed side panels sit just below their place instead of
+    off-screen, and the game kept drawing them there (the division overview
+    over the map in your screenshot). Closed panels are off-screen again, and
+    a panel now opens and closes at once, so nothing slides across the flag.
+  - The main menu's career profile star sits on the button's corner instead
+    of over its label.
+
 NEW IN v0.5.1
 -------------
   - Side panels, and the windows beside them, no longer slide in from the
     left across the flag and the country's name: they rise a little into
-    place (and sink as they close), quickly, under the medallion.
+    place (and sink as they close), quickly, under the medallion. (Undone in
+    v0.5.2: the game kept closed panels on screen.)
 
 
 NEW IN v0.5

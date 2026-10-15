@@ -144,22 +144,70 @@ def gui(w):
 BOOKMARK = (180, 104)  # vanilla's start date pictures (gfx/interface/select_date_1936.dds)
 
 
-def write_bookmark(write, out, land, deco=False):
+def write_bookmark(write, out, land, deco=False, vale=None):
     """The start date's picture (single player's date screen): vanilla's shows 1936's soldiers over
     Europe; ours is Valsora on the minimap's parchment (or the Deco UI's gilt), darkened at the edges like
-    vanilla's."""
+    vanilla's. vale: the land of the Vale of Reibonne's start (a mask of the map), drawn close up, lit, for
+    its own picture (GFX_select_date_valsora_vale)."""
     w, h = BOOKMARK
     pic = (picture_deco if deco else picture)(land, round(h * land.shape[1] / land.shape[0]), h).astype(float)
     x0 = (pic.shape[1] - w) // 2
     pic = pic[:, x0:x0 + w]
+    d = out / "gfx/interface"
+    d.mkdir(parents=True, exist_ok=True)
+    write_dds(d / "valsora_select_date.dds", vignette(pic))
+    gfx = ('\tspriteType = {\n\t\tname = "GFX_select_date_valsora"\n'
+           '\t\ttexturefile = "gfx/interface/valsora_select_date.dds"\n\t}\n')
+    if vale is not None and (vale > 0).any():
+        write_dds(d / "valsora_select_date_vale.dds", vignette(close_up(land, vale, w, h, deco)))
+        gfx += ('\tspriteType = {\n\t\tname = "GFX_select_date_valsora_vale"\n'
+                '\t\ttexturefile = "gfx/interface/valsora_select_date_vale.dds"\n\t}\n')
+    write("interface/valsora_bookmark.gfx", "spriteTypes = {\n" + gfx + "}\n")
+
+
+def vignette(pic):
+    h, w = pic.shape[:2]
+    pic = pic.astype(float)
     yy, xx = np.mgrid[0:h, 0:w]
     r = np.hypot((xx - w / 2) / (w / 2), (yy - h / 2) / (h / 2))
     pic[..., :3] *= (1 - 0.45 * np.clip(r - 0.45, 0, None) ** 1.3)[..., None]
-    d = out / "gfx/interface"
-    d.mkdir(parents=True, exist_ok=True)
-    write_dds(d / "valsora_select_date.dds", np.clip(pic, 0, 255).astype(np.uint8))
-    write("interface/valsora_bookmark.gfx", 'spriteTypes = {\n\tspriteType = {\n\t\tname = "GFX_select_date_valsora"\n'
-          '\t\ttexturefile = "gfx/interface/valsora_select_date.dds"\n\t}\n}\n')
+    return np.clip(pic, 0, 255).astype(np.uint8)
+
+
+def close_up(land, owners, w, h, deco):
+    """the map round `owners` (0 outside, a number per country inside), w x h: its land lit and outlined, its
+    countries' borders drawn, the rest of the land dimmed"""
+    region = owners > 0
+    ys, xs = np.nonzero(region)
+    (ya, yb), (xa, xb) = np.percentile(ys, [1, 99]), np.percentile(xs, [1, 99])   # not its far islets
+    cy, cx = (ya + yb) / 2, (xa + xb) / 2
+    bh = max(yb - ya, (xb - xa) * h / w) * 1.35
+    bw = bh * w / h
+    y0 = int(np.clip(cy - bh / 2, 0, land.shape[0] - bh))
+    x0 = int(np.clip(cx - bw / 2, 0, land.shape[1] - bw))
+    sl = (slice(y0, y0 + int(bh)), slice(x0, x0 + int(bw)))
+    pic = (picture_deco if deco else picture)(land[sl], w, h).astype(float)
+    k = 4
+    frac = np.asarray(Image.fromarray((region[sl] * 255).astype(np.uint8)).resize((w * k, h * k), Image.BOX)) / 255.0
+    frac = ndi.gaussian_filter(frac, 0.7)
+    edge = np.clip(np.hypot(ndi.sobel(frac, 0), ndi.sobel(frac, 1)) * 0.9, 0, 1)
+    small = lambda a: np.asarray(Image.fromarray((np.clip(a, 0, 1) * 255).astype(np.uint8)).resize((w, h), Image.LANCZOS)) / 255.0
+    lit, line = small(frac), small(edge)
+    land_px = small(np.asarray(Image.fromarray((land[sl] * 255).astype(np.uint8)).resize((w * k, h * k), Image.BOX)) / 255.0)
+    col = pic[..., :3]
+    dim = land_px * (1 - lit)
+    col = col * (1 - 0.45 * dim[..., None])                                           # the rest of the land
+    col = col * (1 + 0.25 * lit[..., None]) + np.array([24, 18, 6]) * lit[..., None]  # the Vale, lit
+    ink = np.array([241, 220, 156]) if deco else np.array([90, 40, 30])
+    col = col * (1 - line[..., None]) + ink * line[..., None]                          # its outline
+    big = np.asarray(Image.fromarray(owners[sl].astype(np.int32)).resize((w * k, h * k), Image.NEAREST))
+    inner = np.zeros(big.shape, bool)
+    inner[:, 1:] |= (big[:, 1:] != big[:, :-1]) & (big[:, 1:] > 0) & (big[:, :-1] > 0)
+    inner[1:, :] |= (big[1:, :] != big[:-1, :]) & (big[1:, :] > 0) & (big[:-1, :] > 0)
+    inner = small(ndi.binary_dilation(inner, iterations=1).astype(float)) * 0.8
+    border = np.array([96, 70, 26]) if deco else np.array([120, 70, 50])
+    col = col * (1 - inner[..., None]) + border * inner[..., None]                     # its countries
+    return np.dstack([np.clip(col, 0, 255), pic[..., 3:]]).astype(np.uint8)
 
 
 def write_files(write, out, land, deco=False):

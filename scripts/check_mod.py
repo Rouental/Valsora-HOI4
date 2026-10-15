@@ -526,11 +526,16 @@ def main(mod):
     for f in (mod / "common/characters").glob("*.txt"):
         chars |= set(re.findall(r"^\t(\w+)\s*=\s*\{", strip(f.read_text()), re.M))
     sprites = {}
+    # A game .gfx the mod ships patched (the Deco UI's nationalfocusview.gfx) keeps the game's sprites pointing at the
+    # game's own textures: a game sprite may name a texture the mod doesn't ship, unless it is in one of our folders.
+    game_sprites = set(vanilla_index("sprites.txt"))
+    ours = re.compile(r"valsora|/VAL/", re.I)
     for f in (mod / "interface").rglob("*.gfx"):
         for name, texs in gfx_sprites(strip(f.read_text(encoding="utf-8-sig"))).items():
             sprites[name] = texs[0] if texs else None
             for tex in texs:
-                if not (mod / tex).exists() and not (tex.endswith(".tga") and (mod / (tex[:-4] + ".dds")).exists()):
+                if not (mod / tex).exists() and not (tex.endswith(".tga") and (mod / (tex[:-4] + ".dds")).exists()) \
+                        and not (name in game_sprites and not ours.search(tex)):
                     err(f"sprite {name} points at missing {tex}")
     for f in (mod / "history/countries").glob("*.txt"):
         for c in re.findall(r"recruit_character\s*=\s*(\w+)", f.read_text()):
@@ -606,6 +611,19 @@ def main(mod):
     for name in set(re.findall(r"\b(valsora_\w+)\s*=\s*yes", scripted)):
         if name not in effects:
             err(f"scripted effect {name} is used but not defined")
+    # on_startup runs without a scope, and a scripted effect needs one (error.log, 2026-10-15: "Invalid Scope ...
+    # provided: None"): ours must be called inside a scope there (random_country = { ... })
+    for f in (mod / "common/on_actions").glob("*.txt"):
+        if is_vanilla_part(f, mod):
+            continue
+        for body in blocks(strip(f.read_text(encoding="utf-8-sig")), "on_startup"):
+            for eff in blocks(body, "effect"):
+                top = re.sub(r"\{[^{}]*\}", "", eff)
+                while re.search(r"\{[^{}]*\}", top):
+                    top = re.sub(r"\{[^{}]*\}", "", top)
+                for name in re.findall(r"\b(\w+)\s*=\s*yes", top):
+                    if name in effects:
+                        err(f"{f.name}: on_startup calls scripted effect {name} without a scope")
     fired = set(re.findall(rf"\b{kinds}\s*=\s*\{{[^{{}}]*?\bid\s*=\s*([\w.]+)", scripted_all + on_actions_all))
     fired |= set(re.findall(rf"\b{kinds}\s*=\s*([A-Za-z_]\w*\.\d+)\b", scripted_all + on_actions_all))
     for body in blocks(on_actions_all, "random_events"):

@@ -459,11 +459,12 @@ guiTypes = {
 		
 		iconType = {
 			name = "career_profile_button_star"
-			position = { x = 174 y = 58 }
+			position = { x = 182 y = 35 }
 			spriteType = "GFX_icon_best_in_career"
 			centerposition = yes
 			orientation = UPPER_LEFT
 			alwaysTransparent = yes
+			scale = 0.6
 		}
 		
 		buttonType = {

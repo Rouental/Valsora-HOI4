@@ -60,12 +60,12 @@ guiTypes = {
 
 	containerWindowType = {
 		name = "faction_ping_window"
-		position = { x = 0 y = 98 }
+		position = { x = -500 y = 62 }
 		show_position = { x = 0 y = 62 }
 		size = { width = 500 height = 712 }
 		show_animation_type = decelerated
 		hide_animation_type = accelerated
-		animation_time = 200
+		animation_time = 0
 
 		background = {
 			name = "Background"

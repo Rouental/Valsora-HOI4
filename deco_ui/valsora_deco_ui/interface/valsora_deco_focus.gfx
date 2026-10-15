@@ -2,9 +2,10 @@
 spriteTypes = {
 	corneredTileSpriteType = {
 		name = "GFX_valsora_deco_nf_header"
-		size = { x = 196 y = 47 }
+		size = { x = 616 y = 114 }
 		textureFile = "gfx/interface/valsora_deco/focus/header.dds"
-		borderSize = { x = 8 y = 4 }
+		borderSize = { x = 260 y = 57 }
+		tilingCenter = yes
 	}
 	corneredTileSpriteType = {
 		name = "GFX_valsora_deco_nf_tree_bg"
@@ -18,10 +19,6 @@ spriteTypes = {
 		size = { x = 512 y = 512 }
 		textureFile = "gfx/interface/valsora_deco/focus/vignette.dds"
 		borderSize = { x = 255 y = 255 }
-	}
-	spriteType = {
-		name = "GFX_valsora_deco_nf_medallion"
-		texturefile = "gfx/interface/valsora_deco/focus/medallion.dds"
 	}
 	spriteType = {
 		name = "GFX_valsora_deco_nf_search"

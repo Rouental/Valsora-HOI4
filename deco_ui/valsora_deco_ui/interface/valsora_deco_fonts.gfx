@@ -270,6 +270,72 @@ bitmapfonts = {
 		}
 	}
 
+	# focus tree: the country's focus tree title in gilt capitals (gilt baked in)
+	bitmapfont = {
+		name = "valsora_deco_title_30"
+		path = "gfx/fonts/valsora_deco_title_30"
+		color = 0xffffffff
+		textcolors = {
+			C = { 92 160 170 }
+			L = { 195 176 145 }
+			W = { 244 236 217 }
+			B = { 110 150 230 }
+			G = { 147 214 165 }
+			R = { 238 140 126 }
+			b = { 0 0 0 }
+			g = { 176 168 146 }
+			Y = { 231 183 90 }
+			H = { 241 220 156 }
+			T = { 246 238 220 }
+			O = { 231 162 74 }
+			K = { 44 31 10 }
+		}
+	}
+
+	# focus tree: the subtitle (Bodoni Moda italic)
+	bitmapfont = {
+		name = "valsora_deco_italic_15"
+		path = "gfx/fonts/valsora_deco_italic_15"
+		color = 0xffcbbf9f
+		textcolors = {
+			C = { 92 160 170 }
+			L = { 195 176 145 }
+			W = { 244 236 217 }
+			B = { 110 150 230 }
+			G = { 147 214 165 }
+			R = { 238 140 126 }
+			b = { 0 0 0 }
+			g = { 176 168 146 }
+			Y = { 231 183 90 }
+			H = { 241 220 156 }
+			T = { 246 238 220 }
+			O = { 231 162 74 }
+			K = { 44 31 10 }
+		}
+	}
+
+	# superevent: the quote (Bodoni Moda italic)
+	bitmapfont = {
+		name = "valsora_deco_italic_18"
+		path = "gfx/fonts/valsora_deco_italic_18"
+		color = 0xffefe6d0
+		textcolors = {
+			C = { 92 160 170 }
+			L = { 195 176 145 }
+			W = { 244 236 217 }
+			B = { 110 150 230 }
+			G = { 147 214 165 }
+			R = { 238 140 126 }
+			b = { 0 0 0 }
+			g = { 176 168 146 }
+			Y = { 231 183 90 }
+			H = { 241 220 156 }
+			T = { 246 238 220 }
+			O = { 231 162 74 }
+			K = { 44 31 10 }
+		}
+	}
+
 	# politics: the leader's name
 	bitmapfont = {
 		name = "valsora_deco_heading_24"

@@ -253,8 +253,9 @@ STATION_GUI = """guiTypes = {
 """
 
 
-def write_files(write, out):
-    """Every superevent file; returns the localisation lines."""
+def write_files(write, out, deco=False):
+    """Every superevent file; returns the localisation lines. deco: the window in the Deco UI's style
+    (common.DECO_UI: superevents_deco.py), which uses the Deco UI's fonts."""
     pictures = sorted({se["picture"] for se in SUPEREVENTS})
     others = [flag(se) for se in SUPEREVENTS]
 
@@ -287,7 +288,7 @@ def write_files(write, out):
 
     # texts, picked by whichever superevent flag is set
     sl = []
-    for part in ("TITLE", "QUOTE", "AUTHOR"):
+    for part in ("TITLE", "QUOTE", "AUTHOR", "SONG"):
         sl += ["defined_text = {", f"\tname = ValsoraSuperevent{part.capitalize()}"]
         for se in SUPEREVENTS:
             sl += ["\ttext = {", f"\t\ttrigger = {{ has_global_flag = {flag(se)} }}",
@@ -315,6 +316,17 @@ def write_files(write, out):
         "\t\tai_enabled = { always = no }",
         "\t}",
         "}", ""]))
+    if deco:
+        import superevents_deco
+        superevents_deco.write(write, out, SUPEREVENTS, pictures, picture_sprite, fit, write_dds)
+    else:
+        write_plain_window(write, out, pictures)
+    write_music(write, out)
+    return localisation(deco)
+
+
+def write_plain_window(write, out, pictures):
+    """the window before the Deco UI: a dark panel with a gold frame, the typewriter fonts"""
     W, H = PIC_W + 60, PIC_H + 225
     icons = []
     for pic in pictures:
@@ -387,6 +399,8 @@ def write_files(write, out):
                    f'\t\ttexturefile = "gfx/interface/valsora/superevent_{Path(pic).stem}.dds"\n\t}}\n')
     write("interface/valsora_superevent.gfx", "spriteTypes = {\n" + "".join(gfx) + "}\n")
 
+
+def write_music(write, out):
     # music: HOI4 only knows songs that belong to a music station, so the superevent
     # songs get a station of their own ("Valsora Radio" in the radio menu), where they
     # have zero chance of coming up in normal play
@@ -401,11 +415,20 @@ def write_files(write, out):
     write(f"music/{STATION}/{STATION}.txt", "\n".join(txt))
     write_station_interface(write, out)
 
+
+def localisation(deco):
     loc = [' VAL_SE_CLOSE:0 "History Marches On"', f' {STATION}_TITLE:0 "Valsora Radio"']
     loc += [f' {name}:0 "{title}"' for name, title in SONG_TITLES.items()]
     for se in SUPEREVENTS:
         key = f"VAL_SE_{se['id'].upper()}"
-        # §W ... §! = white: the typewriter fonts draw dark on the dark panel
-        loc += [f' {key}_TITLE:0 "§W{se["title"]}§!"', f' {key}_QUOTE:0 "§W\\"{se["quote"]}\\"§!"',
-                f' {key}_AUTHOR:0 "- {se["author"]}"']
+        song = SONG_TITLES[se["song"]].replace(" - ", " \u2014 ")
+        loc.append(f' {key}_SONG:0 "Valsora Radio \u00b7 {song}"')
+        if deco:
+            # the Deco UI's fonts are light already; its quote font has curly quotes
+            loc += [f' {key}_TITLE:0 "{se["title"]}"', f' {key}_QUOTE:0 "\u201c{se["quote"]}\u201d"',
+                    f' {key}_AUTHOR:0 "\u2014 {se["author"]}"']
+        else:
+            # §W ... §! = white: the typewriter fonts draw dark on the dark panel
+            loc += [f' {key}_TITLE:0 "§W{se["title"]}§!"', f' {key}_QUOTE:0 "§W\\"{se["quote"]}\\"§!"',
+                    f' {key}_AUTHOR:0 "- {se["author"]}"']
     return loc

@@ -2,11 +2,11 @@
 guiTypes = {
 	containerWindowType = {
 		name = "command_character_view_window"
-		position = { x = 540 y = 98 }	
+		position = { x = -556 y = 62 }	
 		show_position = { x = 540 y = 62 }
 		show_animation_type = decelerated
 		hide_animation_type = accelerated
-		animation_time = 200
+		animation_time = 0
 		size = { width=500 height=590 }
 		show_sound = open_sub_window
 

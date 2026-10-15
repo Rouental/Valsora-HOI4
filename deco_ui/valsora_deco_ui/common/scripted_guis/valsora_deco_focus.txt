@@ -1,0 +1,8 @@
+# Valsora Deco UI - the focus tree's title (window in interface/valsora_deco_focus_extras.gui)
+scripted_gui = {
+	valsora_deco_nf_title = {
+		context_type = player_context
+		window_name = "valsora_deco_nf_title_window"
+		parent_window_token = national_focus
+	}
+}

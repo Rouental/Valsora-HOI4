@@ -148,6 +148,9 @@ def title_font(text, width, max_lines=2):
     raise AssertionError(f"title {text!r} does not fit {width} px")
 
 
+hidden_x = LPN.LP.closed_x   # where a closed window rests (off-screen; it opens at once)
+
+
 # ---------------------------------------------------------------- one panel
 def panel(t, key, spec):
     R = spec["window"]
@@ -183,9 +186,9 @@ def panel(t, key, spec):
         t = t[:cs] + with_position(h0, x, y + dy) + rest + t[ce:]
         moved.append(name)
 
-    # 2. the window: flush under the band, rising into place as it opens (it slid in from the left, across the
-    # flag and the name: layout_politics.RISE); a fixed height grows by the shift
-    win = dict(position=(X, LPN.TOP + LPN.RISE), show_position=(X, LPN.TOP))
+    # 2. the window: flush under the band; closed, it rests at the game's off-screen x and it opens at once (sliding
+    # in, it crossed the flag and the name: layout_politics.OPEN_MS); a fixed height grows by the shift
+    win = dict(position=(hidden_x(head), LPN.TOP), show_position=(X, LPN.TOP))
     if re.search(r"animation_time\s*=", head):
         win["animation_time"] = LPN.OPEN_MS
     if spec.get("height"):
@@ -258,7 +261,7 @@ def beside(t, names):
         h = own_head(t, s, e)
         sx = int(re.search(r"show_position\s*=\s*\{\s*x\s*=\s*(-?\d+)", h).group(1))
         anim = dict(animation_time=LPN.OPEN_MS) if re.search(r"animation_time\s*=", h) else {}
-        t = GP.set_attrs(t, n, position=(sx, LPN.TOP + LPN.RISE), show_position=(sx, LPN.TOP), **anim)
+        t = GP.set_attrs(t, n, position=(hidden_x(h), LPN.TOP), show_position=(sx, LPN.TOP), **anim)
     return t
 
 

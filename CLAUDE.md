@@ -184,9 +184,10 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `deco_ui.py` | the Valsora Deco UI into the build (`common.DECO_UI`; see Deco UI below): Valsora's own copies of what it replaces kept in `work/deco_base/`, its long-name trigger and politics screen made from this build, then `deco_ui/valsora_deco_ui/` copied in (a file both ship stops the build unless the Deco UI replaces it on purpose) |
 | `nations.py` | hand-written per-nation content (leaders, portraits, focus trees), used by `build_mod.py` |
 | `superevents.py` | TNO-style superevent windows, their texts, picture and music |
+| `superevents_deco.py` | the superevent window in the Deco UI's style (`DECO_UI`, 2026-10-15): the mockup's board drawn with numpy and Pillow, a title strip per superevent, the texts measured against their boxes |
 | `cultures.py` | generic portraits, name lists and graphical culture per continent / country |
 | `ideologies.py` | the five ideologies: ideology file, renamed localisation, theocracy icon |
-| `minimap.py` | the minimap (lower right): Valsora's land on parchment instead of vanilla's Earth, its frame, window and slide (2026-10-13); with the Deco UI (`DECO_UI`) gilt land and coasts on lacquer in a gilt frame, same sizes, and the start date picture the same (2026-10-14) |
+| `minimap.py` | the minimap (lower right): Valsora's land on parchment instead of vanilla's Earth, its frame, window and slide (2026-10-13); with the Deco UI (`DECO_UI`) gilt land and coasts on lacquer in a gilt frame, same sizes, and the start date picture the same (2026-10-14); the Vale of Reibonne start's picture, the Vale close up (2026-10-15) |
 | `globe.py` | the world tension globe (top bar, 10 frames) and its small icon: Valsora instead of Earth (2026-10-14), cracking into lava as tension grows (redrawn the same day: the first flames "didn't come out too well"); run alone, `dist/tension_globe_preview.png` |
 | `vanilla_parts.py` | vanilla's parts in the mod, for `build_mod.py`: the vanilla files it ships moved to 2036, the stand-ins for what Earth's content still names (decisions, events, country histories), the start and end dates, the AI's faction theaters |
 | `vanilla_sync.py` | by hand, after a game update: refreshes `source/vanilla/` from the author's copy of the game (`Rouental/HOI4-Files`): the vanilla files the mod ships changed, and lists of vanilla's names |
@@ -348,8 +349,14 @@ scripting (tags targeted, popularities, ideologies) skip vanilla's shipped files
     tag, so Solitas is `SLT`); Araseos has no land left since 2026-10-09, nor Nonscio and
     Yastreovakia since 2026-10-12, nor Orientalis, Usnistan and Solitas since 2026-10-13,
     so ARS, NSC, YAS, ORI, USN and SLT are left out of the mod. Merlovich (AIS, still on
-    the placeholder's paint) is the only one left, so the bookmark recommends only it. They are `common.PLACEHOLDERS`, the only countries the
-    bookmark recommends (author's wish, to keep the start menu short).
+    the placeholder's paint) is the only one left. Until 2026-10-15 the placeholders were the only countries the
+    bookmark recommended (author's wish, to keep the start menu short).
+  - **Two starts on 1 January 2036** (`common/bookmarks/valsora.txt`, `build_mod.py`): **Valsora** recommends
+    Rouental (author, 2026-10-15: "add Rouental to the recommended nations") and Merlovich; **the Vale of Reibonne**
+    recommends Rouental and the seven other Association states (`nations.REIBONNAISE`), its picture the Vale close
+    up with the eight lit and their borders (`minimap.close_up`). Two, because with one start the game skips its
+    scenario screen, so Back on the country screen went to it and was sent straight on again: no way back to the
+    menu (the author's video, 2026-10-15). The histories are short and factual; the author may write their own.
   - Colours follow the flags (author): Rouental royal green, Guedelon blue, Hollier red, Seigne white,
     Evriches yellow, Lustiana black, Selgrave dark maroon, Lanzerac purple (its new flag's,
     2026-10-09; dark gold before), Cardonia deep purple (kept when its own flag, black,
@@ -815,6 +822,17 @@ scripting (tags targeted, popularities, ideologies) skip vanilla's shipped files
     owl on a compass star), fitted to 82:52 by trimming 9 px of plain band at each side
     and added to the flag file (`dist/flag_cardonia_20261014.png`); its map colour stays
     deep purple.
+    **2026-10-15** (author): **Vilna moved** to Russovichia's land (its 2 states, with the RU islands), taking
+    its paint (140, 0, 0), dark red like Vilna's new flag (the author's: a crimson field framed by blue bars and
+    Stars of David, a menorah over a sword, a line in Hebrew), which came at 1280 × 841 and was fitted to 82:52
+    by lengthening the top and bottom bars 23 px at each end (`dist/flag_vilna_20261015.png`; in the flag file
+    as "Vilna", the old layer renamed "Placeholdgrad"). It keeps its formal name, Radical Republicanism and
+    Lithuanian culture. **Russovichia stays in `COUNTRIES`, off the map** (author: "should remain in the code,
+    but be off the map for now"): it owns nothing, so it is left out of the mod like the United States of
+    Solitas, with an unused colour from its flag, (153, 47, 45). Vilna's old land (3 states) is
+    **Placeholdgrad** PHG, with Vilna's old flag (`PHG.png`) and Radical Republicanism, and Vilna's old green;
+    the adjective Placeholdgradian, Russian culture (for the "-grad") and no formal name yet are Claude's.
+    Since the paint moved with the names, the `.pdn` is unchanged.
     All tags were checked against vanilla `common/country_tags`; new tags must be too.
   - The adjectives of the neighbours are guesses; the author may rename them.
 - **State names** are the author's, in `source/state_names.json` ("x,y" of a pixel
@@ -1162,6 +1180,18 @@ white via `§W…§!` in their localisation (the typewriter fonts draw dark). Ho
 - **Background.** `GFX_tiled_window_transparent` is see-through (vanilla's event window
   gets its look from separate header/footer images), so the window has its own
   generated background, `superevent_bg.dds`: dark, with gold frames.
+- **With the Deco UI** (`DECO_UI`, 2026-10-15; `superevents_deco.py`): the mockup's Superevent board
+  (`deco_ui/art/mockups/source/Superevent.html`), drawn with numpy and Pillow. The window covers the screen: a dark
+  veil over the map (a cornered tile) with faint gilt rays round the middle and the board's vignette (drawn at half
+  size, scale 2), and the panel centred on it, every element a direct child of the window (the visibility triggers
+  name them): one picture holds the crest, the 900 x 645 frame (lacquer, gilt border, corner brackets, the rings round
+  the picture) and the now-playing tab; over it a title strip per superevent (gilt Federo capitals between stepped
+  hairlines, baked, since the hairlines follow the title's width: long titles shrink to fit), the picture with gilt
+  fans and arcs in its corners, a diamond on its lower edge, the quote (`valsora_deco_italic_18`, curly quotes, no
+  `§W`), the attribution (`valsora_deco_section_11`), the gilt "History Marches On" button (Esc closes it too) and the
+  song (`ValsoraSupereventSong`, "Valsora Radio · Rafael Krux — Epic Church Organ", `valsora_deco_label`). The
+  build measures every quote, attribution and song with the Deco UI's font files and stops if one would not fit its
+  box (a box too short drops lines silently). Not yet seen in game.
 - **Current set.** Seven superevents: one per Rouental leadership focus (five), the
   Rouentaise civil war (Execute the Prince; the author's soldier photo) and AIS
   "Fucking Explode". The quotes are Claude-written except the civil war's (the
@@ -1523,6 +1553,9 @@ it before touching the UI. In short:
 - `check_mod.py` checks the merged mod: the Deco UI's localisation in the game's 9 languages (only its files
   may be other than English), its politics screen's five 19 px party rows, every kind of sprite in a .gfx, and
   sprites the game's own .gui files name without defining (`source/vanilla/index/gui_undefined_sprites.txt`).
+  A game sprite (`source/vanilla/index/sprites.txt`) in a game .gfx the Deco UI ships patched (`nationalfocusview.gfx`)
+  may point at the game's own texture; a texture in a folder of ours (`valsora…`, `VAL/`) must be shipped
+  (mutation-tested).
 - There is no separate release any more (`dist/valsora_deco_ui.zip` was removed). The author was told to delete
   the old `mod/valsora_deco_ui/` and `mod/valsora_deco_ui.mod` and take it out of the playset: left in, it
   loads after Valsora and puts its older files back.
@@ -1554,6 +1587,18 @@ in git history (commit d2d6cd8, `scripts/cartographic.py`). It used
 
 ## Current state
 
+- 2026-10-15, latest: **Vilna moved** to Russovichia's land with the author's new flag, **Placeholdgrad** on its old
+  land with its old flag and government, Russovichia off the map (still 183 countries). The Deco UI is v0.6: the
+  **focus tree after the mockup** (notched under the
+  band, the country's title and sub-ideology in the header, medallions and plates per focus state, a gilt halo on
+  the focus in progress, gilt links, red exclusive marks, the scale-pattern canvas; the focus icons are the game's,
+  as the author asked) and v0.5.2's fix: closed side panels stayed on screen (the author's screenshot), so they rest
+  off-screen again and open at once; the menu's career profile star moved off its label. The **superevent window**
+  follows the mockup (`superevents_deco.py`). **Two starts** (Valsora: Rouental and Merlovich recommended; the Vale
+  of Reibonne: the Association), so Back on the country screen returns to the scenario screen instead of looping.
+  `on_startup` called the Reibonnaise opinions effect without a scope (the one line of the author's 10-line
+  error.log that was ours, down from 2,081): it runs in a country scope now, and `check_mod.py` checks for it.
+  Not yet seen in game.
 - 2026-10-15, last: **Rouental's Gazetteer page is in the build** (`source/gazetteer/ROU.json`, read from
   the site with its password, which the author gave; the author removed its test hub and made Rêverie the
   capital again first): population 42.3 million over its 56 states, terrain for 132 provinces, 15 cities

@@ -163,7 +163,9 @@ COUNTRIES = {
     "gorbastan": ("GOB", "Gorbastan", "Gorbastani", (200, 160, 90)),
     "zukchiva": ("ZUK", "Zukchiva", "Zukchivan", (90, 160, 170)),
     "sminishia": ("SMN", "Sminishia", "Sminishian", (210, 110, 150)),
-    "russovichia": ("RSV", "Russovichia", "Russovich", (140, 0, 0)),
+    # off the map since 2026-10-15 (author: "should remain in the code, but be off the map for now"); its
+    # land and paint are Vilna's, so it has an unused colour from its flag
+    "russovichia": ("RSV", "Russovichia", "Russovich", (153, 47, 45)),
     "ostaria": ("OST", "Ostaria", "Ostarian", (230, 200, 30)),                    # flag yellow
     # 2026-10-08 (the author's names, governments and formal names; tags, colours and
     # adjectives Claude's; Tethia's colour from its flag)
@@ -187,7 +189,9 @@ COUNTRIES = {
     "pakitsk": ("PKT", "Pakitsk", "Pakitskian", (156, 148, 76)),
     "kieska": ("KSK", "Kieska", "Kieskan", (128, 84, 160)),
     "zoluzeme": ("ZLZ", "Zoluzeme", "Zoluzemian", (220, 180, 60)),
-    "vilna": ("VIL", "Vilna", "Vilnian", (40, 140, 90)),
+    # since 2026-10-15 (author) on Russovichia's land, with its paint (the new flag's field is crimson);
+    # its old land is Placeholdgrad's
+    "vilna": ("VIL", "Vilna", "Vilnian", (140, 0, 0)),
     "sombor": ("SMB", "Sombor", "Somborian", (236, 132, 52)),
     "skillia": ("SKL", "Skillia", "Skillian", (226, 74, 74)),
     "tenkyoku": ("TKY", "Tenkyoku", "Tenkyoku", (176, 22, 52)),
@@ -269,6 +273,9 @@ COUNTRIES = {
     # 2026-10-13, later (author): the land labelled Santa Fe; gold, so it stands out from
     # Bromé's crimson and Atrocha's red beside it
     "santa_fe": ("SFE", "Santa Fe", "Santa Fean", (230, 175, 35)),
+    # 2026-10-15 (author): Vilna's old land, with its old flag and ideology and its paint; the adjective
+    # is Claude's
+    "placeholdgrad": ("PHG", "Placeholdgrad", "Placeholdgradian", (40, 140, 90)),
 }
 # The placeholder countries, one per continent, are the recommended starts in the
 # bookmark; the rest are playable but not listed there.

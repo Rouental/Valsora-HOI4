@@ -10,6 +10,7 @@ valsora_deco_long_name = {
 		tag = MTN
 		tag = MZG
 		tag = OCR
+		tag = PHG
 		tag = PNC
 		tag = RMD
 		tag = STM

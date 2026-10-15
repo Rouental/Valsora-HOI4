@@ -28,13 +28,25 @@ PANEL_W = 550
 X0, X1 = 18, 532                                   # content edges
 PANEL_X = -6                                       # vanilla's shown x (the first 6 px are off-screen)
 TOP = 62                                           # screen y of the panel's top: the band ends at 62 (layout.BAND_H)
-# How a panel opens (v0.5.1; the author's video of 2026-10-14: sliding in from the left, a new panel's header
-# crossed the flag and the country's name before its notch reached them). It rises RISE px into place over
-# OPEN_MS ms, and sinks back as it closes. The notch narrows downward, so a panel that is lower than its place
-# never covers the medallion or the seal. (in vanilla) the game hides a window once it has slid back to its
-# position: vanilla's dropdowns (`*_expanded_window`) and trait boxes slide 25-76 px within their parent.
-RISE = 36
-OPEN_MS = 200
+# How a panel opens (v0.5.2). `position` is where a closed window rests and `show_position` where it opens. The
+# game does not hide a closed side panel: it moves it back to `position`, which is off-screen in vanilla (x -606),
+# and leaves it there. Vanilla's dropdowns rest at y -300 or -2000, or inside a clipped parent. v0.5.1 rested the
+# panels 36 px below their place, on screen, to make them rise into place; a closed panel then stayed drawn there
+# (the author's screenshot of 2026-10-15: a closed division overview under the open map). Sliding in from the
+# left crosses the flag and the country's name (their video of 2026-10-14), so a panel now rests at vanilla's
+# off-screen position and opens and closes at once (OPEN_MS 0, as vanilla's dropdowns do).
+OPEN_MS = 0
+
+
+def closed_x(head):
+    """where a closed window rests (`head`: the window's own attributes in the game's file): the game's `position`
+    when that is off-screen (x -606 for a side panel), else just off the left edge (the ships and planes windows
+    rest at x 100, behind the division overview), so that nothing is left on screen"""
+    import re
+    x = int(re.search(r"(?<!show_)position\s*=\s*\{\s*x\s*=\s*(-?\d+)", head).group(1))
+    w = re.search(r"size\s*=\s*\{\s*width\s*=\s*(\d+)\s*height", head)
+    w = int(w.group(1)) if w else 2000
+    return x if x + w <= 0 else -(w + 56)
 
 
 def local(sx, sy):

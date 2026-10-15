@@ -6,6 +6,34 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**Deco UI: a closed division overview stayed on screen, headerless, over the map** (2026-10-15, author's screenshot)
+- Cause: the game does not hide a closed side panel; it moves it back to its `position` and leaves it drawn there.
+  Vanilla's `position` is off-screen (x -606), so nothing shows. v0.5.1 had set it 36 px below the panel's place, on
+  screen, to make panels rise into place; a closed panel then stayed there (its sub-windows over the map). The
+  v0.5.1 entry below wrongly said the game hides a window once it has slid back: vanilla's dropdowns rest at y -300
+  or -2000 or inside a clipped parent.
+- Fix (Deco UI v0.5.2): every closed panel rests at the game's off-screen `position` again (just off the left edge
+  where the game's is on screen: `layout_politics.closed_x`), and opens and closes at once (`animation_time = 0`, as
+  several vanilla dropdowns do), so nothing slides across the flag either.
+
+**New game: Back on the country screen looped instead of returning to the menu** (2026-10-15, author's video)
+- Cause: with a single start (bookmark), the game skips its "Select scenario" screen. Back on the country screen
+  returns to that screen, which picks the only start at once ("Starting History...") and opens the country screen
+  again.
+- Fix: two starts on 1 January 2036, Valsora (Rouental, as the author asked, and Merlovich recommended) and the Vale
+  of Reibonne (the Association), so the scenario screen stays and its Back returns to the menu.
+
+**error.log: `valsora_reibonnaise_opinions: Invalid Scope ... provided: None`** (2026-10-15, the author's error.log,
+10 lines in all, down from 2,081; this was the only one of ours)
+- Cause: `on_startup` runs without a scope, and the scripted effect was called straight inside it.
+- Fix: `random_country = { valsora_reibonnaise_opinions = yes }` (the effect goes through every country itself).
+  Check: no scripted effect of ours called at the top of an `on_startup` effect.
+
+**Main menu: a star over the career profile button's label** (2026-10-15, author's screenshot)
+- Cause: the game's `career_profile_button_star` (shown when the career profile has something new) was placed at
+  the button's right end, over the end of "CAREER PROFILE".
+- Fix (Deco UI v0.5.2): a small badge (scale .6) on the button's upper right corner.
+
 **Deco UI: a newly opened side panel slid over the flag and the country's name** (2026-10-15, author's video)
 - Cause: every side panel slid in from x -606 to its place (vanilla's slide), and the windows beside them from
   -356; with the panels flush under the top bar since v0.4.8/v0.5, their header crossed the medallion before
@@ -449,6 +477,28 @@ screenshot and `error.log`)
 - Fix: no trailing newline.
 
 ## Map problems found while building
+
+**Deco UI: the top bar's date box was too narrow for 20xx dates** (2026-10-15, `validate_preview.py`)
+- Cause: the box (220 px) was sized for 1936-1949; "2" is wider than "1" in the date font, and the widest date
+  the game shows from 2036 to 2049, "00:00, 30 September, 2040", is 230 px. The game cuts a longer text short.
+  The preview's long sample was still "23:00, 29 September, 1939".
+- Fix: the box is 230 px (x 55), the speed chevrons 6 px further right; the long sample is now that widest
+  date, so the check covers the worst case.
+
+**`collages.py` listed Earth's 364 tags as nations still without a flag** (2026-10-15)
+- Cause: since 2026-10-14 the build ships a stand-in history for each of Earth's tags, and the collages took
+  every history file for a country of ours; with `--continent`, their capital (state 1) put them all on one
+  continent.
+- Fix: Earth's tags (`source/vanilla/index/tags.txt`) are left out, as `country_list.py` does; flags of
+  countries in `COUNTRIES` owning nothing are labelled "(off the map)".
+
+**check_mod: 132 errors, sprites of the Deco UI's `nationalfocusview.gfx` "point at missing" textures** (2026-10-15, build)
+- Cause: to give the focus in progress its own picture, the Deco UI ships the game's `nationalfocusview.gfx` with
+  `GFX_focus_current` changed; its other sprites still name the game's textures (`tiled_focus_bg.dds`,
+  `focuslink.dds` ...), which the game has and the mod doesn't ship. The check wanted every texture in the mod.
+- Fix: a game sprite (`source/vanilla/index/sprites.txt`) may name a texture the mod doesn't ship, unless the
+  texture is in a folder of ours (`valsora…`, `VAL/`): removing the Deco UI's `current_bg.dds` is still an error
+  (mutation-tested).
 
 **The Gazetteer's map tools, releasables and admins, found while testing them** (2026-10-15, later)
 - Facts entered on a nation whose states the build had cut would land in the wrong places once

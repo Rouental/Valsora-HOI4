@@ -159,9 +159,9 @@ BAR_W, BAR_H = 42, 3
 # ------------------------------------------------------------------ date cartouche
 CART = dict(x=1410, y=6, w=400, h=46)
 PAUSE_C = (34, 23)                            # pause diamond centre (cartouche-local)
-DATE_BOX = dict(x=58, w=220)
+DATE_BOX = dict(x=55, w=230)                  # the widest date of 2036-2049, '00:00, 30 September, 2040', is 230 px
 DATE_BOX["y"] = box_y_for_caps("valsora_deco_date", 23 - 6)
-CHEV_W, CHEV_H, CHEV_X0, CHEV_STEP, CHEV_Y = 12, 18, 280, 12, 14
+CHEV_W, CHEV_H, CHEV_X0, CHEV_STEP, CHEV_Y = 12, 18, 286, 12, 14   # x 280 until v0.6 (220 px dates)
 PM_W, PM_H, PM_X, PLUS_Y, MINUS_Y = 22, 15, 354, 7, 24
 
 # ------------------------------------------------------------------ right-hand plate

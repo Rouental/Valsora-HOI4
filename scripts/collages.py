@@ -18,6 +18,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 import ideologies
 import nations
+from common import COUNTRIES
 from country_list import MOD, loc
 
 FLAGS = Path("source/flags")
@@ -77,16 +78,21 @@ def continent_of(lands=None):
 
 
 def flags(L, continent=None):
+    ours = {v[0]: v[1] for v in COUNTRIES.values()}
+
     def key(stem):
         tag, _, var = stem.partition("_")
-        base = L.get(tag, tag)
+        base = L.get(tag) or (f"{ours[tag]} (off the map)" if tag in ours else tag)  # in COUNTRIES, owning nothing
         if not var:
             return (base, 0, ""), base
         if var in IDEOLOGY:  # used while that government rules
             return (base, 1, var), f"{base} ({IDEOLOGY[var]})"
         return (base, 2, var), f"{L.get(stem, var.title())} ({base})"  # a cosmetic tag
     items = sorted(key(p.stem) + (p,) for p in FLAGS.glob("*.png"))
-    tags = sorted(f.name[:3] for f in (MOD / "history/countries").glob("*.txt"))
+    # Earth's tags stay defined, owning nothing, for what vanilla still names (vanilla_parts.py): not ours
+    earth = {ln.split("\t")[0] for ln in Path("source/vanilla/index/tags.txt").read_text(encoding="utf-8").splitlines()}
+    earth -= set(ours)
+    tags = sorted(t for t in (f.name[:3] for f in (MOD / "history/countries").glob("*.txt")) if t not in earth)
     others = []
     if continent:
         lands = {}

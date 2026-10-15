@@ -222,6 +222,14 @@ if __name__ == "__main__":
                      atlas=(512, 256)))
     out.append(build("valsora_deco_section_11", JOS, 11, 0, "ui", weight=600, caps=True, tracking=3, kern_set=ALNUM,
                      atlas=(512, 256)))
+    # v0.6 focus tree header and superevent (the mockups): the focus tree's title (Federo 30, .2em), its subtitle
+    # and the superevent's quote (Bodoni Moda italic 15 and 18)
+    out.append(build("valsora_deco_title_30", FED, 30, 0, "ui", fallback=JOS, fb_weight=500, caps=True, tracking=6,
+                     gilt=True, kern_set=ALNUM, atlas=(1024, 256)))
+    out.append(build("valsora_deco_italic_15", BOD_I, 15, 0, "ui", fallback=JOS, fb_weight=400, kern_set=ALNUM, line_extra=-4,
+                     atlas=(512, 256)))
+    out.append(build("valsora_deco_italic_18", BOD_I, 18, 0, "ui", fallback=JOS, fb_weight=400, kern_set=ALNUM, line_extra=-6,
+                     atlas=(512, 256)))
     # body text: Josefin Sans
     out.append(build("valsora_deco_body_15", JOS, 15, 0, "ui", weight=600, kern_set=ALNUM, atlas=(512, 256)))
     out.append(build("valsora_deco_body_13", JOS, 13, 0, "ui", weight=500, kern_set=ALNUM, atlas=(512, 256)))

@@ -14,7 +14,7 @@ Treat assumed items as hypotheses.
 
 ---------------------------------------------------------------------------------------------------
 
-## 1. Status (v0.5.1)
+## 1. Status (v0.6)
 
 v0.4.3 was the first v0.3/v0.4 build the user launched. The user's reports so far cover only the main
 menu: the Valsora background and the social links in the top-left corner show **(in game)**, but in
@@ -51,10 +51,23 @@ release any more (section 11).
 **(in game, v0.5)** the user's video (2026-10-15, playing Myehn: "I love it so far"): the panels open flush
 with their notch, but a newly opened panel slid in from the left over the flag and the country's name before
 its notch reached them, choppily the first time (the panel's pictures loading) and still across them later;
-switching panels, the old one slid out the same way. **v0.5.1** opens every side panel, and every window
-beside one, by rising 36 px into place over 200 ms (`layout_politics.RISE`, `OPEN_MS`) instead of sliding
-600 px across the screen; it sinks back as it closes. The notch narrows downward, so a panel below its place
-never covers the medallion or the seal (section 6).
+switching panels, the old one slid out the same way. **v0.5.1** opened every side panel, and every window
+beside one, by rising 36 px into place over 200 ms instead of sliding 600 px across the screen.
+**(in game, v0.5.1)** the user's screenshot (2026-10-15): a closed division overview stayed on screen 36 px below
+its place, its header gone and its lists showing over the map. The game does not hide a closed side panel; it
+moves it to `position` and leaves it there (section 6). **v0.5.2** parks every closed panel at the game's off-screen
+`position` again and opens it at once (`animation_time = 0`, as vanilla's dropdowns do): no slide across the flag,
+nothing left on screen. The same release moved the main menu's career profile star (it covered the button's label).
+**v0.6 (2026-10-15, not yet seen in game)**, the user's request "begin to work on styling the superevents and focus
+tree to be more like they were in the mockup. Leave the icons on the focus tree alone": the focus tree opens flush
+under the band with the panels' notch (it was drawn over the medallion like the panels were), with the mockup's
+header (the country's focus tree title, full name and sub-ideology from a scripted GUI on the focus view), its scale
+pattern canvas in a gilt frame, an octagon medallion and plate under every focus in four states (the in-progress one
+red, through a copy of the game's `nationalfocusview.gfx`), a gilt halo behind the focus in progress, gilt links and
+red exclusive marks. The superevent window is the Valsora mod's (`scripts/superevents_deco.py` there, with
+`DECO_UI`), drawn from the mockup's Superevent board with this project's fonts. The top bar's date box is 230 px
+(x 55; 220 until then) and the speed chevrons start at x 286: since Valsora moved to 2036 the widest date the game
+shows, "00:00, 30 September, 2040", is 230 px, and the preview's long sample is that date.
 
 | Area | State |
 |---|---|
@@ -65,11 +78,12 @@ never covers the medallion or the seal (section 6).
 | Politics screen (`interface/countrypoliticsview.gui`) | v0.4: the Government mockup's layout (no Court panel), with scripted GUIs for what the game's screen lacks. v0.4.8: flush under the top bar, notched round the medallion; no description or law cards; sub-ideology; spirits beside popularity. |
 | Other side panels (16: army, construction, decisions, deployment, diplomacy, intelligence, logistics, occupation, officer corps, production, research, trade, faction, faction setup, faction pings, market) | v0.5 (`make_panels.py`): flush under the top bar with the notch, deco header (gilt title right of the notch, close diamond, header buttons, rule), the politics body tile, content moved below the seal; the windows that open beside them flush too. Their insides keep the game's layout; shared pieces (tabs, sort buttons, headers, checkboxes, close, `tiled_bg`) are re-skinned. |
 | State / province panel (`interface/countrystateview.gui`) | v0.4: the mockup's arrangement for the state part (flag + name header, stats row, slots, buildings); the province part keeps the game's positions. |
-| Focus tree (`interface/nationalfocusview.gui`) | v0.4: window chrome, plates, medallions, filters, detail pop-up, legend. Focus icons untouched. |
+| Focus tree (`interface/nationalfocusview.gui`, `.gfx`) | v0.6 (the FocusTree mockup): flush under the band with the notch; header with the scripted title and subtitle, chips, search, zoom, close; scale-pattern canvas in a gilt frame; medallion + plate per focus state (unavailable, available, in progress, completed); halo, search glow, links, exclusive marks, continuous focus marks, legend. Focus icons untouched. |
+| Superevent (Valsora's `valsora_superevent.gui`) | v0.6: drawn by the Valsora mod (`scripts/superevents_deco.py`) from the Superevent board when `DECO_UI` is on: a veil over the map, gilt frame, crest, title strip, framed picture with corner fans, quote, button, now-playing tab. |
 | Main menu (`interface/frontendmainview.gui` + background) | v0.3; v0.4.5 fixed the invisible button row (a quoted `Orientation`). Background and social links **(in game)**. |
 | Army bar (bottom: `leadergroups.gui`) | **Next.** See `docs/next_army_bar_and_map_modes.md`. |
 | Map modes and minimap (bottom right: `mapmodes_interface.gui`, `minimap.gui`) | v0.5: textures only (layouts are the game's and Valsora's): lacquer column, line-icon medallions for land/air/naval/intel, the game's small icons and toggles recoloured in gilt, deco handle and ping buttons; the minimap's picture and frame in gilt by the Valsora mod (`scripts/minimap.py`, deco style). |
-| Everything else (events, the army bar, the panels' own pictures ...) | Only the core skin so far. A mockup exists for the superevent. |
+| Everything else (events, the army bar, the panels' own pictures ...) | Only the core skin so far. |
 
 **HOI4 has no outliner.** The mockup's "Outliner" panel was a design idea. The closest things in the
 game are the army/navy/air overview lists (opened from the top bar's army/navy/air buttons); restyle
@@ -298,14 +312,16 @@ Build order matters. `gen_fonts` runs first because `layout.py` measures strings
   a per-panel survey of each element's real size (`build/` scratch, the game's textures) put the needed
   shift at 62-72 px (the faction screen's banner, which starts at y -10, 119). The notch's place in a panel
   depends on the panel's x (`layout_panels.notch_poly(x)`), so each (width, x) has its own header picture.
-- **How a window slides (v0.5.1).** `position` is where a window is while hidden and `show_position` where
-  it shows; `show_animation_type`, `hide_animation_type` (decelerated, accelerated) and `animation_time` (ms)
-  move it between the two. **(in vanilla)** the game hides a window once it has slid back, wherever that is:
-  dropdowns (`*_expanded_window`) slide 25 px and trait boxes 76 px within their parent, on screen, and are
-  gone when closed. The side panels slid from x -606 (the windows beside them from -356) to their place, so
-  their header crossed the top bar's medallion (**(in game, v0.5)**, the user's video). Since v0.5.1 they rise
-  `RISE` px from below their place instead: safe because the notch's every row is no narrower than the row
-  below it, so a panel lower than its place shows more of the medallion and seal, never less.
+- **How a window slides (v0.5.2).** `position` is where a window is while closed and `show_position` where it shows;
+  `show_animation_type`, `hide_animation_type` (decelerated, accelerated) and `animation_time` (ms) move it between
+  the two. **(in game, v0.5.1)** the game does not hide a closed side panel: it moves it back to `position` and leaves
+  it there, drawn. Vanilla's panels rest off-screen (x -606, the windows beside them at x -356 or behind the panel);
+  its dropdowns (`*_expanded_window`) rest at y -300 or -2000, or inside a parent with `clipping = yes`, and several
+  open with `animation_time = 0`. v0.5.1 rested the panels 36 px below their place to make them rise: a closed
+  division overview then stayed on screen with its lists over the map (the user's screenshot; an earlier note here
+  said the game hides a window once it has slid back, which was wrong). Since v0.5.2 every closed panel rests at the
+  game's `position` when that is off-screen, else just off the left edge (`layout_politics.closed_x`), and opens at
+  once (`OPEN_MS = 0`): sliding in from the left crossed the flag and the name (the user's video, v0.5).
 - **(inferred from vanilla)** a **negative size** runs to the parent's edge minus that much (the logistics
   list, `height = -98`, ends where its 98 px footer, LOWER_LEFT at y -98, begins), like `100%%` runs to the
   edge; so moving a box down only shortens it, and bottom-anchored elements stay put.
@@ -559,11 +575,34 @@ because several of its elements are placed relative to the province window by th
 background picture (450x650 at the game's (5,5), zones in `layout_stateview.py`), building tiles,
 level plates, chips, close diamond and fonts.
 
-**make_focus.py.** Focus tree chrome: header band (stretched corneredTile), gilt title, search box,
-zoom diamonds, close, filter chips (2 frames), the tree's grid background and vignette, an octagon
-medallion behind every focus icon, the name plates (replaced at their vanilla paths, 160x34; the name
-is re-centred on them), the detail pop-ups and a legend in the lower right. The tree's geometry is
-untouched.
+**make_focus.py (v0.6).** The focus tree, after the FocusTree mockup; `layout_focus.py` has the numbers.
+- The window opens at `layout_politics.TOP` with the side panels' notch (its x is the game's -3, so its notch is
+  `layout_panels.notch_poly(-3)`): its background is clear and click-through; first children are click-catchers
+  beside the notch (to the window's right edge: `100%%` wide) and the header picture, a cornered tile 616 px wide
+  whose left 260 px hold the notch and whose 96 px middle repeats to the window's width. The tree moves to y 114.
+- Header: the game's title (`national_focus_title`, "National Focus") is a small label; a scripted GUI docked to the
+  focus view (`parent_window_token = national_focus`, player context, `valsora_deco_focus_extras.gui`) draws the
+  title ("[ROOT.GetAdjective] Focus Tree", `valsora_deco_title_30`) and the full name and sub-ideology (the politics
+  screen's `GetValsoraDecoSubIdeology`, `valsora_deco_italic_15`). **(assumed)** the token works, and in player
+  context the title is the player's even when they look at another country's tree.
+- Each focus: the game swaps its `bg` button's sprite by state, so the picture is the medallion and the plate
+  together (157 x 118, at item (9, -27): the octagon centred on the icon's (87.5, 20), the plate overlapping its
+  foot): `focus_unavailable_bg`, `focus_can_start_bg` and `focus_completed_bg` at the game's paths (completed: the
+  gold medallion and a check badge; its plate a deep gold, since the game's name stays cream). The game draws a
+  focus in progress with `GFX_focus_current`, the can-start picture plus two rotating shines; the mod ships the
+  game's `nationalfocusview.gfx` with that one sprite changed to its own picture (the mockup's red medallion) and
+  its shines dropped (`validate_preview` lets the rest of a copied game .gfx keep the game's textures, and so does
+  Valsora's `check_mod.py`: a game sprite may name a texture the mod doesn't ship, unless it is in a folder of ours).
+- The focus in progress has the mockup's ring of gilt rays behind it (`continuous_glow`, `GFX_ongoing_focus_goal`:
+  `ongoing_focus_goal.dds`, 3 frames of 150 px the game blends); the search highlight is the same ring in jade.
+- The links (`focus_link_*.dds`, 4 frames of 16 px: the game's green frames 1-2 are bright gilt, its blue-grey 3-4
+  dim bronze, 2 and 4 dashed) and the exclusive marks (`focus_link_exclusive.dds`: a red diamond with a cross, small
+  red diamonds at the ends; the lines red) are replaced at their paths and sizes (`SAME_SIZE`). Which link frame
+  means what is **(assumed)**: green for a completed prerequisite.
+- The filter chips, search box, zoom and close sit on one row at the header's right; the legend shows the mockup's
+  four marks. The tree's geometry (focus spacing 96 x 130) is the game's, so links show only in the 12 px between a
+  plate and the next medallion.
+- `preview_focus.py` draws it over the top bar with Rouental's tree, the game's icons and the mockup's states.
 - **Conflict:** the Valsora mod ships the same file path, so the UI mod must load **after** Valsora.
   If Valsora's `countrypoliticsview.gui` changes, re-run `make_politics.py`.
 
@@ -653,8 +692,13 @@ GP.write_gui(MOD + "interface/x.gui", t)    # braces checked, engine_safe applie
 
 Check these first in the user's next screenshots and `error.log`:
 
-- **v0.5.1**: a side panel rises a little into place as it opens and sinks as it closes; it never crosses
-  the flag or the name. Check the first opening too (the game loads the panel's pictures then).
+- **v0.6 focus tree**: the window flush under the band with the medallion and seal in its notch; the title
+  ("Rouentaise Focus Tree") and the full name and sub-ideology under it (if they don't show, the scripted GUI's token
+  failed); the chips, search, zoom and close on one row; each focus's medallion behind its icon in its state's look
+  (grey unavailable, jade available, red in progress with a gilt halo, gold completed with a check); the links gilt
+  (bright from a completed focus), the exclusive marks red; the scale pattern and the frame; the legend.
+- **v0.5.2**: a side panel opens and closes at once, nothing of it left on screen when it is closed (the division
+  overview and the windows beside the panels especially); the main menu's career profile star on the button's corner.
 - **v0.5** (the README's checklist has the user-facing version): each side panel's notch (medallion, name and
   seal visible, gilt edge, no map between), its title, close and header buttons, nothing cut off at the
   bottom (logistics, officer corps, faction, research), the construction screen with its list folded, the
@@ -720,7 +764,7 @@ Still vanilla art:
 - the count badges on the menu buttons
 - the music player pop-out
 - faction logos
-- focus icons and the links between focuses
+- focus icons (on purpose: the user's request)
 - every screen other than the politics screen, state panel, focus tree and main menu (core skin only)
 
 ## 11. Integration: part of the Valsora mod (v0.5)
@@ -763,9 +807,9 @@ The user asked (2026-10-14) for one install, keeping the option of going back to
 4. The side panels' insides (v0.5 did their frames, headers and the shared pieces): the game's pictures
    inside them (research's photograph, `production_win_top`, the officer corps' coloured command boxes, the
    intelligence agency's art, `overview_top_strip`) and the +/- buttons; re-lay a panel only if the user asks.
-5. Superevent screen (mockup in `art/mockups/`). Valsora has its own `valsora_superevent.gui`, so
-   coordinate with that file rather than overriding it blindly. The focus tree's links are still
-   vanilla (16 px tiles, 4 frames per state, frame meaning unknown: read the textures first).
+5. Focus tree, after the user's screenshots of v0.6: what the mockup has that the game's window lacks (the focus in
+   progress and its days in the header, a progress bar under the focus, the "on completion" list in the tooltip)
+   needs scripted GUIs or can't be done; the superevent is done (Valsora's `scripts/superevents_deco.py`).
 6. HD flags experiment (section 6), only if the user wants it.
 
 For every new screen, follow this pattern:
