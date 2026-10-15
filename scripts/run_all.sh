@@ -11,7 +11,13 @@ if [ -f "source/HOI4 Mod Map.pdn" ]; then
     if [ ! -f work/pdn_game/layers.txt ] || [ "source/HOI4 Mod Map.pdn" -nt work/pdn_game/layers.txt ]; then
         python3 scripts/readpdn.py "source/HOI4 Mod Map.pdn" work/pdn_game
     fi
-    python3 scripts/read_layers.py   # layers -> provinces, states, regions, owners
+    # layers -> provinces, states, regions, owners; skipped when nothing it reads has changed (FORCE=1 reruns it)
+    if python3 scripts/stamp.py fresh read_layers; then
+        echo "read_layers.py: its inputs are unchanged, so work/ is kept (FORCE=1 to rerun)"
+    else
+        python3 scripts/read_layers.py
+        python3 scripts/stamp.py save read_layers
+    fi
 else
     [ -f work/pdn/layer1.npy ] || python3 scripts/readpdn.py source/Valsora_06SEPT2026HOTFIX.pdn work/pdn
     python3 scripts/blocks.py        # land mask, continents, Antarctica removal

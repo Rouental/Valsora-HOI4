@@ -38,8 +38,11 @@ before you trust any number below.
 - **Set up.**
   - You need Python 3.11 with numpy, scipy, pillow and scikit-image (there is no
     requirements file).
-  - From the repository root, run `sh scripts/run_all.sh`. It takes a few minutes, and
-    longer the first time, when it decodes the `.pdn`.
+  - From the repository root, run `sh scripts/run_all.sh`. It takes about two minutes, one
+    when the map hasn't changed (it skips `read_layers.py` while nothing that step reads has
+    changed: `scripts/stamp.py`; `FORCE=1 sh scripts/run_all.sh` reruns it), and longer the
+    first time, when it decodes the `.pdn`. The same sources give the same files, the zip
+    included, so a rebuild that changed nothing shows nothing to commit.
   - Its `check_mod.py` step must end with `all checks passed`. A clean `check_mod.py` is
     the bar for shipping anything.
 - **Run everything from the repository root.** Paths are relative to it (`work/`,

@@ -245,7 +245,9 @@ def main():
     OUT.mkdir(parents=True)
     p = np.load("work/provinces.npz")
     lab, kind, cont = p["prov"], p["kind"], p["cont"]
-    reg = np.load("work/regions.npz")
+    # read once: an .npz file decompresses an array again on every reg["..."], and central() below asks for the
+    # centres province by province (82,565 reads, 200 s of a 238 s build until 2026-10-15)
+    reg = dict(np.load("work/regions.npz"))
     anchor, size, state_of = reg["anchor"], reg["size"], reg["state_of"]
     rj = json.load(open("work/regions.json"))
     states, regions = rj["states"], rj["regions"]
@@ -329,7 +331,7 @@ def main():
     # ---------------------------------------------------------------- bitmaps
     # heights, terrain and rivers come from the .pdn's layers when there are some
     if "height" in world:
-        height, d_sea = world["height"], coast_distance(pix_kind != 1)[0]
+        height, d_sea = world["height"], ndi.distance_transform_edt(pix_kind != 1)
         tmap, rmap = world["terrain"], world["rivers"]
     else:
         height, d_sea = heightmap(pix_kind)
@@ -367,7 +369,9 @@ def main():
     edge[:-1] |= lab[:-1] != lab[1:]
     edge[1:] |= lab[:-1] != lab[1:]
     edge[0, :] = edge[-1, :] = True
-    inner = ndi.distance_transform_edt(~edge)
+    # clear[r]: no province edge closer than r px (Euclidean, as a distance transform has it: the 3x3 block round a
+    # pixel for 2, the 5x5 for 3), by erosion, which takes a tenth of a distance transform's time
+    clear = {r: ndi.binary_erosion(~edge, np.ones((2 * r - 1, 2 * r - 1), bool), border_value=1) for r in (2, 3)}
     spread = [(0, 0), (0, 3), (3, 0), (0, -3), (-3, 0), (2, 2), (-2, -2), (2, -2), (-2, 2)]
 
     def spot(i, k):
@@ -375,7 +379,7 @@ def main():
         y, x = int(anchor[i][0]), int(anchor[i][1])
         for dy, dx in spread[k % len(spread):] + spread[:k % len(spread)]:
             yy, xx = y + dy, (x + dx) % W
-            if 0 <= yy < H and lab[yy, xx] == i and inner[yy, xx] >= 2:
+            if 0 <= yy < H and lab[yy, xx] == i and clear[2][yy, xx]:
                 return yy, xx
         return y, x
 
@@ -617,7 +621,7 @@ def main():
         dx = ((j_x - ax + W / 2) % W) - W / 2
         for f in (0.55, 0.45, 0.35, 0.25, 0.15):
             yy, xx = int(round(ay + f * (j_y - ay))), int(round(ax + f * dx)) % W
-            if 0 <= yy < H and lab[yy, xx] == i and inner[yy, xx] >= 2:
+            if 0 <= yy < H and lab[yy, xx] == i and clear[2][yy, xx]:
                 return yy, xx
         return spot(i, 0)
 
@@ -628,7 +632,7 @@ def main():
         a = k * math.pi / 4
         while r >= 3:
             yy, xx = int(round(ay + r * math.sin(a))), int(round(ax + r * math.cos(a))) % W
-            if 0 <= yy < H and lab[yy, xx] == i and inner[yy, xx] >= 3:
+            if 0 <= yy < H and lab[yy, xx] == i and clear[3][yy, xx]:
                 return yy, xx
             r *= 0.75
         return spot(i, k + 1)
@@ -750,7 +754,7 @@ def main():
           "adjacency_rule_name;Comment\n-1;-1;;-1;-1;-1;-1;-1;-1\n", crlf=True)
     write("map/adjacency_rules.txt", "# No straits or canals on the placeholder map.\n")
     # ambient objects: vanilla's wind and frame, water ambience moved to our open seas
-    water_far = ndi.distance_transform_edt(pix_kind != 1)
+    water_far = d_sea  # the distance from land of every water pixel
     spots = []
     for gy in range(2):
         for gx in range(7):

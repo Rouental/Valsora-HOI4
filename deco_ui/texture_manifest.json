@@ -1,0 +1,1682 @@
+[
+ {
+  "key": "win_tiled_window",
+  "path": "gfx/interface/tiles/tiled_window.dds",
+  "w": 192,
+  "h": 192,
+  "sig": "7cfea74f1e9d8a376f8b8171b299709f1a1c70ed9ee7259767de97d20aea2364"
+ },
+ {
+  "key": "win_tiled_window_2b_border",
+  "path": "gfx/interface/tiles/tiled_window_2b_border.dds",
+  "w": 192,
+  "h": 192,
+  "sig": "7d78233168dc95ac52386980426e1cd5e206165389578b90de656ce0f113b3cc"
+ },
+ {
+  "key": "win_tiled_window2_2b_border",
+  "path": "gfx/interface/tiles/tiled_window2_2b_border.dds",
+  "w": 192,
+  "h": 192,
+  "sig": "251e05ce58f07d671390b6a7ee5881a5c3a8149389781ce6c5f0ef9e8e905ced"
+ },
+ {
+  "key": "win_tiled_window_1b_border",
+  "path": "gfx/interface/tiles/tiled_window_1b_border.dds",
+  "w": 192,
+  "h": 192,
+  "sig": "c23a329a79a06d7c0d79a18c6293175ce1cad9240e5cfa70c39c47104358481d"
+ },
+ {
+  "key": "win_tiled_window2_1b_border",
+  "path": "gfx/interface/tiles/tiled_window2_1b_border.dds",
+  "w": 192,
+  "h": 192,
+  "sig": "63767ffb361496ee16f2b7ac8e35a64633e32ce9ee4c306b49a86689341c040f"
+ },
+ {
+  "key": "win_tiled_window_1b_thin_border",
+  "path": "gfx/interface/tiles/tiled_window_1b_thin_border.dds",
+  "w": 192,
+  "h": 192,
+  "sig": "5aeffae0731e7490c3cffdfe926dbc500d909bfe2b37777c0d1a6a70a0e3b922"
+ },
+ {
+  "key": "win_tiled_window_thin_border",
+  "path": "gfx/interface/tiles/tiled_window_thin_border.dds",
+  "w": 192,
+  "h": 192,
+  "sig": "d946c16c37e0cbc67a44b1c83e5011ed317d10d1849cf1483008b0548421c10b"
+ },
+ {
+  "key": "win_tiled_window_thin_border2",
+  "path": "gfx/interface/tiles/tiled_window_thin_border2.dds",
+  "w": 192,
+  "h": 192,
+  "sig": "07c1650185ce7a10142a1084768901e639d3caf7c5d4cdf292b925799a242615"
+ },
+ {
+  "key": "win_plain_bg",
+  "path": "gfx/interface/tiles/tiled_plain_bg.dds",
+  "w": 192,
+  "h": 192,
+  "sig": "85a1d6a27e5efb1105805ef5412df7ec7b8e95ee272956427c4cc990dd6981d6"
+ },
+ {
+  "key": "win_plain_bg2",
+  "path": "gfx/interface/tiles/tiled_plain_bg2.dds",
+  "w": 182,
+  "h": 186,
+  "sig": "85eadb2e149b2147af2674258b15689ed5d25affca7bfef48e7fc7c216efb2a9"
+ },
+ {
+  "key": "win_plain_bg_small",
+  "path": "gfx/interface/tiles/tiled_plain_bg_small.dds",
+  "w": 48,
+  "h": 48,
+  "sig": "ffc60076f8635d406af02c937d06645770e99ad756799cd226833a423655efd9"
+ },
+ {
+  "key": "win_small",
+  "path": "gfx/interface/tiles/tiled_window_small.dds",
+  "w": 96,
+  "h": 96,
+  "sig": "ba93bc3d0fd57b70149bbd0b49db4087996ff846d35083fc3ca7f3c3376de9a9"
+ },
+ {
+  "key": "win_small_small",
+  "path": "gfx/interface/tiles/tiled_window_small_small.dds",
+  "w": 48,
+  "h": 48,
+  "sig": "c2242b1c8c70cb38fc2e111f7940361151d39d8ef7b38cc7db55f27f5ed7d502"
+ },
+ {
+  "key": "mini_dialog",
+  "path": "gfx/interface/tiles/tiled_mini_dialog.dds",
+  "w": 32,
+  "h": 32,
+  "sig": "9ff4f3c7dc892a6ff8e7c41b3dca0c1506a31fb79d153bb41ce78fc9102b8a9c"
+ },
+ {
+  "key": "tooltip",
+  "path": "gfx/interface/tiles/tiles_dialog.dds",
+  "w": 96,
+  "h": 96,
+  "sig": "49e0bd0ffa433af986aafb5eabe0b751302eb97e5c15d0cc1c78f6470b41a450"
+ },
+ {
+  "key": "btn_148x34",
+  "path": "gfx/interface/button_148x34.dds",
+  "w": 148,
+  "h": 34,
+  "sig": "6973e142d2952c013c46e1fc12e4fed28ef4dfe2e96715dc7f66af3dab95791d"
+ },
+ {
+  "key": "btn_221x34",
+  "path": "gfx/interface/button_221x34.dds",
+  "w": 221,
+  "h": 34,
+  "sig": "1bcfb645a91c73736105bbed62104f7997a24e1abac924b917ee0e63e0e30b61"
+ },
+ {
+  "key": "btn_123x34",
+  "path": "gfx/interface/button_123x34.dds",
+  "w": 123,
+  "h": 34,
+  "sig": "c7da5db69c9255ce2e9234b42b2368f66103515685937c2d88cd5f33167a8287"
+ },
+ {
+  "key": "btn_261x34",
+  "path": "gfx/interface/button_261x34.dds",
+  "w": 261,
+  "h": 34,
+  "sig": "2acd3fe1197aa04073281cc7594985d69ac8079749190f555532d2d044f37f00"
+ },
+ {
+  "key": "btn_359x34",
+  "path": "gfx/interface/button_359x34.dds",
+  "w": 359,
+  "h": 34,
+  "sig": "7c0de14b28753841b11a883f5f8431392bbb796403be94191ffdfbde2c923e52"
+ },
+ {
+  "key": "btn_223x32",
+  "path": "gfx/interface/button_223x32.dds",
+  "w": 223,
+  "h": 32,
+  "sig": "d7718ca32357c2ed86e721f65069142a6c93d9f85ed38d32d8df37ebc3015390"
+ },
+ {
+  "key": "btn_238x38",
+  "path": "gfx/interface/button_238x38.dds",
+  "w": 238,
+  "h": 38,
+  "sig": "a0a93ffed01efeafca1e20afb0bafe026b3f70d8e7928b00d9611a5d239b1936"
+ },
+ {
+  "key": "btn_211x20",
+  "path": "gfx/interface/button_211x20.dds",
+  "w": 211,
+  "h": 20,
+  "sig": "908e0f9f55fc2db59dc7d386d3145ffc0d390153a3364e2d898b32c20cd61270"
+ },
+ {
+  "key": "btn_148x20",
+  "path": "gfx/interface/button_148x20.dds",
+  "w": 148,
+  "h": 20,
+  "sig": "5d27e0f7fa10a4f65a109935fb90cad3f8337f39d35d71ed66666b693b3558e0"
+ },
+ {
+  "key": "btn_372x43",
+  "path": "gfx/interface/button_372x43.dds",
+  "w": 372,
+  "h": 43,
+  "sig": "5058bb1bef56960eda71b3c497fba9e653f50786040ca546de3b33f30b7b0609"
+ },
+ {
+  "key": "btn_94x31",
+  "path": "gfx/interface/button_94x31.dds",
+  "w": 94,
+  "h": 31,
+  "sig": "8b04cc34b54fd63033fe59b4bf028e3c7d5d471eb2b172c97d9bfdd979f2204e"
+ },
+ {
+  "key": "shared_closebutton",
+  "path": "gfx/interface/closebutton.dds",
+  "w": 32,
+  "h": 33,
+  "sig": "55d0f5be331cb830e2ce62cbb922ae12fd4168be838c591287153f1f022af47e"
+ },
+ {
+  "key": "shared_tiled_bg",
+  "path": "gfx/interface/tiles/tiled_bg.dds",
+  "w": 192,
+  "h": 192,
+  "sig": "d2c389d3537a04593dfe6f82ca70576e202eef5a7a1d971f251172f8f6035325"
+ },
+ {
+  "key": "shared_header_bg",
+  "path": "gfx/interface/header_bg.dds",
+  "w": 543,
+  "h": 41,
+  "sig": "9d65442c282c68bfe0d60cd2116306a7e5ca4d905014202bde582df8fdf92e83"
+ },
+ {
+  "key": "shared_category_header",
+  "path": "gfx/interface/category_header.dds",
+  "w": 511,
+  "h": 44,
+  "sig": "8c3790ea50191387d3962ff17fb9a181da336787d9ec7bba1c46fe3e7bfbe343"
+ },
+ {
+  "key": "shared_faction_header",
+  "path": "gfx/interface/factions/ui/faction_header.dds",
+  "w": 530,
+  "h": 42,
+  "sig": "1ad7a1b3ddc7ce2ed3fb0bdfeb21d686ff0761c1d411f8c7deacf3f605368385"
+ },
+ {
+  "key": "shared_main_screens_bottom",
+  "path": "gfx/interface/main_screens_bottom.dds",
+  "w": 545,
+  "h": 54,
+  "sig": "4c0564216ff128e7a76dc2c4eea8c8b40b60f2d2961ee6c5743f29b0d2fa9cc5"
+ },
+ {
+  "key": "shared_deployment_binding",
+  "path": "gfx/interface/deployment_binding.dds",
+  "w": 533,
+  "h": 35,
+  "sig": "8c22e006221dc291c8627aae04f1779d9790155e15af610988893e4fd64e4023"
+ },
+ {
+  "key": "shared_trade_header",
+  "path": "gfx/interface/tradeview/trade_header.dds",
+  "w": 516,
+  "h": 35,
+  "sig": "4cb0c3c59511942285c96c9418b738bc8f92f46fb8135f3cbb17d9c902829384"
+ },
+ {
+  "key": "shared_tab_bg",
+  "path": "gfx/interface/intel_ledger/tab_bg.dds",
+  "w": 520,
+  "h": 40,
+  "sig": "6bc327063c208909ba503026b193641a5a3745eb141f90df1958192b5b78136a"
+ },
+ {
+  "key": "shared_diplo_details_header",
+  "path": "gfx/interface/diplo_details_header.dds",
+  "w": 241,
+  "h": 51,
+  "sig": "1e262eb403e256e8656d52a82ba9e693db5ff58b81931801de5b7917cf42eec0"
+ },
+ {
+  "key": "shared_generic_text_bg_108",
+  "path": "gfx/interface/generic_text_bg_108.dds",
+  "w": 108,
+  "h": 27,
+  "sig": "20572cf5a423828f942c8b06f54a04ccea9e2db022a3e525783ea542d606a62f"
+ },
+ {
+  "key": "shared_tiling_sort_button",
+  "path": "gfx/interface/tiles/tiling_sort_button.dds",
+  "w": 60,
+  "h": 23,
+  "sig": "0d0d715bba3407bd2782602e54a34bf274a37c7f12a5bb6a3d16c17bc14cbd8f"
+ },
+ {
+  "key": "shared_tab_large",
+  "path": "gfx/interface/tab_large.dds",
+  "w": 516,
+  "h": 42,
+  "sig": "4645cc19b4c70f8d66c649018ecad70961fa314b453a3f05c0aaffb978043d2b"
+ },
+ {
+  "key": "shared_tab",
+  "path": "gfx/interface/intel_ledger/tab.dds",
+  "w": 520,
+  "h": 42,
+  "sig": "725333b8acc8b0996b8b1e171051a8e032abbb6286f39b7494a7046943030711"
+ },
+ {
+  "key": "shared_diplo_filter_entry",
+  "path": "gfx/interface/diplo_filter_entry.dds",
+  "w": 246,
+  "h": 34,
+  "sig": "766b11ef669dfcccd77168d2ce6511a31257ec5a0f4b4f6e467d31c6615e36ee"
+ },
+ {
+  "key": "shared_sort_button_100x29_2",
+  "path": "gfx/interface/sort_button_100x29_2.dds",
+  "w": 200,
+  "h": 29,
+  "sig": "b997332fed73d5744f7c989de163f88854e758a2bc20eaf874af09a45ff0ff56"
+ },
+ {
+  "key": "shared_sort_button_202x29",
+  "path": "gfx/interface/sort_button_202x29.dds",
+  "w": 404,
+  "h": 29,
+  "sig": "3eb88e9681f0c240bd4d4d7b0da03f867d057208faff53772f6795774d68929c"
+ },
+ {
+  "key": "shared_generic_checkbox",
+  "path": "gfx/interface/generic_checkbox.dds",
+  "w": 68,
+  "h": 30,
+  "sig": "c223e3890e9257f31001ffdebe164802b9bdaa6c108a2c96e8b3972bff6b672c"
+ },
+ {
+  "key": "mm_column",
+  "path": "gfx/interface/mapmode/mapmode_main_bg.dds",
+  "w": 87,
+  "h": 206,
+  "sig": "cdd8f41954188bb5346cfaca05dcaff8e628bad2a3ac7b8a2b0621aad0c0903b"
+ },
+ {
+  "key": "mm_foot",
+  "path": "gfx/interface/mapmode/mapmode_bottom_bg.dds",
+  "w": 86,
+  "h": 59,
+  "sig": "6bc8a4e3f80d43038bbeac920e02a1201774fb07f8335180b9cfd62338719033"
+ },
+ {
+  "key": "mm_find",
+  "path": "gfx/interface/mapmode/find_screen_button.dds",
+  "w": 39,
+  "h": 39,
+  "sig": "2ba2ca6bc74097199e7c1082224911b01fe1d4a1dcc395ec9833020f4b93a1a6"
+ },
+ {
+  "key": "mm_all",
+  "path": "gfx/interface/mapmode/mapmode_button_all.dds",
+  "w": 44,
+  "h": 21,
+  "sig": "2f1e632c502a46131d1743199f26bf81e01e05ef225351649f027c157720198e"
+ },
+ {
+  "key": "mm_well",
+  "path": "gfx/interface/mapmode/mapmode_button_bg.dds",
+  "w": 42,
+  "h": 51,
+  "sig": "8654c295c4cef9e03fa724d54d26b05ccb062fdbb090b1b3ffd396011f1c791d"
+ },
+ {
+  "key": "mm_big",
+  "path": "gfx/interface/mapmode/mapmode_buttons_deselected_big.dds",
+  "w": 136,
+  "h": 31,
+  "sig": "988ef1f7a8ccfabe8379e3e525187b478763a9cb4b82d1926475b1c6e460e2d2"
+ },
+ {
+  "key": "mm_big_s",
+  "path": "gfx/interface/mapmode/mapmode_buttons_selected_big.dds",
+  "w": 136,
+  "h": 31,
+  "sig": "4352806c2ad3e5a274a670821bc4549efb7b55cabf0ef2ce577d19b7403baa44"
+ },
+ {
+  "key": "mm_depressed",
+  "path": "gfx/interface/mapmode/mapmode_button_depressed.dds",
+  "w": 23,
+  "h": 20,
+  "sig": "b673df6fed50d2f193619d1e84740206b1973c45312f2b9425291e4c4825cb1a"
+ },
+ {
+  "key": "mm_small",
+  "path": "gfx/interface/mapmode/mapmode_buttons_deselected_small.dds",
+  "w": 360,
+  "h": 18,
+  "sig": "53ba439ab5dd8e2c811eda84db9125003a12a39619ae0a48d1720a58ff12474d"
+ },
+ {
+  "key": "mm_small_s",
+  "path": "gfx/interface/mapmode/mapmode_buttons_selected_small.dds",
+  "w": 360,
+  "h": 18,
+  "sig": "7a0f638770a4934338a4f6f70b239a16c9fbcc6b460e31d44d18e81c4467220b"
+ },
+ {
+  "key": "mm_day_night",
+  "path": "gfx/interface/mapmode/day_night_toggle.dds",
+  "w": 44,
+  "h": 22,
+  "sig": "bba23834d79b1ae06566f52f3aaa1052191e71f92f2abd0861173bb435ccf4c6"
+ },
+ {
+  "key": "mm_counters",
+  "path": "gfx/interface/mapmode/player_counters_toggle.dds",
+  "w": 44,
+  "h": 22,
+  "sig": "8e5b94651499b0d7e32a190a8531f87ac97a4e8c9e118ea8aa090cc128a270c5"
+ },
+ {
+  "key": "mm_counter_colours",
+  "path": "gfx/interface/mapmode/counters_color_mode_button.dds",
+  "w": 44,
+  "h": 22,
+  "sig": "c74ea614fc0c5c2761b2c8cd3f452ec6bb16f66a6e0e603f0c35d115fc174a26"
+ },
+ {
+  "key": "mm_allied_plans",
+  "path": "gfx/interface/mapmode/allied_plans_button.dds",
+  "w": 44,
+  "h": 22,
+  "sig": "591873e9dd4ea86b4256a58da445f09639ce5a4f3072caec8683072f9501c319"
+ },
+ {
+  "key": "mm_fog",
+  "path": "gfx/interface/mapmode/fog_of_war_toggle.dds",
+  "w": 44,
+  "h": 22,
+  "sig": "4551de48c16cc7bd31f86230263f301239bf34dce4630b570a1b93166f709633"
+ },
+ {
+  "key": "mm_radar",
+  "path": "gfx/interface/mapmode/radar_toggle.dds",
+  "w": 44,
+  "h": 22,
+  "sig": "be7f14122c2cf0f1607996d4f258f1567cf59d055e7c76391d6b004a5b7d1c11"
+ },
+ {
+  "key": "mm_configure",
+  "path": "gfx/interface/mapmode/mapmode_configure_bg.dds",
+  "w": 519,
+  "h": 23,
+  "sig": "ad9b04e8bdce85dd0facb07f2f12b3e810070eff1601e6442882e9f9dd72772f"
+ },
+ {
+  "key": "sort_83",
+  "path": "gfx/interface/sort_button_83x29.dds",
+  "w": 166,
+  "h": 29,
+  "sig": "1c40a56e6a915957f25bd3c63f8e3be3bd446b560f9ece03207be5c1b04ad0db"
+ },
+ {
+  "key": "mn_handle",
+  "path": "gfx/minimap/handle_default.dds",
+  "w": 24,
+  "h": 64,
+  "sig": "bd7fdd3bf36eba5148a8f74f9766d0ae659622150c4fb7c07342d6fb19a2dc00"
+ },
+ {
+  "key": "mn_handle_pinged",
+  "path": "gfx/minimap/handle_pinged.dds",
+  "w": 24,
+  "h": 64,
+  "sig": "c2023a120f43a81dd5d0105cb61552c3fb793ab05c07777b5ea0dd3dcb4de6fb"
+ },
+ {
+  "key": "mn_offensive_btn",
+  "path": "gfx/minimap/offensive_ping_btn.dds",
+  "w": 64,
+  "h": 31,
+  "sig": "6bf0f8fe3df1e9bd8c2d8bed32a715a27942c1e2526a33c301e1e5d333dfc841"
+ },
+ {
+  "key": "mn_defensive_btn",
+  "path": "gfx/minimap/defensive_ping_btn.dds",
+  "w": 64,
+  "h": 31,
+  "sig": "8b38ee6ed0ad279a89cf1bb6739235cce59c6ca7beeba2e10731c7c187a5ab12"
+ },
+ {
+  "key": "mn_ping_offensive",
+  "path": "gfx/minimap/minimap_ping_offensive.dds",
+  "w": 21,
+  "h": 22,
+  "sig": "44ced3588dd00139edb2792ccf7571855a1ae9b143748ff31d37827c1a11eced"
+ },
+ {
+  "key": "mn_ping_defensive",
+  "path": "gfx/minimap/minimap_ping_defensive.dds",
+  "w": 23,
+  "h": 21,
+  "sig": "b5ff0e4c26fde18c0b9e08606ca0b7429dc632e0184c9a8c8d585c70176164a5"
+ },
+ {
+  "key": "tb_band",
+  "path": "gfx/interface/valsora_deco/topbar_band.dds",
+  "w": 196,
+  "h": 64,
+  "sig": "0bf5d5d6499e2f75a48b375a5911f821e229558f12d12390fccd1be42b4087b2"
+ },
+ {
+  "key": "tb_band_shadow",
+  "path": "gfx/interface/valsora_deco/topbar_band_shadow.dds",
+  "w": 16,
+  "h": 8,
+  "sig": "e1615b4ca89f8747e1afb54f1f95a16477817a047f8942b71c6c33faf6b16d9d"
+ },
+ {
+  "key": "tb_medallion",
+  "path": "gfx/interface/valsora_deco/topbar_medallion.dds",
+  "w": 156,
+  "h": 148,
+  "sig": "c66177bedf6b972767d94240565ab4688debd796ed45747e22b6d1630ff02894"
+ },
+ {
+  "key": "flag_mask",
+  "path": "gfx/interface/valsora_deco/flag_mask.tga",
+  "w": 82,
+  "h": 52,
+  "sig": "572f53f658bf91b0a20221cb8bbfbb5cfd49bfe93cf561b6c07cf3bca6723f94"
+ },
+ {
+  "key": "flag_overlay",
+  "path": "gfx/interface/valsora_deco/flag_overlay.dds",
+  "w": 82,
+  "h": 52,
+  "sig": "bf4f91e6af38ee312bb6d0b814741fd5742f00f03e2d291552acbfa7b7faa115"
+ },
+ {
+  "key": "tb_decisions_seal",
+  "path": "gfx/interface/valsora_deco/decisions_seal.dds",
+  "w": 88,
+  "h": 44,
+  "sig": "6855b79472fd79ae51233694868972c88c4833f64c4e8eb810c499a96c9db3a1"
+ },
+ {
+  "key": "dec_glow",
+  "path": "gfx/interface/decisionview/decisions_glow.dds",
+  "w": 128,
+  "h": 64,
+  "sig": "453dc28aeec6d45708c27134ee28beac818e706094ec4908b5c621bab199a345"
+ },
+ {
+  "key": "dec_glow_blue",
+  "path": "gfx/interface/decisionview/decisions_glow_blue.dds",
+  "w": 128,
+  "h": 64,
+  "sig": "1c7bd9f6860ad75e6878b80327453125df6628d3174f32d98459237f793b00d1"
+ },
+ {
+  "key": "dec_glow_yellow",
+  "path": "gfx/interface/decisionview/decisions_glow_yellow.dds",
+  "w": 128,
+  "h": 64,
+  "sig": "0555e6219d354e45dc7c20925f1e4b7f86d563661496a09db7cd98f852d79d71"
+ },
+ {
+  "key": "dec_glow_green",
+  "path": "gfx/interface/decisionview/decisions_glow_green.dds",
+  "w": 128,
+  "h": 64,
+  "sig": "8d48be798877da257123b4c2621d856d1b858336d37227ff62b5ff9409bc9d6f"
+ },
+ {
+  "key": "tb_intelligence",
+  "path": "gfx/interface/valsora_deco/button_intelligence.dds",
+  "w": 88,
+  "h": 46,
+  "sig": "0793fd0446bb066806e540f54262b4ac01578362d780f2e98abb3b9af6b3a3e5"
+ },
+ {
+  "key": "tb_technology",
+  "path": "gfx/interface/valsora_deco/button_technology.dds",
+  "w": 88,
+  "h": 46,
+  "sig": "305463026ed41f058eb8aca694d8d74d7fecb83b1eba02d4727b85a1f051a5b3"
+ },
+ {
+  "key": "tb_diplomacy",
+  "path": "gfx/interface/valsora_deco/button_diplomacy.dds",
+  "w": 88,
+  "h": 46,
+  "sig": "548ef0a4b9260d5b1e0f2d38284816e8f8756d6fa2b2b407a740d3cb80e1348e"
+ },
+ {
+  "key": "tb_trade",
+  "path": "gfx/interface/valsora_deco/button_trade.dds",
+  "w": 88,
+  "h": 46,
+  "sig": "d750278099fd3b1ef8c69c825d0f18b92f94413f0562ab01768aeca1a678ac15"
+ },
+ {
+  "key": "tb_construction",
+  "path": "gfx/interface/valsora_deco/button_construction.dds",
+  "w": 88,
+  "h": 46,
+  "sig": "1e28432afb519449553bffa34a17868fdc449d02e8ba156e0c9533eb91bd1398"
+ },
+ {
+  "key": "tb_production",
+  "path": "gfx/interface/valsora_deco/button_production.dds",
+  "w": 88,
+  "h": 46,
+  "sig": "d4d5c8927ed5f3186df064d20007628d3e1a5d1f05b4fcee66b3ea2ccad8b2ca"
+ },
+ {
+  "key": "tb_deployment",
+  "path": "gfx/interface/valsora_deco/button_deployment.dds",
+  "w": 88,
+  "h": 46,
+  "sig": "6d4a3f79d6a0836420cbcfbca21292e113dc20d11d50e7cd447825cf6783a72f"
+ },
+ {
+  "key": "tb_logistics",
+  "path": "gfx/interface/valsora_deco/button_logistics.dds",
+  "w": 88,
+  "h": 46,
+  "sig": "433740a9b4ca7eadd675dfbf8f9bce67d2cdf1e5eef48d2764caaaebbddd4ec8"
+ },
+ {
+  "key": "tb_officer",
+  "path": "gfx/interface/valsora_deco/button_officer.dds",
+  "w": 88,
+  "h": 46,
+  "sig": "3ccb18d0e3ea13dd8c7a55dc573d0952c20be5082510622a8b52a3ef839e32ba"
+ },
+ {
+  "key": "tb_faction_empty",
+  "path": "gfx/interface/factions/ui/topbar_faction_empty.dds",
+  "w": 44,
+  "h": 46,
+  "sig": "d2bece27f6f174960d8517875e70f0ec981966fd8575792c69d9b689ddab423a"
+ },
+ {
+  "key": "tb_faction",
+  "path": "gfx/interface/factions/ui/topbar_faction.dds",
+  "w": 44,
+  "h": 46,
+  "sig": "b91223d1f42823f9db85028afb59c8ecf5554601204377ff624a2cb62531ed22"
+ },
+ {
+  "key": "tb_crown_glow",
+  "path": "gfx/interface/valsora_deco/crown_glow.dds",
+  "w": 120,
+  "h": 62,
+  "sig": "b1052f545f9dc5d27693ff0a3a4570f6474bc15e7fdc541402892f36afb6af4c"
+ },
+ {
+  "key": "tb_market_vanilla",
+  "path": "gfx/interface/topbar/toolbar/international_market_button.dds",
+  "w": 88,
+  "h": 46,
+  "sig": "543a52645902e2c51598ba51e662fcee9ba0c1473686724282f335df5b518c22"
+ },
+ {
+  "key": "tb_diplomacy_vanilla",
+  "path": "gfx/interface/topbar/toolbar/diplomacy_button.dds",
+  "w": 88,
+  "h": 46,
+  "sig": "983cb28d5086d5e5d9add6cd6789271b877fb22950be38eb46bbf7a72d734011"
+ },
+ {
+  "key": "ov_army",
+  "path": "gfx/interface/valsora_deco/overview_army.dds",
+  "w": 88,
+  "h": 40,
+  "sig": "7d00f6d94966897fe6c7b3fadf7cb47a5d3673319b08ea397d1f737da0ab606d"
+ },
+ {
+  "key": "ov_navy",
+  "path": "gfx/interface/valsora_deco/overview_navy.dds",
+  "w": 88,
+  "h": 40,
+  "sig": "7cdbfeaf33cdfb649c41932a0d9b39046121d9911ff896680da165640ca303a9"
+ },
+ {
+  "key": "ov_air",
+  "path": "gfx/interface/valsora_deco/overview_air.dds",
+  "w": 88,
+  "h": 40,
+  "sig": "647dba87515cae0dc3bed9fb1da3010bfdd58af6c711c3d45d98c244d3d0c642"
+ },
+ {
+  "key": "tb_divider",
+  "path": "gfx/interface/valsora_deco/divider.dds",
+  "w": 1,
+  "h": 36,
+  "sig": "ef2c82da31b937095c3557719a83b19ecd6ea9dbcfcbd0532609970ae6aaebb5"
+ },
+ {
+  "key": "hit_63x30",
+  "path": "gfx/interface/valsora_deco/hit_63x30.dds",
+  "w": 63,
+  "h": 30,
+  "sig": "2c6d0a62bc58f3b8a32eb52cc4876653ce51f694141df6e9ff9c314723b3c4cf"
+ },
+ {
+  "key": "hit_67x30",
+  "path": "gfx/interface/valsora_deco/hit_67x30.dds",
+  "w": 67,
+  "h": 30,
+  "sig": "3be7852a7e5408a720da62f15d1d3f67722332ffcbe78c0afe197b44e0680e15"
+ },
+ {
+  "key": "hit_104x46",
+  "path": "gfx/interface/valsora_deco/hit_104x46.dds",
+  "w": 104,
+  "h": 46,
+  "sig": "ca0bd269217ee72923e25d37ac1643efa24437d15439dd027d6c91c6832dcf4a"
+ },
+ {
+  "key": "hit_112x46",
+  "path": "gfx/interface/valsora_deco/hit_112x46.dds",
+  "w": 112,
+  "h": 46,
+  "sig": "b9404fe36b5afc11c02fe67f191d75aaff34b03d8ab7e07b2aafd5c02bc3b869"
+ },
+ {
+  "key": "hit_129x46",
+  "path": "gfx/interface/valsora_deco/hit_129x46.dds",
+  "w": 129,
+  "h": 46,
+  "sig": "8a591ec1fb71e1c5b77af0926a67c40f2ec66264a6fa8e56b4c10de566d252ca"
+ },
+ {
+  "key": "hit_132x46",
+  "path": "gfx/interface/valsora_deco/hit_132x46.dds",
+  "w": 132,
+  "h": 46,
+  "sig": "264b546fa4c98bfbd21d1bbc9acc69fe48d169ed25a296d40378f8817da86325"
+ },
+ {
+  "key": "hit_157x46",
+  "path": "gfx/interface/valsora_deco/hit_157x46.dds",
+  "w": 157,
+  "h": 46,
+  "sig": "4d0a884c2b0ec0689768a525f475ce9f04da598157f406868a96f52c2f8387e1"
+ },
+ {
+  "key": "clear",
+  "path": "gfx/interface/valsora_deco/clear.dds",
+  "w": 8,
+  "h": 8,
+  "sig": "787dd5372e5f0031370380d470242c64a485703af92ccfe86ba76031e511150c"
+ },
+ {
+  "key": "none",
+  "path": "gfx/interface/valsora_deco/none.dds",
+  "w": 2,
+  "h": 2,
+  "sig": "b85d3f6dcfa84b17600b8a48eb8072e27345337f5948143bde99b36b5928c712"
+ },
+ {
+  "key": "badge",
+  "path": "gfx/interface/valsora_deco/badge.dds",
+  "w": 16,
+  "h": 15,
+  "sig": "fb3e9a473ed1fb59482443ae62cf544767fa0be8d8e6cf9825358eede591457b"
+ },
+ {
+  "key": "ic_pp",
+  "path": "gfx/interface/valsora_deco/icon_pp.dds",
+  "w": 24,
+  "h": 24,
+  "sig": "f79b8a4ee8899d4db6bccd710b65af273df872d419ed9fa00dcc5904c2376896"
+ },
+ {
+  "key": "ic_stability",
+  "path": "gfx/interface/valsora_deco/icon_stability.dds",
+  "w": 24,
+  "h": 24,
+  "sig": "f0764b2d550ab6fce4114a93ae90406ed49a99736e1b24a5add8658d9b6d2e8e"
+ },
+ {
+  "key": "ic_war",
+  "path": "gfx/interface/valsora_deco/icon_war.dds",
+  "w": 24,
+  "h": 24,
+  "sig": "30d1faaa38d92de2fd9dc041fc03731d587d22d24ed52e477759bd32ec0a1e00"
+ },
+ {
+  "key": "ic_manpower",
+  "path": "gfx/interface/valsora_deco/icon_manpower.dds",
+  "w": 24,
+  "h": 24,
+  "sig": "993a21260b2bb2b89f326be7f8352266bcf7ed24848977efac19745335263f6e"
+ },
+ {
+  "key": "ic_factory",
+  "path": "gfx/interface/valsora_deco/icon_factory.dds",
+  "w": 48,
+  "h": 24,
+  "sig": "896dbe6c9d83ab995c655db3caaeedf8a56e05e38b133a49bfb197060a813464"
+ },
+ {
+  "key": "ic_convoy",
+  "path": "gfx/interface/valsora_deco/icon_convoy.dds",
+  "w": 18,
+  "h": 18,
+  "sig": "d97864ea83de068378af2753e3ec0b5f29ec9ae92eee025a26a647e5fb6ebbe4"
+ },
+ {
+  "key": "ic_command",
+  "path": "gfx/interface/valsora_deco/icon_command.dds",
+  "w": 18,
+  "h": 18,
+  "sig": "fc5c492c2f25020674f4fbf937c00ac3fb74fb36914fdbecce7385808338a34f"
+ },
+ {
+  "key": "ic_nuke",
+  "path": "gfx/interface/valsora_deco/icon_nuke.dds",
+  "w": 18,
+  "h": 18,
+  "sig": "40bd939ecb192f70bb88e2b084048d7b69c369ab15cc3adb0a2e8a7f17343608"
+ },
+ {
+  "key": "ic_fuel",
+  "path": "gfx/interface/valsora_deco/icon_fuel.dds",
+  "w": 54,
+  "h": 18,
+  "sig": "e02c5068b8803a8819d175e880649dedfb5c302164111b5af44a966488a37c78"
+ },
+ {
+  "key": "ratio_fill",
+  "path": "gfx/interface/valsora_deco/ratio_fill.dds",
+  "w": 42,
+  "h": 3,
+  "sig": "66c81ad40d081d7626644d531e6f0218cfb744ce38d32f185a99dd7c86904746"
+ },
+ {
+  "key": "ratio_bg",
+  "path": "gfx/interface/valsora_deco/ratio_bg.dds",
+  "w": 42,
+  "h": 3,
+  "sig": "42bc1f6e0033df5ca75872e98f1e38feaea9fc0cd17c62a943c3b9ba9765968e"
+ },
+ {
+  "key": "tb_tray",
+  "path": "gfx/interface/valsora_deco/tray.dds",
+  "w": 259,
+  "h": 32,
+  "sig": "705f08e6580bbd5ae1c0fcd1bbb0ab51ca239d60c42c679d990f97efefbc2b31"
+ },
+ {
+  "key": "date_bg",
+  "path": "gfx/interface/valsora_deco/date_bg.dds",
+  "w": 400,
+  "h": 46,
+  "sig": "a2880339e6e8d6b71abb1e046ada44decd09268652308e7c735b2304f7617e8c"
+ },
+ {
+  "key": "date_paused",
+  "path": "gfx/interface/valsora_deco/date_paused.dds",
+  "w": 800,
+  "h": 46,
+  "sig": "336f4b3d6b8ba8827c79a47d4bb68361babfc4b2c78687224d514124d4459019"
+ },
+ {
+  "key": "speed_step",
+  "path": "gfx/interface/valsora_deco/speed_step.dds",
+  "w": 36,
+  "h": 18,
+  "sig": "c41f0e5481983e46e1e0fb8e76a0988a25be7f6b3557b72560c9b7057f460e54"
+ },
+ {
+  "key": "speed_down",
+  "path": "gfx/interface/valsora_deco/speed_down.dds",
+  "w": 22,
+  "h": 15,
+  "sig": "5adffe3dabe8edc81a441df1cbffafe3a6a08fafdffe34629e9925e4fba49451"
+ },
+ {
+  "key": "speed_up",
+  "path": "gfx/interface/valsora_deco/speed_up.dds",
+  "w": 22,
+  "h": 15,
+  "sig": "e0227e8a791cdda41dfdd8fff720ef725951d0d45e44d26cfc9fd89a6653acc4"
+ },
+ {
+  "key": "tb_right",
+  "path": "gfx/interface/valsora_deco/topbar_right.dds",
+  "w": 532,
+  "h": 112,
+  "sig": "b8f481c46c838977bcdf8cd471791b2f2fb1af9a3e96e7be1a532adf289f1765"
+ },
+ {
+  "key": "btn_menu",
+  "path": "gfx/interface/valsora_deco/menu_button.dds",
+  "w": 30,
+  "h": 24,
+  "sig": "20911f651cbe08fdf285c2a83f215c8d53ef10736b623ab4adfb80dca92842ea"
+ },
+ {
+  "key": "btn_help",
+  "path": "gfx/interface/valsora_deco/help_button.dds",
+  "w": 30,
+  "h": 22,
+  "sig": "0154c5d548fadec9e09344377355ec236e9ee65e3cadb0614f572534ef94511a"
+ },
+ {
+  "key": "btn_playlist",
+  "path": "gfx/interface/valsora_deco/playlist_button.dds",
+  "w": 26,
+  "h": 26,
+  "sig": "171e40408692f2ca543117a3804d67f3038cc4c7a9afa53b1cdd9fb3cb50b5bc"
+ },
+ {
+  "key": "pol_head_pol_view_bg",
+  "path": "gfx/interface/pol_view_bg.dds",
+  "w": 550,
+  "h": 344,
+  "sig": "f15b246ace17071f12eba11c8d5794b39ec9857f7248336a41e904ac2b373609"
+ },
+ {
+  "key": "pol_head_pol_view_bg_no_dlc",
+  "path": "gfx/interface/pol_view_bg_no_dlc.dds",
+  "w": 550,
+  "h": 344,
+  "sig": "e7913aaa9657349c2fb36a972e19f60c6f0a1821ebd8a5422fc87fb088c90b2b"
+ },
+ {
+  "key": "pol_body",
+  "path": "gfx/interface/valsora_deco/politics/body.dds",
+  "w": 192,
+  "h": 192,
+  "sig": "b2b610ae339a67cabf01d039bb586aaa5d2dfc89a64390616b4a72348f3e8504"
+ },
+ {
+  "key": "panel_head_500_0",
+  "path": "gfx/interface/valsora_deco/panels/head_500_0.dds",
+  "w": 500,
+  "h": 114,
+  "sig": "68c24eb8ed483097a48c59f8ca6d2fddbb62963260ecf015db5a5e83397e1801"
+ },
+ {
+  "key": "panel_head_550_m6",
+  "path": "gfx/interface/valsora_deco/panels/head_550_m6.dds",
+  "w": 550,
+  "h": 114,
+  "sig": "1f4b6b8c58b55c6c669fdb7dbb8abbb599da4c542a242b8a81acacb5c6f6190e"
+ },
+ {
+  "key": "panel_head_689_m6",
+  "path": "gfx/interface/valsora_deco/panels/head_689_m6.dds",
+  "w": 689,
+  "h": 114,
+  "sig": "50fa79cfa708426323ef8d4b1eb8e7dc74c36e612de397437cff51fb5566a883"
+ },
+ {
+  "key": "panel_head_700_m9",
+  "path": "gfx/interface/valsora_deco/panels/head_700_m9.dds",
+  "w": 700,
+  "h": 114,
+  "sig": "904f2acc50b21f6d90c99a7e118cc2f4437c382721572745c8cecf6cf5c6f7d0"
+ },
+ {
+  "key": "pol_sections",
+  "path": "gfx/interface/valsora_deco/politics/pol_sections.dds",
+  "w": 550,
+  "h": 666,
+  "sig": "2d978889c4426a7ff4cd12a4468721c74e7afea6a335f1ac6b2424e474af6997"
+ },
+ {
+  "key": "pol_frame",
+  "path": "gfx/interface/valsora_deco/politics/portrait_frame.dds",
+  "w": 172,
+  "h": 226,
+  "sig": "b8b37f8e799260783f9cedb354ce03ee3d37f3569970841cda7ab1b8acfe7727"
+ },
+ {
+  "key": "pol_ribbon",
+  "path": "gfx/interface/valsora_deco/politics/ribbon.dds",
+  "w": 128,
+  "h": 22,
+  "sig": "7081b3298742dc46c3080868c48926072aa42a1e599d4929adf037628741316b"
+ },
+ {
+  "key": "pol_close",
+  "path": "gfx/interface/valsora_deco/politics/close.dds",
+  "w": 34,
+  "h": 34,
+  "sig": "fae1f73e8dbdef8ae5583af2a74125925bc5de458c992450092f3ce9c8bb141c"
+ },
+ {
+  "key": "pol_close_small",
+  "path": "gfx/interface/valsora_deco/politics/close_small.dds",
+  "w": 20,
+  "h": 20,
+  "sig": "cf5f3d4a76e631df0cbb5a4295cb2ea600c5f4d4c7723afac7db57ce877b9551"
+ },
+ {
+  "key": "pol_pie_ring",
+  "path": "gfx/interface/valsora_deco/politics/pie_ring.dds",
+  "w": 96,
+  "h": 96,
+  "sig": "6edb1ba554e0b75c9e64d86109fd140478edbfa36af8c551cf7e4ee6e5460972"
+ },
+ {
+  "key": "pol_party_diamond",
+  "path": "gfx/interface/valsora_deco/politics/party_diamond.dds",
+  "w": 12,
+  "h": 12,
+  "sig": "55e2da53fcf03772a2d5f7be2707b3e3408a6daa480879df9adce9bbfe5ad628"
+ },
+ {
+  "key": "pol_party_swatch_bg",
+  "path": "gfx/interface/valsora_deco/politics/party_swatch_bg.dds",
+  "w": 16,
+  "h": 16,
+  "sig": "c46114d0b80c8280fe0e7a1b62db3b6bb45dcd8e68e020a9b62adc79691abe7f"
+ },
+ {
+  "key": "pol_party_lead",
+  "path": "gfx/interface/valsora_deco/politics/party_lead.dds",
+  "w": 142,
+  "h": 19,
+  "sig": "f969098e69a626f4cc3a07e1314814c3f01c965cfa88be5e99f9094cde386623"
+ },
+ {
+  "key": "pol_faction_card",
+  "path": "gfx/interface/valsora_deco/politics/faction_card.dds",
+  "w": 720,
+  "h": 78,
+  "sig": "545452c4616d52dbe4cada387b2b2b2e4a3484ff014ed99433f73fc4fc8d2bbc"
+ },
+ {
+  "key": "pol_focus_card",
+  "path": "gfx/interface/valsora_deco/politics/focus_card.dds",
+  "w": 798,
+  "h": 78,
+  "sig": "471cdc55b52dec204b558646e48a95591b6a312f69ca20942db5eadd2b8d2a9f"
+ },
+ {
+  "key": "pol_focus_glow",
+  "path": "gfx/interface/valsora_deco/politics/focus_glow.dds",
+  "w": 556,
+  "h": 90,
+  "sig": "9d6366078dbe8ef77da6c864121db58802a99b468fe77e2c5d300479786c450d"
+ },
+ {
+  "key": "pol_focus_fill",
+  "path": "gfx/interface/valsora_deco/politics/focus_fill.dds",
+  "w": 176,
+  "h": 4,
+  "sig": "132e96ce68603e0cda4b5de521a402339d2b58f24baf2c1b60d2e57ed5973567"
+ },
+ {
+  "key": "pol_focus_track",
+  "path": "gfx/interface/valsora_deco/politics/focus_track.dds",
+  "w": 176,
+  "h": 4,
+  "sig": "d96b7333f7f6285b0d37c1fd246d6217fba9c895d58311429356d7fe9c108df8"
+ },
+ {
+  "key": "pol_button",
+  "path": "gfx/interface/valsora_deco/politics/button.dds",
+  "w": 164,
+  "h": 26,
+  "sig": "dcad2d668d7093b0e897e62e079dfe806db558a62deaca9ef8e0ed4de8ba9c71"
+ },
+ {
+  "key": "pol_strip",
+  "path": "gfx/interface/valsora_deco/politics/strip.dds",
+  "w": 538,
+  "h": 38,
+  "sig": "bfafdf039e7627eda43e164ed1d64a08794b625bb6263a4d4ff877b2b1ee9786"
+ },
+ {
+  "key": "pol_cat_header",
+  "path": "gfx/interface/valsora_deco/politics/category_header.dds",
+  "w": 520,
+  "h": 30,
+  "sig": "0160fc3685391ee5cc5cfd1bca7097dc39171c683efc4515d4fd99bbef0c4417"
+ },
+ {
+  "key": "pol_idea_slot",
+  "path": "gfx/interface/valsora_deco/politics/idea_slot.dds",
+  "w": 53,
+  "h": 53,
+  "sig": "0108cb2cb553629d90b45f830f2586ebf18ce435963a05b4832ba86776253dfb"
+ },
+ {
+  "key": "pol_sub_header",
+  "path": "gfx/interface/valsora_deco/politics/sub_header.dds",
+  "w": 500,
+  "h": 30,
+  "sig": "bf841780f3ebcdec0ab7ad2cd10dc48470838486df89ae953e6b42821079c058"
+ },
+ {
+  "key": "pol_entry_87",
+  "path": "gfx/interface/valsora_deco/politics/entry_87.dds",
+  "w": 494,
+  "h": 87,
+  "sig": "b0fd860d364f5977848ec106eacbc894bb05ccd68ee41a0a0a930ac9e070ba3d"
+ },
+ {
+  "key": "pol_entry_95",
+  "path": "gfx/interface/valsora_deco/politics/entry_95.dds",
+  "w": 494,
+  "h": 95,
+  "sig": "cfc6937c6dcb7013b03871859b860fed61725f84dbf5c3ced50651399b90ad08"
+ },
+ {
+  "key": "pol_entry_65",
+  "path": "gfx/interface/valsora_deco/politics/entry_65.dds",
+  "w": 494,
+  "h": 65,
+  "sig": "d2094c5b95e9a0aa866e67c6e51a76623b6872049c1a15fb2aa4d53f4f9462e3"
+ },
+ {
+  "key": "pol_entry_100",
+  "path": "gfx/interface/valsora_deco/politics/entry_100.dds",
+  "w": 494,
+  "h": 100,
+  "sig": "6d75fca06171d3fe53532c2300d2863ec3633823360aad213a4d75e195e7bf2a"
+ },
+ {
+  "key": "pol_idea_entry_grid",
+  "path": "gfx/interface/valsora_deco/politics/idea_entry_grid.dds",
+  "w": 456,
+  "h": 72,
+  "sig": "99ade81e6b182e4c03589570ba141ca1e83c8d206534b493dbab30130ca73c4f"
+ },
+ {
+  "key": "pol_idea_entry_list",
+  "path": "gfx/interface/valsora_deco/politics/idea_entry_list.dds",
+  "w": 918,
+  "h": 72,
+  "sig": "d7cc445b48292078113b4f68ac3fbd06cffd1f2adc6ec1b24765f6c6f593be89"
+ },
+ {
+  "key": "sv_bg",
+  "path": "gfx/interface/valsora_deco/stateview/stateview_bg.dds",
+  "w": 450,
+  "h": 650,
+  "sig": "2fae2eb7d66424d9190046910cba9cacdf84f37272f30ebf81fb87bfa97afac9"
+ },
+ {
+  "key": "sv_tile",
+  "path": "gfx/interface/valsora_deco/stateview/building_tile.dds",
+  "w": 56,
+  "h": 48,
+  "sig": "8ddb62960566b51ae533cfe6c73c247feb1367d91dc73dbc1325d2ba8d22262a"
+ },
+ {
+  "key": "sv_slot",
+  "path": "gfx/interface/valsora_deco/stateview/slot.dds",
+  "w": 52,
+  "h": 46,
+  "sig": "178d529f6dbb56845adae9d075ce287dc0396642eec643fc86b56e7e6e2aa284"
+ },
+ {
+  "key": "sv_level",
+  "path": "gfx/interface/valsora_deco/stateview/level.dds",
+  "w": 48,
+  "h": 18,
+  "sig": "03bd7d39ff89c342c183f9dd2681c212243d8b0ec3a8a8c46b575fd1ecb52759"
+ },
+ {
+  "key": "sv_chip",
+  "path": "gfx/interface/valsora_deco/stateview/chip.dds",
+  "w": 44,
+  "h": 24,
+  "sig": "7d75a9258c15c7a053dd7d1f007db1990765cf48d2e911fbf956bf2b57d105b3"
+ },
+ {
+  "key": "nf_header",
+  "path": "gfx/interface/valsora_deco/focus/header.dds",
+  "w": 616,
+  "h": 114,
+  "sig": "b1a8ee667c03ad6adf308189df954749fa1f9e97f1cb5d2201614d04349e3173"
+ },
+ {
+  "key": "nf_tree_bg",
+  "path": "gfx/interface/valsora_deco/focus/tree_bg.dds",
+  "w": 192,
+  "h": 192,
+  "sig": "3ccb1e40a051b510aa530324c0bb8d3debe47461ef196eaa2115c9f10e5f8677"
+ },
+ {
+  "key": "nf_vignette",
+  "path": "gfx/interface/valsora_deco/focus/vignette.dds",
+  "w": 512,
+  "h": 512,
+  "sig": "7ef1d575bca3e2a87cd454a89925bfa3bc980b856f5570442d5c8e6689114eb3"
+ },
+ {
+  "key": "nf_node_unavailable",
+  "path": "gfx/interface/focusview/titlebar/focus_unavailable_bg.dds",
+  "w": 157,
+  "h": 118,
+  "sig": "3eeb75bc86b1b52a25e6a9e1cc04fdd7399ce2784b78cfabd882cd5c74264f54"
+ },
+ {
+  "key": "nf_node_can_start",
+  "path": "gfx/interface/focusview/titlebar/focus_can_start_bg.dds",
+  "w": 157,
+  "h": 118,
+  "sig": "2608eb61c31085efca36d96c39aa0e5b8c62ffe14834cfb6187138f527ed335e"
+ },
+ {
+  "key": "nf_node_completed",
+  "path": "gfx/interface/focusview/titlebar/focus_completed_bg.dds",
+  "w": 157,
+  "h": 118,
+  "sig": "50264c9cb69c6ed40367332baa8c9355bf8242559a6d65450f78cf4734914dea"
+ },
+ {
+  "key": "nf_node_current",
+  "path": "gfx/interface/valsora_deco/focus/current_bg.dds",
+  "w": 157,
+  "h": 118,
+  "sig": "bce7ef47c6878813250f55aea9a247580f3691a2732fdec2fc654a605849ca3a"
+ },
+ {
+  "key": "nf_completed_mask",
+  "path": "gfx/interface/focusview/titlebar/focus_completed_mask.dds",
+  "w": 157,
+  "h": 118,
+  "sig": "01b994d0e5b0aa2cffcb7fc96fc2fd94bd6fc5b3ad7f19c2406ecb9312e424d5"
+ },
+ {
+  "key": "nf_halo",
+  "path": "gfx/interface/ongoing_focus_goal.dds",
+  "w": 450,
+  "h": 150,
+  "sig": "b9ff11ca6af975334dd9bf7749e08823de937ed29b311fb0bc61800023d73740"
+ },
+ {
+  "key": "nf_search_glow",
+  "path": "gfx/interface/search_current_focus.dds",
+  "w": 450,
+  "h": 150,
+  "sig": "dcec04da5d263b5cb19f1d5fd3ff1ccb0483298aadd05b2e24b03574492791e5"
+ },
+ {
+  "key": "nf_link_up_down",
+  "path": "gfx/interface/focusview/focus_link_up_down.dds",
+  "w": 64,
+  "h": 16,
+  "sig": "baca60ba8408457afc007bab863b1f425a7bf0728df2be813657c5496e06f07d"
+ },
+ {
+  "key": "nf_link_left_right",
+  "path": "gfx/interface/focusview/focus_link_left_right.dds",
+  "w": 64,
+  "h": 16,
+  "sig": "0c8b260db59bb4856094b1a8209954d4367960c755b3f0fa9a17462d798075fd"
+ },
+ {
+  "key": "nf_link_down_left",
+  "path": "gfx/interface/focusview/focus_link_down_left.dds",
+  "w": 64,
+  "h": 16,
+  "sig": "2c9de6b08d67519db9b0215dd463b812e1a0b5719da68f47194646207b8f9b03"
+ },
+ {
+  "key": "nf_link_down_right",
+  "path": "gfx/interface/focusview/focus_link_down_right.dds",
+  "w": 64,
+  "h": 16,
+  "sig": "2b180878de3f87e0157689bb7f80cc104362050071744eacc52d845ec921efc5"
+ },
+ {
+  "key": "nf_link_up_left",
+  "path": "gfx/interface/focusview/focus_link_up_left.dds",
+  "w": 64,
+  "h": 16,
+  "sig": "dcb783eafa70e454a20ef02a6aabbc90305ca671f38d83eb1109c32b2191d48e"
+ },
+ {
+  "key": "nf_link_up_right",
+  "path": "gfx/interface/focusview/focus_link_up_right.dds",
+  "w": 64,
+  "h": 16,
+  "sig": "21eca90275c50e17d24162d24da2d8991d67a319f130461ff9cad705f9ae16d5"
+ },
+ {
+  "key": "nf_link_down_left_right",
+  "path": "gfx/interface/focusview/focus_link_down_left_right.dds",
+  "w": 64,
+  "h": 16,
+  "sig": "6dbc3d1acec646358c98ea2f91cc4fd32f4980c597673df10c5f59b0913a33a1"
+ },
+ {
+  "key": "nf_link_up_down_left",
+  "path": "gfx/interface/focusview/focus_link_up_down_left.dds",
+  "w": 64,
+  "h": 16,
+  "sig": "3bedb4f1ce198923bcadbca9955f91b4e29b7d1be03174f861a2ec890c5fb125"
+ },
+ {
+  "key": "nf_link_up_down_right",
+  "path": "gfx/interface/focusview/focus_link_up_down_right.dds",
+  "w": 64,
+  "h": 16,
+  "sig": "6e4ede0330d7856408607fb08c43b2ad638222dfb0a36a7ae7db3ba9fd3e05b1"
+ },
+ {
+  "key": "nf_link_up_left_right",
+  "path": "gfx/interface/focusview/focus_link_up_left_right.dds",
+  "w": 64,
+  "h": 16,
+  "sig": "dcbda2b0aacea02d83c9b9e33b2713c165c27c8a29b1679b9bbc2da4009a0916"
+ },
+ {
+  "key": "nf_link_up_down_left_right",
+  "path": "gfx/interface/focusview/focus_link_up_down_left_right.dds",
+  "w": 64,
+  "h": 16,
+  "sig": "c40069dca4c816e28e735a1fd41c4417300d0aac0a407abf86c51627c718ee68"
+ },
+ {
+  "key": "nf_excl_line1",
+  "path": "gfx/interface/focusview/focus_exlusive_link_line1.dds",
+  "w": 64,
+  "h": 16,
+  "sig": "82bea863687316de87abd670273d24aa6d269a270c82f3bcfe40f6ab61f628c6"
+ },
+ {
+  "key": "nf_excl_line2",
+  "path": "gfx/interface/focusview/focus_exlusive_link_line2.dds",
+  "w": 64,
+  "h": 16,
+  "sig": "e1a4b59ad93d9c02e2a3f4318bf387abb6e509fe91616930ecea681b71de32b3"
+ },
+ {
+  "key": "nf_excl",
+  "path": "gfx/interface/focusview/focus_link_exclusive.dds",
+  "w": 96,
+  "h": 32,
+  "sig": "d6a9b42b0a6d4fc098fcdef48402d29118f4341ade2061de59567851738629f8"
+ },
+ {
+  "key": "nf_cont_check",
+  "path": "gfx/interface/cont_focus_check_icon.dds",
+  "w": 64,
+  "h": 32,
+  "sig": "edad87f8f3cc5842c3587dc636ae640fc881d8f46c0314c072e08b005f369218"
+ },
+ {
+  "key": "nf_search",
+  "path": "gfx/interface/valsora_deco/focus/search.dds",
+  "w": 232,
+  "h": 40,
+  "sig": "45916e669a64478a57c115bc48c7a2ebb933fa6519d1041d7fb2d8b131119139"
+ },
+ {
+  "key": "nf_zoom_in",
+  "path": "gfx/interface/valsora_deco/focus/zoom_in.dds",
+  "w": 30,
+  "h": 30,
+  "sig": "563c668e8532910ec6d6dda44a071654163a4723a0ba58e4626dd7d23309d505"
+ },
+ {
+  "key": "nf_zoom_out",
+  "path": "gfx/interface/valsora_deco/focus/zoom_out.dds",
+  "w": 30,
+  "h": 30,
+  "sig": "f4bce4f9142cd6c506038cf6bd1891f2a1c5abfc6c342dbc2c694a64b1ed5c6f"
+ },
+ {
+  "key": "nf_filter",
+  "path": "gfx/interface/valsora_deco/focus/filter_chip.dds",
+  "w": 72,
+  "h": 36,
+  "sig": "53f3bb4d4ec9ecd833cf01c909bbc2d571d687948f522358b6b88b30a18826fd"
+ },
+ {
+  "key": "nf_prereq_bg",
+  "path": "gfx/interface/valsora_deco/focus/prereq_bg.dds",
+  "w": 307,
+  "h": 113,
+  "sig": "ec5d2a45e7f416a50dc37ed8d735c8a12627c8388ac53f8fbbc9a2056392a7eb"
+ },
+ {
+  "key": "nf_reward_bar",
+  "path": "gfx/interface/valsora_deco/focus/reward_bar.dds",
+  "w": 382,
+  "h": 30,
+  "sig": "f9b99b0ab5a0c718123d6b51107a8788d13cb69c98a6a4edcddffc29476ffecc"
+ },
+ {
+  "key": "nf_legend",
+  "path": "gfx/interface/valsora_deco/focus/legend.dds",
+  "w": 560,
+  "h": 30,
+  "sig": "049e9d3bc328e652034ea81c5f88a5ce102fa41a7643db5684971e97cc37b516"
+ },
+ {
+  "key": "menu_bg",
+  "path": "gfx/loadingscreens/valsora_menu.dds",
+  "w": 1920,
+  "h": 1440,
+  "sig": "642e94f18be02daf9f2b0d9865c8149f8254e243650dbe3f67257d192a9d14ef"
+ },
+ {
+  "key": "menu_button",
+  "path": "gfx/interface/valsora_deco/menu/menu_button.dds",
+  "w": 600,
+  "h": 48,
+  "sig": "63f5aece4429995c10f104e30b148b1b631545775c81f9971fc83cd5f8ea3d8f"
+ },
+ {
+  "key": "menu_button_big",
+  "path": "gfx/interface/valsora_deco/menu/menu_button_big.dds",
+  "w": 1260,
+  "h": 64,
+  "sig": "4d828e82352d986ddbed7c71abef3c21476e8d5707f4c1c68c586ecf859ec91b"
+ },
+ {
+  "key": "menu_button_small",
+  "path": "gfx/interface/valsora_deco/menu/menu_button_small.dds",
+  "w": 450,
+  "h": 32,
+  "sig": "a25d5da120595f43d4cbe9b0e3a2c6a42d7ab966d151d14d2a59d3e648a5d583"
+ },
+ {
+  "key": "menu_button_panel",
+  "path": "gfx/interface/valsora_deco/menu/menu_button_panel.dds",
+  "w": 864,
+  "h": 36,
+  "sig": "640ab77b37e9ce50bb4c6487c3e2f29c890a939cac5404b5eda376c618441e8e"
+ },
+ {
+  "key": "menu_bg_small",
+  "path": "gfx/interface/valsora_deco/menu/valsora_menu_small.dds",
+  "w": 192,
+  "h": 144,
+  "sig": "b80cfcd60a410b347568be70d3c809ac2d93ec0b918c11cf88c0c9ef103a7778"
+ },
+ {
+  "key": "thumb",
+  "path": "thumbnail.png",
+  "w": 512,
+  "h": 256,
+  "sig": "da8bfac1b5658f79452a5983d68eabfa432d73c16f0ad922f0d6f8aeb4b26d02"
+ },
+ {
+  "key": "lg_frame",
+  "path": "gfx/interface/unitcontrol/leader_group_frame.dds",
+  "w": 336,
+  "h": 117,
+  "sig": "3fc4cbb1f0fd36789f26b64aedb697b2d7a47780499b6a122939858f9cbf4724"
+ },
+ {
+  "key": "lg_group_frame",
+  "path": "gfx/interface/unitcontrol/leader_army_group_frame.dds",
+  "w": 270,
+  "h": 126,
+  "sig": "7fc08e4757858665dcaf4ff05e37139b4c08b8c65a4f041f296554a76db71b2b"
+ },
+ {
+  "key": "lg_strip_mid",
+  "path": "gfx/interface/unitcontrol/army_mid_bg.dds",
+  "w": 160,
+  "h": 149,
+  "sig": "32188582ed46ef6ad515cc16eb4e3c3285d77934a8a76d39d8b8bb52b0915176"
+ },
+ {
+  "key": "lg_strip_end",
+  "path": "gfx/interface/unitcontrol/army_end_bg.dds",
+  "w": 168,
+  "h": 150,
+  "sig": "d4efa4ce89dcf612575ae067aaa94b29ec8c995b18f520de6c6b351a8e6d9206"
+ },
+ {
+  "key": "lg_strip_back",
+  "path": "gfx/interface/unitcontrol/army_group_back_bg.dds",
+  "w": 175,
+  "h": 151,
+  "sig": "343f3cc9a005eb0498f0b2d18da8f6884e716e04933464cafef0b42db0a5fd85"
+ },
+ {
+  "key": "lg_play",
+  "path": "gfx/interface/unitcontrol/execute_btn_play_small.dds",
+  "w": 172,
+  "h": 23,
+  "sig": "5abb5c3b68799c3f4af436fa6bb213c5367129a87f6dc6cb171a9f8dc91a94c8"
+ },
+ {
+  "key": "lg_play_ag",
+  "path": "gfx/interface/unitcontrol/execute_btn_play_small_ag.dds",
+  "w": 172,
+  "h": 23,
+  "sig": "fe301287cee570ed885ccae1245c68808fab072fc6cc9ba6fe9c4211d4790059"
+ },
+ {
+  "key": "lg_stop",
+  "path": "gfx/interface/unitcontrol/execute_btn_stop_small.dds",
+  "w": 112,
+  "h": 23,
+  "sig": "466de5ed96ffa4ccffff864c19711f062d92cba69f5a7cdbbb12a6b1e67348dc"
+ },
+ {
+  "key": "lg_stop_ag",
+  "path": "gfx/interface/unitcontrol/execute_btn_stop_small_ag.dds",
+  "w": 112,
+  "h": 23,
+  "sig": "a1330c23520d6022828d03e048cfd4bf3ed371b3c7bf17832a2898cbbea89ebd"
+ },
+ {
+  "key": "lg_buttons_bg",
+  "path": "gfx/interface/unitcontrol/execute_stop_small_bg.dds",
+  "w": 78,
+  "h": 26,
+  "sig": "ef26aacfcb862fb49c74308053a6d3f7e94497da1461111ab115f130dfc3fb63"
+ },
+ {
+  "key": "lg_border_war_bg",
+  "path": "gfx/interface/unitcontrol/excecute_stop_border_war_bg.dds",
+  "w": 73,
+  "h": 27,
+  "sig": "a9486425ddf9526dcf79649f5f9ae013f8ab716c8c72ed7276fe462fa2275ec1"
+ },
+ {
+  "key": "lg_no_order",
+  "path": "gfx/interface/unitcontrol/execute_button_no_order.dds",
+  "w": 82,
+  "h": 37,
+  "sig": "1c0e0bbd3c46ff64a17bc3311362df00960926e6aa9c0065e2846d26e4233b08"
+ },
+ {
+  "key": "lg_plan_anim",
+  "path": "gfx/interface/unitcontrol/active_battleplan_anim.dds",
+  "w": 528,
+  "h": 20,
+  "sig": "0eae66032cfc60ada937a9e7438a577c589de6bed08ce5ee422eedacc7011930"
+ },
+ {
+  "key": "lg_point_out",
+  "path": "gfx/interface/unitcontrol/execute_button_point_out_mode.dds",
+  "w": 45,
+  "h": 26,
+  "sig": "feba4510723737b2b6c0e0133567ed432f460a0c418f3161fbb88bd47087b167"
+ },
+ {
+  "key": "lg_expand",
+  "path": "gfx/interface/unitcontrol/army_group_expand_collapse.dds",
+  "w": 28,
+  "h": 20,
+  "sig": "7a002d4358dd691fa04b92f8009ba5d6486fc5afdf22088454814c0e2c4130ed"
+ },
+ {
+  "key": "lg_power",
+  "path": "gfx/interface/unitcontrol/comm_group_plan_power_bar.dds",
+  "w": 59,
+  "h": 6,
+  "sig": "44a792d98dab7b2a5d2427d0875d9fe61ef9220abeae4977fa16b488c6df4f83"
+ },
+ {
+  "key": "lg_power_bg",
+  "path": "gfx/interface/unitcontrol/comm_group_plan_power_bar_bg.dds",
+  "w": 59,
+  "h": 6,
+  "sig": "6cb57bb5ab6ac1c903ebe56158e364b6121be7442031476b3cca6514c606de51"
+ },
+ {
+  "key": "lg_disband",
+  "path": "gfx/interface/unitcontrol/disband_orders_group.dds",
+  "w": 16,
+  "h": 16,
+  "sig": "d37dccc33c793f6b9ce4a5c7b8b2f3713bc346c94f6c6394c2e0aaba14ce8c11"
+ },
+ {
+  "key": "lg_air_bg",
+  "path": "gfx/interface/attached_air_bg.dds",
+  "w": 39,
+  "h": 45,
+  "sig": "163bbe8a8c8a5f7979062bc77914c2922fdf5c345ce37b9ee6fb02f558ea813a"
+ },
+ {
+  "key": "lg_add_bg",
+  "path": "gfx/interface/unitcontrol/group_add_leader_bg.dds",
+  "w": 61,
+  "h": 83,
+  "sig": "7c69af3d474285547e0d0c6791174c1cdb2b203dd2a176de39d3213391000edf"
+ },
+ {
+  "key": "lg_add",
+  "path": "gfx/interface/unitcontrol/group_add_leader.dds",
+  "w": 122,
+  "h": 83,
+  "sig": "9beb650ddc34e2eb5db8b916e6afb2b0bc7c89df8fc8038e78c9fddeaad94a01"
+ },
+ {
+  "key": "lg_add_marshal_bg",
+  "path": "gfx/interface/unitcontrol/group_add_marshal_bg.dds",
+  "w": 70,
+  "h": 96,
+  "sig": "67c12f4a8df37fca8808a410f623be7740123085b2697fc73105a2cad3415378"
+ },
+ {
+  "key": "lg_add_marshal",
+  "path": "gfx/interface/unitcontrol/group_add_marshal.dds",
+  "w": 140,
+  "h": 96,
+  "sig": "3bc46a90db96b2256718b860d137b5bad55edb00010d2ec8060ffa5916eb33b8"
+ },
+ {
+  "key": "lg_hq_alert",
+  "path": "gfx/interface/unitcontrol/hq_alert.dds",
+  "w": 122,
+  "h": 83,
+  "sig": "84310dc827524ccd9abf760dc0016883860ab3a356c7566e58403ec007e9df07"
+ },
+ {
+  "key": "lg_hq_badge",
+  "path": "gfx/interface/unitcontrol/hq_badge.dds",
+  "w": 18,
+  "h": 27,
+  "sig": "6fbad5857969b70b81b8e1feae3e7e3748391d371a38ed6f239a6a6ec70b58af"
+ },
+ {
+  "key": "lg_give_role",
+  "path": "gfx/interface/unitcontrol/give_role_leader_strip.dds",
+  "w": 56,
+  "h": 28,
+  "sig": "c18bc2c5225a3de939d09bf3b05b66112d4439e605d10136c44a9c19ecd6e976"
+ },
+ {
+  "key": "ev_top",
+  "path": "gfx/interface/event_report_top_win.dds",
+  "w": 581,
+  "h": 121,
+  "sig": "4b98c173ae2f6efea20f1886705fbf84d5348cecc75687a62724f8d99173e821"
+ },
+ {
+  "key": "ev_mid",
+  "path": "gfx/interface/event_report_tileable_midsection.dds",
+  "w": 580,
+  "h": 66,
+  "sig": "db08119dfbf5e4a21fde9da26ecbbd663fb571c66f885d13525c83ff85f6bbc6"
+ },
+ {
+  "key": "ev_bottom",
+  "path": "gfx/interface/event_report_bottom_win.dds",
+  "w": 581,
+  "h": 206,
+  "sig": "3557d3c93de8394f141607987ce0a816f6002fc6329849e1e94af47375e14943"
+ },
+ {
+  "key": "ev_option",
+  "path": "gfx/interface/event_option_entry.dds",
+  "w": 352,
+  "h": 48,
+  "sig": "672df1e7aa3e0fb65b33f5b1328d01aa4fbb8689c52465ac2c41c5ccaa66369c"
+ },
+ {
+  "key": "ev_clip",
+  "path": "gfx/interface/event_pic_clip.dds",
+  "w": 55,
+  "h": 30,
+  "sig": "a930f7b2a42ead7abbb7e52c26995dda7fca8313f35dfc7fe51b07c169d509b6"
+ },
+ {
+  "key": "ev_clip2",
+  "path": "gfx/interface/events/clip.dds",
+  "w": 53,
+  "h": 29,
+  "sig": "e9e3192929b4c7db2671be8fc54c66ec6fdad3e16cada8b58c7f1f6546c29f36"
+ },
+ {
+  "key": "ev_bottom_end",
+  "path": "gfx/interface/event_report_bottom_win_2.dds",
+  "w": 581,
+  "h": 59,
+  "sig": "ca9718e7a06acef6cdbf72c75d842f73d8870dda9df4c3559765fcd11e89c8d1"
+ },
+ {
+  "key": "ev_minimize",
+  "path": "gfx/interface/event_button_minimize.dds",
+  "w": 32,
+  "h": 33,
+  "sig": "294ae08ca6be2dd62b6568cedce5295e6ee285dfea918d9d597e543d41bc63b7"
+ },
+ {
+  "key": "ev_news",
+  "path": "gfx/interface/event_news_bg.dds",
+  "w": 528,
+  "h": 595,
+  "sig": "5a13587c23e848aacb0dbf4ef5ab4b53a72b0e489c406c2325555e1a618a3d17"
+ },
+ {
+  "key": "ev_news_overlay",
+  "path": "gfx/interface/event_news_pic_overlay.dds",
+  "w": 399,
+  "h": 155,
+  "sig": "0cf0262b382281da64df5c451f7956ce83f6750ef34739f6e7e8941819a315ac"
+ },
+ {
+  "key": "ev_leader_frame",
+  "path": "gfx/interface/event_leader_frame.dds",
+  "w": 172,
+  "h": 232,
+  "sig": "f38fef8f52d2381292e189453587a6a1b62c00924a15f5a021f5f8d8ce5052bf"
+ }
+]

@@ -5,6 +5,7 @@ with a transparent background at device scale 1, and the PNG is converted to an 
 A8R8G8B8 DDS (or TGA where vanilla uses TGA).
 """
 import json
+import re
 import os
 import struct
 import sys
@@ -15,7 +16,7 @@ from playwright.sync_api import sync_playwright
 from ddsutil import write_dds as _wd
 from icons import icon as _icon
 
-from paths import MOD, PNG, ART, BUILD, FONTS_SRC, CHROMIUM
+from paths import MOD, PNG, ART, BUILD, FONTS_SRC, CHROMIUM, MANIFEST, ROOT
 os.makedirs(PNG, exist_ok=True)
 
 
@@ -1582,7 +1583,7 @@ add("ev_minimize", EV + "event_button_minimize.dds", 32, 33,
     'background:#0B1014;box-sizing:border-box"></div>'
     '<svg width="32" height="33" viewBox="0 0 32 33" style="position:absolute;left:0;top:0"><path d="M18,12.5L13.5,16.5L18,20.5" '
     'fill="none" stroke="#E3C77E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>')
-# the World News masthead (v0.7.1, the user: the heading "looks lopsided. Maybe center the ball in the center and slightly
+# the World News masthead (v0.8, the user: the heading "looks lopsided. Maybe center the ball in the center and slightly
 # shrink the text so it fits on either side ... maybe make the ball a stylized Valsoran globe?"): a gilt line globe of
 # Valsora (globe_art.py) dead centre between the masthead's rules, WORLD and NEWS in Federo capitals at the same
 # distance either side of it (SVG letter-spacing also follows the last letter, so WORLD, set from its end, is moved
@@ -1639,12 +1640,49 @@ FONTS = f"""@font-face{{font-family:'Limelight';src:url('file://{G}limelight/Lim
 @font-face{{font-family:'Federo';src:url('file://{G}federo/Federo-Regular.ttf')}}
 @font-face{{font-family:'Bodoni Moda';font-style:italic;src:url('file://{G}bodonimoda/BodoniModa-Italic[opsz,wght].ttf')}}
 @font-face{{font-family:'Josefin Sans';src:url('file://{G}josefinsans/JosefinSans[wght].ttf');font-weight:100 700}}"""
-# python gen_textures.py lg_ ev_   renders only the textures whose key starts with one of those prefixes (the others
-# keep their files and manifest entries: re-rendering everything changes a few anti-aliased pixels everywhere)
+# python gen_textures.py            draws the textures whose drawing changed since the manifest was written
+# python gen_textures.py lg_ ev_    draws only the textures whose key starts with one of those prefixes
+# python gen_textures.py --all      draws every texture (each then differs by a few anti-aliased pixels: restore_noise.py)
+# python gen_textures.py --sign     draws nothing: records the textures on disk as drawn from today's code
 ONLY = [a for a in sys.argv[1:] if not a.startswith("-")]
+ALL = list(SPRITES)
+ALL_KEYS = {s[0] for s in SPRITES}
+PREV = {m["key"]: m for m in json.load(open(MANIFEST))} if os.path.isfile(MANIFEST) else {}
+
+
+def signature(key, rel, w, h, html, fmt):
+    """what a texture's picture depends on: its HTML, size and format, the page's CSS and fonts, and the local files it
+    shows (file:// paths). Unchanged, the texture isn't drawn again (2026-10-15: faster, and no anti-aliasing noise
+    in textures nothing changed)"""
+    import hashlib
+    # the page names its files by absolute path: the project's own folder counts as "<root>", so a clone elsewhere
+    # gets the same signatures
+    h_ = hashlib.sha256((f"{rel}|{w}|{h}|{fmt}|{FONTS}|{CSS}|" + html).replace(ROOT, "<root>").encode())
+    for f in sorted(set(re.findall(r"file://([^'\")\s]+)", html))):
+        if os.path.isfile(f):
+            h_.update(open(f, "rb").read())
+    return h_.hexdigest()
+
+
+SIG = {s[0]: signature(*s) for s in SPRITES}
+
+
+def entry(key, rel, w, h, html, fmt):
+    return {"key": key, "path": rel, "w": w, "h": h, "sig": SIG[key]}
+
+
+if "--sign" in sys.argv:
+    # after restore_noise.py, or for a manifest that is missing or older than a change to the signature itself
+    missing = [s[1] for s in ALL if not os.path.isfile(MOD + s[1])]
+    assert not missing, f"--sign: these textures have no file yet (draw them): {missing[:5]}"
+    json.dump([entry(*s) for s in ALL], open(MANIFEST, "w"), indent=1)
+    print(f"--sign: {len(ALL)} textures recorded as drawn from today's code")
+    sys.exit(0)
 if ONLY:
     SPRITES = [s for s in SPRITES if s[0].startswith(tuple(ONLY))]
     assert SPRITES, f"no texture key starts with {ONLY}"
+elif "--all" not in sys.argv:          # only what changed: python gen_textures.py --all draws every texture
+    SPRITES = [s for s in SPRITES if PREV.get(s[0], {}).get("sig") != SIG[s[0]] or not os.path.isfile(MOD + s[1])]
 body = []
 y = 0
 for key, rel, w, h, html, fmt in SPRITES:
@@ -1654,6 +1692,9 @@ page = f"<html><head><style>{FONTS}{CSS}</style></head><body style='width:2000px
 open(BUILD + "sprites.html", "w").write(page)
 
 manifest = []
+if not SPRITES:
+    print(f"no texture changed ({len(ALL_KEYS)} kept; --all draws them all)")
+    sys.exit(0)
 with sync_playwright() as p:
     b = p.chromium.launch(**CHROMIUM)
     pg = b.new_page(viewport={"width": 2000, "height": 1500}, device_scale_factor=1)
@@ -1673,10 +1714,11 @@ with sync_playwright() as p:
         else:
             os.makedirs(os.path.dirname(dest), exist_ok=True)
             im.convert("RGB").save(dest)
-        manifest.append({"key": key, "path": rel, "w": w, "h": h})
+        manifest.append(entry(key, rel, w, h, html, fmt))
     b.close()
-if ONLY and os.path.isfile(BUILD + "texture_manifest.json"):
-    done = {m["key"] for m in manifest}
-    manifest = [m for m in json.load(open(BUILD + "texture_manifest.json")) if m["key"] not in done] + manifest
-json.dump(manifest, open(BUILD + "texture_manifest.json", "w"), indent=1)
-print(len(manifest), "textures written")
+# the textures not drawn this time keep their entries, the ones no longer defined are dropped; in the order they are
+# defined, so the file changes only where a texture did
+done = {m["key"]: m for m in manifest}
+manifest = [m for m in (done.get(s[0]) or PREV.get(s[0]) for s in ALL) if m]
+json.dump(manifest, open(MANIFEST, "w"), indent=1)
+print(f"{len(done)} textures drawn, {len(manifest) - len(done)} unchanged")

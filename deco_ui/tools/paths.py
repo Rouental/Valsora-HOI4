@@ -35,6 +35,8 @@ VALSORA = _d(os.environ.get("VALSORA_MOD_DIR") or os.path.join(ROOT, "reference"
 _base = os.environ.get("VALSORA_BASE_DIR") or os.path.join(ROOT, "..", "work", "deco_base")
 VALSORA_BASE = _d(_base) if os.path.isdir(_base) else VALSORA
 BUILD = _d(os.path.join(ROOT, "build"))
+# each texture's signature (gen_textures.py): in the repository, so a fresh clone redraws only what changed
+MANIFEST = os.path.join(ROOT, "texture_manifest.json")
 # Chromium for Playwright: by default Playwright's own download; CHROMIUM_PATH points at another one
 # (e.g. a cloud machine's pre-installed /opt/pw-browsers/chromium when the versions differ)
 CHROMIUM = {"executable_path": os.environ["CHROMIUM_PATH"]} if os.environ.get("CHROMIUM_PATH") else {}
