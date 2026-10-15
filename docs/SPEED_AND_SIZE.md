@@ -93,7 +93,9 @@ What could be done (none of it done, but the first):
    repository to about 215 MB, the old previews too to about 115 MB. But it rewrites every commit: each one gets a
    new id (the docs name a few: the removed submods' last commits, which would need updating), the branch has to be
    force-pushed, and everyone with a clone (Merlo) has to clone again. Worth it only if the size becomes a problem,
-   and only with the author's explicit go-ahead.
+   and only with the author's explicit go-ahead. The author (2026-10-15, asking whether the oldest versions could be deleted: "DON'T DO IT
+   YET", then "leave it until it becomes a problem"): left until then, best done once, when nearing 1 GB or on moving
+   to the Releases page.
 
 ## The mod
 

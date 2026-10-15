@@ -276,6 +276,8 @@ in `scripts/mutation_test.py` (50, every one caught): run it after any change to
   one can't publish releases: GitHub's proxy answers "Creating, editing, or deleting releases is not permitted for this
   session type" (HTTP 403), so the Releases page, when it comes, is the author's to publish by hand (Claude gives them
   the zip and the notes). Don't work around that rule (no workflow or tag that publishes for the session).
+  The old zips stay in the history too (author: "leave it until it becomes a problem"): removing them means
+  rewriting it (`docs/SPEED_AND_SIZE.md`), only with the author's go-ahead.
 - **Test content until the first public build** (author, 2026-10-15: "I'll remove all the test stuff before the first
   public build"): Devlon's spirits and Rouental's test decisions stay until the author takes them out.
 - **Map size 5120×2560.** HOI4 needs both sides to be multiples of 256 and the area to stay
