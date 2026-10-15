@@ -197,10 +197,10 @@ one-time decode of the original `.pdn`. Needs `numpy scipy pillow scikit-image`.
 | `country_list.py` | by hand, after a build: `dist/world_map_labelled.png` (every country labelled) and `dist/countries.md` / `.csv` (name, full name, ideology, sub-ideology, culture, leader, states), read from the built mod |
 | `nation_sheet.py` | by hand, after a build: `dist/nations_by_continent.png`, every nation in the game under the continent of its capital: flag, ruler at the start (portrait of our own, or a "placeholder" box for a base-game one), full name, ideology and sub-ideology, culture, and a strip of its map colour (author, 2026-10-13) |
 | `collages.py` | by hand, after a build: `dist/flags_collage.png` (every custom flag, and the countries still on a placeholder stripe) and `dist/leaders_collage.png` (every custom leader: own portraits at 2×, named ones with base-game portraits as labelled tiles); `--continent NAME` writes only `dist/flags_<name>.png`, the flags of the nations whose capital is on that continent, naming below them those with land there and their capital elsewhere (2026-10-10, Araseos; 2026-10-12, Yastreovakia) |
-| `facts_export.py` | by hand, after a build: the Gazetteer's map data into `work/gazetteer/` (`index.json`, `world.png`, `n/<TAG>.json` per nation: its states, provinces, cities and politics as built, its flag, its land and the neighbours' around it as province numbers per pixel, in parts, with the rivers), published with the page |
+| `facts_export.py` | by hand, after a build: the Gazetteer's map data into `work/gazetteer/` (`index.json`, `world.png`, `n/<TAG>.json` per nation: its states, provinces, cities and politics as built, its flag, its land and the neighbours' around it as province numbers per pixel, in parts, with the rivers, and whether its states are drawn, `final`), published with the page |
 | `gazetteer.html` | the Gazetteer (see below): the page where friends fill in their nations' facts; the web site's (`gazetteer_site.py`), or a claude.ai artifact with its own database (the first version) |
 | `gazetteer_site.py` | the Gazetteer's web site into `work/gazetteer_site/` (the page with the Firebase project's settings, the SDK bundle from `source/gazetteer_site/`, `facts_export.py`'s map data), committed alone on the `gh-pages` branch, which GitHub Pages serves; `--emulator` builds it for Firebase's local emulators (tests) |
-| `gazetteer.py` | the Gazetteer's facts into `source/gazetteer/<TAG>.json` (pictures in `source/gazetteer/assets/`): `paths KEYS.json` (each nation's atlas folder `n/<TAG>/<key>` from the owner's passwords), `pull DIR` (the atlas as the ArtifactData tool saves it, pictures fetched by asset id into `DIR/assets/`), `import FILE.json` (a file saved from the page or the site, pictures inside), `status` (and what is left to do by hand), `suggestions` (`dist/gazetteer_suggestions.png`, a layer for the `.pdn`); and the functions `read_layers.py` (terrain, rivers, cities) and `build_mod.py` (state facts, capitals, railways, supply hubs, names, sub-ideologies, rulers and party leaders with titles and portraits, map colours) call |
+| `gazetteer.py` | the Gazetteer's facts into `source/gazetteer/<TAG>.json` (pictures in `source/gazetteer/assets/`): `paths KEYS.json` (each nation's atlas folder `n/<TAG>/<key>` from the owner's passwords), `pull DIR` (the atlas as the ArtifactData tool saves it, pictures fetched by asset id into `DIR/assets/`), `import FILE.json` (a file saved from the page or the site, pictures inside; drops the map facts of nations whose states aren't drawn; gives releasables their tags), `status` (releasables' cores, and what is left to do by hand), `suggestions` (`dist/gazetteer_suggestions.png`, a layer for the `.pdn`); `finals` (whose states are the author's); and the functions `read_layers.py` (terrain, rivers, cities) and `build_mod.py` (state facts, capitals, railways, supply hubs, names, sub-ideologies, rulers and party leaders with titles and portraits, map colours, releasables) call |
 
 **A clean `check_mod.py` run is the bar for shipping a build.** It was mutation-tested
 (CRLF, X-crossing, missing building row, state split across regions, descriptor
@@ -855,7 +855,8 @@ Aislada is the worked example of a built-out nation:
   again. `nations.IDEOLOGY_NAMES["ROU"]`: "Rouental" on the map for every government,
   with the author's formal names (2026-09-30): Monarchist "The Sacred Principality",
   Authoritarian "The Grand Principality", Theocratic "The Most Seran State",
-  Democratic "The Republic", Communist "The People's Republic" (all "… of Rouental");
+  Democratic "The Principality" (a constitutional monarchy, since later that day), Communist
+  "The People's Republic" (all "… of Rouental");
   adjective Rouentaise. (The first names, Perfect / Powerful / Boring / Shitty
   Rouental, were dropped.)
   - **Capital: Rêverie**, the one-province state the author drew at (660, 805)
@@ -1026,7 +1027,8 @@ working; names come from `localisation/english/replace/`:
   Holy Order, Synodal Rule, Prophetic Rule, and the author's **Divine Republicanism**
   (2026-10-12, Muqadasa Salamat). Vanilla's Earth-bound ones (`nazism`, `japan_militarism_ideology`
   …, `ideologies.HIDDEN`) stay defined because vanilla's characters and focus files name
-  them, but are never given to generated leaders. The author wants no more for now.
+  them, but are never given to generated leaders. The author wanted no more on 2026-09-30, and
+  has added their own since (above).
 - Subtype descriptions start with the subtype's name ("Feudalism: …"), so it shows on
   mouse-over (author). `lordly_republic` "Lordly Republic" (democratic) is the author's
   own: a republic in which the nobility and clergy retain significant power.
@@ -1341,15 +1343,51 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   `source/gazetteer_site/firebase-config.json` (not secret). The rules,
   `source/gazetteer_site/firestore.rules`, are pasted in the console by the author with their
   Google address for `OWNER_EMAIL`, which is never committed: change the file, then ask them to
-  paste it again. They allow `get` and `list` inside a nation's folder but nothing on `n` and
-  no `{path=**}` match, so neither `n`, a nation's folders nor a collection-group query can be
-  listed; writes need the folder's `key` document (only the owner writes those) and a known
-  kind; `owner/*` is the owner's alone; `planned` is read by all, written by the owner. Cloud
+  paste it again (they changed on 2026-10-15, later: admins, `releasables`). They allow `get`
+  and `list` inside a nation's folder but nothing on `n` and no `{path=**}` match, so neither
+  `n`, a nation's folders nor a collection-group query can be listed; writes need the folder's
+  `key` document (only admins write those) and a known kind; `owner/*` is the admins' alone;
+  `planned/*` is read by all, written by admins; `admins/<address>` is read by admins and
+  written by the author alone (`isAdmin()` = the author's address, or an `admins` document
+  under the signed-in address). Cloud
   Storage needs the paid plan, so pictures are documents beside the facts (`img-<id>`: a data
   URL of at most 640 px, JPEG over 400 kB; the rules cap them at 800,000 characters).
   Firestore keeps no array directly inside an array: lines' points are stored as
   `{"_a": [x, y]}`. The SDK is Google's, bundled into one module
   (`source/gazetteer_site/README.md`).
+- **Map tools wait for a nation's states** (author, 2026-10-15: "if a nation's states have not
+  yet been defined, they would be able to make suggestions for me to make their state borders,
+  and do things like provide flags, leaders, full nation names, etc. Then once their state
+  borders have been set in the mod, full customization would be unlocked"). `gazetteer.finals`
+  marks a nation final when no two of its states share an area the Necessary Borders and
+  Necessary States lines enclose (the states `apply_outlines.py` cuts from an area left without
+  lines do); one-piece nations count (Claude's suggestion, accepted). 37 of 161 on 2026-10-15:
+  AIS CRD KRK LTH ROU STO and 31 of one piece; Belekria, San Sierra and Placeholdaire are partly
+  drawn, 121 not at all. Until then the page shows the plain land (no cut states), only Map,
+  Politics, People, Releasables and Nation and the Select, Releasables (areas) and Suggest tools;
+  `planned/unlock` ({TAG: true | false}, Owner tools › Map tools, or the nation's Map tab)
+  overrides the rule. The import drops a closed nation's states, provinces, cities, rivers,
+  railways and releasables' provinces (the file of every nation carries `unlock`).
+- **Releasables** (author, 2026-10-15: "allow people to select provinces that could be
+  releasables, and then the ability to define flags, names, etc."). The `releasables` document:
+  `{rl-<id>: {name, adj, def, ruling, colour, flag, leader {name, desc, portrait}, notes,
+  provinces {"x,y": true}, areas {a-<id>: points}, added}}`; a province belongs to one
+  releasable; areas while the map tools are closed. The import gives each a tag (`new_tag`: its
+  name's letters, never `COUNTRIES`', the base game's (LIB is Liberia's), a planned nation's or
+  another releasable's), kept by id. The build (`gazetteer.releasables`) makes each a country
+  owning nothing (in `COUNTRIES` as `gazetteer_<tag>` for that build only), with cores on the
+  states it holds at least half of (provinces and areas, by pixels; the largest is its capital;
+  less than half is a note, none at all leaves it out), its names, ruler and colour as facts of
+  its tag, its nation's culture, and its nation's ruling sub-ideology when it has none. Its flag
+  goes to `source/flags/<tag>.png` at the import like a nation's.
+- **Admins** (author, 2026-10-15: "How would I go about making Merlo an admin on the Gazetteer
+  as well, so he can manage passwords and such"): Owner tools › Admins (the author adds or
+  removes a Google address: `admins/<address>`); an admin signs in with Google and gets every
+  owner tool but that list. The page tells the author from an admin by the list (the author
+  isn't on it).
+- **Merlo's handoff** (author, 2026-10-15: "a handoff file for Merlo, so that his instance of
+  Claude generates in line with this one"): `docs/HANDOFF_MERLO.md`, how to work from this
+  repository, recipes, conventions and how to hand work back. Keep it in step.
 - **Version 2** (author, 2026-10-14, latest: "each nation should be locked behind a password I
   can give them so that people can't make troll edits on each others' nations ... submit
   flags, leaders, etc ... a function for them to make suggestions ... overseas territory ...
@@ -1419,6 +1457,11 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   islands, Seigne's people and the planned nation's suggestions, changes a password; a
   friend in another browser is locked out until the password (typed loosely) opens it, an old
   password no longer does; desktop and phone, light and dark; the view-only and offline modes.
+  On the site too: releasables picked by province on Rouental and drawn as areas on Hollier
+  (closed), Hollier's map tools opened and closed again, the author adding Merlo as an admin,
+  Merlo making a password but refused when adding an admin; the import closing Hollier's map
+  facts, opened by the switch; a build with three releasables (check_mod clean; cores, capital,
+  names, ruler), and without facts byte-identical.
   The site is tested the same way against Firebase's own emulators (firebase-tools 15, Java 21;
   `gazetteer_site.py --emulator 127.0.0.1:8080:9099 --project demo-...`, the rules loaded with a
   test owner), plus the rules attacked straight over REST (listing `n`, a nation's folders or
@@ -1486,6 +1529,10 @@ in git history (commit d2d6cd8, `scripts/cartographic.py`). It used
 
 ## Current state
 
+- 2026-10-15, later: the Gazetteer keeps a nation's map tools closed until its states are drawn
+  (37 of 161 open), lets players define releasables, and has admins (Merlo, once the author adds
+  him; the author is to paste the new rules). `docs/HANDOFF_MERLO.md` for Merlo's Claude. No
+  facts imported yet, so the build is unchanged.
 - 2026-10-15: the Gazetteer moved to its own web site, https://rouental.github.io/Valsora-HOI4/
   (GitHub Pages and the author's Firebase project); the author is to paste the database rules.
   No facts imported yet, so the build is unchanged.

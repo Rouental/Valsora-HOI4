@@ -52,7 +52,11 @@ DIR = Path(os.environ.get("GAZETTEER_DIR", "source/gazetteer"))  # another folde
 FLAGS = Path(os.environ.get("GAZETTEER_FLAGS", "source/flags"))
 TAG = re.compile(r"[A-Z][A-Z0-9]{2}")
 # a nation's documents in the atlas (n/<TAG>/<key>/<kind>), as on the page
-KINDS = ("states", "provinces", "cities", "rivers", "rails", "politics", "flags", "people", "about", "suggest")
+KINDS = ("states", "provinces", "cities", "rivers", "rails", "politics", "flags", "people", "about", "suggest",
+         "releasables")
+# facts drawn on a nation's provinces: taken only once its states are the author's (finals)
+MAP_KINDS = ("states", "provinces", "cities", "rivers", "rails")
+REL_ID = re.compile(r"rl-[a-z0-9]{6,40}")
 # terrain.bmp palette index of each terrain the page offers (common.TERRAIN_TYPES)
 TERRAIN_INDEX = {"plains": 0, "forest": 1, "hills": 2, "desert": 3, "mountain": 6, "marsh": 9,
                  "urban": 13, "jungle": 21}
@@ -391,6 +395,53 @@ def normalise(tag, facts, meta, requests=(), sources=(), todo=None):
         sugg.append({"type": v["type"], "pts": pts, "label": clean(v.get("label"), 80), "note": text(v.get("note"), 1000)})
     if sugg:
         out["suggest"] = sorted(sugg, key=lambda v: (v["type"], v["pts"]))
+    # releasables: their land (provinces by pixel, or drawn areas), names, flag and ruler
+    rels = []
+    raw = facts.get("releasables") or {}
+    for rid in sorted(raw, key=lambda k: (num((raw[k] or {}).get("added") if isinstance(raw[k], dict) else 0, 0, 10 ** 14) or 0, k)):
+        v = raw[rid]
+        if not isinstance(v, dict) or not REL_ID.fullmatch(str(rid)):
+            continue
+        r = {"id": rid}
+        for k, n in (("name", 60), ("adj", 60), ("def", 100)):
+            if clean(v.get(k), n):
+                r[k] = clean(v[k], n)
+        if v.get("ruling") in subs:
+            r["ruling"] = v["ruling"]
+        if isinstance(v.get("colour"), str) and re.fullmatch(r"#[0-9a-fA-F]{6}", v["colour"]):
+            r["colour"] = v["colour"].lower()
+        label = f"{tag} releasable {r.get('name') or rid}"
+        pic = picture(v.get("flag"), f"{label}: flag", sources, todo)
+        if pic:
+            r["flag"] = pic
+        ld, lead = v.get("leader") if isinstance(v.get("leader"), dict) else {}, {}
+        if clean(ld.get("name"), 80):
+            lead["name"] = clean(ld["name"], 80)
+        if clean(ld.get("desc"), 600):
+            lead["desc"] = clean(ld["desc"], 600)
+        pic = picture(ld.get("portrait"), f"{label}: ruler's portrait", sources, todo)
+        if pic:
+            lead["portrait"] = pic
+        if lead:
+            r["leader"] = lead
+        if text(v.get("notes"), 2000):
+            r["notes"] = text(v["notes"], 2000)
+        provs = set()
+        for k, on in (v.get("provinces") or {}).items():
+            try:
+                if on:
+                    provs.add("%d,%d" % xy(k))
+            except ValueError:
+                continue
+        if provs:
+            r["provinces"] = sorted(provs, key=lambda k: xy(k)[::-1])
+        areas = [points(a) for _, a in sorted((v.get("areas") or {}).items()) if isinstance(a, list)]
+        if any(len(a) >= 3 for a in areas):
+            r["areas"] = [a for a in areas if len(a) >= 3]
+        if r.get("name") or provs or r.get("areas"):
+            rels.append(r)
+    if rels:
+        out["releasables"] = rels
     reqs = []
     for v in requests or ():
         if isinstance(v, dict) and clean(v.get("title"), 100):
@@ -403,12 +454,62 @@ def normalise(tag, facts, meta, requests=(), sources=(), todo=None):
     return out
 
 
-def import_nations(nations, planned=None, sources=()):
+def map_open(unlock=None):
+    """{tag: True or False}: whose map facts the import takes: a nation's whose states are the
+    author's (finals), or whose map tools the owner opened on the page ({TAG: True}, or False to
+    keep them closed); None when there is no build to tell"""
+    try:
+        fin = finals()
+    except FileNotFoundError:
+        print("No build in work/ to tell whose states are drawn: every nation's map facts are taken.")
+        return None
+    unlock = unlock or {}
+    return {t: unlock.get(t) is True or (unlock.get(t) is not False and f) for t, f in fin.items()}
+
+
+def tags_taken(planned=None):
+    """Every tag in use: Valsora's countries, the base game's, nations not on the map yet and
+    releasables already named."""
+    from common import COUNTRIES
+    taken = {v[0] for v in COUNTRIES.values()}
+    f = Path("source/vanilla/index/tags.txt")
+    if f.exists():
+        taken |= {ln.split("\t")[0] for ln in f.read_text(encoding="utf-8").splitlines() if ln and not ln.startswith("#")}
+    taken |= set(planned or {})
+    if (DIR / "planned.json").exists():
+        taken |= set(json.loads((DIR / "planned.json").read_text(encoding="utf-8")))
+    for g in load().values():
+        taken |= {r["tag"] for r in g.get("releasables", []) if r.get("tag")}
+    return taken
+
+
+def new_tag(name, taken):
+    """A free tag for a releasable: its name's first three letters, else its first letter and
+    two later ones, else the first free one; never D and two digits (the game's own)."""
+    import itertools
+    import string
+    import unicodedata
+    letters = [c for c in unicodedata.normalize("NFKD", name or "").upper() if "A" <= c <= "Z"]
+    cands = ["".join(letters[:3])] if len(letters) >= 3 else []
+    cands += [letters[0] + a + b for i, a in enumerate(letters[1:], 1) for b in letters[i + 1:]] if letters else []
+    cands += ("".join(t) for t in itertools.product(string.ascii_uppercase, repeat=3))
+    for t in cands:
+        if TAG.fullmatch(t) and t not in taken:
+            taken.add(t)
+            return t
+    raise SystemExit("no free tag left")
+
+
+def import_nations(nations, planned=None, sources=(), unlock=None):
     """{tag: {"facts", "meta", "requests", "images"}} (and the owner's nations not on the
-    map yet) -> source/gazetteer/; then the new flags into source/flags/. Lists pictures
-    still to download."""
+    map yet, and their switches of the map tools) -> source/gazetteer/; then the new flags
+    into source/flags/. A nation whose states aren't drawn yet (finals) keeps no map facts;
+    releasables keep their tags from one import to the next. Lists pictures still to
+    download."""
     DIR.mkdir(parents=True, exist_ok=True)
     todo = []
+    opened = map_open(unlock)
+    taken = tags_taken(planned)
     for tag, v in sorted(nations.items()):
         if not TAG.fullmatch(tag):
             print(f"skipped {tag!r}: not a country tag")
@@ -418,7 +519,16 @@ def import_nations(nations, planned=None, sources=()):
         if missing:
             print(f"{tag}: {len(missing)} pictures are not in the file; left out")
         n = normalise(tag, facts, v.get("meta") or {}, v.get("requests") or (), sources, todo)
+        if opened is not None and opened.get(tag) is False:
+            dropped = [k for k in MAP_KINDS if n.pop(k, None) is not None]
+            dropped += [f"the provinces of {r.get('name') or r['id']}" for r in n.get("releasables", []) if r.pop("provinces", None)]
+            if dropped:
+                print(f"{tag}: its states aren't drawn yet (map tools closed): left out {', '.join(dropped)}")
         path = DIR / f"{tag}.json"
+        had = {r["id"]: r["tag"] for r in (json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}).get("releasables", [])
+               if r.get("tag")}
+        for r in n.get("releasables", []):
+            r["tag"] = had.get(r["id"]) or new_tag(r.get("name"), taken)
         if len(n) == 1:
             if path.exists():
                 path.unlink()
@@ -444,7 +554,7 @@ def import_nations(nations, planned=None, sources=()):
 
 
 def import_files(files):
-    nations, planned = {}, None
+    nations, planned, unlock = {}, None, None
     for f in files:
         d = json.loads(Path(f).read_text(encoding="utf-8"))
         if not d.get("gazetteer"):
@@ -455,7 +565,9 @@ def import_files(files):
             nations[tag] = v
         if isinstance(d.get("planned"), dict):
             planned = d["planned"]
-    import_nations(nations, planned, [Path(f).parent / "assets" for f in files])
+        if isinstance(d.get("unlock"), dict):
+            unlock = d["unlock"]
+    import_nations(nations, planned, [Path(f).parent / "assets" for f in files], unlock)
 
 
 def _body(path):
@@ -492,8 +604,9 @@ def pull(root):
         reqs = [_body(f) for f in sorted(d.glob("req-*.json"))]
         imgs = {f.stem[4:]: _body(f) for f in sorted(d.glob("img-*.json"))}
         nations[tag] = {"facts": facts, "meta": meta, "requests": reqs, "images": imgs}
-    planned_f = root / "planned" / "list.json"
-    todo = import_nations(nations, _body(planned_f) if planned_f.exists() else None, [root / "assets"])
+    planned_f, unlock_f = root / "planned" / "list.json", root / "planned" / "unlock.json"
+    todo = import_nations(nations, _body(planned_f) if planned_f.exists() else None, [root / "assets"],
+                          _body(unlock_f) if unlock_f.exists() else None)
     reqs = [(t, r) for t, v in nations.items() for r in v["requests"] if (r.get("status") or "open") == "open"]
     print(f"{len(reqs)} open requests")
     for t, r in sorted(reqs, key=lambda x: x[1].get("at") or 0):
@@ -514,27 +627,28 @@ def install_flags(G):
     from PIL import Image
     record_f = DIR / "installed.json"
     record = json.loads(record_f.read_text(encoding="utf-8")) if record_f.exists() else {}
-    for tag, f in sorted(G.items()):
-        for slot, im in sorted((f.get("flags") or {}).items()):
-            if not im.get("file"):
-                continue
-            k = f"{tag}:{slot}"
-            if record.get(k) == im["file"]:
-                continue
-            w, h = im["w"], im["h"]
-            if abs(w / h / FLAG_RATIO - 1) > FLAG_SLACK:
-                print(f"{tag}: its {slot} flag is {w} x {h}, not HOI4's 82:52; fit it by hand from {DIR / im['file']}")
-                continue
-            from import_flags import opaque
-            a = np.asarray(Image.open(DIR / im["file"]).convert("RGBA"))
-            pic = Image.fromarray(opaque(a))
-            if pic.width > FLAG_MAX_W:
-                pic = pic.resize((FLAG_MAX_W, round(pic.height * FLAG_MAX_W / pic.width)), Image.LANCZOS)
-            FLAGS.mkdir(parents=True, exist_ok=True)
-            out = FLAGS / (f"{tag}.png" if slot == "base" else f"{tag}_{slot}.png")
-            pic.save(out)
-            record[k] = im["file"]
-            print(f"{tag}: {slot} flag -> {out}")
+    sent = [(tag, slot, im) for tag, f in sorted(G.items()) for slot, im in sorted((f.get("flags") or {}).items())]
+    sent += [(r["tag"], "base", r["flag"]) for f in G.values() for r in f.get("releasables", []) if r.get("tag") and r.get("flag")]
+    for tag, slot, im in sent:  # nations' flags, and their releasables'
+        if not im.get("file"):
+            continue
+        k = f"{tag}:{slot}"
+        if record.get(k) == im["file"]:
+            continue
+        w, h = im["w"], im["h"]
+        if abs(w / h / FLAG_RATIO - 1) > FLAG_SLACK:
+            print(f"{tag}: its {slot} flag is {w} x {h}, not HOI4's 82:52; fit it by hand from {DIR / im['file']}")
+            continue
+        from import_flags import opaque
+        a = np.asarray(Image.open(DIR / im["file"]).convert("RGBA"))
+        pic = Image.fromarray(opaque(a))
+        if pic.width > FLAG_MAX_W:
+            pic = pic.resize((FLAG_MAX_W, round(pic.height * FLAG_MAX_W / pic.width)), Image.LANCZOS)
+        FLAGS.mkdir(parents=True, exist_ok=True)
+        out = FLAGS / (f"{tag}.png" if slot == "base" else f"{tag}_{slot}.png")
+        pic.save(out)
+        record[k] = im["file"]
+        print(f"{tag}: {slot} flag -> {out}")
     if record:
         record_f.write_text(json.dumps(record, indent=1, sort_keys=True) + "\n", encoding="utf-8")
 
@@ -548,6 +662,8 @@ def summary(n):
     for k in ("politics", "people", "flags", "about"):
         if k in n:
             parts.append(k)
+    if n.get("releasables"):
+        parts.append("releasables " + ", ".join(f"{r.get('name') or r['id']} ({r['tag']})" for r in n["releasables"]))
     if n.get("status") == "done":
         parts.append("finished")
     return ", ".join(parts) or "nothing"
@@ -557,6 +673,59 @@ def load():
     """{tag: facts} from source/gazetteer/."""
     return {f.stem: json.loads(f.read_text(encoding="utf-8")) for f in sorted(DIR.glob("*.json"))
             if TAG.fullmatch(f.stem)} if DIR.exists() else {}
+
+
+# ------------------------------------------------------------------ whose states are final
+LINE_LAYERS = ("Necessary Borders", "Necessary States")
+
+
+def finals(lab=None, kind=None, states=None, owners=None, layers=Path("work/pdn_game")):
+    """{tag: True or False} for every country owning land, after a build: True when its states
+    are the author's, i.e. no two of them share an area the Necessary Borders and Necessary
+    States lines enclose (apply_outlines.py cuts an area without lines into states of about
+    1,300 px, which the author's lines replace later, provinces and all). A country of whole
+    areas (one state, islands) counts as final. Until then the Gazetteer keeps its map tools
+    (states, cities, terrain, rivers, railways, hubs) closed, and the import drops such facts."""
+    from scipy import ndimage as ndi
+    from skimage.measure import label as sklabel
+    if lab is None:
+        p = np.load("work/provinces.npz")
+        lab, kind = p["prov"], p["kind"]
+        rj = json.load(open("work/regions.json"))
+        states, owners = rj["states"], rj["owners"]
+    tags = sorted({o for o in owners if o})
+    names_f = layers / "layers.txt"
+    if not names_f.exists():  # a placeholder build: no lines to read
+        return {t: True for t in tags}
+    names = names_f.read_text().splitlines()
+    state_of = np.full(len(kind), -1, np.int64)
+    for s, g in enumerate(states):
+        state_of[g] = s
+    st = state_of[lab]
+    land = st >= 0
+    lines = np.zeros(land.shape, bool)
+    for nm in LINE_LAYERS:
+        if nm in names:
+            lines |= np.load(layers / f"layer{names.index(nm)}.npy", mmap_mode="r")[..., 3] > 0
+    lines &= land
+    cells = sklabel(land & ~lines, connectivity=1)
+    idx = ndi.distance_transform_edt(cells == 0, return_distances=False, return_indices=True)
+    area = np.where(land & (cells == 0), cells[idx[0], idx[1]], cells)  # line pixels: the nearest area
+    n = int(area.max()) + 1
+    pair, count = np.unique(st[land].astype(np.int64) * n + area[land], return_counts=True)
+    main = {}  # each state's area: where most of its land is
+    for k, c in zip(pair.tolist(), count.tolist()):
+        s, a = divmod(k, n)
+        if c > main.get(s, (0, 0))[0]:
+            main[s] = (c, a)
+    together = defaultdict(int)  # states of one country in one area
+    for s, (_, a) in main.items():
+        together[(a, owners[s])] += 1
+    out = {t: True for t in tags}
+    for s, (_, a) in main.items():
+        if together[(a, owners[s])] > 1:
+            out[owners[s]] = False
+    return out
 
 
 # ------------------------------------------------------------------ the build
@@ -858,6 +1027,71 @@ def names(tag, base, by_ideology, pol):
     return base, out
 
 
+REL_COLOURS = ("#b5543c", "#3c7db5", "#6f9a3a", "#8a4fb0", "#c2912e", "#2f9a93", "#b04f7c", "#5c6670")  # as the page
+
+
+def releasables(G, lab, kind, state_of, owners, notes, taken=()):
+    """The facts' releasables as the build makes them: countries owning nothing, with cores
+    on the states of their nation they hold at least half of (by its provinces, or the areas
+    drawn before its states were), the largest first (the capital). Each is {tag, parent,
+    name, adj, colour, states, facts}, facts being what the build reads for a nation
+    (politics with its names and ruling sub-ideology, its ruler, its colour). `taken`: tags
+    of countries already in the mod."""
+    rels = [(tag, i, r) for tag, f in sorted(G.items()) for i, r in enumerate(f.get("releasables", []))]
+    if not rels:
+        return []
+    from PIL import Image, ImageDraw
+    st = np.asarray(state_of)
+    own = _owner_of(lab, state_of, owners)
+    px_state = np.where(kind[lab] == 1, st[lab], -1)
+    state_px = np.bincount(px_state[px_state >= 0], minlength=len(owners))
+    prov_px = np.bincount(lab.ravel(), minlength=len(kind))
+    out, used = [], set(taken)
+    for tag, i, r in rels:
+        name = r.get("name") or r.get("tag") or r["id"]
+        if not r.get("tag") or r["tag"] in used:
+            notes.append(f"Gazetteer: {tag}'s releasable {name} has no tag of its own (import it again); left out")
+            continue
+        cover = defaultdict(int)  # state -> its pixels the releasable holds
+        provs = {at(lab, k) for k in r.get("provinces", [])}
+        for p in provs:
+            if kind[p] == 1 and own[p] == tag:
+                cover[int(st[p])] += int(prov_px[p])
+        for pts in r.get("areas", []):
+            u = _unwrap(pts)
+            x0, y0 = min(x for x, _ in u), max(0, min(y for _, y in u))
+            x1, y1 = max(x for x, _ in u), min(H - 1, max(y for _, y in u))
+            im = Image.new("1", (x1 - x0 + 1, y1 - y0 + 1), 0)
+            ImageDraw.Draw(im).polygon([(x - x0, y - y0) for x, y in u], fill=1, outline=1)
+            ys, xs = np.nonzero(np.asarray(im))
+            ys, xs = ys + y0, (xs + x0) % W
+            ps = lab[ys, xs]
+            mine = (kind[ps] == 1) & (own[ps] == tag) & ~np.isin(ps, list(provs))
+            for s_, c in zip(*np.unique(st[ps[mine]], return_counts=True)):
+                cover[int(s_)] += int(c)
+        cores = sorted((s_ for s_, c in cover.items() if owners[s_] == tag and c * 2 >= state_px[s_]),
+                       key=lambda s_: (-cover[s_], s_))
+        part = [s_ for s_, c in cover.items() if owners[s_] == tag and 0 < c * 2 < state_px[s_]]
+        if part:
+            notes.append(f"Gazetteer: {tag}'s releasable {name} holds less than half of {len(part)} state(s); "
+                         f"they stay {tag}'s alone (a state line along its border would give them to it)")
+        if not cores:
+            notes.append(f"Gazetteer: {tag}'s releasable {name} holds no state by half; left out")
+            continue
+        used.add(r["tag"])
+        colour = r.get("colour") or REL_COLOURS[i % len(REL_COLOURS)]
+        parent_pol = G.get(tag, {}).get("politics") or {}
+        facts = {"politics": {"names": {"base": {k: r[k] for k in ("name", "def", "adj") if r.get(k)}}},
+                 "about": {"colour": colour}}
+        if r.get("ruling") or parent_pol.get("ruling"):
+            facts["politics"]["ruling"] = r.get("ruling") or parent_pol["ruling"]
+        if r.get("leader"):
+            facts["people"] = {"ruler": r["leader"]}
+        out.append(dict(tag=r["tag"], parent=tag, name=name, adj=r.get("adj") or name,
+                        colour=tuple(int(colour[k:k + 2], 16) for k in (1, 3, 5)), states=cores, facts=facts))
+    return out
+
+
 def colours(G):
     """{tag: (r, g, b)}: the map colours the facts give, over the .pdn paint (like
     nations.DISPLAY_COLOUR)"""
@@ -936,6 +1170,9 @@ def status():
     record_f = DIR / "installed.json"
     record = json.loads(record_f.read_text(encoding="utf-8")) if record_f.exists() else {}
     todo = []
+    notes = []  # how the build takes the releasables: their cores, or why they are left out
+    rels = releasables(G, lab, p["kind"], reg["state_of"], rj["owners"], notes)
+    by_rel = {r["tag"]: r for r in rels}
     for tag, f in G.items():
         lost = [k for kind_ in ("states", "provinces") for k in f.get(kind_, {})
                 if own[at(lab, k)] != tag]
@@ -955,6 +1192,16 @@ def status():
                 todo.append(f"{tag} {slot} flag: not downloaded yet (asset {im.get('asset')})")
             elif record.get(f"{tag}:{slot}") != im["file"]:
                 todo.append(f"{tag} {slot} flag: {im['w']} x {im['h']}, to fit to 82:52 by hand ({DIR / im['file']})")
+        for r in f.get("releasables", []):
+            b_ = by_rel.get(r.get("tag"))
+            print(f"  releasable {r.get('name') or r['id']} ({r.get('tag')}): "
+                  + (f"cores on {len(b_['states'])} state(s)" if b_ else "not in the build")
+                  + (f", {len(r['provinces'])} provinces" if r.get("provinces") else "")
+                  + (f", {len(r['areas'])} drawn areas" if r.get("areas") else ""))
+            im = r.get("flag")
+            if im and (not im.get("file") or record.get(f"{r.get('tag')}:base") != im["file"]):
+                todo.append(f"{r.get('tag')} (releasable of {tag}) flag: " + (f"{im['w']} x {im['h']}, to fit to 82:52 by hand ({DIR / im['file']})" if im.get("file") else "not downloaded yet"))
+    todo += [n.replace("Gazetteer: ", "") for n in notes]
     if todo:
         print("\nFor the author (or Claude) to do by hand:")
         for t in todo:
@@ -962,6 +1209,8 @@ def status():
 
 
 if __name__ == "__main__":
+    if not Path("source/vanilla").is_dir():  # the base game's tags, the last build: all by the root
+        sys.exit("Run this from the repository's root: python3 scripts/gazetteer.py ...")
     if len(sys.argv) >= 3 and sys.argv[1] == "import":
         import_files(sys.argv[2:])
     elif len(sys.argv) == 3 and sys.argv[1] == "pull":

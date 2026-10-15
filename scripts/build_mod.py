@@ -254,11 +254,23 @@ def main():
     # what friends filled in on the Gazetteer (source/gazetteer/, scripts/gazetteer.py)
     G, gnotes = gazetteer.load(), []
     gfacts = gazetteer.state_facts(G, lab, state_of, rj["owners"], gnotes) if G else {}
+    # the releasables the Gazetteer's players made: countries owning nothing, with cores on
+    # the states they hold most of, named, led and coloured as their facts say
+    grel = gazetteer.releasables(G, lab, kind, state_of, rj["owners"], gnotes,
+                                 taken={v[0] for v in COUNTRIES.values()}) if G else []
+    for r in grel:
+        COUNTRIES[f"gazetteer_{r['tag'].lower()}"] = (r["tag"], r["name"], r["adj"], r["colour"])
+        by_tag[r["tag"]] = f"gazetteer_{r['tag'].lower()}"
+        G[r["tag"]] = r["facts"]
+        if not r["facts"]["politics"].get("ruling"):  # none given: its nation's
+            r["facts"]["politics"]["ruling"] = (nations.LEADERS.get(r["parent"]) or ["despotism"])[0]
+        if r["parent"] in cultures.TAG_CULTURE:  # its nation's names and faces
+            cultures.TAG_CULTURE.setdefault(r["tag"], cultures.TAG_CULTURE[r["parent"]])
     # owner of every state: from the Countries layer, or the continent's placeholder
     owners = [by_tag[t] for t in rj["owners"]] if "owners" in rj else \
         [CONTINENTS[int(cont[g[0]]) - 1] for g in states]
     # countries that own a state, plus those released later (they own nothing at start)
-    later = {by_tag[t] for t in (*nations.CIVIL_WAR, *nations.RELEASABLE)}
+    later = {by_tag[t] for t in (*nations.CIVIL_WAR, *nations.RELEASABLE, *(r["tag"] for r in grel))}
     present = [c for c in COUNTRIES if c in owners or c in later]
     n = len(kind)
     pid = np.arange(n) + 1  # HOI4 province ids start at 1
@@ -396,6 +408,10 @@ def main():
                 raise SystemExit(f"nations.CIVIL_WAR / RELEASABLE: no state named {nm!r} for {tag}")
             if tag not in nations.CIVIL_WAR_ONLY:  # those get their cores in the focus
                 extra_cores[state_by_name[nm]].append(tag)
+    for r in grel:  # the Gazetteer's, by state
+        for s in r["states"]:
+            extra_cores[s].append(r["tag"])
+    grel_capital = {r["tag"]: r["states"][0] for r in grel}
     state_capital = [max(g, key=lambda i: (size[i], -i)) for g in states]
     # the author's cities (Cities layer): the first in a state becomes its victory point,
     # any others extra ones; all named, worth CITY_VP unless the country's capital
@@ -425,7 +441,8 @@ def main():
         members = [s for s in range(len(states)) if owners[s] == c]
         if not members:  # released later: its first named state
             t = COUNTRIES[c][0]
-            capital_state[c] = state_by_name[(nations.CIVIL_WAR.get(t) or nations.RELEASABLE[t])[0]]
+            capital_state[c] = grel_capital[t] if t in grel_capital else \
+                state_by_name[(nations.CIVIL_WAR.get(t) or nations.RELEASABLE[t])[0]]
             continue
         capital_state[c] = central(members)
         # a capital drawn out to a continent holding under a third of the country's land

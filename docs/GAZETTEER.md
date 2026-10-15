@@ -1,12 +1,13 @@
 # The Valsora Gazetteer
 
-A web site where friends fill in the facts of their own nations: once its states are drawn
-on the `.pdn`, state names, terrain, rivers, cities, population, railways, supply hubs,
-resources and buildings; at any time, its names and titles under each government, its
+A web site where friends fill in the facts of their own nations: once you have drawn its
+states on the `.pdn`, state names, terrain, rivers, cities, population, railways, supply
+hubs, resources and buildings; at any time, its names and titles under each government, its
 sub-ideologies, its flags, its ruler and party leaders (names, titles, portraits), its
-generals and admirals, its colour, culture, motto and anthem, suggestions for the map, and
-requests for things the game doesn't have yet. Each nation is locked behind a password you
-give its player, so nobody can change anyone else's nation.
+generals and admirals, its colour, culture, motto and anthem, its releasables (their land,
+names, government, flag and ruler), suggestions for the map (its states and cities among
+them, before you draw them), and requests for things the game doesn't have yet. Each nation
+is locked behind a password you give its player, so nobody can change anyone else's nation.
 
 **Address:** https://rouental.github.io/Valsora-HOI4/
 
@@ -24,6 +25,8 @@ as Editors, so it is no longer used.
    (`https://console.firebase.google.com/project/valsora-hoi4/firestore/rules`). Replace
    what is there with `source/gazetteer_site/firestore.rules`, with your Google address in
    place of `OWNER_EMAIL`, and press **Publish**. Until then the database refuses everything.
+   When the rules file changes (it did on 2026-10-15, later, for admins and releasables),
+   paste it again the same way.
 2. **GitHub Pages** switched itself on when the `gh-pages` branch was first pushed
    (2026-10-15). The repository's **Settings › Pages** shows it: **Deploy from a branch**,
    **gh-pages**, **/ (root)**.
@@ -43,6 +46,43 @@ A password opens one nation and no other. **New password** locks the old one out
 everything that was entered. You never need passwords yourself: signed in, the page unlocks
 every nation for you.
 
+## Admins (Merlo)
+
+Admins sign in with Google as you do and get the same Owner tools: passwords, nations not on
+the map yet, map tools, requests, suggestions and the file of every nation. Only you can add or
+remove them. To add one: **Owner tools › Admins**, type their Google address, **Add**. They
+open the site, scroll to the bottom and press **Sign in with Google** with that account. Remove
+them with **Remove** beside their address. The list is kept in the database (`admins/<their
+address>`); the rules let only your account change it.
+
+## A nation's map tools wait for its states
+
+A nation's map tools (the State and Cities tabs, and terrain, cities, rivers, railways and supply
+hubs on the map) open only once its states are your own lines: drawing them later cuts its
+provinces again, and what was entered on the old ones would land in the wrong places. A nation
+counts as ready when no two of its states share an area your Necessary Borders and Necessary
+States lines enclose (the build splits an area you left without state lines into states of about
+1,300 px); a nation of single pieces (one state, islands) counts too. On 2026-10-15, 37 of 161
+nations were ready: Rouental, Cardonia, Kurikia, Merlovich, Leithanien, Selto and 31 nations of
+one piece each (Seigne, Evriches, Guedelon, Devlon, the Holy See ...).
+
+Until then its player sees its land without the states the build cut, and can fill in its names,
+flags, people and releasables, and suggest its states and cities with the Suggest tool: an area
+for each state (or lines along its borders) and a point for each city, each saying what it is.
+Use them when you draw (below). When you have drawn a nation's states, its tools open by
+themselves at the next update of the site. **Owner tools › Map tools** opens or closes any
+nation by hand (Automatic, Open, Closed); a nation's own Map tab has the same button for you.
+
+## Releasables
+
+On the **Releasables** tab, a player adds the nations that could be released from theirs: its
+name, adjective and full title, its ruling sub-ideology, map colour, flag, ruler (name, titles,
+portrait) and a few words about it, and its land. With the **Releasables** tool they pick its
+provinces on the map (a province belongs to one releasable; **Take them away** removes them),
+or, while their map tools are closed, draw its land as areas. In the game a releasable is a
+country owning nothing at the start, with cores on its land, so its nation can release it from
+the diplomacy screen.
+
 A friend whose page can't reach the atlas still gets the whole page: their changes stay in
 their browser, and **Nation › Save a file** gives them a file to send you. Load it with
 **Nation › Load a file** on that nation and it joins the atlas.
@@ -60,6 +100,7 @@ their browser, and **Nation › Save a file** gives them a file to send you. Loa
 | map, Suggest tool | areas, lines and points drawn anywhere on the world (a border, an island that should be theirs, a mountain range, where an undrawn nation goes), each with what it is | nothing by itself: a layer for you (below) |
 | Politics tab | name, full title and adjective under every government and each ideology; ruling sub-ideology | localisation, `nations.LEADERS` |
 | People tab | head of state (name, titles, portrait); each other party's sub-ideology, leader and portrait; generals, admirals, advisors (name, notes, portrait) | the rulers and party leaders, with their titles shown on the portrait; the characters are a list for you |
+| Releasables tab and tool | releasables: name, adjective, full title, ruling sub-ideology, colour, flag, ruler, notes, land (provinces, or drawn areas) | a country each, owning nothing, with cores on the states it holds at least half of (the largest is its capital), its names, ruler, colour and flag; culture its nation's |
 | Nation tab | status (in progress / finished), flags (one, and one per government if they like), map colour, culture, motto, anthem, description, notes for you, requests | flags into `source/flags/`; the map colour; the rest is for you |
 
 Pictures (flags, portraits) are kept at up to 640 px, plenty for HOI4's 82 × 52 flags and
@@ -80,10 +121,11 @@ their sub-ideologies and rulers; their names can still be changed.
 
 ## Your tools on the start page
 
-**Owner tools** (only you see them, signed in): the passwords; nations not on the map yet;
-every **request** (set it done or declined, and reply; the player sees the reply with their
-nation); every **suggestion** (shown on the world map, or opened where it was drawn); and
-**Save every nation as a file**, the whole atlas in one file to send Claude.
+**Owner tools** (only you and your admins see them, signed in): the passwords; nations not on
+the map yet; **map tools** (open, closed or automatic, per nation); every **request** (set it
+done or declined, and reply; the player sees the reply with their nation); every
+**suggestion** (shown on the world map, or opened where it was drawn); **admins** (only you
+change them); and **Save every nation as a file**, the whole atlas in one file to send Claude.
 
 ## Getting the facts into the mod
 
@@ -110,6 +152,12 @@ with `gazetteer.py paths` and `pull`, which still work.)
 - **Suggestions**: `dist/gazetteer_suggestions.png` is a transparent 5120 × 2560 picture of
   every suggestion with its label; import it into the `.pdn` as a layer (it lines up exactly)
   and draw from it. `dist/gazetteer_suggestions_preview.png` shows them over the map.
+- **Releasables** get a tag each at their first import (from their name, never one in use or
+  the base game's), kept from one import to the next. `status` lists their cores; one holding
+  no state by half is left out of the build with a note (draw a state line along its border).
+- **Nations whose map tools are closed**: their states, provinces, cities, rivers and railways,
+  and their releasables' provinces, are left out at the import (the file carries your switches;
+  the import reads which states are drawn from the last build).
 - **By hand**: requests, generals and admirals, cultures and flags of other shapes; `status`
   lists them.
 
@@ -135,13 +183,17 @@ them.
 - A nation's facts are stored at an address made from its password, and the database's
   rules refuse to list nations or their folders: without the password a nation can be
   neither found, read nor changed.
-- Only your Google account (named in the rules) can make passwords, read the list of them,
-  and add nations that aren't on the map. Nobody else can write anything without a password,
-  and with one only that nation's own kinds of documents, pictures under 800 kB.
+- Only your Google account (named in the rules) and the admins you add can make passwords,
+  read the list of them, add nations that aren't on the map and open map tools; only yours can
+  change the admins. Nobody else can write anything without a password, and with one only that
+  nation's own kinds of documents, pictures under 800 kB.
 - Tested against Google's own Firebase emulator with these rules: listing every nation, a
-  nation's folders or every states document, reading your passwords, making, replacing or
-  deleting a password, writing without one or writing an unknown document were all refused;
-  writing with the password worked; another Google account got no owner tools.
+  nation's folders or every states document, reading your passwords, reading or changing the
+  admins, opening a nation's map tools, making, replacing or deleting a password, writing
+  without one or writing an unknown document were all refused; writing with the password
+  worked; another Google account got no owner tools; an admin got them, but couldn't add an
+  admin, even straight at the database. The live database answered the same to a stranger
+  (2026-10-15, with the first rules, before admins).
 - The settings in the page (`source/gazetteer_site/firebase-config.json`) are not secret:
   every Firebase web page carries them, and the rules are what protect the data.
 - What a password can't stop: its holder can change or clear that nation (that is the point;
@@ -152,16 +204,18 @@ them.
 ## How it is made
 
 - `scripts/facts_export.py` (after a build): `work/gazetteer/`: `index.json` (every nation,
-  sub-ideologies, the world's owners for the start page's map, the base game's tags),
+  whether its states are drawn (`final`, from `gazetteer.finals`), sub-ideologies, the world's
+  owners for the start page's map, the base game's tags),
   `world.png`, and `n/<TAG>.json` per nation (its states, provinces, cities and politics as
   the build has them, its flag, and its land in parts with the neighbours' around it, as
   province numbers per pixel, plus the rivers).
 - `scripts/gazetteer.html`: the page. On the web site its atlas is the Firestore database:
   each nation's documents at `n/<TAG>/<key>/<kind>` (`states`, `provinces`, `cities`,
-  `rivers`, `rails`, `politics`, `flags`, `people`, `about`, `suggest`, plus `meta`, `key`,
-  `req-<id>` requests and `img-<id>` pictures), where the key is the first 32 hex digits of
-  SHA-256("valsora-gazetteer|TAG|password"); `planned/list` (nations not on the map yet,
-  written by the owner only); the owner's passwords at `owner/keys`. Firestore keeps no
+  `rivers`, `rails`, `politics`, `flags`, `people`, `about`, `suggest`, `releasables`, plus
+  `meta`, `key`, `req-<id>` requests and `img-<id>` pictures), where the key is the first 32
+  hex digits of SHA-256("valsora-gazetteer|TAG|password"); `planned/list` (nations not on the
+  map yet) and `planned/unlock` (your map-tool switches), written by admins only; the
+  passwords at `owner/keys`; the admins at `admins/<address>`. Firestore keeps no
   array directly inside another, so lines' points are stored as `{"_a": [x, y]}`.
   On claude.ai (the first version) the same documents are in the artifact's database, the
   passwords at `data/users/<owner>/keys`, and pictures are the artifact's uploaded files.

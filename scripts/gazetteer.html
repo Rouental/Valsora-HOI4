@@ -133,7 +133,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .lead, .sec > .meta { font: 13px/1.45 var(--font-ui); color: var(--ink-2); }
 
 /* desk */
-#desk { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 390px; }
+#desk { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 420px; }
 .mapcol { display: flex; flex-direction: column; min-width: 0; min-height: 0; padding-block: 10px 8px; gap: 8px; }
 .toolbar { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
 .tool { display: inline-flex; align-items: center; gap: 6px; padding: 6px 9px 4px; border: 1px solid var(--rule-2); border-radius: 4px;
@@ -172,9 +172,9 @@ button, input, select, textarea { font: inherit; color: inherit; }
 
 /* ledger */
 .ledger { border-left: 1px solid var(--rule); background: var(--sheet); display: flex; flex-direction: column; min-height: 0; min-width: 0; }
-.tabs { display: flex; border-bottom: 1px solid var(--rule); }
-.tabs button { flex: 1; padding: 11px 4px 8px; border: 0; background: none; cursor: pointer; font-size: 12.5px; font-weight: 700;
-  letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); border-bottom: 2px solid transparent; }
+.tabs { display: flex; border-bottom: 1px solid var(--rule); overflow-x: auto; scrollbar-width: none; }
+.tabs button { flex: 1 0 auto; padding: 11px 3px 8px; border: 0; background: none; cursor: pointer; font-size: 11.5px; font-weight: 700;
+  letter-spacing: .02em; text-transform: uppercase; color: var(--ink-3); border-bottom: 2px solid transparent; }
 .tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--gilt); }
 .lock { display: grid; gap: 8px; padding: 14px 16px; border-bottom: 1px solid var(--rule); background: var(--paper); }
 .lock b { font: 400 18px var(--font-display); }
@@ -236,6 +236,15 @@ optgroup { font-style: normal; }
 .portrait { width: 78px; height: 105px; border: 1px solid var(--rule-2); background: var(--paper) center 20% / cover no-repeat; display: grid; place-items: center;
   font: 500 10px var(--font-data); color: var(--ink-3); text-align: center; cursor: pointer; padding: 4px; }
 .flagslot { display: grid; grid-template-columns: 84px minmax(0, 1fr); gap: 10px; align-items: center; padding: 6px 0; border-top: 1px solid var(--rule); }
+.relcard { display: grid; gap: 10px; padding: 10px 12px; border: 1px solid var(--rule-2); border-left: 5px solid var(--rel); border-radius: 4px; background: var(--paper); }
+.relcard.sel { box-shadow: 0 0 0 2px var(--sel); }
+.relhead { display: flex; gap: 8px; align-items: center; }
+.relhead .nameinput { flex: 1; min-width: 0; font-size: 20px; }
+.relhead input[type="color"] { flex: none; width: 34px; height: 30px; padding: 0; border: 1px solid var(--rule-2); border-radius: 3px; background: none; }
+.relland { display: grid; gap: 6px; }
+.relland .row { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.relcard .person, .relcard .flagslot { border-top: 1px solid var(--rule); }
+.pwrow.unl { grid-template-columns: 41px minmax(0, 1fr) auto; }
 .flagslot:first-of-type { border-top: 0; }
 .flagbox { width: 84px; height: 54px; border: 1px solid var(--rule-2); background: var(--paper); object-fit: contain; display: grid; place-items: center; font: 500 10px var(--font-data); color: var(--ink-3); }
 .sugtype { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--sug); }
@@ -333,6 +342,7 @@ optgroup { font-style: normal; }
         <button class="tool" data-tool="river" aria-pressed="false" title="Draw rivers (R)"><svg viewBox="0 0 24 24"><path d="M3 8c3-3 5 3 8 0s5 3 8 0"/><path d="M3 15c3-3 5 3 8 0s5 3 8 0"/></svg><span>Rivers</span></button>
         <button class="tool" data-tool="rail" aria-pressed="false" title="Draw railways (L)"><svg viewBox="0 0 24 24"><path d="M3 12h18"/><path d="M6 8v8M10 8v8M14 8v8M18 8v8"/></svg><span>Railways</span></button>
         <button class="tool" data-tool="hub" aria-pressed="false" title="Supply hubs (H)"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12"/><path d="M12 9v6M9 12h6"/></svg><span>Hubs</span></button>
+        <button class="tool" data-tool="release" aria-pressed="false" title="Releasables: their land (E)"><svg viewBox="0 0 24 24"><path d="M6 21V4"/><path d="M6 4h11l-2.5 4 2.5 4H6"/></svg><span>Releasables</span></button>
         <button class="tool" data-tool="suggest" aria-pressed="false" title="Suggest a change to the map (S)"><svg viewBox="0 0 24 24"><path d="M4 20l3-1 11-11-2-2L5 17z"/><path d="M14 6l2 2"/><path d="M15 20h5"/></svg><span>Suggest</span></button>
         <div class="viewctl">
           <div class="seg" role="group" aria-label="Map colours" id="modes">
@@ -360,6 +370,7 @@ optgroup { font-style: normal; }
         <button role="tab" data-tab="map" aria-selected="false">Map</button>
         <button role="tab" data-tab="politics" aria-selected="false">Politics</button>
         <button role="tab" data-tab="people" aria-selected="false">People</button>
+        <button role="tab" data-tab="release" aria-selected="false">Releasables</button>
         <button role="tab" data-tab="nation" aria-selected="false">Nation</button>
         <button class="grow" id="grow" type="button" title="Make the facts bigger or smaller" aria-label="Make the facts bigger or smaller" aria-pressed="false">&#8597;</button>
       </div>
@@ -369,6 +380,7 @@ optgroup { font-style: normal; }
       <div class="pane" id="pane-map" role="tabpanel" hidden></div>
       <div class="pane" id="pane-politics" role="tabpanel" hidden></div>
       <div class="pane" id="pane-people" role="tabpanel" hidden></div>
+      <div class="pane" id="pane-release" role="tabpanel" hidden></div>
       <div class="pane" id="pane-nation" role="tabpanel" hidden></div>
     </aside>
   </section>
@@ -397,7 +409,9 @@ const RES = [["oil", "Oil"], ["steel", "Steel"], ["aluminium", "Aluminium"], ["r
 const VPS = [[1, "1 · village"], [3, "3 · town"], [5, "5 · city"], [10, "10 · large city"], [15, "15"], [20, "20 · major city"],
   [25, "25"], [30, "30 · metropolis"], [40, "40"], [50, "50 · world city"]];
 // a nation's documents in the atlas, each at n/<TAG>/<key>/<kind>; the key comes from its password
-const KINDS = ["states", "provinces", "cities", "rivers", "rails", "politics", "flags", "people", "about", "suggest"];
+const KINDS = ["states", "provinces", "cities", "rivers", "rails", "politics", "flags", "people", "about", "suggest", "releasables"];
+// releasables without a colour of their own, in the order they were added
+const REL_COLOURS = ["#b5543c", "#3c7db5", "#6f9a3a", "#8a4fb0", "#c2912e", "#2f9a93", "#b04f7c", "#5c6670"];
 const MAX_STATE_POP = 500000000;
 const ERASE_R = 3;
 const REQ_KINDS = [["subideology", "New sub-ideology"], ["subject", "Subject type"], ["map", "Map change"], ["other", "Something else"]];
@@ -424,12 +438,15 @@ const app = {
   mode: "starting",          // shared | readonly | local
   fb: null, player: null, signedIn: null, keysUnsub: null, names: {}, imgs: {},
   keys: {}, keysLoaded: false, planned: {}, profiles: {}, owner: {}, ownerBusy: false, ownerSug: null,
-  reqKind: "subideology", ownerFilter: "",
+  reqKind: "subideology", ownerFilter: "", unlockFilter: "",
+  unlock: {},                // the owner's say on whose map tools are open: {TAG: true | false}
+  admins: [], isAuthor: false, adminsUnsub: null,
   N: null,                   // the open nation
   docs: {}, pending: {}, inflight: {}, local: {}, cache: {}, meta: null, reqs: {},
   timers: {}, flushing: {}, again: {}, unsub: [], claimed: null, lastTouch: 0,
   undo: [], group: null, routes: new Map(),
   ui: { tool: "select", terrain: "forest", riverKind: "major", railLevel: 3, sugKind: "area", mode: "states", part: 0, tab: "state", legend: true,
+        rel: null, relMode: "add",
         sel: { state: -1, prov: -1, city: null, line: null, sug: null }, draft: null, hover: null },
   view: { s: 1, ox: 0, oy: 0 },
 };
@@ -670,11 +687,15 @@ function writeFailed(e, kind) {
   }
   if (app.fb) {
     if (code === "permission_denied" && app.N && app.N.K && !app.isOwner) {
-      // on the web site everyone may write: a refusal means the author gave this nation a new password
-      const N = app.N;
-      N.K = null; detach(); store("gazetteer-pw:" + N.tag, null);
-      renderLock("This nation's password has changed: ask the author for the new one. What you entered since is kept on this device and saved once you unlock it.");
-      refreshSave(); renderAllPanes();
+      // on the web site everyone may write with the password: a refusal means the author gave this
+      // nation a new password (its old folder has no key any more), or the rules don't know a kind
+      const N = app.N, K = N.K;
+      app.db.doc(`${nPath(N.tag, K)}/key`).get().then(k => {
+        if (k.exists || app.N !== N || N.K !== K) { if (k.exists) setSave("bad", "Not saved", "The atlas refused it. It is kept on this device; tell the author."); return; }
+        N.K = null; detach(); store("gazetteer-pw:" + N.tag, null);
+        renderLock("This nation's password has changed: ask the author for the new one. What you entered since is kept on this device and saved once you unlock it.");
+        refreshSave(); renderAllPanes();
+      }, () => setSave("bad", "Not saved", "The atlas refused it. It is kept on this device."));
     } else setSave("bad", "Not saved", `The atlas refused it (${code}). It is kept on this device.`);
     return;
   }
@@ -739,6 +760,11 @@ function watchShared() {
       const tag = location.hash.slice(1).toUpperCase();  // a link to a nation not on the map yet
       if (!app.N && app.index && tag && app.planned[tag] && !app.byTag[tag] && $("#desk").hidden) openNation(tag);
     }, () => {});
+    app.db.doc("planned/unlock").onSnapshot(s => {
+      app.unlock = (s.exists && s.data()) || {};
+      renderOwner(); renderList();
+      if (app.N && !app.N.planned) reconfigure();
+    }, () => {});
   } catch (e) { /* no listing */ }
   watchOwner();
 }
@@ -783,10 +809,22 @@ async function initFirebase() {
   watchShared();
   fb.onAuthStateChanged(auth, async u => {
     if (app.keysUnsub) { app.keysUnsub(); app.keysUnsub = null; }
+    if (app.adminsUnsub) { app.adminsUnsub(); app.adminsUnsub = null; }
     app.signedIn = u ? { name: u.displayName || u.email || "", email: u.email || "", avatarUrl: u.photoURL || "" } : null;
     let owner = false;
     if (u) try { await fb.getDoc(fb.doc(fs, "owner/keys")); owner = true; } catch (e) { owner = false; }  // the rules decide
-    app.isOwner = owner;
+    app.isOwner = owner; app.admins = []; app.isAuthor = false;
+    if (owner) {  // the author's admins: one of them, or the author (who isn't on the list)
+      const me = (u.email || "").toLowerCase(), list = qs => qs.docs.map(d => d.id).sort();
+      try { app.admins = list(await app.db.collection("admins").get()); } catch (e) { app.admins = []; }
+      app.isAuthor = !app.admins.includes(me);
+      try {
+        app.adminsUnsub = app.db.collection("admins").onSnapshot(qs => {
+          app.admins = list(qs); app.isAuthor = !app.admins.includes(me);
+          renderOwner(); renderSignIn(); renderWho();
+        }, () => {});
+      } catch (e) { /* no listing */ }
+    }
     app.me = owner ? { id: u.uid, name: u.displayName || "", avatarUrl: u.photoURL || "", isOwner: true } : app.player;
     if (!owner) { app.keys = {}; app.keysLoaded = false; app.owner = {}; app.ownerSug = null; }
     watchOwner();
@@ -842,11 +880,11 @@ function renderSignIn() {  // the author's way in, at the foot of the start page
   if (!app.fb) { el.hidden = true; return; }
   el.hidden = false;
   const out = () => h("button", { class: "btn small", type: "button", onclick: () => app.fb.fb.signOut(app.fb.auth) }, "Sign out");
-  if (!app.signedIn) el.replaceChildren(h("span", { text: "Players don't sign in: your nation's password is all you need. The author:" }),
+  if (!app.signedIn) el.replaceChildren(h("span", { text: "Players don't sign in: your nation's password is all you need. The author and their admins:" }),
     h("button", { class: "btn small", type: "button", onclick: signIn }, "Sign in with Google"),
     ...(app.signInError ? [h("span", { class: "warn", text: app.signInError })] : []));
-  else if (app.isOwner) el.replaceChildren(h("span", { text: `Signed in as ${app.signedIn.name}, the author.` }), out());
-  else el.replaceChildren(h("span", { class: "warn", text: `${app.signedIn.email || app.signedIn.name} isn't the author's account here.` }), out());
+  else if (app.isOwner) el.replaceChildren(h("span", { text: `Signed in as ${app.signedIn.name}, ${app.isAuthor ? "the author" : "an admin"}.` }), out());
+  else el.replaceChildren(h("span", { class: "warn", text: `${app.signedIn.email || app.signedIn.name} isn't the author's account here, nor one of their admins.` }), out());
 }
 async function resolveProfiles(ids) {
   if (!app.user || !ids.size) return;
@@ -862,7 +900,7 @@ function renderWho() {
   const el = $("#who");
   el.replaceChildren();
   if (app.fb) {
-    if (app.signedIn && app.isOwner) el.append(...(app.signedIn.avatarUrl ? [h("img", { src: app.signedIn.avatarUrl, alt: "" })] : []), h("span", { text: app.signedIn.name + " · owner" }));
+    if (app.signedIn && app.isOwner) el.append(...(app.signedIn.avatarUrl ? [h("img", { src: app.signedIn.avatarUrl, alt: "" })] : []), h("span", { text: app.signedIn.name + (app.isAuthor ? " · author" : " · admin") }));
     return;
   }
   if (!app.me) return;
@@ -1024,6 +1062,44 @@ function renderOwner() {
   const planned = plannedList().map(p => h("div", { class: "item" },
     h("div", { class: "row" }, h("b", { text: p.name }), h("span", { class: "meta", text: `${p.tag}${p.continent ? " · " + p.continent : ""}` })),
     h("button", { class: "btn small danger", type: "button", onclick: () => { const next = { ...app.planned }; delete next[p.tag]; app.db.doc("planned/list").set(next).catch(() => {}); } }, "Remove")));
+  // map tools: open by themselves once a nation's states are drawn; the owner can say otherwise
+  const uf = app.unlockFilter.toLowerCase();
+  const openN = app.index.nations.filter(n => mapOpen(n)).length;
+  const urows = app.index.nations.filter(n => !uf || n.name.toLowerCase().includes(uf) || n.tag.toLowerCase().includes(uf))
+    .sort((a, b) => ((a.final !== false) - (b.final !== false)) || a.name.localeCompare(b.name)).map(n => {
+      const o = app.unlock[n.tag], auto = n.final !== false;
+      const sel = h("select", { "aria-label": "Map tools of " + n.name, onchange: e => setUnlock(n.tag, e.target.value) },
+        h("option", { value: "", text: `Automatic (${auto ? "open" : "closed"})` }), h("option", { value: "open", text: "Open" }), h("option", { value: "closed", text: "Closed" }));
+      sel.value = o === true ? "open" : o === false ? "closed" : "";
+      return h("div", { class: "pwrow unl" },
+        n.flag ? h("img", { src: n.flag, alt: "", width: 41, height: 26, style: "image-rendering:pixelated" }) : h("span", { class: "noflag", text: n.tag }),
+        h("div", { style: "min-width:0" }, h("div", { class: "nm", text: n.name }), h("div", { class: "meta", text: `${n.tag} · ${auto ? "states drawn" : "states not drawn yet"}` })), sel);
+    });
+  // admins (the web site): they share these tools; only the author changes who they are
+  let adminSec = null;
+  if (app.fb) {
+    const aIn = h("input", { id: "own-admin", type: "email", placeholder: "Their Google address", "data-keep": true, autocomplete: "off", style: "flex:1 1 220px;min-width:0" });
+    const aMsg = h("span", { id: "own-amsg", class: "meta", text: app.adminMsg || "" });
+    const sayA = t => { app.adminMsg = t; const el = document.getElementById("own-amsg"); if (el) el.textContent = t; };
+    const aAdd = h("button", { class: "btn small primary", type: "button", onclick: async () => {
+      const em = aIn.value.trim().toLowerCase();
+      if (!/^[^\s@\/]+@[^\s@\/]+\.[^\s@\/]+$/.test(em)) { sayA("That doesn't look like an email address."); return; }
+      if (em === (app.signedIn && app.signedIn.email || "").toLowerCase()) { sayA("That's you: you have these tools already."); return; }
+      try {
+        await app.db.doc("admins/" + em).set({ email: em, added: Date.now() });
+        sayA(`${em} is an admin now: they open this page, scroll to the bottom and sign in with Google.`);
+        const el = document.getElementById("own-admin"); if (el) el.value = "";
+      } catch (e) { sayA("Not saved: only the author can add admins."); }
+    } }, "Add");
+    adminSec = h("details", null, h("summary", null, `Admins (${app.admins.length})`), h("div", { class: "inner" },
+      h("div", { class: "lead", text: app.isAuthor
+        ? "Admins sign in with Google, as you do, and get these tools: passwords, nations not on the map yet, map tools, requests, suggestions and the file of every nation. Only you can add or remove them."
+        : "Admins share the author's tools. Only the author can change who they are." }),
+      h("div", null, app.admins.length ? app.admins.map(em => h("div", { class: "item" }, h("b", { text: em }),
+        app.isAuthor ? h("button", { class: "btn small danger", type: "button", onclick: () => app.db.doc("admins/" + em).delete().catch(e => writeFailed(e, null)) }, "Remove") : h("span")))
+        : h("p", { class: "empty", text: "No admins yet." })),
+      app.isAuthor ? h("div", { class: "chips" }, aIn, aAdd) : null, aMsg));
+  }
   const sugBtn = h("button", { class: "btn small", type: "button", onclick: toggleOwnerSuggestions }, app.ownerSug ? "Hide them from the world map" : "Show them on the world map");
   const sugList = [];
   if (app.ownerSug) for (const [tag, items] of Object.entries(app.ownerSug)) for (const it of items)
@@ -1032,22 +1108,33 @@ function renderOwner() {
   const build = [
     h("h3", null, "Owner tools", h("small", { text: `${n} nation${n === 1 ? "" : "s"} with a password` }),
       h("button", { class: "btn small", type: "button", disabled: app.ownerBusy, onclick: () => loadOwnerData(true) }, app.ownerBusy ? "Loading…" : "Refresh")),
-    h("div", { class: "lead", text: "Only you see this. Hand each player their nation's password; it lets them fill in that nation and no other. A new password locks the old one out and keeps what was entered." }),
+    h("div", { class: "lead", text: (!app.fb ? "Only you see this." : app.isAuthor ? "Only you and your admins see this." : "Only the author and their admins see this.")
+      + " Hand each player their nation's password; it lets them fill in that nation and no other. A new password locks the old one out and keeps what was entered." }),
     h("details", null, h("summary", null, "Passwords"), h("div", { class: "inner" },
       h("input", { id: "own-filter", type: "search", placeholder: "Find a nation", value: app.ownerFilter, oninput: e => { app.ownerFilter = e.target.value; renderOwner(); } }),
       h("div", { class: "pwlist" }, rows))),
     h("details", null, h("summary", null, "Nations not on the map yet"), h("div", { class: "inner" },
       h("div", { class: "lead", text: "A player can send flags, leaders, names and suggestions before you or Merlo draw their land. Use the tag their country will have in the mod." }),
       h("div", { class: "chips" }, nTag, nName, nCont, add), nMsg, h("div", null, planned))),
+    h("details", null, h("summary", null, `Map tools (${openN} of ${app.index.nations.length} nations open)`), h("div", { class: "inner" },
+      h("div", { class: "lead", text: "A nation's map tools (states, cities, terrain, rivers, railways, supply hubs) open by themselves once you've drawn its states, so nothing its player enters is lost when its provinces are cut again. Until then its player suggests its states and cities. Open them early, or keep them closed, here." }),
+      h("input", { id: "own-ufilter", type: "search", placeholder: "Find a nation", value: app.unlockFilter, oninput: e => { app.unlockFilter = e.target.value; renderOwner(); } }),
+      h("div", { class: "pwlist" }, urows))),
     h("details", null, h("summary", null, `Requests (${reqs.filter(([, r]) => (r.status || "open") === "open").length} open)`), h("div", { class: "inner reqs" },
       reqs.length ? reqs.map(([tag, r]) => requestCard(tag, r, true)) : h("p", { class: "empty", text: "No requests yet." }))),
     h("details", null, h("summary", null, "Suggestions"), h("div", { class: "inner" },
       h("div", { class: "lead", text: "What players drew with the Suggest tool, for when you or Merlo draw the map." }), h("div", null, sugBtn), h("div", null, sugList))),
+    adminSec,
     h("div", { class: "chips" }, h("button", { class: "btn small primary", type: "button", onclick: saveAllFile }, "Save every nation as a file"), h("span", { class: "meta", text: app.ownerOut || "" })),
     h("div", { id: "own-out" }),
   ];
   keepFocus(el, () => build);
   [...el.querySelectorAll("details")].forEach((d, i) => { d.open = !!open[i]; });
+}
+async function setUnlock(tag, v) {  // "open", "closed" or "" (automatic: open once its states are drawn)
+  const next = { ...app.unlock };
+  if (v === "open") next[tag] = true; else if (v === "closed") next[tag] = false; else delete next[tag];
+  try { await app.db.doc("planned/unlock").set(next); } catch (e) { writeFailed(e, null); }
 }
 async function makePassword(tag) {
   const pw = newPassword(), K = await keyFor(tag, pw);
@@ -1142,6 +1229,12 @@ async function openNation(tag, opt = {}) {
   N.parts.push({ world: true, x0: 0, y0: 0, w: W, h: H, states: [], name: "World map" });
   derive(N);
   app.N = N;
+  N.open = mapOpen(N);
+  app.ui.rel = null;
+  if (!N.open && app.ui.mode !== "states") {  // its states aren't drawn: the plain land only
+    app.ui.mode = "states";
+    for (const b of document.querySelectorAll("[data-mode]")) b.setAttribute("aria-pressed", String(b.dataset.mode === "states"));
+  }
   Object.assign(app, { docs: {}, pending: {}, inflight: {}, local: {}, cache: {}, undo: [], routes: new Map(), meta: null, reqs: {}, metaLoaded: false });
   app.ui.sel = { state: -1, prov: -1, city: null, line: null, sug: opt.sug || null }; app.ui.draft = null;
   $("#undo").disabled = true;
@@ -1155,8 +1248,8 @@ async function openNation(tag, opt = {}) {
   configure();
   resolve();
   showPart(0);
-  setTool(N.planned ? "suggest" : (app.ui.tool === "suggest" ? "select" : app.ui.tool));
-  showTab(N.planned ? "people" : "state");
+  setTool(!N.open ? "suggest" : (app.ui.tool === "suggest" || app.ui.tool === "release" ? "select" : app.ui.tool));
+  showTab(N.planned ? "people" : N.open ? "state" : "map");
   renderLock(); refreshSave();
   renderAllPanes();
   openKey();
@@ -1164,14 +1257,34 @@ async function openNation(tag, opt = {}) {
   app.pendingSug = opt.sug || null;
   if (opt.sug) { showTab("map"); if (opt.at) locate(opt.at[0], opt.at[1]); }
 }
-function configure() {  // what a nation on the map has that one not drawn yet hasn't
-  const N = app.N, geo = !N.planned;
+// A nation's map tools (states, cities, terrain, rivers, railways, supply hubs) open once its
+// states are the author's (`final` in its file: scripts/gazetteer.py finals), unless the owner
+// says otherwise: drawing them later cuts its provinces again, and what was entered on the old
+// ones would land in the wrong places. Until then its player suggests them, and fills in names,
+// flags, people and releasables.
+function mapOpen(N = app.N) {
+  if (!N || N.planned) return false;
+  const o = app.unlock[N.tag];
+  return o === true || (o !== false && N.final !== false);
+}
+function configure() {  // what a nation with its states drawn has that one without them (or not on the map yet) hasn't
+  const geo = mapOpen();
   for (const t of ["state", "cities"]) document.querySelector(`[data-tab="${t}"]`).hidden = !geo;
   $("#modes").hidden = !geo;
 }
+function reconfigure() {  // the owner opened or closed the open nation's map tools
+  const N = app.N, now = mapOpen();
+  if (N.open === now) return;
+  N.open = now;
+  if (!now) { app.ui.sel.state = -1; app.ui.sel.prov = -1; app.ui.mode = "states"; }
+  configure(); resolve(); showPart(app.ui.part);
+  if (!now && (app.ui.tab === "state" || app.ui.tab === "cities")) showTab("map");
+  renderAllPanes();
+}
 function toolsHere() {
   const P = app.N.parts[app.ui.part];
-  return app.N.planned || P.world ? ["select", "suggest"] : ["select", "terrain", "city", "river", "rail", "hub", "suggest"];
+  if (!mapOpen()) return ["select", "release", "suggest"];  // releasables' land as drawn areas
+  return P.world ? ["select", "suggest"] : ["select", "terrain", "city", "river", "rail", "hub", "release", "suggest"];
 }
 function closeNation() {
   flushAll();
@@ -1323,7 +1436,9 @@ function derive(N) {
 }
 function partName(N, P, k) {  // the largest piece is the mainland; the others are named after a state
   if (!P.states.length) return `Part ${k + 1}`;
-  if (k === 0 && N.parts.filter(q => !q.world).length > 1) return "Mainland";
+  const land = N.parts.filter(q => !q.world).length;
+  if (land === 1) return N.name;
+  if (k === 0) return "Mainland";
   const first = N.states[P.states[0]].name || `State ${N.states[P.states[0]].id}`;
   return P.states.length > 1 ? `${first} +${P.states.length - 1}` : first;
 }
@@ -1394,6 +1509,15 @@ function resolve() {  // the facts' pixel keys -> this map's states and province
   for (const c of N.cityList) if (c.prov >= 0 && !N.cityInProv.has(c.prov)) N.cityInProv.set(c.prov, c);
   N.capitalCity = N.cityList.find(c => c.capital && c.prov >= 0) || null;
   N.sugList = Object.entries(F("suggest")).filter(([, v]) => v && Array.isArray(v.pts) && v.pts.length).map(([id, v]) => ({ id, ...v }));
+  // releasables, in the order they were added, and which of them holds each province
+  N.relList = Object.entries(F("releasables")).filter(([, v]) => v && isObj(v)).map(([id, v]) => ({ id, ...v }))
+    .sort((a, b) => (a.added || 0) - (b.added || 0) || a.id.localeCompare(b.id));
+  N.relOf = new Map();
+  for (const r of N.relList) for (const [k, on] of Object.entries(r.provinces || {})) {
+    if (!on) continue;
+    const [x, y] = keyXY(k), p = ownProvAt(x, y);
+    if (p >= 0 && !N.relOf.has(p)) N.relOf.set(p, [r.id, k]);
+  }
 }
 function sf(s) { return app.N.stateFacts[s] || {}; }
 function pf(p) { return app.N.provFacts[p] || {}; }
@@ -1410,7 +1534,7 @@ function changed(kind) {
   if (kind === "suggest" && app.pendingSug && app.N.sugList.some(x => x.id === app.pendingSug)) {
     const id = app.pendingSug; app.pendingSug = null; app.ui.sel.sug = id; requestAnimationFrame(() => selectSug(id));
   }
-  if (kind === "states" || kind === "provinces" || kind === "rivers") renderBase();
+  if (kind === "states" || kind === "provinces" || kind === "rivers" || kind === "releasables") renderBase();
   else requestDraw();
   renderAllPanes(kind);
 }
@@ -1427,7 +1551,7 @@ function showPart(k) {
   }
   const allowed = toolsHere();
   for (const b of document.querySelectorAll(".tool")) b.hidden = !allowed.includes(b.dataset.tool);
-  $("#modes").hidden = !!(app.N.planned || app.N.parts[k].world);
+  $("#modes").hidden = !mapOpen() || !!app.N.parts[k].world;
   if (!allowed.includes(app.ui.tool)) setTool("select");
   else renderSubtools();
   renderBase();
@@ -1458,17 +1582,21 @@ function renderBase() {  // every part's picture, the one shown with the selecte
 }
 function renderPart(N, P, active, pal) {
   const mode = app.ui.mode, own = N.nOwn + 2, nl = own + N.others.length;
-  const pc = mode === "pop" ? popClass(N) : null;
+  const plain = !mapOpen(N);  // states not drawn yet: the land alone, not the states the script cut
+  const pc = mode === "pop" && !plain ? popClass(N) : null, rel = relView();
   const fill = new Array(nl), e1 = new Array(nl), e2 = new Array(nl), e4 = new Array(nl);
   fill[0] = pal.sea; fill[1] = pal.lake;
   for (let v = 2; v < nl; v++) {
     let c;
     if (v < own) {
       const p = v - 2, s = N.prov[p].s;
-      if (mode === "terrain") { const t = pf(p).t; c = pal.t[t || N.prov[p].t] || pal.t.plains; if (!t) c = mix(c, pal.paper, 0.45); }
+      if (plain) c = pal.st[0];
+      else if (mode === "terrain") { const t = pf(p).t; c = pal.t[t || N.prov[p].t] || pal.t.plains; if (!t) c = mix(c, pal.paper, 0.45); }
       else if (mode === "pop") c = pal.pop[pc[s]];
       else c = pal.st[N.colourOf[s]];
-      if (s === app.ui.sel.state) c = mix(c, pal.sel, 0.32);
+      if (!plain && s === app.ui.sel.state) c = mix(c, pal.sel, 0.32);
+      const r = rel && N.relOf.get(p);
+      if (r) c = mix(c, rgb(relColour(r[0])), r[0] === app.ui.rel ? 0.66 : 0.4);
     } else {
       const o = N.others[v - own], nb = o >= 0 ? N.nb[o] : null;
       c = nb ? mix(pal.other, rgb(nb.colour), 0.16) : pal.other;
@@ -1485,7 +1613,7 @@ function renderPart(N, P, active, pal) {
     const v = px[i];
     let c = fp[v];
     const e = edge[i];
-    if (e) c = e === 1 ? e1[v] : e === 2 ? e2[v] : e === 3 ? inkP : e === 4 ? e4[v] : e === 5 ? otherE : otherC;
+    if (e && !(plain && e <= 2)) c = e === 1 ? e1[v] : e === 2 ? e2[v] : e === 3 ? inkP : e === 4 ? e4[v] : e === 5 ? otherE : otherC;
     if (rv[i] && v >= 2 && !(erased && erased[i])) c = rv[i] >= 8 ? riverW : riverP;
     u[i] = c;
   }
@@ -1564,9 +1692,12 @@ function renderLegend(pal) {
     const b = app.N.popBreaks || [];
     pal.pop.forEach((c, i) => items.push(sw(c, i === 0 ? "under " + fmt(b[0]) : `${fmt(b[i - 1])}+`)));
     items.push(h("span", { text: "people per map pixel" }));
+  } else if (!mapOpen()) {
+    items.push(sw(pal.st[0], "Your land"), sw(pal.other, "Neighbours"), sw(pal.sea, "Sea"), sw(pal.river, "River"));
   } else {
     items.push(sw(pal.st[0], "Your states"), sw(pal.other, "Neighbours"), sw(pal.sea, "Sea"), sw(pal.river, "River"), sw(pal.sel, "Selected"));
   }
+  if (!P.world && relView() && app.N.relList.length) items.push(sw(rgb(relColour(relCurrent() || app.N.relList[0].id)), "Releasable"));
   el.replaceChildren(...items);
   el.hidden = !app.ui.legend;
 }
@@ -1676,7 +1807,17 @@ function draw() {
       const t = c.name || "(unnamed)", w = ctx.measureText(t).width;
       if (place(q[0] + 8, q[1] - 8, w, 16)) halo(ctx, t, q[0] + 8, q[1], c.prov < 0 ? warn : ink, paper);
     }
-    if (v.s > 0.6) {
+    if (relView()) {  // releasables' names over their provinces
+      ctx.font = `700 12px "Josefin Sans", sans-serif`;
+      for (const r of N.relList) {
+        let sx = 0, sy = 0, n = 0;
+        for (const [p, [id]] of N.relOf) if (id === r.id && N.stateToPart[N.prov[p].s] === app.ui.part) { sx += N.prov[p].x; sy += N.prov[p].y; n++; }
+        if (!n) continue;
+        const q = gToScreen(sx / n, sy / n), t = (r.name || "(unnamed)").toUpperCase(), w = ctx.measureText(t).width;
+        if (q && place(q[0] - w / 2, q[1] - 8, w, 16)) halo(ctx, t, q[0] - w / 2, q[1], relColour(r.id), paper);
+      }
+    }
+    if (v.s > 0.6 && mapOpen()) {
       ctx.font = `700 ${v.s > 2.5 ? 13 : 11}px "Josefin Sans", sans-serif`;
       const order = [...N.states.keys()].filter(s => N.stateToPart[s] === app.ui.part).sort((a, b) => N.states[b].area - N.states[a].area);
       for (const s of order) {
@@ -1694,6 +1835,11 @@ function draw() {
       if (place(s[0] - w / 2, s[1] - 8, w, 16)) halo(ctx, t, s[0] - w / 2, s[1], css("--other-ink"), paper);
     }
   }
+  // releasables' land drawn as areas (before the states are drawn, or for a nation not on the map yet)
+  for (const r of N.relList) for (const pts of Object.values(r.areas || {})) {
+    if (!Array.isArray(pts) || pts.length < 3) continue;
+    drawSuggestion(ctx, { type: "area", pts, label: r.name || "(unnamed)" }, ([x, y]) => gToScreen(x, y), r.id === app.ui.rel && relView(), null, relColour(r.id));
+  }
   // suggestions, on every map
   for (const it of N.sugList) drawSuggestion(ctx, it, ([x, y]) => gToScreen(x, y), app.ui.sel.sug === it.id);
   // the line being drawn
@@ -1709,18 +1855,18 @@ function draw() {
       railPath(ctx, line, app.ui.railLevel, ink, paper, sel);
     } else {
       ctx.beginPath(); pts.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y));
-      if (d.kind === "s-area" && pts.length > 2) ctx.closePath();
-      ctx.strokeStyle = d.kind === "erase" ? warn : d.kind.startsWith("s-") ? css("--sug") : river;
+      if ((d.kind === "s-area" || d.kind === "r-area") && pts.length > 2) ctx.closePath();
+      ctx.strokeStyle = d.kind === "erase" ? warn : d.kind.startsWith("s-") ? css("--sug") : d.kind === "r-area" ? relColour(app.ui.rel) : river;
       ctx.lineWidth = d.kind === "erase" ? Math.max(2, ERASE_R * 2 * v.s * 0.7) : 3; ctx.stroke();
     }
     ctx.setLineDash([]);
     for (const [x, y] of pts.slice(0, d.pts.length)) { ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI * 2); ctx.fillStyle = sel; ctx.fill(); }
   }
 }
-function drawSuggestion(ctx, it, toS, selected, tag) {
+function drawSuggestion(ctx, it, toS, selected, tag, colour) {
   const pts = it.pts.map(toS);
   if (pts.some(p => !p)) return;
-  const c = css("--sug"), paper = css("--sheet");
+  const c = colour || css("--sug"), paper = css("--sheet");
   ctx.lineJoin = ctx.lineCap = "round";
   if (it.type === "point") {
     const [x, y] = pts[0];
@@ -1832,8 +1978,9 @@ function hoverText(sx, sy) {
   if (v === 0) return "Sea" + at;
   if (v === 1) return "Lake" + at;
   if (v >= N.nOwn + 2) { const o = N.others[v - N.nOwn - 2]; return (o >= 0 ? N.nb[o].name + " (neighbour)" : "Land") + at; }
-  const p = v - 2, s = N.prov[p].s, c = N.cityInProv.get(p);
-  return `${stateName(s)}${c ? " · " + c.name : ""} · ${TNAME[provTerrain(p)] || provTerrain(p)}${pf(p).hub ? " · supply hub" : ""}${N.prov[p].coastal ? " · coast" : ""}${at}`;
+  const p = v - 2, s = N.prov[p].s, c = N.cityInProv.get(p), r = N.relOf.get(p);
+  if (!mapOpen()) return `${N.name}${c ? " · " + c.name : ""}${N.prov[p].coastal ? " · coast" : ""}${at}`;
+  return `${stateName(s)}${c ? " · " + c.name : ""}${r ? " · " + relName(r[0]) : ""} · ${TNAME[provTerrain(p)] || provTerrain(p)}${pf(p).hub ? " · supply hub" : ""}${N.prov[p].coastal ? " · coast" : ""}${at}`;
 }
 function wireMap() {
   map.cv = $("#map"); map.ctx = map.cv.getContext("2d");
@@ -1850,7 +1997,7 @@ function wireMap() {
     const tool = app.ui.tool;
     const panning = e.button === 1 || e.button === 2 || map.space;
     map.drag = { kind: panning ? "pan" : "maybe", x0: x, y0: y, view: { ...app.view }, moved: false, button: e.button };
-    if (!panning && tool === "terrain" && !locked()) { beginGroup(); map.drag.kind = "paint"; paintAt(x, y); }
+    if (!panning && (tool === "terrain" || (tool === "release" && mapOpen() && relCurrent())) && !locked()) { beginGroup(); map.drag.kind = "paint"; paintAt(x, y); }
     if (!panning && tool === "city") { const c = cityAtScreen(x, y); if (c) { map.drag.city = c; selectCity(c.id); } }
   });
   cv.addEventListener("pointermove", e => {
@@ -1870,9 +2017,9 @@ function wireMap() {
       d.moved = true;
       const t = app.ui.tool;
       if (d.city && !locked()) d.kind = "movecity";
-      else if ((t === "river" || (t === "suggest" && app.ui.sugKind !== "point")) && !locked()) {
+      else if ((t === "river" || (t === "suggest" && app.ui.sugKind !== "point") || (t === "release" && !mapOpen() && relCurrent())) && !locked()) {
         d.kind = "free";
-        if (!app.ui.draft) startDraft(t === "river" ? app.ui.riverKind : "s-" + app.ui.sugKind);
+        if (!app.ui.draft) startDraft(t === "river" ? app.ui.riverKind : t === "release" ? "r-area" : "s-" + app.ui.sugKind);
         app.ui.draft.free = true; addPoint(d.x0, d.y0, true);
       }
       else d.kind = "pan";
@@ -1924,11 +2071,22 @@ function clickAt(x, y, dbl) {
     if (it) { selectSug(it.id); return; }
     const c = cityAtScreen(x, y);
     if (c) { selectCity(c.id); showTab("cities"); return; }
+    const r = p >= 0 && relView() ? N.relOf.get(p) : null;
+    if (r) { selectRel(r[0]); showTab("release"); return; }
+    if (!mapOpen()) return;
     if (p >= 0) selectState(N.prov[p].s, p);
-    else if (!N.planned) selectState(-1, -1);
+    else selectState(-1, -1);
     return;
   }
   if (locked()) { askPassword(); return; }
+  if (t === "release") {
+    if (!relCurrent()) { flash("Add a releasable on the Releasables tab first, or pick one there."); showTab("release"); return; }
+    if (mapOpen()) return;  // provinces: painted as the pointer went down
+    if (dbl) { const d = app.ui.draft; if (d && d.pts.length > 1) d.pts.pop(); finishDraft(); return; }
+    if (!app.ui.draft) startDraft("r-area");
+    addPoint(x, y, false);
+    return;
+  }
   if (t === "city") {
     const c = cityAtScreen(x, y);
     if (c) { selectCity(c.id); showTab("cities"); return; }
@@ -1952,6 +2110,7 @@ function clickAt(x, y, dbl) {
 function paintAt(x, y) {
   const N = app.N, v = labelAtScreen(x, y);
   if (v < 2 || v >= N.nOwn + 2) return;
+  if (app.ui.tool === "release") { paintRel(v - 2); return; }
   const p = v - 2, t = app.ui.terrain === "unset" ? null : app.ui.terrain;
   if ((pf(p).t || null) === t) return;
   editProv(p, { t });
@@ -1975,8 +2134,13 @@ function finishDraft() {
   const d = app.ui.draft;
   app.ui.draft = null;
   renderSubtools();
-  if (!d || d.pts.length < 2 || (d.kind === "s-area" && d.pts.length < 3)) { requestDraw(); return; }
+  if (!d || d.pts.length < 2 || ((d.kind === "s-area" || d.kind === "r-area") && d.pts.length < 3)) { requestDraw(); return; }
   const pts = d.free ? simplify(d.pts, 1.0) : d.pts;
+  if (d.kind === "r-area") {
+    const id = relCurrent();
+    if (id && edit("releasables", { [id]: { areas: { ["a-" + uid()]: pts } } })) flash(`Land drawn for ${relName(id)}.`);
+    return;
+  }
   if (d.kind.startsWith("s-")) {
     const id = "s-" + uid();
     if (edit("suggest", { [id]: { type: d.kind.slice(2), pts, label: "", note: "" } })) selectSug(id, true);
@@ -2008,6 +2172,9 @@ function flash(msg) { const el = $("#status"); el.textContent = msg; clearTimeou
 function hint() {
   const P = app.N && curPart();
   if (P && P.world && app.ui.tool === "select") return "The whole world. Drag to move, scroll or pinch to zoom; pick Suggest to draw on it.";
+  if (app.ui.tool === "release") return mapOpen()
+    ? "Click or drag over your provinces to give them to the releasable picked here (or take them away)."
+    : "Draw the releasable's land: click points around it, double-click or Enter to finish, or drag freehand.";
   return {
     select: "Click a state to fill in its facts. Drag to move the map; scroll or pinch to zoom.",
     terrain: "Click or drag over provinces to paint the terrain. Right-drag or two fingers move the map.",
@@ -2015,14 +2182,19 @@ function hint() {
     river: "Click to add points, double-click or Enter to finish, Esc to cancel. Or drag to draw freehand.",
     rail: "Click cities or places in order; points snap to cities and hubs. Double-click or Enter to finish.",
     hub: "Click a province to add or remove a supply hub. Hubs need a railway to the capital to work.",
-    suggest: "Show the author what the map should have: draw an area or a line (click points, double-click or Enter to finish; or drag freehand) or drop a point, then say what it is on the Map tab.",
+    suggest: mapOpen() || !app.N || app.N.planned
+      ? "Show the author what the map should have: draw an area or a line (click points, double-click or Enter to finish; or drag freehand) or drop a point, then say what it is on the Map tab."
+      : "Suggest your states and cities: an area for each state (or lines along its borders) and a point for each city; say what each is on the Map tab.",
   }[app.ui.tool];
 }
 
 // ---- tools
 function setTool(t) {
   if (app.ui.draft && t !== app.ui.tool) finishDraft();
+  const was = relView();
   app.ui.tool = t;
+  if (t === "release" && app.N && !relCurrent() && app.N.relList.length) app.ui.rel = app.N.relList[0].id;
+  if (app.N && was !== relView()) renderBase();
   if (t === "terrain" && app.ui.mode !== "terrain" && app.N) setMapMode("terrain");
   for (const b of document.querySelectorAll(".tool")) b.setAttribute("aria-pressed", String(b.dataset.tool === t));
   $("#sheet").style.cursor = t === "select" ? "default" : "crosshair";
@@ -2042,6 +2214,19 @@ function renderSubtools() {
       out.push(h("button", { class: "tchip", type: "button", "aria-pressed": String(app.ui.terrain === k), onclick: () => { app.ui.terrain = k; renderSubtools(); } },
         h("i", { style: c ? `background:rgb(${c.join(",")})` : "background:transparent;border-style:dashed" }), nm));
     }
+  } else if (t === "release") {
+    const list = app.N ? app.N.relList : [];
+    if (!list.length) out.push(h("button", { class: "btn small primary", type: "button", onclick: addRelease }, "Add a releasable"));
+    else {
+      const sel = h("select", { "aria-label": "Releasable", onchange: e => selectRel(e.target.value) }, list.map(r => h("option", { value: r.id, text: r.name || "(unnamed)" })));
+      sel.value = relCurrent() || "";
+      out.push(sel);
+      if (mapOpen()) for (const [k, nm] of [["add", "Add provinces"], ["remove", "Take them away"]])
+        out.push(h("button", { class: "tchip", type: "button", "aria-pressed": String(app.ui.relMode === k), onclick: () => { app.ui.relMode = k; renderSubtools(); } }, nm));
+    }
+    const d = app.ui.draft;
+    if (d && d.kind === "r-area") out.push(...draftControls(d));
+    else out.push(h("span", { class: "hinttext", text: hint() }));
   } else if (t === "river" || t === "rail" || t === "suggest") {
     if (t === "river") for (const [k, nm] of [["major", "Major river"], ["minor", "Minor river"], ["erase", "Erase rivers"]]) {
       out.push(h("button", { class: "tchip", type: "button", "aria-pressed": String(app.ui.riverKind === k), onclick: () => { app.ui.riverKind = k; if (app.ui.draft) app.ui.draft.kind = k; renderSubtools(); requestDraw(); } }, nm));
@@ -2052,24 +2237,29 @@ function renderSubtools() {
       out.push(h("button", { class: "tchip", type: "button", "aria-pressed": String(app.ui.sugKind === k), onclick: () => { app.ui.sugKind = k; if (app.ui.draft) cancelDraft(); renderSubtools(); } }, nm));
     }
     const d = app.ui.draft;
-    if (d) out.push(h("span", { class: "meta", text: `${d.pts.length} point${d.pts.length === 1 ? "" : "s"}` }),
-      h("button", { class: "btn small primary", type: "button", onclick: finishDraft, disabled: d.pts.length < 2 }, "Finish"),
-      h("button", { class: "btn small", type: "button", onclick: () => { d.pts.pop(); renderSubtools(); requestDraw(); }, disabled: !d.pts.length }, "Undo point"),
-      h("button", { class: "btn small", type: "button", onclick: cancelDraft }, "Cancel"));
+    if (d) out.push(...draftControls(d));
     else if (t === "suggest") out.push(h("span", { class: "hinttext", text: hint() }));
   } else out.push(h("span", { class: "hinttext", text: hint() }));
   el.replaceChildren(...out);
 }
+function draftControls(d) {
+  return [h("span", { class: "meta", text: `${d.pts.length} point${d.pts.length === 1 ? "" : "s"}` }),
+    h("button", { class: "btn small primary", type: "button", onclick: finishDraft, disabled: d.pts.length < 2 }, "Finish"),
+    h("button", { class: "btn small", type: "button", onclick: () => { d.pts.pop(); renderSubtools(); requestDraw(); }, disabled: !d.pts.length }, "Undo point"),
+    h("button", { class: "btn small", type: "button", onclick: cancelDraft }, "Cancel")];
+}
 
 // ======================================================================= the ledger
-const TABS = ["state", "cities", "map", "politics", "people", "nation"];
+const TABS = ["state", "cities", "map", "politics", "people", "release", "nation"];
 function showTab(tab) {
+  const was = relView();
   app.ui.tab = tab;
+  if (app.N && was !== relView()) renderBase();
   for (const b of document.querySelectorAll("[data-tab]")) b.setAttribute("aria-selected", String(b.dataset.tab === tab));
   for (const k of TABS) $("#pane-" + k).hidden = k !== tab;
 }
 const PANES = { state: () => renderState(), cities: () => renderCities(), map: () => renderMapPane(),
-                politics: () => renderPolitics(), people: () => renderPeople(), nation: () => renderNation() };
+                politics: () => renderPolitics(), people: () => renderPeople(), release: () => renderReleasables(), nation: () => renderNation() };
 const dirty = new Set();
 let panesQueued = false;
 function dirtyPanes(...names) {
@@ -2089,7 +2279,7 @@ function typingIn(pane) {
 function renderAllPanes(kind) {
   const by = { rails: ["map", "nation"], rivers: ["map", "nation"], suggest: ["map"], politics: ["politics", "people", "nation"],
                provinces: ["state", "map", "nation"], cities: ["state", "cities", "nation"], states: ["state", "cities", "nation"],
-               flags: ["nation"], about: ["nation"], people: ["people"] };
+               flags: ["nation"], about: ["nation"], people: ["people"], releasables: ["release", "nation"] };
   dirtyPanes(...(by[kind] || Object.keys(PANES)));
 }
 function paneFrame(content) {  // a pane's fields, greyed out while the nation is locked
@@ -2153,7 +2343,7 @@ function keepFocus(pane, build) {  // rebuild a pane, keeping the focused field,
 }
 function renderState(force) {
   const pane = $("#pane-state"), N = app.N, s = app.ui.sel.state;
-  if (N.planned) { pane.replaceChildren(); return; }
+  if (!mapOpen()) { pane.replaceChildren(); return; }
   if (!force && typingIn(pane)) { dirtyPanes("state"); return; }
   if (s < 0) {
     pane.replaceChildren(h("div", { class: "empty" },
@@ -2222,9 +2412,9 @@ function stateForm(s) {
   return out;
 }
 function bval(s, k) { const f = sf(s), st = app.N.states[s]; if (f[k] != null) return f[k]; const b = BUILD.find(b => b[0] === k); return k === "naval" ? st.naval : (st.b[b[3]] || 0); }
-function resetButton(label, act, disabled) {
+function resetButton(label, act, disabled, yes = "Yes, reset") {
   const wrap = h("div", { class: "confirm" });
-  const ask = () => wrap.replaceChildren(h("span", { text: "Sure?" }), h("button", { class: "btn small danger", type: "button", onclick: () => { act(); wrap.replaceChildren(btn); } }, "Yes, reset"), h("button", { class: "btn small", type: "button", onclick: () => wrap.replaceChildren(btn) }, "Keep"));
+  const ask = () => wrap.replaceChildren(h("span", { text: "Sure?" }), h("button", { class: "btn small danger", type: "button", onclick: () => { act(); wrap.replaceChildren(btn); } }, yes), h("button", { class: "btn small", type: "button", onclick: () => wrap.replaceChildren(btn) }, "Keep"));
   const btn = h("button", { class: "btn small danger", type: "button", onclick: ask, disabled }, label);
   wrap.append(btn);
   return wrap;
@@ -2233,7 +2423,7 @@ function capitalState() { const N = app.N; return N.capitalCity ? N.capitalCity.
 
 function renderCities(force) {
   const pane = $("#pane-cities"), N = app.N;
-  if (N.planned) { pane.replaceChildren(); return; }
+  if (!mapOpen()) { pane.replaceChildren(); return; }
   if (!force && typingIn(pane)) { dirtyPanes("cities"); return; }
   keepFocus(pane, () => {
     const out = [h("div", { class: "sec" }, h("h4", null, "Cities", h("small", { text: `${N.cityList.length}` })),
@@ -2280,10 +2470,18 @@ function renderMapPane(force) {
   if (!force && typingIn(pane)) { dirtyPanes("map"); return; }
   keepFocus(pane, () => {
     const out = [];
+    if (!N.planned && app.isOwner && app.mode === "shared") {  // the owner's say over the automatic rule
+      if (!mapOpen()) out.push(h("div", { class: "note" }, `Its map tools stay closed until its states are drawn. `,
+        h("button", { class: "btn small", type: "button", onclick: () => setUnlock(N.tag, "open") }, "Open them now")));
+      else if (app.unlock[N.tag] === true && N.final === false) out.push(h("div", { class: "note" }, "You opened its map tools before its states were drawn. ",
+        h("button", { class: "btn small", type: "button", onclick: () => setUnlock(N.tag, "") }, "Close them again")));
+    }
     // suggestions first: everyone has them
     out.push(h("div", { class: "sec" }, h("h4", null, "Suggestions", h("small", { text: `${N.sugList.length}` })),
       h("div", { class: "meta", text: N.planned
         ? "Your nation isn't on the map yet. Draw where it should be, its borders, mountains, rivers or cities with the Suggest tool, and say what each is; the author and Merlo use them when they draw it."
+        : !mapOpen()
+        ? "Your states aren't drawn yet, so the map tools (states, cities, terrain, rivers, railways) wait for them: drawing them cuts your provinces again. Suggest them meanwhile with the Suggest tool, an area for each state (or lines along its borders) and a point for each city, and say what each is. Your names, flags, people and releasables can be filled in now."
         : "Anything the map can't take from you directly (a border to move, an island that should be yours, a mountain range): draw it with the Suggest tool and say what it is." }),
       N.sugList.length ? h("div", null, N.sugList.map(it => {
         const lab = textInput("sug-label-" + it.id, it.label, "What is it? (e.g. our northern border)", v => edit("suggest", { [it.id]: { label: v || "" } }), "", 80);
@@ -2295,7 +2493,7 @@ function renderMapPane(force) {
             h("button", { class: "btn small danger", type: "button", onclick: () => edit("suggest", { [it.id]: null }) }, "Delete")),
           textArea("sug-note-" + it.id, it.note, "More about it (optional)", v => edit("suggest", { [it.id]: { note: v || "" } }), 1000));
       })) : h("div", { class: "empty", text: "None yet." })));
-    if (!N.planned) {
+    if (mapOpen()) {
       const rivers = Object.entries(rv).filter(([, r]) => r && Array.isArray(r.pts));
       out.push(h("div", { class: "sec" }, h("h4", null, "Rivers you drew", h("small", { text: `${rivers.length}` })),
         h("div", { class: "meta", text: "Blue lines on the map are the rivers already in the game; draw more with the Rivers tool. A river reaches the sea or a lake by itself if it ends within a few pixels of it. Erase strokes remove the game's rivers under them." }),
@@ -2379,6 +2577,97 @@ function uploadInto(kind, path, label) {
       flash(`${label[0].toUpperCase() + label.slice(1)} added.`);
     } catch (e) { flash((e && e.message) || "That picture couldn't be sent."); }
   });
+}
+
+// ---- releasables: nations that can be released from this one, with their land, names, flag
+// and ruler. Their land is provinces once the nation's states are drawn (a province belongs to
+// one releasable), drawn areas before; the build gives them cores on the states they hold most of.
+function relCurrent() { const id = app.ui.rel; return id && app.N && F("releasables")[id] ? id : null; }
+function relName(id) { const r = F("releasables")[id]; return (r && r.name) || "the releasable"; }
+function relColour(id) {
+  const r = F("releasables")[id];
+  if (r && /^#[0-9a-f]{6}$/i.test(r.colour || "")) return r.colour;
+  const i = app.N ? app.N.relList.findIndex(x => x.id === id) : 0;
+  return REL_COLOURS[Math.max(0, i) % REL_COLOURS.length];
+}
+function relView() { return app.ui.tab === "release" || app.ui.tool === "release"; }
+function selectRel(id) { app.ui.rel = id; renderBase(); renderSubtools(); dirtyPanes("release"); }
+function addRelease() {
+  const id = "rl-" + uid();
+  if (!edit("releasables", { [id]: { name: "", added: Date.now() } })) return;
+  app.ui.rel = id; showTab("release"); renderSubtools();
+  setTimeout(() => { const el = document.getElementById("rl-name-" + id); if (el) { el.scrollIntoView({ block: "nearest" }); el.focus(); } }, 60);
+}
+function paintRel(p) {
+  const id = relCurrent(), N = app.N, has = N.relOf.get(p);
+  if (!id) return;
+  if (app.ui.relMode === "remove") { if (has && has[0] === id) edit("releasables", { [id]: { provinces: { [has[1]]: null } } }); return; }
+  if (has && has[0] === id) return;
+  const d = { [id]: { provinces: { [N.prov[p].key]: true } } };
+  if (has) d[has[0]] = { provinces: { [has[1]]: null } };  // a province belongs to one releasable
+  edit("releasables", d);
+}
+function showRel(id) {
+  const N = app.N, r = F("releasables")[id] || {};
+  const p = [...N.relOf].find(([, v]) => v[0] === id);
+  const a = Object.values(r.areas || {}).find(x => Array.isArray(x) && x.length);
+  selectRel(id);
+  if (p) locate(N.prov[p[0]].x, N.prov[p[0]].y); else if (a) locate(a[0][0], a[0][1]);
+}
+function fieldOf(id, label, input, set, cls) {
+  return h("div", { class: "field" + (cls ? " " + cls : "") + (set ? " set" : "") }, h("label", { for: id, text: label }), input);
+}
+function renderReleasables(force) {
+  const pane = $("#pane-release"), N = app.N;
+  if (!N || !app.index) return;
+  if (!force && typingIn(pane)) { dirtyPanes("release"); return; }
+  keepFocus(pane, () => {
+    const out = [h("div", { class: "sec" }, h("h4", null, "Releasables", h("small", { text: N.relList.length ? String(N.relList.length) : "" })),
+      h("div", { class: "meta", text: "Nations that could be released from yours: in the game they can be set free from the diplomacy screen, on the land they have cores on. Give each its land, names, flag and ruler." }),
+      h("div", null, h("button", { class: "btn small primary", type: "button", onclick: addRelease }, "Add a releasable")))];
+    for (const r of N.relList) out.push(relCard(r));
+    return paneFrame(out);
+  });
+}
+function relCard(r) {
+  const N = app.N, id = r.id, open = mapOpen(), col = relColour(id), leader = r.leader || {}, flag = r.flag;
+  const provs = [...N.relOf.values()].filter(v => v[0] === id).length;
+  const areas = Object.entries(r.areas || {}).filter(([, a]) => Array.isArray(a) && a.length > 2);
+  const edit1 = delta => edit("releasables", { [id]: delta });
+  const land = open ? `${provs} province${provs === 1 ? "" : "s"}` + (areas.length ? ` · ${areas.length} drawn area${areas.length === 1 ? "" : "s"}` : "")
+    : areas.length ? `${areas.length} area${areas.length === 1 ? "" : "s"} drawn` : "not drawn yet";
+  const card = h("div", { class: "relcard" + (app.ui.rel === id ? " sel" : ""), style: `--rel:${col}` },
+    h("div", { class: "relhead" },
+      h("input", { type: "color", value: col, title: "Its map colour", "aria-label": "Map colour", onchange: e => edit1({ colour: e.target.value }) }),
+      textInput("rl-name-" + id, r.name, "Its name, e.g. Ghessone", v => edit1({ name: v || "" }), "nameinput", 60),
+      h("button", { class: "btn small", type: "button", "aria-pressed": String(app.ui.rel === id), onclick: () => selectRel(id) }, app.ui.rel === id ? "Picked" : "Pick")),
+    h("div", { class: "grid2" },
+      fieldOf("rl-adj-" + id, "Adjective", textInput("rl-adj-" + id, r.adj, "e.g. Ghessonese", v => edit1({ adj: v }), "", 60), r.adj),
+      fieldOf("rl-ruling-" + id, "Ruling sub-ideology", subSelect("rl-ruling-" + id, r.ruling, "Pick one", v => edit1({ ruling: v })), r.ruling),
+      fieldOf("rl-def-" + id, "Full title", textInput("rl-def-" + id, r.def, "e.g. the Free State of Ghessone", v => edit1({ def: v }), "", 100), r.def, "full")),
+    h("div", { class: "relland" },
+      h("div", { class: "row" }, h("b", { text: "Land" }), h("span", { class: "meta", text: land })),
+      h("div", { class: "chips" },
+        h("button", { class: "btn small", type: "button", onclick: () => { selectRel(id); app.ui.relMode = "add"; setTool("release"); } },
+          open ? (provs ? "Change its provinces" : "Pick its provinces") : (areas.length ? "Draw more of its land" : "Draw its land")),
+        provs || areas.length ? h("button", { class: "btn small", type: "button", onclick: () => showRel(id) }, "Show") : null,
+        ...areas.map(([aid], i) => h("button", { class: "tchip", type: "button", title: "Delete this area", onclick: () => edit1({ areas: { [aid]: null } }) }, `Area ${i + 1} ✕`))),
+      open ? null : h("div", { class: "meta", text: "Draw it as an area for now: once the author has drawn your states, you pick its exact provinces." })),
+    h("div", { class: "flagslot" },
+      flag && imgSrc(flag) ? h("img", { class: "flagbox", src: imgSrc(flag), alt: "Its flag" }) : h("span", { class: "flagbox", text: flag ? "loading" : "no flag" }),
+      h("div", { style: "display:grid;gap:4px;min-width:0" }, h("b", { text: "Flag", style: "font-size:14px" }),
+        flag ? h("span", { class: "meta", text: `${flag.w} × ${flag.h}${flag.name ? " · " + flag.name : ""}` }) : null,
+        h("div", { class: "chips" },
+          h("button", { class: "btn small", type: "button", onclick: () => uploadInto("releasables", [id, "flag"], "the flag") }, flag ? "Replace" : "Send a picture"),
+          flag ? h("button", { class: "btn small danger", type: "button", onclick: () => edit1({ flag: null }) }, "Remove") : null))),
+    h("div", { class: "person" },
+      portraitBox(leader.portrait, () => uploadInto("releasables", [id, "leader", "portrait"], "the portrait"), () => edit1({ leader: { portrait: null } }), "Ruler's portrait"),
+      h("div", { class: "fields" },
+        fieldOf("rl-lead-" + id, "Ruler", textInput("rl-lead-" + id, leader.name, "Its head of state", v => edit1({ leader: { name: v } }), "", 80), leader.name),
+        fieldOf("rl-desc-" + id, "Titles", textArea("rl-desc-" + id, leader.desc, "Shown on their portrait in game", v => edit1({ leader: { desc: v } }), 600), leader.desc))),
+    fieldOf("rl-notes-" + id, "About it", textArea("rl-notes-" + id, r.notes, "Its people and history, why it would break away", v => edit1({ notes: v }), 2000), r.notes),
+    resetButton("Delete this releasable", () => { edit("releasables", { [id]: null }); if (app.ui.rel === id) app.ui.rel = null; renderSubtools(); }, false, "Yes, delete it"));
+  return card;
 }
 
 // ---- politics: names under each government, the ruling sub-ideology
@@ -2561,7 +2850,7 @@ function renderNation(force) {
     out.push(h("div", { class: "sec" }, h("h4", null, "Requests to the author", h("small", { text: reqs.length ? `${reqs.length}` : "" })),
       h("div", { class: "meta", text: "Ask for what the game doesn't have yet: a new sub-ideology, a kind of subject (like a dominion or a protectorate), a change to the map…" }),
       requestForm(), reqs.length ? h("div", { class: "reqs" }, reqs.map(r => requestCard(N.tag, r, false))) : null));
-    if (!N.planned) {
+    if (mapOpen()) {
       const named = N.states.filter((_, s) => sf(s).name).length, popset = N.states.filter((_, s) => sf(s).pop != null).length;
       const terr = N.prov.filter((_, p) => pf(p).t).length, total = N.states.reduce((a, _, s) => a + statePop(s), 0);
       const rivers = Object.values(F("rivers")).filter(r => r && r.pts).length, rails = Object.values(F("rails")).filter(r => r && r.pts).length;
@@ -2733,7 +3022,7 @@ async function saveAllFile() {
     all[tag] = { facts, meta, requests, images };
   });
   app.ownerOut = `${Object.keys(all).length} nations with a password.`; renderOwner();
-  offer("valsora-gazetteer-all.json", JSON.stringify({ gazetteer: 2, saved: new Date().toISOString(), planned: app.planned, nations: all }, null, 1), "own-out");
+  offer("valsora-gazetteer-all.json", JSON.stringify({ gazetteer: 2, saved: new Date().toISOString(), planned: app.planned, unlock: app.unlock, nations: all }, null, 1), "own-out");
 }
 function loadFile(file) {
   const r = new FileReader();
@@ -2782,10 +3071,10 @@ function wireStatic() {
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z" && !typing) { e.preventDefault(); undo(); return; }
     if (typing) return;
     if (e.key === " ") { map.space = true; e.preventDefault(); }
-    if (e.key === "Escape") { if (app.ui.draft) cancelDraft(); else if (!app.N.planned) selectState(-1, -1); }
+    if (e.key === "Escape") { if (app.ui.draft) cancelDraft(); else if (mapOpen()) selectState(-1, -1); }
     if (e.key === "Enter" && app.ui.draft) finishDraft();
     if (e.key === "Backspace" && app.ui.draft) { e.preventDefault(); app.ui.draft.pts.pop(); renderSubtools(); requestDraw(); }
-    const t = { v: "select", t: "terrain", c: "city", r: "river", l: "rail", h: "hub", s: "suggest" }[e.key.toLowerCase()];
+    const t = { v: "select", t: "terrain", c: "city", r: "river", l: "rail", h: "hub", e: "release", s: "suggest" }[e.key.toLowerCase()];
     if (t && !e.ctrlKey && !e.metaKey && !e.altKey && toolsHere().includes(t)) setTool(t);
   });
   document.addEventListener("keyup", e => { if (e.key === " ") map.space = false; });

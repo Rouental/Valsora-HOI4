@@ -10,6 +10,8 @@ with the page (scripts/gazetteer.html) as the artifact's files:
                     build gives them now, its flag, and its land with its neighbours' around
                     it as province numbers per pixel, in parts (land and islands within
                     PART_GAP px of each other share a part), plus the rivers on it
+Each nation is marked `final` when its states are the author's (gazetteer.finals): only
+then does the page open its map tools.
 Keys are pixels: a state or province is named by its anchor pixel "x,y" (the point
 farthest inside it), as source/state_names.json does, since ids shift when the map
 changes. Points (cities, rivers, railways) are game map pixels.
@@ -165,6 +167,7 @@ def main():
     city_at = {int(c[0]): c for c in rj.get("cities", [])}
 
     shown = {**nations.DISPLAY_COLOUR, **gazetteer.colours(gazetteer.load())}  # as the build colours them
+    final = gazetteer.finals(lab, kind, states, owners)  # states drawn: the map tools open
 
     def colour(tag):
         return hexcol(shown.get(tag, COUNTRIES[by_tag[tag]][3]))
@@ -261,7 +264,7 @@ def main():
         cont = CONTINENTS[int(p["cont"][states[cap_state][0]]) - 1] if cap_state >= 0 else ""
         c = COUNTRIES[by_tag[tag]]
         nation = dict(tag=tag, name=c[1], adj=c[2], colour=colour(tag), flag=flag(tag),
-                      continent=CONT_NAME.get(cont, cont), states=st_list, provs=provs,
+                      continent=CONT_NAME.get(cont, cont), final=final[tag], states=st_list, provs=provs,
                       others=others, nb=[dict(tag=o, name=COUNTRIES[by_tag[o]][1], colour=colour(o))
                                          for o in sorted(nb, key=nb.get)],
                       cities=cities, politics=politics(tag, loc), parts=parts)
@@ -269,7 +272,7 @@ def main():
         (OUT / "n" / f"{tag}.json").write_text(text, encoding="utf-8")
         index.append(dict(tag=tag, name=c[1], colour=colour(tag), continent=nation["continent"],
                           flag=flag(tag, medium=True), states=len(mine), provinces=len(own),
-                          cities=len(cities), area=int(sum(int(size[i]) for i in own)),
+                          cities=len(cities), area=int(sum(int(size[i]) for i in own)), final=final[tag],
                           v=hashlib.sha1(text.encode()).hexdigest()[:10]))
 
     # the world in country colours for the start page, with borders between countries

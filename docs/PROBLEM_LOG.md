@@ -412,6 +412,32 @@ screenshot and `error.log`)
 
 ## Map problems found while building
 
+**The Gazetteer's map tools, releasables and admins, found while testing them** (2026-10-15, later)
+- Facts entered on a nation whose states the build had cut would land in the wrong places once
+  the author drew its states (state facts on whichever new state holds their pixel, one replacing
+  another; terrain on re-cut provinces). Fix (author's idea): a nation's map tools open only once
+  its states are the author's (`gazetteer.finals`), and the import drops a closed nation's map
+  facts.
+- Seven tabs didn't fit the 390 px column on a desktop (483 px wide): State and Nation scrolled
+  out of sight. Fix: the column is 420 px and the tab labels tighter.
+- Run from `scripts/`, the import couldn't find the last build (so it couldn't tell whose states
+  were drawn) nor the base game's tags, and named a releasable LIB, Liberia's tag. Fix: it
+  refuses to run outside the repository's root.
+- The build looked tags up before it had added the Gazetteer's releasables (KeyError). Fix: they
+  join `COUNTRIES` and the lookup together.
+- A releasable without a ruling sub-ideology had no leader, and `check_mod.py` failed. Fix: it
+  takes its nation's.
+- Any refused save locked a player out with "This nation's password has changed", so under
+  rules a step behind the page (before the author pastes new ones) a player saving a releasable
+  would have been told so. Fix: the page first checks the nation's key; while it is there, the
+  save is only "Not saved" (tested with the first rules in the emulator).
+- The tests' sign-in waited for the Sign in button, which a nation's page hides. Fix (tests
+  only): they wait for the Firebase SDK instead.
+- The emulator can't reload its rules in this sandbox (the CLI's reload request is blocked and
+  it stops, leaving the Firestore process running); and `pgrep -f`/`pkill -f` on a pattern in
+  the shell's own command line stop that shell. Fix: restart the emulators with the rules file
+  in place, and stop leftovers by their process id.
+
 **The Gazetteer moved to a web site of its own** (2026-10-15)
 - On claude.ai only friends invited by email as Editors could save; visitors through a public
   link can only view, and the author didn't want to ask everyone for an email. Fix: the same
