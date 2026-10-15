@@ -931,6 +931,37 @@ def main(mod):
             for idea in body.split():
                 if idea not in v_ideas:
                     err(f"{rel}: idea {idea} is neither ours nor the game's")
+    # the Gazetteer's companies (2026-10-15): an organisation includes one of the game's generic ones and belongs to a
+    # country of the mod; our ideas (designers, concerns, spirits) have names, and their traits are the game's
+    co_index = json.loads((Path("source/vanilla/index/companies.json")).read_text(encoding="utf-8"))
+    country_traits = set(json.loads(Path("source/vanilla/index/traits.json").read_text(encoding="utf-8"))["defined"]["country"])
+    for f in (mod / "common/military_industrial_organization/organizations").glob("*.txt"):
+        if is_vanilla_part(f, mod):
+            continue
+        text = strip(f.read_text(encoding="utf-8-sig"))
+        for name in re.findall(r"^(\w+)\s*=\s*\{", text, re.M):
+            body = blocks(text, name)[0]
+            inc = field(body, "include")
+            if inc not in co_index["templates"]:
+                err(f"{f.relative_to(mod)}: organisation {name} includes {inc}, which is not one of the game's generic ones")
+            for t in re.findall(r"original_tag\s*=\s*(\w+)", body):
+                if t not in tags:
+                    err(f"{f.relative_to(mod)}: organisation {name} is for {t}, which is not a country in the mod")
+            if name not in keys:
+                err(f"{f.relative_to(mod)}: organisation {name} has no localisation")
+    for f in (mod / "common/ideas").glob("*.txt"):
+        if is_vanilla_part(f, mod):
+            continue
+        text = strip(f.read_text(encoding="utf-8-sig"))
+        for cat in blocks(text, "ideas"):
+            for name in re.findall(r"^\t\t(\w+)\s*=\s*\{", cat, re.M):
+                body = blocks(cat, name)[0]
+                if name not in keys and not field(body, "name"):
+                    err(f"{f.relative_to(mod)}: idea {name} has no localisation")
+                for tb in blocks(body, "traits"):
+                    for t in tb.split():
+                        if t not in country_traits:
+                            err(f"{f.relative_to(mod)}: idea {name}'s trait {t} is not one of the game's")
     v_defines = set(vanilla_index("defines.txt"))
     for f in (mod / "common/defines").glob("*.lua"):
         for name in re.findall(r"^(NDefines(?:_Graphics)?\.\w+\.\w+)\s*=", f.read_text(encoding="utf-8"), re.M):

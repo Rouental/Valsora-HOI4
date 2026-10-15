@@ -38,7 +38,7 @@ their Earth-specific parts. Dates are moved like `files/`.
 
 ## `index/`: vanilla's names
 
-Lists made by `vanilla_sync.py`, one name per line (`traits.json` is JSON):
+Lists made by `vanilla_sync.py`, one name per line (`traits.json` and `companies.json` are JSON):
 
 | file | holds | used by |
 |---|---|---|
@@ -49,3 +49,4 @@ Lists made by `vanilla_sync.py`, one name per line (`traits.json` is JSON):
 | `map_files.txt` | the files of vanilla's `map` folder | `check_mod.py` (map files the mod inherits) |
 | `year_names.yml` | generic names with a year ("1936 Cruiser Hull") | renamed for 2036 |
 | `traits.json` | the traits the game's own characters have, by kind (ruler, general, admiral) and advisor post, with their names, groups and ledgers, Earth's one-country ones left out; and every trait the game defines (`defined`) | the Gazetteer's trait lists (`facts_export.py`), the import, `check_mod.py` |
+| `companies.json` | the generic arms organisations the Gazetteer offers (`arms`: id, name, group, icon and the generic designer each is without Arms Against Tyranny), those designers (`designers`: category, picture, research bonus, trait, costs), the industrial concern kinds (`concerns`: trait, name, picture, research bonus, cost, as most of the game's own concerns of that trait have them), research category names (`research`) and every generic organisation (`templates`) | the Gazetteer's company kinds (`facts_export.py`), the import and build (`gazetteer.companies`), `check_mod.py` |

@@ -518,6 +518,33 @@ screenshot and `error.log`)
 
 ## Map problems found while building
 
+**The Gazetteer's company kinds lacked the helicopter maker, and the check its list of templates** (2026-10-15)
+- Cause: `vanilla_sync.py` read the game's English names with a pattern wanting one leading space; the helicopter
+  organisation's line has none in the game's file, so it read as unnamed and was left out. And `companies.json` was
+  first written before the list of every generic organisation (`templates`) was added to it, so `check_mod.py` stopped
+  on the first build with a company (a missing key), not on a real fault.
+- Fix: the pattern takes any leading space (the other lists came out the same); `vanilla_sync.py` was run again, and
+  the test build with companies passed. The train organisation has no English name in the game at all and stays out.
+
+**The Gazetteer's company rows ran past the panel's right edge** (2026-10-15, the companies test's screenshots, desktop
+and phone)
+- Cause: a row's fields sit in a one-column grid whose column was sized by its widest content; a list of the kinds of
+  company is as wide as its longest name, so the column, and every field and line of text under it, grew wider than
+  the panel and were cut off.
+- Fix: the column can't grow past the panel (`minmax(0, 1fr)`), and the kind list shares its line with Delete and
+  shrinks. The test now also photographs the political advisors' section.
+
+**Two of the Gazetteer page's new functions had the names of existing ones** (2026-10-15, adding companies)
+- Cause: the request form for traits and kinds of company was first written as `askFor` and `requestForm`, which the
+  page already had (the Nation tab's requests); in one script, the later definition silently replaces the earlier.
+- Fix: one function, `askAuthor`, for both; the page was searched for any name defined twice (none left).
+
+**The Gazetteer's arms companies named the DLC in their conditions, as the game's don't** (2026-10-15)
+- Cause: the first version wrote `has_dlc = "Arms Against Tyranny"` into each organisation's `allowed`; the game's
+  national organisations (Germany's Porsche, Henschel ...) give only their tags, the organisations themselves being
+  the DLC's.
+- Fix: `allowed = { original_tag = TAG }`, as theirs.
+
 **`check_mod.py` didn't check the scripted effects our on_actions call** (2026-10-15, found by the new
 `scripts/mutation_test.py`)
 - Cause: the check of "a scripted effect used but not defined" read focus trees, scripted effects, events and

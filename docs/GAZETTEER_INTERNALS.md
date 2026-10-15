@@ -24,7 +24,7 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   `work/gazetteer_site/` alone as the next commit of `gh-pages` through a worktree, pushed;
   nothing is committed when the site is unchanged). Pages redeploys in a minute or two (the
   "pages build and deployment" run in Actions; github.io itself can't be reached from
-  Claude's sandbox). Test the page first: `python3 tests/gazetteer/run.py` and `traits.py`.
+  Claude's sandbox). Test the page first: `python3 tests/gazetteer/run.py`, `traits.py` and `companies.py`.
 - **Firebase** (set up by the author, 2026-10-15): Firestore (Standard, production mode), Google
   sign-in with `rouental.github.io` among the authorized domains, the web app's settings in
   `source/gazetteer_site/firebase-config.json` (not secret). The rules,
@@ -99,10 +99,12 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   cities (one per province, victory points, the capital); rivers (major, minor, erase
   strokes); railways (level 1-5); names, full titles and adjectives under every government and
   each ideology, the ruling sub-ideology; the head of state (name, titles, portrait, traits),
-  each other party's sub-ideology, leader, portrait and traits, generals, admirals and
-  advisors (traits, an advisor's post); flags (one per government too); map colour, culture,
+  each other party's sub-ideology, leader, portrait and traits, political advisors (a section
+  of their own), generals, admirals and other advisors (traits, an advisor's post); companies
+  (name, logo, kind, notes); flags (one per government too); map colour, culture,
   motto, anthem, description; suggestions (areas, lines and points anywhere on the world,
-  labelled); status, notes and requests (new sub-ideologies, subject types, map changes ...).
+  labelled); status, notes and requests (new sub-ideologies, subject types, traits, kinds of
+  company, map changes ...).
   Overseas parts of a nation and the whole world are boxes in the map's corner. Phone and
   desktop layouts (the author asked for both).
 - **Passwords.** A nation's documents are at `n/<TAG>/<key>/<kind>`, the key being the first
@@ -159,7 +161,26 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   `vanilla_sync.py`: the traits the game's own characters have, by kind and advisor post, Earth's one-country ones
   left out; `facts_export.py` puts them in `index.json`), and **Ask for a new trait** is a request of kind `trait`.
   `check_mod.py` checks every trait of ours against the game's own (country leader traits for rulers and advisors,
-  unit leader traits for commanders), each advisor's slot and its own `idea_token` (mutation-tested, 6 of 6). A flag in HOI4's 82:52 shape (within 4 %)
+  unit leader traits for commanders), each advisor's slot and its own `idea_token` (mutation-tested, 6 of 6).
+  **Political advisors and companies** (author, 2026-10-15: "allow people to create political advisors and
+  companies"): political advisors are advisors of `political_advisor` (`{role: "advisor", slot:
+  "political_advisor"}`), in a section of their own. Companies are `co-<id>` entries of the `people` document (so the
+  rules needed no new kind): `{name, kind, logo, notes}`, the kind one of `source/vanilla/index/companies.json`'s
+  (`vanilla_sync.companies`: the 28 generic arms organisations of `00_generic_organization.txt` with a name, by group,
+  each with the generic designer of `zzz_generic.txt` it is without Arms Against Tyranny; the 14 traits three or more
+  of the game's industrial concerns share, not one country's, with their most common research bonus, picture and
+  cost; all 30 generic organisations as `templates`), or `concern:<trait>`; **Ask for a new kind of company** is a
+  request of kind `company`. The import keeps them as `people.companies` (`[{name, kind, notes, logo}]`). The build
+  (`gazetteer.companies`, ids `<TAG>_gazetteer_company_<n>`): an arms company is an organisation
+  `<id>_organization` (`include` its kind, `icon` its logo or the kind's, `allowed = { original_tag = TAG }` as the
+  game's national ones) in `common/military_industrial_organization/organizations/valsora_gazetteer_organizations.txt`
+  and a designer idea (`designer = yes`, the generic designer's picture, research bonus, trait and costs) in
+  `common/ideas/valsora_gazetteer_companies.txt`, where a concern is an `industrial_concern` idea; logos are
+  `gfx/interface/ideas/VAL/<id>.dds` (the whole logo fitted into 64 × 64), sprites `GFX_idea_<id>` in
+  `interface/valsora_gazetteer_companies.gfx`. The files are written only when a nation has companies. `check_mod.py`
+  checks that each organisation of ours includes one of the game's templates, is for a country of the mod and is
+  localised, and that each idea of ours is localised and has the game's traits (mutation-tested, 5 of 5). A flag in
+  HOI4's 82:52 shape (within 4 %)
   becomes `source/flags/` at the import, once per picture (`source/gazetteer/installed.json`);
   others are fitted by hand, as the author's are. Pictures are kept at most 1,200 px, heavy
   opaque ones as JPEG. Without facts the build is byte-identical to before (checked again for
@@ -186,3 +207,6 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   with the emulator's unsigned tokens (`window.__fb`, only in an emulator build): Google's
   sign-in window can't load in the sandbox. A file saved from the site imports with its
   pictures.
+  `tests/gazetteer/companies.py`: the People tab's sections, a political advisor with the political advisors'
+  traits, an arms company with a logo, a concern with notes, a request for a new kind, a company deleted, the file;
+  that file imported and built (check_mod clean: organisation, designer, concern, logo and political advisor as above).

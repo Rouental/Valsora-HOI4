@@ -267,6 +267,44 @@ def m_advisor_slot(mod):
     return "character ROU_mutant_advisor: advisor without one of the game's slots"
 
 
+def organisation(mod, name, include, tag):
+    add_file(mod, f"common/military_industrial_organization/organizations/{name}.txt", (
+        f"{name}_organization = {{\n\tinclude = {include}\n\ticon = GFX_idea_generic_tank_manufacturer_1\n"
+        f"\tallowed = {{\n\t\toriginal_tag = {tag}\n\t}}\n}}\n").encode())
+
+
+def m_company_include(mod):
+    organisation(mod, "ROU_mutant_a", "generic_no_such_organization", "ROU")
+    return "includes generic_no_such_organization, which is not one of the game's generic ones"
+
+
+def m_company_tag(mod):
+    organisation(mod, "ROU_mutant_b", "generic_medium_tank_organization", "XQZ")
+    return "organisation ROU_mutant_b_organization is for XQZ, which is not a country in the mod"
+
+
+def m_company_loc(mod):
+    organisation(mod, "ROU_mutant_c", "generic_medium_tank_organization", "ROU")
+    return "organisation ROU_mutant_c_organization has no localisation"
+
+
+def concern(mod, name, trait):
+    add_file(mod, f"common/ideas/{name}.txt", (
+        f"ideas = {{\n\tindustrial_concern = {{\n\t\t{name} = {{\n\t\t\tpicture = generic_industrial_concern_1\n"
+        f"\t\t\tallowed = {{ original_tag = ROU }}\n\t\t\tcost = 150\n\t\t\tremoval_cost = 10\n"
+        f"\t\t\ttraits = {{ {trait} }}\n\t\t}}\n\t}}\n}}\n").encode())
+
+
+def m_concern_trait(mod):
+    concern(mod, "ROU_mutant_concern", "no_such_concern_trait")
+    return "idea ROU_mutant_concern's trait no_such_concern_trait is not one of the game's"
+
+
+def m_idea_loc(mod):
+    concern(mod, "ROU_mutant_bank", "central_bank")
+    return "idea ROU_mutant_bank has no localisation"
+
+
 def m_recruit_unknown(mod):
     edit(mod, rou_history(mod), lambda t: t.replace("recruit_character = ROU_roland_cahun", "recruit_character = ROU_roland_cahun\nrecruit_character = ROU_no_such_person", 1))
     return "recruits unknown character ROU_no_such_person"
@@ -359,7 +397,8 @@ BATCHES = {
     "history": [m_technology, m_module, m_equipment, m_idea, m_battalion, m_define, m_earth_history, m_popularities,
                 m_ruling_party, m_recruit_unknown, m_faction_template, m_bookmark, m_descriptor],
     "content": [m_decision_stand_in, m_event_stand_in, m_old_date, m_tree_label, m_start_year, m_trait, m_advisor_slot,
-                m_prerequisite, m_state_loc, m_decision_loc, m_trigger_for, m_scripted_effect, m_war_goal, m_song],
+                m_prerequisite, m_state_loc, m_decision_loc, m_trigger_for, m_scripted_effect, m_war_goal, m_song,
+                m_company_include, m_company_tag, m_company_loc, m_concern_trait, m_idea_loc],
     "files": [m_no_bom, m_gui_sprite, m_texture_missing, m_minimap, m_globe, m_case_clash, m_ascii_name],
 }
 

@@ -10,6 +10,16 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-15, the fifth round (the author: "Also allow people to create political advisors and companies on the
+  gazetteer"): no map changes, the mod byte-identical (no nation has companies yet). **The Gazetteer's People tab**
+  has a section for political advisors (with the political advisors' traits) and one for **companies**: an arms maker
+  of one of the base game's 28 generic kinds (tanks, ships, aircraft, land equipment) or an industrial concern of one
+  of its 14 kinds, with a name, a logo and notes, and "Ask for a new kind of company" as a request
+  (`source/vanilla/index/companies.json`, from the game's files by `vanilla_sync.py`). The build makes an arms maker a
+  military-industrial organisation of its kind (Arms Against Tyranny) and the designer of its kind (without it), a
+  concern an industrial concern idea, a logo its 64 x 64 icon (the whole logo); `check_mod.py` checks organisations and ideas
+  (`mutation_test.py`: 50 breaks, all caught). Tested in the browser (`tests/gazetteer/companies.py`) and through an
+  import and a build of the test's file (check_mod clean). The site is republished.
 - 2026-10-15, the fourth round (the author: "add the option to add base-game traits to leaders, as well as the option
   to request new traits", the crests, the globe "my current favorite of your designs", "Is there anything else you can
   do to streamline the modding process to make it more efficient without losing out on quality?"): no map changes.

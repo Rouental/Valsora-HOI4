@@ -75,8 +75,9 @@ RESOURCES = ("oil", "steel", "aluminium", "rubber", "tungsten", "chromium")
 VPS = {1, 3, 5, 10, 15, 20, 25, 30, 40, 50}
 IDEOLOGIES = ("democratic", "fascism", "communism", "neutrality", "theocracy")
 ROLES = ("general", "admiral", "advisor", "other")
-REQ_KINDS = ("subideology", "subject", "trait", "map", "other")   # as the page's
+REQ_KINDS = ("subideology", "subject", "trait", "company", "map", "other")   # as the page's
 TRAITS_FILE = Path("source/vanilla/index/traits.json")   # the base game's traits for leaders (vanilla_sync.py)
+COMPANIES_FILE = Path("source/vanilla/index/companies.json")   # the base game's kinds of company (vanilla_sync.py)
 MAX_TRAITS = 6
 
 
@@ -91,6 +92,27 @@ def trait_index():
             "slots": {sl: (nm, cost) for sl, nm, cost in t.get("slots", [])},
             "defined": {k: set(v) for k, v in (t.get("defined") or {}).items()}}
     return trait_index.cache
+
+
+def company_index():
+    """the base game's kinds of company (index.companies on the page): {"arms": {template: (name, group, icon,
+    designer)}, "designers": {generic idea: {...}}, "concerns": {trait: (name, picture, research, cost)}}; a company's
+    kind on the page is an arms company's template, or "concern:" and an industrial concern's trait"""
+    if not hasattr(company_index, "cache"):
+        c = json.loads(COMPANIES_FILE.read_text(encoding="utf-8")) if COMPANIES_FILE.exists() else {}
+        company_index.cache = {
+            "arms": {k: (nm, grp, icon, d) for k, nm, grp, icon, d in c.get("arms", [])},
+            "designers": c.get("designers", {}),
+            "concerns": {t: (nm, pic, rb, cost) for t, nm, pic, rb, cost in c.get("concerns", [])}}
+    return company_index.cache
+
+
+def company_kind(kind):
+    """a kind from the page that is the base game's, or None"""
+    ci = company_index()
+    if isinstance(kind, str) and (kind in ci["arms"] or (kind.startswith("concern:") and kind[8:] in ci["concerns"])):
+        return kind
+    return None
 
 
 def keep_traits(v, allowed):
@@ -406,6 +428,24 @@ def normalise(tag, facts, meta, requests=(), sources=(), todo=None):
             chars.append(c)
     if chars:
         people["characters"] = chars
+    cos = []   # companies (2026-10-15): of the base game's kinds, kept in the people document as co-<id>
+    for k, v in sorted(ppl.items()):
+        if not (k.startswith("co-") and isinstance(v, dict)):
+            continue
+        c = {}
+        if clean(v.get("name"), 80):
+            c["name"] = clean(v["name"], 80)
+        if company_kind(v.get("kind")):
+            c["kind"] = v["kind"]
+        if text(v.get("notes"), 1000):
+            c["notes"] = text(v["notes"], 1000)
+        pic = picture(v.get("logo"), f"{tag} company's logo", sources, todo)
+        if pic:
+            c["logo"] = pic
+        if c:
+            cos.append(c)
+    if cos:
+        people["companies"] = cos
     if people:
         out["people"] = people
     flags = {}
@@ -1120,6 +1160,58 @@ def characters(tag, facts, portraits, small=None, generic=None):
     return blocks, loc, ids
 
 
+def companies(tag, facts):
+    """The facts' companies as the game's own are written (2026-10-15, the author: "allow people to create political
+    advisors and companies"), each named <TAG>_gazetteer_company_<n>:
+      - an arms company is both a military-industrial organisation (include = the base game's generic one of its kind,
+        allowed for its nation, as the game's national ones are; the organisations come with Arms Against Tyranny) and
+        the generic designer of its kind (the politics screen's designers, which the DLC replaces by those
+        organisations): the designer's research bonus,
+        trait and cost, its own name and picture. A nation's own designer hides the generic one (the generic's
+        has_allowed_idea_with_traits); the generic organisations stay beside ours;
+      - an industrial concern is an idea of the politics screen's industrial concern slot with its kind's trait, the
+        research bonus and cost the game's own concerns of that kind most often have.
+    The picture is the company's logo (whole, fitted into 64 x 64), else the game's for its kind. The
+    notes stay a comment for the author. Returns ({idea category: [blocks]}, [organisation blocks], loc lines,
+    [(sprite name, logo file)])."""
+    ci = company_index()
+    ideas, mios, loc, logos = defaultdict(list), [], [], []
+    n = 0
+    for c in ((facts or {}).get("people") or {}).get("companies", []):
+        kind = company_kind(c.get("kind"))
+        if not (c.get("name") and kind):
+            continue
+        n += 1
+        cid = f"{tag}_gazetteer_company_{n}"
+        logo = c.get("logo") or {}
+        own = bool(logo.get("file") and (DIR / logo["file"]).is_file())
+        if own:
+            logos.append((f"GFX_idea_{cid}", str(DIR / logo["file"])))
+        notes = " / ".join(ln.strip() for ln in (c.get("notes") or "").splitlines() if ln.strip())
+        note = f"\t\t# the Gazetteer's notes: {notes}\n" if notes else ""
+
+        def idea(picture, research, trait, cost, removal):
+            rb = " ".join(f"{k} = {v:g}" for k, v in research.items())
+            return (f"\t\t{cid} = {{\n" + note.replace("\t\t#", "\t\t\t#") + f"\t\t\tpicture = {cid if own else picture}\n"
+                    f"\t\t\tallowed = {{ original_tag = {tag} }}\n\t\t\tcost = {cost}\n\t\t\tremoval_cost = {removal}\n"
+                    + (f"\t\t\tresearch_bonus = {{ {rb} }}\n" if rb else "")
+                    + f"\t\t\ttraits = {{ {trait} }}\n\t\t\tai_will_do = {{ factor = 1 }}\n\t\t}}\n")
+        if kind in ci["arms"]:
+            _name, _group, icon, designer = ci["arms"][kind]
+            d = ci["designers"][designer]
+            ideas[d["category"]].append(idea(d["picture"], d["research"], d["trait"], d["cost"], d["removal_cost"]))
+            mios.append(f"{cid}_organization = {{\n" + note.replace("\t\t#", "\t#") + f"\tinclude = {kind}\n"
+                        f"\ticon = {f'GFX_idea_{cid}' if own else icon}\n"
+                        f"\tallowed = {{\n\t\toriginal_tag = {tag}\n\t}}\n}}\n")
+            loc.append(f' {cid}_organization:0 "{c["name"]}"')
+        else:
+            trait = kind[len("concern:"):]
+            _name, picture, research, cost = ci["concerns"][trait]
+            ideas["industrial_concern"].append(idea(picture, research, trait, cost, 10))
+        loc.append(f' {cid}:0 "{c["name"]}"')
+    return ideas, mios, loc, logos
+
+
 def names(tag, base, by_ideology, pol):
     """The country's (name, formal name, adjective), and per ideology, with the facts'
     names over the build's: base = (name, formal, adj); by_ideology = nations.IDEOLOGY_NAMES[tag]."""
@@ -1339,6 +1431,17 @@ def status():
                 continue
             todo.append(f"{tag} {c['role']}: {c.get('name', '(no name)')}" + (f" - {c['notes'][:160]}" if c.get("notes") else "")
                         + (f" [portrait {c['portrait'].get('file') or 'not downloaded'}]" if c.get("portrait") else ""))
+        ci = company_index()
+        for c in (f.get("people") or {}).get("companies", []):
+            said = " / ".join(ln.strip() for ln in (c.get("notes") or "").splitlines() if ln.strip())
+            if c.get("name") and company_kind(c.get("kind")):
+                if said:
+                    k = c["kind"]
+                    what = ci["arms"][k][0] if k in ci["arms"] else ci["concerns"][k[8:]][0]
+                    todo.append(f"{tag} company {c['name']} is in the game ({what}); notes: {said[:160]}")
+                continue
+            todo.append(f"{tag} company {c.get('name') or '(no name)'}: not in the game, "
+                        + ("no kind picked" if c.get("name") else "no name") + (f"; notes: {said[:160]}" if said else ""))
         ab = f.get("about") or {}
         if ab.get("culture"):
             todo.append(f"{tag} culture: {ab['culture']}")

@@ -117,7 +117,7 @@ def loc_names(V):
     out = {}
     for f in sorted(glob.glob(str(V / "localisation/english/**/*.yml"), recursive=True)):
         for line in Path(f).read_text(encoding="utf-8-sig", errors="replace").splitlines():
-            m = re.match(r'^ ([\w.\-]+):\d* "(.*)"', line)
+            m = re.match(r'^\s*([\w.\-]+):\d* "(.*)"', line)   # one key per line (indented or not: the game reads both)
             if m and m[1] not in out:
                 out[m[1]] = re.sub(r"\s+", " ", re.sub(r"§.|£\w+|\[[^]]*\]|\\n", " ", m[2])).strip()
     return out
@@ -194,6 +194,111 @@ def traits(V, earth):
                               key=lambda x: x[1].lower()) for s, _ in ADVISOR_SLOTS},
         "defined": {"unit": sorted(unit), "country": sorted(country)},
     }
+
+
+# the base game's generic arms companies (common/military_industrial_organization/organizations/
+# 00_generic_organization.txt, with Arms Against Tyranny) the Gazetteer offers, by kind: their group on the page and the
+# generic designer (common/ideas/zzz_generic.txt) a company of that kind is without the DLC, which replaces designers
+# by these organizations. Left out: the Black Sea Fleet (Earth's), the debug ones.
+ARMS = {
+    "tank": ("Tanks", "generic_tank_manufacturer"), "infantry_tank": ("Tanks", "generic_tank_manufacturer"),
+    "assault_guns": ("Tanks", "generic_tank_manufacturer"), "mobile_tank": ("Tanks", "generic_tank_manufacturer"),
+    "medium_tank": ("Tanks", "generic_tank_manufacturer"), "heavy_tank": ("Tanks", "generic_tank_manufacturer"),
+    "tank_refurbishment_plant": ("Tanks", "generic_tank_manufacturer"),
+    "task_force_ship": ("Ships", "generic_naval_manufacturer"), "battle_line_ship": ("Ships", "generic_naval_manufacturer"),
+    "escort_ship": ("Ships", "generic_naval_manufacturer"), "raider_ship": ("Ships", "generic_naval_manufacturer"),
+    "submarine": ("Ships", "generic_naval_manufacturer"), "refurbishment_repair": ("Ships", "generic_naval_manufacturer"),
+    "general_aircraft": ("Aircraft", "generic_light_aircraft_manufacturer"),
+    "light_aircraft": ("Aircraft", "generic_light_aircraft_manufacturer"),
+    "cas_aircraft": ("Aircraft", "generic_light_aircraft_manufacturer"),
+    "multi_role_aircraft": ("Aircraft", "generic_light_aircraft_manufacturer"),
+    "high_agility_fighter_aircraft": ("Aircraft", "generic_light_aircraft_manufacturer"),
+    "helicopter": ("Aircraft", "generic_light_aircraft_manufacturer"),
+    "medium_aircraft": ("Aircraft", "generic_medium_aircraft_manufacturer"),
+    "range_focused_aircraft": ("Aircraft", "generic_medium_aircraft_manufacturer"),
+    "heavy_aircraft": ("Aircraft", "generic_heavy_aircraft_manufacturer"),
+    "naval_aircraft": ("Aircraft", "generic_naval_aircraft_manufacturer"),
+    "artillery": ("Land equipment", "generic_artillery_manufacturer"),
+    "infantry_equipment": ("Land equipment", "generic_infantry_equipment_manufacturer"),
+    "support_equipment": ("Land equipment", "generic_infantry_equipment_manufacturer"),
+    "motorized_mechanized": ("Land equipment", "generic_motorized_equipment_manufacturer"),
+    "armored_car": ("Land equipment", "generic_motorized_equipment_manufacturer"),
+    "train": ("Land equipment", "generic_motorized_equipment_manufacturer"),
+}
+DESIGNER_SLOTS = ("tank_manufacturer", "naval_manufacturer", "aircraft_manufacturer", "materiel_manufacturer")
+
+
+def companies(V, earth):
+    """The base game's companies the Gazetteer offers (2026-10-15, the author: "allow people to create political
+    advisors and companies"): arms companies of the generic kinds (with their name, icon and the generic designer each
+    is without Arms Against Tyranny: picture, research bonus, trait, cost), and industrial concerns of the kinds the
+    game's own concerns most often are (a trait used by three or more of them, not one country's: the trait's name, the
+    research bonus and generic picture they most often have, their usual cost). `research` names the research
+    categories, for the page."""
+    loc = loc_names(V)
+
+    def fields(body):
+        return {k: v for k, _, v in body if k and isinstance(v, str)}
+
+    def research(body):
+        rb = next((v for k, _, v in body if k == "research_bonus" and isinstance(v, list)), [])
+        return {k: float(v) for k, _, v in rb if k and isinstance(v, str) and re.fullmatch(r"-?[\d.]+", v)}
+
+    def trait_of(body):
+        tr = next((v for k, _, v in body if k == "traits" and isinstance(v, list)), [])
+        return next((t for _, _, t in tr if isinstance(t, str)), None)
+    mio = {k: body for k, _, body in read(V / "common/military_industrial_organization/organizations/"
+                                              "00_generic_organization.txt") if isinstance(body, list)}
+    designers = {}
+    for top, _, cats in read(V / "common/ideas/zzz_generic.txt"):
+        for cat, _, entries in (cats if top == "ideas" and isinstance(cats, list) else []):
+            if cat not in DESIGNER_SLOTS or not isinstance(entries, list):
+                continue
+            for key, _, body in entries:
+                if key and isinstance(body, list):
+                    f = fields(body)
+                    designers[key] = dict(category=cat, picture=f.get("picture"), research=research(body),
+                                          trait=trait_of(body), cost=int(f.get("cost", 150)),
+                                          removal_cost=int(f.get("removal_cost", 10)))
+    arms = []
+    for kind, (group, designer) in ARMS.items():
+        key = f"generic_{kind}_organization"
+        why = (f"{key} is no longer the game's" if key not in mio else f"{designer} is no longer the game's"
+               if designer not in designers else f"{key} has no English name in the game" if not loc.get(key) else None)
+        if why:   # (2026-10-15: generic_train_organization has no name)
+            print(f"companies: {why}; left out")
+            continue
+        arms.append([key, loc[key], group, fields(mio[key]).get("icon"), designer])
+    # industrial concerns: every idea of the slot in the game's files, by its trait
+    uses = {}
+    for f in sorted(glob.glob(str(V / "common/ideas/*.txt"))):
+        for top, _, cats in read(f):
+            for cat, _, entries in (cats if top == "ideas" and isinstance(cats, list) else []):
+                if cat != "industrial_concern" or not isinstance(entries, list):
+                    continue
+                for key, _, body in entries:
+                    if not (key and isinstance(body, list)):
+                        continue
+                    t = trait_of(body)
+                    if t:
+                        f_ = fields(body)
+                        uses.setdefault(t, []).append((key, f_.get("picture"), research(body), f_.get("cost")))
+    earthy = lambda k: bool(re.match(r"(?:trait_)?[A-Z][A-Z0-9]{1,4}_", k)) or k.split("_")[0] in earth
+    concerns = []
+    for t, us in uses.items():
+        if len(us) < 3 or earthy(t) or not loc.get(t) or "$" in loc[t]:
+            continue
+        most = lambda xs: max(set(xs), key=xs.count) if xs else None
+        rb = most([json.dumps(r, sort_keys=True) for _, _, r, _ in us if r])
+        pics = [p for _, p, _, _ in us if p and p.startswith("generic_")]
+        cost = most([c for _, _, _, c in us if c and c.isdigit()])
+        concerns.append([t, loc[t], most(pics) or "generic_industrial_concern_1", json.loads(rb) if rb else {},
+                         int(cost or 150)])
+    concerns.sort(key=lambda c: (-len(uses[c[0]]), c[1].lower()))
+    cats = sorted({c for d in designers.values() for c in d["research"]} | {c for x in concerns for c in x[3]})
+    return {"arms": arms, "designers": designers, "concerns": concerns,
+            "research": {c: loc.get(c, c.replace("_", " ").capitalize()) for c in cats},
+            "templates": sorted(mio)}   # every generic organisation, for check_mod.py
 
 
 def main():
@@ -314,13 +419,21 @@ def main():
                                                       "trait it defines (vanilla 1.19.3, scripts/vanilla_sync.py)", **tr),
                                                  ensure_ascii=False, indent=0, sort_keys=False) + "\n", encoding="utf-8")
 
+    co = companies(V, earth)
+    (idx / "companies.json").write_text(json.dumps(dict(_="the base game's company kinds the Gazetteer offers: arms "
+                                                         "companies (organizations, and their designers without Arms "
+                                                         "Against Tyranny) and industrial concerns (vanilla 1.19.3, "
+                                                         "scripts/vanilla_sync.py)", **co),
+                                                    ensure_ascii=False, indent=0) + "\n", encoding="utf-8")
+
     n = sum(1 for _ in (OUT / "files").rglob("*") if _.is_file())
     print(f"source/vanilla: {n} files, {len(tags)} tags, {len(used)} decisions referenced, {len(sprites)} sprites, "
           f"{len(techs)} technologies, {len(equipment)} equipment, {len(modules)} modules, {len(subunits)} sub-units, "
           f"{len(ideas)} ideas, "
           f"{len(defines)} defines, {len(names)} names with years; traits: {len(tr['general'])} generals', "
           f"{len(tr['admiral'])} admirals', {len(tr['ruler'])} rulers', "
-          f"{sum(len(v) for v in tr['advisor'].values())} advisors'")
+          f"{sum(len(v) for v in tr['advisor'].values())} advisors'; companies: {len(co['arms'])} arms kinds, "
+          f"{len(co['concerns'])} industrial concern kinds")
 
 
 if __name__ == "__main__":

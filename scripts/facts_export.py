@@ -315,9 +315,15 @@ def main():
     # every trait the game defines, which only check_mod.py needs)
     traits = {k: v for k, v in json.loads(Path("source/vanilla/index/traits.json").read_text(encoding="utf-8")).items()
               if k not in ("_", "defined")}
+    # the base game's kinds of company a nation may have (2026-10-15, the author: "allow people to create ...
+    # companies"): arms companies by group, with the research their designer gives without Arms Against Tyranny, and
+    # industrial concerns with theirs (vanilla_sync.py's index)
+    co = json.loads(Path("source/vanilla/index/companies.json").read_text(encoding="utf-8"))
+    companies = dict(arms=[[k, nm, grp, co["designers"][d]["research"]] for k, nm, grp, _icon, d in co["arms"]],
+                     concerns=[[t, nm, rb] for t, nm, _pic, rb, _cost in co["concerns"]], research=co["research"])
     json.dump(dict(built=__import__("datetime").date.today().isoformat(), w=W, h=H,
                    terrains=TERRAINS, ideologies=IDEOLOGY_NAMES, subtypes=subtypes, earth=earth, known=known,
-                   traits=traits,
+                   traits=traits, companies=companies,
                    nations=index,
                    ids=dict(w=IDS[0], h=IDS[1], tags=tags, px=b64z(ids))),
               open(OUT / "index.json", "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
