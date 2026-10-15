@@ -682,11 +682,15 @@ function writeFailed(e, kind) {
   }
   if (app.fb) {
     if (code === "permission_denied" && app.N && app.N.K && !app.isOwner) {
-      // on the web site everyone may write: a refusal means the author gave this nation a new password
-      const N = app.N;
-      N.K = null; detach(); store("gazetteer-pw:" + N.tag, null);
-      renderLock("This nation's password has changed: ask the author for the new one. What you entered since is kept on this device and saved once you unlock it.");
-      refreshSave(); renderAllPanes();
+      // on the web site everyone may write with the password: a refusal means the author gave this
+      // nation a new password (its old folder has no key any more), or the rules don't know a kind
+      const N = app.N, K = N.K;
+      app.db.doc(`${nPath(N.tag, K)}/key`).get().then(k => {
+        if (k.exists || app.N !== N || N.K !== K) { if (k.exists) setSave("bad", "Not saved", "The atlas refused it. It is kept on this device; tell the author."); return; }
+        N.K = null; detach(); store("gazetteer-pw:" + N.tag, null);
+        renderLock("This nation's password has changed: ask the author for the new one. What you entered since is kept on this device and saved once you unlock it.");
+        refreshSave(); renderAllPanes();
+      }, () => setSave("bad", "Not saved", "The atlas refused it. It is kept on this device."));
     } else setSave("bad", "Not saved", `The atlas refused it (${code}). It is kept on this device.`);
     return;
   }
