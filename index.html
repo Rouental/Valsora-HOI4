@@ -231,9 +231,11 @@ optgroup { font-style: normal; }
 .ideo .lab small { font: 600 11px var(--font-ui); letter-spacing: .1em; text-transform: uppercase; color: var(--jade); }
 .person { display: grid; grid-template-columns: 78px minmax(0, 1fr); gap: 10px; padding: 10px 0; border-top: 1px solid var(--rule); align-items: start; }
 .person:first-of-type { border-top: 0; }
-.person .fields { display: grid; gap: 6px; min-width: 0; }
+.person .fields { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; min-width: 0; }
+.person.company .row select { flex: 1 1 10em; min-width: 0; }   /* the kinds' long names: never wider than the pane */
 .portrait { width: 78px; height: 105px; border: 1px solid var(--rule-2); background: var(--paper) center 20% / cover no-repeat; display: grid; place-items: center;
   font: 500 10px var(--font-data); color: var(--ink-3); text-align: center; cursor: pointer; padding: 4px; }
+.portrait.logo { height: 78px; background-position: center; background-size: contain; }
 .flagslot { display: grid; grid-template-columns: 84px minmax(0, 1fr); gap: 10px; align-items: center; padding: 6px 0; border-top: 1px solid var(--rule); }
 .relcard { display: grid; gap: 10px; padding: 10px 12px; border: 1px solid var(--rule-2); border-left: 5px solid var(--rel); border-radius: 4px; background: var(--paper); }
 .relcard.sel { box-shadow: 0 0 0 2px var(--sel); }
@@ -416,7 +418,7 @@ const KINDS = ["states", "provinces", "cities", "rivers", "rails", "politics", "
 const REL_COLOURS = ["#b5543c", "#3c7db5", "#6f9a3a", "#8a4fb0", "#c2912e", "#2f9a93", "#b04f7c", "#5c6670"];
 const MAX_STATE_POP = 500000000;
 const ERASE_R = 3;
-const REQ_KINDS = [["subideology", "New sub-ideology"], ["trait", "New trait"], ["subject", "Subject type"], ["map", "Map change"], ["other", "Something else"]];
+const REQ_KINDS = [["subideology", "New sub-ideology"], ["trait", "New trait"], ["company", "New kind of company"], ["subject", "Subject type"], ["map", "Map change"], ["other", "Something else"]];
 const MAX_TRAITS = 6;   // a leader's traits from the base game (2026-10-15)
 const REQ_KIND = Object.fromEntries(REQ_KINDS);
 const REQ_STATUS = { open: "Open", done: "Done", declined: "Declined" };
@@ -2886,10 +2888,10 @@ function renderPolitics(force) {
 }
 
 // ---- people: head of state, party leaders, generals and the rest
-function portraitBox(im, onPick, onClear, label) {
-  const src = imgSrc(im);
-  const box = h("button", { class: "portrait", type: "button", title: im ? "Change the portrait" : "Add a portrait", onclick: onPick,
-    style: src ? `background-image:url("${String(src).replace(/"/g, "%22")}")` : "" }, im ? (src ? "" : "loading") : label || "Add a portrait");
+function portraitBox(im, onPick, onClear, label, logo) {
+  const src = imgSrc(im), what = logo ? "logo" : "portrait";
+  const box = h("button", { class: "portrait" + (logo ? " logo" : ""), type: "button", title: im ? `Change the ${what}` : `Add a ${what}`, onclick: onPick,
+    style: src ? `background-image:url("${String(src).replace(/"/g, "%22")}")` : "" }, im ? (src ? "" : "loading") : label || `Add a ${what}`);
   return h("div", { style: "display:grid;gap:4px" }, box, im ? h("button", { class: "btn small", type: "button", onclick: onClear }, "Remove") : null);
 }
 // a leader's traits: the base game's (index.traits, from scripts/vanilla_sync.py), as chips with a list to add more
@@ -2916,26 +2918,81 @@ function traitPicker(id, list, chosen, onval) {
   }
   return h("div", { class: "field" + (have.length ? " set" : "") }, h("label", { for: id, text: "Traits, from the base game" }), chips, sel);
 }
-function traitAsk(id, who) {  // ask the author for a trait the base game doesn't have
+function askAuthor(id, o) {  // ask the author for something the base game doesn't have: a trait, a kind of company
   const box = h("div", { class: "reqform", hidden: true });
-  const open = h("button", { class: "btn small", type: "button", onclick: () => { box.hidden = !box.hidden; if (!box.hidden) nm.focus(); } }, "Ask for a new trait");
-  const nm = h("input", { id: id + "-name", type: "text", maxlength: "60", placeholder: "The trait's name", "data-keep": true });
-  const what = h("textarea", { id: id + "-what", maxlength: "1500", placeholder: "What it should do (e.g. +10% defence in hills, cheaper advisors …)", "data-keep": true });
+  const open = h("button", { class: "btn small", type: "button", onclick: () => { box.hidden = !box.hidden; if (!box.hidden) nm.focus(); } }, o.button);
+  const nm = h("input", { id: id + "-name", type: "text", maxlength: "60", placeholder: o.namePh, "data-keep": true });
+  const what = h("textarea", { id: id + "-what", maxlength: "1500", placeholder: o.whatPh, "data-keep": true });
   const msg = h("span", { class: "meta" });
-  if (app.mode !== "shared") box.append(h("div", { class: "meta", text: "Requests go to the shared atlas, which this view can't save to: describe the trait in the notes instead." }));
+  if (app.mode !== "shared") box.append(h("div", { class: "meta", text: `Requests go to the shared atlas, which this view can't save to: describe ${o.it} in the notes instead.` }));
   else {
     const send = h("button", { class: "btn small primary", type: "button", onclick: async () => {
       if (locked()) { askPassword(); return; }
       const t = nm.value.trim();
-      if (!t) { msg.textContent = "Name the trait first."; nm.focus(); return; }
+      if (!t) { msg.textContent = "Name it first."; nm.focus(); return; }
       send.disabled = true;
-      try { await sendRequest("trait", `New trait: ${t}`, `For ${who}. ${what.value.trim()}`); nm.value = ""; what.value = ""; msg.textContent = "Sent. The author sees it with your nation's requests."; }
+      try { await sendRequest(o.kind, o.title(t), o.details(what.value.trim())); nm.value = ""; what.value = ""; msg.textContent = "Sent. The author sees it with your nation's requests."; }
       catch (e) { msg.textContent = "Not sent: this view can't save to the shared atlas."; writeFailed(e, null); }
       finally { send.disabled = false; }
     } }, "Send");
-    box.append(h("div", { class: "field" }, h("label", { for: id + "-name", text: "New trait" }), nm), what, h("div", { class: "chips" }, send, msg));
+    box.append(h("div", { class: "field" }, h("label", { for: id + "-name", text: o.label }), nm), what, h("div", { class: "chips" }, send, msg));
   }
   return h("div", { style: "display:grid;gap:6px" }, h("div", null, open), box);
+}
+function traitAsk(id, who) {  // a trait the base game doesn't have
+  return askAuthor(id, { kind: "trait", button: "Ask for a new trait", label: "New trait", it: "the trait", namePh: "The trait's name",
+    whatPh: "What it should do (e.g. +10% defence in hills, cheaper advisors …)", title: t => `New trait: ${t}`, details: w => `For ${who}. ${w}` });
+}
+// a nation's companies (2026-10-15): of the base game's kinds (index.companies, from scripts/vanilla_sync.py), kept in
+// the people document as co-<id>: arms companies (a military-industrial organisation with the Arms Against Tyranny DLC,
+// a designer without it) and industrial concerns
+function companyKinds() { return Object.assign({ arms: [], concerns: [], research: {} }, app.index.companies || {}); }
+function companyWhat(kind) {  // what a company of this kind is in the game, in a line
+  const K = companyKinds();
+  const pct = rb => Object.entries(rb || {}).map(([k, v]) => `${v > 0 ? "+" : ""}${Math.round(v * 100)}% ${(K.research[k] || k).toLowerCase()} research`).join(", ");
+  const a = K.arms.find(x => x[0] === kind);
+  if (a) return `In the game: a military-industrial organisation of the ${a[1].toLowerCase()} kind in the production screen, designing and building its equipment (with Arms Against Tyranny); without that DLC, a designer in the politics screen (${pct(a[3])}).`;
+  const t = kind && kind.startsWith("concern:") ? K.concerns.find(x => "concern:" + x[0] === kind) : null;
+  if (t) return `In the game: an industrial concern in the politics screen, with the ${t[1]} trait${t[2] && Object.keys(t[2]).length ? ` (${pct(t[2])})` : ""}.`;
+  return "Pick its kind: what it is in the game follows from it.";
+}
+function companyRow(id, c) {
+  const K = companyKinds();
+  const sel = h("select", { id: "pp-co-kind-" + id, "aria-label": "Kind", onchange: e => edit("people", { [id]: { kind: e.target.value || null } }) },
+    h("option", { value: "", text: "Its kind…" }));
+  const groups = {};
+  for (const [k, nm, grp] of K.arms) (groups[grp] = groups[grp] || sel.appendChild(h("optgroup", { label: "Arms: " + grp.toLowerCase() }))).append(h("option", { value: k, text: nm }));
+  if (K.concerns.length) {
+    const og = sel.appendChild(h("optgroup", { label: "Industrial concerns" }));
+    for (const [t, nm] of K.concerns) og.append(h("option", { value: "concern:" + t, text: nm }));
+  }
+  sel.value = c.kind || "";
+  return h("div", { class: "person company" },
+    portraitBox(c.logo, () => uploadInto("people", [id, "logo"], "the logo"), () => edit("people", { [id]: { logo: null } }), null, true),
+    h("div", { class: "fields" },
+      h("div", { class: "row", style: "display:flex;gap:6px;flex-wrap:wrap" }, sel,
+        h("button", { class: "btn small danger", type: "button", onclick: () => edit("people", { [id]: null }) }, "Delete")),
+      textInput("pp-co-name-" + id, c.name, "The company's name", v => edit("people", { [id]: { name: v } }), "", 80),
+      h("div", { class: "meta", text: companyWhat(c.kind) }),
+      textArea("pp-co-note-" + id, c.notes, "Notes for the author: what it makes, its history", v => edit("people", { [id]: { notes: v } }), 1000)));
+}
+function characterRow(id, c) {  // a general, an admiral or an advisor
+  return h("div", { class: "person" },
+    portraitBox(c.portrait, () => uploadInto("people", [id, "portrait"], "the portrait"), () => edit("people", { [id]: { portrait: null } })),
+    h("div", { class: "fields" },
+      h("div", { class: "row", style: "display:flex;gap:6px;flex-wrap:wrap" },
+        (() => { const s = h("select", { "aria-label": "Role", onchange: e => edit("people", { [id]: { role: e.target.value, traits: null, slot: null } }) }, ROLES.map(([k, l]) => h("option", { value: k, text: l }))); s.value = c.role || "general"; return s; })(),
+        (c.role || "general") === "advisor" ? (() => {
+          const s = h("select", { "aria-label": "Post", onchange: e => edit("people", { [id]: { slot: e.target.value || null, traits: null } }) },
+            h("option", { value: "", text: "Their post…" }), ((app.index.traits || {}).slots || []).map(([k, l]) => h("option", { value: k, text: l })));
+          s.value = c.slot || ""; return s; })() : null,
+        h("button", { class: "btn small danger", type: "button", onclick: () => edit("people", { [id]: null }) }, "Delete")),
+      textInput("pp-c-name-" + id, c.name, "Name", v => edit("people", { [id]: { name: v } }), "", 80),
+      (c.role || "general") === "other" ? null :
+        (c.role === "advisor" && !c.slot) ? h("div", { class: "meta", text: "Pick the advisor's post to give them traits." }) :
+        traitPicker("pp-c-traits-" + id, traitList(c.role || "general", c.slot), c.traits, v => edit("people", { [id]: { traits: v } })),
+      (c.role || "general") === "other" ? null : traitAsk("pp-c-ask-" + id, `${ROLES.find(r => r[0] === (c.role || "general"))[1].toLowerCase()} ${c.name || "(no name yet)"}`),
+      textArea("pp-c-note-" + id, c.notes, "Notes for the author: skills, history", v => edit("people", { [id]: { notes: v } }), 1000)));
 }
 function renderPeople(force) {
   const pane = $("#pane-people"), N = app.N;
@@ -2978,27 +3035,29 @@ function renderPeople(force) {
               have ? traitPicker("pp-traits-" + ideo, traitList("ruler"), p.traits, v => edit("people", { ["party-" + ideo]: { traits: v } })) : null));
         }))));
     }
-    // generals, admirals, advisors
-    const others = Object.entries(ppl).filter(([k, v]) => k.startsWith("c-") && v && isObj(v));
-    out.push(h("div", { class: "sec" }, h("h4", null, "Generals, admirals and others", h("small", { text: `${others.length}` })),
-      h("div", { class: "meta", text: "Generals and admirals join the nation's army and navy at the start, and advisors its political screen (pick their post). Give them traits from the base game, or ask the author for a new one; the notes are for the author." }),
-      h("div", null, others.map(([id, c]) => h("div", { class: "person" },
-        portraitBox(c.portrait, () => uploadInto("people", [id, "portrait"], "the portrait"), () => edit("people", { [id]: { portrait: null } })),
-        h("div", { class: "fields" },
-          h("div", { class: "row", style: "display:flex;gap:6px;flex-wrap:wrap" },
-            (() => { const s = h("select", { "aria-label": "Role", onchange: e => edit("people", { [id]: { role: e.target.value, traits: null, slot: null } }) }, ROLES.map(([k, l]) => h("option", { value: k, text: l }))); s.value = c.role || "general"; return s; })(),
-            (c.role || "general") === "advisor" ? (() => {
-              const s = h("select", { "aria-label": "Post", onchange: e => edit("people", { [id]: { slot: e.target.value || null, traits: null } }) },
-                h("option", { value: "", text: "Their post…" }), ((app.index.traits || {}).slots || []).map(([k, l]) => h("option", { value: k, text: l })));
-              s.value = c.slot || ""; return s; })() : null,
-            h("button", { class: "btn small danger", type: "button", onclick: () => edit("people", { [id]: null }) }, "Delete")),
-          textInput("pp-c-name-" + id, c.name, "Name", v => edit("people", { [id]: { name: v } }), "", 80),
-          (c.role || "general") === "other" ? null :
-            (c.role === "advisor" && !c.slot) ? h("div", { class: "meta", text: "Pick the advisor's post to give them traits." }) :
-            traitPicker("pp-c-traits-" + id, traitList(c.role || "general", c.slot), c.traits, v => edit("people", { [id]: { traits: v } })),
-          (c.role || "general") === "other" ? null : traitAsk("pp-c-ask-" + id, `${ROLES.find(r => r[0] === (c.role || "general"))[1].toLowerCase()} ${c.name || "(no name yet)"}`),
-          textArea("pp-c-note-" + id, c.notes, "Notes for the author: skills, history", v => edit("people", { [id]: { notes: v } }), 1000))))),
-      h("div", null, h("button", { class: "btn small", type: "button", onclick: () => { const id = "c-" + uid(); if (edit("people", { [id]: { role: "general", name: "" } })) setTimeout(() => { const el = document.getElementById("pp-c-name-" + id); if (el) el.focus(); }, 60); } }, "Add a character"))));
+    // characters: the political advisors on their own (author, 2026-10-15: "allow people to create political
+    // advisors"), then generals, admirals and the other advisors
+    const chars = Object.entries(ppl).filter(([k, v]) => k.startsWith("c-") && v && isObj(v));
+    const political = ([, c]) => c.role === "advisor" && c.slot === "political_advisor";
+    const pols = chars.filter(political), others = chars.filter(x => !political(x));
+    const add = (prefix, init, field) => { const id = prefix + uid(); if (edit("people", { [id]: { ...init, name: "" } })) setTimeout(() => { const el = document.getElementById(field + id); if (el) el.focus(); }, 60); };
+    out.push(h("div", { class: "sec" }, h("h4", null, "Political advisors", h("small", { text: `${pols.length}` })),
+      h("div", { class: "meta", text: "In the game they are the politics screen's political advisors, hired for political power, each with the base game's traits (more political power, stability, support for an ideology …)." }),
+      h("div", null, pols.map(([id, c]) => characterRow(id, c))),
+      h("div", null, h("button", { class: "btn small", type: "button", onclick: () => add("c-", { role: "advisor", slot: "political_advisor" }, "pp-c-name-") }, "Add a political advisor"))));
+    out.push(h("div", { class: "sec" }, h("h4", null, "Generals, admirals and other advisors", h("small", { text: `${others.length}` })),
+      h("div", { class: "meta", text: "Generals and admirals join the nation's army and navy at the start, and advisors its political screen (pick their post: theorist, chiefs of the army, navy and air force, high command). Give them traits from the base game, or ask the author for a new one; the notes are for the author." }),
+      h("div", null, others.map(([id, c]) => characterRow(id, c))),
+      h("div", null, h("button", { class: "btn small", type: "button", onclick: () => add("c-", { role: "general" }, "pp-c-name-") }, "Add a character"))));
+    // companies (author, 2026-10-15: "allow people to create ... companies")
+    const cos = Object.entries(ppl).filter(([k, v]) => k.startsWith("co-") && v && isObj(v));
+    out.push(h("div", { class: "sec" }, h("h4", null, "Companies", h("small", { text: `${cos.length}` })),
+      h("div", { class: "meta", text: "The nation's own companies, of the base game's kinds: arms companies that design and build its tanks, ships, aircraft and equipment, and industrial concerns that speed its research. Name each, pick its kind and send a logo (square is best; without one it has the game's picture for its kind)." }),
+      h("div", null, cos.map(([id, c]) => companyRow(id, c))),
+      h("div", null, h("button", { class: "btn small", type: "button", onclick: () => add("co-", {}, "pp-co-name-") }, "Add a company")),
+      askAuthor("pp-co-ask", { kind: "company", button: "Ask for a new kind of company", label: "New kind of company", it: "the kind",
+        namePh: "What kind (e.g. a rocket maker, a shipping line)", whatPh: "What it should do in the game",
+        title: t => `New kind of company: ${t}`, details: w => w })));
     return paneFrame(out);
   });
 }
