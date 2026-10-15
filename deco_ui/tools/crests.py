@@ -52,7 +52,9 @@ def keystone(cx, base):
     body = (f'<path d="{d}Z" fill="#0F171C"/>'
             f'<path d="{inner_d}" fill="none" stroke="rgba(201,165,90,.45)" stroke-width="1"/>'
             f'<path d="{d}" fill="none" stroke="url(#kg)" stroke-width="1.2"/>'
-            + _diamond(cx, base - 15, 7.5, "kg"))
+            # the diamond 12.5 px above the edge (2026-10-15: 15 until the author asked to "lower the diamond just a
+            # little so it's not touching the top"): clear of the top tier's inner line
+            + _diamond(cx, base - 12.5, 7.5, "kg"))
     return _svg(581, 40, 0, 0, body, GILT_GRAD.format(id="kg")), 33
 
 

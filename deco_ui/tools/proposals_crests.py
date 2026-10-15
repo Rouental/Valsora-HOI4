@@ -22,7 +22,9 @@ from paths import ART, CHROMIUM, ROOT, TOOLS
 
 OUT = ART + "proposals/crests/"
 PROJECT = os.path.abspath(os.path.join(ROOT, ".."))
-LABELS = {"star": "a compass star", "globe": "Valsora rising (the news masthead's globe)", "hourglass": "an hourglass",
+LABELS = {"star": "a compass star", "globe": "the whole globe (lit), across the frame's top edge",
+          "globe_ringed": "the whole globe with its ring (the news masthead's), across the frame's top edge",
+          "hourglass": "an hourglass",
           "laurel": "a laurel wreath round a star", "guillotine": "before: the mockup's guillotine",
           "keystone": "a stepped keystone with a diamond", "fan": "a fan of seven broad rays",
           "diamond": "a diamond on the edge, with rules", "sunburst": "before: the half sunburst (v0.7)"}
@@ -48,7 +50,7 @@ def superevent_crests():
             p.alpha_composite(Image.fromarray(SD.title_strip(SAMPLE_TITLE)), (SD.PIC_X, SD.CREST + SD.TITLE_Y))
             bg = Image.new("RGBA", p.size, (30, 36, 34, 255))
             bg.alpha_composite(p)
-            out[e] = bg.crop((0, 0, SD.PW, 104))
+            out[e] = bg.crop((0, 0, SD.PW, SD.CREST + 64))
         return out, SD.EMBLEM
     finally:
         os.chdir(cwd)

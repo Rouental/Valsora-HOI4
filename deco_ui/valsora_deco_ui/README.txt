@@ -1,4 +1,4 @@
-VALSORA DECO UI - v0.8.2 (for HOI4 1.19)
+VALSORA DECO UI - v0.8.3 (for HOI4 1.19)
 ========================================
 
 An art deco interface for the Valsora total conversion: core skin and fonts,
@@ -28,6 +28,24 @@ Valsora repository's scripts/common.py and rebuild (sh scripts/run_all.sh).
 The layout is built for 1920 px of UI width: 1920x1080 at 100% UI scale, or
 2560x1440 at up to 133%.
 
+
+NEW IN v0.8.3
+-------------
+  - Events: the keystone's diamond sits a little lower, clear of the
+    keystone's top step (it touched it).
+  - The news: the masthead's globe is the newsreel globe, girdled by a
+    tilted gilt ring (behind the globe at the back, over it in front): the
+    user's favourite of the designs. The others stay in
+    art/proposals/news_globe/.
+  - Superevents: the crest is the same ringed globe, whole, rising across
+    the middle of the frame's top edge (it was the top half of a globe, cut
+    off at the frame).
+
+Things to check in game (v0.8.3):
+  - the news masthead's ringed globe at its size;
+  - a superevent (Rouental's test decision): the whole globe across the
+    frame's edge;
+  - an event card: the keystone's diamond clear of the top step.
 
 NEW IN v0.8.2
 -------------

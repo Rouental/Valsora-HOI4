@@ -20,7 +20,7 @@ FEDERO = FONTS / "federo/Federo-Regular.ttf"
 JOSEFIN = FONTS / "josefinsans/JosefinSans[wght].ttf"
 
 FW, FH = 900, 645          # the frame: the size of the window before the Deco UI
-CREST = 40                 # panel rows above the frame (the crest rises 36 px over it)
+CREST = 70                 # panel rows above the frame (the globe crest's rays rise 68 px over it; others 36)
 TAB = 35                   # panel rows below it (the now-playing tab, 34 px)
 PW, PH = FW, CREST + FH + TAB
 PIC_X, PIC_Y, PIC_W, PIC_H = 30, 62, 840, 420     # in the frame
@@ -153,8 +153,12 @@ def svg_strokes(w, h, segments, width, colour, scale, ox, oy, ss=SS):
 # (deco_ui/tools) shows side by side.
 CREST_W, CREST_H = 120, 60      # the crest's picture; the medallion's centre is its bottom middle
 MED_R = 38                      # the medallion's radius (its top half shows)
-EMBLEMS = ("star", "globe", "hourglass", "laurel", "guillotine")
-EMBLEM = "globe"
+EMBLEMS = ("globe_ringed", "globe", "star", "hourglass", "laurel", "guillotine")
+EMBLEM = "globe_ringed"
+# the whole globe (2026-10-15, later: "raise the globe so it intersects the top of the event panel in the center, and
+# show the whole globe so it doesn't look weirdly cut off at the bottom"): centred just above the frame's top edge, in a
+# half sunburst that rises only over the frame; globe_ringed is the author's favourite of the news globes
+GLOBE_R, GLOBE_CY, RAYS_R = 30, -8, 58     # the globe's radius, its centre's frame row, the rays' reach
 
 
 def gilt_fill(h, w, y0, y1):
@@ -198,9 +202,50 @@ def ndi_grow(mask, px=1):
     return ndi.maximum_filter(mask, size=2 * px + 1)
 
 
+def _globe_art():
+    """the Deco UI's globes (deco_ui/tools/globe_art.py), as the news masthead's"""
+    import sys
+    tools = str(Path(__file__).resolve().parent.parent / "deco_ui" / "tools")
+    if tools not in sys.path:
+        sys.path.append(tools)       # last: its layout.py and package.py are not the build's
+    import globe_art
+    return globe_art
+
+
+def globe_crest(ringed):
+    """(the whole globe in its half sunburst, the frame row of the picture's top edge)"""
+    top = GLOBE_CY - RAYS_R - 2
+    w, h = 2 * RAYS_R + 4, GLOBE_CY + GLOBE_R + 30 - top
+    cx, cy = w / 2, GLOBE_CY - top
+    out = layer(w, h)
+    above = (np.mgrid[0:h, 0:w][0] + .5 < -top).astype(np.float32)      # the frame's top edge is row -top
+    rays_base = np.where(disc(w, h, cx, cy, GLOBE_R + 8)[..., None] > .5, hex_rgb("#1B262D"), hex_rgb("#0B1115"))
+    outer = disc(w, h, cx, cy, RAYS_R) * above
+    paint(out, outer, rays_base)
+    paint(out, outer * conic_rays(w, h, cx, cy, 0, 2.5, 10), hex_rgb("#E8CD84"))
+    # a dark ring parts the globe from the rays and the frame's border, a gilt rim round it
+    paint(out, disc(w, h, cx, cy, GLOBE_R + 3), hex_rgb("#0B1115"))
+    paint(out, ring(w, h, cx, cy, GLOBE_R + 1.6, GLOBE_R + .2), hex_rgb("#E8CD84"))
+    ga = _globe_art()
+    if ringed:
+        d = round(2 * GLOBE_R / .72)
+        d += d % 2
+        g = np.asarray(ga.globe_ringed(d, ga.VIEW, scale=2 * GLOBE_R / d), np.float32)
+    else:
+        d = 2 * GLOBE_R
+        g = np.asarray(ga.globe(d, ga.VIEW), np.float32)
+    x0, y0 = int(round(cx - d / 2)), int(round(cy - d / 2))
+    sub = out[y0:y0 + d, x0:x0 + d]
+    paint(sub, g[..., 3] / 255, g[..., :3])
+    return out, top
+
+
 def crest(emblem=None):
-    """the crest's picture (CREST_W x CREST_H, straight alpha floats)"""
+    """(the crest's picture, straight alpha floats; the frame row of its top edge): the whole globe, or a medallion of
+    which the top half shows (CREST_W x CREST_H, from 36 px above the frame) with one of the other emblems"""
     emblem = emblem or EMBLEM
+    if emblem in ("globe", "globe_ringed"):
+        return globe_crest(emblem == "globe_ringed")
     cw, ch = CREST_W, CREST_H
     cx, cy = cw / 2, ch
     out = layer(cw, ch)
@@ -218,19 +263,6 @@ def crest(emblem=None):
     paint(out, ring(cw, ch, cx, cy, MED_R, MED_R - 1.5), hex_rgb("#E8CD84"))
     if emblem == "star":
         draw_star(out, cx, 41, 17.5, 10.5, 4.8)
-    elif emblem == "globe":
-        # Valsora rising: the top half of the Deco UI's globe (deco_ui/tools/globe_art.py), as the news masthead's
-        import sys
-        tools = str(Path(__file__).resolve().parent.parent / "deco_ui" / "tools")
-        if tools not in sys.path:
-            sys.path.append(tools)       # last: its layout.py and package.py are not the build's
-        import globe_art
-        d = 2 * (MED_R - 4)
-        g = np.asarray(globe_art.globe(d, globe_art.VIEW), np.float32)
-        g = g[: d // 2]
-        sub = out[int(cy) - d // 2:int(cy), int(cx) - d // 2:int(cx) - d // 2 + d]
-        paint(sub, g[..., 3] / 255, g[..., :3])
-        paint(out, ring(cw, ch, cx, cy, MED_R - 4, MED_R - 5), hex_rgb("#E8CD84"), .9)
     elif emblem == "hourglass":
         hx, top, bot, half = cx, 26, 58, 11
         pale = gilt_fill(ch, cw, top, bot)
@@ -280,7 +312,7 @@ def crest(emblem=None):
         paint(out, icon[..., 3], icon[..., :3])
     else:
         raise ValueError(f"no emblem {emblem!r}: {EMBLEMS}")
-    return out
+    return out, -36
 
 
 # ---------------------------------------------------------------- the panel picture
@@ -313,10 +345,11 @@ def panel(emblem=None):
         m[y0:y1, x0:x1] = 1
         m[y0 + 1:y1 - 1, x0 + 1:x1 - 1] = 0
         paint(frame, m, rgb, a)
-    # the crest: a half disc of gilt rays round a medallion with an emblem (EMBLEM), rising 36 px over the frame
-    x0 = (PW - CREST_W) // 2
-    sub = img[fy - 36:fy - 36 + CREST_H, x0:x0 + CREST_W]
-    c = crest(emblem)
+    # the crest (EMBLEM): the whole globe across the frame's top edge in a half sunburst, or a half medallion
+    c, top = crest(emblem)
+    x0, y0 = (PW - c.shape[1]) // 2, fy + top
+    assert y0 >= 0, "the crest rises higher than CREST rows"
+    sub = img[y0:y0 + c.shape[0], x0:x0 + c.shape[1]]
     paint(sub, c[..., 3], c[..., :3])
     # the now-playing tab under the frame: a trapezoid, gilt on three sides, with a music note at each end
     tx, tw, th = TAB_X, TAB_W, 34

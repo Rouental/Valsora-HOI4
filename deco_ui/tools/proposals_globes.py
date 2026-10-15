@@ -22,13 +22,14 @@ OUT = ART + "proposals/news_globe/"
 FED = G + "federo/Federo-Regular.ttf"
 D = LE.NEWS_GLOBE
 OPTIONS = [
-    (lambda: GA.globe(D, LE.NEWS_VIEW), True,
-     "In the mod: this one, improved (v0.8.2): lit from the upper left, a bright limb on the lit side, the graticule over "
-     "the sea only and stopping short of the pole, the land a little less smoothed, seen above Nonscio and Araseos"),
-    (lambda: GA.globe_flat(D), True, "Before (v0.8.1): flat gilt land, the graticule over sea and land, looking down on open sea"),
-    (lambda: GA.globe_first(D), True, "The first (v0.8): every lake and channel, lit, a bright coast"),
     (lambda: GA.globe_ringed(D, LE.NEWS_VIEW), False,
-     "Concept: the newsreel globe, girdled by a tilted gilt ring (behind it at the back, over it in front)"),
+     "In the mod (v0.8.3, the author's favourite): the newsreel globe, girdled by a tilted gilt ring (behind it at the "
+     "back, over it in front)"),
+    (lambda: GA.globe(D, LE.NEWS_VIEW), True,
+     "v0.8.2: lit from the upper left, a bright limb on the lit side, the graticule over the sea only and stopping short "
+     "of the pole, the land a little less smoothed, seen above Nonscio and Araseos"),
+    (lambda: GA.globe_flat(D), True, "v0.8.1: flat gilt land, the graticule over sea and land, looking down on open sea"),
+    (lambda: GA.globe_first(D), True, "The first (v0.8): every lake and channel, lit, a bright coast"),
     (lambda: GA.world_disc(D), True,
      "Concept: the whole world on one disc, as on an emblem: a map round the north pole, the meridians as spokes"),
     (lambda: GA.globe_engraved(D, LE.NEWS_VIEW), True,

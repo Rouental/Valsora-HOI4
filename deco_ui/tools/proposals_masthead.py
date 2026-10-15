@@ -14,7 +14,6 @@ import os
 
 from playwright.sync_api import sync_playwright
 
-import globe_art as GA
 import layout_events as LE
 from paths import ART, CHROMIUM, FONTS_SRC as G
 
@@ -30,11 +29,12 @@ NAMES = [(("VALSORAN", "STANDARD"), "In the mod: VALSORAN STANDARD (the words se
 def main():
     os.makedirs(OUT, exist_ok=True)
     b = io.BytesIO()
-    GA.globe(LE.NEWS_GLOBE, LE.NEWS_VIEW).save(b, "PNG")
+    globe, rim = LE.news_globe()
+    globe.save(b, "PNG")
     uri = "data:image/png;base64," + base64.b64encode(b.getvalue()).decode()
     cards = ""
     for words, label in NAMES:
-        svg, rules = LE.news_masthead(words, uri, FED)
+        svg, rules = LE.news_masthead(words, uri, FED, rim=rim)
         cards += (f'<div class="lab">{label}</div><div class="card"><svg width="528" height="130" style="position:absolute;'
                   'left:0;top:0"><path d="M.5,130V14.5L14.5,.5H513.5L527.5,14.5V130" fill="none" stroke="#C9A55A"/>'
                   '<path d="M6.5,130V16.5L16.5,6.5H511.5L521.5,16.5V130" fill="none" stroke="rgba(201,165,90,.4)"/>'

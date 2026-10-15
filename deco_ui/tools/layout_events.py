@@ -36,6 +36,18 @@ def grid_x(window):
 NEWS_WORDS = ("VALSORAN", "STANDARD")
 NEWS_VIEW = (-95.0, 18.0)        # the globe (globe_art.globe): above Nonscio and Araseos, as the tension globe (v0.8.2)
 NEWS_SIZE, NEWS_GLOBE = 27, 60   # the words' size (Federo), the globe's diameter
+# the globe's design (v0.8.3): the author's favourite of the options (2026-10-15, later: "I think the globe I'm sending
+# now is my current favorite of your designs"), the newsreel globe girdled by a tilted ring; "lit" is v0.8.2's
+NEWS_GLOBE_STYLE = "ringed"
+
+
+def news_globe():
+    """(the masthead's globe, a PIL image NEWS_GLOBE across; whether the masthead draws a gilt rim round it: not round
+    the ringed one, whose ring reaches past the globe)"""
+    import globe_art as GA
+    if NEWS_GLOBE_STYLE == "ringed":
+        return GA.globe_ringed(NEWS_GLOBE, NEWS_VIEW), False
+    return GA.globe(NEWS_GLOBE, NEWS_VIEW), True
 NEWS_CY, NEWS_GAP = 52.5, 13     # the band's middle (between the rules at 25.5 and 79.5), the words' gap to the medallion
 
 

@@ -1571,11 +1571,11 @@ add("ev_minimize", EV + "event_button_minimize.dds", 32, 33,
 # also draws other names with).
 import base64 as _b64
 import io as _io
-import globe_art as GA
 _buf = _io.BytesIO()
-GA.globe(LEV.NEWS_GLOBE, LEV.NEWS_VIEW).save(_buf, "PNG")
+_globe, _rim = LEV.news_globe()      # v0.8.3: the ringed globe, the author's favourite (layout_events.NEWS_GLOBE_STYLE)
+_globe.save(_buf, "PNG")
 MASTHEAD, NEWS_RULES = LEV.news_masthead(LEV.NEWS_WORDS, "data:image/png;base64," + _b64.b64encode(_buf.getvalue()).decode(),
-                                         FONTS_SRC + "federo/Federo-Regular.ttf")
+                                         FONTS_SRC + "federo/Federo-Regular.ttf", rim=_rim)
 # the news: a broadsheet in lacquer and gilt; the picture at (64, 91), 399 x 155 (layout_events, centred); the headline at y 260-292 under a
 # rule (the story starts right under the headline, at y 291)
 EV_NEWS = ('<div class="lac" style="position:absolute;inset:0;clip-path:polygon(14px 0,calc(100% - 14px) 0,100% 14px,100% calc(100% - 14px),'
