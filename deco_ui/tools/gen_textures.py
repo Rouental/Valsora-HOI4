@@ -1357,8 +1357,8 @@ def lg_frame(W, H, hole, body, plaque, selected, flat=False, marshal=False):
     return "".join(s) + "</svg>"
 
 
-ARMY = dict(hole=(10, 69, 8, 21, 88), body=(2, 2, 82, 112), plaque=(6, 90, 78, 110))
-GROUP = dict(hole=(10, 78, 7, 22, 99), body=(2, 2, 88, 123), plaque=(6, 101, 84, 121))
+import layout_armybar as LAB
+ARMY, GROUP = LAB.ARMY, LAB.GROUP
 add("lg_frame", UC + "leader_group_frame.dds", 336, 117, frames(336, 117,
     lg_frame(84, 117, selected=False, **ARMY), lg_frame(84, 117, selected=True, **ARMY),
     lg_frame(84, 117, selected=False, flat=True, **ARMY), lg_frame(84, 117, selected=True, flat=True, **ARMY)))
@@ -1468,16 +1468,17 @@ add("lg_disband", UC + "disband_orders_group.dds", 16, 16,
 add("lg_air_bg", "gfx/interface/attached_air_bg.dds", 39, 45, bar(c=4, shine=.15))
 
 
-def lg_add(w, h, lit, plus=True):
-    """the empty card asking for a commander: a gilt line bust under an arch, a plus medallion"""
-    cx = w / 2
+def lg_add(w, h, lit, cx, plus=True):
+    """the empty card asking for a commander: a gilt line bust and a plus medallion, centred on the frame's opening
+    (cx: the game draws this picture 1.5 px left of the opening's centre on an army card)"""
     hr, hy = w * .18, h * .36
     sh = h * .58
-    s = (f'<div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,#1E2A31,#0B1014 75%)"></div>'
+    half = w * .36
+    s = (f'<div style="position:absolute;inset:0;background:radial-gradient(ellipse at {cx}px 40%,#1E2A31,#0B1014 75%)"></div>'
          f'<svg width="{w}" height="{h}" style="position:absolute;left:0;top:0">'
          f'<circle cx="{cx}" cy="{hy}" r="{hr}" fill="none" stroke="rgba(227,199,126,.55)" stroke-width="1.3"/>'
-         f'<path d="M{w * .14},{h * .92}C{w * .14},{sh + 6} {cx - hr - 4},{sh} {cx},{sh}C{cx + hr + 4},{sh} {w * .86},{sh + 6} '
-         f'{w * .86},{h * .92}" fill="none" stroke="rgba(227,199,126,.55)" stroke-width="1.3"/>')
+         f'<path d="M{cx - half},{h * .92}C{cx - half},{sh + 6} {cx - hr - 4},{sh} {cx},{sh}C{cx + hr + 4},{sh} {cx + half},{sh + 6} '
+         f'{cx + half},{h * .92}" fill="none" stroke="rgba(227,199,126,.55)" stroke-width="1.3"/>')
     if plus:
         r = 9
         my = h * .75
@@ -1488,10 +1489,12 @@ def lg_add(w, h, lit, plus=True):
     return s + "</svg>"
 
 
-add("lg_add_bg", UC + "group_add_leader_bg.dds", 61, 83, lg_add(61, 83, False))
-add("lg_add", UC + "group_add_leader.dds", 122, 83, frames(122, 83, lg_add(61, 83, False), lg_add(61, 83, True)))
-add("lg_add_marshal_bg", UC + "group_add_marshal_bg.dds", 70, 96, lg_add(70, 96, False))
-add("lg_add_marshal", UC + "group_add_marshal.dds", 140, 96, frames(140, 96, lg_add(70, 96, False), lg_add(70, 96, True)))
+_ca = LAB.hole_centre(ARMY, LAB.FRAME_ARMY, LAB.ADD_ARMY)[0]
+_cg = LAB.hole_centre(GROUP, LAB.FRAME_GROUP, LAB.ADD_GROUP)[0]
+add("lg_add_bg", UC + "group_add_leader_bg.dds", 61, 83, lg_add(61, 83, False, _ca))
+add("lg_add", UC + "group_add_leader.dds", 122, 83, frames(122, 83, lg_add(61, 83, False, _ca), lg_add(61, 83, True, _ca)))
+add("lg_add_marshal_bg", UC + "group_add_marshal_bg.dds", 70, 96, lg_add(70, 96, False, _cg))
+add("lg_add_marshal", UC + "group_add_marshal.dds", 140, 96, frames(140, 96, lg_add(70, 96, False, _cg), lg_add(70, 96, True, _cg)))
 # a commander's headquarters needs attention: frame 2 (frame 1 is the game's blank, the blink)
 add("lg_hq_alert", UC + "hq_alert.dds", 122, 83, frames(122, 83, "",
     f'<div style="position:absolute;inset:0;background:rgba(238,140,126,.16);box-shadow:inset 0 0 0 2px #EE8C7E"></div>'
@@ -1502,6 +1505,100 @@ add("lg_hq_badge", UC + "hq_badge.dds", 18, 27, img_tag(gilt(vanilla_frames(UC +
 _gr = vanilla_frames(UC + "give_role_leader_strip.dds", 2)
 add("lg_give_role", UC + "give_role_leader_strip.dds", 56, 28, frames(56, 28, img_tag(gilt(_gr[0])),
     '<div style="position:absolute;inset:1px;border:1px solid #5FB39C;border-radius:3px"></div>' + img_tag(gilt(_gr[1], 1.15))))
+
+# ---------------------------------------------------------------- events (v0.7: interface/eventwindow.gui)
+# The game's events are paper reports on a clipboard (country, leader and operative events) and a newspaper (news
+# events). Their pictures are replaced at the game's paths and sizes, and make_events.py gives the window the mod's
+# fonts (the game's typewriter fonts are dark, for paper). A country event is three pieces the game stacks: the top
+# (title), the middle, stretched to the text (a cornered tile: 16 px kept at top and bottom), and the bottom (the
+# picture at (5, 5), 210 x 176, and the options at x 215). In the superevent's style: lacquer, gilt rails, a crest.
+EV = "gfx/interface/"
+RAIL = ('<div class="frame" style="left:0;top:{t}px;bottom:{b}px;width:1px;background:#C9A55A"></div>'
+        '<div class="frame" style="right:0;top:{t}px;bottom:{b}px;width:1px;background:#C9A55A"></div>'
+        '<div class="frame" style="left:4px;top:{t2}px;bottom:{b2}px;width:1px;background:rgba(201,165,90,.35)"></div>'
+        '<div class="frame" style="right:4px;top:{t2}px;bottom:{b2}px;width:1px;background:rgba(201,165,90,.35)"></div>')
+
+
+def ev_crest(cx, base, r):
+    """a half sunburst rising from the card's top edge, as the superevent's crest"""
+    return (f'<div style="position:absolute;left:{cx - r}px;top:{base - r}px;width:{2 * r}px;height:{r}px;overflow:hidden">'
+            f'<div style="position:absolute;left:0;top:0;width:{2 * r}px;height:{2 * r}px;border-radius:50%;'
+            'background:repeating-conic-gradient(from -90deg,rgba(227,199,126,.55) 0deg 2.5deg,transparent 2.5deg 12deg),'
+            'radial-gradient(circle,#1E2A31 0 55%,#11191E 56%)"></div>'
+            f'<div style="position:absolute;left:{r * .38}px;top:{r * .38}px;width:{r * 1.24}px;height:{r * 1.24}px;border-radius:50%;'
+            'border:1px solid #C9A55A;box-sizing:border-box"></div></div>'
+            f'<div style="position:absolute;left:{cx - 5}px;top:{base - r * .55 - 5}px;width:10px;height:10px;transform:rotate(45deg);'
+            'background:linear-gradient(135deg,#F1DC9C,#8B6A2C)"></div>')
+
+
+EVT = 30     # the card's top edge in the top piece (the crest rises above it)
+EV_TOP = (ev_crest(290.5, EVT, 28)
+          + f'<div class="lac" style="position:absolute;left:0;right:0;top:{EVT}px;bottom:0;'
+            f'clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%,0 10px)"></div>'
+          + f'<svg width="581" height="121" style="position:absolute;left:0;top:0"><path d="M.5,121V{EVT + 10}L10.5,{EVT + .5}'
+            f'H{290.5 - 30}M{290.5 + 30},{EVT + .5}H570.5L580.5,{EVT + 10}V121" fill="none" stroke="url(#evg)" stroke-width="1"/>'
+            '<defs><linearGradient id="evg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F1DC9C"/>'
+            '<stop offset="1" stop-color="#C9A55A"/></linearGradient></defs>'
+            f'<path d="M4.5,121V{EVT + 12}L12.5,{EVT + 4.5}H568.5L576.5,{EVT + 12}V121" fill="none" stroke="rgba(201,165,90,.35)"/></svg>'
+          # the title's band (the title is centred at y 70-102): a gilt hairline above and below, fading at the ends
+          + '<div class="frame" style="left:46px;right:46px;top:63px;height:1px;'
+            'background:linear-gradient(90deg,transparent,#C9A55A 18%,#C9A55A 82%,transparent)"></div>'
+          + '<div class="frame" style="left:46px;right:46px;top:107px;height:1px;'
+            'background:linear-gradient(90deg,transparent,rgba(201,165,90,.6) 18%,rgba(201,165,90,.6) 82%,transparent)"></div>'
+          + f'<i class="ck tr" style="top:{EVT + 6}px;right:8px"></i>')
+add("ev_top", EV + "event_report_top_win.dds", 581, 121, EV_TOP)
+add("ev_mid", EV + "event_report_tileable_midsection.dds", 580, 66,
+    '<div class="lac" style="position:absolute;inset:0"></div>' + RAIL.format(t=0, b=0, t2=0, b2=0))
+EV_BOTTOM = ('<div class="lac" style="position:absolute;left:0;right:0;top:0;bottom:6px;'
+             'clip-path:polygon(0 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px))"></div>'
+             '<svg width="581" height="206" style="position:absolute;left:0;top:0">'
+             '<path d="M.5,0V189.5L10.5,199.5H570.5L580.5,189.5V0" fill="none" stroke="#C9A55A"/>'
+             '<path d="M4.5,0V187.5L12.5,195.5H568.5L576.5,187.5V0" fill="none" stroke="rgba(201,165,90,.35)"/>'
+             # the picture (210 x 176 at 5, 5): a gilt frame round it, small fans at its corners
+             '<rect x="3.5" y="3.5" width="213" height="179" fill="none" stroke="#C9A55A"/>'
+             '<rect x="1.5" y="1.5" width="217" height="183" fill="none" stroke="rgba(201,165,90,.3)"/></svg>'
+             '<i class="ck sm bl" style="left:8px;bottom:13px"></i><i class="ck sm br" style="right:8px;bottom:13px"></i>')
+add("ev_bottom", EV + "event_report_bottom_win.dds", 581, 206, EV_BOTTOM)
+# an option: a chamfered lacquer plate with a gilt rim (352 wide, under a 300 px entry: it overhangs to the right)
+add("ev_option", EV + "event_option_entry.dds", 352, 48,
+    f'<div style="position:absolute;left:0;top:2px;width:352px;height:44px">{bar("linear-gradient(180deg,#1E2A31,#0E1519)", GOLD, 9, .25)}</div>'
+    '<div class="frame" style="left:16px;right:16px;top:41px;height:1px;background:rgba(201,165,90,.25)"></div>')
+add("ev_clip", EV + "event_pic_clip.dds", 55, 30, "")        # the paper clip: none on lacquer
+add("ev_minimize", EV + "event_button_minimize.dds", 32, 33,
+    '<div style="position:absolute;left:5px;top:5.5px;width:22px;height:22px;transform:rotate(45deg);border:1px solid #E3C77E;'
+    'background:#0B1014;box-sizing:border-box"></div>'
+    '<svg width="32" height="33" viewBox="0 0 32 33" style="position:absolute;left:0;top:0"><path d="M18,12.5L13.5,16.5L18,20.5" '
+    'fill="none" stroke="#E3C77E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>')
+# the news: a broadsheet in lacquer and gilt; the picture at (59, 91), 399 x 155; the headline at y 260-292
+NEWS_TITLE = ('<span style="background:linear-gradient(180deg,#FFF3C8,#E3C77E 45%,#9C7836);-webkit-background-clip:text;'
+              'color:transparent">{}</span>')
+EV_NEWS = ('<div class="lac" style="position:absolute;inset:0;clip-path:polygon(14px 0,calc(100% - 14px) 0,100% 14px,100% calc(100% - 14px),'
+           'calc(100% - 14px) 100%,14px 100%,0 calc(100% - 14px),0 14px)"></div>'
+           '<svg width="528" height="595" style="position:absolute;left:0;top:0">'
+           '<path d="M14.5,.5H513.5L527.5,14.5V580.5L513.5,594.5H14.5L.5,580.5V14.5Z" fill="none" stroke="#C9A55A"/>'
+           '<path d="M16.5,6.5H511.5L521.5,16.5V578.5L511.5,588.5H16.5L6.5,578.5V16.5Z" fill="none" stroke="rgba(201,165,90,.4)"/>'
+           '<path d="M40,22.5H488M40,25.5H488M40,79.5H488M40,82.5H488" stroke="#C9A55A" stroke-width="1"/>'
+           '<rect x="57.5" y="89.5" width="402" height="158" fill="none" stroke="#C9A55A"/>'
+           '<path d="M60,298.5H468" stroke="rgba(201,165,90,.55)"/>'
+           '<path d="M170,492.5H358" stroke="rgba(201,165,90,.55)"/></svg>'
+           '<div style="position:absolute;left:259px;top:487.5px;width:10px;height:10px;transform:rotate(45deg);background:#C9A55A"></div>'
+           '<div style="position:absolute;left:0;right:0;top:29px;height:46px;display:flex;align-items:center;justify-content:center;'
+           "gap:26px;font:400 40px/1 Federo;letter-spacing:.16em\">" + NEWS_TITLE.format("WORLD")
+           + '<span style="position:relative;width:44px;height:44px;border-radius:50%;background:repeating-conic-gradient('
+             'rgba(227,199,126,.7) 0deg 3deg,transparent 3deg 15deg),#11191E;box-shadow:0 0 0 1px #C9A55A"></span>'
+           + NEWS_TITLE.format("NEWS") + '</div>')
+add("ev_news", EV + "event_news_bg.dds", 528, 595, EV_NEWS)
+add("ev_news_overlay", EV + "event_news_pic_overlay.dds", 399, 155,
+    '<div style="position:absolute;inset:0;box-shadow:inset 0 0 22px rgba(11,16,20,.55),inset 0 0 0 1px rgba(241,220,156,.35)"></div>')
+# a leader event's portrait frame (172 x 232; the portrait at its (8, 9), 156 x 210): an arch, as the army cards
+LF_HOLE = _arch(10, 162, 11, 52, 218)
+LF_BODY = _cham(2, 2, 170, 230, 7)
+add("ev_leader_frame", EV + "event_leader_frame.dds", 172, 232,
+    f'<svg width="172" height="232" style="position:absolute;left:0;top:0"><defs>{LG_GOLD}</defs>'
+    f'<path d="{LF_BODY}{LF_HOLE}" fill="url(#pin)" fill-rule="evenodd"/>'
+    f'<path d="{LF_BODY}" fill="none" stroke="url(#g)" stroke-width="1.4"/>'
+    f'<path d="{_cham(5, 5, 167, 227, 5)}" fill="none" stroke="rgba(201,165,90,.4)"/>'
+    f'<path d="{LF_HOLE}" fill="none" stroke="url(#g)" stroke-width="1.6"/></svg>')
 
 # ---------------------------------------------------------------- render
 G = FONTS_SRC
