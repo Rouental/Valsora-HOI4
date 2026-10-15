@@ -1,0 +1,83 @@
+# Room under HOI4's province border limit
+
+The author's request (2026-10-15): check the room under the border limit, bearing in mind that "the reduction in
+provinces once terrain starts being applied in earnest" will free some ("areas that are impassible desert use less
+provinces"). Numbers from the build of 2026-10-15; rerun them with `python3 scripts/border_report.py` (add
+`--terrain map` once the Terrain layer is painted, `--preview` for the picture).
+
+## Where we are
+
+HOI4 draws at most **65,536 province borders**: past that, province and state lines stop being drawn from some row
+of the map down (it happened on 2026-10-12, at 73,231). A border is a stretch of boundary two touching provinces
+share, land or water alike (`scripts/borders.py`). `check_mod.py` fails over the limit and warns within 4,000 of it.
+
+- **62,183 borders now: 3,353 left**, about 1,100 more provinces' worth (each province adds about 3).
+- By kind: land–land 55,341 (89 %), land–sea 5,628, sea–sea 946, lake–land 268.
+- By continent: Orientalis 16,665, Nonscio 10,866, Yastreovakia 10,766, Araseos 9,682, Usnistan 8,564,
+  Solitas 3,910, Aislada 784 (sea and lakes alone 946).
+- 20,690 land provinces, median 168 px (cut at ~190 px since 2026-10-12); 367 are under 100 px; 380 are islands
+  alone in the water (407 borders).
+- Only 166 borders come from pairs that touch in more than one place, so tidying borders frees almost nothing:
+  the count follows the number of provinces.
+
+## The base game, for comparison
+
+Vanilla 1.19.3's map: 13,413 provinces and **40,694 borders**. Its land provinces are dense in Europe and sparse
+elsewhere (median 160 px, mean 399 px), and their size follows the terrain:
+
+| terrain | provinces | median size | vs plains |
+|---|---|---|---|
+| desert | 815 | 516 px | 4.1 × |
+| marsh | 142 | 234 px | 1.8 × |
+| mountain | 1,708 | 232 px | 1.8 × |
+| jungle | 477 | 207 px | 1.6 × |
+| forest | 2,364 | 152 px | 1.2 × |
+| plains | 3,031 | 127 px | 1 |
+| hills | 1,352 | 120 px | 0.9 × |
+| urban | 265 | 100 px | 0.8 × |
+
+Its 22 **impassable** states (interior Borneo, the Gibson Desert, parts of the Sahara ...) are still cut into
+provinces, but large ones: 140 provinces, median **1,456 px**, against 157 px for every other land province.
+So the author is right: impassable land needs about a tenth of the provinces.
+
+## What would free room
+
+Estimates from re-cutting every state's provinces (a quick weighted k-means per state, compared with the same cut at
+today's 190 px: 59,780 borders, which is below today's 62,183 because today's map also has provinces split along
+rivers and the author's small drawn states). The terrain is the **terrain test's** (`terrain_test.py`, not in the
+mod), standing in for the terrain the author will paint, so the real figures will differ.
+
+| re-cut | land provinces | borders | change |
+|---|---|---|---|
+| 190 px everywhere (the comparison) | 19,664 | 59,780 | |
+| **sizes by terrain like the base game's** | 17,021 | 51,932 | **−7,848 (−13 %)** |
+| ... and deep desert in 2,500 px 'impassable' provinces | 16,980 | 51,782 | −7,998 |
+| 220 px everywhere | 16,992 | 51,869 | −7,911 |
+| 250 px everywhere | 14,949 | 45,804 | −13,976 |
+
+- **Sizes by terrain** are the big win: about 8,000 borders, roughly what a province size of 220 px instead of 190
+  would give, but kept small where the ground is open. Applied to today's map, that would mean about 54,000 borders,
+  11,500 under the limit. `dist/border_room_preview.png` shows the deserts of Usnistan, now and re-cut.
+- **Impassable land** adds little here (−150), because the terrain test's deserts are mostly narrow: only 59,000 px
+  are more than 40 px inside one. It grows with how much land the author makes impassable: every 10,000 px of
+  impassable land cut like the base game's (about 1,500 px a province) instead of 190 px saves about 140 borders,
+  so 200,000 px (a large desert or ice sheet) would save about 2,800.
+- **Bigger provinces overall**: each 10 % on the province size takes about 9 % off the borders.
+- Not worth it: borders touching twice (166), merging the tiny provinces left (367 under 100 px: about 1,000
+  borders, and `merge_provinces.py` already took 4,313), the islands (they can't join other land).
+
+## What adds borders
+
+Every new province adds about 3: provinces re-cut along new rivers (`river_provinces.py`), new state lines that
+split provinces, new islands. With 3,353 left, the map can take about 1,100 more provinces as it is.
+
+## Recommendation
+
+- Nothing is needed now: 3,353 borders is enough for the river and state-line edits ahead.
+- When the terrain is painted, re-cut the provinces of each region by terrain, with the base game's sizes (desert
+  4 ×, mountains and marshes 1.8 ×, jungle 1.6 ×, forest 1.2 ×), and the land the author marks impassable in
+  provinces of about 1,500 px. The states stay; only the Provinces layer changes, then `river_provinces.py` runs
+  again. Facts on the Gazetteer are kept by map pixel, so they follow the new provinces. This would be a new option
+  of `pdn_tools.py recut --keep-states` (sizes from the Terrain layer).
+- If the Vale of Reibonne, where most of the play is, should stay dense, the room can come from the rest of the
+  world, as in the base game (Europe dense, elsewhere sparse).
