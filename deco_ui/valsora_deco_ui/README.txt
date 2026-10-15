@@ -1,10 +1,10 @@
-VALSORA DECO UI - v0.6 (for HOI4 1.19)
+VALSORA DECO UI - v0.7 (for HOI4 1.19)
 ======================================
 
 An art deco interface for the Valsora total conversion: core skin, a rebuilt
 top bar, the politics screen, every side panel, the province panel, the
-focus tree, the map modes and minimap, and the main menu, laid out like the
-Valsora mockups.
+focus tree, the army bar, the events, the map modes and minimap, and the main
+menu, laid out like the Valsora mockups.
 
 
 INSTALL
@@ -28,6 +28,27 @@ Valsora repository's scripts/common.py and rebuild (sh scripts/run_all.sh).
 The layout is built for 1920 px of UI width: 1920x1080 at 100% UI scale, or
 2560x1440 at up to 133%.
 
+
+NEW IN v0.7
+-----------
+  - The army bar along the bottom of the screen: each commander's portrait
+    in a gilt arched frame on lacquer (jade when selected), the division
+    count centred on a plaque, an army group's card with gilt fans, the
+    plate behind them with a gilt rule, gilt play and coral stop buttons,
+    a battle plan running as gilt chevrons on jade, and an empty card with
+    a gilt bust and a plus when an army has no commander.
+  - Events: country, leader and operative events are lacquer cards with a
+    crest, gilt rails and a gilt frame round the picture; news events are a
+    broadsheet with a WORLD NEWS masthead. Titles in gilt capitals, the text
+    and options in cream (the game's typewriter fonts are dark, for paper).
+
+Things to check in game (v0.7):
+  - the army bar: a selected army, an army group with its armies (the plate
+    should run on from the field marshal over his armies), a battle plan
+    being prepared and executed, an army with no commander;
+  - any event: the title, the text, the options (hover and click), the
+    picture; a long event (the middle should stretch with the text); a
+    news event.
 
 NEW IN v0.6
 -----------

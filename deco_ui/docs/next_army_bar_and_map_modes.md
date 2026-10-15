@@ -1,4 +1,8 @@
-# Next: the army bar (the bottom-right map controls are done, v0.5)
+# The army bar (done in v0.7) and the bottom-right map controls (done in v0.5)
+
+**Done in v0.7 (2026-10-15):** the army bar, by textures at the game's paths (`gen_textures.py`, `lg_*`, numbers in
+`tools/layout_armybar.py`) and `make_leadergroups.py` (the counts on the plaques); preview
+`build/preview_armybar.png` (`preview_armybar.py`). The plan below is kept as the record of how it was approached.
 
 **Done in v0.5 (2026-10-14): map modes and minimap**, by textures at vanilla paths only (the game's
 `mapmodes_interface.gui` and Valsora's `minimap.gui` are untouched); `gen_textures.py`, the `mm_*` and `mn_*`

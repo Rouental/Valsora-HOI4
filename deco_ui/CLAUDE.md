@@ -14,7 +14,7 @@ Treat assumed items as hypotheses.
 
 ---------------------------------------------------------------------------------------------------
 
-## 1. Status (v0.6)
+## 1. Status (v0.7)
 
 v0.4.3 was the first v0.3/v0.4 build the user launched. The user's reports so far cover only the main
 menu: the Valsora background and the social links in the top-left corner show **(in game)**, but in
@@ -68,6 +68,16 @@ red exclusive marks. The superevent window is the Valsora mod's (`scripts/supere
 `DECO_UI`), drawn from the mockup's Superevent board with this project's fonts. The top bar's date box is 230 px
 (x 55; 220 until then) and the speed chevrons start at x 286: since Valsora moved to 2036 the widest date the game
 shows, "00:00, 30 September, 2040", is 230 px, and the preview's long sample is that date.
+**v0.7 (2026-10-15, overnight, not yet seen in game)**, the user's picks "Do the army bar, the event window ...": the
+**army bar** (the cards along the bottom: the user's request after v0.2) re-skinned by textures at the game's paths
+and sizes, plus `make_leadergroups.py`, which moves the division counts onto the frames' plaques. The user's notes
+on its first preview: "the bar above the field marshal cuts off weirdly" (the preview's fault: it put the army
+group's piece of the plate behind both the marshal and his first army; the game's pieces make one plate, the army
+group's piece starting it, the armies' carrying it on, the last army's ending it, `layout_armybar.py`), "the plus
+over the empty general isn't quite centered, nor are the numbers" (the game draws the empty card 1.5 px left of the
+opening, and its count 3 px above the plaque: both fixed). The **events** (country, leader, operative, news)
+re-skinned the same way, with `make_events.py` giving them the mod's fonts. Panel picture proposals, for the user's
+approval and **not in the mod**, are in `art/proposals/`.
 
 | Area | State |
 |---|---|
@@ -81,9 +91,10 @@ shows, "00:00, 30 September, 2040", is 230 px, and the preview's long sample is 
 | Focus tree (`interface/nationalfocusview.gui`, `.gfx`) | v0.6 (the FocusTree mockup): flush under the band with the notch; header with the scripted title and subtitle, chips, search, zoom, close; scale-pattern canvas in a gilt frame; medallion + plate per focus state (unavailable, available, in progress, completed); halo, search glow, links, exclusive marks, continuous focus marks, legend. Focus icons untouched. |
 | Superevent (Valsora's `valsora_superevent.gui`) | v0.6: drawn by the Valsora mod (`scripts/superevents_deco.py`) from the Superevent board when `DECO_UI` is on: a veil over the map, gilt frame, crest, title strip, framed picture with corner fans, quote, button, now-playing tab. |
 | Main menu (`interface/frontendmainview.gui` + background) | v0.3; v0.4.5 fixed the invisible button row (a quoted `Orientation`). Background and social links **(in game)**. |
-| Army bar (bottom: `leadergroups.gui`) | **Next.** See `docs/next_army_bar_and_map_modes.md`. |
+| Army bar (bottom: `leadergroups.gui`) | v0.7: textures at the game's paths and sizes (`gen_textures.py`, `lg_*`; numbers in `layout_armybar.py`): arched gilt frames over the portraits (jade when selected; an army group's with gilt fans), the plate behind a run of cards, play/stop chips, the battle plan's chevrons, the empty card; `make_leadergroups.py` moves the division counts onto the plaques (centred, `valsora_deco_value_17`). Preview `build/preview_armybar.png`. |
 | Map modes and minimap (bottom right: `mapmodes_interface.gui`, `minimap.gui`) | v0.5: textures only (layouts are the game's and Valsora's): lacquer column, line-icon medallions for land/air/naval/intel, the game's small icons and toggles recoloured in gilt, deco handle and ping buttons; the minimap's picture and frame in gilt by the Valsora mod (`scripts/minimap.py`, deco style). |
-| Everything else (events, the army bar, the panels' own pictures ...) | Only the core skin so far. |
+| Events (`eventwindow.gui`) | v0.7: the report and newspaper textures replaced at the game's paths (`ev_*`): lacquer card with a crest, gilt rails and a picture frame; a WORLD NEWS broadsheet; options as gilt-rimmed plates; `make_events.py` sets the mod's fonts (titles `title_18`, text and options `body_15`). Preview `build/preview_events.png`. |
+| Everything else (the panels' own pictures ...) | Only the core skin so far. Proposals for the panels' pictures (not in the mod) in `art/proposals/`. |
 
 **HOI4 has no outliner.** The mockup's "Outliner" panel was a design idea. The closest things in the
 game are the army/navy/air overview lists (opened from the top bar's army/navy/air buttons); restyle
@@ -606,6 +617,33 @@ level plates, chips, close diamond and fonts.
 - **Conflict:** the Valsora mod ships the same file path, so the UI mod must load **after** Valsora.
   If Valsora's `countrypoliticsview.gui` changes, re-run `make_politics.py`.
 
+**make_leadergroups.py (v0.7).** The army bar. Everything but the counts is textures at the game's paths and sizes
+(`gen_textures.py`, the `lg_` keys; their numbers, and the counts', in `layout_armybar.py`): the army card frame
+(84 x 117, 4 frames: normal, selected, then both without the plaque, the game's order) and the army group's (90 x 126,
+3: normal, selected, plain) are lacquer with an arched opening over the portrait, gilt rims and a plaque for the count
+(selected: a jade line, a jade glow round the opening, a jade plaque); the plate pieces (army group 175 x 151 = two
+frames of 87.5 px, the game's own odd size; mid 80; end 84 with the chamfered end) fade into the map below a gilt rule;
+play and stop chips in the game's 4-frame order (normal, hatched, lit, lit and hatched; an army group's frames 3-4
+show a double triangle and two squares); the battle plan's 12-frame chevrons; the empty card (a gilt bust and a plus,
+drawn on the opening's centre since the game places the picture 1.5 px left of it); the HQ alert (frame 2; frame 1
+is the blink's blank); the HQ badge and the staff-office strip recoloured with `gilt()`. The script itself only gives
+both `divisions_count` boxes the plaque's box, centred both ways, in `valsora_deco_value_17` (the game's sat 3 px above
+the plaque). `preview_armybar.py` draws the game's look and the mod's, the plate as the game lays it.
+
+**make_events.py (v0.7).** The events. The pictures are textures at the game's paths (`ev_` keys): the country
+event's top (581 x 121: a crest on the card's top edge, the title's band between two gilt hairlines), middle (a
+cornered tile 580 x 66 the game stretches to the text: only the side rails, so it repeats seamlessly) and bottom
+(581 x 206: a gilt frame round the 210 x 176 picture at (5, 5), the chamfered foot); the options' plate (352 x 48, it
+overhangs its 300 px entry as the game's does); no paper clip; the minimize diamond; the news broadsheet (528 x 595:
+WORLD NEWS masthead, the picture's frame at (59, 91), a rule over the headline, since the story starts right under
+it at y 291) and its picture overlay; a leader event's arched portrait frame (172 x 232). The script sets the fonts
+(the game's typewriter fonts are dark, for paper): titles `valsora_deco_title_18`, the text and the options
+`valsora_deco_body_15` (in the menu's tracked capitals 811 of the game's 10,171 options would need a third line,
+which the 40 px box cuts off; 4 in the body font). `preview_events.py` draws a country event and a news event.
+
+**gen_textures.py `prefix ...`** renders only the textures whose key starts with a prefix (`lg_`, `ev_` ...) and
+merges the manifest: a full run changes a few anti-aliased pixels in every texture.
+
 **make_menu.py.**
 
 - Hides the logo (the title is baked into the background art).
@@ -691,6 +729,13 @@ GP.write_gui(MOD + "interface/x.gui", t)    # braces checked, engine_safe applie
 ## 10. Open items and things to check in game
 
 Check these first in the user's next screenshots and `error.log`:
+
+- **v0.7 army bar**: a selected army (jade frame and plaque), an army group with its armies (one plate from the
+  marshal over his armies), the counts centred on the plaques, a battle plan prepared and running (the chevrons), an
+  army without a commander (the bust and plus centred in the opening), the HQ alert. Which of the frames' four
+  pictures the game uses when (with or without the plaque) is the game's own order, kept.
+- **v0.7 events**: the title, text and options readable (the mod's fonts), the middle stretching with the text, the
+  picture in its frame, the options' plates (hover), a news event's broadsheet; a leader event's portrait frame.
 
 - **v0.6 focus tree**: the window flush under the band with the medallion and seal in its notch; the title
   ("Rouentaise Focus Tree") and the full name and sub-ideology under it (if they don't show, the scripted GUI's token
@@ -800,13 +845,15 @@ The user asked (2026-10-14) for one install, keeping the option of going back to
 
 1. Process the user's screenshots and `error.log` of v0.5 (section 10 and the README's checklist): the side
    panels' notch and headers, the construction screen folded, the map modes and minimap.
-2. **Army bar**: see `docs/next_army_bar_and_map_modes.md` (the map modes and minimap part is done, v0.5).
+2. The army bar (v0.7) and the events (v0.7), after the user's screenshots.
 3. Politics extras still missing from the Government mockup: faction member flags (needs a scripted
    GUI dynamic list over the faction's members; not verified that one exists) and a one-spirit card
    with its modifiers. The user does not want "The Court" panel.
 4. The side panels' insides (v0.5 did their frames, headers and the shared pieces): the game's pictures
    inside them (research's photograph, `production_win_top`, the officer corps' coloured command boxes, the
    intelligence agency's art, `overview_top_strip`) and the +/- buttons; re-lay a panel only if the user asks.
+   v0.7: proposals for the pictures in `art/proposals/` wait for the user's approval (the user: "don't put them in
+   the mod yet. I'd like to see and approve them first").
 5. Focus tree, after the user's screenshots of v0.6: what the mockup has that the game's window lacks (the focus in
    progress and its days in the header, a progress bar under the focus, the "on completion" list in the tooltip)
    needs scripted GUIs or can't be done; the superevent is done (Valsora's `scripts/superevents_deco.py`).

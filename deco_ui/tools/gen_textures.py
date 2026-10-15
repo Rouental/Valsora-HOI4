@@ -1569,7 +1569,8 @@ add("ev_minimize", EV + "event_button_minimize.dds", 32, 33,
     'background:#0B1014;box-sizing:border-box"></div>'
     '<svg width="32" height="33" viewBox="0 0 32 33" style="position:absolute;left:0;top:0"><path d="M18,12.5L13.5,16.5L18,20.5" '
     'fill="none" stroke="#E3C77E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>')
-# the news: a broadsheet in lacquer and gilt; the picture at (59, 91), 399 x 155; the headline at y 260-292
+# the news: a broadsheet in lacquer and gilt; the picture at (59, 91), 399 x 155; the headline at y 260-292 under a
+# rule (the story starts right under the headline, at y 291)
 NEWS_TITLE = ('<span style="background:linear-gradient(180deg,#FFF3C8,#E3C77E 45%,#9C7836);-webkit-background-clip:text;'
               'color:transparent">{}</span>')
 EV_NEWS = ('<div class="lac" style="position:absolute;inset:0;clip-path:polygon(14px 0,calc(100% - 14px) 0,100% 14px,100% calc(100% - 14px),'
@@ -1579,7 +1580,7 @@ EV_NEWS = ('<div class="lac" style="position:absolute;inset:0;clip-path:polygon(
            '<path d="M16.5,6.5H511.5L521.5,16.5V578.5L511.5,588.5H16.5L6.5,578.5V16.5Z" fill="none" stroke="rgba(201,165,90,.4)"/>'
            '<path d="M40,22.5H488M40,25.5H488M40,79.5H488M40,82.5H488" stroke="#C9A55A" stroke-width="1"/>'
            '<rect x="57.5" y="89.5" width="402" height="158" fill="none" stroke="#C9A55A"/>'
-           '<path d="M60,298.5H468" stroke="rgba(201,165,90,.55)"/>'
+           '<path d="M60,254.5H468" stroke="rgba(201,165,90,.55)"/>'
            '<path d="M170,492.5H358" stroke="rgba(201,165,90,.55)"/></svg>'
            '<div style="position:absolute;left:259px;top:487.5px;width:10px;height:10px;transform:rotate(45deg);background:#C9A55A"></div>'
            '<div style="position:absolute;left:0;right:0;top:29px;height:46px;display:flex;align-items:center;justify-content:center;'

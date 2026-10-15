@@ -330,7 +330,11 @@ SAME_SIZE = ["gfx/interface/pol_view_bg.dds", "gfx/interface/pol_view_bg_no_dlc.
                  "execute_button_point_out_mode", "army_group_expand_collapse", "comm_group_plan_power_bar",
                  "comm_group_plan_power_bar_bg", "disband_orders_group", "group_add_leader_bg", "group_add_leader",
                  "group_add_marshal_bg", "group_add_marshal", "hq_alert", "hq_badge", "give_role_leader_strip")],
-             "gfx/interface/attached_air_bg.dds"]
+             "gfx/interface/attached_air_bg.dds",
+             # the events (v0.7): the game stacks and stretches these by their sizes
+             *[f"gfx/interface/{k}.dds" for k in (
+                 "event_report_top_win", "event_report_tileable_midsection", "event_report_bottom_win", "event_option_entry",
+                 "event_pic_clip", "event_button_minimize", "event_news_bg", "event_news_pic_overlay", "event_leader_frame")]]
 VG = VANILLA + "gfx/"
 if os.path.isdir(VG):
     resized = []

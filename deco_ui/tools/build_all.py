@@ -9,8 +9,8 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 steps = ["gen_fonts.py", "gen_textures.py", "make_topbar.py", "make_politics.py", "make_stateview.py",
-         "make_focus.py", "make_menu.py", "make_panels.py", "make_leadergroups.py",
-         "validate_preview.py", "preview_screens.py", "preview_panels.py", "preview_focus.py", "preview_armybar.py"]
+         "make_focus.py", "make_menu.py", "make_panels.py", "make_leadergroups.py", "make_events.py",
+         "validate_preview.py", "preview_screens.py", "preview_panels.py", "preview_focus.py", "preview_armybar.py", "preview_events.py"]
 skip = set(sys.argv[1:])           # e.g.  python build_all.py gen_textures.py   to skip the slow step
 for s in steps:
     if s in skip:
