@@ -478,6 +478,15 @@ screenshot and `error.log`)
 
 ## Map problems found while building
 
+**Deco UI previews: centred text looked badly spaced ("Postpon e th e count.")** (2026-10-15, the event preview)
+- Cause: the previews' text renderer (`deco_ui/tools/validate_preview.draw_text`), not the fonts: it rounded each
+  glyph's position on its own, and centred text starts half a pixel in when its box has an odd number of pixels to
+  spare. Python's `round()` takes .5 to the even number, so every other letter moved a pixel (vertically too, when a
+  line was centred in its box). Set with the font's own advances, the same letters are even. Every preview with
+  centred text had it since v0.3; the mod's files were never affected.
+- Fix: each line starts on a whole pixel, as the game draws text, and the glyphs follow by the font's whole-pixel
+  advances.
+
 **Deco UI army bar preview: the plate cut off above the marshal; the plus and the counts off centre** (2026-10-15,
 the author's notes on the first preview)
 - Cause: the plate was the preview's fault: it drew the army group's piece behind both the marshal and his first

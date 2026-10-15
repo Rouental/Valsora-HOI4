@@ -7,6 +7,7 @@ agree with their atlases; replaced vanilla textures keep vanilla's sizes; engine
 boxes; every vanilla element of topbar.gui is still present exactly once.
 """
 import glob
+import math
 import os
 import re
 import sys
@@ -446,7 +447,9 @@ def draw_text(canvas, font, text, x, y, max_w=None, fmt="left", color=None, chec
             lx = x + (max_w - width) / 2
         elif max_w and fmt == "right":
             lx = x + max_w - width
-        pen, ly, prev = lx, y0 + li * lh, None
+        # a line starts on a whole pixel, as the game draws text: rounding each glyph's half-pixel position on its own
+        # (round() takes .5 to the even number) moved every other letter of centred text a pixel ("Postpon e")
+        pen, ly, prev = math.floor(lx), math.floor(y0) + li * lh, None
         for ch, code in line:
             cp = ord(ch)
             if cp not in chars:
@@ -456,7 +459,7 @@ def draw_text(canvas, font, text, x, y, max_w=None, fmt="left", color=None, chec
                 pen += f["kern"].get((prev, cp), 0)
             col = np.array((f["tc"].get(code) if code else None) or color or f["color"], np.float32) / 255
             g = atlas[c["y"]:c["y"] + c["height"], c["x"]:c["x"] + c["width"]]
-            gx, gy = int(round(pen + c["xoffset"])), int(round(ly + c["yoffset"]))
+            gx, gy = pen + c["xoffset"], ly + c["yoffset"]
             h, w = g.shape[:2]
             if 0 <= gx and 0 <= gy and gx + w <= canvas.shape[1] and gy + h <= canvas.shape[0]:
                 rgb, a = g[..., :3], g[..., 3:4]

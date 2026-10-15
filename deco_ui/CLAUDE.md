@@ -725,6 +725,10 @@ GP.write_gui(MOD + "interface/x.gui", t)    # braces checked, engine_safe applie
   game's texture before redrawing one.
 - The game's map mode icons are picked by frame number, and their meaning is not written anywhere: keep
   their order and glyphs (v0.5 recolours them; the big four are land, air, naval, intelligence).
+- Uneven letters in a preview are the renderer's before they are the font's. Until v0.7 `draw_text` rounded each
+  glyph's half-pixel position on its own (Python's `round()` takes .5 to the even number), so centred text read
+  "Postpon e th e count."; a line now starts on a whole pixel, as the game draws it. The fonts' advances are whole
+  pixels, and Pillow draws glyphs only at whole pixels too (an offset under .5 is ignored).
 
 ## 10. Open items and things to check in game
 

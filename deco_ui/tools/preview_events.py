@@ -19,11 +19,11 @@ PHOTO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "so
 SAMPLE = dict(
     title="Elections in Rouental",
     text=("The Principality's assemblies have been called to elect a new chancellor. Across the Vale of Reibonne the "
-          "parties have filled the squares of Reverie and Carcarelle, and the old families watch the count with "
+          "parties have filled the squares of Rêverie and Carcarelle, and the old families watch the count with "
           "unease. Whatever the result, the Crown will have to work with the new government."),
     options=["The people have spoken.", "Postpone the count."],
     news_title="The Association Stands Together",
-    news_text=("Envoys of the eight Reibonnaise states met in Reverie today and renewed the Association's charter for "
+    news_text=("Envoys of the eight Reibonnaise states met in Rêverie today and renewed the Association's charter for "
                "another decade. Observers across Nonscio call it the strongest bond in the Vale since the old wars."),
     news_options=["A union of the Vale."])
 
