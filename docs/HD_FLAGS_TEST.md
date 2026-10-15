@@ -34,22 +34,17 @@ The test version is the mod with the game's large flags at **123 x 78** instead 
 ## How it is built
 
 `common.FLAG_SCALE` (the Valsora build) and `layout.FLAG_SCALE` (the Deco UI's tools) both read the environment
-variable `VALSORA_FLAG_SCALE`; at 1, nothing changes (the mod is built byte for byte as before).
+variable `VALSORA_FLAG_SCALE`; at 1, nothing changes (the mod is built byte for byte as before). Since 2026-10-15,
+later, one command builds the test version beside the mod, after `sh scripts/run_all.sh`:
 
 ```sh
-S=/path/to/scratch
-cp -r deco_ui "$S/deco_flags15"                       # the Deco UI drawn for the larger flag, apart from ours
-ln -sfn "$PWD/deco_ui/reference/vanilla" "$S/deco_flags15/reference/vanilla"
-ln -sfn "$PWD/build/valsora_test" "$S/deco_flags15/reference/valsora"
-VALSORA_FLAG_SCALE=1.5 VALSORA_BASE_DIR="$PWD/work/deco_base/" CHROMIUM_PATH=/opt/pw-browsers/chromium \
-    python3 "$S/deco_flags15/tools/build_all.py" validate_preview.py preview_screens.py preview_panels.py \
-    preview_focus.py preview_armybar.py preview_events.py preview_game_fonts.py
-VALSORA_FLAG_SCALE=1.5 python3 scripts/build_mod.py
-VALSORA_FLAG_SCALE=1.5 VALSORA_DECO_ROOT="$S/deco_flags15" python3 scripts/deco_ui.py
-python3 scripts/check_mod.py
-VALSORA_ZIP="$S/valsora_test_flags15.zip" python3 scripts/package.py
-sh scripts/run_all.sh                                 # then the mod itself again
+sh scripts/build_flags15.sh       # about 75 s: work/valsora_test_flags15.zip
 ```
+
+It copies the Deco UI to `work/deco_flags15/` and draws the textures the flag's size changes there (11 of 240), builds
+the mod into `work/build_flags15/` (`VALSORA_BUILD`), checks it and zips it. `build/`, `dist/` and `deco_ui/` are left
+as they are, so the mod needs no rebuild afterwards (until then the test version was built over the mod, which then
+had to be built again).
 
 If the author takes the larger flags, the switch becomes the mod's own (`FLAG_SCALE = 1.5` in both places), the seven
 small flags need their originals, and each screen that shows a large flag is re-laid to show it at 1:1.

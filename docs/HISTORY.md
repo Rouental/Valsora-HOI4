@@ -10,6 +10,23 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-15, the fourth round (the author: "add the option to add base-game traits to leaders, as well as the option
+  to request new traits", the crests, the globe "my current favorite of your designs", "Is there anything else you can
+  do to streamline the modding process to make it more efficient without losing out on quality?"): no map changes.
+  **The Gazetteer's traits**: rulers, party leaders, generals, admirals and advisors take up to six of the base game's
+  traits (`source/vanilla/index/traits.json`, by kind and advisor post), and "Ask for a new trait" is a request; the
+  build writes them, builds advisors into their post, and gives portrait-less generals and admirals a generic portrait
+  of their culture; `check_mod.py` checks every trait, slot and idea token. The site is republished. The Deco UI is
+  v0.8.3: the keystone's diamond lowered, the news masthead's **ringed newsreel globe**, and the superevent's crest
+  that globe, **whole, across the frame's top edge**. **Streamlining**, each checked to give the same files:
+  `run_all.sh` runs its checks, previews and zip side by side and replaces the zip only when the checks pass (a build
+  with an unchanged map: 47 s); the Deco UI builds in 31 s (81 before); one command each for the larger flags' test
+  version (`build_flags15.sh`, beside the mod), publishing the site (`publish_site.sh`), testing `check_mod.py`
+  (`mutation_test.py`, 45 breaks: it found a real gap, fixed), fitting a flag (`fit_flag.py`) and a superevent's
+  preview (`superevent_preview.py`); the Gazetteer's browser tests are in the repository (`tests/gazetteer/`);
+  `requirements.txt` pins the libraries; the manuals are shorter (the Gazetteer's working detail is
+  `docs/GAZETTEER_INTERNALS.md`, the Deco UI's version history `deco_ui/docs/HISTORY.md`); Merlo's handoff has the new
+  commands (`docs/HANDOFF_MERLO.md` §7).
 - 2026-10-15, later still: the author's flags of **Côtefer**, **Entroterra** and **Mezzogiorno**, fitted to 82:52
   without stretching (`docs/NATIONS.md`); 95 of the 161 nations on the map have a flag of their own.
 - 2026-10-15, the third round (the author's answers and screenshots of the test decisions): no map changes. Fixed

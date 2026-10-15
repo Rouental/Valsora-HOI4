@@ -36,6 +36,27 @@ A whole build, `sh scripts/run_all.sh` (2026-10-15):
 What is left to gain is small: `build_mod.py`'s province neighbours (7 s) and `package.py`'s compression (14 s).
 The Deco UI's full build (`tools/build_all.py`) takes about a minute, nearly all of it previews.
 
+## Later the same day: the round's chores in one command each
+
+The author: "Is there anything else you can do to streamline the modding process to make it more efficient without
+losing out on quality?" What took the most time in a round was no longer the build but the steps around it, done by
+hand each time: the larger flags' test version, the Deco UI's build, publishing the Gazetteer, fitting flags, testing
+`check_mod.py` and the Gazetteer page. Each is now one command, and each was checked to give what the manual way gave:
+
+| job | before | after | how it was checked |
+|---|---|---|---|
+| the checks, previews and zip (`run_all.sh`) | 33 s, one after another | 15 s, side by side | the same zip; the zip now replaces the old one only if `check_mod.py` passes |
+| the Deco UI (`build_all.py`) | 81 s | 31 s | every one of its 432 files and 48 previews byte for byte the same: the panel previews are drawn on four cores (41 s to 16 s), the previews side by side, the fonts too; each preview script no longer redraws the top bar's preview (`validate_preview.py` draws it only when it runs itself) |
+| the larger flags' test version | 7 commands, then the mod built again over it (about 4 minutes) | `sh scripts/build_flags15.sh`, 75 s, beside the mod | its own `check_mod.py` passes; its flags 123 x 78, the mod's 82 x 52 |
+| publishing the Gazetteer | 6 git commands | `sh scripts/publish_site.sh "message"` | it found the live site unchanged, as it was |
+| testing `check_mod.py` | a one-off script each round | `python3 scripts/mutation_test.py`, 30 s, 45 breaks | it found a real gap at once: a misspelt scripted effect in our on_actions passed (fixed) |
+| fitting a flag | a script per flag | `python3 scripts/fit_flag.py TAG picture` | the past fits' rules, tried on the fitted flags made too wide and too tall: fields, bands and stripes come back right, Ganden's border and Rouental's quarters are refused (they were done by hand) |
+| testing the Gazetteer page | the tests lived in a session's scratch space, lost with it | `tests/gazetteer/run.py`, `traits.py` | they pass on the page as it is |
+| setting up (Merlo's Claude, a new session) | "numpy, scipy, pillow, scikit-image" | `pip install -r requirements.txt`, versions pinned | the same versions give the same files |
+
+`docs/HANDOFF_MERLO.md` (§7) has them as a table for Merlo's Claude, with the habits that keep a session quick: the
+manual read by section, skipped steps left skipped, long steps in the background, every speed-up proven byte for byte.
+
 ## GitHub
 
 The repository is 370 MB on GitHub (packed) and 163 MB checked out. Its history holds 1.8 GB of file versions; packed

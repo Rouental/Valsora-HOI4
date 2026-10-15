@@ -518,6 +518,27 @@ screenshot and `error.log`)
 
 ## Map problems found while building
 
+**`check_mod.py` didn't check the scripted effects our on_actions call** (2026-10-15, found by the new
+`scripts/mutation_test.py`)
+- Cause: the check of "a scripted effect used but not defined" read focus trees, scripted effects, events and
+  decisions, but not our on_actions, where `valsora_reibonnaise_opinions` is called on every start and change of
+  government. Renamed or misspelt, it would only have shown in game (error.log), and the Reibonnaise opinions with it.
+- Fix: our on_actions (not vanilla's shipped ones) count among the users of scripted effects. The mutation test's
+  45th break is that rename; all 45 are caught.
+
+**The larger flags' script failed in the Deco UI's tools** (2026-10-15, `scripts/build_flags15.sh`'s first run)
+- Cause: it gave `VALSORA_DECO_ROOT` as a relative path (`work/deco_flags15`); `deco_ui.py` runs the Deco UI's tools
+  from their own folder, where that path leads nowhere (`long_names.py`: no `.fnt` file).
+- Fix: the script gives the folder's absolute path. The test version then built and passed `check_mod.py`.
+
+**A test of the Gazetteer showed the page garbled** (2026-10-15, the traits test; the page was fine)
+- Cause: the test served `scripts/gazetteer.html` as it is; claude.ai wraps a page in a skeleton with
+  `<meta charset=utf8>` and a doctype first. Without them the browser read the page as Latin-1, in quirks mode
+  ("Â·", "â€¦"), and the layout broke.
+- Fix: the tests (`tests/gazetteer/harness.py`) serve the page in claude.ai's skeleton, as the earlier tests did.
+  Also learned there: Playwright's `select_option` leaves the focus where it was, and the page doesn't redraw a pane
+  while someone types in it, so a test must focus a list before choosing (`harness.pick`), as a click does.
+
 **`check_mod.py`: Seigne "had no leader" once the Gazetteer's admiral was built** (2026-10-15)
 - Cause: the check read each character's ruling sub-ideology with one regular expression from a character's name to
   the next `country_leader = { ideology = ...`. The admiral has no country_leader role, so the expression ran on into

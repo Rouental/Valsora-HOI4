@@ -12,8 +12,9 @@ author's mod without rework, and looks and reads as if one hand made it.
 2. The code wins over both.
 3. The author's word wins over everything. Quote them, with the date.
 
-Written 2026-10-15. The author's line moves fast, so check `CLAUDE.md`'s "Current state"
-before you trust any number below.
+Written 2026-10-15, and brought up to date the same day with the faster tools (§7: one
+command each for the jobs that took several). The author's line moves fast, so check
+`CLAUDE.md`'s "Current state" before you trust any number below.
 
 ## 1. Work from the repository
 
@@ -33,18 +34,21 @@ before you trust any number below.
   - `docs/NATIONS.md`: how every nation was made and who decided what; `docs/HISTORY.md`:
     the build's history, newest first (both moved out of `CLAUDE.md` on 2026-10-15).
   - `docs/EDITING.md`: the `.pdn`'s layers, as the author uses them.
+  - `docs/GAZETTEER_INTERNALS.md`: how the Gazetteer works, if you touch its page or import.
   - `docs/HOI4_MODDING_PRIMER.md`: what HOI4 requires, learned the hard way.
   - `docs/PROBLEM_LOG.md`: newest first.
 - **Set up.**
-  - You need Python 3.11 with numpy, scipy, pillow and scikit-image (there is no
-    requirements file).
+  - Python 3.11 and `pip install -r requirements.txt` (numpy, scipy, pillow, scikit-image,
+    and Playwright for the Deco UI's textures and the Gazetteer's tests). The versions are
+    pinned: the same versions give the same files, byte for byte, so your build of the
+    author's sources matches theirs.
   - From the repository root, run `sh scripts/run_all.sh`. It takes about two minutes, one
     when the map hasn't changed (it skips `read_layers.py` while nothing that step reads has
     changed: `scripts/stamp.py`; `FORCE=1 sh scripts/run_all.sh` reruns it), and longer the
     first time, when it decodes the `.pdn`. The same sources give the same files, the zip
     included, so a rebuild that changed nothing shows nothing to commit.
-  - Its `check_mod.py` step must end with `all checks passed`. A clean `check_mod.py` is
-    the bar for shipping anything.
+  - Its `check_mod.py` step must end with `all checks passed`, and the zip is only replaced
+    when it does. A clean `check_mod.py` is the bar for shipping anything.
 - **Run everything from the repository root.** Paths are relative to it (`work/`,
   `source/`, `build/`).
 
@@ -162,8 +166,12 @@ the name; the build puts "Name: " in front.
   neutrality (Monarchist) and theocracy.
   - The author's flag file is `source/New_Mod_Flags.pdn`. Import it with
     `python3 scripts/import_flags.py <file.pdn>`.
-  - Fit other shapes to HOI4's 82:52 **without stretching**: scale evenly, then add plain
-    field inside the stripes or trim plain sides.
+  - Fit other shapes to HOI4's 82:52 **without stretching**:
+    `python3 scripts/fit_flag.py TAG picture` does it the way the author's flags have been
+    fitted (plain field trimmed round an emblem, bands made longer, stripes lengthened or
+    made taller), crops a screenshot's frame, writes `source/flags/TAG.png` and a sheet to
+    check (`work/flag_fit_TAG.png`), and refuses flags no rule covers (quarters, a border
+    and a triangle): those are fitted by hand.
   - Add a fitted flag to the flag file as a layer, so the next import doesn't put the old
     one back.
   - Keep map colours when a flag arrives, unless the author asks.
@@ -260,5 +268,43 @@ password: https://rouental.github.io/Valsora-HOI4/
 - **Facts come in through the file.** Facts reach the mod through "Save every nation as a
   file" and `python3 scripts/gazetteer.py import <file>` (`docs/GAZETTEER.md`).
   - After map changes, the site is republished from the repository by the author's
-    Claude (`facts_export.py`, `gazetteer_site.py`, a commit on `gh-pages`).
+    Claude (`sh scripts/publish_site.sh "message"`: the map data, the page, a commit on
+    `gh-pages`).
   - Don't push to `gh-pages` yourself.
+- **Leaders' traits.** Players give rulers, party leaders, generals, admirals and advisors
+  traits from the base game's lists (`source/vanilla/index/traits.json`), and ask for new
+  ones as requests of the kind "New trait". The build writes them; `check_mod.py` checks
+  each against the game's.
+
+## 7. Working fast without losing quality
+
+Each of these replaced several manual steps (2026-10-15). Use them; they check what the manual
+steps relied on someone remembering.
+
+| Job | One command | Notes |
+|---|---|---|
+| Build the mod | `sh scripts/run_all.sh` | about 1 minute when the map hasn't changed; the checks, previews and zip run side by side; the zip is replaced only when `check_mod.py` passes |
+| Build the Deco UI | `CHROMIUM_PATH=/opt/pw-browsers/chromium python3 deco_ui/tools/build_all.py` | only after changing `deco_ui/tools/` (then `sh scripts/run_all.sh` takes it in); 31 s, independent steps side by side, only changed textures redrawn |
+| Test `check_mod.py` itself | `python3 scripts/mutation_test.py` | after any change to `check_mod.py`: 45 known breaks, each must be caught; 30 s. Add a break for every new check |
+| Fit a flag | `python3 scripts/fit_flag.py TAG picture` | look at `work/flag_fit_TAG.png` before committing |
+| The larger flags' test version | `sh scripts/build_flags15.sh` | beside the mod (`work/`), never over it: no rebuild afterwards |
+| Publish the Gazetteer | `sh scripts/publish_site.sh "message"` | the author's Claude only |
+| Test the Gazetteer page | `python3 tests/gazetteer/run.py`, `python3 tests/gazetteer/traits.py` | after `python3 scripts/facts_export.py`; every change to `scripts/gazetteer.html` |
+
+Habits that save a session's time and keep its quality:
+- **Read the manual by section.** `CLAUDE.md` is long; search it (`grep -n`) for the part
+  you need rather than reading it whole each time, but read "Decisions worth keeping" and
+  "Working with the author" once.
+- **Don't force what is skipped on purpose.** `read_layers.py` and the Deco UI's textures
+  are skipped when their inputs are unchanged; `FORCE=1` and `gen_textures.py --all` are
+  for when you know the skip is wrong.
+- **Run long steps in the background** and do the next thing meanwhile (docs, a check);
+  never edit files a running step reads.
+- **Prove a speed-up gives the same files.** Before changing how something is built, keep
+  its outputs' hashes (`sha1sum`) and compare after; every speed-up so far was checked
+  byte for byte.
+- **Check work by pictures.** Previews (`dist/`, `deco_ui/build/`, the flag sheet) find
+  layout mistakes in seconds; look at them before sending anything.
+- **One commit per finished job,** with what changed and why in its message: the author
+  reads the history.
+
