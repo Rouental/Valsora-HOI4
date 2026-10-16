@@ -49,6 +49,9 @@ as Editors, so it is no longer used.
    Rouental).
 2. They open it, find their nation, and type the password once; the page remembers it on
    that device. On the Nation tab they can give their name, so you can see who edited what.
+   The first time, a five-step **quick-start guide** shows them round (welcome and saving, the
+   map, the tabs, asking for more, the password); **Guide** beside the nation's name shows it
+   again (2026-10-16). You don't get it by yourself: press Guide to see what they see.
 
 A password opens one nation and no other. **New password** locks the old one out and keeps
 everything that was entered. You never need passwords yourself: signed in, the page unlocks

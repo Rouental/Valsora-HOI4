@@ -24,8 +24,8 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   `work/gazetteer_site/` alone as the next commit of `gh-pages` through a worktree, pushed;
   nothing is committed when the site is unchanged). Pages redeploys in a minute or two (the
   "pages build and deployment" run in Actions; github.io itself can't be reached from
-  Claude's sandbox). Test the page first: `python3 tests/gazetteer/run.py`, `traits.py`, `companies.py`, `ingame.py`
-  and `reset.py`.
+  Claude's sandbox). Test the page first: `python3 tests/gazetteer/run.py`, `traits.py`, `companies.py`, `ingame.py`,
+  `reset.py` and `guide.py`.
 - **Firebase** (set up by the author, 2026-10-15): Firestore (Standard, production mode), Google
   sign-in with `rouental.github.io` among the authorized domains, the web app's settings in
   `source/gazetteer_site/firebase-config.json` (not secret). The rules,
@@ -138,6 +138,14 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   `tests/gazetteer/reset.py`. The mod's side of the blank slate: `source/gazetteer/` was removed (Rouental's page and
   its assets, `installed.json`) with the flag the import had installed (`source/flags/TES.png`); without facts the
   build is the `.pdn`'s alone.
+- **Quick-start guide** (2026-10-16, the author's overnight list: "a short illustrated walkthrough shown the first
+  time someone opens their nation"): `guideSteps`, `showGuide`, `closeGuide`, `maybeGuide` and the pictures `GPIC`
+  (inline SVG in the page's own colours, no outside images). `unlockWith` calls `maybeGuide` after a successful unlock:
+  a player (not the owner) sees it once per browser (`localStorage` `gazetteer-guided`); the Guide button in the crumb
+  shows it again. Five steps; the map step follows the nation (open tools, closed: Suggest, or not on the map). On
+  opening, the card itself takes the focus, not Next: the Enter that unlocked the nation pressed a focused Next and
+  skipped a step (found by the test). While it is open the page's keys (tools, Undo) don't reach the map.
+  `tests/gazetteer/guide.py` (desktop and phone, light and dark); `run.py`'s friend closes it with Skip.
 - **Admins** (author, 2026-10-15: "How would I go about making Merlo an admin on the Gazetteer
   as well, so he can manage passwords and such"): Owner tools › Admins (the author adds or
   removes a Google address: `admins/<address>`); an admin signs in with Google and gets every

@@ -226,7 +226,7 @@ and what could make both smaller.
 | `fit_flag.py` | by hand: a flag the author sends in another shape → `source/flags/TAG.png` at 82:52 without resampling (plain field trimmed round an emblem, vertical bands made longer, stripes lengthened or made taller, a screenshot's frame cropped; quarters, crosses and borders refused) and `work/flag_fit_TAG.png` to check |
 | `build_flags15.sh` | by hand: the larger flags' test version (`docs/HD_FLAGS_TEST.md`) beside the mod: the Deco UI drawn for it in `work/deco_flags15/`, the mod in `work/build_flags15/`, `work/valsora_test_flags15.zip`; `build/` and `dist/` untouched |
 | `publish_site.sh` | by hand: the Gazetteer's site (`facts_export.py`, `gazetteer_site.py`) as the next commit of `gh-pages`, pushed; nothing when unchanged |
-| `tests/gazetteer/` | by hand, after `facts_export.py`: the Gazetteer page driven in Chromium with a stand-in for claude.ai's runtime: `run.py` (owner, friend, passwords, desktop and phone, light and dark), `traits.py` (traits and their requests), `companies.py` (political advisors, companies and their requests), `ingame.py` (the game's own characters and releasables, commanders' stats, cities' size), `reset.py` (Owner tools › Start over); `harness.py` builds the test site in `work/gazetteer_test/` |
+| `tests/gazetteer/` | by hand, after `facts_export.py`: the Gazetteer page driven in Chromium with a stand-in for claude.ai's runtime: `run.py` (owner, friend, passwords, desktop and phone, light and dark), `traits.py` (traits and their requests), `companies.py` (political advisors, companies and their requests), `ingame.py` (the game's own characters and releasables, commanders' stats, cities' size), `reset.py` (Owner tools › Start over), `guide.py` (the quick-start guide); `harness.py` builds the test site in `work/gazetteer_test/` |
 | `country_list.py` | by hand, after a build: `dist/world_map_labelled.png` (every country labelled) and `dist/countries.md` / `.csv` (name, full name, ideology, sub-ideology, culture, leader, states), read from the built mod |
 | `nation_sheet.py` | by hand, after a build: `dist/nations_by_continent.png`, every nation in the game under the continent of its capital: flag, ruler at the start (portrait of our own, or a "placeholder" box for a base-game one), full name, ideology and sub-ideology, culture, and a strip of its map colour (author, 2026-10-13) |
 | `collages.py` | by hand, after a build: `dist/flags_collage.png` (every custom flag, and the countries still on a placeholder stripe) and `dist/leaders_collage.png` (every custom leader: own portraits at 2×, named ones with base-game portraits as labelled tiles); `--continent NAME` writes only `dist/flags_<name>.png`, the flags of the nations whose capital is on that continent, naming below them those with land there and their capital elsewhere (2026-10-10, Araseos; 2026-10-12, Yastreovakia) |
@@ -997,8 +997,8 @@ the page, its rules or its import.
     closed nation's map facts.
   - Only the author's Claude publishes the site (`gh-pages`, allowed for it alone: "it's ok to put it on a new branch").
 - **Republish** after map changes: `sh scripts/publish_site.sh "message"`; test the page first, after
-  `python3 scripts/facts_export.py`: `python3 tests/gazetteer/run.py`, `traits.py`, `companies.py`, `ingame.py` and
-  `reset.py` (same folder).
+  `python3 scripts/facts_export.py`: `python3 tests/gazetteer/run.py`, `traits.py`, `companies.py`, `ingame.py`,
+  `reset.py` and `guide.py` (same folder).
 - **Into the mod:** the author's **Save every nation as a file**, then `python3 scripts/gazetteer.py import FILE`
   (`source/gazetteer/<TAG>.json`, pictures in `source/gazetteer/assets/`, flags of HOI4's shape into `source/flags/`),
   a rebuild (`river_provinces.py` first after new rivers), `gazetteer.py suggestions` if there are any, and

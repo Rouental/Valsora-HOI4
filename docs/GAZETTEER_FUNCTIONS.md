@@ -51,6 +51,10 @@ the nation's password; without it, the page shows the map and what the mod has, 
 - **H6 Bigger facts** (↕ beside the tabs): the facts panel wider and the map smaller, and back.
 - **H7 The status line** under the map: what is under the pointer (state, city, releasable, terrain, supply hub,
   coast, its pixel) and the page's short messages.
+- **H8 Guide** (beside the nation's name; 2026-10-16): the quick-start guide, five short illustrated steps (welcome
+  and saving, the map and its tools (the open map's, or Suggest while the states aren't drawn), the tabs, asking for
+  more, the password). It shows by itself once in a browser, the first time a player unlocks a nation (never to the
+  owner); Skip, Escape or Start close it. A first version of the tutorial: it will follow the final layout.
 
 ## The map
 

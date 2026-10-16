@@ -310,6 +310,26 @@ optgroup { font-style: normal; }
   .mapctl button { width: 42px; height: 42px; }
 }
 @media (prefers-reduced-motion: no-preference) { .btn, .tool, .nrow, .tchip { transition: background .12s, border-color .12s; } }
+
+/* the quick-start guide: shown once, the first time a player unlocks a nation */
+.guide { position: fixed; inset: 0; z-index: 30; display: grid; place-items: center; padding: 16px;
+  background: rgba(8, 12, 16, .55); }
+.guide[hidden] { display: none; }
+.gcard { width: min(560px, 100%); max-height: calc(100% - 8px); overflow: auto; background: var(--sheet); color: var(--ink);
+  border: 1px solid var(--rule-2); border-top: 3px solid var(--gilt); border-radius: 6px; padding: 16px 18px 14px;
+  box-shadow: 0 14px 44px rgba(0, 0, 0, .32); }
+.gcard:focus { outline: none; }
+.gcard .gtop { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.gcard .gtop .eyebrow { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--gilt); }
+.gcard .gtop .x { margin-left: auto; }
+.gpic { display: block; width: 100%; height: auto; background: var(--paper); border: 1px solid var(--rule); border-radius: 4px; }
+.gcard h3 { margin: 12px 0 6px; font: 400 22px/1.15 var(--font-display); letter-spacing: .02em; }
+.gcard p { margin: 0 0 8px; color: var(--ink-2); }
+.gcard p b { color: var(--ink); font-weight: 600; }
+.gfoot { display: flex; align-items: center; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+.gsteps { display: flex; gap: 7px; margin-right: auto; }
+.gsteps i { width: 8px; height: 8px; transform: rotate(45deg); background: var(--rule-2); }
+.gsteps i.on { background: var(--gilt); }
 </style>
 
 <div class="app">
@@ -319,6 +339,7 @@ optgroup { font-style: normal; }
       <button class="btn small" id="back" type="button">All nations</button>
       <img id="crumb-flag" alt="">
       <span class="nname" id="crumb-name"></span>
+      <button class="btn small" id="guide-btn" type="button" title="How this page works">Guide</button>
     </div>
     <div class="top-right">
       <span class="chip" id="save" title="">Loading</span>
@@ -404,6 +425,9 @@ optgroup { font-style: normal; }
   </section>
   <input type="file" id="file" accept=".json,application/json" hidden>
   <input type="file" id="imgfile" accept="image/png,image/jpeg,image/webp,image/gif" hidden>
+  <div class="guide" id="guide" role="dialog" aria-modal="true" aria-labelledby="guide-title" hidden>
+    <div class="gcard" id="guide-card" tabindex="-1"></div>
+  </div>
 </div>
 
 <script>
@@ -1390,6 +1414,126 @@ function goHome() {
   try { history.replaceState(null, "", location.pathname + location.search); } catch (e) { /* as above */ }
   renderList(); drawWorld(null); renderOwner(); refreshSave();
 }
+// ======================================================================= the quick-start guide
+// Five short steps, shown once in each browser the first time a player unlocks a nation (2026-10-16, the author's
+// overnight list: "a short illustrated walkthrough shown the first time someone opens their nation"); the Guide
+// button beside the nation's name shows it again. The pictures are drawn here, in the page's own colours.
+const GPIC = {
+  desk: `<svg class="gpic" viewBox="0 0 520 150" aria-hidden="true">
+    <rect x="10" y="10" width="300" height="130" rx="3" style="fill:var(--sheet);stroke:var(--rule-2)"/>
+    <g style="stroke:var(--rule-2)">${[0, 1, 2, 3, 4, 5, 6, 7].map(i => `<rect x="${20 + i * 30}" y="18" width="24" height="14" rx="2" style="fill:var(--paper)"/>`).join("")}</g>
+    <rect x="20" y="40" width="280" height="92" style="fill:var(--sea)"/>
+    <path d="M60 60 L120 50 L160 64 L150 96 L100 112 L58 98 Z" style="fill:var(--st1);stroke:var(--ink-3)"/>
+    <path d="M160 64 L214 56 L242 80 L226 112 L150 96 Z" style="fill:var(--st2);stroke:var(--ink-3)"/>
+    <path d="M100 112 L150 96 L226 112 L200 126 L118 126 Z" style="fill:var(--st3);stroke:var(--ink-3)"/>
+    <rect x="322" y="10" width="188" height="130" rx="3" style="fill:var(--sheet);stroke:var(--rule-2)"/>
+    <g style="fill:var(--paper);stroke:var(--rule-2)">${[0, 1, 2, 3, 4].map(i => `<rect x="${330 + i * 35}" y="18" width="31" height="13" rx="2"/>`).join("")}</g>
+    <g style="fill:var(--rule)">${[0, 1, 2, 3, 4].map(i => `<rect x="332" y="${44 + i * 18}" width="${150 - i * 17}" height="7" rx="3"/>`).join("")}</g>
+    <rect x="430" y="122" width="72" height="14" rx="7" style="fill:none;stroke:var(--jade)"/>
+    <text x="466" y="132.5" text-anchor="middle" style="fill:var(--jade);font:600 9px var(--font-ui);letter-spacing:.08em">SAVED</text>
+  </svg>`,
+  open: `<svg class="gpic" viewBox="0 0 520 150" aria-hidden="true">
+    <rect x="10" y="40" width="500" height="100" style="fill:var(--sea)"/>
+    <path d="M40 60 L150 50 L250 58 L330 52 L470 64 L480 120 L330 132 L200 128 L60 124 Z" style="fill:var(--t-plains);stroke:var(--ink-3)"/>
+    <path d="M250 58 L262 128 M150 50 L140 126 M330 52 L340 130" style="fill:none;stroke:var(--ink-3)"/>
+    <path d="M60 100 C110 80 160 120 210 96 S300 80 330 110" style="fill:none;stroke:var(--river);stroke-width:3"/>
+    <path d="M190 70 L420 90" style="fill:none;stroke:var(--rail);stroke-width:2;stroke-dasharray:6 3"/>
+    <circle cx="190" cy="70" r="6" style="fill:var(--sheet);stroke:var(--ink);stroke-width:2"/>
+    <circle cx="420" cy="90" r="5" style="fill:var(--sheet);stroke:var(--ink);stroke-width:2"/>
+    <path d="M360 102 l18 -14 l18 14 z" style="fill:var(--t-mountain)"/>
+    ${["Select", "Terrain", "Cities", "Rivers", "Railways", "Hubs", "Releasables", "Suggest"].map((s, i) => `<rect x="${12 + i * 63}" y="10" width="58" height="20" rx="3" style="fill:${i === 2 ? "var(--jade-2)" : "var(--sheet)"};stroke:${i === 2 ? "var(--jade)" : "var(--rule-2)"}"/><text x="${41 + i * 63}" y="24" text-anchor="middle" style="fill:var(--ink);font:600 9.5px var(--font-ui)">${s}</text>`).join("")}
+  </svg>`,
+  closed: `<svg class="gpic" viewBox="0 0 520 150" aria-hidden="true">
+    <rect x="10" y="40" width="500" height="100" style="fill:var(--sea)"/>
+    <path d="M40 60 L150 50 L250 58 L330 52 L470 64 L480 120 L330 132 L200 128 L60 124 Z" style="fill:var(--st1);stroke:var(--ink-3)"/>
+    <path d="M70 66 L240 62 L246 120 L80 118 Z" style="fill:none;stroke:var(--sug);stroke-width:2.5;stroke-dasharray:7 4"/>
+    <circle cx="160" cy="92" r="5" style="fill:var(--sug)"/>
+    <rect x="262" y="76" width="118" height="22" rx="3" style="fill:var(--sheet);stroke:var(--sug)"/>
+    <text x="321" y="91" text-anchor="middle" style="fill:var(--sug);font:600 10px var(--font-ui)">“A state: the coast”</text>
+    ${["Select", "Releasables", "Suggest"].map((s, i) => `<rect x="${12 + i * 78}" y="10" width="72" height="20" rx="3" style="fill:${i === 2 ? "var(--jade-2)" : "var(--sheet)"};stroke:${i === 2 ? "var(--jade)" : "var(--rule-2)"}"/><text x="${48 + i * 78}" y="24" text-anchor="middle" style="fill:var(--ink);font:600 9.5px var(--font-ui)">${s}</text>`).join("")}
+  </svg>`,
+  ledger: `<svg class="gpic" viewBox="0 0 520 150" aria-hidden="true">
+    ${["Politics", "People", "Releasables", "Nation"].map((s, i) => `<rect x="${14 + i * 125}" y="12" width="117" height="22" rx="3" style="fill:var(--sheet);stroke:var(--rule-2)"/><text x="${72 + i * 125}" y="27" text-anchor="middle" style="fill:var(--ink);font:600 10.5px var(--font-ui)">${s}</text>`).join("")}
+    <g style="fill:none;stroke:var(--gilt);stroke-width:2;stroke-linejoin:round">
+      <path d="M50 110 L50 74 L62 88 L72 64 L82 88 L94 74 L94 110 Z"/>
+      <circle cx="185" cy="76" r="9"/><path d="M168 112 C168 94 202 94 202 112"/><circle cx="214" cy="80" r="7"/><path d="M204 112 C206 98 226 98 228 112"/>
+      <path d="M300 116 L300 66"/><path d="M300 66 L340 66 L330 78 L340 90 L300 90"/>
+      <rect x="425" y="64" width="44" height="30" rx="2"/><path d="M447 94 L447 118"/><path d="M432 74 L462 74 M432 84 L455 84"/>
+    </g>
+    <g style="fill:var(--ink-2);font:9.5px var(--font-ui)" text-anchor="middle">
+      <text x="72" y="134">names, ruler, parties</text><text x="197" y="134">leaders, companies</text>
+      <text x="322" y="134">who can break away</text><text x="447" y="134">flag, colour, requests</text></g>
+  </svg>`,
+  ask: `<svg class="gpic" viewBox="0 0 520 150" aria-hidden="true">
+    <rect x="60" y="20" width="400" height="56" rx="4" style="fill:var(--sheet);stroke:var(--rule-2)"/>
+    <rect x="72" y="30" width="86" height="14" rx="7" style="fill:none;stroke:var(--ink-3)"/>
+    <text x="115" y="40.5" text-anchor="middle" style="fill:var(--ink-2);font:600 8.5px var(--font-ui);letter-spacing:.06em">SUB-IDEOLOGY</text>
+    <text x="72" y="64" style="fill:var(--ink);font:600 13px var(--font-ui)">A new sub-ideology: “Maritime Republic”</text>
+    <rect x="390" y="30" width="58" height="14" rx="7" style="fill:none;stroke:var(--gilt)"/>
+    <text x="419" y="40.5" text-anchor="middle" style="fill:var(--gilt);font:600 8.5px var(--font-ui);letter-spacing:.06em">OPEN</text>
+    <path d="M100 86 L100 104 L116 104" style="fill:none;stroke:var(--rule-2);stroke-width:2"/>
+    <rect x="124" y="90" width="336" height="40" rx="4" style="fill:var(--jade-2);stroke:var(--jade)"/>
+    <text x="138" y="114" style="fill:var(--ink);font:12px var(--font-ui)">The author's answer shows here.</text>
+  </svg>`,
+  key: `<svg class="gpic" viewBox="0 0 520 150" aria-hidden="true">
+    <g style="fill:none;stroke:var(--gilt);stroke-width:3;stroke-linecap:round">
+      <circle cx="200" cy="75" r="22"/><path d="M222 75 L320 75 M290 75 L290 92 M306 75 L306 88"/></g>
+    <rect x="340" y="56" width="120" height="38" rx="4" style="fill:var(--sheet);stroke:var(--rule-2)"/>
+    <text x="400" y="80" text-anchor="middle" style="fill:var(--ink-2);font:13px var(--font-data)">amber-falcon…</text>
+    <text x="260" y="128" text-anchor="middle" style="fill:var(--ink-2);font:11px var(--font-ui)">This browser remembers it; keep it to yourself.</text>
+  </svg>`,
+};
+function guideSteps(N) {
+  const nm = N ? N.name : "your nation", B = s => h("b", { text: s });
+  const map = !N || N.planned
+    ? { pic: "closed", title: "The map", body: [h("p", null, nm, " isn't on the map yet. On the ", B("Map"), " tab, use ", B("Suggest"), " to draw on the world map where it should go, and say what each mark is.")] }
+    : N.open
+      ? { pic: "open", title: "The map and its tools", body: [
+          h("p", null, "Pick a tool above the map. ", B("Select"), " a state to name it and set its buildings and resources; place ", B("Cities"), "; paint ", B("Terrain"), "; draw ", B("Rivers"), " and ", B("Railways"), "; set supply ", B("Hubs"), "; mark ", B("Releasables"), "' land; ", B("Suggest"), " anything else."),
+          h("p", null, B("Undo"), " takes back your last change. Drag to move the map, scroll or pinch to zoom; the boxes in its corner show your overseas parts and the whole world.")] }
+      : { pic: "closed", title: "The map", body: [
+          h("p", null, "Your states aren't drawn yet, so the map shows your land plain. With ", B("Suggest"), ", draw the states you'd like (", B("State"), " keeps only your land inside your line), lines along borders, or a point for each city, and say what each is."),
+          h("p", null, "Once the author has drawn your states, the rest of the map tools open: state names, cities, terrain, rivers and railways.")] };
+  return [
+    { pic: "desk", title: "Welcome to " + nm, body: [
+      h("p", null, "This is ", nm, "'s page in Valsora's atlas: the map on the left, its facts on the right."),
+      h("p", null, "Whatever you enter is saved as you go (the chip at the top right says ", B("Saved"), "), and the author builds it into the mod.")] },
+    map,
+    { pic: "ledger", title: "The facts", body: [
+      h("p", null, "The tabs on the right hold the rest: ", B("Politics"), " (your names under each government, the ruling sub-ideology, the ruler and party leaders), ", B("People"), " (generals, admirals, advisors, companies), ", B("Releasables"), " (nations that can break away from yours) and ", B("Nation"), " (flag, map colour, culture, motto, anthem, and your name)."),
+      N && N.open ? h("p", null, B("State"), " and ", B("Cities"), " show what you select on the map.") : null] },
+    { pic: "ask", title: "Asking for more", body: [
+      h("p", null, "Missing something the lists don't have: a sub-ideology, a trait, a kind of company or of subject, a change to the map? Ask for it on the ", B("Nation"), " tab. Your requests go to the author, and their answer shows under each one.")] },
+    { pic: "key", title: "Your password", body: [
+      h("p", null, "This browser remembers ", nm, "'s password, so it opens by itself next time. On another device, enter it again."),
+      h("p", null, "Keep it to yourself: anyone who has it can change your nation. Lost it? Ask the author for a new one.")] },
+  ];
+}
+function showGuide(step = 0) {
+  const steps = guideSteps(app.N), s = steps[step], last = step === steps.length - 1;
+  const pic = h("div"); pic.innerHTML = GPIC[s.pic];   // the page's own drawings, no outside text
+  const next = h("button", { class: "btn primary", type: "button", onclick: () => last ? closeGuide() : showGuide(step + 1) }, last ? "Start" : "Next");
+  $("#guide-card").replaceChildren(
+    h("div", { class: "gtop" }, h("p", { class: "eyebrow", text: `Quick start · ${step + 1} of ${steps.length}` }),
+      h("button", { class: "btn small x", type: "button", onclick: closeGuide, "aria-label": "Close the guide" }, "Skip")),
+    pic.firstElementChild, h("h3", { id: "guide-title", text: s.title }), ...s.body,
+    h("div", { class: "gfoot" }, h("div", { class: "gsteps", "aria-hidden": "true" }, steps.map((_, i) => h("i", { class: i === step ? "on" : null }))),
+      step ? h("button", { class: "btn", type: "button", onclick: () => showGuide(step - 1) }, "Back") : null, next));
+  const g = $("#guide"), opening = g.hidden;
+  if (opening) app.guideReturn = document.activeElement;
+  g.hidden = false;
+  // on opening, the card takes the focus, not Next: the Enter that unlocked the nation would press it
+  (opening ? $("#guide-card") : next).focus();
+}
+function closeGuide() {
+  store("gazetteer-guided", "1");
+  $("#guide").hidden = true;
+  const r = app.guideReturn; app.guideReturn = null;
+  if (r && r.focus && document.contains(r)) r.focus();
+}
+function maybeGuide() {  // a player's first nation in this browser
+  if (!app.isOwner && !recall("gazetteer-guided") && $("#guide").hidden) showGuide(0);
+}
 // the nation's key: the owner's, or a password this browser remembers
 async function openKey() {
   const N = app.N;
@@ -1416,6 +1560,7 @@ async function unlockWith(pw, quiet) {
   attach();
   adoptLocal();
   renderLock(); refreshSave(); renderAllPanes();
+  maybeGuide();
   return true;
 }
 function adoptLocal() {  // facts kept on this device (offline, or locked out by a new password) join the atlas
@@ -3581,6 +3726,9 @@ function loadFile(file) {
 // ======================================================================= boot
 function wireStatic() {
   $("#back").onclick = goHome;
+  $("#guide-btn").onclick = () => showGuide(0);
+  $("#guide").addEventListener("keydown", e => { if (e.key === "Escape") { e.stopPropagation(); closeGuide(); } });
+  $("#guide").addEventListener("click", e => { if (e.target === e.currentTarget) closeGuide(); });
   for (const b of document.querySelectorAll(".tool")) b.onclick = () => setTool(b.dataset.tool);
   for (const b of document.querySelectorAll("[data-mode]")) b.onclick = () => setMapMode(b.dataset.mode);
   for (const b of document.querySelectorAll("[data-tab]")) b.onclick = () => showTab(b.dataset.tab);
@@ -3595,7 +3743,7 @@ function wireStatic() {
   $("#keybtn").onclick = () => { app.ui.legend = !app.ui.legend; $("#keybtn").setAttribute("aria-pressed", String(app.ui.legend)); $("#legend").hidden = !app.ui.legend; };
   $("#keybtn").setAttribute("aria-pressed", String(app.ui.legend));
   document.addEventListener("keydown", e => {
-    if (!app.N || $("#desk").hidden) return;
+    if (!app.N || $("#desk").hidden || !$("#guide").hidden) return;
     const typing = /INPUT|TEXTAREA|SELECT/.test((document.activeElement || {}).tagName || "");
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z" && !typing) { e.preventDefault(); undo(); return; }
     if (typing) return;
