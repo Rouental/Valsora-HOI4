@@ -23,7 +23,9 @@ CHARS = (list(range(0x20, 0x7F)) + list(range(0xA0, 0x100)) + list(range(0x100, 
 # Sans has them all; the faces that don't (Federo, Bodoni Moda) get them composed (compose below)
 VIETNAMESE = [0x01A0, 0x01A1, 0x01AF, 0x01B0] + list(range(0x1EA0, 0x1EFA))
 CHARS += VIETNAMESE
-COMPOSED = set(VIETNAMESE) | {0x0110, 0x0111}     # Đ đ: Latin Extended-A, which Federo lacks
+# and the Latin Extended-A letters Vietnamese uses (Ă ă Đ đ Ĩ ĩ Ũ ũ: Văn, Nghĩa, Vũ), which Federo lacks too: until
+# they were composed, a Federo font drew them in Josefin Sans, a letter of another face inside the word
+COMPOSED = set(VIETNAMESE) | {0x0102, 0x0103, 0x0110, 0x0111, 0x0128, 0x0129, 0x0168, 0x0169}
 CHARS = sorted(set(CHARS))
 
 
@@ -174,6 +176,17 @@ def _d_stroke(fp, size):
     return Image.fromarray((np.clip(A[bb[1]:bb[3], bb[0]:bb[2]], 0, 1) * 255 + .5).astype(np.uint8)), bb[0] - ox, bb[1] - oy, adv
 
 
+def _drop_dot(A, oy, xh):
+    """the i's dot taken off (in place): every piece of ink that ends above the x-height"""
+    from scipy import ndimage
+    lab, n = ndimage.label(A > .15)
+    for k in range(1, n + 1):
+        ys = np.nonzero(lab == k)[0]
+        if ys.max() < oy - .8 * xh:
+            mask = np.array(Image.fromarray(((lab == k) * 255).astype(np.uint8)).filter(ImageFilter.MaxFilter(3))) > 0
+            A[mask] = 0
+
+
 def compose(ch, fp, primary, donor, donor_path, size):
     """the letter ch built in the primary face: (L image, x0, y0 relative to the origin, advance), or None"""
     if ch == "\u0110" and has_glyph(primary, 0xD0):                # Đ is drawn as Ð, the eth, in every Latin face
@@ -199,6 +212,8 @@ def compose(ch, fp, primary, donor, donor_path, size):
     if pb is None:
         return None
     cx = (pb[0] + pb[2]) / 2
+    if base == "i" and any(m in ABOVE for m in marks):          # a mark above an i takes the place of its dot (ỉ ĩ)
+        _drop_dot(A, oy, _height(fp, "x", size))
     top, base_right = _bbox(A)[1], _bbox(A)[2]
     circ = None
     if 0x302 in [ord(x) for x in _ud.normalize("NFD", base)]:      # the base carries a circumflex: its box

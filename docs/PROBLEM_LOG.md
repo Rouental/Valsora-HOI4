@@ -13,7 +13,9 @@ example, Plaija's current nameset")
   ...), and its communist leader is "Mai Đức Tài". Federo has none of them, nor Đ đ.
 - Fix (Deco UI v0.8.4): every font has the Vietnamese letters; in Federo and Bodoni Moda they are composed from the
   face's own letters and accents (`gen_fonts.compose`). Check: every letter of the mod's English text and name lists
-  must be in every font the mod ships (`check_mod.py`, mutation-tested).
+  must be in every font the mod ships (`check_mod.py`, mutation-tested). A specimen sheet of the built fonts then showed
+  ỉ with the i's dot left under its hook (an i under a mark loses its dot now) and ă ĩ ũ (Văn, Nghĩa, Vũ) drawn in
+  Josefin Sans inside Federo words, as fallbacks (now composed in Federo too).
 
 **Long names under the flag rode up against its frame** (2026-10-16, the author: "for long names like Kampf")
 - Cause: a name in two lines of the large letters (20 px each) filled the 40 px box, so its first line touched the

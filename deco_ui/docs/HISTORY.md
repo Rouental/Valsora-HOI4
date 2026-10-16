@@ -133,4 +133,6 @@ and đ's bar drawn in the face's weight: `gen_fonts.compose`, section 6; the fon
 and Italic, as the OFL asks of a modified version); "for long names like Kampf, they ride up against the flag" (any
 name that needs two lines in the large letters takes the small cut: `long_names.py`, 34 tags); "like the army, the navy
 is covered by the flag tab" (`naviesview_window` below the medallion, 77 % of the screen tall so it ends where the
-game's did, the home base and refit windows down with it: `make_mapviews.py`).
+game's did, the home base and refit windows down with it: `make_mapviews.py`). A specimen sheet of the built fonts ("Please
+show me the results of building the font") showed ỉ keeping the i's dot under its hook, and ă ĩ ũ still Josefin Sans
+fallbacks in the Federo fonts: an i under a mark loses its dot, and those six letters are composed too.

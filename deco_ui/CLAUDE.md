@@ -435,7 +435,9 @@ Build order matters. `gen_fonts` runs first because `layout.py` measures strings
   (â for ấ) and the marks: each mark cut out of a precomposed letter (its ink beyond the base letter's), from the
   face itself (acute, grave, circumflex, tilde, breve) or else Josefin Sans (hook above, dot below), scaled by the
   x-height or cap height and set where the source sets it; a tone mark beside a circumflex goes to its side. The
-  horn and đ's bar are strokes drawn in the face's weight (`_horn`, `_d_stroke`); Đ is the face's Ð. A mark reaching
+  horn and đ's bar are strokes drawn in the face's weight (`_horn`, `_d_stroke`); Đ is the face's Ð; an i under a mark
+  loses its dot (ỉ ĩ, `_drop_dot`). `COMPOSED` adds the Latin Extended-A letters Vietnamese uses (Ă ă Đ đ Ĩ ĩ Ũ ũ),
+  which a Federo font otherwise drew in Josefin Sans. A mark reaching
   past the letter widens it by half of what it takes beyond the letter's side bearing, as Josefin spaces its own.
   The atlases grew to fit (several doubled; the mod's zip by 0.6 MB).
 - **Face names** (v0.8.4): the `.fnt` files' `face` is "Valsora Deco Display" (from Federo), "Valsora Deco Sans"
