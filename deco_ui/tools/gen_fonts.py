@@ -27,6 +27,13 @@ CHARS += VIETNAMESE
 # they were composed, a Federo font drew them in Josefin Sans, a letter of another face inside the word
 COMPOSED = set(VIETNAMESE) | {0x0102, 0x0103, 0x0110, 0x0111, 0x0128, 0x0129, 0x0168, 0x0169}
 CHARS = sorted(set(CHARS))
+# The map font (country, state and city names on the map) is huge (96 px): with the Vietnamese letters its atlas grew
+# to 2048 x 2048, which the game refuses ("Failed to load texture larger than MAX_TEXTURE_SIZE: gfx/fonts/
+# hoi_mapfont4.tga", error.log 2026-10-16: no names on the map). The map's labels need none of them today, so the map
+# font keeps the letters it had (2048 x 1024, as v0.8.3, seen in game), and the Valsora build's check_mod.py checks the
+# map's own labels against it.
+MAP_CHARS = [c for c in CHARS if c not in VIETNAMESE]
+MAP_ATLAS = (2048, 1024)
 
 
 FACE_NAMES = {"Federo": "Valsora Deco Display", "JosefinSans": "Valsora Deco Sans", "BodoniModa": "Valsora Deco Italic"}
@@ -312,7 +319,8 @@ def _pack(glyphs, W, dry=False):
 
 
 def build(name, primary, size, outline, mode, weight=None, fallback=None, fb_weight=None, tracking=0,
-          atlas=(512, 512), line_extra=0, kern_set=None, caps=False, gilt=False, diamond=False, blank=False, line=None):
+          atlas=(512, 512), line_extra=0, kern_set=None, caps=False, gilt=False, diamond=False, blank=False, line=None,
+          chars=None, max_atlas=None, ink=None):
     """mode 'ui' or 'map'. caps: lowercase code points get the uppercase glyph (small-caps-free
     all-caps setting, so engine strings like the date or a country name render in capitals).
     gilt: bake the gilt gradient into the glyph colour (use with font colour white).
@@ -320,7 +328,10 @@ def build(name, primary, size, outline, mode, weight=None, fallback=None, fb_wei
     blank: same metrics, invisible glyphs (hides an engine string while keeping its box and tooltip).
     atlas: (width, height), or fit_atlas for the smallest that fits.
     line: (line height, where the capitals' centre sits below the line's top): another font's vertical metrics, so
-    this one can replace it in the boxes laid out for it (game_fonts.py)."""
+    this one can replace it in the boxes laid out for it (game_fonts.py).
+    chars: the code points to draw (CHARS by default); max_atlas: the atlas may not grow past it.
+    ink: (r, g, b) baked into the glyphs for a font the game colours white (the typewriter's "_inverted" files: the
+    game's texture holds black letters, which it draws on paper)."""
     fp = load(primary, size, weight)
     ffb = load(fallback, size, fb_weight) if fallback else None
     donor_path = fallback or G + "josefinsans/JosefinSans[wght].ttf"   # the marks a face lacks come from Josefin Sans
@@ -330,7 +341,7 @@ def build(name, primary, size, outline, mode, weight=None, fallback=None, fb_wei
     cap_top, cap_h = asc + hb[1], -hb[1]
     pad = outline + 1
     glyphs = []
-    for cp in CHARS:
+    for cp in (CHARS if chars is None else chars):
         ch = chr(cp)
         if caps and len(ch.upper()) == 1:
             ch = ch.upper()
@@ -388,6 +399,8 @@ def build(name, primary, size, outline, mode, weight=None, fallback=None, fb_wei
     assert need_h is not None, (name, "a glyph is wider than the atlas", W)
     while need_h > H:          # v0.8.4: the Vietnamese letters may need a taller atlas than the one asked for
         H *= 2
+    assert max_atlas is None or (W <= max_atlas[0] and H <= max_atlas[1]), \
+        (name, f"needs a {W} x {H} atlas, over {max_atlas[0]} x {max_atlas[1]}: the game refuses a larger texture")
     tex = np.zeros((H, W, 4), np.float32)
     for g in glyphs:
         sl = (slice(g["y"], g["y"] + g["h"]), slice(g["x"], g["x"] + g["w"]))
@@ -396,6 +409,9 @@ def build(name, primary, size, outline, mode, weight=None, fallback=None, fb_wei
                 rows = np.array([gilt_ramp((g["yoff"] + r - cap_top) / cap_h) for r in range(g["h"])], np.float32)
                 for c in range(3):
                     tex[sl][..., c] = g["glyph"] * rows[:, c:c + 1]
+            elif ink is not None:
+                for c in range(3):
+                    tex[sl][..., c] = ink[c] / 255
             else:
                 tex[sl][..., 0] = g["glyph"]
                 tex[sl][..., 1] = g["glyph"]
@@ -466,6 +482,9 @@ if __name__ == "__main__":
     # small tracked capitals for the readout labels (mockup .rl: Josefin 600 9.5px, .17em)
     out.append(build("valsora_deco_label", JOS, 9.5, 0, "ui", weight=600, caps=True, tracking=2, kern_set=ALNUM,
                      atlas=(512, 128)))
+    # the top bar's readout labels, tracked 1 px less (v0.9.1: room in the strip for fuel, supply and convoys)
+    out.append(build("valsora_deco_label_tb", JOS, 9.5, 0, "ui", weight=600, caps=True, tracking=1, kern_set=ALNUM,
+                     atlas=(512, 128)))
     # date in the cartouche: Federo capitals, light tracking
     out.append(build("valsora_deco_date", FED, 16, 0, "ui", fallback=JOS, fb_weight=500, caps=True, tracking=1,
                      kern_set=ALNUM, atlas=(512, 256)))
@@ -519,7 +538,7 @@ if __name__ == "__main__":
                      kern_set=ALNUM, atlas=(512, 512)))
     # map font: vanilla hoi_mapfont4 is size 94, lineHeight 118, base 89 -> match the cap height
     out.append(build("hoi_mapfont4", FED, 96, 3, "map", fallback=JOS, fb_weight=400, kern_set=ALNUM, line_extra=4,
-                     atlas=(2048, 1024)))
+                     atlas=MAP_ATLAS, chars=MAP_CHARS, max_atlas=MAP_ATLAS))
     json.dump(out, open(BUILD + "font_metrics.json", "w"), indent=1)
     # the SIL Open Font License travels with fonts derived from these families
     import shutil

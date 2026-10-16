@@ -62,7 +62,8 @@ def blockers(width, panel_x):
 # x, w: the panel's shown x and width (checked against the game's file); head_w: the header picture's width when
 # the panel draws wider than its window (the construction screen's building list hangs out of it); shift: the
 # content's offset (child_shift: per element); height: a fixed-height window's, which grows by the shift;
-# attrs: other attributes to set (path -> dict)
+# attrs: other attributes to set (path -> dict; the path's first element counts as the header's and stays put)
+# inner_attrs: attributes of elements inside the content, which moves down as usual
 PANELS = {
     "army": dict(file="countryarmyview.gui", window="countryarmyview", title="army_title", header_bg=["army_header_bg"],
                  controls={"naval_hq_open": (-171, CONTROLS_Y), "destroyed_ships_open": (-131, CONTROLS_Y),
@@ -99,7 +100,10 @@ PANELS = {
                   header_bg=["production_header_bg"]),
     "faction": dict(file="factions/countryfactionview.gui", window="countryfactionview", title="faction_title",
                     header_bg=["faction_header_bg"], shift=119,   # its banner picture starts at y -10
-                    preview_hide=["tab_section_view_full_overlay_container"]),
+                    preview_hide=["tab_section_view_full_overlay_container"],
+                    # v0.9.1, the user: "The name of the faction gets cut off if too long": the Association's is
+                    # 323 px in the deco capitals, the game's box 300; it runs to the star box now (x 442)
+                    inner_attrs={"header_section>faction_name": dict(position=(116, 60), maxWidth=326)}),
     "faction_setup": dict(file="factions/new_faction_window.gui", window="faction_setup_window",
                           title="faction_title>title", header_bg=["faction_title>faction_header_bg"],
                           close_path="faction_title>close_button", header=["faction_title"]),

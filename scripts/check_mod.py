@@ -555,6 +555,28 @@ def main(mod):
             for ch in set(f.read_text(encoding="utf-8-sig")):
                 if ord(ch) >= 0x20:
                     where.setdefault(ch, f.name)
+        # the map font (hoi_mapfont4) draws only the map's labels: countries' names under every government, states,
+        # strategic regions and victory points. Its atlas may not grow (the game refuses one over 2048 x 1024), so it
+        # holds fewer letters, and is checked against those labels alone (2026-10-16: no names on the map)
+        mapfont = have.pop("hoi_mapfont4.fnt", None)
+        if mapfont is not None:
+            cosmetic = set(re.findall(r"^(\w+)\s*=\s*\{", strip((mod / "common/countries/cosmetic.txt").read_text(
+                encoding="utf-8-sig")), re.M)) if (mod / "common/countries/cosmetic.txt").exists() else set()
+            label = re.compile(r"^(?:(?:%s)(?:_(?:democratic|communism|fascism|neutrality|theocracy))?|VAL_STATE_\d+|"
+                               r"VAL_REGION_\d+|VICTORY_POINTS_\d+)$" % "|".join(map(re.escape, sorted(set(tags) | cosmetic))))
+            for f in (mod / "localisation/english").rglob("*.yml"):
+                for k, v in re.findall(r'^\s*([\w.]+):\d*\s*"(.*)"', f.read_text(encoding="utf-8-sig"), re.M):
+                    if label.match(k):
+                        for ch in set(v) - {chr(c) for c in mapfont}:
+                            if ord(ch) >= 0x20:
+                                err(f"letter {ch!r} (U+{ord(ch):04X}) of {k} ({v!r}) is not in the map font "
+                                    f"(hoi_mapfont4): it would not show on the map (deco_ui/tools/gen_fonts.py: MAP_CHARS)")
+            dds = mod / "gfx/fonts/hoi_mapfont4.dds"
+            if dds.exists():
+                mh, mw = struct.unpack_from("<II", dds.read_bytes()[:20], 12)
+                if mw * mh > 2048 * 1024:
+                    err(f"gfx/fonts/hoi_mapfont4.dds is {mw} x {mh}: the game refuses it (error.log: larger than "
+                        f"MAX_TEXTURE_SIZE) and draws no names on the map; 2048 x 1024 loads")
         common_set = set.intersection(*have.values())
         for ch in sorted(set(where) - {chr(c) for c in common_set}):
             lacking = [n for n, cs in have.items() if ord(ch) not in cs]

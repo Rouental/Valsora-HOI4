@@ -189,9 +189,9 @@ guiTypes = {
 
 			instantTextboxType = {
 				name = "faction_name"
-				position = { x = 120 y = 60 }
+				position = { x = 116 y = 60 }
 				font = "hoi_24header"
-				maxWidth = 300
+				maxWidth = 326
 				maxHeight = 20
 				fixedsize = yes
 				format = left

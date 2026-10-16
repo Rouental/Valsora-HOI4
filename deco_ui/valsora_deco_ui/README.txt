@@ -1,5 +1,5 @@
-VALSORA DECO UI - v0.9 (for HOI4 1.19)
-======================================
+VALSORA DECO UI - v0.9.1 (for HOI4 1.19)
+========================================
 
 An art deco interface for the Valsora total conversion: core skin and fonts,
 a rebuilt top bar, the politics screen, every side panel, the province panel,
@@ -27,6 +27,43 @@ Valsora repository's scripts/common.py and rebuild (sh scripts/run_all.sh).
 
 The layout is built for 1920 px of UI width: 1920x1080 at 100% UI scale, or
 2560x1440 at up to 133%.
+
+
+NEW IN v0.9.1
+-------------
+From your screenshots and error.log of v0.9:
+  - The names on the map are back. The map's font had grown too large for
+    the game to load (2048 x 2048, with the Vietnamese letters); it is its
+    old size again, and the build now checks it.
+  - The designers' statistics are dark again on the ivory sheet (the
+    game's "inverted" typewriter fonts are dark ink; ours were white).
+  - Doctrine screen: the tabs start right of the notch instead of running
+    into the name under the flag.
+  - Faction screen: long faction names fit (the box is wider and starts
+    right of the notch).
+  - Politics screen: LEADER is centred in its tag both ways; the members'
+    flags wrap onto a second row (up to 16).
+  - The decisions seal's two badges are the same distance from it.
+  - Top bar: fuel, supply and convoys moved up into the band, as its last
+    readout (three small rows: icon, value, bar), so the tray under the
+    readouts is gone and the alerts row runs on across the screen to the
+    right-hand tray (26 a row instead of 10). To make the room the crown
+    buttons are 4 px apart instead of 6 and the labels slightly tighter.
+  - The right-hand tray's edge sits further out from the music button.
+  - The "green bar" between Construction and Production was the game's
+    production alert (it lights the Production button when something
+    there wants you), drawn behind the button so it only showed in the
+    gap. It is now a gilt ring that pulses round the Production button.
+
+Things to check in game (v0.9.1):
+  - names on the map;
+  - a designer's statistics readable;
+  - the doctrine tabs clear of the name;
+  - a long faction name on the faction screen;
+  - LEADER centred, flags in two rows (a faction of nine or more);
+  - the top bar: fuel, supply and convoys in the band (hover each row for
+    the game's tooltip), the alerts running across, the music button's
+    tray, the ring round Production when the game raises that alert.
 
 
 NEW IN v0.9

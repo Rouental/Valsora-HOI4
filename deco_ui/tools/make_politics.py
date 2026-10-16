@@ -281,20 +281,22 @@ WINDOWS = [
     ("valsora_deco_pol_sub_ideology", "valsora_deco_pol_sub_ideology_window", SI["x"], SI["y"], SI["w"], SI["h"],
      text("valsora_deco_pol_sub_ideology_text", "VAL_DECO_POL_SUB_IDEOLOGY_VALUE", VALUE15, 0, 0, SI["w"], SI["h"],
           tooltip="VAL_DECO_POL_SUB_IDEOLOGY_TT", transparent=False), None),
-    ("valsora_deco_pol_faction_role", "valsora_deco_pol_faction_role_window", FC["x"] + 110, FC["y"] + 7, 82, 12,
-     text("valsora_deco_pol_faction_role_text", "VAL_DECO_POL_FACTION_ROLE", LABEL, 0, 0, 82, 12, "right"),
+    ("valsora_deco_pol_faction_role", "valsora_deco_pol_faction_role_window", FC["x"] + LP.FACTION_COL["x"],
+     FC["y"] + LP.FACTION_ROLE["y"], LP.FACTION_COL["w"], LP.FACTION_ROLE["h"],
+     text("valsora_deco_pol_faction_role_text", "VAL_DECO_POL_FACTION_ROLE", LABEL, 0, 0, LP.FACTION_COL["w"],
+          LP.FACTION_ROLE["h"], "centre", valign=True),
      "is_in_faction = yes"),
 ]
 # the faction's members: a grid the scripted GUI fills from the game's faction_members, one flag per member (v0.9)
 FM = LP.FACTION_MEMBERS
-FM_W, FM_H = FM["slot"][0] * FM["n"], FM["slot"][1]
+FM_W, FM_H = FM["slot"][0] * FM["cols"], FM["slot"][1] * FM["rows"]
 MEMBERS = (window("valsora_deco_pol_faction_members_window", FC["x"] + FM["x"], FC["y"] + FM["y"], FM_W, FM_H,
                   f'\t\tgridBoxType = {{\n\t\t\tname = "valsora_deco_pol_faction_members_grid"\n'
                   f'\t\t\tposition = {{ x = 0 y = 0 }}\n\t\t\tsize = {{ width = {FM_W} height = {FM_H} }}\n'
                   f'\t\t\tslotsize = {{ width = {FM["slot"][0]} height = {FM["slot"][1]} }}\n'
-                  f'\t\t\tmax_slots = {{ x = {FM["n"]} y = 1 }}\n\t\t\tformat = "UPPER_LEFT"\n\t\t}}\n')
+                  f'\t\t\tmax_slots = {{ x = {FM["cols"]} y = {FM["rows"]} }}\n\t\t\tformat = "UPPER_LEFT"\n\t\t}}\n')
            + window("valsora_deco_pol_faction_member_entry", 0, 0, FM["slot"][0], FM["slot"][1],
-                    text("valsora_deco_pol_faction_member_flag", "VAL_DECO_POL_FACTION_MEMBER_FLAG", VALUE15, 0, 0,
+                    text("valsora_deco_pol_faction_member_flag", "VAL_DECO_POL_FACTION_MEMBER_FLAG", VALUE12, 0, 0,
                          FM["slot"][0], FM["slot"][1], "left", valign=True, tooltip="VAL_DECO_POL_FACTION_MEMBER_TT",
                          transparent=False)))
 GP.write_gui(MOD + "interface/valsora_deco_politics_extras.gui", 

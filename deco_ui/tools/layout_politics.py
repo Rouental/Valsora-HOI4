@@ -192,10 +192,16 @@ SPIRIT_SMALL = (33, 34)                            # vanilla's slot once there a
 # ---------------------------------------------------------------- faction | national focus
 SEC3_Y = SPIRITS["y"] + SPIRITS["h"] + 12          # 524
 FACTION_CARD = dict(x=X0, y=SEC3_Y + 16, w=240, h=78)
-FACTION_NAME_Y = 33                                # the name's centre (the game centres it on its position's y)
-# v0.9: the members' flags under the name, as the Government mockup has them (a scripted GUI's list over the game's
-# faction_members; each flag is the text icon [This.GetFlag], whose size in game is (assumed) about 20 x 13)
-FACTION_MEMBERS = dict(x=54, y=56, slot=(22, 16), n=8)
+# the card's column right of the faction's logo: the role ("Leader") centred over the name, the name (the game centres
+# it on its position's y: two lines from y 15 to 47), the members' flags under it (v0.9.1, the user: "the leader text
+# on the box for the faction leader is uncentered both vertically and horizontally"; it sat right-aligned at the top)
+FACTION_COL = dict(x=54, w=138)
+FACTION_ROLE = dict(y=4, h=11)
+FACTION_NAME_Y = 31
+# v0.9: the members' flags, as the Government mockup has them (a scripted GUI's list over the game's faction_members,
+# which follows the faction as it changes; each flag is the text icon [This.GetFlag], about 12 x 8 in game); v0.9.1:
+# two rows of eight (the user: "if there's a large number of nations in a faction, will it wrap around?")
+FACTION_MEMBERS = dict(x=54, y=50, slot=(17, 12), cols=8, rows=2)
 FOCUS_CARD = dict(x=266, y=SEC3_Y + 16, w=X1 - 266, h=78)
 FOCUS_ICON = dict(cx=38, cy=39, scale=0.62)        # the focus picture, centred on the card's medallion
 FOCUS_TITLE = dict(x=76, y=8, w=158, h=36)

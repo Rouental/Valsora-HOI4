@@ -41,7 +41,9 @@ GAME = {
     "hoi_33":            (JOS, 500, 0, False, 0, 26),
     # Century Gothic: tooltips, which grow to fit their text, so the Deco UI's 15 px body size (width-safe: 12.5)
     "cg_16b":            (JOS, 600, 0, False, 0, 15),
-    # the typewriter (unit, leader, designer, scientist screens), black on light and white on dark ("inverted")
+    # the typewriter (unit, leader, designer, scientist screens), for paper: the game colours "hoi4_typewriter16" black
+    # (core.gfx color 0xff000000) over white letters, and the "_inverted" ones white over black letters baked into the
+    # texture (read from the game's own, 2026-10-16), so those carry the ink themselves (INK); both draw dark text
     "hoi4_typewriter16": (JOS, 500, 0, False, 0, 13.5),
     "hoi4_typewriter16_inverted": (JOS, 500, 0, False, 0, 13.5),
     "hoi4_typewriter22": (JOS, 500, 0, False, 0, 19),
@@ -65,6 +67,9 @@ GAME = {
     "hoi_30header":      (FED, None, 0, True, 1, 18.5),
     "hoi_36header":      (FED, None, 0, True, 2, 20.5),
 }
+
+
+INK = (24, 20, 14)          # the "_inverted" typewriter fonts' letters: near black, a little warm, for the paper
 
 
 def game_metrics(name):
@@ -135,7 +140,8 @@ def build_all():
         lh, base, top, bottom = game_metrics(name)
         fb = dict(fallback=JOS, fb_weight=500) if face == FED else {}
         out.append(GF.build(name, face, size, rim, "ui", weight=wt, caps=caps, tracking=tr, kern_set=GF.ALNUM,
-                            atlas=GF.fit_atlas, line=(lh, (top + bottom) / 2), diamond=True, **fb))
+                            atlas=GF.fit_atlas, line=(lh, (top + bottom) / 2), diamond=True,
+                            ink=INK if name.endswith("_inverted") else None, **fb))
         # the game's own base (v0.8.4): a font of several files (cg_16b with the game's hoi_16tooltip3, for Cyrillic)
         # must give them one base, or the game logs "base (13) in 'gfx/fonts/hoi_16tooltip3.fnt' does not match
         # previous fontfiles in font 'cg_16b'" (the user's error.log). The glyphs' offsets are measured from the line's

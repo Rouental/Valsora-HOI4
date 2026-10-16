@@ -506,20 +506,24 @@ def faction_crown(in_faction):
 
 add("tb_faction_empty", "gfx/interface/factions/ui/topbar_faction_empty.dds", L.BTN_W, L.BTN_H, faction_crown(True))
 add("tb_faction", "gfx/interface/factions/ui/topbar_faction.dds", L.BTN_W, L.BTN_H, faction_crown(False))
-# production alert glow (vanilla used the decisions' yellow glow there): own crown-shaped halo, 2 frames
-CG = 8
+# production alert (vanilla used the decisions' yellow glow there): a gilt ring round the inside of the crown, drawn over
+# the button, its 2 frames blended in turn so it pulses. Until v0.9.1 it was a halo behind the button, 8 px larger
+# all round, which only showed in the 6 px gaps either side ("an odd green bar between construction and production":
+# the user, 2026-10-16)
+def crown_ring(a, key):
+    w, h, c, i = L.BTN_W, L.BTN_H, 9, 2
+    P = " ".join(f"{x},{y}" for x, y in inset_poly([(c, 0), (w - c, 0), (w, c), (w, h), (0, h), (0, c)], i))
+    return (f'<svg width="{w}" height="{h}" style="position:absolute;left:0;top:0">'
+            f'<defs><filter id="b{key}" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2.2"/></filter>'
+            f'<clipPath id="k{key}"><polygon points="{P}"/></clipPath></defs>'
+            f'<g clip-path="url(#k{key})"><polygon points="{P}" fill="none" stroke="rgba(241,205,120,{a * .65})" stroke-width="9" '
+            f'filter="url(#b{key})"/></g>'
+            f'<polygon points="{P}" fill="none" stroke="rgba(255,238,178,{a})" stroke-width="1.6"/></svg>')
 
 
-def crown_halo(a):
-    w, h, c = L.BTN_W + 2 * CG, L.BTN_H + 2 * CG, 14
-    pts = [(c, 0), (w - c, 0), (w, c), (w, h), (0, h), (0, c)]
-    return (f'<div style="position:absolute;inset:0;clip-path:{poly(pts)};'
-            f'background:radial-gradient(ellipse at 50% 50%,rgba(231,183,90,{a}) 50%,rgba(231,183,90,0) 75%)"></div>')
-
-
-add("tb_crown_glow", D + "crown_glow.dds", 2 * (L.BTN_W + 2 * CG), L.BTN_H + 2 * CG,
-    f'<div style="position:absolute;left:0;top:0;width:{L.BTN_W + 2 * CG}px;height:{L.BTN_H + 2 * CG}px">{crown_halo(.35)}</div>'
-    f'<div style="position:absolute;left:{L.BTN_W + 2 * CG}px;top:0;width:{L.BTN_W + 2 * CG}px;height:{L.BTN_H + 2 * CG}px">{crown_halo(.75)}</div>')
+add("tb_crown_glow", D + "crown_glow.dds", 2 * L.BTN_W, L.BTN_H,
+    f'<div style="position:absolute;left:0;top:0;width:{L.BTN_W}px;height:{L.BTN_H}px">{crown_ring(.35, "a")}</div>'
+    f'<div style="position:absolute;left:{L.BTN_W}px;top:0;width:{L.BTN_W}px;height:{L.BTN_H}px">{crown_ring(1, "b")}</div>')
 # the game swaps its own sprites onto the diplomacy button at runtime (GFX_topbar_international_market, and
 # possibly GFX_topbar_diplomacy), so both vanilla textures are replaced at their paths: 2 frames like vanilla
 add("tb_market_vanilla", "gfx/interface/topbar/toolbar/international_market_button.dds", 2 * L.BTN_W, L.BTN_H,
@@ -533,7 +537,7 @@ for k in ["army", "navy", "air"]:
 # 5. readout dividers, hit areas, icons
 add("tb_divider", D + "divider.dds", 1, L.DIV_H,
     '<div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent,#C9A55A 30%,#C9A55A 70%,transparent)"></div>')
-HIT = sorted({(it["w"], 46) for it in L.STRIP} | {(it["w"], 30) for it in L.SECONDARY})
+HIT = sorted({(it["w"], 46) for it in L.STRIP} | {(it["w"], it["h"]) for it in L.SECONDARY})
 for (w, h) in HIT:
     add(f"hit_{w}x{h}", D + f"hit_{w}x{h}.dds", w, h, '<div style="position:absolute;inset:0;background:rgba(0,0,0,0)"></div>')
 add("clear", D + "clear.dds", 8, 8, '<div style="position:absolute;inset:0;background:rgba(0,0,0,0)"></div>')
@@ -548,23 +552,22 @@ add("ic_factory", D + "icon_factory.dds", 48, 24,
     f'<div class="ico" style="position:absolute;left:0;top:0;width:24px;height:24px">{svg("factory", 24, "#E3C77E", 1.4)}</div>'
     f'<div class="ico" style="position:absolute;left:24px;top:0;width:24px;height:24px">{svg("factory", 24, "#E7A24A", 1.4)}</div>')
 T = L.TRAY_ICON
-for k, ic in [("convoy", "convoy"), ("command", "command"), ("nuke", "nuke")]:
+for k, ic in [("command", "command"), ("nuke", "nuke")]:
     add("ic_" + k, D + f"icon_{k}.dds", T, T, f'<div class="ico" style="position:absolute;inset:0">{svg(ic, T, "#E3C77E", 1.6)}</div>')
+# the logistics cell's icons (v0.9.1: 13 px, in the strip; 18 px in the tray until then): lines drawn heavier, so
+# they stay about a pixel wide at this size
+T = L.LOG_ICON
+for k, ic in [("convoy", "convoy"), ("supply", "supply")]:
+    add("ic_" + k, D + f"icon_{k}.dds", T, T, f'<div class="ico" style="position:absolute;inset:0">{svg(ic, T, "#E3C77E", 2.1)}</div>')
 add("ic_fuel", D + "icon_fuel.dds", 3 * T, T, "".join(
-    f'<div class="ico" style="position:absolute;left:{i * T}px;top:0;width:{T}px;height:{T}px">{svg("fuel", T, col, 1.6)}</div>'
+    f'<div class="ico" style="position:absolute;left:{i * T}px;top:0;width:{T}px;height:{T}px">{svg("fuel", T, col, 2.1)}</div>'
     for i, col in enumerate(["#E3C77E", "#E7B75A", "#EE8C7E"])))
 
 # ratio bars: the game draws the fill texture as-is (v0.2's tint colours were ignored in-game)
 add("ratio_fill", D + "ratio_fill.dds", L.BAR_W, L.BAR_H, '<div style="position:absolute;inset:0;background:linear-gradient(180deg,#F1DC9C,#B48F44)"></div>')
 add("ratio_bg", D + "ratio_bg.dds", L.BAR_W, L.BAR_H, '<div style="position:absolute;inset:0;background:#2A363D"></div>')
 
-# 6. logistics tray hanging under the strip (fuel, supply, convoys)
-TW, TH = L.TRAY["w"], L.TRAY["h"]
-tray = [(0, -1), (TW, -1), (TW, 18), (TW - 10, 18), (TW - 10, TH), (10, TH), (10, 18), (0, 18)]
-seps = "".join(f'<div style="position:absolute;left:{x - L.TRAY["x"]}px;top:{L.SEC_Y - L.TRAY["y"] + 5}px;width:1px;height:20px;'
-               'background:linear-gradient(180deg,transparent,rgba(201,165,90,.8) 30%,rgba(201,165,90,.8) 70%,transparent)"></div>'
-               for x in L.TRAY_SEPS)
-add("tb_tray", D + "tray.dds", TW, TH, plate(tray, "linear-gradient(180deg,#141E24,#0B1115)") + seps)
+# 6. (until v0.9.1 the logistics tray hung under the strip here: fuel, supply and convoys are in the strip now)
 
 # 7. date cartouche: pause diamond baked in; paused version pulses (2 frames)
 CW, CH = L.CART["w"], L.CART["h"]

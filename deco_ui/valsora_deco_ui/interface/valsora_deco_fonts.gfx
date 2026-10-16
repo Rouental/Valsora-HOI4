@@ -94,10 +94,32 @@ bitmapfonts = {
 		}
 	}
 
-	# readout labels: small tracked capitals
+	# small tracked capitals (screens' labels)
 	bitmapfont = {
 		name = "valsora_deco_label"
 		path = "gfx/fonts/valsora_deco_label"
+		color = 0xffb7a680
+		textcolors = {
+			C = { 92 160 170 }
+			L = { 195 176 145 }
+			W = { 244 236 217 }
+			B = { 110 150 230 }
+			G = { 147 214 165 }
+			R = { 238 140 126 }
+			b = { 0 0 0 }
+			g = { 176 168 146 }
+			Y = { 231 183 90 }
+			H = { 241 220 156 }
+			T = { 246 238 220 }
+			O = { 231 162 74 }
+			K = { 44 31 10 }
+		}
+	}
+
+	# the top bar's readout labels: small capitals tracked 1 px less
+	bitmapfont = {
+		name = "valsora_deco_label_tb"
+		path = "gfx/fonts/valsora_deco_label_tb"
 		color = 0xffb7a680
 		textcolors = {
 			C = { 92 160 170 }

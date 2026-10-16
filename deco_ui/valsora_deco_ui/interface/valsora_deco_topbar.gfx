@@ -29,11 +29,6 @@ spriteTypes = {
 		transparencecheck = yes
 	}
 	spriteType = {
-		name = "GFX_valsora_deco_tray"
-		texturefile = "gfx/interface/valsora_deco/tray.dds"
-		transparencecheck = yes
-	}
-	spriteType = {
 		name = "GFX_valsora_deco_divider"
 		texturefile = "gfx/interface/valsora_deco/divider.dds"
 	}
@@ -68,7 +63,7 @@ spriteTypes = {
 		texturefile = "gfx/interface/valsora_deco/decisions_seal.dds"
 		noOfFrames = 2
 	}
-	# production alert glow (crown-shaped; vanilla borrowed the decisions glow here)
+	# production alert: a gilt ring pulsing round the crown (vanilla borrowed the decisions glow here)
 	frameAnimatedSpriteType = {
 		name = "GFX_valsora_deco_crown_glow"
 		texturefile = "gfx/interface/valsora_deco/crown_glow.dds"
@@ -83,32 +78,28 @@ spriteTypes = {
 
 	# ---- invisible hover areas (the vanilla value boxes keep their tooltips)
 	spriteType = {
-		name = "GFX_valsora_deco_hit_63x30"
-		texturefile = "gfx/interface/valsora_deco/hit_63x30.dds"
+		name = "GFX_valsora_deco_hit_59x15"
+		texturefile = "gfx/interface/valsora_deco/hit_59x15.dds"
 	}
 	spriteType = {
-		name = "GFX_valsora_deco_hit_67x30"
-		texturefile = "gfx/interface/valsora_deco/hit_67x30.dds"
+		name = "GFX_valsora_deco_hit_94x46"
+		texturefile = "gfx/interface/valsora_deco/hit_94x46.dds"
 	}
 	spriteType = {
-		name = "GFX_valsora_deco_hit_104x46"
-		texturefile = "gfx/interface/valsora_deco/hit_104x46.dds"
+		name = "GFX_valsora_deco_hit_103x46"
+		texturefile = "gfx/interface/valsora_deco/hit_103x46.dds"
 	}
 	spriteType = {
-		name = "GFX_valsora_deco_hit_112x46"
-		texturefile = "gfx/interface/valsora_deco/hit_112x46.dds"
+		name = "GFX_valsora_deco_hit_117x46"
+		texturefile = "gfx/interface/valsora_deco/hit_117x46.dds"
 	}
 	spriteType = {
-		name = "GFX_valsora_deco_hit_129x46"
-		texturefile = "gfx/interface/valsora_deco/hit_129x46.dds"
+		name = "GFX_valsora_deco_hit_131x46"
+		texturefile = "gfx/interface/valsora_deco/hit_131x46.dds"
 	}
 	spriteType = {
-		name = "GFX_valsora_deco_hit_132x46"
-		texturefile = "gfx/interface/valsora_deco/hit_132x46.dds"
-	}
-	spriteType = {
-		name = "GFX_valsora_deco_hit_157x46"
-		texturefile = "gfx/interface/valsora_deco/hit_157x46.dds"
+		name = "GFX_valsora_deco_hit_141x46"
+		texturefile = "gfx/interface/valsora_deco/hit_141x46.dds"
 	}
 
 	# ---- readout icons (frame counts mirror the vanilla sprites they replace)
@@ -131,6 +122,10 @@ spriteTypes = {
 	spriteType = {
 		name = "GFX_valsora_deco_icon_convoy"
 		texturefile = "gfx/interface/valsora_deco/icon_convoy.dds"
+	}
+	spriteType = {
+		name = "GFX_valsora_deco_icon_supply"
+		texturefile = "gfx/interface/valsora_deco/icon_supply.dds"
 	}
 	spriteType = {
 		name = "GFX_valsora_deco_icon_command"
@@ -157,7 +152,7 @@ spriteTypes = {
 		colortwo = { 1.0 1.0 1.0 }
 		textureFile1 = "gfx/interface/valsora_deco/ratio_fill.dds"
 		textureFile2 = "gfx/interface/valsora_deco/ratio_bg.dds"
-		size = { x = 42 y = 3 }
+		size = { x = 38 y = 2 }
 		effectFile = "gfx/FX/progress_startend.lua"
 	}
 

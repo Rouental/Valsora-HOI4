@@ -157,15 +157,6 @@ deco = f"""
 				quadTextureSprite = "GFX_valsora_deco_topbar_band_shadow"
 			}}
 		}}"""
-tx, ty = G(L.TRAY["x"], L.TRAY["y"])
-deco += f"""
-		# tray hanging under the readouts (fuel, supply, convoys)
-		iconType = {{
-			name = "valsora_deco_tray"
-			spriteType = "GFX_valsora_deco_tray"
-			position = {{ x = {tx} y = {ty} }}
-			Orientation = "UPPER_LEFT"
-		}}"""
 deco += "\n\t\t# readout dividers and labels"
 for i, x in enumerate(L.DIVIDERS):
     deco += icon(f"valsora_deco_divider_{i + 1}", "GFX_valsora_deco_divider", *G(x, L.DIV_Y))
@@ -203,22 +194,22 @@ for it in L.STRIP:
                   font="valsora_deco_blank" if it["key"] == "factory" else L.VALUE_FONT,
                   maxWidth=it["value_w"], maxHeight=20, format="left")
 
-# ---------------------------------------------------------------- 4. logistics tray, right tray, badges
+# ---------------------------------------------------------------- 4. logistics cell, right tray, badges
+# fuel, supply and convoys: the strip's last cell, three rows (v0.9.1; a tray under the strip until then). The supply
+# icon is ours too since then (the game's equipment icon, 18 x 22, was too tall for a row; it has one frame, which the
+# game doesn't change)
 SEC = {it["key"]: it for it in L.SECONDARY}
 for key, bg, ic, txt, bar, spr in [
     ("fuel", "fuel_value_bg", "fuel_icon", "fuel_value", "fuel_ratio_bar", "GFX_valsora_deco_icon_fuel"),
-    ("supply", "supply_value_bg", "supply_icon", "supply_value", "supply_ratio_bar", None),
+    ("supply", "supply_value_bg", "supply_icon", "supply_value", "supply_ratio_bar", "GFX_valsora_deco_icon_supply"),
     ("convoys", "convoy_text_bg", "convoys_icon", "convoys_count", "convoys_ratio_bar", "GFX_valsora_deco_icon_convoy"),
 ]:
     it = SEC[key]
-    t = set_attrs(t, bg, sprite=f"GFX_valsora_deco_hit_{it['w']}x30", position=G(it["x"], L.SEC_Y))
-    if spr:
-        t = set_attrs(t, ic, sprite=spr, position=G(it["icon_x"], L.SEC_ICON_Y))
-    else:  # vanilla equipment icon (kept: the engine may pick its frame)
-        t = set_attrs(t, ic, position=G(it["icon_x"] - 3, L.SEC_ICON_Y - 3))
-    t = set_attrs(t, txt, position=G(it["value_x"], L.SEC_VALUE_Y_BAR), font=L.SEC_FONT, maxWidth=it["value_w"],
-                  maxHeight=18, format="left", fixedsize="yes")
-    t = set_attrs(t, bar, sprite="GFX_valsora_deco_ratio_bar", position=G(it["value_x"], L.SEC_BAR_Y))
+    t = set_attrs(t, bg, sprite=f"GFX_valsora_deco_hit_{it['w']}x{it['h']}", position=G(it["x"], it["y"]))
+    t = set_attrs(t, ic, sprite=spr, position=G(it["icon_x"], it["icon_y"]))
+    t = set_attrs(t, txt, position=G(it["value_x"], it["value_y"]), font=L.LOG_FONT, maxWidth=it["value_w"],
+                  maxHeight=14, format="left", fixedsize="yes")
+    t = set_attrs(t, bar, sprite="GFX_valsora_deco_ratio_bar", position=G(it["value_x"], it["bar_y"]))
 
 # command power and nukes: icon + value in the right-hand tray (right-anchored like the tray)
 for box, cont, ic, txt, spr in [(L.CP, "cp", "command_power_icon", "command_power_value", "GFX_valsora_deco_icon_command"),
@@ -315,7 +306,16 @@ t = set_attrs(t, "delivering_contracts", position=(r2("diplomacy") + 7, 26))
 for k, b in [("trade", "trade_button"), ("construction", "construction_button"), ("production", "production_button"),
              ("deployment", "deployment_button"), ("logistics", "logistics_button"), ("officer", "officer_corp_button")]:
     t = set_attrs(t, b, sprite="GFX_valsora_deco_tb_" + k, position=(r2(k), 0))
-t = set_attrs(t, "production_button_glow", sprite="GFX_valsora_deco_crown_glow", position=(r2("production") - 8, -8))
+# the production alert (the game shows it while something in production wants the player, most likely factories left
+# idle): a gilt ring pulsing round the crown, drawn over the button (moved after it). Until v0.9.1 it was a halo
+# behind the button, which only showed in the narrow gaps either side of it ("an odd green bar between construction
+# and production": the user, 2026-10-16)
+t = set_attrs(t, "production_button_glow", sprite="GFX_valsora_deco_crown_glow", position=(r2("production"), 0))
+s_, e_ = find_block(t, "production_button_glow")
+glow = t[t.rindex("\n", 0, s_):e_]
+t = t[:t.rindex("\n", 0, s_)] + t[e_:]
+s_, e_ = find_block(t, "production_button")
+t = t[:e_] + glow + t[e_:]
 for k in ["army", "navy", "air"]:
     t = set_attrs(t, k + "_button", sprite="GFX_valsora_deco_overview_" + k,
                   position=(L.OVERVIEW[k] - L.RIGHT, L.OVERVIEW_Y - CMY))
@@ -336,10 +336,10 @@ header = """# Valsora Deco UI - top bar (art deco layout)
 # Based on the HOI4 1.19 interface/topbar.gui. Every vanilla element and name is kept, because the
 # engine finds them by name, but most are moved and re-skinned to the mockup's arrangement:
 #   flag medallion (left) > crown buttons > labelled readouts > date cartouche > world tension ring
-# with fuel/supply/convoys in a tray under the band, army/navy/air (experience as badges), command
+# with fuel/supply/convoys in the strip's last cell, army/navy/air (experience as badges), command
 # power and nukes in a tray on the right, and the land/navy/air experience containers moved after
 # country_menu_window so they draw on top of the buttons.
-# The decorative layer (band, tray, dividers, labels) is the block marked "Valsora Deco" below.
+# The decorative layer (band, dividers, labels) is the block marked "Valsora Deco" below.
 # Generated by make_topbar.py from layout.py; when Paradox updates topbar.gui, re-run it against
 # the new vanilla file rather than hand-merging.
 
@@ -489,7 +489,6 @@ cornered("GFX_valsora_deco_topbar_band", "topbar_band.dds", 196, L.BAND_TEX_H, 1
 cornered("GFX_valsora_deco_topbar_band_shadow", "topbar_band_shadow.dds", 16, L.SHADOW_H, 4, 2)
 sprite("GFX_valsora_deco_medallion", "topbar_medallion.dds", extra="\t\ttransparencecheck = yes\n")
 sprite("GFX_valsora_deco_topbar_right", "topbar_right.dds", extra="\t\ttransparencecheck = yes\n")
-sprite("GFX_valsora_deco_tray", "tray.dds", extra="\t\ttransparencecheck = yes\n")
 sprite("GFX_valsora_deco_divider", "divider.dds")
 cornered("GFX_valsora_deco_clear", "clear.dds", 8, 8, 2, 2)
 cornered("GFX_valsora_deco_badge", "badge.dds", 16, 15, 4, 4)
@@ -500,16 +499,16 @@ SP.append('\tmaskedShieldType = {\n\t\tname = "GFX_valsora_deco_player_flag"\n'
           '\t\ttextureFile2 = "gfx/interface/valsora_deco/flag_mask.tga"\n'
           '\t\teffectFile = "gfx/FX/maskedflag.lua"\n\t}\n')
 sprite("GFX_valsora_deco_decisions_seal", "decisions_seal.dds", 2)
-SP.append('\t# production alert glow (crown-shaped; vanilla borrowed the decisions glow here)\n'
+SP.append('\t# production alert: a gilt ring pulsing round the crown (vanilla borrowed the decisions glow here)\n'
           '\tframeAnimatedSpriteType = {\n\t\tname = "GFX_valsora_deco_crown_glow"\n'
           '\t\ttexturefile = "gfx/interface/valsora_deco/crown_glow.dds"\n\t\tnoOfFrames = 2\n'
           '\t\tanimation_rate_fps = 1\n\t\tlooping = yes\n\t\tplay_on_show = yes\n\t\tpause_on_loop = 0.0\n'
           '\t\talwaystransparent = yes\n\t\teffectFile = "gfx/FX/buttonstate_blendframes.lua"\n\t}\n')
 comment("invisible hover areas (the vanilla value boxes keep their tooltips)")
-for w, h in sorted({(it["w"], 46) for it in L.STRIP} | {(it["w"], 30) for it in L.SECONDARY}):
+for w, h in sorted({(it["w"], 46) for it in L.STRIP} | {(it["w"], it["h"]) for it in L.SECONDARY}):
     sprite(f"GFX_valsora_deco_hit_{w}x{h}", f"hit_{w}x{h}.dds")
 comment("readout icons (frame counts mirror the vanilla sprites they replace)")
-for k in ["pp", "stability", "war", "manpower", "convoy", "command", "nuke"]:
+for k in ["pp", "stability", "war", "manpower", "convoy", "supply", "command", "nuke"]:
     sprite(f"GFX_valsora_deco_icon_{k}", f"icon_{k}.dds")
 sprite("GFX_valsora_deco_icon_factory", "icon_factory.dds", 2)
 sprite("GFX_valsora_deco_icon_fuel", "icon_fuel.dds", 3, "buttonstate.lua")
@@ -561,7 +560,8 @@ FONTS = [("valsora_deco_value_17", "0xfff4ecd9", "readout values (U+25C6 is a di
          ("valsora_deco_value_15", "0xfff4ecd9", "tray values, world tension, daily political power"),
          ("valsora_deco_value_12", "0xfff4ecd9", "badges: experience, faction initiative"),
          ("valsora_deco_blank", "0xfff4ecd9", "invisible: hides the game's factory number, which a scripted GUI redraws"),
-         ("valsora_deco_label", "0xffb7a680", "readout labels: small tracked capitals"),
+         ("valsora_deco_label", "0xffb7a680", "small tracked capitals (screens' labels)"),
+         ("valsora_deco_label_tb", "0xffb7a680", "the top bar's readout labels: small capitals tracked 1 px less"),
          ("valsora_deco_date", "0xfff4ecd9", "date: Federo capitals"),
          ("valsora_deco_name_big", "0xffffffff", "country name: gilt is baked into the glyphs, so the colour is white"),
          ("valsora_deco_name", "0xffffffff", "country name, smaller cut for long words"),

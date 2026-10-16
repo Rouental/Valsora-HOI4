@@ -400,6 +400,19 @@ def m_font_letter(mod):
     return "(U+01C4) in valsora_l_english.yml is in no font"
 
 
+def m_map_letter(mod):
+    """a letter the other fonts have but the map font doesn't, in a country's name"""
+    edit(mod, "localisation/english/valsora_l_english.yml", lambda t: t.replace(' ROU:0 "Rouental"', ' ROU:0 "Rouent\u1ea1l"', 1))
+    return "of ROU ('Rouent\u1ea1l') is not in the map font"
+
+
+def m_mapfont_size(mod):
+    """the map font's atlas grown past what the game loads (2026-10-16: no names on the map)"""
+    import struct as _s
+    edit_bytes(mod, "gfx/fonts/hoi_mapfont4.dds", lambda b: b[:12] + _s.pack("<I", 2048) + b[16:])
+    return "gfx/fonts/hoi_mapfont4.dds is 2048 x 2048"
+
+
 def m_song(mod):
     edit(mod, "events/valsora_superevents.txt", lambda t: t.replace('play_song = "valsora_gladiators"', 'play_song = "valsora_no_such_song"', 1))
     return "play_song valsora_no_such_song is not defined in music/"
@@ -414,7 +427,7 @@ BATCHES = {
                 m_prerequisite, m_state_loc, m_decision_loc, m_trigger_for, m_scripted_effect, m_war_goal, m_song,
                 m_company_include, m_company_tag, m_company_loc, m_concern_trait, m_idea_loc, m_skill_range, m_skill_kind],
     "files": [m_no_bom, m_gui_sprite, m_texture_missing, m_minimap, m_globe, m_case_clash, m_ascii_name,
-              m_font_letter],
+              m_font_letter, m_map_letter, m_mapfont_size],
 }
 
 

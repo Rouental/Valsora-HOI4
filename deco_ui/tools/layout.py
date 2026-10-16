@@ -87,20 +87,25 @@ BELOW_MEDALLION = SEAL["y"] + SEAL["h"] + 4
 # the decision counters (vanilla's 17 px badges, 20 px text) sit on the plate's lower step either side of the
 # seal (v0.4.8; until then both were on its right edge, partly below the plate): the politics panel, drawn
 # over the top bar, leaves the plate and the seal uncovered (layout_politics.NOTCH), so they stay visible
-DEC_BADGES = dict(timeout=(SEAL["x"] - 21, SEAL["y"] - 7), to_take=(SEAL["x"] + SEAL["w"] + 2, SEAL["y"] - 7))
+# v0.9.1: the user's screenshot had the seal 2.7 px from the timeout badge and 4.7 px from the other ("they should both
+# be the same distance away from the decision button"): the timeout badge 2 px further left
+DEC_BADGES = dict(timeout=(SEAL["x"] - 23, SEAL["y"] - 7), to_take=(SEAL["x"] + SEAL["w"] + 2, SEAL["y"] - 7))
 FACTION_LOGO = dict(dx=8, dy=11, scale=0.85)      # faction logo (32 px miniature) centred in the crown's ring
 FACTION_INIT = dict(dx=24, dy=33, w=24, h=14)     # faction initiative: bottom-right corner of the crown
 
 # ------------------------------------------------------------------ crown buttons
-BTN_W, BTN_H, BTN_GAP = 44, 46, 6
+# v0.9.1: the crowns 4 px apart (6 until then), to make room in the strip for fuel, supply and convoys
+BTN_W, BTN_H, BTN_GAP = 44, 46, 4
 MENU_X, MENU_Y = 184, 6
 MENU = ["faction", "intelligence", "technology", "diplomacy", "trade", "construction",
         "production", "deployment", "logistics", "officer"]
 MENU_POS = {k: MENU_X + i * (BTN_W + BTN_GAP) for i, k in enumerate(MENU)}
-MENU_END = MENU_POS[MENU[-1]] + BTN_W            # 678
+MENU_END = MENU_POS[MENU[-1]] + BTN_W            # 660
 
 # ------------------------------------------------------------------ primary readouts in the band
-LABEL_FONT, VALUE_FONT = "valsora_deco_label", "valsora_deco_value_17"
+# the labels' own cut of the small tracked capitals, tracked 1 px less than valsora_deco_label (v0.9.1: room for the
+# logistics cell)
+LABEL_FONT, VALUE_FONT = "valsora_deco_label_tb", "valsora_deco_value_17"
 ICON = 24
 ITEMS = [  # key, loc key, label, widest value the engine is likely to write
     ("pp", "VAL_DECO_TB_PP", "Political Power", "999"),
@@ -109,7 +114,19 @@ ITEMS = [  # key, loc key, label, widest value the engine is likely to write
     ("manpower", "VAL_DECO_TB_MANPOWER", "Manpower", "151.2K"),
     ("factory", "VAL_DECO_TB_FACTORIES", "Factories", "\u25c645 \u25c630 \u25c68"),
 ]
-STRIP_X0, STRIP_X1 = 686, 1394                   # first and last divider
+# ------------------------------------------------------------------ logistics: a cell of its own in the strip
+# v0.9.1 (the user, 2026-10-16: "could we experiment with trying to find a way to move this up into the main bar? That
+# way notifications could extend across the screen until the music bar"): fuel, supply and convoys hung in a tray under
+# the strip until then; now they are the strip's last cell, after Factories: three rows, each an icon, the value and
+# the game's ratio bar under the value
+LOG = ["fuel", "supply", "convoys"]
+LOG_FONT = "valsora_deco_value_12"
+LOG_ICON, LOG_ROW_H, LOG_Y0 = 13, 15, 7          # rows at y 7, 22, 37 (the readouts' hover areas are y 6-52)
+LOG_VALUE_W = 38                                 # "999.9K" in value_12
+LOG_W = 2 + LOG_ICON + 4 + LOG_VALUE_W + 2
+BAR_W, BAR_H = LOG_VALUE_W, 2
+
+STRIP_X0, STRIP_X1 = MENU_END + 8, 1400          # first and last divider (686, 1394 until v0.9.1)
 DIV_H, DIV_Y = 36, 11
 ICON_Y = 29 - ICON // 2
 LABEL_Y = box_y_for_caps(LABEL_FONT, 14)
@@ -117,16 +134,16 @@ VALUE_Y = box_y_for_caps(VALUE_FONT, 30)
 
 
 def _strip():
-    pad, igap = 2, 7
+    pad, igap = 2, 6                                  # igap 7 until v0.9.1
     content = [max(measure(LABEL_FONT, lab.upper()), measure(VALUE_FONT, v)) + 2 for _, _, lab, v in ITEMS]
-    widths = [pad + ICON + igap + c + pad for c in content]
-    n = len(ITEMS)
+    widths = [pad + ICON + igap + c + pad for c in content] + [LOG_W]
+    n = len(widths)
     free = (STRIP_X1 - STRIP_X0) - (n + 1) - sum(widths)   # n+1 one-pixel dividers
     gap = free / (2 * n)
     assert gap >= 6.5, ("strip too tight", gap)
     out, x = [], STRIP_X0
     dividers = [x]
-    for (key, loc, lab, v), w, c in zip(ITEMS, widths, content):
+    for (key, loc, lab, v), w, c in zip(ITEMS + [("logistics", None, None, None)], widths, content + [None]):
         x0 = x + 1 + gap
         out.append(dict(key=key, loc=loc, label=lab, x=round(x0), w=w, icon_x=round(x0 + pad),
                         text_x=round(x0 + pad + ICON + igap), text_w=c))
@@ -137,42 +154,24 @@ def _strip():
     # value boxes may run on into the gap, up to the next divider (large numbers)
     for it, d in zip(out, dividers[1:]):
         it["value_w"] = d - 3 - it["text_x"]
-    return out, dividers, gap
+    cell = out.pop()
+    rows = []
+    for i, k in enumerate(LOG):
+        y = LOG_Y0 + i * LOG_ROW_H
+        vx = cell["x"] + 2 + LOG_ICON + 4
+        # the value's capitals from y to y + 9 (the font draws them 1 px under box_y_for_caps), its bar 2 px under them,
+        # the icon level with both
+        rows.append(dict(key=k, x=cell["x"], w=LOG_W, y=y, h=LOG_ROW_H, icon_x=cell["x"] + 2, icon_y=y,
+                         value_x=vx, value_w=LOG_VALUE_W, value_y=box_y_for_caps(LOG_FONT, y - 1), bar_y=y + 12))
+    return out, dividers, gap, rows
 
 
-STRIP, DIVIDERS, STRIP_GAP = _strip()
+STRIP, DIVIDERS, STRIP_GAP, SECONDARY = _strip()
 
-# ------------------------------------------------------------------ logistics tray (hangs under the strip)
-# v0.3: only fuel, supply and convoys; experience moved onto the army/navy/air buttons as badges and
-# command power / nukes into the right-hand tray
+# ------------------------------------------------------------------ the right-hand tray's values (command power, nukes)
 SEC_FONT = "valsora_deco_value_15"
 SMALL_FONT = "valsora_deco_value_12"
 TRAY_ICON = 18
-LOG = [("fuel", 44), ("supply", 44), ("convoys", 40)]   # key, value box width
-TRAY = dict(y=62, h=32)
-
-
-def _log_tray():
-    item_w = [TRAY_ICON + 5 + vw for _, vw in LOG]
-    w = 14 + sum(item_w) + 17 * (len(LOG) - 1) + 14
-    x = round((STRIP_X0 + STRIP_X1) / 2 - w / 2)
-    TRAY.update(x=x, w=w)
-    out, seps, cx = [], [], x + 14
-    for i, ((k, vw), iw) in enumerate(zip(LOG, item_w)):
-        out.append(dict(key=k, x=cx, w=iw, icon_x=cx, value_x=cx + TRAY_ICON + 5, value_w=vw))
-        cx += iw
-        if i < len(LOG) - 1:
-            seps.append(cx + 8)
-            cx += 17
-    return out, seps
-
-
-SECONDARY, TRAY_SEPS = _log_tray()
-SEC_Y = TRAY["y"] + 2                          # top of each slot (slot height 30)
-SEC_ICON_Y = SEC_Y + 6
-SEC_VALUE_Y_BAR = box_y_for_caps(SEC_FONT, SEC_Y + 5)
-SEC_BAR_Y = SEC_Y + 21
-BAR_W, BAR_H = 42, 3
 
 # ------------------------------------------------------------------ date cartouche
 CART = dict(x=1410, y=6, w=400, h=46)
@@ -188,7 +187,9 @@ WT_C, WT_R = (1845, 44), 30                          # ring around vanilla world
 WT_ICON = (WT_C[0] - 25, WT_C[1] - 25)               # vanilla globe is ~50x50 (measured in-game)
 WT_GLOW = (WT_ICON[0] - 15, WT_ICON[1] - 15)         # vanilla keeps the glow 15px up-left of the globe
 WT_VALUE = dict(x=1820, y=82, w=50, h=20)
-RTRAY = dict(x=1478, y=62, h=46)
+# v0.9.1: the tray's edge 12 px further left (the user, 2026-10-16: "it currently looks odd how the music button is
+# directly next to the border of this. Please extend the border out a little"): its lower step 14 px from the button
+RTRAY = dict(x=1466, y=62, h=46)
 OVERVIEW_W, OVERVIEW_H = 44, 40
 OVERVIEW = {"army": 1584, "navy": 1632, "air": 1680}
 OVERVIEW_Y = 65
@@ -205,9 +206,11 @@ HELP_BTN = dict(x=1882, y=32, w=30, h=22)
 MUSIC_Y = 112
 
 # ------------------------------------------------------------------ alerts (interface/alerts.gui)
-# moved from the readouts (723,40) to a row under the menu buttons, left of the logistics tray
+# moved from the readouts (723,40) to a row under the menu buttons; until v0.9.1 it stopped at the logistics tray (10
+# icons a row), now it runs on to the right-hand tray
 ALERTS_START = (MENU_X, 70)
-ALERTS_ROW_MAX = 432                                 # last icon offset in a row -> 10 per row
+ALERT_STEP, ALERT_W = 48, 44                         # alerticon_offset x; the icons' width
+ALERTS_ROW_MAX = (RTRAY["x"] - 8 - ALERT_W - ALERTS_START[0]) // ALERT_STEP * ALERT_STEP   # last icon offset in a row
 
 if __name__ == "__main__":
     for s in STRIP:
@@ -215,7 +218,7 @@ if __name__ == "__main__":
     print("dividers", DIVIDERS, "gap", round(STRIP_GAP, 1))
     for s in SECONDARY:
         print(s)
-    print("tray", TRAY, "seps", TRAY_SEPS)
+    print("alerts row max", ALERTS_ROW_MAX, "->", ALERTS_ROW_MAX // ALERT_STEP + 1, "icons a row")
     print("label y", LABEL_Y, "value y", VALUE_Y, "date y", DATE_BOX["y"])
     print("date width", measure("valsora_deco_date", "12:00, 29 SEPTEMBER, 1939"))
     for n in ["ROUENTAL", "FRAXHEMARK", "TERRABIS-SERAN", "PONCHOMAGNIFICO"]:

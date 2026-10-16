@@ -63,9 +63,10 @@ SKIP = {"power_balance_button", "autonomy_progress_view", "in_faction", "origina
 N_SPIRITS = 1          # Rouental has one; the second preview shows Devlon's 15 test spirits
 FACTION = False        # the third shows Rouental leading the Association, its members' flags under the name (v0.9)
 FACTION_NAME = "The Association of Reibonnaise States"
-FACTION_TAGS = ["ROU", "GDN", "LST", "EVR", "HLR", "SGV", "LZC", "SGN"]
-# a flag in text ([This.GetFlag]) is drawn at about this size (assumed: check in game)
-TEXT_FLAG = (20, 13)
+# the Association's eight, and three more to show the second row
+FACTION_TAGS = ["ROU", "GDN", "LST", "EVR", "HLR", "SGV", "LZC", "SGN", "CRD", "LNT", "AIS"]
+# a flag in text ([This.GetFlag]) is drawn about this size (in game, v0.9: the user's screenshot)
+TEXT_FLAG = (12, 8)
 import layout_politics as LP  # noqa: E402
 # sample values as the game shows them (in game, v0.4.7)
 TEXT = {"political_title": "Government", "ideology": "Monarchist", "leader_name": "Roland II Cahun",
@@ -127,13 +128,14 @@ def render(cv, elems, px, py, pr, T, ctx=None):
                 for i in range(N_SPIRITS):
                     V.paste(cv, SPIRIT.resize((30, 30), Image.LANCZOS), ax + (i % per) * sw + 1, ay + (i // per) * sh + 2)
             elif name == "valsora_deco_pol_faction_members_grid":
-                for i, tag in enumerate(FACTION_TAGS[:int(V.xy(V.sub(body, "max_slots"))[0])]):
+                cols, rows = (int(v) for v in V.xy(V.sub(body, "max_slots")))
+                for i, tag in enumerate(FACTION_TAGS[:cols * rows]):
                     try:
                         fl = Image.open(VALSORA + f"gfx/flags/medium/{tag}.tga").convert("RGBA")
                     except OSError:
                         continue
                     fl = fl.resize(TEXT_FLAG, Image.LANCZOS)
-                    V.paste(cv, fl, ax + i * sw, ay + (sh - fl.height) // 2)
+                    V.paste(cv, fl, ax + (i % cols) * sw, ay + (i // cols) * sh + (sh - fl.height) // 2)
             elif name == "idea_categories_grid":
                 for i, (cn, n) in enumerate(CATEGORIES):
                     render(cv, T["country_politics_idea_category_entry"], ax, ay + 14 + i * sh, ax + 550, T,

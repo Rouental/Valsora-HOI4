@@ -122,7 +122,11 @@ def doctrines():
     t = notched(t, R, "valsora_deco_doc", "VAL_DECO_DOC_TITLE", has_background=False)
     t = GP.set_attrs(t, f"{R}>doctrine_folder_view", position=(0, LF.TREE_Y))
     # the folder tabs: 256 px slots, each tab drawn at x 16 in its slot (the game's doctrine_folder_tab)
-    t = GP.set_attrs(t, f"{R}>folders_grid", position=(HX - 16, LF.TREE_Y - (61 - TAB_OVERLAP)))
+    # v0.9.1 (the user: the "doctrine screen runs into nametag"): the game kept the tabs at the left (x 47 in the window,
+    # under the medallion) though the file said 171. The game's grid has no format, which seems to centre each tab on
+    # the grid's x (the game's x 128 = half a 256 px slot, its first tab at the screen's left edge); with the format the
+    # game's other grids have, x is the tabs' left edge (assumed: check in game)
+    t = GP.set_attrs(t, f"{R}>folders_grid", position=(HX - 16, LF.TREE_Y - (61 - TAB_OVERLAP)), format="UPPER_LEFT")
     t = GP.set_attrs(t, f"{R}>close_button", sprite=CLOSE, position=LF.CLOSE)
     t = (f"# {MARK} - doctrine screen (tools/make_research.py, from the game's doctrines_view.gui): the focus tree's\n"
          "# notched header; every element and name kept\n\n" + t)

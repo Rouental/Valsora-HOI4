@@ -681,9 +681,9 @@
  {
   "key": "tb_crown_glow",
   "path": "gfx/interface/valsora_deco/crown_glow.dds",
-  "w": 120,
-  "h": 62,
-  "sig": "b1052f545f9dc5d27693ff0a3a4570f6474bc15e7fdc541402892f36afb6af4c"
+  "w": 88,
+  "h": 46,
+  "sig": "48e84808766c37e15b66fa1839a5d6a4b5ebd082a0a897298af298c1da0a4df2"
  },
  {
   "key": "tb_market_vanilla",
@@ -728,53 +728,46 @@
   "sig": "ef2c82da31b937095c3557719a83b19ecd6ea9dbcfcbd0532609970ae6aaebb5"
  },
  {
-  "key": "hit_63x30",
-  "path": "gfx/interface/valsora_deco/hit_63x30.dds",
-  "w": 63,
-  "h": 30,
-  "sig": "2c6d0a62bc58f3b8a32eb52cc4876653ce51f694141df6e9ff9c314723b3c4cf"
+  "key": "hit_59x15",
+  "path": "gfx/interface/valsora_deco/hit_59x15.dds",
+  "w": 59,
+  "h": 15,
+  "sig": "b1aa9c705045c00f5e59238b35384529e542963576f5c69f218302a12c69e6be"
  },
  {
-  "key": "hit_67x30",
-  "path": "gfx/interface/valsora_deco/hit_67x30.dds",
-  "w": 67,
-  "h": 30,
-  "sig": "3be7852a7e5408a720da62f15d1d3f67722332ffcbe78c0afe197b44e0680e15"
- },
- {
-  "key": "hit_104x46",
-  "path": "gfx/interface/valsora_deco/hit_104x46.dds",
-  "w": 104,
+  "key": "hit_94x46",
+  "path": "gfx/interface/valsora_deco/hit_94x46.dds",
+  "w": 94,
   "h": 46,
-  "sig": "ca0bd269217ee72923e25d37ac1643efa24437d15439dd027d6c91c6832dcf4a"
+  "sig": "059b4fc42fecacef10381536c6b22c954acc2d261aea630676a5f219ccb15b82"
  },
  {
-  "key": "hit_112x46",
-  "path": "gfx/interface/valsora_deco/hit_112x46.dds",
-  "w": 112,
+  "key": "hit_103x46",
+  "path": "gfx/interface/valsora_deco/hit_103x46.dds",
+  "w": 103,
   "h": 46,
-  "sig": "b9404fe36b5afc11c02fe67f191d75aaff34b03d8ab7e07b2aafd5c02bc3b869"
+  "sig": "15aec2aab9230ada79f56e35f5ff9014d8d90d447e0ab463725e8f9f5c5945bf"
  },
  {
-  "key": "hit_129x46",
-  "path": "gfx/interface/valsora_deco/hit_129x46.dds",
-  "w": 129,
+  "key": "hit_117x46",
+  "path": "gfx/interface/valsora_deco/hit_117x46.dds",
+  "w": 117,
   "h": 46,
-  "sig": "8a591ec1fb71e1c5b77af0926a67c40f2ec66264a6fa8e56b4c10de566d252ca"
+  "sig": "3841694500f68dc04a715fff773691d11234eb03a71550b3491ec02587d17ffc"
  },
  {
-  "key": "hit_132x46",
-  "path": "gfx/interface/valsora_deco/hit_132x46.dds",
-  "w": 132,
+  "key": "hit_131x46",
+  "path": "gfx/interface/valsora_deco/hit_131x46.dds",
+  "w": 131,
   "h": 46,
-  "sig": "264b546fa4c98bfbd21d1bbc9acc69fe48d169ed25a296d40378f8817da86325"
+  "sig": "7625c6dd9d811d2c50fce97b6d76f640c5ee5ac9ea3ea5e5831e70466afa87a7"
  },
  {
-  "key": "hit_157x46",
-  "path": "gfx/interface/valsora_deco/hit_157x46.dds",
-  "w": 157,
+  "key": "hit_141x46",
+  "path": "gfx/interface/valsora_deco/hit_141x46.dds",
+  "w": 141,
   "h": 46,
-  "sig": "4d0a884c2b0ec0689768a525f475ce9f04da598157f406868a96f52c2f8387e1"
+  "sig": "2568d5387a507bedf2051ba68d9adeede26230588fdd0741d75cec7c7ae178c3"
  },
  {
   "key": "clear",
@@ -833,13 +826,6 @@
   "sig": "896dbe6c9d83ab995c655db3caaeedf8a56e05e38b133a49bfb197060a813464"
  },
  {
-  "key": "ic_convoy",
-  "path": "gfx/interface/valsora_deco/icon_convoy.dds",
-  "w": 18,
-  "h": 18,
-  "sig": "d97864ea83de068378af2753e3ec0b5f29ec9ae92eee025a26a647e5fb6ebbe4"
- },
- {
   "key": "ic_command",
   "path": "gfx/interface/valsora_deco/icon_command.dds",
   "w": 18,
@@ -854,32 +840,39 @@
   "sig": "40bd939ecb192f70bb88e2b084048d7b69c369ab15cc3adb0a2e8a7f17343608"
  },
  {
+  "key": "ic_convoy",
+  "path": "gfx/interface/valsora_deco/icon_convoy.dds",
+  "w": 13,
+  "h": 13,
+  "sig": "8aa7a1f3a905866431c874c0abde506789e64b97feca2cecda626d07662df09f"
+ },
+ {
+  "key": "ic_supply",
+  "path": "gfx/interface/valsora_deco/icon_supply.dds",
+  "w": 13,
+  "h": 13,
+  "sig": "db9a22c27e84de7947da2de69c7683c33e21f6ee938109011074f3d052ea642d"
+ },
+ {
   "key": "ic_fuel",
   "path": "gfx/interface/valsora_deco/icon_fuel.dds",
-  "w": 54,
-  "h": 18,
-  "sig": "e02c5068b8803a8819d175e880649dedfb5c302164111b5af44a966488a37c78"
+  "w": 39,
+  "h": 13,
+  "sig": "308a06e61ae112db093e023004361c3b7a523f2095092112d5c5ab252eaf33da"
  },
  {
   "key": "ratio_fill",
   "path": "gfx/interface/valsora_deco/ratio_fill.dds",
-  "w": 42,
-  "h": 3,
-  "sig": "66c81ad40d081d7626644d531e6f0218cfb744ce38d32f185a99dd7c86904746"
+  "w": 38,
+  "h": 2,
+  "sig": "0bd67ea2f1802ac53bab1fff1c9d3a22a926deb13273f79a967fce7b6f4c2b82"
  },
  {
   "key": "ratio_bg",
   "path": "gfx/interface/valsora_deco/ratio_bg.dds",
-  "w": 42,
-  "h": 3,
-  "sig": "42bc1f6e0033df5ca75872e98f1e38feaea9fc0cd17c62a943c3b9ba9765968e"
- },
- {
-  "key": "tb_tray",
-  "path": "gfx/interface/valsora_deco/tray.dds",
-  "w": 259,
-  "h": 32,
-  "sig": "705f08e6580bbd5ae1c0fcd1bbb0ab51ca239d60c42c679d990f97efefbc2b31"
+  "w": 38,
+  "h": 2,
+  "sig": "eb471187686259b6160354f02711c541990e95ed2306cae1ea11094b3da45205"
  },
  {
   "key": "date_bg",
@@ -921,7 +914,7 @@
   "path": "gfx/interface/valsora_deco/topbar_right.dds",
   "w": 532,
   "h": 112,
-  "sig": "b8f481c46c838977bcdf8cd471791b2f2fb1af9a3e96e7be1a532adf289f1765"
+  "sig": "3055bbceb9a9c5bc612943decff4599528f12b35438ff4fabecc14ef93cb63a2"
  },
  {
   "key": "btn_menu",
