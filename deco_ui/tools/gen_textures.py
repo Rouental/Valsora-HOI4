@@ -205,6 +205,11 @@ SHARED = {   # vanilla path: (w, h, html)
 for rel, (w, h, html) in SHARED.items():
     add("shared_" + rel.split("/")[-1][:-4], rel, w, h, html)
 
+# v0.9: the designers' and the commander pickers' background pictures (designer_art.py), at the game's paths and sizes
+import designer_art as _DA  # noqa: E402
+for _key, _rel, _w, _h, _fn in _DA.ADDS:
+    add(_key, _rel, _w, _h, _fn())
+
 # ---------------------------------------------------------------- map modes and minimap (lower right, v0.5)
 # Replaced at their vanilla paths, sizes and frame counts (interface/mapmodes_interface.gui and Valsora's
 # minimap.gui stay as they are). The game picks a map mode's icon by frame, so the small icons and the toggles

@@ -5,8 +5,9 @@ Run by run_all.sh after build_mod.py. With DECO_UI on:
   1. the Valsora files the Deco UI replaces (REPLACES) are kept as Valsora built them in work/deco_base/: the
      Deco UI's tools start from those (deco_ui/tools/paths.py VALSORA_BASE), never from their own output;
   2. the Deco UI's files that depend on the Valsora mod are made again from this build, so they can't go stale:
-     which country names need the medallion's small font (long_names.py) and the politics screen with its
-     sub-ideologies (make_politics.py, from Valsora's own countrypoliticsview.gui);
+     which country names need the medallion's small font (long_names.py), the politics screen with its
+     sub-ideologies (make_politics.py, from Valsora's own countrypoliticsview.gui) and the research trees with
+     Valsora's year labels (make_research.py, from its countrytechtreeview.gui);
   3. deco_ui/valsora_deco_ui/ is copied into build/valsora_test/, all but its own launcher descriptor, readme and
      thumbnail. A file both mods ship stops the build, unless the Deco UI replaces it on purpose (REPLACES).
 Everything else of the Deco UI (textures, fonts, the patched game screens) is built by hand with the game's
@@ -26,7 +27,8 @@ DECO = Path(os.environ.get("VALSORA_DECO_ROOT") or "deco_ui")   # another copy o
 DECO_MOD = DECO / "valsora_deco_ui"
 BASE = Path("work/deco_base") if BUILD == Path("build") else Path("work") / f"deco_base_{BUILD.name}"   # per build
 SKIP = {"descriptor.mod", "README.txt", "thumbnail.png"}       # the Deco UI's own, as a separate mod
-REPLACES = {"interface/countrypoliticsview.gui"}               # built by the Deco UI from Valsora's own
+REPLACES = {"interface/countrypoliticsview.gui",                # built by the Deco UI from Valsora's own
+            "interface/countrytechtreeview.gui"}               # (make_research.py: its year labels are Valsora's)
 MARK = "Valsora Deco UI"                                       # the first lines of the Deco UI's files say so
 
 
@@ -45,8 +47,8 @@ def main():
         shutil.copy2(OUT / rel, BASE / rel)
     # 2. the Deco UI's files that follow the Valsora mod, made from this build
     env = dict(os.environ, VALSORA_MOD_DIR=str(OUT.resolve()) + os.sep, VALSORA_BASE_DIR=str(BASE.resolve()) + os.sep)
-    for script in ("long_names.py", "make_politics.py"):
-        r = subprocess.run([sys.executable, script], cwd=DECO / "tools", env=env, capture_output=True, text=True)
+    for script, *args in (("long_names.py",), ("make_politics.py",), ("make_research.py", "--research-only")):
+        r = subprocess.run([sys.executable, script, *args], cwd=DECO / "tools", env=env, capture_output=True, text=True)
         if r.returncode:
             sys.exit(f"deco_ui/tools/{script} failed:\n{r.stdout[-2000:]}\n{r.stderr[-3000:]}")
         last = [ln for ln in r.stdout.splitlines() if ln.strip()]

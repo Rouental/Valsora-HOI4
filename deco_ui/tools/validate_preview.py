@@ -321,7 +321,9 @@ for rel, size in VANILLA_TILES.items():
     if read_dds(M + rel).size != size:
         problems.append(f"{rel} size mismatch")
 # replaced at vanilla's size on purpose: the icon whose sprite the game swaps, the tooltip's frame
-SAME_SIZE = ["gfx/interface/pol_view_bg.dds", "gfx/interface/pol_view_bg_no_dlc.dds", "gfx/interface/tiles/tiles_dialog.dds",
+import designer_art as _DA  # noqa: E402
+SAME_SIZE = [r for _k, r, _w, _h, _f in _DA.ADDS] + [
+             "gfx/interface/pol_view_bg.dds", "gfx/interface/pol_view_bg_no_dlc.dds", "gfx/interface/tiles/tiles_dialog.dds",
              # the panels' shared pieces (v0.5): the game lays them out at vanilla's sizes
              "gfx/interface/closebutton.dds", "gfx/interface/header_bg.dds", "gfx/interface/category_header.dds",
              "gfx/interface/factions/ui/faction_header.dds", "gfx/interface/main_screens_bottom.dds",

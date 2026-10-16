@@ -18,10 +18,10 @@ STAGES = [
     ["gen_fonts.py", "game_fonts.py"],                       # the mod's fonts and the game's, redrawn
     ["gen_textures.py"],                                     # sizes come from the fonts' metrics
     ["make_topbar.py", "make_politics.py", "make_stateview.py", "make_focus.py", "make_menu.py", "make_panels.py",
-     "make_leadergroups.py", "make_mapviews.py", "make_events.py"],
+     "make_leadergroups.py", "make_mapviews.py", "make_events.py", "make_research.py"],
     ["validate_preview.py"],                                 # the checks, before any preview
     ["preview_screens.py", "preview_panels.py", "preview_focus.py", "preview_armybar.py", "preview_events.py",
-     "preview_game_fonts.py"],
+     "preview_game_fonts.py", "preview_research.py", "preview_designers.py"],
 ]
 # the generators write files the next ones read (make_topbar writes the fonts' .gfx, make_politics reads Valsora's
 # screen ...), so they stay one after another

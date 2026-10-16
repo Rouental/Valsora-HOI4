@@ -308,6 +308,62 @@
   "sig": "c223e3890e9257f31001ffdebe164802b9bdaa6c108a2c96e8b3972bff6b672c"
  },
  {
+  "key": "dsg_division",
+  "path": "gfx/interface/division_designer_popup_bg_new.dds",
+  "w": 1200,
+  "h": 720,
+  "sig": "54ee7c8e4433c08faa0e234315a9f608cb6dcf700d3a6e2d0a73470324e8efff"
+ },
+ {
+  "key": "dsg_tank",
+  "path": "gfx/interface/equipmentdesigner/tanks/tank_designer_popup_bg.dds",
+  "w": 1092,
+  "h": 553,
+  "sig": "9f0b936e531a87c0a74ed1e5417d246b53dce0b985dc7e72b707cf1af4dcd9ce"
+ },
+ {
+  "key": "dsg_plane",
+  "path": "gfx/interface/equipmentdesigner/planes/plane_designer_popup_bg.dds",
+  "w": 1092,
+  "h": 553,
+  "sig": "ea20ccef062b5d18e6563870c077524da4838d7bb516139040d74e0101865c41"
+ },
+ {
+  "key": "dsg_ship",
+  "path": "gfx/interface/equipmentdesigner/ship_designer_popup_bg.dds",
+  "w": 1092,
+  "h": 553,
+  "sig": "298f45718cab7e0f56377deef0766382206c6d1a4c4f38dbdff84092ec1bfb0f"
+ },
+ {
+  "key": "ldr_window",
+  "path": "gfx/interface/leader_selection_bg.dds",
+  "w": 550,
+  "h": 607,
+  "sig": "2636dc06c2c9d15b471a99e86d901d2e6962cbbb915f60183fb36791d89ee062"
+ },
+ {
+  "key": "ldr_card",
+  "path": "gfx/interface/leader_selection_entry_bg.dds",
+  "w": 510,
+  "h": 98,
+  "sig": "1cb4910b0eb50c7a32ffb9fdde80bdde4f32673fe1c8577083decad9b6cd4961"
+ },
+ {
+  "key": "ldr_card_navy",
+  "path": "gfx/interface/naval_leader_selection_entry_bg.dds",
+  "w": 510,
+  "h": 98,
+  "sig": "73a47045ee1c24ec35659b834bd454b3fb3ac69733bb3bbdcc7a40f191ec1a4d"
+ },
+ {
+  "key": "ldr_card_captured",
+  "path": "gfx/interface/marshal_captured_bg.dds",
+  "w": 510,
+  "h": 98,
+  "sig": "f9d7afea3d2e3bf6ca142c987869e2e2a41b8b4fcde99a9de64ad73d22a58c98"
+ },
+ {
   "key": "mm_column",
   "path": "gfx/interface/mapmode/mapmode_main_bg.dds",
   "w": 87,

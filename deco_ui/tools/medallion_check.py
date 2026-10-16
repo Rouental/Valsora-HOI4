@@ -32,12 +32,13 @@ Y0, Y1 = 55, L.BELOW_MEDALLION
 
 MOVED = {"armies_view", "air_selection_view", "operative_view", "naviesview_window", "hotjoin_window"}
 # the notch's pieces in a window's file: the side panels' header picture, the politics screen's blocks, the focus tree's
-NOTCH_MARKS = ("GFX_valsora_deco_panel_head_", "valsora_deco_pol_block", "valsora_deco_nf_block", "valsora_deco_notch")
+NOTCH_MARKS = ("GFX_valsora_deco_panel_head_", "valsora_deco_pol_block", "valsora_deco_nf_block", "GFX_valsora_deco_nf_header")
 NOTCHED = {"countryarmyview", "countryconstructionsview", "countrydecisionview", "countrydeploymentview",
            "countrydiplomacyview", "countryintelligenceagencyview", "countrylogisticsview", "countryoccupationview",
            "countryofficercorpview", "countryproductionlineview", "countrytechnologyview", "countrytradeview",
            "countryfactionview", "faction_setup_window", "faction_ping_window", "countryinternationalmarketview",
-           "countrypoliticsview", "nationalfocusview"}
+           "countrypoliticsview", "nationalfocusview",
+           "countrytechtreeview", "country_doctrine_view"}          # make_research.py (v0.9)
 REVIEWED = {
     "console_wnd": "the debug console (core.gui), opened by hand",
     "ai_trace_window": "a debug window (the ai_trace console command)",
