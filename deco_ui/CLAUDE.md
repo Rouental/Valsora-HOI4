@@ -14,9 +14,20 @@ Treat assumed items as hypotheses.
 
 ---------------------------------------------------------------------------------------------------
 
-## 1. Status (v0.9)
+## 1. Status (v0.9.1)
 
-**v0.9 (2026-10-16, the night)** is the current version, from the user's overnight list ("do 1 (though be prepared to
+**v0.9.1 (2026-10-16, later)** is the current version, from the user's screenshots and `error.log` of v0.9 (section 10,
+the README): the map's names back (the map font's texture had grown to 2048 x 2048 with the Vietnamese letters, past
+what the game loads: section 6), dark ink in the typewriter fonts on the designers' ivory sheet (the game's `_inverted`
+fonts are dark, not white), the doctrine tabs at the header's x (`format = "UPPER_LEFT"`, assumed), the faction
+screen's long names whole, the LEADER tag centred, two rows of member flags (16), the seal's two badges equidistant;
+and in the top bar, fuel, supply and convoys moved up into the strip as its last cell (the tray under it is gone, so
+the alerts run on to the right-hand tray), the right-hand tray's edge 12 px clear of the music button, and the
+production alert a gilt ring over its crown (it was a halo behind it that showed only in the gaps: the user's "odd
+green bar"). **Not yet seen in game.** The user saw v0.9 in game (2026-10-16): the research and doctrine screens
+"mostly look good", the faction flags "look amazing".
+
+**v0.9 (2026-10-16, the night)**, before it, from the user's overnight list ("do 1 (though be prepared to
 possibly revert it,) 2, 3 ..."): the research trees and the doctrine screen under the focus tree's notched header
 (`make_research.py`), the four designers' and the commander pickers' pictures redrawn (`designer_art.py`), the faction's
 members' flags on the politics screen, the hot-join window below the medallion, and a check that fails the build when
@@ -41,8 +52,8 @@ lessons that still hold are in section 6 (engine facts) and section 9 (pitfalls)
 |---|---|
 | Core skin (window frames, tooltips, standard buttons, panel background, map font) | Done. Vanilla textures are replaced at their vanilla paths and sizes. |
 | Icons (`tools/icons.py`) | The mockup's 24 px gilt line icons, with modern subjects for army, deployment, air and convoys. Sheet: `build/icon_sheet.png`. |
-| Top bar (`interface/topbar.gui`) | Re-laid to the mockup. v0.4: **decisions** is the seal under the flag; **faction** moved into the crown row (first slot). |
-| Alerts row (`interface/alerts.gui`) | v0.3: moved below the band, under the menu buttons. |
+| Top bar (`interface/topbar.gui`) | Re-laid to the mockup. v0.4: **decisions** is the seal under the flag; **faction** moved into the crown row (first slot). v0.9.1: fuel, supply and convoys are the strip's last cell (three rows: icon, value, ratio bar), no tray under the strip; the crowns 4 px apart, the labels in `valsora_deco_label_tb` (tracked 1 px less) to make the room; the production alert a ring over its crown. |
+| Alerts row (`interface/alerts.gui`) | v0.3: moved below the band, under the menu buttons. v0.9.1: it runs on to the right-hand tray (26 a row). |
 | Politics screen (`interface/countrypoliticsview.gui`) | v0.4: the Government mockup's layout (no Court panel), with scripted GUIs for what the game's screen lacks. v0.4.8: flush under the top bar, notched round the medallion; no description or law cards; sub-ideology; spirits beside popularity. |
 | Other side panels (16: army, construction, decisions, deployment, diplomacy, intelligence, logistics, occupation, officer corps, production, research, trade, faction, faction setup, faction pings, market) | v0.5 (`make_panels.py`): flush under the top bar with the notch, deco header (gilt title right of the notch, close diamond, header buttons, rule), the politics body tile, content moved below the seal; the windows that open beside them flush too. Their insides keep the game's layout; shared pieces (tabs, sort buttons, headers, checkboxes, close, `tiled_bg`) are re-skinned. |
 | State / province panel (`interface/countrystateview.gui`) | v0.4: the mockup's arrangement for the state part (flag + name header, stats row, slots, buildings); the province part keeps the game's positions. |
@@ -472,7 +483,16 @@ Build order matters. `gen_fonts` runs first because `layout.py` measures strings
   inside it: the game's own `.fnt` files name `hoi_18mbs_0.dds`, which the game doesn't ship. Tooltips use `cg_16b`
   (Century Gothic: `ToolTip` in `core.gui`); the rest are Ubuntu (`hoi_*`), Orator (`hoi_24header`, `_30header`,
   `_36header`: window titles), Garamond (`garamond_*`, `vic_*`, `standard*`: settings, menus, chat, the news feed) and
-  the AFL typewriter (`hoi4_typewriter*`: the unit, leader, designer and scientist screens; `_inverted` is white).
+  the AFL typewriter (`hoi4_typewriter*`: the unit, leader, designer and scientist screens). **(read from the game's
+  texture)** the plain typewriter fonts have white glyphs that `core.gfx` colours black; the `_inverted` ones (the
+  designers' statistics) have their dark ink baked into the texture and are coloured white, so ours bake the ink too
+  (`game_fonts.INK`; until v0.9.1 they were white, unreadable on the ivory sheet).
+- **(in game)** The game refuses a font texture past its size limit: with the Vietnamese letters (v0.8.4) the map
+  font's atlas grew to 2048 x 2048 and `error.log` said "Failed to load texture larger than MAX_TEXTURE_SIZE:
+  gfx/fonts/hoi_mapfont4.tga" (the game names the .tga even for a .dds): no names on the map at all. 2048 x 1024 loads
+  (v0.3 to v0.8.3). The map font leaves the Vietnamese letters out (no map name uses them) and `gen_fonts.py` stops if
+  it would outgrow 2048 x 1024; the Valsora build's `check_mod.py` checks its size and that it has every letter of the
+  names drawn on the map (mutation-tested).
 
 ### Main menu
 
@@ -506,7 +526,8 @@ Build order matters. `gen_fonts` runs first because `layout.py` measures strings
   `alerticon_startposition_extended` (718,38). **(in game)** The extended one is the one in use. The
   others are `alerticon_offset` (48,44) and `alerticon_endposition` x, which is the row width before
   wrapping. Alert icons measure about 43x38 **(in game)**. The mod sets start and extended to the
-  same point (188,71) and the row width to 432 (10 per row).
+  same point (188,71) and the row width to 1200 (26 per row, up to the right-hand tray; 432, 10 per row, until v0.9.1,
+  when the logistics tray hung beside them).
 
 ### Measured from screenshots (in game)
 
@@ -531,9 +552,14 @@ localisation, tags, cosmetic tags and ideologies.
   localisation, the trigger is `always = yes`.
 - Daily political power and the three factory counts (with coloured diamonds) are scripted GUI
   text. The engine's own factory string is hidden with the blank font.
-- Logistics (fuel, supply, convoys) sits in a slim tray hanging under the readout strip. Army, navy
-  and air XP are small badges on the right-hand overview buttons. This replaced vanilla's big
-  dropdown at the user's request.
+- Logistics (fuel, supply, convoys) is the strip's last cell since v0.9.1 (the user: "could we experiment with
+  trying to find a way to move this up into the main bar? That way notifications could extend across the screen
+  until the music bar"): three 15 px rows (`layout.SECONDARY`), each a 13 px icon, the game's value box in
+  `valsora_deco_value_12` and its ratio bar 2 px under the value; the game's value backgrounds are invisible hover
+  areas over each row, so the tooltips are the game's. The room came from the crowns 4 px apart (6 before) and the
+  labels in `valsora_deco_label_tb` (tracked 1 px less); `layout._strip` still wants 6.5 px either side of every
+  divider (6.7 now). Until then it hung in a slim tray under the strip. Army, navy and air XP are small badges on the
+  right-hand overview buttons. This replaced vanilla's big dropdown at the user's request.
 - Command power and nukes are in the right-hand tray. World tension sits in a gilt ring with its
   value underneath.
 - It writes `common/scripted_guis/valsora_deco_topbar.txt`,
@@ -796,6 +822,13 @@ GP.write_gui(MOD + "interface/x.gui", t)    # braces checked, engine_safe applie
 
 ## 10. Open items and things to check in game
 
+- **v0.9.1**: the names on the map back; the designers' statistics dark on the ivory sheet; the doctrine tabs right of
+  the notch, clear of the name (**(assumed)**: a `gridBoxType` without `format` seemed to centre its items on x, so
+  the tabs' grid is `UPPER_LEFT` now); the faction screen's long name whole; the politics screen's LEADER tag centred
+  and the members' flags in two rows of eight; the seal's badges equally far from it; in the top bar, fuel, supply and
+  convoys in the strip's last cell (values, bars, their tooltips on hover), the alerts running on past the middle,
+  the right-hand tray clear of the music button, the production alert (a pulsing gilt ring round the Production crown,
+  when the game shows it).
 - **v0.9**: the research and doctrine screens (the notch, the title, the tabs opening their trees, the close diamond,
   the trees not cut off); the designers and the commander picker (the pictures under the game's lists and statistics,
   the statistics readable); in a faction, its members' flags under its name on the politics screen (**(assumed)**: a

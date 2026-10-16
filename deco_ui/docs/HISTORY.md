@@ -152,3 +152,21 @@ documented by the game but unused by it: assumed); the focus in progress in the 
 focus and a one-spirit card with its modifiers have no hook in the game (section 12). Beside the mod, four loading
 screens drawn from Valsora's map as a proposal (`art/proposals/loading_screens/`, `proposals_loading.py`: "don't add
 them yet").
+
+**v0.9.1 (2026-10-16, later, not yet seen in game)**, from the user's screenshots and `error.log` of v0.9 ("Research and
+doctrine screens mostly look good ... The flags on the faction button look amazing"). The map had no names: the map
+font's texture, grown to 2048 x 2048 by v0.8.4's Vietnamese letters, was refused ("Failed to load texture larger than
+MAX_TEXTURE_SIZE"); the map font leaves them out (333 glyphs, 2048 x 1024 again) and the build checks its size and its
+letters. "The text on the unit designer can't be seen w/ white on tan": the game's `_inverted` typewriter fonts carry
+dark ink in the texture, ours were white; the ink is baked in now. "Doctrine screen runs into nametag": the tabs' grid
+ignored its x (centred, it seemed): `format = "UPPER_LEFT"`. The faction screen's name was cut off (323 px in a 300 px
+box: 326 now, right of the notch); the faction card's LEADER tag centred both ways, and its flags wrap to a second row
+(16). The seal's badges sat 2.7 and 4.7 px from it: equal now. Then the top bar ("the music button is directly next to
+the border ... could we experiment with trying to find a way to move this up into the main bar? That way notifications
+could extend across the screen until the music bar"; "By "this" i meant the fuel, logistics, and convoy"; "There is
+an odd green bar between construction and production. Intentional?"): fuel, supply and convoys are the strip's last
+cell, three rows of a 13 px icon, the value (`value_12`) and its bar, room made by setting the crowns 4 px apart and
+the labels in a cut tracked 1 px less (`valsora_deco_label_tb`); the tray under the strip is gone and the alerts run
+on to the right-hand tray (26 a row); that tray's edge is 12 px further out; the "green bar" was the production alert
+(the game shows it on the Production button), drawn as a halo behind the crown that showed only in the 6 px gaps:
+it is a gilt ring over the crown now.
