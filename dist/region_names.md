@@ -8,113 +8,170 @@ colour. The current names are the build's ("<country with most of its states> Re
 
 | # | countries | current name | new name |
 |---|---|---|---|
-| 1 | Cascadia, Wersh, Troc | Cascadia Region 1 | |
-| 2 | Romanoddle, Cardonia | Romanoddle Region 2 | |
-| 3 | Wersh, Troc, Cascadia, Placeholdaire | Wersh Region 1 | |
-| 4 | Cardonia, Placeholdaire | Cardonia Region 2 | |
-| 5 | Cardonia, Kurikia, Belekria, Rouental ... | Cardonia Region 1 | |
-| 6 | Kurikia | Kurikia Region 1 | |
-| 7 | Romanoddle, Vultuca | Romanoddle Region 3 | |
-| 8 | Romanoddle, Rouental, Estande, Volinovia ... | Romanoddle Region 1 | |
-| 9 | Fraxhemark, Republican Illiricium, Rouental, Côtefer ... | Fraxhemark Region 1 | |
-| 10 | Fraxhemark, Kurikia, Terrabis-Seran, Cardonia | Fraxhemark Region 2 | |
-| 11 | Belekria, Kurikia | Belekria Region 3 | |
-| 12 | Estande, Anglost, Danelaw, Vultuca ... | Estande Region 1 | |
-| 13 | San Sierra, Garfield Republics, Malvekia, Danelaw ... | San Sierra Region 1 | |
+| 1 | Cascadia | Cascadia Region 1 | |
+| 2 | Cascadia | Cascadia Region 2 | |
+| 3 | Troc | Troc Region 1 | |
+| 4 | Wersh | Wersh Region 1 | |
+| 5 | Cardonia | Cardonia Region 1 | |
+| 6 | Rouental, Hollier, Selgrave, Lustiana ... | Rouental Region 1 | |
+| 7 | Kurikia | Kurikia Region 1 | |
+| 8 | Belekria, Kurikia | Belekria Region 3 | |
+| 9 | Vultuca, Coraliza, Merlgould | Vultuca Region 1 | |
+| 10 | Romanoddle | Romanoddle Region 2 | |
+| 11 | Romanoddle | Romanoddle Region 1 | |
+| 12 | Volinovia, Rastava | Volinovia Region 1 | |
+| 13 | Placeholdaire, Selto | Placeholdaire Region 1 | |
+| 14 | Estande | Estande Region 2 | |
+| 15 | Republican Illiricium, Entroterra, Côtefer, Mezzogiorno ... | Republican Illiricium Region 1 | |
+| 16 | Fraxhemark, Locus | Fraxhemark Region 1 | |
+| 17 | Fraxhemark, Devlon | Fraxhemark Region 3 | |
+| 18 | Fraxhemark, Terrabis-Seran | Fraxhemark Region 2 | |
+| 19 | Thorian Dynamics, Cardonia | Thorian Dynamics Region 1 | |
+| 20 | Kurikia | Kurikia Region 2 | |
+| 21 | Anglost, Normania, Sicilianzo, Peatiktist | Anglost Region 1 | |
+| 22 | Danelaw | Danelaw Region 1 | |
+| 23 | San Sierra | San Sierra Region 1 | |
+| 24 | San Sierra, Dremaur | San Sierra Region 2 | |
+| 25 | Garfield Republics, Malvekia, North Pollana, South Pollana | Garfield Republics Region 1 | |
 
 ## Araseos
 
 | # | countries | current name | new name |
 |---|---|---|---|
-| 14 | Anglost, Transcainia, Peatiktist | Anglost Region 1 | |
-| 15 | Peatiktist, Terreich und Preußen, Daravon | Peatiktist Region 1 | |
-| 16 | Terrabis-Seran, Vineta, Zwintern, Ostercoirasreich | Terrabis-Seran Region 2 | |
-| 17 | Großlöwenburg, Terrabis-Seran, Leithanien, Merikaan ... | Großlöwenburg Region 1 | |
-| 18 | Großlöwenburg, Terreich und Preußen, Terrabis-Seran, Scealand ... | Großlöwenburg Region 2 | |
-| 19 | Terrabis-Seran, Kilkire-Foraois, Gaellia, Kampfian Empire ... | Terrabis-Seran Region 1 | |
-| 20 | Terreich und Preußen | Terreich und Preußen Region 2 | |
-| 21 | Peatiktist, Anglost, Terreich und Preußen | Peatiktist Region 2 | |
-| 22 | Kampfian Empire, Kilkire-Foraois, Terreich und Preußen, Someriania | Kampfian Empire Region 1 | |
-| 23 | Terreich und Preußen, Estande | Terreich und Preußen Region 1 | |
-| 24 | Kampfian Empire, Dumas, Terreich und Preußen, Mahina ... | Kampfian Empire Region 2 | |
-| 25 | Estande, Dumas, Terreich und Preußen, Kampfian Empire | Estande Region 3 | |
+| 26 | Transcainia, Leithanien, Serentia | Transcainia Region 1 | |
+| 27 | Scealand, Artzen, Ostaria, Daravon | Scealand Region 1 | |
+| 28 | Anglost | Anglost Region 2 | |
+| 29 | Peatiktist | Peatiktist Region 1 | |
+| 30 | Zwintern, Merikaan | Zwintern Region 1 | |
+| 31 | Großlöwenburg, Krionik | Großlöwenburg Region 1 | |
+| 32 | Terrabis-Seran, Vineta | Terrabis-Seran Region 1 | |
+| 33 | Großlöwenburg, Ungar | Großlöwenburg Region 2 | |
+| 34 | Terrabis-Seran | Terrabis-Seran Region 3 | |
+| 35 | Terrabis-Seran | Terrabis-Seran Region 2 | |
+| 36 | Terreich und Preußen | Terreich und Preußen Region 2 | |
+| 37 | Kampfian Empire | Kampfian Empire Region 3 | |
+| 38 | Terreich und Preußen | Terreich und Preußen Region 1 | |
+| 39 | Terreich und Preußen | Terreich und Preußen Region 3 | |
+| 40 | Kampfian Empire | Kampfian Empire Region 2 | |
+| 41 | Kampfian Empire | Kampfian Empire Region 1 | |
+| 42 | Estande, Dumas | Estande Region 3 | |
+| 43 | Gaellia, Schteirmark, Ostercoirasreich | Gaellia Region 1 | |
+| 44 | Kilkire-Foraois, Harwick | Kilkire-Foraois Region 1 | |
+| 45 | Kampfian Empire, Mahina | Kampfian Empire Region 4 | |
+| 46 | Someriania | Someriania Region 1 | |
 
 ## Merlovich
 
 | # | countries | current name | new name |
 |---|---|---|---|
-| 26 | Merlovich | Merlovich Region 1 | |
-| 27 | Merlovich | Merlovich Region 2 | |
+| 47 | Merlovich | Merlovich Region 1 | |
+| 48 | Merlovich | Merlovich Region 2 | |
 
 ## Solitas
 
 | # | countries | current name | new name |
 |---|---|---|---|
-| 28 | Abalón, Avesária, Arovannea, Ponchomagnifico | Abalón Region 1 | |
-| 29 | Gran Yucanoa, Texaria, Hoalepa, Arovannea ... | Gran Yucanoa Region 1 | |
-| 30 | Arovannea, Recaxa, Surredia, Ponchomagnifico ... | Arovannea Region 1 | |
-| 31 | Surredia, Atrocha, Arovannea | Surredia Region 1 | |
-| 32 | Arvorenia, Atrocha | Arvorenia Region 4 | |
-| 33 | Arvorenia, Atrocha | Arvorenia Region 3 | |
-| 34 | Atrocha, Arvorenia | Atrocha Region 1 | |
-| 35 | Arvorenia, Santa Fe, Atrocha | Arvorenia Region 1 | |
-| 36 | Arvorenia, Silvamar, Las Anod, Santa Fe ... | Arvorenia Region 2 | |
+| 49 | Avesária, Ponchomagnifico, Abalón, Rouental | Avesária Region 1 | |
+| 50 | Gran Yucanoa, Texaria, Hoalepa | Gran Yucanoa Region 1 | |
+| 51 | Recaxa | Recaxa Region 1 | |
+| 52 | Surredia | Surredia Region 1 | |
+| 53 | Arovannea | Arovannea Region 1 | |
+| 54 | Atrocha | Atrocha Region 1 | |
+| 55 | Arvorenia | Arvorenia Region 2 | |
+| 56 | Arvorenia | Arvorenia Region 1 | |
+| 57 | Santa Fe, Silvamar, Las Anod, Bromé | Santa Fe Region 1 | |
 
 ## Yastreovakia
 
 | # | countries | current name | new name |
 |---|---|---|---|
-| 37 | Belekria, West Sminishia | Belekria Region 2 | |
-| 38 | Belekria, Belka | Belekria Region 1 | |
-| 39 | Sanada, Belka, Volstokn, Pakitsk | Sanada Region 3 | |
-| 40 | Sanada, Volstokn, Kamyachyn, Ryśny | Sanada Region 2 | |
-| 41 | Sanada, Brethren, Sarkis | Sanada Region 1 | |
-| 42 | Krionik, Sminishia, Gorbastan, Zukchiva ... | Krionik Region 1 | |
-| 43 | Krionik | Krionik Region 4 | |
-| 44 | Krionik, Belka, Volstokn, Pakitsk ... | Krionik Region 2 | |
-| 45 | Krionik | Krionik Region 3 | |
-| 46 | Volstokn, Kieska, Ryśny, Placeholdgrad ... | Volstokn Region 1 | |
-| 47 | Brethren, Ryśny, Volstokn | Brethren Region 1 | |
-| 48 | Krionik, Sennheiser, Skillia | Krionik Region 5 | |
+| 58 | Belekria, West Sminishia | Belekria Region 2 | |
+| 59 | Belekria | Belekria Region 1 | |
+| 60 | Belka | Belka Region 1 | |
+| 61 | Belka | Belka Region 2 | |
+| 62 | Pakitsk | Pakitsk Region 1 | |
+| 63 | Sanada | Sanada Region 3 | |
+| 64 | Volstokn | Volstokn Region 2 | |
+| 65 | Sanada | Sanada Region 2 | |
+| 66 | Volstokn, Kamyachyn | Volstokn Region 1 | |
+| 67 | Sanada | Sanada Region 4 | |
+| 68 | Brethren | Brethren Region 1 | |
+| 69 | Sanada, Sarkis | Sanada Region 1 | |
+| 70 | Sminishia | Sminishia Region 1 | |
+| 71 | Krionik | Krionik Region 4 | |
+| 72 | Gorbastan, Vilna | Gorbastan Region 1 | |
+| 73 | Krionik | Krionik Region 3 | |
+| 74 | Zukchiva | Zukchiva Region 1 | |
+| 75 | Krionik | Krionik Region 2 | |
+| 76 | Krionik | Krionik Region 1 | |
+| 77 | Krionik, Skillia | Krionik Region 5 | |
+| 78 | Kieska, Placeholdgrad, Zoluzeme, Sombor | Kieska Region 1 | |
+| 79 | Volstokn | Volstokn Region 3 | |
+| 80 | Ryśny | Ryśny Region 1 | |
+| 81 | Krionik | Krionik Region 6 | |
+| 82 | Sennheiser | Sennheiser Region 1 | |
 
 ## Usnistan
 
 | # | countries | current name | new name |
 |---|---|---|---|
-| 49 | Cultists, Anglost, Muqadasa Salamat, Kampfian Empire | Cultists Region 1 | |
-| 50 | Arcadia | Arcadia Region 1 | |
-| 51 | Cultists, Arcadia | Cultists Region 2 | |
-| 52 | Muqadasa Salamat, Krionik, Kilkire-Foraois, Sarkis | Muqadasa Salamat Region 1 | |
-| 53 | Sarza, Arcadia, Lafari, Meddacah | Sarza Region 1 | |
-| 54 | Kyras, Lafari, Leviathan, Hulya | Kyras Region 1 | |
-| 55 | Utopian Republic, Lafari, New Paradise, Hohenzburg ... | Utopian Republic Region 1 | |
-| 56 | Utopian Republic, Arklen, Soloriania, Anglost | Utopian Republic Region 2 | |
-| 57 | Royabad, South Usnistan, Humanist State, Soloriania ... | Royabad Region 1 | |
-| 58 | North Koronista, Humanist State, Kyras, Levantinin ... | North Koronista Region 1 | |
-| 59 | Almohavid, Solaria, Humanist State, Kyras ... | Almohavid Region 1 | |
+| 83 | Cultists | Cultists Region 1 | |
+| 84 | Arcadia | Arcadia Region 1 | |
+| 85 | Muqadasa Salamat, Krionik | Muqadasa Salamat Region 1 | |
+| 86 | Sarza, Meddacah | Sarza Region 1 | |
+| 87 | Lafari, Khaleeya | Lafari Region 1 | |
+| 88 | Kyras, Leviathan, Chineasia, Hulya | Kyras Region 1 | |
+| 89 | Utopian Republic, Arklen | Utopian Republic Region 2 | |
+| 90 | New Paradise, Hohenzburg, Kizimwe, Isigoriya | New Paradise Region 1 | |
+| 91 | Soloriania, Anglost, Kilkire-Foraois, Sarkis ... | Soloriania Region 1 | |
+| 92 | Utopian Republic | Utopian Republic Region 3 | |
+| 93 | Utopian Republic | Utopian Republic Region 1 | |
+| 94 | Levantinin, Zanzimibia, Koronista | Levantinin Region 1 | |
+| 95 | Royabad | Royabad Region 1 | |
+| 96 | North Koronista | North Koronista Region 1 | |
+| 97 | Mustawi, Al-Khabid | Mustawi Region 1 | |
+| 98 | Humanist State | Humanist State Region 1 | |
+| 99 | South Usnistan | South Usnistan Region 1 | |
+| 100 | Almohavid, Al-Radiyaa, Kalaistan, Solaria ... | Almohavid Region 1 | |
 
 ## Orientalis
 
 | # | countries | current name | new name |
 |---|---|---|---|
-| 60 | Sarkis | Sarkis Region 1 | |
-| 61 | Gorduchai | Gorduchai Region 1 | |
-| 62 | Sarkis, Wanea, Xuè, Charity | Sarkis Region 5 | |
-| 63 | Sarkis, Estande, Xuè | Sarkis Region 3 | |
-| 64 | Sarkis, Qinguo, Xuè, Kianhua ... | Sarkis Region 2 | |
-| 65 | Sarkis, Qinguo, Kianhua, Haidao ... | Sarkis Region 4 | |
-| 66 | Estande | Estande Region 2 | |
-| 67 | Krionik, Chineasia, Daihai | Krionik Region 6 | |
-| 68 | Krionik, Charity, Tenkyoku | Krionik Region 7 | |
-| 69 | Charity, Uyizar, Kianhua, Plaija ... | Charity Region 1 | |
-| 70 | Kianhua, Myehn, Sho, Charity ... | Kianhua Region 1 | |
-| 71 | Myehn, Shinnokawa | Myehn Region 1 | |
-| 72 | Chineasia | Chineasia Region 1 | |
-| 73 | Chineasia | Chineasia Region 3 | |
-| 74 | Chineasia | Chineasia Region 4 | |
-| 75 | Chineasia | Chineasia Region 2 | |
-| 76 | Felter, Terrabis-Seran | Felter Region 1 | |
-| 77 | Arpino, Krionik | Arpino Region 1 | |
-| 78 | Plaija, Arpino, Pinzahao, Ganden ... | Plaija Region 1 | |
-| 79 | Arpino | Arpino Region 2 | |
-| 80 | Myehn, Ostercoirasreich | Myehn Region 2 | |
+| 101 | Sarkis | Sarkis Region 1 | |
+| 102 | Gorduchai | Gorduchai Region 1 | |
+| 103 | Sarkis | Sarkis Region 9 | |
+| 104 | Sarkis | Sarkis Region 5 | |
+| 105 | Sarkis | Sarkis Region 8 | |
+| 106 | Sarkis | Sarkis Region 4 | |
+| 107 | Sarkis | Sarkis Region 7 | |
+| 108 | Xuè | Xuè Region 1 | |
+| 109 | Sarkis | Sarkis Region 2 | |
+| 110 | Qinguo, Associated Cities | Qinguo Region 1 | |
+| 111 | Sarkis, Hulinguo | Sarkis Region 3 | |
+| 112 | Kianhua | Kianhua Region 1 | |
+| 113 | Red Path, Kuran | Red Path Region 1 | |
+| 114 | Sarkis, Haidao | Sarkis Region 6 | |
+| 115 | Kianhua, Terreich und Preußen | Kianhua Region 2 | |
+| 116 | Estande, Wanea, Daihai | Estande Region 1 | |
+| 117 | Krionik | Krionik Region 7 | |
+| 118 | Chineasia | Chineasia Region 2 | |
+| 119 | Charity, Tsuruma, Tenkyoku | Charity Region 1 | |
+| 120 | Uyizar | Uyizar Region 1 | |
+| 121 | Charity | Charity Region 2 | |
+| 122 | Plaija | Plaija Region 1 | |
+| 123 | Sho, Yatar, Kaizan | Sho Region 1 | |
+| 124 | Myehn, Shinnokawa | Myehn Region 1 | |
+| 125 | Chineasia | Chineasia Region 3 | |
+| 126 | Chineasia | Chineasia Region 1 | |
+| 127 | Felter, Terrabis-Seran | Felter Region 1 | |
+| 128 | Arpino | Arpino Region 1 | |
+| 129 | Arpino | Arpino Region 5 | |
+| 130 | Plaija | Plaija Region 2 | |
+| 131 | Arpino | Arpino Region 3 | |
+| 132 | Ganden | Ganden Region 1 | |
+| 133 | Plaija | Plaija Region 3 | |
+| 134 | Arpino | Arpino Region 2 | |
+| 135 | Pinzahao | Pinzahao Region 1 | |
+| 136 | Arpino | Arpino Region 4 | |
+| 137 | Myehn, Ostercoirasreich | Myehn Region 2 | |
