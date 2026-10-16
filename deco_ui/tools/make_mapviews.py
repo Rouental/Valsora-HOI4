@@ -24,7 +24,8 @@ from paths import MOD, VANILLA as VANILLA_DIR
 
 ARG = sys.argv[1] if len(sys.argv) > 1 else VANILLA_DIR
 VIEWS = {"unitview.gui": "armies_view", "airselectionview.gui": "air_selection_view",
-         "operativeleader.gui": "operative_view", "naviesview.gui": "naviesview_window"}
+         "operativeleader.gui": "operative_view", "naviesview.gui": "naviesview_window",
+         "hotjoin.gui": "hotjoin_window"}             # multiplayer: the host's list of join requests (medallion_check)
 SIZE = {"naviesview_window": (500, "77%%")}                   # the game's: 500 x 86%%
 BESIDE = {"naviesview.gui": ["home_base_selection_window", "ship_refit_equipment_view"]}
 

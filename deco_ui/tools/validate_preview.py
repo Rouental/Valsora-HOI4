@@ -407,6 +407,12 @@ for k in []:
         problems.append(f"loc key missing: {k}")
 
 
+# ------------------------------------------------------------------ windows the medallion would hide (v0.8.4)
+import medallion_check as _MC  # noqa: E402
+problems.extend(_MC.problems()[0])
+if not _MC.selftest(quiet=True):
+    problems.append("medallion_check's self-test failed: it no longer catches a window under the medallion")
+
 # ------------------------------------------------------------------ preview renderer
 def _runs(text, base):
     """Split a string with §X ... §! colour codes into (char, colour-letter) pairs."""
