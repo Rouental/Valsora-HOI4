@@ -1,0 +1,1137 @@
+{
+ "1": {
+  "colour": "921d27",
+  "id": 12,
+  "continent": "nonscio",
+  "owners": [
+   "Cascadia",
+   "Wersh",
+   "Troc"
+  ],
+  "name": "Cascadia Region 1",
+  "x": 314,
+  "y": 691
+ },
+ "2": {
+  "colour": "9c514e",
+  "id": 23,
+  "continent": "nonscio",
+  "owners": [
+   "Romanoddle",
+   "Cardonia"
+  ],
+  "name": "Romanoddle Region 2",
+  "x": 334,
+  "y": 838
+ },
+ "3": {
+  "colour": "965e94",
+  "id": 11,
+  "continent": "nonscio",
+  "owners": [
+   "Wersh",
+   "Troc",
+   "Cascadia",
+   "Placeholdaire"
+  ],
+  "name": "Wersh Region 1",
+  "x": 489,
+  "y": 629
+ },
+ "4": {
+  "colour": "8d8958",
+  "id": 13,
+  "continent": "nonscio",
+  "owners": [
+   "Cardonia",
+   "Placeholdaire"
+  ],
+  "name": "Cardonia Region 2",
+  "x": 693,
+  "y": 705
+ },
+ "5": {
+  "colour": "ea9666",
+  "id": 10,
+  "continent": "nonscio",
+  "owners": [
+   "Cardonia",
+   "Kurikia",
+   "Belekria",
+   "Rouental",
+   "Selgrave"
+  ],
+  "name": "Cardonia Region 1",
+  "x": 956,
+  "y": 717
+ },
+ "6": {
+  "colour": "a6a03a",
+  "id": 15,
+  "continent": "nonscio",
+  "owners": [
+   "Kurikia"
+  ],
+  "name": "Kurikia Region 1",
+  "x": 1162,
+  "y": 748
+ },
+ "7": {
+  "colour": "ba8e4a",
+  "id": 27,
+  "continent": "nonscio",
+  "owners": [
+   "Romanoddle",
+   "Vultuca"
+  ],
+  "name": "Romanoddle Region 3",
+  "x": 353,
+  "y": 1026
+ },
+ "8": {
+  "colour": "a95f50",
+  "id": 21,
+  "continent": "nonscio",
+  "owners": [
+   "Romanoddle",
+   "Rouental",
+   "Estande",
+   "Volinovia",
+   "Rastava",
+   "Vultuca",
+   "Placeholdaire",
+   "Selto",
+   "Republican Illiricium",
+   "Guedelon",
+   "Merlgould"
+  ],
+  "name": "Romanoddle Region 1",
+  "x": 513,
+  "y": 988
+ },
+ "9": {
+  "colour": "e6c62b",
+  "id": 22,
+  "continent": "nonscio",
+  "owners": [
+   "Fraxhemark",
+   "Republican Illiricium",
+   "Rouental",
+   "Côtefer",
+   "Thorian Dynamics",
+   "Mezzogiorno",
+   "San Sierra",
+   "Locus",
+   "Hollier",
+   "Royalist Illiricium",
+   "Lustiana",
+   "Lanzerac",
+   "Evriches",
+   "Seigne",
+   "Estande",
+   "Entroterra",
+   "Devlon"
+  ],
+  "name": "Fraxhemark Region 1",
+  "x": 980,
+  "y": 963
+ },
+ "10": {
+  "colour": "c9f17f",
+  "id": 24,
+  "continent": "nonscio",
+  "owners": [
+   "Fraxhemark",
+   "Kurikia",
+   "Terrabis-Seran",
+   "Cardonia"
+  ],
+  "name": "Fraxhemark Region 2",
+  "x": 1235,
+  "y": 877
+ },
+ "11": {
+  "colour": "e27d66",
+  "id": 16,
+  "continent": "nonscio",
+  "owners": [
+   "Belekria",
+   "Kurikia"
+  ],
+  "name": "Belekria Region 3",
+  "x": 1414,
+  "y": 909
+ },
+ "12": {
+  "colour": "81b927",
+  "id": 33,
+  "continent": "nonscio",
+  "owners": [
+   "Estande",
+   "Anglost",
+   "Danelaw",
+   "Vultuca",
+   "Coraliza",
+   "San Sierra",
+   "Sicilianzo",
+   "Peatiktist",
+   "Normania",
+   "Entroterra"
+  ],
+  "name": "Estande Region 1",
+  "x": 695,
+  "y": 1245
+ },
+ "13": {
+  "colour": "952f1b",
+  "id": 34,
+  "continent": "nonscio",
+  "owners": [
+   "San Sierra",
+   "Garfield Republics",
+   "Malvekia",
+   "Danelaw",
+   "Entroterra",
+   "Normania",
+   "Anglost",
+   "Holy See",
+   "North Pollana",
+   "Dremaur",
+   "South Pollana"
+  ],
+  "name": "San Sierra Region 1",
+  "x": 894,
+  "y": 1313
+ },
+ "14": {
+  "colour": "caed80",
+  "id": 41,
+  "continent": "araseos",
+  "owners": [
+   "Anglost",
+   "Transcainia",
+   "Peatiktist"
+  ],
+  "name": "Anglost Region 1",
+  "x": 441,
+  "y": 1427
+ },
+ "15": {
+  "colour": "56e9a1",
+  "id": 55,
+  "continent": "araseos",
+  "owners": [
+   "Peatiktist",
+   "Terreich und Preußen",
+   "Daravon"
+  ],
+  "name": "Peatiktist Region 1",
+  "x": 675,
+  "y": 1642
+ },
+ "16": {
+  "colour": "89a01c",
+  "id": 78,
+  "continent": "araseos",
+  "owners": [
+   "Terrabis-Seran",
+   "Vineta",
+   "Zwintern",
+   "Ostercoirasreich"
+  ],
+  "name": "Terrabis-Seran Region 2",
+  "x": 319,
+  "y": 1979
+ },
+ "17": {
+  "colour": "c49761",
+  "id": 49,
+  "continent": "araseos",
+  "owners": [
+   "Großlöwenburg",
+   "Terrabis-Seran",
+   "Leithanien",
+   "Merikaan",
+   "Serentia",
+   "Ostaria",
+   "Zwintern",
+   "Krionik"
+  ],
+  "name": "Großlöwenburg Region 1",
+  "x": 318,
+  "y": 1652
+ },
+ "18": {
+  "colour": "9d9f50",
+  "id": 51,
+  "continent": "araseos",
+  "owners": [
+   "Großlöwenburg",
+   "Terreich und Preußen",
+   "Terrabis-Seran",
+   "Scealand",
+   "Artzen",
+   "Ungar",
+   "Leithanien",
+   "Ostaria"
+  ],
+  "name": "Großlöwenburg Region 2",
+  "x": 525,
+  "y": 1779
+ },
+ "19": {
+  "colour": "ece47b",
+  "id": 72,
+  "continent": "araseos",
+  "owners": [
+   "Terrabis-Seran",
+   "Kilkire-Foraois",
+   "Gaellia",
+   "Kampfian Empire",
+   "Schteirmark",
+   "Terreich und Preußen",
+   "Vineta",
+   "Ostercoirasreich",
+   "Harwick"
+  ],
+  "name": "Terrabis-Seran Region 1",
+  "x": 617,
+  "y": 2066
+ },
+ "20": {
+  "colour": "62eb73",
+  "id": 67,
+  "continent": "araseos",
+  "owners": [
+   "Terreich und Preußen"
+  ],
+  "name": "Terreich und Preußen Region 2",
+  "x": 825,
+  "y": 1817
+ },
+ "21": {
+  "colour": "2bc053",
+  "id": 56,
+  "continent": "araseos",
+  "owners": [
+   "Peatiktist",
+   "Anglost",
+   "Terreich und Preußen"
+  ],
+  "name": "Peatiktist Region 2",
+  "x": 846,
+  "y": 1693
+ },
+ "22": {
+  "colour": "eac63d",
+  "id": 74,
+  "continent": "araseos",
+  "owners": [
+   "Kampfian Empire",
+   "Kilkire-Foraois",
+   "Terreich und Preußen",
+   "Someriania"
+  ],
+  "name": "Kampfian Empire Region 1",
+  "x": 958,
+  "y": 2071
+ },
+ "23": {
+  "colour": "d35d44",
+  "id": 60,
+  "continent": "araseos",
+  "owners": [
+   "Terreich und Preußen",
+   "Estande"
+  ],
+  "name": "Terreich und Preußen Region 1",
+  "x": 1093,
+  "y": 1881
+ },
+ "24": {
+  "colour": "9ee02b",
+  "id": 76,
+  "continent": "araseos",
+  "owners": [
+   "Kampfian Empire",
+   "Dumas",
+   "Terreich und Preußen",
+   "Mahina",
+   "Ostercoirasreich"
+  ],
+  "name": "Kampfian Empire Region 2",
+  "x": 1233,
+  "y": 1990
+ },
+ "25": {
+  "colour": "be4ea1",
+  "id": 61,
+  "continent": "araseos",
+  "owners": [
+   "Estande",
+   "Dumas",
+   "Terreich und Preußen",
+   "Kampfian Empire"
+  ],
+  "name": "Estande Region 3",
+  "x": 1195,
+  "y": 1804
+ },
+ "26": {
+  "colour": "d0d82f",
+  "id": 28,
+  "continent": "aislada",
+  "owners": [
+   "Merlovich"
+  ],
+  "name": "Merlovich Region 1",
+  "x": 2051,
+  "y": 1213
+ },
+ "27": {
+  "colour": "f2694d",
+  "id": 30,
+  "continent": "aislada",
+  "owners": [
+   "Merlovich"
+  ],
+  "name": "Merlovich Region 2",
+  "x": 1860,
+  "y": 1288
+ },
+ "28": {
+  "colour": "ce5826",
+  "id": 57,
+  "continent": "solitas",
+  "owners": [
+   "Abalón",
+   "Avesária",
+   "Arovannea",
+   "Ponchomagnifico"
+  ],
+  "name": "Abalón Region 1",
+  "x": 1866,
+  "y": 1655
+ },
+ "29": {
+  "colour": "d38b28",
+  "id": 43,
+  "continent": "solitas",
+  "owners": [
+   "Gran Yucanoa",
+   "Texaria",
+   "Hoalepa",
+   "Arovannea",
+   "Abalón"
+  ],
+  "name": "Gran Yucanoa Region 1",
+  "x": 2058,
+  "y": 1667
+ },
+ "30": {
+  "colour": "b41da5",
+  "id": 58,
+  "continent": "solitas",
+  "owners": [
+   "Arovannea",
+   "Recaxa",
+   "Surredia",
+   "Ponchomagnifico",
+   "Avesária",
+   "Atrocha",
+   "Rouental"
+  ],
+  "name": "Arovannea Region 1",
+  "x": 1622,
+  "y": 1788
+ },
+ "31": {
+  "colour": "d54a65",
+  "id": 64,
+  "continent": "solitas",
+  "owners": [
+   "Surredia",
+   "Atrocha",
+   "Arovannea"
+  ],
+  "name": "Surredia Region 1",
+  "x": 1799,
+  "y": 1906
+ },
+ "32": {
+  "colour": "99421b",
+  "id": 66,
+  "continent": "solitas",
+  "owners": [
+   "Arvorenia",
+   "Atrocha"
+  ],
+  "name": "Arvorenia Region 4",
+  "x": 1909,
+  "y": 1815
+ },
+ "33": {
+  "colour": "dec65b",
+  "id": 65,
+  "continent": "solitas",
+  "owners": [
+   "Arvorenia",
+   "Atrocha"
+  ],
+  "name": "Arvorenia Region 3",
+  "x": 2082,
+  "y": 1826
+ },
+ "34": {
+  "colour": "a4e639",
+  "id": 70,
+  "continent": "solitas",
+  "owners": [
+   "Atrocha",
+   "Arvorenia"
+  ],
+  "name": "Atrocha Region 1",
+  "x": 2138,
+  "y": 1932
+ },
+ "35": {
+  "colour": "d2375a",
+  "id": 59,
+  "continent": "solitas",
+  "owners": [
+   "Arvorenia",
+   "Santa Fe",
+   "Atrocha"
+  ],
+  "name": "Arvorenia Region 1",
+  "x": 2251,
+  "y": 1739
+ },
+ "36": {
+  "colour": "bb4841",
+  "id": 63,
+  "continent": "solitas",
+  "owners": [
+   "Arvorenia",
+   "Silvamar",
+   "Las Anod",
+   "Santa Fe",
+   "Bromé"
+  ],
+  "name": "Arvorenia Region 2",
+  "x": 2362,
+  "y": 1839
+ },
+ "37": {
+  "colour": "b758ad",
+  "id": 5,
+  "continent": "yastreovakia",
+  "owners": [
+   "Belekria",
+   "West Sminishia"
+  ],
+  "name": "Belekria Region 2",
+  "x": 1830,
+  "y": 343
+ },
+ "38": {
+  "colour": "b93f6e",
+  "id": 4,
+  "continent": "yastreovakia",
+  "owners": [
+   "Belekria",
+   "Belka"
+  ],
+  "name": "Belekria Region 1",
+  "x": 2079,
+  "y": 322
+ },
+ "39": {
+  "colour": "93672d",
+  "id": 3,
+  "continent": "yastreovakia",
+  "owners": [
+   "Sanada",
+   "Belka",
+   "Volstokn",
+   "Pakitsk"
+  ],
+  "name": "Sanada Region 3",
+  "x": 2575,
+  "y": 291
+ },
+ "40": {
+  "colour": "cad288",
+  "id": 2,
+  "continent": "yastreovakia",
+  "owners": [
+   "Sanada",
+   "Volstokn",
+   "Kamyachyn",
+   "Ryśny"
+  ],
+  "name": "Sanada Region 2",
+  "x": 2813,
+  "y": 276
+ },
+ "41": {
+  "colour": "63e582",
+  "id": 1,
+  "continent": "yastreovakia",
+  "owners": [
+   "Sanada",
+   "Brethren",
+   "Sarkis"
+  ],
+  "name": "Sanada Region 1",
+  "x": 3139,
+  "y": 327
+ },
+ "42": {
+  "colour": "dc5746",
+  "id": 8,
+  "continent": "yastreovakia",
+  "owners": [
+   "Krionik",
+   "Sminishia",
+   "Gorbastan",
+   "Zukchiva",
+   "Belka",
+   "Vilna",
+   "Belekria",
+   "West Sminishia"
+  ],
+  "name": "Krionik Region 1",
+  "x": 2187,
+  "y": 636
+ },
+ "43": {
+  "colour": "948e5f",
+  "id": 18,
+  "continent": "yastreovakia",
+  "owners": [
+   "Krionik"
+  ],
+  "name": "Krionik Region 4",
+  "x": 2231,
+  "y": 831
+ },
+ "44": {
+  "colour": "c39b7f",
+  "id": 9,
+  "continent": "yastreovakia",
+  "owners": [
+   "Krionik",
+   "Belka",
+   "Volstokn",
+   "Pakitsk",
+   "Kieska",
+   "Zukchiva",
+   "Sombor"
+  ],
+  "name": "Krionik Region 2",
+  "x": 2573,
+  "y": 590
+ },
+ "45": {
+  "colour": "e889b5",
+  "id": 17,
+  "continent": "yastreovakia",
+  "owners": [
+   "Krionik"
+  ],
+  "name": "Krionik Region 3",
+  "x": 2648,
+  "y": 733
+ },
+ "46": {
+  "colour": "bdd174",
+  "id": 7,
+  "continent": "yastreovakia",
+  "owners": [
+   "Volstokn",
+   "Kieska",
+   "Ryśny",
+   "Placeholdgrad",
+   "Zoluzeme"
+  ],
+  "name": "Volstokn Region 1",
+  "x": 2971,
+  "y": 484
+ },
+ "47": {
+  "colour": "ae9f2f",
+  "id": 6,
+  "continent": "yastreovakia",
+  "owners": [
+   "Brethren",
+   "Ryśny",
+   "Volstokn"
+  ],
+  "name": "Brethren Region 1",
+  "x": 3144,
+  "y": 441
+ },
+ "48": {
+  "colour": "b3b669",
+  "id": 19,
+  "continent": "yastreovakia",
+  "owners": [
+   "Krionik",
+   "Sennheiser",
+   "Skillia"
+  ],
+  "name": "Krionik Region 5",
+  "x": 2518,
+  "y": 869
+ },
+ "49": {
+  "colour": "951a29",
+  "id": 35,
+  "continent": "usnistan",
+  "owners": [
+   "Cultists",
+   "Anglost",
+   "Muqadasa Salamat",
+   "Kampfian Empire"
+  ],
+  "name": "Cultists Region 1",
+  "x": 2656,
+  "y": 1228
+ },
+ "50": {
+  "colour": "9ae191",
+  "id": 46,
+  "continent": "usnistan",
+  "owners": [
+   "Arcadia"
+  ],
+  "name": "Arcadia Region 1",
+  "x": 2656,
+  "y": 1464
+ },
+ "51": {
+  "colour": "59dc6a",
+  "id": 40,
+  "continent": "usnistan",
+  "owners": [
+   "Cultists",
+   "Arcadia"
+  ],
+  "name": "Cultists Region 2",
+  "x": 2733,
+  "y": 1351
+ },
+ "52": {
+  "colour": "56d380",
+  "id": 36,
+  "continent": "usnistan",
+  "owners": [
+   "Muqadasa Salamat",
+   "Krionik",
+   "Kilkire-Foraois",
+   "Sarkis"
+  ],
+  "name": "Muqadasa Salamat Region 1",
+  "x": 2818,
+  "y": 1273
+ },
+ "53": {
+  "colour": "e74b2e",
+  "id": 38,
+  "continent": "usnistan",
+  "owners": [
+   "Sarza",
+   "Arcadia",
+   "Lafari",
+   "Meddacah"
+  ],
+  "name": "Sarza Region 1",
+  "x": 2904,
+  "y": 1456
+ },
+ "54": {
+  "colour": "c5dd71",
+  "id": 39,
+  "continent": "usnistan",
+  "owners": [
+   "Kyras",
+   "Lafari",
+   "Leviathan",
+   "Hulya"
+  ],
+  "name": "Kyras Region 1",
+  "x": 3117,
+  "y": 1493
+ },
+ "55": {
+  "colour": "179630",
+  "id": 52,
+  "continent": "usnistan",
+  "owners": [
+   "Utopian Republic",
+   "Lafari",
+   "New Paradise",
+   "Hohenzburg",
+   "Kyras",
+   "Kizimwe",
+   "Isigoriya",
+   "Zanzimibia",
+   "Meddacah",
+   "Khaleeya"
+  ],
+  "name": "Utopian Republic Region 1",
+  "x": 2944,
+  "y": 1776
+ },
+ "56": {
+  "colour": "ddad69",
+  "id": 77,
+  "continent": "usnistan",
+  "owners": [
+   "Utopian Republic",
+   "Arklen",
+   "Soloriania",
+   "Anglost"
+  ],
+  "name": "Utopian Republic Region 2",
+  "x": 3017,
+  "y": 1998
+ },
+ "57": {
+  "colour": "d36891",
+  "id": 71,
+  "continent": "usnistan",
+  "owners": [
+   "Royabad",
+   "South Usnistan",
+   "Humanist State",
+   "Soloriania",
+   "Utopian Republic"
+  ],
+  "name": "Royabad Region 1",
+  "x": 3280,
+  "y": 2035
+ },
+ "58": {
+  "colour": "8d5f4f",
+  "id": 54,
+  "continent": "usnistan",
+  "owners": [
+   "North Koronista",
+   "Humanist State",
+   "Kyras",
+   "Levantinin",
+   "Mustawi",
+   "Al-Khabid",
+   "Zanzimibia",
+   "Utopian Republic",
+   "Al-Radiyaa",
+   "Almohavid",
+   "Koronista",
+   "Royabad",
+   "South Usnistan",
+   "Kalaistan"
+  ],
+  "name": "North Koronista Region 1",
+  "x": 3269,
+  "y": 1755
+ },
+ "59": {
+  "colour": "8f4c1d",
+  "id": 45,
+  "continent": "usnistan",
+  "owners": [
+   "Almohavid",
+   "Solaria",
+   "Humanist State",
+   "Kyras",
+   "Chineasia",
+   "Port Almohavid",
+   "Mekele",
+   "Kalaistan",
+   "Al-Radiyaa"
+  ],
+  "name": "Almohavid Region 1",
+  "x": 3493,
+  "y": 1675
+ },
+ "60": {
+  "colour": "a37449",
+  "id": 14,
+  "continent": "orientalis",
+  "owners": [
+   "Sarkis"
+  ],
+  "name": "Sarkis Region 1",
+  "x": 4471,
+  "y": 712
+ },
+ "61": {
+  "colour": "b78b5f",
+  "id": 37,
+  "continent": "orientalis",
+  "owners": [
+   "Gorduchai"
+  ],
+  "name": "Gorduchai Region 1",
+  "x": 3517,
+  "y": 1244
+ },
+ "62": {
+  "colour": "d36d2d",
+  "id": 29,
+  "continent": "orientalis",
+  "owners": [
+   "Sarkis",
+   "Wanea",
+   "Xuè",
+   "Charity"
+  ],
+  "name": "Sarkis Region 5",
+  "x": 4108,
+  "y": 1263
+ },
+ "63": {
+  "colour": "599774",
+  "id": 25,
+  "continent": "orientalis",
+  "owners": [
+   "Sarkis",
+   "Estande",
+   "Xuè"
+  ],
+  "name": "Sarkis Region 3",
+  "x": 4135,
+  "y": 1011
+ },
+ "64": {
+  "colour": "9b8f1c",
+  "id": 20,
+  "continent": "orientalis",
+  "owners": [
+   "Sarkis",
+   "Qinguo",
+   "Xuè",
+   "Kianhua",
+   "Hulinguo",
+   "Red Path",
+   "Associated Cities",
+   "Kuran"
+  ],
+  "name": "Sarkis Region 2",
+  "x": 4438,
+  "y": 968
+ },
+ "65": {
+  "colour": "a5621c",
+  "id": 26,
+  "continent": "orientalis",
+  "owners": [
+   "Sarkis",
+   "Qinguo",
+   "Kianhua",
+   "Haidao",
+   "Kuran"
+  ],
+  "name": "Sarkis Region 4",
+  "x": 4685,
+  "y": 1020
+ },
+ "66": {
+  "colour": "949352",
+  "id": 44,
+  "continent": "orientalis",
+  "owners": [
+   "Estande"
+  ],
+  "name": "Estande Region 2",
+  "x": 3994,
+  "y": 1435
+ },
+ "67": {
+  "colour": "9a271b",
+  "id": 47,
+  "continent": "orientalis",
+  "owners": [
+   "Krionik",
+   "Chineasia",
+   "Daihai"
+  ],
+  "name": "Krionik Region 6",
+  "x": 4057,
+  "y": 1584
+ },
+ "68": {
+  "colour": "ad4c99",
+  "id": 48,
+  "continent": "orientalis",
+  "owners": [
+   "Krionik",
+   "Charity",
+   "Tenkyoku"
+  ],
+  "name": "Krionik Region 7",
+  "x": 4149,
+  "y": 1496
+ },
+ "69": {
+  "colour": "9a4796",
+  "id": 32,
+  "continent": "orientalis",
+  "owners": [
+   "Charity",
+   "Uyizar",
+   "Kianhua",
+   "Plaija",
+   "Yatar",
+   "Tsuruma",
+   "Xuè",
+   "Sho",
+   "Sarkis",
+   "Myehn",
+   "Red Path",
+   "Kaizan"
+  ],
+  "name": "Charity Region 1",
+  "x": 4475,
+  "y": 1286
+ },
+ "70": {
+  "colour": "dad57f",
+  "id": 31,
+  "continent": "orientalis",
+  "owners": [
+   "Kianhua",
+   "Myehn",
+   "Sho",
+   "Charity",
+   "Kaizan",
+   "Red Path",
+   "Yatar",
+   "Terreich und Preußen"
+  ],
+  "name": "Kianhua Region 1",
+  "x": 4755,
+  "y": 1278
+ },
+ "71": {
+  "colour": "a4964e",
+  "id": 42,
+  "continent": "orientalis",
+  "owners": [
+   "Myehn",
+   "Shinnokawa"
+  ],
+  "name": "Myehn Region 1",
+  "x": 4851,
+  "y": 1504
+ },
+ "72": {
+  "colour": "dfe847",
+  "id": 50,
+  "continent": "orientalis",
+  "owners": [
+   "Chineasia"
+  ],
+  "name": "Chineasia Region 1",
+  "x": 3781,
+  "y": 1838
+ },
+ "73": {
+  "colour": "dda787",
+  "id": 73,
+  "continent": "orientalis",
+  "owners": [
+   "Chineasia"
+  ],
+  "name": "Chineasia Region 3",
+  "x": 3796,
+  "y": 2009
+ },
+ "74": {
+  "colour": "bb2759",
+  "id": 80,
+  "continent": "orientalis",
+  "owners": [
+   "Chineasia"
+  ],
+  "name": "Chineasia Region 4",
+  "x": 3877,
+  "y": 2021
+ },
+ "75": {
+  "colour": "b64f4f",
+  "id": 62,
+  "continent": "orientalis",
+  "owners": [
+   "Chineasia"
+  ],
+  "name": "Chineasia Region 2",
+  "x": 3888,
+  "y": 1798
+ },
+ "76": {
+  "colour": "c33d2b",
+  "id": 69,
+  "continent": "orientalis",
+  "owners": [
+   "Felter",
+   "Terrabis-Seran"
+  ],
+  "name": "Felter Region 1",
+  "x": 4155,
+  "y": 2079
+ },
+ "77": {
+  "colour": "da9b62",
+  "id": 75,
+  "continent": "orientalis",
+  "owners": [
+   "Arpino",
+   "Krionik"
+  ],
+  "name": "Arpino Region 1",
+  "x": 4339,
+  "y": 2023
+ },
+ "78": {
+  "colour": "d27bac",
+  "id": 53,
+  "continent": "orientalis",
+  "owners": [
+   "Plaija",
+   "Arpino",
+   "Pinzahao",
+   "Ganden",
+   "Chineasia",
+   "Myehn"
+  ],
+  "name": "Plaija Region 1",
+  "x": 4467,
+  "y": 1772
+ },
+ "79": {
+  "colour": "dba44b",
+  "id": 79,
+  "continent": "orientalis",
+  "owners": [
+   "Arpino"
+  ],
+  "name": "Arpino Region 2",
+  "x": 4663,
+  "y": 2028
+ },
+ "80": {
+  "colour": "8fa02c",
+  "id": 68,
+  "continent": "orientalis",
+  "owners": [
+   "Myehn",
+   "Ostercoirasreich"
+  ],
+  "name": "Myehn Region 2",
+  "x": 4905,
+  "y": 1894
+ }
+}
