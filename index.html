@@ -203,6 +203,8 @@ textarea { min-height: 70px; resize: vertical; }
 .meter i { display: block; height: 100%; background: var(--jade); }
 .meter.over i { background: var(--warn); }
 .warn { color: var(--warn); font-size: 13px; }
+.resetbox { border: 1px solid var(--warn); border-radius: 8px; padding: 8px 10px; margin: 6px 0; }
+.resetbox p { margin: 0 0 8px; color: var(--warn); font-size: 13px; }
 .chips { display: flex; flex-wrap: wrap; gap: 5px; }
 .item { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 8px; padding: 8px 0; border-top: 1px solid var(--rule); align-items: center; }
 .item:first-child { border-top: 0; }
@@ -1153,7 +1155,7 @@ function renderOwner() {
     h("details", null, h("summary", null, "Suggestions"), h("div", { class: "inner" },
       h("div", { class: "lead", text: "What players drew with the Suggest tool, for when you or Merlo draw the map." }), h("div", null, sugBtn), h("div", null, sugList))),
     adminSec,
-    startOverSec(),
+    !app.fb || app.isAuthor ? startOverSec() : null,  // the author's alone: not their admins'
     h("div", { class: "chips" }, h("button", { class: "btn small primary", type: "button", onclick: saveAllFile }, "Save every nation as a file"), h("span", { class: "meta", text: app.ownerOut || "" })),
     h("div", { id: "own-out" }),
   ];
@@ -1163,19 +1165,39 @@ function renderOwner() {
 // "Start over" (the author, 2026-10-16: "is there a way you could reset any edits made thus far? I'd like a blank slate"):
 // every nation's facts, pictures, requests, status and notes are deleted; its password, the admins, the nations not on
 // the map yet and the map-tool switches stay. planned/reset records when, so browsers drop what they kept from before.
+// The author's alone, and asked twice (the author, later that day: "make sure the reset button is only available for me,
+// not my admin, and that it requires two separate confirmations"): the page shows it to the author only, and the
+// rules let only the author write planned/reset, which clearEveryNation writes before it deletes anything.
 function startOverSec() {
-  const inp = h("input", { id: "own-reset", type: "text", placeholder: "Type CLEAR", "data-keep": true, autocomplete: "off", style: "flex:0 1 140px;min-width:0" });
-  const go = h("button", { class: "btn small danger", type: "button", disabled: app.resetBusy, onclick: () => {
-    if (inp.value.trim().toUpperCase() !== "CLEAR") { app.resetMsg = "Type CLEAR in the box first."; renderOwner(); return; }
-    clearEveryNation();
-  } }, app.resetBusy ? "Clearing…" : "Clear every nation");
+  const stage = app.resetStage || 0;
+  const cancel = () => h("button", { class: "btn small", type: "button", disabled: app.resetBusy, onclick: () => { app.resetStage = 0; app.resetMsg = ""; renderOwner(); } }, "Cancel");
+  let body;
+  if (app.resetBusy || stage === 0) {
+    body = h("div", { class: "chips" }, h("button", { class: "btn small danger", type: "button", disabled: app.resetBusy, onclick: () => { app.resetStage = 1; app.resetMsg = ""; renderOwner(); } },
+      app.resetBusy ? "Clearing…" : "Clear every nation…"));
+  } else if (stage === 1) {
+    body = h("div", { id: "own-reset1", class: "resetbox" },
+      h("p", null, h("b", { text: "First confirmation. " }), "This deletes everything entered for every nation, for good. Are you sure you want to go on?"),
+      h("div", { class: "chips" }, h("button", { class: "btn small danger", type: "button", onclick: () => { app.resetStage = 2; app.resetMsg = ""; renderOwner(); } }, "Yes, go on"), cancel()));
+  } else {
+    const inp = h("input", { id: "own-reset", type: "text", placeholder: "Type CLEAR", "data-keep": true, autocomplete: "off", style: "flex:0 1 140px;min-width:0" });
+    body = h("div", { id: "own-reset2", class: "resetbox" },
+      h("p", null, h("b", { text: "Second confirmation. " }), "Type CLEAR and press the button to delete every nation's entries now."),
+      h("div", { class: "chips" }, inp, h("button", { class: "btn small danger", type: "button", onclick: () => {
+        if (inp.value.trim().toUpperCase() !== "CLEAR") { app.resetMsg = "Type CLEAR in the box first."; renderOwner(); return; }
+        clearEveryNation();
+      } }, "Clear everything now"), cancel()));
+  }
   return h("details", null, h("summary", null, "Start over"), h("div", { class: "inner" },
-    h("div", { class: "lead", text: "Deletes everything entered for every nation with a password: its facts, pictures, suggestions, requests, status and notes. Passwords, admins, nations not on the map yet and the map-tool switches stay, so players start again with the passwords they have. It can't be undone: save every nation as a file first if you want a copy." }),
-    h("div", { class: "chips" }, inp, go), h("span", { class: "meta", text: app.resetMsg || "" })));
+    h("div", { class: "lead", text: "Deletes everything entered for every nation with a password: its facts, pictures, suggestions, requests, status and notes. Passwords, admins, nations not on the map yet and the map-tool switches stay, so players start again with the passwords they have. It can't be undone: save every nation as a file first if you want a copy. Only you see this, not your admins; it asks twice." }),
+    body, h("span", { class: "meta", text: app.resetMsg || "" })));
 }
 async function clearEveryNation() {
-  if (app.resetBusy) return;
+  if (app.resetBusy || app.resetStage !== 2 || (app.fb && !app.isAuthor)) return;
   app.resetBusy = true; app.resetMsg = "Clearing every nation…"; renderOwner();
+  // the gate: only the author may write planned/reset, so an admin's browser stops here, before deleting anything
+  try { await app.db.doc("planned/reset").set({ at: Date.now() }); }
+  catch (e) { app.resetBusy = false; app.resetStage = 0; app.resetMsg = "Not cleared: only the author can start over."; renderOwner(); return; }
   let nations = 0, docs = 0, failed = 0;
   await eachKey(async (tag, K) => {
     const qs = await app.db.collection(nPath(tag, K)).limit(1000).get();
@@ -1185,8 +1207,8 @@ async function clearEveryNation() {
     }
     nations++;
   });
-  try { await app.db.doc("planned/reset").set({ at: Date.now() }); } catch (e) { failed++; }
-  app.resetBusy = false;
+  try { await app.db.doc("planned/reset").set({ at: Date.now() }); } catch (e) { failed++; }  // and when it ended
+  app.resetBusy = false; app.resetStage = 0;
   app.resetMsg = failed ? `${nations} nations, ${docs} documents deleted; ${failed} could not be. Try again.`
     : `Done: ${nations} nations cleared (${docs} documents). Passwords, admins and your switches are kept.`;
   if (app.N) { for (const k of KINDS) { app.pending[k] = null; } app.local = {}; store("gazetteer-pending:" + app.N.tag, null); store(localKey(), null); }
