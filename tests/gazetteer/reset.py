@@ -1,6 +1,8 @@
 """The Gazetteer's "Start over" (2026-10-16, the author: "is there a way you could reset any edits made thus far? I'd
 like a blank slate"): Owner tools › Start over deletes every nation's facts, pictures, requests, status and notes, and
-keeps its password; a browser's unsent changes from before it don't come back.
+keeps its password; a browser's unsent changes from before it don't come back. It asks twice (a first "Yes, go on",
+then CLEAR typed), and Cancel at either step changes nothing (the author, later that day). That it is the author's alone,
+not their admins', is the web site's: tested against Firebase's emulators (docs/GAZETTEER_INTERNALS.md).
 
     python3 scripts/facts_export.py          # after a build: the map data the page reads
     python3 tests/gazetteer/reset.py         # PROBLEMS: none, screenshots in work/gazetteer_test/shots/
@@ -43,15 +45,35 @@ def owner(b, url, size):
     before = page.evaluate(f"[...window.__store.keys()].filter(k => k.startsWith('{base}/'))")
     check(any(k.endswith("/about") for k in before) and any("/req-" in k for k in before), f"{label}: nothing to clear: {before}")
 
-    # start over
+    # start over: asked twice (a first "Yes, go on", then CLEAR typed), and Cancel at either step changes nothing
     page.click("#back")
     time.sleep(0.4)
     unfold(page, "Start over")
+    left = lambda: page.evaluate(f"[...window.__store.keys()].filter(k => k.startsWith('{base}/')).length")
     page.click("#owner button:has-text('Clear every nation')")
+    time.sleep(0.2)
+    check(page.locator("#own-reset1").count() == 1 and page.locator("#own-reset").count() == 0, f"{label}: no first confirmation")
+    page.click("#own-reset1 button:has-text('Cancel')")
+    time.sleep(0.2)
+    check(page.locator("#own-reset1").count() == 0 and left() == len(before), f"{label}: Cancel at the first step didn't back out")
+    page.click("#owner button:has-text('Clear every nation')")
+    page.click("#own-reset1 button:has-text('Yes, go on')")
+    time.sleep(0.2)
+    check(page.locator("#own-reset2").count() == 1, f"{label}: no second confirmation")
+    page.click("#own-reset2 button:has-text('Clear everything now')")
     time.sleep(0.3)
-    check("Type CLEAR" in page.inner_text("#owner"), f"{label}: cleared without the word")
-    page.fill("#own-reset", "clear")
+    check("Type CLEAR" in page.inner_text("#owner") and left() == len(before), f"{label}: cleared without the word")
+    page.click("#own-reset2 button:has-text('Cancel')")
+    time.sleep(0.2)
+    check(page.locator("#own-reset2").count() == 0 and left() == len(before), f"{label}: Cancel at the second step didn't back out")
+    page.evaluate("clearEveryNation()")            # nor does the page clear anything without both steps
+    time.sleep(0.3)
+    check(left() == len(before), f"{label}: cleared without the two confirmations")
     page.click("#owner button:has-text('Clear every nation')")
+    page.click("#own-reset1 button:has-text('Yes, go on')")
+    page.fill("#own-reset", "clear")
+    page.screenshot(path=str(H.SHOTS / f"reset_confirm_{label}.png"))
+    page.click("#own-reset2 button:has-text('Clear everything now')")
     page.wait_for_function("!app.resetBusy && (app.resetMsg || '').startsWith('Done')", timeout=10000)
     after = page.evaluate(f"[...window.__store.keys()].filter(k => k.startsWith('{base}/'))")
     check(after == [f"{base}/key"], f"{label}: left after clearing: {after}")

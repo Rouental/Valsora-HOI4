@@ -120,11 +120,21 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   Unchanged characters stay byte for byte, and without facts the build is byte-identical. `check_mod.py` checks every
   commander's skill (1–9) and stats (0–9), and that they are its role's (mutation-tested, 2 of 2).
 - **Start over** (author, 2026-10-16: "is there a way you could reset any edits made thus far? I'd like a blank
-  slate"): Owner tools › Start over (`startOverSec`, `clearEveryNation`; the word CLEAR typed first) deletes every
-  document but `key` in each folder of `owner/keys`' nations (the rules let admins delete), then writes `planned/reset`
-  `{at}` (admins write `planned/*`; everyone reads it). Unsent changes a browser keeps (`gazetteer-pending:<TAG>`) and
+  slate"): Owner tools › Start over (`startOverSec`, `clearEveryNation`) deletes every document but `key` in each
+  folder of `owner/keys`' nations (the rules let admins delete) and writes `planned/reset` `{at}` (everyone reads it).
+  **The author's alone, asked twice** (the author, later that day: "make sure the reset button is only available for
+  me, not my admin, and that it requires two separate confirmations"): the section is shown only with `!app.fb ||
+  app.isAuthor`; it goes `app.resetStage` 0 → 1 ("Yes, go on") → 2 (CLEAR typed, "Clear everything now"), Cancel
+  back to 0, and `clearEveryNation` does nothing outside stage 2. The rules let only the author write `planned/reset`
+  (`planned/{doc}`: `(doc != "reset" && isAdmin()) || isAuthor()`), and the page writes it **first**, as a gate:
+  refused, it stops before deleting anything, so even an admin's page that thought itself the author's deletes
+  nothing (it writes it again when done). An admin can still delete a nation's documents one by one, as the owner
+  tools need (a request, a picture). Tested against the emulators: the admin keeps the other tools without Start
+  over; an admin's page forced to run it says "Not cleared" and Seigne's motto stays; over REST an admin's
+  `planned/reset` gets 403 and `planned/unlock` 200, the author's `planned/reset` 200; the author's two steps clear
+  Seigne to its `key`. Unsent changes a browser keeps (`gazetteer-pending:<TAG>`) and
   an offline copy (`gazetteer:<TAG>`) carry the time they were saved (`__at`); one from before the reset is dropped
-  when the nation is unlocked (`loadReset`, `staleSinceReset`) instead of being written back. No rules change.
+  when the nation is unlocked (`loadReset`, `staleSinceReset`) instead of being written back.
   `tests/gazetteer/reset.py`. The mod's side of the blank slate: `source/gazetteer/` was removed (Rouental's page and
   its assets, `installed.json`) with the flag the import had installed (`source/flags/TES.png`); without facts the
   build is the `.pdn`'s alone.

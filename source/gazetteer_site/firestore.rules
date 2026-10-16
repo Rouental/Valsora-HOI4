@@ -25,10 +25,11 @@ service cloud.firestore {
     match /owner/{doc} {
       allow read, write: if isAdmin();
     }
-    // nations not on the map yet, and whose map tools are open: everyone reads, admins change
+    // nations not on the map yet, and whose map tools are open: everyone reads, admins change;
+    // "reset" (when the author started over, which the page writes before it deletes anything) the author alone
     match /planned/{doc} {
       allow read: if true;
-      allow write: if isAdmin();
+      allow write: if (doc != "reset" && isAdmin()) || isAuthor();
     }
     // a nation's documents sit in a folder named after its password, n/<TAG>/<key>/<document>.
     // Nothing lists n or n/<TAG>, so only the password finds them, and a folder takes writes

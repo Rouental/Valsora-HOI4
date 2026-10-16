@@ -10,6 +10,13 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-16, later again (the author: "I think I'll actually not reset it. Could you make sure the reset button is only
+  available for me, not my admin, and that it requires two separate confirmations before resetting everything?"): the
+  site's **Start over** is the author's alone (admins don't see it, and the Firestore rules let only the author write
+  `planned/reset`, which the page writes before it deletes anything) and asks twice ("Yes, go on", then CLEAR typed);
+  tested on the stand-in and against Firebase's emulators, published. The rules changed: the author pastes them again.
+  Nothing was reset. The fonts: ỉ and ĩ without the i's dot, ă ĩ ũ composed in Federo (a specimen sheet of the built
+  fonts showed both).
 - 2026-10-16, later (the author's screenshots and `error.log` of v0.8.3, and: "I don't know if you're still giving
   nations the extra manpower ... please remove it", "is there a way you could reset any edits made thus far? I'd like a
   blank slate. The same goes for the mod. I'd like it just as it was on the last pdn, no extra rivers or internal

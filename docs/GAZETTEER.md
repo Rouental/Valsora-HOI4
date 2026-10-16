@@ -155,7 +155,9 @@ communist) are changed the same way. The ruling sub-ideology isn't on their Poli
 the map yet; **map tools** (open, closed or automatic, per nation); every **request** (set it
 done or declined, and reply; the player sees the reply with their nation); every
 **suggestion** (shown on the world map, or opened where it was drawn); **admins** (only you
-change them); **Start over** (2026-10-16, your "blank slate"): type CLEAR and press **Clear every nation** to delete
+change them); **Start over** (2026-10-16, your "blank slate"; yours alone, your admins don't see it): press **Clear
+every nation…**, then **Yes, go on** (the first confirmation), then type CLEAR and press **Clear everything now** (the
+second; **Cancel** backs out at either) to delete
 everything entered for every nation with a password (facts, pictures, suggestions, requests, status and notes); the
 passwords, admins, nations not on the map yet and map-tool switches stay, and what a player's browser kept from before
 (unsent changes, an offline copy) is dropped rather than sent back. It can't be undone, so save every nation as a file

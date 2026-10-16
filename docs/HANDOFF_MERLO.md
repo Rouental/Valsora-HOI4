@@ -249,7 +249,7 @@ password: https://rouental.github.io/Valsora-HOI4/
   - **map tools**, open or closed per nation;
   - requests, suggestions, and **Save every nation as a file**;
   - **Start over** (2026-10-16): clears every nation's entries, keeping the passwords. The
-    author's call: don't press it unless they ask.
+    author's alone: admins don't see it, and the rules refuse an admin's reset.
   Only the author can add or remove admins.
 - **A nation's map tools** (states, cities, terrain, rivers, railways, supply hubs) open
   only once its states are the author's own lines.

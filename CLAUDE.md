@@ -990,7 +990,8 @@ the page, its rules or its import.
     (`source/gazetteer_site/firestore.rules`) say `OWNER_EMAIL`, and the author pastes them in the console with their
     address. After changing the rules, ask them to paste them again.
   - Without its password a nation can be neither listed nor changed (the rules allow `get` and `list` only inside a
-    nation's folder, no `{path=**}`); `owner/*` is the admins' alone; only the author changes admins.
+    nation's folder, no `{path=**}`); `owner/*` is the admins' alone; only the author changes admins, and only the
+    author starts over (Owner tools › Start over, asked twice; the rules keep `planned/reset` the author's).
   - Map tools wait for a nation's states (author, 2026-10-15: "once their state borders have been set in the mod, full
     customization would be unlocked"): `gazetteer.finals`, or `planned/unlock` set by the author; the import drops a
     closed nation's map facts.
@@ -1087,7 +1088,8 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   slate. The same goes for the mod. I'd like it just as it was on the last pdn, no extra rivers or internal borders"):
   the mod is built from the `.pdn` alone, with no Gazetteer facts (`source/gazetteer/` removed: Rouental's page, its
   river, railway, terrain, cities, admiral and "Test" releasable with its flag), and Owner tools › **Start over**
-  clears the site's atlas (the author presses it: Claude can't sign in to their Firebase). The Gazetteer offers the base game's traits for every leader and takes requests for new ones,
+  would clear the site's atlas (the author's alone, asked twice; they decided not to, 2026-10-16: "I think I'll
+  actually not reset it"). The Gazetteer offers the base game's traits for every leader and takes requests for new ones,
   and has political advisors and companies (arms makers and industrial concerns of the base game's kinds, with logos;
   requests for new kinds); since 2026-10-15 (later) it shows what the game already has, editable (the author's own
   characters with their stats; Rouental's 13 releasables, its civil war's 7 risers and Belekria's Tethia), commanders'

@@ -35,7 +35,8 @@ the nation's password; without it, the page shows the map and what the mod has, 
   where it was drawn.
 - **O7 Admins.** Who they are; add one by Google address, **Remove** (only you).
 - **O8 Save every nation as a file.** The whole atlas, pictures inside, for Claude to bring into the mod.
-- **O9 Start over** (2026-10-16). Type CLEAR, then **Clear every nation**: everything entered for every nation is
+- **O9 Start over** (2026-10-16; the author's alone, not the admins'). **Clear every nation…**, then **Yes, go on**,
+  then CLEAR typed and **Clear everything now** (two confirmations; **Cancel** at either): everything entered for every nation is
   deleted (facts, pictures, suggestions, requests, status, notes); passwords, admins, nations not on the map yet and
   the map-tool switches stay.
 
