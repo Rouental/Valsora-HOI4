@@ -278,6 +278,11 @@ map (Merlo's, 2026-10-12), named after their ocean and numbered west to east, li
 each region's colour (in `source/region_names.json`): paint part of a region in a new blue
 and the new region gets a plain name like "Sea Zone 3" until names are added for it.
 
+The land regions follow the nations (2026-10-16, made by `scripts/land_regions.py`): each is
+whole states, a big nation's land cut into several, small neighbours grouped. Repaint them as
+you like; ask me to run the script again after big border changes (it repaints every land
+region, so your own land regions would be lost).
+
 One colour per region. Weather, air zones and naval zones work per region. **Sea zones
 are painted in blues, land regions in anything but blue**, so they are easy to tell
 apart. Keep to that when you add or repaint one. To make a sea zone bigger, paint its

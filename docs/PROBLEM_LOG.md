@@ -6,6 +6,46 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**No names on the map** (2026-10-16, the author: "Names seem to have disappeared in the new build")
+- Cause: `error.log`: "Failed to load texture larger than MAX_TEXTURE_SIZE: gfx/fonts/hoi_mapfont4.tga". The Deco UI's
+  map font (it replaces the game's at its path) got the Vietnamese letters with every other font in v0.8.4, and its
+  atlas grew from 2048 x 1024 to 2048 x 2048, which the game refuses: no font, so no country, state or region names.
+- Fix (Deco UI v0.9.1): the map font leaves the Vietnamese letters out (no name on the map uses them; 333 glyphs,
+  2048 x 1024 again) and `gen_fonts.py` stops if it would grow past that. Check: the map font's texture size, and
+  every letter of the names the map draws (countries under each government, states, regions, victory points) in it
+  (`check_mod.py`, mutation-tested).
+
+**The designers' statistics were white on the ivory sheet** (2026-10-16, the author: "The text on the unit designer
+can't be seen w/ white on tan")
+- Cause: v0.9 drew an ivory sheet where the designers write their statistics, in the game's `hoi4_typewriter*_inverted`
+  fonts. The game's own `_inverted` textures carry dark ink (they are coloured white); ours, redrawn in v0.8, were
+  white glyphs, which had read on the game's dark metal.
+- Fix (Deco UI v0.9.1): the two `_inverted` fonts have the ink baked in (`game_fonts.INK`).
+
+**The doctrine screen's tabs ran into the name under the flag** (2026-10-16, the author's screenshot)
+- Cause: the tabs' grid (`folders_grid`) was placed right of the notch, but the game drew the tabs about 125 px further
+  left. The grid had no `format`; the game seems to centre a grid's items without one (assumed).
+- Fix (Deco UI v0.9.1): `format = UPPER_LEFT` on the grid. Not yet seen in game.
+
+**A long faction name was cut off on the faction screen** (2026-10-16, the author's screenshot)
+- Cause: the name's box was the game's 300 px; "The Association of Reibonnaise States" is 323 px in our heading font.
+- Fix (Deco UI v0.9.1): 326 px, starting right of the notch (`layout_panels`, `inner_attrs`).
+
+**The faction card's LEADER tag was off centre; the seal's two badges sat unequally far from it** (2026-10-16, the
+author's screenshots)
+- Cause: the tag's text box was taller and wider than its plate, left-aligned; the timeout badge was 2.7 px from the
+  seal and the other 4.7 px.
+- Fix (Deco UI v0.9.1): the text box is the plate, centred both ways; the timeout badge 2 px further left. The members'
+  flags wrap to a second row now (up to 16; the author asked whether they would).
+
+**An "odd green bar" between Construction and Production; the music button against the tray's edge** (2026-10-16, the
+author's screenshots)
+- Cause: the bar was the game's production alert (`production_button_glow`), drawn by v0.2 as a gilt halo 8 px larger
+  than the crown, behind it: only the 6 px gaps either side showed it, dark green over the lacquer. The right-hand
+  tray's lower step was 2 px from the music button.
+- Fix (Deco UI v0.9.1): the alert is a ring round the inside of the crown, drawn over it (pulsing, click-through); the
+  tray's edge is 12 px further out.
+
 **Plaija's Vietnamese names had missing letters** (2026-10-16, the author: "the font not including character for, for
 example, Plaija's current nameset")
 - Cause: the Deco UI's fonts held Latin-1, Latin Extended-A and punctuation only; a bitmap font draws nothing for a

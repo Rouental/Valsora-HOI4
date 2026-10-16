@@ -10,6 +10,21 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-16, later (the author's screenshots and `error.log` of the Deco UI v0.9, and: "could you please regenerate
+  [the strategic regions] taking into account the nations now on the map?"):
+  - **Land strategic regions from the nations** (`scripts/land_regions.py`): 137 land regions (80 before, buckets of a
+    384 px grid that ignored borders), each of whole states: nations over 45,000 px cut into regions of about 30,000
+    (Sarkis 11, Krionik 9 ...), nations of 18,000 to 45,000 px one region each, smaller ones grouped with small
+    neighbours; Rouental and the other seven Association states are one region, the Vale. Sea regions untouched.
+    Written on the Strategic Regions layer of `source/HOI4 Mod Map.pdn`; `dist/region_numbers.png` and
+    `dist/region_names.md` renumbered for naming. 179 strategic regions in all.
+  - **The Deco UI v0.9.1**: the map's names back (the map font's texture had grown past what the game loads; checked
+    now, with the map's letters), dark ink in the designers' typewriter fonts, the doctrine tabs at their x, the
+    faction screen's long names whole, the LEADER tag centred and the faction's flags in two rows, the seal's badges
+    equidistant; in the top bar fuel, supply and convoys in the strip's last cell (the tray under it gone), the alerts
+    across to the right-hand tray, that tray's edge clear of the music button, and the production alert a ring round
+    its crown (the "odd green bar" was its halo, showing in the gaps).
+  - The build: 179 strategic regions, 62,183 borders, all checks passed, the mutation test's 55 breaks caught.
 - 2026-10-16, the night (the author's overnight list: "do 1 (though be prepared to possibly revert it,) 2, 3, 11, 12,
   and 13. Do maybe 3 or 4 loading screens as suggested in 8 as well, but don't add them yet"):
   - **The Deco UI v0.9** (1, 2, 3): the research trees and the doctrine screen under the focus tree's notched header;
