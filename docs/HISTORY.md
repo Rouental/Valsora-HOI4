@@ -10,6 +10,15 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-16 (the author's answers to the tech tree proposal's eight questions): no build. Recorded in
+  `docs/TECH_TREE_2036.md`, whose calendar, tiers, drones, battleship line and orbital strike were reworked from them:
+  a realistic 2036 (what is in development now is in full service, most nations at today's level, the superpowers a
+  little ahead); the tree begins where the base game's ends (gun battleships, then Kirov-like battlecruisers, then
+  arsenal ships); nuclear weapons only for the superpowers, in small numbers; Krionik, Kampf and Fraxhemark or Sarkis
+  as the superpowers; designed for the DLCs with fallbacks; drones as a support company, larger ones as aircraft, FPV
+  strike drones down the recon line; special projects open to anyone but very difficult; the orbital strike weaker than
+  a nuke, without fallout, unstoppable once launched and destroyable only by a raid before. The author is still
+  brainstorming; nothing is built.
 - 2026-10-15, the seventh round (the author: "Rouental's capital should be worth more VPs than Vair for example, even
   though Vair is bigger, right?", "give me a list of every function of the gazetteer", "Releasables already in the game
   should be represented on the site", "Leaders already in the game should be represented and editable, for example

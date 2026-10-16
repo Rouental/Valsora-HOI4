@@ -2,7 +2,46 @@
 
 The author's request (2026-10-15): "a written proposal for the 2036 tech tree", and later the same night: special
 projects, "for example, mechs. Or maybe an orbital kinetic bombardment weapon that acts sort of like a nuke". Nothing here
-is built yet; it is a plan to react to. The questions at the end decide most of it.
+is built yet; it is a plan to react to. **The author answered its eight questions on 2026-10-16** (next section); they are
+still brainstorming ("not ready to make any actual changes") and will say more about the tree's shape later, so nothing is
+built until they do. Where an answer changed the plan, the section concerned says so.
+
+## The author's answers (2026-10-16)
+
+1. **Tone: a realistic 2036.** "The time is a relatively realistic 2036. So things that are just starting to be
+   developed now should be coming into full swing then. Many nations are still at the modern level, but the
+   superpowers are pushing ahead by a little." What is in development or first service in the mid-2020s is in full
+   service by 2036: sixth-generation fighters with drone wingmen, laser air defence, hypersonic missiles, FPV drones
+   and loitering munitions everywhere, uncrewed surface and underwater vessels, AI-assisted targeting. Most nations
+   field today's equipment; the superpowers a step beyond it. No retro-futurism.
+2. **The tree begins where the base game's ends.** "This goes into something I'll talk about later, but my current
+   idea is that the beginning of Valsora's tech tree, the equivalent of the most basic equipment, is the end of the
+   base game's tech tree. So battleships only capable of mounting guns would be the first step on the tree, then maybe
+   battle cruisers like the Kirov, then on to arsenal ships." The tree runs from the late 1940s' kit to the 2040s, with
+   today's level well along it (the calendar below); the heavy hull is gun battleship, then missile battlecruiser, then
+   arsenal ship. More to come from the author.
+3. **Nuclear weapons** "exist, but in small numbers, and only for the superpowers": the superpowers start with the
+   nuclear technologies and a small stockpile each; nobody else has them at the start.
+4. **The superpowers**: "Krionik, Kampf, and either Fraxhemark or Sarkis". Krionik KRI (Yastreovakia, 161 states),
+   the Kampfian Empire KPF (Araseos, 95), and Fraxhemark FRX (Nonscio, Rouental's continent, 141) or Sarkis SRK
+   (Orientalis, the largest nation on the map, 201). Counts from the 2026-10-15 build; most of them are states Claude
+   cut from outlines, so they measure land.
+5. **DLCs**: "I have the DLC, and I'd like to design the mod with the hope of everyone having it, but there should be
+   a fallback for lack of dlc if possible." The new things go into the designers (tank, ship, plane) and the special
+   projects; the classic trees are renamed too, and get the nearest equivalent where one can be made.
+6. **Drones**: "My current idea is, to have them largely as a support company, and an aircraft for larger drones.
+   Maybe somewhere down the recon tree there could be a branch for offensive fpv drones or something?" (Drones,
+   under "The few new things".)
+7. **Special projects**: "I'm not sure yet, I'm still in the brainstorming phase, not ready to make any actual
+   changes. The plan would be for anyone to be able to make them, but it would be very difficult." No great-power
+   lock: high complexity, costs and industry requirements instead.
+8. **The orbital strike**: "my idea, assuming it's possible, is that they are weaker than a nuke, with no radiation,
+   but cannot be prevented. The window to destroy them would be a raid before they are launched, once they're in orbit
+   you just have to hope they miss." (Orbital bombardment, below.)
+
+Still open: Fraxhemark or Sarkis; whether anyone else can build nuclear weapons during the game (through the nuclear
+special projects, very difficult like the rest, would fit answer 7); which nations sit below the modern level (the
+tiers, under the calendar); and the author's later thoughts on the tree's shape (answer 2).
 
 ## Where it stands
 
@@ -48,23 +87,33 @@ C ships something visible quickly (step 1 alone changes how the whole game reads
 
 ## The calendar
 
-The game runs 2036 to 2049, 13 years like the base game's 1936 to 1949. The base game's tree has three layers, and
-they map naturally:
+*Reworked after answers 1 and 2 (2026-10-16). The first version mapped the base game's years a hundred years on
+(1918-1935 to 2018-2035 "Legacy", and so on); the author's tree instead begins where the base game's ends.*
 
-| the game's years | becomes | meaning |
-|---|---|---|
-| 1918-1935 | **2018-2035, "Legacy"** | what nations own at the start, by how developed they are |
-| 1936-1944 | **2036-2044, "Current"** | the main research of a game |
-| 1945-1950 | **2045-2050, "Next generation"** | late, expensive, ahead of the time penalty until then |
+The tree covers about a century of equipment, of which the game's thirteen years (2036 to 2049) are the last part.
+Each line keeps the base game's number of steps; its first step is renamed as the post-war kit (the base game's last)
+and each later step moves forward in time:
 
-Starting technology would follow **development tiers** the author assigns (the base game does this per country in
-its history files):
+| era | its technologies' years | for example | who has it at the start |
+|---|---|---|---|
+| Post-war | about 1945-1960 | gun battleships, the first jets, battle rifles: Valsora's most basic kit | everyone |
+| Cold War | about 1960-1990 | missile battlecruisers (the Kirov), main battle tanks, fourth-generation fighters | all but the feudal and levy states |
+| Modern | about 1990-2030 | today's: Gen 4.5 and 5 fighters, FPV drones, guided missiles everywhere | most nations |
+| 2036 | about 2030-2040 | sixth-generation fighters and their drone wingmen, lasers, hypersonics | the superpowers in part; everyone's main research |
+| Next generation | about 2040-2050 | arsenal ships, mechs, orbital strikes | nobody: late, costly, and penalised as ahead of its time until its year |
 
-- **Tier 1, the great powers** (Rouental? Krionik? Sarkis?): all Legacy techs, some 2036 ones.
-- **Tier 2, regional powers**: most Legacy techs.
-- **Tier 3, developing states**: basic infantry, trucks, older aircraft.
-- **Tier 4, feudal and levy states**: Rouental's vassal levies, the Khanates, the small principalities. Basic
-  infantry only, which fits Rouental's *Feudal Army* idea of a modern royal host beside medieval-style levies.
+The years are real ones, so the game's research penalty only bites on what lies beyond the date. `check_mod.py`, which
+fails on any 19xx `start_year` today, would allow technologies' years before 2036 (the game's dates and labels stay
+2036).
+
+Starting technology follows **tiers** (the base game sets it per country in its history files):
+
+- **Superpowers**: Krionik, the Kampfian Empire, and Fraxhemark or Sarkis. The Modern era and part of 2036, the
+  nuclear technologies and a few warheads (`add_nuclear_bombs`).
+- **Modern**: most nations (the default for every nation the author doesn't place lower).
+- **Developing**: up to the Cold War.
+- **Feudal and levy states**: the post-war kit. Rouental's vassal levies fit here, beside its modern royal host (the
+  host's divisions take modern equipment from Rouental's own tier).
 
 ## Branch by branch: what each thing becomes
 
@@ -74,7 +123,7 @@ Names are suggestions in a plain modern style; the author's own names win.
 
 | the game's | 2036 |
 |---|---|
-| Infantry Weapons / Improved Infantry Equipment I-III | Service Rifles (Legacy) / Assault Rifles 2036 / Smart Rifles 2040 / Integrated Soldier System 2044 |
+| Infantry Weapons / Improved Infantry Equipment I-III | Battle Rifles (post-war) / Assault Rifles (Cold War) / Modular Rifles (modern) / Smart Rifles and the Integrated Soldier System (2036) |
 | Infantry Anti-Tank I-II | Anti-Tank Guided Missiles I-II |
 | Paratroopers, Marines, Mountain Infantry, Rangers | Airborne, Marines, Mountain Troops, Special Forces (kept, renamed where needed) |
 | Night vision, support weapons | Thermal optics, crew-served weapons |
@@ -101,7 +150,7 @@ flavour.
 
 | the game's | 2036 |
 |---|---|
-| Fighter (small airframe) | Multirole Fighter: Gen 4.5 (Legacy), Gen 5 (2036), Gen 6 (2044) |
+| Fighter (small airframe) | Jet Fighter (post-war) to Gen 4 (Cold War), Gen 4.5 and 5 (modern), Gen 6 (2036) |
 | CAS (small airframe) | Ground-Attack Aircraft / **Attack Drone** (an "unmanned" module) |
 | Tactical Bomber (medium) | Strike Aircraft |
 | Strategic Bomber (large) | Stealth Bomber |
@@ -117,7 +166,7 @@ flavour.
 |---|---|
 | Light hull (destroyer) | Frigate / Destroyer |
 | Cruiser | Missile Cruiser |
-| Heavy hull (battleship) | **Arsenal Ship**, or kept as battleships (a question below) |
+| Heavy hull (battleship) | Gun Battleship (the first step), then Missile Battlecruiser (like the Kirov), then **Arsenal Ship** (answer 2) |
 | Carrier | Carrier, and later a Drone Carrier |
 | Submarine | Diesel-Electric (SSK) / Nuclear Attack (SSN) |
 | Torpedoes, guns | Anti-ship missiles, naval guns; torpedoes stay on submarines |
@@ -204,17 +253,26 @@ specialisations), ending in a weapon that **acts like a nuke**:
 3. **Anti-Satellite Weapons**: lets a country blind another's satellites (a targeted decision with a cooldown).
 4. **Orbital Kinetic Bombardment** ("rods from God"): tungsten rods dropped from orbit.
 
-How the strike would work, as near to a nuke as the game allows:
-- a **targeted decision** on an enemy state ("Kinetic Strike on [State]"), available at war once the project is done;
-- it consumes one **rod** (a stockpile kept as a country variable, built by a production decision at a cost in
-  steel, tungsten and civilian factories, or the game's own nuke stockpile, so the game's nuke counter shows it);
-- it calls the game's scripted nuke, the `launch_nuke` effect, on the state's main province (to be checked against
-  the game's effects documentation, not in our reference copy), so the damage is the game's: infrastructure, buildings,
-  units, war support, the world's reaction and world tension;
-- a long cooldown (e.g. 120 days), a world tension cost, and counters: the target's **Anti-Satellite Weapons** or
-  missile defence give a chance the strike misses (scripted, with a superevent when the first strike lands);
-- the kinetic strike leaves no fallout: an event may add "Kinetic devastation" in place of the game's nuclear
-  modifiers, if the game's nuke modifiers can be lifted off afterwards.
+How the strike would work (reworked after answer 8, 2026-10-16: "weaker than a nuke, with no radiation, but cannot be
+prevented. The window to destroy them would be a raid before they are launched, once they're in orbit you just have
+to hope they miss"):
+- **Readied, then launched.** A rod is built (a production decision at a cost in steel, tungsten and civilian
+  factories) and readied at a **launch site**: a special project facility, or a building of ours carrying the game's
+  `facility` tag. Readying takes some days: that is the window.
+- **Only a raid stops it.** The game's own air raid **Facility Strike** (`facility_strike` in
+  `common/raids/air_raids.txt`, at war, against buildings tagged `facility`) can hit the launch site; a successful
+  raid destroys the rods readied there. A paratrooper raid of our own could do the same.
+- **Once launched, nothing stops it**: no interception, no anti-satellite counter. The strike is a **targeted
+  decision** on an enemy state ("Kinetic Strike on [State]"), with a chance to miss (the rod lands in a neighbouring
+  province, or somewhere of no use), so the target can only hope.
+- **Weaker than a nuke, no fallout.** Not the game's nuke (`launch_nuke` brings its radiation and nuclear modifiers):
+  a scripted strike built from the game's own effects, the one its raids use on buildings (`damage_building`) and
+  those for units in a province (strength and organisation), plus the target state's infrastructure and a war support
+  loss. The exact effects to be checked against the game's documentation.
+- A cooldown and a world tension cost; a superevent when the first strike lands.
+
+The line's other steps stay: launch capability, then reconnaissance satellites (intelligence and targeting). The
+anti-satellite step would blind those satellites, not stop strikes.
 
 ### Others worth a project
 
@@ -232,11 +290,14 @@ style. The scientist roster and facility screens would get the deco look with th
 
 Kept small on purpose. Each is one step that can ship and be tested alone.
 
-1. **Drones.**
-   - Recon drones replace the recon company. The game already has the slot, the modifiers and the AI.
-   - **Loitering munitions** as a support company (soft and hard attack, cheap, fragile).
-   - **Attack drones** as a plane design (small airframe with an unmanned module: cheap and short-ranged, no pilot
-     losses).
+1. **Drones** (the author's shape, answer 6):
+   - **A drone company** (support): recon drones in place of the recon company. The game already has the slot, the
+     modifiers and the AI.
+   - **Offensive FPV drones, down the recon line**: a branch of its technologies that arms the drone company (soft and
+     hard attack, cheap, fragile), or a second support company of FPV strike teams if one company can't carry both.
+   - **Larger drones as aircraft**: a plane design with an unmanned module (long-endurance drones like the Reaper for
+     ground attack and reconnaissance; for the superpowers, drone wingmen beside their sixth-generation fighters).
+     Without By Blood Alone, the classic tree's close air support line, renamed.
 2. **Electronic warfare.** The signal company becomes an EW company, plus a short tech line whose jamming lowers
    the enemy's air and drone effectiveness in a fight (combat modifiers the game already has).
 3. **Air defence.** The game's SAM equipment, available from 2036, and a SHORAD support company to use it.
@@ -258,8 +319,8 @@ Each new unit needs its definition, icon, AI template and costs, checked like th
 1. **Names and descriptions**: every technology, equipment item, module, unit and doctrine, from a mapping table in
    the repository (`source/tech_names.json` or similar) into `localisation/english/replace/`. `check_mod.py` would
    flag any WW2 name left in the player's view. About one session.
-2. **Calendar and starting techs**: the Legacy / Current / Next labels, and the development tiers in the
-   countries' histories. One session, once the author has picked tiers.
+2. **Calendar and starting techs**: the eras' years and labels, and the tiers in the countries' histories (with the
+   superpowers' warheads). One session, once the author has placed nations in tiers.
 3. **Pictures** in the Deco line style. Two or three sessions.
 4. **The new things** (drones, EW, air defence, satellites and cyber), one at a time, with a balance pass each.
    Two or three sessions.
@@ -268,17 +329,8 @@ Each new unit needs its definition, icon, AI template and costs, checked like th
 6. **Doctrines**: names, descriptions, perhaps a few modifiers that fit a modern war. One session.
 7. **Models**, when there are any.
 
-## Questions for the author
+## Questions for the author (answered 2026-10-16)
 
-1. **Tone**: a realistic 2036, or a Valsora-flavoured one (art deco retro-futurism, some anachronisms on purpose)?
-2. **Battleships**: does Valsora still build them (kept, perhaps as "dreadnoughts"), or are they arsenal ships?
-3. **Nuclear weapons**: does Valsora have them, and who has them at the start?
-4. **Development tiers**: which nations are great powers, which developing, which feudal (Rouental's levies, the
-   Khanates)? A list by name is enough.
-5. **DLCs**: do you and your friends have No Step Back, Man the Guns and By Blood Alone? Without them the game shows
-   the classic trees, so both would be renamed either way, but the new things would go into the designers.
-6. **Drones**: a light touch (the three items above) or a branch of their own?
-7. **Special projects**: mechs and orbital bombardment in the first round of new things, or after the renaming? Who
-   may build them: anyone with the industry, or only great powers (tier 1)?
-8. **The orbital strike**: as strong as a nuke (the game's devastation), or weaker and more frequent? Should a target
-   be able to shoot it down (anti-satellite weapons, missile defence)?
+The first version's eight questions (the tone, battleships, nuclear weapons, the tiers, DLCs, drones, special projects
+and the orbital strike) are answered above, under "The author's answers"; what is still open is listed at the end of
+that section.

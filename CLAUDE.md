@@ -1090,8 +1090,11 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   Not seen yet: the Deco UI v0.8.2 and v0.8.3, the two starts, Vilna and Placeholdgrad. The Deco UI's checklist for the
   author is in `deco_ui/valsora_deco_ui/README.txt` (Things to check) and `deco_ui/CLAUDE.md` (section 10).
 - **Waiting on the author:** the larger flags' test version (`docs/HD_FLAGS_TEST.md`); the panel picture proposals (on
-  hold, the author: "I don't want to move ahead with the panel pictures just yet"); the tech tree proposal's eight
-  questions (`docs/TECH_TREE_2036.md`: "I'll get back to you on that"); the other size options
+  hold, the author: "I don't want to move ahead with the panel pictures just yet"); the tech tree (its eight questions
+  answered on 2026-10-16 and recorded in `docs/TECH_TREE_2036.md`: a realistic 2036, the tree beginning where the base
+  game's ends, nuclear weapons for the superpowers only, Krionik, Kampf and Fraxhemark or Sarkis as the superpowers;
+  the author is still brainstorming and will say more about the tree's shape, so nothing is built until then); the other
+  size options
   (`docs/SPEED_AND_SIZE.md`); the `error.log` behind the 8 errors of their last test. Settled (2026-10-15): the news
   masthead stays VALSORAN STANDARD, its globe the ringed one, the event cards' crest the keystone; the zip stays in
   `dist/` (Decisions worth keeping, "The mod's zip").
