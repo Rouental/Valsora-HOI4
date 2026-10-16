@@ -194,9 +194,10 @@ and what could make both smaller.
 | `sea_provinces.py` | by hand: the sea from the Ocean Province Lines layer (Merlo's): `build` (provinces from the lines, cut to HOI4's size limit, colours and regions kept by overlap), `seam` (borders and regions meet across the left/right wrap), `names` (`source/region_names.json`: "<ocean> <n>" west to east), `check` (report only) |
 | `river_provinces.py` | by hand, after a build: re-cuts the provinces of every state a river crosses so rivers run between provinces |
 | `borders.py` | HOI4's province border count (pairs of touching provinces, each separate stretch of shared boundary once, land and water alike) and its limit, 65,536; `check_mod.py` uses it; run alone, it counts the last build's |
-| `border_report.py` | by hand, after a build: where the province borders come from, and what re-cutting the provinces (one size, a bigger one, sizes by terrain like the base game's, impassable desert) would free; `docs/BORDER_LIMIT.md` (2026-10-15), `--terrain map` once the Terrain layer is painted |
+| `border_report.py` | by hand, after a build: where the province borders come from, and what re-cutting the provinces (one size, a bigger one, sizes by terrain like the base game's, impassable desert) would free; `docs/BORDER_LIMIT.md` (2026-10-15), `--terrain map` once the Terrain layer is painted; `--drawn-states` (2026-10-16): what drawing their own states would cost the nations still on cut ones, at Rouental's density and lighter ones |
 | `merge_provinces.py` | by hand, after a build: merges the smallest land provinces into a neighbour in the same state (never across a river, never two city provinces, at most 400 px) until the borders are down to a target (default 60,000), on the Provinces layer |
 | `redraw_flags.py` | unused: Fraxhemark's stand-in flag (writes `work/FRX_standin.png`); the author's own `FRX.png` replaced it |
+| `region_map.py` | by hand, after a build (2026-10-16): `dist/region_numbers.png`, the 80 land strategic regions numbered for the author to name, `dist/region_names.md` (a table to fill in) and `dist/region_numbers.json` (number → the region's colour); `--apply FILE` ("12 = Name" lines, or the filled table) puts the names into `source/region_names.json` by colour, which the build reads |
 | `state_map.py` | by hand, after a build: a numbered map of some countries' states (`dist/state_numbers_<name>.png` + `.json`, number → tag and pixel), for the author to name them; `--names` labels them with their names instead |
 | `terrain_test.py` | by hand, a test not in the game (author, 2026-10-12: "do not add it to the mod yet"): terrain for the whole map from each continent's real-world model (Nonscio western Europe, Araseos Germany, Yastreovakia eastern Europe and Russia, Usnistan the Middle East and Africa, Orientalis Asia, Solitas loosely the New World, Aislada Australia): its own relief with hand-placed ranges (the Alps down the bay east of Rouental, Tibet and the Himalaya at Ganden, the Ethiopian highlands by Mekele ...), every drawn river in a valley that falls steadily to its mouth, a climate per continent (latitude frame, prevailing winds and monsoons carrying the sea's moisture inland, rain shadows, hand-placed wet and dry areas, wetter where rivers are drawn), terrain.bmp classes (woods on uplands and slopes, farmland on low ground, along rivers and coasts, marsh only where water gathers), and each province's majority type. **The Vale of Reibonne** is the author's (2026-10-12: "Rouental and the Reibonnaise nations are in the Vale of Reibonne and are mostly surrounded by mountains and hills, except the Reliette gap which is open plains"): a low farmland floor ringed by the ranges they drew on their fief map's Mountains layer (`source/vale_ranges.png`, projected from `work/pdn_rmap`: the Osgrande Mountains north, the Nossine north-east, the Bastionne east, the Hollier inside Hollier, the Anarlaine south-west, and the Firime Highlands, hills, north-west) and by hills along the rest of its land border; the Reliette gap (west, between the coast and the Anarlaine, into Placeholdaire) open plains; Marais Verte marsh. Writes `work/terrain_test/` and `dist/terrain_test_map.png`, `terrain_test_provinces.png`, `terrain_test_vale.png` |
 | `usnistan_prototype.py` | by hand, a prototype not in the game: a fully generated Usnistan (relief, climate terrain, rivers, ~800 provinces, states, 6 placeholder countries, cities) into `work/usnistan/` and `dist/usnistan_*.png` (author asked for an example, 2026-10-02) |
@@ -1067,6 +1068,15 @@ it before touching the UI. In short:
   (`layout.NAME_SLACK`); the selected armies' badges, the air wings and the operatives start below the medallion
   (`make_mapviews.py`); the news globe is lit. Options for the globe and the crests: `deco_ui/art/proposals/news_globe/`
   and `crests/`. The larger flags' test version is drawn from the same tools (`VALSORA_FLAG_SCALE`).
+- **v0.9** (2026-10-16, the night, not yet seen in game; the author: "do 1 (though be prepared to possibly revert
+  it,)"): the research trees and the doctrine screen under the focus tree's notched header (`make_research.py`; the
+  research file is Valsora's, made again by `scripts/deco_ui.py`, REPLACES), the designers' and commander pickers'
+  pictures (`designer_art.py`), the faction's members' flags on the politics screen, the hot-join window below the
+  medallion, and `medallion_check.py` (a window under the medallion fails the Deco UI's build). The restyled screens
+  are one commit, `8dece16`: `git revert 8dece16` and a rebuild of both take them out. The focus in progress in the
+  focus tree's header, a bar under a focus and a one-spirit card have no hook in the game (`deco_ui/CLAUDE.md` section
+  12). **Four loading screens** from Valsora's map are a proposal, not in the mod (`deco_ui/art/proposals/loading_screens/`:
+  "don't add them yet").
 - **Proposals for the side panels' own pictures** (research, production, the market, the overview strip, the
   intelligence agency, the spirit banners) are in `deco_ui/art/proposals/panel_pictures/`, **not in the mod**
   (author, 2026-10-15: "don't put them in the mod yet. I'd like to see and approve them first").
@@ -1078,11 +1088,11 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
 - **The build** (2026-10-16): 21,078 provinces (20,690 land, 363 sea, 25 lakes), 62,183 province borders (HOI4
   draws 65,536: `docs/BORDER_LIMIT.md`), 3,149 states, 122 strategic regions (42 sea); 182 countries in the mod,
   161 of them on the map, 95 of those with a flag of their own (66 fly a stripe in their map colour); the states of
-  39 are the author's own lines (`gazetteer.finals`). Two starts, both on 1 January 2036. The Deco UI is v0.8.4 (the
-  focus tree's title in its header, the empty general card's plus on the chest, the count badges and fold arrows in
-  the deco style, the large tabs apart, opaque panel headers, the game's font bases; Vietnamese letters in every font,
-  for Plaija's names; the small letters for any name that needs two lines under the flag; the navy's panel below the
-  medallion).
+  39 are the author's own lines (`gazetteer.finals`). Two starts, both on 1 January 2036. The Deco UI is v0.9 (the research
+  trees and doctrines under a notched header, the designers' and commander pickers' pictures, the faction's members'
+  flags, a check for windows under the medallion), after v0.8.4 (the focus tree's title in its header, the count
+  badges and fold arrows, Vietnamese letters in every font, the small letters for names of two lines, the navy's panel
+  below the medallion). The Gazetteer shows players a quick-start guide the first time they unlock a nation.
   Rouental has test decisions for every kind of event and a test superevent (`test_events.py`).
   **A blank slate** (author, 2026-10-16: "is there a way you could reset any edits made thus far? I'd like a blank
   slate. The same goes for the mod. I'd like it just as it was on the last pdn, no extra rivers or internal borders"):
@@ -1105,7 +1115,8 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   the game's own (two Workshop mods, missing Italian and German tank models, SCO's and CSA's flags). Not seen yet
   besides: the two starts, Vilna and Placeholdgrad. The Deco UI's checklist for the author is in
   `deco_ui/valsora_deco_ui/README.txt` (Things to check) and `deco_ui/CLAUDE.md` (section 10).
-- **Waiting on the author:** the larger flags' test version (`docs/HD_FLAGS_TEST.md`); the panel picture proposals (on
+- **Waiting on the author:** names for the 80 land strategic regions (`dist/region_names.md`); the loading screen
+  proposal (`deco_ui/art/proposals/loading_screens/`); whether v0.9's restyled screens stay; the larger flags' test version (`docs/HD_FLAGS_TEST.md`); the panel picture proposals (on
   hold, the author: "I don't want to move ahead with the panel pictures just yet"); the tech tree (its eight questions
   answered on 2026-10-16 and recorded in `docs/TECH_TREE_2036.md`: a realistic 2036, the tree beginning where the base
   game's ends, nuclear weapons for the superpowers only, Krionik, Kampf and Fraxhemark or Sarkis as the superpowers;

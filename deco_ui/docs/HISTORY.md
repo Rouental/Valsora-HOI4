@@ -136,3 +136,19 @@ is covered by the flag tab" (`naviesview_window` below the medallion, 77 % of th
 game's did, the home base and refit windows down with it: `make_mapviews.py`). A specimen sheet of the built fonts ("Please
 show me the results of building the font") showed ỉ keeping the i's dot under its hook, and ă ĩ ũ still Josefin Sans
 fallbacks in the Federo fonts: an i under a mark loses its dot, and those six letters are composed too.
+
+**v0.9 (2026-10-16, the night, not yet seen in game)**, from the user's overnight list ("do 1 (though be prepared to
+possibly revert it,) 2, 3 ..."). A check first (3): `medallion_check.py` reads every top-level window of the game's and
+the mod's .gui files and fails when one would show in the medallion's corner without being moved below it, notched or
+reviewed with a reason; it found the hot-join window (moved, `make_mapviews.py`), and `validate_preview.py` runs it with
+a self-test (the navy put back, a panel without its notch, a new view: all caught). Then the screens (1): the research
+trees and the doctrine screen open flush under the band with the focus tree's notched header (`make_research.py`: the
+game's tabs in the header, a gilt title, the close diamond; the research file is Valsora's, made again by its build);
+the designers' and the commander pickers' pictures are redrawn at the game's paths (`designer_art.py`, eight textures),
+their panels measured from the game's own pictures so they lie under its lists. The army, navy and air overviews were
+already the notched side panels of v0.5. All of it is one commit, to revert in one step. The mockups' extras (2): the
+faction's members' flags under its name on the politics screen (a scripted GUI's dynamic list over `faction_members`,
+documented by the game but unused by it: assumed); the focus in progress in the focus tree's header, a bar under the
+focus and a one-spirit card with its modifiers have no hook in the game (section 12). Beside the mod, four loading
+screens drawn from Valsora's map as a proposal (`art/proposals/loading_screens/`, `proposals_loading.py`: "don't add
+them yet").

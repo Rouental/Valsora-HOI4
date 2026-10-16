@@ -1,5 +1,5 @@
-VALSORA DECO UI - v0.8.4 (for HOI4 1.19)
-========================================
+VALSORA DECO UI - v0.9 (for HOI4 1.19)
+======================================
 
 An art deco interface for the Valsora total conversion: core skin and fonts,
 a rebuilt top bar, the politics screen, every side panel, the province panel,
@@ -28,6 +28,45 @@ Valsora repository's scripts/common.py and rebuild (sh scripts/run_all.sh).
 The layout is built for 1920 px of UI width: 1920x1080 at 100% UI scale, or
 2560x1440 at up to 133%.
 
+
+NEW IN v0.9
+-----------
+  (The user: "do 1 (though be prepared to possibly revert it,) 2, 3 ..."
+  The restyled screens are one commit of their own, so they can be taken
+  out again in one step.)
+  - Research trees and the doctrine screen: they open flush under the top
+    bar like the focus tree, with its notched header round the medallion
+    and seal (they used to cover the medallion's lower half), a gilt title
+    ("Research", "Doctrines") right of the notch, the game's folder tabs in
+    the header and the close diamond. The trees, technologies and doctrines
+    are the game's.
+  - The designers (division, tank, plane, ship) and the commander pickers:
+    their background pictures redrawn in the deco style at the game's
+    sizes: lacquer plates with gilt hairlines where the game's metal was,
+    recessed panels where it draws its lists, an ivory ruled sheet where it
+    writes the statistics (dark text), and the commanders' cards in
+    parchment with a gilt rim, a lacquer portrait well and an emblem strip
+    in the card's colour (army red, navy blue, captured grey). The advisor
+    picker uses the same pictures.
+  - Politics screen: the faction card shows its members' flags in a row
+    under the faction's name, as the Government mockup has them (up to
+    eight; the name of each is its tooltip).
+  - The hot-join window (multiplayer) opens below the medallion.
+  - A check now fails the Deco UI's build if a game window at the top left
+    would sit under the flag medallion, so a new one is caught before it
+    ships.
+
+Things to check in game (v0.9):
+  - the research screen and the doctrine screen: the medallion and seal in
+    the notch, the title, the tabs (each opens its tree), the close diamond,
+    the trees under the header and not cut off;
+  - the designers (division, tank, plane, ship) and the commander picker
+    (a general's "assign" button): the pictures under the game's lists and
+    statistics, nothing misplaced; the statistics readable on the sheet;
+  - the politics screen while in a faction: its members' flags under its
+    name (the flags drawn by the game's text: their size is a guess);
+  - the faction screen opened: nothing showing in its notch (the game parks
+    the member and invite lists behind it; assumed, not seen).
 
 NEW IN v0.8.4
 -------------

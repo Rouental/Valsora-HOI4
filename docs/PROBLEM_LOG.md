@@ -575,6 +575,25 @@ screenshot and `error.log`)
 
 ## Map problems found while building
 
+**Enter in the password box skipped the Gazetteer guide's first step** (2026-10-16, `tests/gazetteer/guide.py`, the
+night's quick-start guide)
+- Cause: the guide opens as the nation unlocks, and it gave its Next button the focus; the Enter that unlocked the
+  nation (a key down in the password box) went on to press the focused button, so a player who unlocked with Enter
+  started on step 2. The test showed it as a guide that skipped a step on every Next after Back.
+- Fix: on opening, the card itself takes the focus (Next takes it when the steps change); the test checks it.
+
+**The Vale's loading screen framed half the world** (2026-10-16, `deco_ui/tools/proposals_loading.py`)
+- Cause: the box round the Reibonnaise states took every pixel they own, and Rouental also owns islands off Solitas,
+  far away.
+- Fix: only their land within 320 px of Rêverie. Guedelon has 48 pixels of land on today's map, so it is a dot with
+  its name beside it.
+
+**The designers' preview showed the game's sub-windows, not the new pictures** (2026-10-16, Deco UI v0.9)
+- Cause: none in the mod: the designers' popup pictures are their windows' backgrounds, and the game's panels on them
+  (the module list, the statistics sheet) are drawn over them with their own tiles, so only the parts between show.
+  The new pictures' panels are measured from the game's own pictures, so they lie under those sub-windows.
+- Fix: none needed; checked against the game's look side by side (`preview_designers.py`).
+
 **A test pressed a portrait instead of the Send button** (2026-10-15, `tests/gazetteer/traits.py` after the game's
 characters came to the People tab)
 - Cause: a portrait box for a base-game portrait first read "Base-game portrait: send one", and the test finds the

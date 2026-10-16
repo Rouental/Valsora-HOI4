@@ -10,6 +10,23 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-16, the night (the author's overnight list: "do 1 (though be prepared to possibly revert it,) 2, 3, 11, 12,
+  and 13. Do maybe 3 or 4 loading screens as suggested in 8 as well, but don't add them yet"):
+  - **The Deco UI v0.9** (1, 2, 3): the research trees and the doctrine screen under the focus tree's notched header;
+    the four designers' and the commander pickers' pictures redrawn; one commit (`8dece16`), so it can be reverted
+    alone. The faction's members' flags on the politics screen (assumed until seen). The focus in progress in the focus
+    tree's header, a bar under a focus and a one-spirit card can't be built (no hook in the game:
+    `deco_ui/CLAUDE.md` section 12). A check fails the Deco UI's build when a game window at the top left would sit
+    under the medallion (`medallion_check.py`); it moved the hot-join window.
+  - **Land regions numbered for naming** (12): `scripts/region_map.py`, `dist/region_numbers.png` (80 land regions),
+    `dist/region_names.md` to fill in; `--apply` puts the names into `source/region_names.json` by region colour.
+  - **The border budget for drawing the remaining states** (11): `border_report.py --drawn-states`,
+    `docs/BORDER_LIMIT.md`: Rouental-sized states cost about 600 borders, but Rouental's province density everywhere
+    about 8,150 (over the limit), unless provinces are sized by terrain.
+  - **The Gazetteer's quick-start guide** (13): five illustrated steps the first time a player unlocks a nation,
+    Guide to see it again; `tests/gazetteer/guide.py`; published.
+  - **Four loading screens** (8), a proposal only: `deco_ui/art/proposals/loading_screens/`.
+  - The build: 62,183 borders, all checks passed, the mutation test's 53 breaks caught.
 - 2026-10-16, later again (the author: "I think I'll actually not reset it. Could you make sure the reset button is only
   available for me, not my admin, and that it requires two separate confirmations before resetting everything?"): the
   site's **Start over** is the author's alone (admins don't see it, and the Firestore rules let only the author write

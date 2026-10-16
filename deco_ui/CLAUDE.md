@@ -14,9 +14,18 @@ Treat assumed items as hypotheses.
 
 ---------------------------------------------------------------------------------------------------
 
-## 1. Status (v0.8.4)
+## 1. Status (v0.9)
 
-**v0.8.4 (2026-10-16)** is the current version: the user's screenshots and `error.log` of v0.8.3 (section 10, the
+**v0.9 (2026-10-16, the night)** is the current version, from the user's overnight list ("do 1 (though be prepared to
+possibly revert it,) 2, 3 ..."): the research trees and the doctrine screen under the focus tree's notched header
+(`make_research.py`), the four designers' and the commander pickers' pictures redrawn (`designer_art.py`), the faction's
+members' flags on the politics screen, the hot-join window below the medallion, and a check that fails the build when
+a game window at the top left would sit under the medallion (`medallion_check.py`). The restyled screens are one commit
+of their own (`8dece16` in the Valsora repository), so they can be reverted alone. **Not yet seen in game.** What the
+mockups have that the game doesn't let us build (section 12): the focus in progress in the focus tree's header, a
+progress bar under a focus, a one-spirit card with its modifiers.
+
+**v0.8.4 (2026-10-16)**, before it: the user's screenshots and `error.log` of v0.8.3 (section 10, the
 README): the focus tree's title in its header (the game's own title; the scripted one sat in the tree's canvas), opaque
 headers, deco fold arrows and count badges, the large tabs 4 px in from each side, the empty card's plus on the chest,
 and the game's font bases; then, from the user's later messages, Vietnamese letters in every font (Plaija's names),
@@ -43,6 +52,8 @@ lessons that still hold are in section 6 (engine facts) and section 9 (pitfalls)
 | Army bar (bottom: `leadergroups.gui`) | v0.7: textures at the game's paths and sizes (`gen_textures.py`, `lg_*`; numbers in `layout_armybar.py`): arched gilt frames over the portraits (jade when selected; an army group's with gilt fans), the plate behind a run of cards, play/stop chips, the battle plan's chevrons, the empty card; `make_leadergroups.py` moves the division counts onto the plaques (centred, `valsora_deco_value_17`); v0.8: the play / stop row on the card's centre line. Preview `build/preview_armybar.png`. |
 | Map modes and minimap (bottom right: `mapmodes_interface.gui`, `minimap.gui`) | v0.5: textures only (layouts are the game's and Valsora's): lacquer column, line-icon medallions for land/air/naval/intel, the game's small icons and toggles recoloured in gilt, deco handle and ping buttons; the minimap's picture and frame in gilt by the Valsora mod (`scripts/minimap.py`, deco style). |
 | Events (`eventwindow.gui`) | v0.7: the report and newspaper textures replaced at the game's paths (`ev_*`): lacquer card with a crest, gilt rails and a picture frame; a WORLD NEWS broadsheet; options as gilt-rimmed plates; `make_events.py` sets the mod's fonts (titles `title_18`, text and options `body_15`). v0.8: the options centred in the room beside the picture (`layout_events.py`), a Valsoran globe on the masthead. v0.8.1: the masthead VALSORAN (globe) STANDARD, the news page centred. v0.8.2: the card's crest a keystone (`crests.py`), options in `option_14` (three lines to a plate), the globe lit. Preview `build/preview_events.png` (a country, a news and a leader event). |
+| Research trees, doctrine screen (`countrytechtreeview.gui`, `doctrines/doctrines_view.gui`) | v0.9 (`make_research.py`): flush under the band at the focus tree's x, the focus tree's notched header picture (`GFX_valsora_deco_nf_header`), a gilt title right of the notch, the game's folder tabs in the header hanging over the tree as the game's do, the close diamond; the trees, their pictures and every technology and doctrine are the game's. The research trees' file is Valsora's (2036's year labels): the Valsora build makes it again from its own copy (`scripts/deco_ui.py` REPLACES), as the politics screen. Preview `build/preview_research.png`, `preview_doctrines.png`. |
+| Designers, commander pickers | v0.9 (`designer_art.py`, through `gen_textures.py`): the four designers' popup pictures (division, tank, plane, ship) and the commander and advisor pickers' window and cards (army, navy, captured) redrawn at the game's paths and sizes, their panels where the game's are (measured from its pictures): lacquer plates, recessed panels, an ivory ruled sheet under the statistics (dark text), parchment cards with a lacquer portrait well. Textures only. Preview `build/preview_designers.png`. |
 | Fonts | The mod's own (`gen_fonts.py`) on its own screens; v0.8: the game's 28 fonts redrawn in the deco faces at their paths (`game_fonts.py`), for everything else. Preview `build/preview_game_fonts.png` (needs the game's font textures: section 7). |
 | Everything else (the panels' own pictures ...) | Only the core skin so far. Proposals for the panels' pictures (not in the mod) in `art/proposals/`. |
 
@@ -174,6 +185,13 @@ tools/
                             Valsora build run it
   layout_armybar.py         army bar numbers (v0.7): the cards, plate pieces, plaques, counts; MOVES (v0.8)
   make_leadergroups.py      leadergroups.gui: the counts on the plaques, the play / stop row on the centre line
+  make_research.py          countrytechtreeview.gui (from Valsora's copy) and doctrines/doctrines_view.gui: the focus tree's
+                            notched header (v0.9); --research-only for the Valsora build
+  designer_art.py           the designers' and the commander pickers' pictures (v0.9; gen_textures.py adds them)
+  medallion_check.py        the windows the medallion would hide (v0.9): every top-level window in the top left corner
+                            is MOVED, NOTCHED or REVIEWED with a reason; validate_preview.py runs it and its selftest
+  preview_research.py       build/preview_research.png, preview_doctrines.png (+ _vanilla)
+  preview_designers.py      build/preview_designers.png (+ _vanilla): the tank and division designers, the commander picker
   make_mapviews.py          unitview.gui, airselectionview.gui, operativeleader.gui, naviesview.gui: the left-edge
                             views moved below the medallion (v0.8.2, layout.BELOW_MEDALLION; the navy v0.8.4)
   preview_armybar.py        build/preview_armybar.png (+ _zoom): the game's look and the mod's, read from the .gui
@@ -778,6 +796,14 @@ GP.write_gui(MOD + "interface/x.gui", t)    # braces checked, engine_safe applie
 
 ## 10. Open items and things to check in game
 
+- **v0.9**: the research and doctrine screens (the notch, the title, the tabs opening their trees, the close diamond,
+  the trees not cut off); the designers and the commander picker (the pictures under the game's lists and statistics,
+  the statistics readable); in a faction, its members' flags under its name on the politics screen (**(assumed)**: a
+  scripted GUI's `dynamic_lists` over the game's `faction_members` array, documented in the game's
+  `common/scripted_guis/_documentation.md` but used by none of its own GUIs; each flag is the text icon
+  `[This.GetFlag]`, its size a guess); the faction screen's notch empty (`medallion_check.REVIEWED`: the game parks
+  `faction_countries_window` and `invite_countries_window` behind the panel, assumed); the hot-join window below the
+  medallion.
 Check these first in the user's next screenshots and `error.log`:
 
 - **v0.8.4**: the focus tree's title in its header and nothing over the first row; its header opaque; the lower left
@@ -917,17 +943,22 @@ The user asked (2026-10-14) for one install, keeping the option of going back to
    side panels, the focus tree, the army bar, the events, the fonts.
 2. Any text the deco faces don't fit in game: shrink that font in `game_fonts.GAME` (or widen the box in the screen's
    `make_*.py`), rebuild.
-3. Politics extras still missing from the Government mockup: faction member flags (needs a scripted
-   GUI dynamic list over the faction's members; not verified that one exists) and a one-spirit card
-   with its modifiers. The user does not want "The Court" panel.
+3. Politics extras: the faction member flags are built (v0.9, assumed until seen). A one-spirit card with its
+   modifiers can't be: no script or localisation command prints an idea's modifiers (the game's own spirit icons show
+   them in their tooltips). The user does not want "The Court" panel.
 4. The side panels' insides (v0.5 did their frames, headers and the shared pieces): the game's pictures
    inside them (research's photograph, `production_win_top`, the officer corps' coloured command boxes, the
    intelligence agency's art, `overview_top_strip`) and the +/- buttons; re-lay a panel only if the user asks.
    v0.7: proposals for the pictures in `art/proposals/` wait for the user's approval (the user: "don't put them in
    the mod yet. I'd like to see and approve them first").
-5. Focus tree, after the user's screenshots of v0.6: what the mockup has that the game's window lacks (the focus in
-   progress and its days in the header, a progress bar under the focus, the "on completion" list in the tooltip)
-   needs scripted GUIs or can't be done; the superevent is done (Valsora's `scripts/superevents_deco.py`).
+5. Focus tree: what the mockup has that the game's window lacks, looked at for v0.9. The focus in progress and its
+   days in the header: no localisation command names the focus in progress, and the only scripted GUI token for the
+   focus tree (`national_focus`) docks a GUI inside the tree's scrolling canvas (section 6), not its header;
+   `parent_window_window` ("may not work", the game's documentation) would put the text on the map if it failed. A
+   scripted localisation over every focus of Valsora's trees (`focus_progress` in 10 % steps) could give the name and
+   the progress, but only on the canvas. A progress bar under the focus: the focus item has no progress element, and a
+   scripted GUI can't follow the focus's place. So neither is built; the politics screen's focus card has both (the
+   game's). The superevent is done (Valsora's `scripts/superevents_deco.py`).
 6. HD flags experiment (section 6), only if the user wants it: the mockup and what it would take are in
    `art/proposals/hd_flags/`.
 
