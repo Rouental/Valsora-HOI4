@@ -541,6 +541,29 @@ def main(mod):
         if c not in keys:
             err(f"continent {c} has no localisation")
 
+    # ------------------------------------------------------------ letters the fonts draw
+    # A letter a bitmap font lacks is not drawn at all (2026-10-16: Plaija's Vietnamese names, "Mai Đức Tài"). With the
+    # Deco UI the mod ships the fonts the game draws its text in (deco_ui/tools/gen_fonts.py, game_fonts.py), so every
+    # letter of our English text and name lists must be in each of them.
+    fonts = sorted((mod / "gfx/fonts").glob("*.fnt"))
+    if fonts:
+        have = {f.name: {int(c) for c in re.findall(r"^char id=(\d+)", f.read_text(encoding="utf-8"), re.M)} for f in fonts}
+        texts = list((mod / "localisation/english").rglob("*.yml")) + list((mod / "common/names").glob("*.txt")) \
+            + list((mod / "common/units").rglob("names*/*.txt"))
+        where = {}
+        for f in texts:
+            for ch in set(f.read_text(encoding="utf-8-sig")):
+                if ord(ch) >= 0x20:
+                    where.setdefault(ch, f.name)
+        common_set = set.intersection(*have.values())
+        for ch in sorted(set(where) - {chr(c) for c in common_set}):
+            lacking = [n for n, cs in have.items() if ord(ch) not in cs]
+            if ch == "\u25c6" and len(lacking) < len(have):     # the factory diamond: only the value fonts have it
+                continue
+            err(f"letter {ch!r} (U+{ord(ch):04X}) in {where[ch]} is in no font of "
+                f"{', '.join(lacking[:3])}{' ...' if len(lacking) > 3 else ''} ({len(lacking)} of {len(have)}): "
+                f"it would not be drawn (deco_ui/tools/gen_fonts.py: CHARS)")
+
     # ------------------------------------------------------------ characters, focus trees
     chars = set()
     for f in (mod / "common/characters").glob("*.txt"):

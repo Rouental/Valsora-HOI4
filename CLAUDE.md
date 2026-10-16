@@ -222,7 +222,7 @@ and what could make both smaller.
 | `export_canvas.py` | previews in `dist/` |
 | `package.py` | `dist/valsora_test.zip` (reproducible: fixed dates and permissions, sorted) |
 | `stamp.py` | `fresh` / `save` a step's inputs, so `run_all.sh` skips `read_layers.py` while they are unchanged (`FORCE=1` reruns it) |
-| `mutation_test.py` | by hand, after changing `check_mod.py`: breaks hard-linked copies of the build in 52 known ways (map files, history, content, files), runs `check_mod.py` on each batch side by side, and fails unless every break is reported (a miss is retried alone, in case another break hid it); 30 s. Add a break for every new check (2026-10-15: it found our on_actions' scripted effects unchecked) |
+| `mutation_test.py` | by hand, after changing `check_mod.py`: breaks hard-linked copies of the build in 53 known ways (map files, history, content, files), runs `check_mod.py` on each batch side by side, and fails unless every break is reported (a miss is retried alone, in case another break hid it); 30 s. Add a break for every new check (2026-10-15: it found our on_actions' scripted effects unchecked) |
 | `fit_flag.py` | by hand: a flag the author sends in another shape → `source/flags/TAG.png` at 82:52 without resampling (plain field trimmed round an emblem, vertical bands made longer, stripes lengthened or made taller, a screenshot's frame cropped; quarters, crosses and borders refused) and `work/flag_fit_TAG.png` to check |
 | `build_flags15.sh` | by hand: the larger flags' test version (`docs/HD_FLAGS_TEST.md`) beside the mod: the Deco UI drawn for it in `work/deco_flags15/`, the mod in `work/build_flags15/`, `work/valsora_test_flags15.zip`; `build/` and `dist/` untouched |
 | `publish_site.sh` | by hand: the Gazetteer's site (`facts_export.py`, `gazetteer_site.py`) as the next commit of `gh-pages`, pushed; nothing when unchanged |
@@ -243,7 +243,8 @@ equipment, modules, battalions, ideas, defines, the map files the mod inherits, 
 stand-ins for Earth's decisions and tags, every event fired (by focus, effect, event or
 on_action) and 2036 (mutation-tested: 19 breaks, all caught). The checks that judge our
 scripting (tags targeted, popularities, ideologies) skip vanilla's shipped files. Since 2026-10-15 the breaks are kept
-in `scripts/mutation_test.py` (52, every one caught): run it after any change to `check_mod.py`.
+in `scripts/mutation_test.py` (53, every one caught): run it after any change to `check_mod.py`. Since 2026-10-16 it
+also fails on a letter of our text or name lists that a font the mod ships lacks (a bitmap font draws nothing for it).
 
 ## Decisions worth keeping
 
@@ -1035,7 +1036,9 @@ it before touching the UI. In short:
   sprites the game's own .gui files name without defining (`source/vanilla/index/gui_undefined_sprites.txt`).
   A game sprite (`source/vanilla/index/sprites.txt`) in a game .gfx the Deco UI ships patched (`nationalfocusview.gfx`)
   may point at the game's own texture; a texture in a folder of ours (`valsora…`, `VAL/`) must be shipped
-  (mutation-tested).
+  (mutation-tested). Every letter of the mod's English text and name lists must be in every font in `gfx/fonts`
+  (2026-10-16: Plaija's Vietnamese names; the fonts have Vietnamese since, composed where a face lacks it; the factory
+  diamond, U+25C6, only in the value fonts that draw it; mutation-tested).
 - There is no separate release any more (`dist/valsora_deco_ui.zip` was removed). The author was told to delete
   the old `mod/valsora_deco_ui/` and `mod/valsora_deco_ui.mod` and take it out of the playset: left in, it
   loads after Valsora and puts its older files back.
@@ -1076,7 +1079,9 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   161 of them on the map, 95 of those with a flag of their own (66 fly a stripe in their map colour); the states of
   39 are the author's own lines (`gazetteer.finals`). Two starts, both on 1 January 2036. The Deco UI is v0.8.4 (the
   focus tree's title in its header, the empty general card's plus on the chest, the count badges and fold arrows in
-  the deco style, the large tabs apart, opaque panel headers, the game's font bases).
+  the deco style, the large tabs apart, opaque panel headers, the game's font bases; Vietnamese letters in every font,
+  for Plaija's names; the small letters for any name that needs two lines under the flag; the navy's panel below the
+  medallion).
   Rouental has test decisions for every kind of event and a test superevent (`test_events.py`).
   **A blank slate** (author, 2026-10-16: "is there a way you could reset any edits made thus far? I'd like a blank
   slate. The same goes for the mod. I'd like it just as it was on the last pdn, no extra rivers or internal borders"):
@@ -1092,7 +1097,9 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   looked good but for the empty cards' plus, off their chest; the decision counts were the game's round badges; the
   focus tree's title and subtitle sat on its first row of focuses, the map showed faintly through its header, and its
   shortcuts arrow was the game's copper one; the captured commanders' two tabs overlapped; one log line was ours (the
-  tooltip font's base against the game's Cyrillic file). All fixed in v0.8.4, not yet seen. The log's other lines are
+  tooltip font's base against the game's Cyrillic file); later screenshots: long names (the Kampfian Empire) against
+  the flag's frame, the navy's panel under the medallion, and Plaija's Vietnamese names missing letters. All fixed in
+  v0.8.4, not yet seen. The log's other lines are
   the game's own (two Workshop mods, missing Italian and German tank models, SCO's and CSA's flags). Not seen yet
   besides: the two starts, Vilna and Placeholdgrad. The Deco UI's checklist for the author is in
   `deco_ui/valsora_deco_ui/README.txt` (Things to check) and `deco_ui/CLAUDE.md` (section 10).

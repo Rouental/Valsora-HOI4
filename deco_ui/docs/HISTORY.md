@@ -125,3 +125,12 @@ tree's scrolling canvas: section 6); the focus tree's and the side panels' heade
 frames) are redrawn at the game's paths; `tab_large` is drawn 4 px in from each side; the empty card's plus is smaller
 and midway down the chest; `game_fonts.py` writes the game's own base into each font (the game logged cg_16b's against
 its `hoi_16tooltip3`), which `validate_preview.py` checks.
+Later the same day, three more of the user's messages: "would it be possible for you to attempt to make those letters
+yourself by editing the font to create the needed characters? ... most of the needed letters are latin ones with slight
+additions. And the font is open source, right?" (Plaija's Vietnamese names: every font has Vietnamese now, composed in
+Federo and Bodoni Moda from their own letters and accents, the hook above and the dot below from Josefin Sans, the horn
+and đ's bar drawn in the face's weight: `gen_fonts.compose`, section 6; the fonts are named Valsora Deco Display, Sans
+and Italic, as the OFL asks of a modified version); "for long names like Kampf, they ride up against the flag" (any
+name that needs two lines in the large letters takes the small cut: `long_names.py`, 34 tags); "like the army, the navy
+is covered by the flag tab" (`naviesview_window` below the medallion, 77 % of the screen tall so it ends where the
+game's did, the home base and refit windows down with it: `make_mapviews.py`).

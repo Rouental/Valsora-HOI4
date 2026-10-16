@@ -50,6 +50,19 @@ NEW IN v0.8.4
   - Fonts: the game's fonts the Deco UI redraws keep the game's own base
     line, which the game checks against its Cyrillic files (error.log:
     "base (13) in 'gfx/fonts/hoi_16tooltip3.fnt' does not match ...").
+  - Fonts: Vietnamese letters (the horned Ơ Ư, Đ, and every tone-marked
+    vowel), for Plaija's names ("Mai Đức Tài"). Josefin Sans has them;
+    Federo and Bodoni Moda don't, so those letters are put together from the
+    face's own letters and accents, with the hook above and the dot below
+    from Josefin Sans, and the horn and đ's bar drawn in the face's weight.
+    The Valsora build now checks that every letter of the mod's text and
+    name lists is in the fonts.
+  - Names under the flag: a name that needs two lines in the large letters
+    (the Kampfian Empire) uses the smaller ones, which leave room above and
+    below (two large lines filled the box up to the flag's frame).
+  - The navy: the selected fleets' panel starts below the medallion and the
+    decisions seal, as the armies' did in v0.8.2, and the home base and
+    refit windows beside it move down with it.
 
 Things to check in game (v0.8.4):
   - the focus tree: the title in the header, nothing over the focuses,
@@ -59,6 +72,12 @@ Things to check in game (v0.8.4):
   - the captured commanders window (the army screen): two tabs apart;
   - an empty general card: the plus on the chest;
   - error.log: no "does not match previous fontfiles" line.
+  - Plaija's characters (a Vietnamese name in a tooltip, on the politics
+    screen, a general's card): every letter drawn, accents in place;
+  - a long name under the flag (the Kampfian Empire): small letters, clear
+    of the flag's frame;
+  - select a fleet: its panel below the medallion, nothing hidden, its list
+    reaching the bottom of the screen without running off it.
 
 NEW IN v0.8.3
 -------------
@@ -522,6 +541,8 @@ tools/build_all.py; see CLAUDE.md in the source project.
 
 CREDITS
 -------
-Fonts: Federo, Josefin Sans and Bodoni Moda (SIL Open Font License 1.1,
-licence texts in gfx/fonts/OFL_*.txt). Limelight (also SIL OFL) appears only
+Fonts: drawn from Federo, Josefin Sans and Bodoni Moda (SIL Open Font
+License 1.1, licence texts in gfx/fonts/OFL_*.txt). They are modified (bitmap
+versions, with letters of our own), so they carry names of their own, Valsora
+Deco Display, Sans and Italic, as the licence asks of a modified version. Limelight (also SIL OFL) appears only
 in the main menu artwork. All textures and icons are original.

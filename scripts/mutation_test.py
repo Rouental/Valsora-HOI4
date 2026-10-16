@@ -255,9 +255,8 @@ def m_ruling_party(mod):
 
 
 def m_trait(mod):
-    edit(mod, "common/characters/valsora_leaders.txt",
-         lambda t: re.sub(r"(ROU_gazetteer_admiral_1 = \{.*?navy_leader = \{)", r"\1\n\t\t\ttraits = { made_up_trait }", t, count=1, flags=re.S))
-    return "navy_leader trait made_up_trait is not one of the base game's"
+    edit(mod, "common/characters/ROU.txt", lambda t: t.replace("traits = { armor_officer }", "traits = { made_up_trait }", 1))
+    return "corps_commander trait made_up_trait is not one of the base game's"
 
 
 def m_advisor_slot(mod):
@@ -396,6 +395,11 @@ def m_ascii_name(mod):
     return "file names must be ASCII"
 
 
+def m_font_letter(mod):
+    edit(mod, "localisation/english/valsora_l_english.yml", lambda t: t.rstrip("\n") + '\n VAL_FONT_TEST:0 "\u01c4"\n')
+    return "(U+01C4) in valsora_l_english.yml is in no font"
+
+
 def m_song(mod):
     edit(mod, "events/valsora_superevents.txt", lambda t: t.replace('play_song = "valsora_gladiators"', 'play_song = "valsora_no_such_song"', 1))
     return "play_song valsora_no_such_song is not defined in music/"
@@ -409,7 +413,8 @@ BATCHES = {
     "content": [m_decision_stand_in, m_event_stand_in, m_old_date, m_tree_label, m_start_year, m_trait, m_advisor_slot,
                 m_prerequisite, m_state_loc, m_decision_loc, m_trigger_for, m_scripted_effect, m_war_goal, m_song,
                 m_company_include, m_company_tag, m_company_loc, m_concern_trait, m_idea_loc, m_skill_range, m_skill_kind],
-    "files": [m_no_bom, m_gui_sprite, m_texture_missing, m_minimap, m_globe, m_case_clash, m_ascii_name],
+    "files": [m_no_bom, m_gui_sprite, m_texture_missing, m_minimap, m_globe, m_case_clash, m_ascii_name,
+              m_font_letter],
 }
 
 

@@ -19,7 +19,8 @@ Treat assumed items as hypotheses.
 **v0.8.4 (2026-10-16)** is the current version: the user's screenshots and `error.log` of v0.8.3 (section 10, the
 README): the focus tree's title in its header (the game's own title; the scripted one sat in the tree's canvas), opaque
 headers, deco fold arrows and count badges, the large tabs 4 px in from each side, the empty card's plus on the chest,
-and the game's font bases. The user has seen v0.8.3 in game (2026-10-16): the army bar "looks good". **v0.8.4 is not
+and the game's font bases; then, from the user's later messages, Vietnamese letters in every font (Plaija's names),
+the small cut for any name that needs two lines under the flag, and the navy view below the medallion. The user has seen v0.8.3 in game (2026-10-16): the army bar "looks good". **v0.8.4 is not
 yet seen.** **(in game)** so far: the main menu (its background, links and button row), the top bar (the right end
 too, since v0.4.5), the politics screen (v0.4.7, v0.4.8), the side panels' notch and opening (v0.5, v0.5.1), the
 events and the news page (v0.8.1), the army bar and the focus tree (v0.8.3).
@@ -173,8 +174,8 @@ tools/
                             Valsora build run it
   layout_armybar.py         army bar numbers (v0.7): the cards, plate pieces, plaques, counts; MOVES (v0.8)
   make_leadergroups.py      leadergroups.gui: the counts on the plaques, the play / stop row on the centre line
-  make_mapviews.py          unitview.gui, airselectionview.gui, operativeleader.gui: the left-edge views moved
-                            below the medallion (v0.8.2, layout.BELOW_MEDALLION)
+  make_mapviews.py          unitview.gui, airselectionview.gui, operativeleader.gui, naviesview.gui: the left-edge
+                            views moved below the medallion (v0.8.2, layout.BELOW_MEDALLION; the navy v0.8.4)
   preview_armybar.py        build/preview_armybar.png (+ _zoom): the game's look and the mod's, read from the .gui
   layout_events.py          the events' option plate and each window's options centre (v0.8)
   make_events.py            eventwindow.gui: fonts, option entries, each window's options grid
@@ -425,7 +426,22 @@ Build order matters. `gen_fonts` runs first because `layout.py` measures strings
   while keeping its box and tooltip. The factory readout uses it, and a scripted GUI redraws the
   numbers.
 - Characters outside the generated set do not render. The set is Latin-1, Latin Extended-A, common
-  punctuation and the diamond. A thin space U+2009 was tried and failed.
+  punctuation and the diamond, and since v0.8.4 Vietnamese (`gen_fonts.VIETNAMESE`: Ơ ơ Ư ư and the 90 tone-marked
+  vowels of Latin Extended Additional; Plaija's names use 25 of them). A thin space U+2009 was tried and failed.
+  The Valsora build's `check_mod.py` fails on any letter of the mod's English text or name lists missing from a
+  font in `gfx/fonts` (mutation-tested).
+- **Composed letters** (v0.8.4, `gen_fonts.compose`): Josefin Sans has every Vietnamese letter; Federo and Bodoni
+  Moda don't, and Federo lacks Đ đ too. Such a letter is built in the face from its longest precomposed base it has
+  (â for ấ) and the marks: each mark cut out of a precomposed letter (its ink beyond the base letter's), from the
+  face itself (acute, grave, circumflex, tilde, breve) or else Josefin Sans (hook above, dot below), scaled by the
+  x-height or cap height and set where the source sets it; a tone mark beside a circumflex goes to its side. The
+  horn and đ's bar are strokes drawn in the face's weight (`_horn`, `_d_stroke`); Đ is the face's Ð. A mark reaching
+  past the letter widens it by half of what it takes beyond the letter's side bearing, as Josefin spaces its own.
+  The atlases grew to fit (several doubled; the mod's zip by 0.6 MB).
+- **Face names** (v0.8.4): the `.fnt` files' `face` is "Valsora Deco Display" (from Federo), "Valsora Deco Sans"
+  (Josefin Sans) or "Valsora Deco Italic" (Bodoni Moda), not the families' own: Federo and Josefin Sans are Reserved
+  Font Names under their OFL, which a modified version (a bitmap font, letters of our own among them) may not use.
+  The licences ship beside the fonts (`gfx/fonts/OFL_*.txt`).
 - `vanilla "tahoma_60"` (the map's country names) is replaced by overwriting
   `gfx/fonts/hoi_mapfont4.fnt/.dds`, without touching its definition.
 - `line_extra` in `gen_fonts.build` adjusts the line height (Bodoni Moda's is very loose: the italic
@@ -490,8 +506,8 @@ localisation, tags, cosmetic tags and ideologies.
   trigger `valsora_deco_long_name` says the current name would not fit. The trigger is
   **generated**. Each `TAG`, `TAG_<ideology>` and cosmetic-tag name from Valsora's English
   localisation is greedy-wrapped at the large font's metrics, and names with a word wider than the
-  box, or more than 2 lines, are listed. Today the list is GLB HZB KKB LNT MTN MZG OCR PNC RMD STM
-  TBS TUP. **Re-run `make_topbar.py` whenever Valsora adds or renames countries.** Without
+  box, or more than one line (v0.8.4: two lines of the large letters filled the box to the flag's frame), are
+  listed: 34 tags today (AOE ... WSM). **Re-run `make_topbar.py` whenever Valsora adds or renames countries.** Without
   localisation, the trigger is `always = yes`.
 - Daily political power and the three factory counts (with coloured diamonds) are scripted GUI
   text. The engine's own factory string is hidden with the blank font.
@@ -712,6 +728,9 @@ GP.write_gui(MOD + "interface/x.gui", t)    # braces checked, engine_safe applie
 ## 9. Pitfalls already hit (do not repeat)
 
 - Stretching flags makes them pixelated. Keep them 1:1.
+- A view the game puts at the screen's left edge under its top bar is drawn under the Deco UI's top bar, so the
+  medallion hides its top (the armies, air wings and operatives in v0.8.1, the navy in v0.8.3). Side panels and the
+  tech tree are drawn over the top bar instead. A new map-level view in that corner goes in `make_mapviews.py`.
 - A picture the game lays out overlapping (the large tabs, 250-256 px apart for 258 px pictures) needs room drawn
   in: the game's slanted tabs hid the overlap, our chamfered bars didn't (v0.8.3, the captured commanders).
 - Lacquer at 97 % shows the map's names through it (v0.8.3, the focus header): panels and headers are opaque.
@@ -761,7 +780,9 @@ Check these first in the user's next screenshots and `error.log`:
 
 - **v0.8.4**: the focus tree's title in its header and nothing over the first row; its header opaque; the lower left
   arrow in the deco style; the decisions seal's count badges (grey, red with a time limit); the captured commanders'
-  two tabs apart; an empty general card's plus on the chest; no "does not match previous fontfiles" in `error.log`.
+  two tabs apart; an empty general card's plus on the chest; no "does not match previous fontfiles" in `error.log`;
+  Plaija's Vietnamese names drawn whole (tooltips, the politics screen, a general's card); a long name under the flag
+  (the Kampfian Empire) in the small letters; a selected fleet's panel below the medallion, its list ending on screen.
 
 - **v0.8.3**: the news masthead's ringed globe at its size; a superevent's crest, the whole ringed globe across the
   frame's top edge; the event card's keystone, its diamond clear of the top step.

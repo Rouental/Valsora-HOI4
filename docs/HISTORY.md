@@ -23,6 +23,14 @@ states and countries came next.
   divisions. **A blank slate**: the mod from the `.pdn` alone (Rouental's Gazetteer page, its river, railway, terrain,
   cities, admiral and "Test" releasable out: 182 countries), and Owner tools › Start over on the site, which clears every
   nation's entries (the author presses it) and keeps browsers from sending old copies back (`tests/gazetteer/reset.py`).
+  Later still (the author: "would it be possible for you to attempt to make those letters yourself by editing the
+  font", "for long names like Kampf, they ride up against the flag", "like the army, the navy is covered by the flag
+  tab"): **Vietnamese letters in every font** the Deco UI ships (Plaija's names: Josefin Sans has them, the Federo and
+  Bodoni Moda fonts have them composed from their own letters and accents), and `check_mod.py` fails on any letter of
+  the mod's text or name lists a font lacks (53 breaks in `mutation_test.py`, all caught; the trait break moved to
+  Serelle, Rouental's admiral being gone); a name needing two lines under the flag takes the small letters (34 tags);
+  the navy's panel below the medallion. The fonts are named Valsora Deco Display, Sans and Italic (the OFL reserves
+  Federo's and Josefin Sans' names). The zip grew from 21.3 to 21.9 MB (larger font atlases).
 - 2026-10-16 (the author's answers to the tech tree proposal's eight questions): no build. Recorded in
   `docs/TECH_TREE_2036.md`, whose calendar, tiers, drones, battleship line and orbital strike were reworked from them:
   a realistic 2036 (what is in development now is in full service, most nations at today's level, the superpowers a

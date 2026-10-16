@@ -6,6 +6,29 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**Plaija's Vietnamese names had missing letters** (2026-10-16, the author: "the font not including character for, for
+example, Plaija's current nameset")
+- Cause: the Deco UI's fonts held Latin-1, Latin Extended-A and punctuation only; a bitmap font draws nothing for a
+  letter it lacks. Plaija's name list (the base game's Vietnamese) uses 25 letters outside that set (ơ ư ạ ấ ầ ế ộ ứ
+  ...), and its communist leader is "Mai Đức Tài". Federo has none of them, nor Đ đ.
+- Fix (Deco UI v0.8.4): every font has the Vietnamese letters; in Federo and Bodoni Moda they are composed from the
+  face's own letters and accents (`gen_fonts.compose`). Check: every letter of the mod's English text and name lists
+  must be in every font the mod ships (`check_mod.py`, mutation-tested).
+
+**Long names under the flag rode up against its frame** (2026-10-16, the author: "for long names like Kampf")
+- Cause: a name in two lines of the large letters (20 px each) filled the 40 px box, so its first line touched the
+  flag's frame.
+- Fix (Deco UI v0.8.4): a name that needs more than one line of the large letters takes the small cut (`long_names.py`:
+  34 tags), whose two lines leave room above and below.
+
+**The navy's panel was covered by the flag medallion** (2026-10-16, the author: "like the army, the navy is covered by
+the flag tab")
+- Cause: the game puts the selected fleets' panel (`naviesview.gui`'s `naviesview_window`) at y 82, under its own top
+  bar; v0.8.2 moved the armies', air wings' and operatives' views below the medallion but missed this one.
+- Fix (Deco UI v0.8.4): it starts below the medallion and the seal (`make_mapviews.py`), 77 % of the screen tall so it
+  ends where the game's did; the home base and refit windows beside it move down with it. A survey of the game's .gui
+  files found no other view in that corner under the top bar.
+
 **The focus tree's title and subtitle sat on its first row of focuses** (2026-10-16, the author's screenshot of v0.8.3)
 - Cause: the scripted GUI that drew them was docked with `parent_window_token = national_focus`, which the game puts
   inside the tree's scrolling canvas (`focus_tree_scripted_window_container`), not the window: the title landed ~124 px
