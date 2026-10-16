@@ -4,7 +4,8 @@ The author's request (2026-10-15): "a written proposal for the 2036 tech tree", 
 projects, "for example, mechs. Or maybe an orbital kinetic bombardment weapon that acts sort of like a nuke". Nothing here
 is built yet; it is a plan to react to. **The author answered its eight questions on 2026-10-16** (next section); they are
 still brainstorming ("not ready to make any actual changes") and will say more about the tree's shape later, so nothing is
-built until they do. Where an answer changed the plan, the section concerned says so.
+built until they do. Later that day they named TNO and The Fire Rises as models and the Cold War as perhaps the earliest
+era (the tree's depth and the game's length, after the calendar). Where an answer changed the plan, the section concerned says so.
 
 ## The author's answers (2026-10-16)
 
@@ -88,7 +89,9 @@ C ships something visible quickly (step 1 alone changes how the whole game reads
 ## The calendar
 
 *Reworked after answers 1 and 2 (2026-10-16). The first version mapped the base game's years a hundred years on
-(1918-1935 to 2018-2035 "Legacy", and so on); the author's tree instead begins where the base game's ends.*
+(1918-1935 to 2018-2035 "Legacy", and so on); the author's tree instead begins where the base game's ends.* *Later that day the
+author thought of making the Cold War the earliest era instead (the post-war row below would go), with TNO and TFR as
+models: see "The tree's depth and the game's length" after the tiers.*
 
 The tree covers about a century of equipment, of which the game's thirteen years (2036 to 2049) are the last part.
 Each line keeps the base game's number of steps; its first step is renamed as the post-war kit (the base game's last)
@@ -114,6 +117,91 @@ Starting technology follows **tiers** (the base game sets it per country in its 
 - **Developing**: up to the Cold War.
 - **Feudal and levy states**: the post-war kit. Rouental's vassal levies fit here, beside its modern royal host (the
   host's divisions take modern equipment from Rouental's own tier).
+
+## The tree's depth and the game's length (2026-10-16, later)
+
+The author: "I'd like to take inspiration from the fire rises and TNO. I might make the earliest era the cold war
+actually. I'm not sure how many years I want the game to last, so I'm not sure how many layers of tech there should be.
+The base game starts at the second layer and has two more major advances for the infantry weapon, for example. I can't
+quite remember, but I think for majors TFR/TNO starts you even farther in with less distance to go. I'm not sure what
+I'll end up doing." Still brainstorming: nothing is built.
+
+**What the base game does** (read from the author's 1.19.3 files):
+
+- The infantry line: Basic Infantry Equipment (1918), Infantry Equipment I (1936), an upgrade (1938), Infantry
+  Equipment II (1939), an upgrade (1940), Infantry Equipment III (1942), an upgrade (1944). Majors start with the 1918
+  and 1936 steps (Germany's history), minors with the 1918 one alone (Ethiopia's). So a major has two big steps and
+  three small ones ahead, three years apart and one or two years apart; a minor one big step more.
+- The whole tree: 506 dated technologies, 113 of them at 1936 (what a country starts with or can take at once), about
+  330 between 1937 and 1945, and almost none later (a dozen to 1950). The game ends in 1949, so a major reaches the end
+  of the lines it cares about about two thirds of the way through.
+- Research: a technology costs 110 days (`BASE_TECH_COST`) times its cost (1.5 typically), so about 165 days in one
+  slot; five slots over thirteen years is about 145 technologies at the base speed, under half of what the tree holds
+  after 1936: choosing matters. Researching ahead of a technology's year costs extra for every year early
+  (`BASE_YEAR_AHEAD_PENALTY_FACTOR` = 2), which is what holds a country to the calendar.
+
+**The other mods** (researched 2026-10-16; the mods' wikis, Steam and Reddit couldn't be opened from here, so what
+couldn't be read in a mod's own files is marked):
+
+- **The Fire Rises** (starts 1 January 2020; its end date not confirmed). From a copy of its technology files on GitHub
+  (`HugoRinderknecht/The_Fire_Rises`, June 2025; the copy's costs may have been edited, its years and structure are
+  TFR's): the infantry tab's years are 2000, 2006, 2012, 2018, then 2021, 2024 ... 2036: **six years apart behind the
+  start, three years apart ahead of it**. Small arms have six equipment tiers (2000, 2006, 2018, 2024, 2030, 2036) and
+  stat upgrades between them, nine steps in all; the tree stops at 2036 (a few techs to 2044), sixteen years past the
+  start. Which tiers its majors start with is not confirmed. Its startup gives AI countries it doesn't care about no
+  research slots (for speed).
+- **TNO** (starts 1962; the Workshop page promises "ten years or more" of content for the main factions; end date and
+  small-arms tiers not confirmed: its files aren't public). From its bug tracker: technologies run to at least 1990,
+  equipment is named by year ("1950 Basic Motorized Equipment"), and **higher technologies need a higher level of
+  social development**: "a 1965 tech requires highest industry social development level", which holds almost everyone
+  but the three Cold War superpowers back (the developers kept it so, issue #5097, 2025).
+- **Millennium Dawn** (the long-running modern-day mod; confirmed from its own files, v2.0.2): one start, 2000, the game
+  ending in 2100. Its tree runs 1965 to 2080 in five-year steps, about 1,400 techs; small arms are twelve tiers ten years
+  apart ("Small Arms 1965" to "Small Arms 2075"), four of them before the start. The USA starts with five (to 2005, one
+  past the start), Russia, Germany and China with four, Indonesia and Nigeria with two, Mali and Chad with the first
+  alone. Research is slower and the calendar looser than the base game's (`BASE_TECH_COST` 250 against 110, the
+  ahead-of-time penalty 1.0 against 2, tech sharing at most 10 % against 50 %), and research slots (none at the start)
+  come from a country's economy (GDP and GDP per head, with factories), its speed from education and literacy.
+
+So the author's memory is about right for TFR: its majors start in the middle of their lines (four of small arms'
+nine steps lie before 2020) and the steps ahead come quicker than the ones behind. TNO holds the gap open by
+development rather than by starting technologies alone. Millennium Dawn is the other way to a long game: a very long,
+dated tree, slow research, and slots earned by the economy.
+
+**What it means for Valsora:**
+
+1. **Design the tree in generations; date it last.** How many generations a line has is a choice of content (which
+   eras of equipment the game shows); how far a game gets through them is set by the years they carry, their costs and
+   the ahead-of-time penalty, one table. So the game's length can wait: choosing it later re-dates the tree without
+   redrawing it (the build already writes every date by rule, `vanilla_parts.py`).
+2. **A rule of thumb from the base game**: a big step about every three years, a smaller one between, and the
+   frontier running out about two thirds of the way through. For the superpowers that is about three big steps ahead
+   in a 13-year game (2036 to 2049, today's end date), four or five in 20 years, six in 25. Or the last generation is
+   left open: very costly, so a long game never runs dry.
+3. **The Cold War as the floor, coarse behind and fine ahead** (TFR's pattern). With the post-war era dropped, an
+   infantry line could run: Cold War I (1965, battle and assault rifles), Cold War II (1985), Modern I (2005),
+   Modern II (2025), the 2036 tier (where the superpowers start), then a big step every three years with upgrades
+   between (2039, 2042, 2045 ...). In a 13-year game the starts might be:
+
+   | tier | starts with | big steps to a 2045 frontier |
+   |---|---|---|
+   | superpowers | 2036 | 3 |
+   | modern (most nations) | Modern II (2025) | 4 |
+   | developing | Cold War II (1985) | 6 |
+   | feudal and levy states | Cold War I (1965) | 7 |
+
+   Older steps cost no penalty (their years are past), so a nation behind can close the gap line by line; overall it
+   stays behind, with more to research and, as a rule, fewer slots and less speed. TNO's way of keeping the tiers apart
+   would fit too: the newest steps open only to nations developed enough to build them (for Valsora, a scripted
+   condition on industry or a national spirit per tier), so a feudal state can't research its way to sixth-generation
+   fighters however long it tries.
+4. **Questions this leaves for the author:** how long a game should last (13 years like the base game and, so far,
+   Valsora; TFR's tree reaches 16 years past its start; Millennium Dawn's a century, by its tree's length and slow
+   research);
+   how many generations each line shows (the base game's lines have four big steps); whether the nations behind should
+   catch up faster (the base game's only help is technology sharing inside a sharing group, at most 50 % off a
+   technology a partner has, `MAX_TECH_SHARING_BONUS`); and whether the tiers should be held apart by development,
+   as TNO's are.
 
 ## Branch by branch: what each thing becomes
 

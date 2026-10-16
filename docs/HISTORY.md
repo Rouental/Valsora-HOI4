@@ -17,6 +17,10 @@ states and countries came next.
   tested on the stand-in and against Firebase's emulators, published. The rules changed: the author pastes them again.
   Nothing was reset. The fonts: ỉ and ĩ without the i's dot, ă ĩ ũ composed in Federo (a specimen sheet of the built
   fonts showed both).
+  The tech tree (the author: "I'd like to take inspiration from the fire rises and TNO. I might make the earliest era
+  the cold war actually. I'm not sure how many years I want the game to last"): `docs/TECH_TREE_2036.md` has a new
+  section, the tree's depth and the game's length: the base game's numbers from its files, TFR's and Millennium Dawn's
+  from theirs, TNO's from its bug tracker, and what they suggest. Nothing built.
 - 2026-10-16, later (the author's screenshots and `error.log` of v0.8.3, and: "I don't know if you're still giving
   nations the extra manpower ... please remove it", "is there a way you could reset any edits made thus far? I'd like a
   blank slate. The same goes for the mod. I'd like it just as it was on the last pdn, no extra rivers or internal
