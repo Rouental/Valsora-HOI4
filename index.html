@@ -197,7 +197,7 @@ fieldset.lockable[disabled] { opacity: .62; }
 .field input.num { font-family: var(--font-data); font-size: 14px; }
 .field input::placeholder, textarea::placeholder { color: var(--ink-3); }
 .field .hint { font-size: 11.5px; color: var(--ink-3); }
-.field.set label::after { content: " ●"; color: var(--jade); font-size: 9px; vertical-align: 2px; }
+.field.set > label::after { content: " ●"; color: var(--jade); font-size: 9px; vertical-align: 2px; }
 textarea { min-height: 70px; resize: vertical; }
 .meter { height: 6px; background: var(--rule); border-radius: 3px; overflow: hidden; }
 .meter i { display: block; height: 100%; background: var(--jade); }
@@ -242,6 +242,13 @@ optgroup { font-style: normal; }
 .relhead { display: flex; gap: 8px; align-items: center; }
 .relhead .nameinput { flex: 1; min-width: 0; font-size: 20px; }
 .relhead input[type="color"] { flex: none; width: 34px; height: 30px; padding: 0; border: 1px solid var(--rule-2); border-radius: 3px; background: none; }
+.badge { flex: none; font: 700 10px var(--font-data); letter-spacing: .06em; text-transform: uppercase; padding: 3px 6px 2px; border-radius: 3px; background: var(--jade-2); color: var(--ink-2); }
+.stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(58px, 1fr)); gap: 6px; }
+.stats label { display: grid; gap: 2px; font: 600 10px var(--font-data); letter-spacing: .04em; text-transform: uppercase; color: var(--ink-3); min-width: 0; }
+.stats input { width: 100%; min-width: 0; padding: 5px 7px 3px; border: 1px solid var(--rule-2); border-radius: 3px; background: var(--paper); font: 14px var(--font-data); }
+.who { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; }
+.who b { font-size: 15px; }
+.who small { font: 600 11px var(--font-ui); letter-spacing: .08em; text-transform: uppercase; color: var(--jade); }
 .relland { display: grid; gap: 6px; }
 .relland .row { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
 .relcard .person, .relcard .flagslot { border-top: 1px solid var(--rule); }
@@ -410,8 +417,13 @@ const BUILD = [["infra", "Infrastructure", 5, "infrastructure"], ["civ", "Civili
   ["mil", "Military factories", 20, "arms_factory"], ["dock", "Dockyards", 20, "dockyard", true],
   ["air", "Air base", 10, "air_base"], ["aa", "Anti-air", 5, "anti_air_building"], ["naval", "Naval base", 10, null, true]];
 const RES = [["oil", "Oil"], ["steel", "Steel"], ["aluminium", "Aluminium"], ["rubber", "Rubber"], ["tungsten", "Tungsten"], ["chromium", "Chromium"]];
-const VPS = [[1, "1 · village"], [3, "3 · town"], [5, "5 · city"], [10, "10 · large city"], [15, "15"], [20, "20 · major city"],
-  [25, "25"], [30, "30 · metropolis"], [40, "40"], [50, "50 · world city"]];
+// victory points measure how much a place matters, not how big it is (author, 2026-10-15: "Rouental's capital should be
+// worth more VPs than Vair ... even though Vair is bigger"); a city's size is apart, and shares out the population
+const VPS = [[1, "1 · minor"], [3, "3 · local"], [5, "5 · regional"], [10, "10 · important"], [15, "15"], [20, "20 · major"],
+  [25, "25"], [30, "30 · great"], [40, "40"], [50, "50 · foremost"]];
+const CITY_SIZES = [["village", "Village", 1], ["town", "Town", 3], ["city", "City", 8], ["large", "Large city", 20], ["metropolis", "Metropolis", 50]];
+const SIZE_WEIGHT = Object.fromEntries(CITY_SIZES.map(([k, , w]) => [k, w]));
+const cityWeight = c => SIZE_WEIGHT[c.size] || SIZE_WEIGHT.town;   // a city whose size isn't given counts as a town
 // a nation's documents in the atlas, each at n/<TAG>/<key>/<kind>; the key comes from its password
 const KINDS = ["states", "provinces", "cities", "rivers", "rails", "politics", "flags", "people", "about", "suggest", "releasables"];
 // releasables without a colour of their own, in the order they were added
@@ -1531,22 +1543,40 @@ function resolve() {  // the facts' pixel keys -> this map's states and province
   // releasables, in the order they were added, and which of them holds each state (HOI4 gives
   // cores on whole states). Those saved before held provinces: they hold the states those cover
   // by half, as the build reads them, until their land is changed (then saved as states).
-  N.relList = Object.entries(F("releasables")).filter(([, v]) => v && isObj(v)).map(([id, v]) => ({ id, ...v }))
+  // the game's own releasables and civil war revolters follow (2026-10-15, the author: "Releasables already in the game
+  // should be represented on the site"): g-<TAG> holds what was changed of one
+  const allRel = F("releasables");
+  N.relList = Object.entries(allRel).filter(([id, v]) => id.startsWith("rl-") && v && isObj(v)).map(([id, v]) => ({ id, ...v }))
     .sort((a, b) => (a.added || 0) - (b.added || 0) || a.id.localeCompare(b.id));
-  N.relOf = new Map();
-  for (const r of N.relList) for (const [k, on] of Object.entries(r.states || {})) {
-    if (!on) continue;
-    const [x, y] = keyXY(k), p = ownProvAt(x, y), s = p >= 0 ? N.prov[p].s : -1;
-    if (s >= 0 && !N.relOf.has(s)) N.relOf.set(s, r.id);
-  }
+  for (const g of N.gameReleasables || []) N.relList.push({ ...(isObj(allRel["g-" + g.tag]) ? allRel["g-" + g.tag] : {}), id: "g-" + g.tag, game: g });
+  N.relSets = new Map();
+  const stateAt = k => { const [x, y] = keyXY(k), p = ownProvAt(x, y); return p >= 0 ? N.prov[p].s : -1; };
   for (const r of N.relList) {
+    const set = new Set(), keys = r.game && !relLandChanged(r) ? r.game.states.map(k => [k, true]) : Object.entries(r.states || {});
+    for (const [k, on] of keys) { const s = on ? stateAt(k) : -1; if (s >= 0) set.add(s); }
     const cover = new Map();
     for (const [k, on] of Object.entries(r.provinces || {})) {
       if (!on) continue;
       const [x, y] = keyXY(k), p = ownProvAt(x, y);
       if (p >= 0) cover.set(N.prov[p].s, (cover.get(N.prov[p].s) || 0) + N.prov[p].area);
     }
-    for (const [s, a] of cover) if (a * 2 >= N.states[s].area && !N.relOf.has(s)) N.relOf.set(s, r.id);
+    for (const [s, a] of cover) if (a * 2 >= N.states[s].area) set.add(s);
+    N.relSets.set(r.id, set);
+  }
+  relIndex();
+}
+// a game releasable whose land was changed on the page (its whole list of states saved)
+function relLandChanged(r) { return !!(r && r.states && Object.values(r.states).some(Boolean)); }
+// releasables and the civil war's revolters are apart: HOI4 lets cores overlap, so a state belongs to one of each
+function relGroup(r) { return r && r.game && r.game.kind === "civil_war" ? "war" : "rel"; }
+function relIndex() {  // which releasable each state shows: the picked one's group, the picked one first
+  const N = app.N;
+  if (!N || !N.relList) return;
+  const cur = N.relList.find(r => r.id === app.ui.rel), grp = relGroup(cur);
+  N.relOf = new Map();
+  for (const r of [...N.relList.filter(r => r.id === app.ui.rel), ...N.relList.filter(r => r.id !== app.ui.rel)]) {
+    if (relGroup(r) !== grp) continue;
+    for (const s of N.relSets.get(r.id) || []) if (!N.relOf.has(s)) N.relOf.set(s, r.id);
   }
 }
 function sf(s) { return app.N.stateFacts[s] || {}; }
@@ -1903,7 +1933,7 @@ function draw() {
         let sx = 0, sy = 0, n = 0;
         for (const [s, id] of N.relOf) if (id === r.id && N.stateToPart[s] === app.ui.part) for (const p of N.states[s].provs) { sx += N.prov[p].x; sy += N.prov[p].y; n++; }
         if (!n) continue;
-        const q = gToScreen(sx / n, sy / n), t = (r.name || "(unnamed)").toUpperCase(), w = ctx.measureText(t).width;
+        const q = gToScreen(sx / n, sy / n), t = (relLabel(r) || "(unnamed)").toUpperCase(), w = ctx.measureText(t).width;
         if (q && place(q[0] - w / 2, q[1] - 8, w, 16)) halo(ctx, t, q[0] - w / 2, q[1], relColour(r.id), paper);
       }
     }
@@ -2314,7 +2344,7 @@ function setTool(t) {
   if (app.ui.draft && t !== app.ui.tool) finishDraft();
   const was = relView();
   app.ui.tool = t;
-  if (t === "release" && app.N && !relCurrent() && app.N.relList.length) app.ui.rel = app.N.relList[0].id;
+  if (t === "release" && app.N && !relCurrent() && app.N.relList.length) { app.ui.rel = app.N.relList[0].id; relIndex(); }
   if (app.N && was !== relView()) renderBase();
   if (t === "terrain" && app.ui.mode !== "terrain" && app.N) setMapMode("terrain");
   for (const b of document.querySelectorAll(".tool")) b.setAttribute("aria-pressed", String(b.dataset.tool === t));
@@ -2339,7 +2369,8 @@ function renderSubtools() {
     const list = app.N ? app.N.relList : [];
     if (!list.length) out.push(h("button", { class: "btn small primary", type: "button", onclick: addRelease }, "Add a releasable"));
     else {
-      const sel = h("select", { "aria-label": "Releasable", onchange: e => selectRel(e.target.value) }, list.map(r => h("option", { value: r.id, text: r.name || "(unnamed)" })));
+      const sel = h("select", { "aria-label": "Releasable", onchange: e => selectRel(e.target.value) }, list.map(r => h("option", { value: r.id,
+        text: (relLabel(r) || "(unnamed)") + (r.game ? (r.game.kind === "civil_war" ? " · civil war" : " · in the game") : "") })));
       sel.value = relCurrent() || "";
       out.push(sel);
       if (mapOpen()) for (const [k, nm] of [["add", "Add states"], ["remove", "Take them away"]])
@@ -2553,14 +2584,17 @@ function renderCities(force) {
   if (!force && typingIn(pane)) { dirtyPanes("cities"); return; }
   keepFocus(pane, () => {
     const out = [h("div", { class: "sec" }, h("h4", null, "Cities", h("small", { text: `${N.cityList.length}` })),
-      h("div", { class: "meta", text: "Each city is a victory point. Place them with the Cities tool, one per province; a state can have several. ★ is the nation's capital. ◆ is a state's capital, its main city: its supply hub (unless you place your own) and where its troops start. The national capital is its state's capital; elsewhere it's the city you mark, or the one with the most victory points." }))];
+      h("div", { class: "meta", text: "Each city is a victory point. Place them with the Cities tool, one per province; a state can have several. ★ is the nation's capital. ◆ is a state's capital, its main city: its supply hub (unless you place your own) and where its troops start. The national capital is its state's capital; elsewhere it's the city you mark, or the one with the most victory points." }),
+      h("div", { class: "meta", text: "Victory points are how much a place matters, not how big it is. The more of a nation's points its enemies hold, the closer it is to surrender; taking them gives war score; and the more points, the bigger the city's marker and name on the map. Capitals and strategic places count most: in the base game Washington has 40 and New York 30, London 50, Gibraltar 10 and Manchester 5. Size is how big the city is: it shares out the population when you spread a total on the Nation tab." }))];
     if (!N.cityList.length) out.push(h("div", { class: "empty", text: "No cities yet." }));
     const list = h("div", { class: "sec" });
     for (const c of N.cityList) {
       const name = textInput("city-name-" + c.id, c.name, "City name", v => edit("cities", { [c.id]: { name: v || "" } }));
       name.setAttribute("aria-label", "City name");
-      const vp = h("select", { "aria-label": "Victory points", onchange: e => edit("cities", { [c.id]: { vp: +e.target.value } }) }, VPS.map(([v, l]) => h("option", { value: v, text: l })));
+      const vp = h("select", { id: "city-vp-" + c.id, "aria-label": "Victory points", title: "Victory points: how much it matters", onchange: e => edit("cities", { [c.id]: { vp: +e.target.value } }) }, VPS.map(([v, l]) => h("option", { value: v, text: `${l} VP` })));
       vp.value = String(c.vp || 5);
+      const size = h("select", { id: "city-size-" + c.id, "aria-label": "Size", title: "How big it is", onchange: e => edit("cities", { [c.id]: { size: e.target.value } }) }, CITY_SIZES.map(([k, l]) => h("option", { value: k, text: l })));
+      size.value = c.size || "town";
       const cap = h("button", { class: "btn small", type: "button", title: "Make this the nation's capital", "aria-pressed": String(!!c.capital), onclick: () => makeCapital(c) }, c.capital ? "★ Capital" : "☆ Capital");
       const seat = N.seatOf.get(c.s) === c.id, natHere = N.capitalCity && N.capitalCity.s === c.s;
       const seatBtn = h("button", { class: "btn small", type: "button", "aria-pressed": String(seat), disabled: c.s < 0 || (natHere && !c.capital) || c.capital,
@@ -2569,7 +2603,7 @@ function renderCities(force) {
       const del = h("button", { class: "btn small danger", type: "button", title: "Delete this city", onclick: () => { if (edit("cities", { [c.id]: null }) && app.ui.sel.city === c.id) app.ui.sel.city = null; } }, "Delete");
       const where = c.s >= 0 ? stateName(c.s) : "not on your land: move or delete it";
       list.append(h("div", { class: "item city" + (app.ui.sel.city === c.id ? " sel" : "") },
-        h("div", { class: "row" }, name, vp),
+        h("div", { class: "row" }, name, vp, size),
         h("div", { class: "row" }, cap, seatBtn, h("button", { class: "btn small", type: "button", onclick: () => locate(c.x, c.y, () => selectCity(c.id)) }, "Show"), del),
         h("div", { class: "meta", text: `${where} · ${c.x}, ${c.y}` + (seat && !c.capital && !c.stateCapital && N.cityList.some(o => o.s === c.s && o.id !== c.id) ? " · state capital by victory points" : "") + (!c.name ? " · needs a name" : "") })));
     }
@@ -2725,36 +2759,45 @@ function uploadInto(kind, path, label) {
 // and ruler. Their land is whole states once the nation's states are drawn (HOI4 gives cores on
 // states, not provinces; a state belongs to one releasable), drawn areas before; the build gives
 // them cores on the states they hold, and on those the areas cover by half.
-function relCurrent() { const id = app.ui.rel; return id && app.N && F("releasables")[id] ? id : null; }
-function relName(id) { const r = F("releasables")[id]; return (r && r.name) || "the releasable"; }
+function relById(id) { return app.N && app.N.relList ? app.N.relList.find(x => x.id === id) || null : null; }
+function relCurrent() { const id = app.ui.rel; return id && relById(id) ? id : null; }
+function relLabel(r) { return (r && (r.name || (r.game && r.game.name))) || ""; }
+function relName(id) { return relLabel(relById(id)) || "the releasable"; }
 function relColour(id) {
-  const r = F("releasables")[id];
+  const r = relById(id);
   if (r && /^#[0-9a-f]{6}$/i.test(r.colour || "")) return r.colour;
+  if (r && r.game && r.game.colour) return r.game.colour;
   const i = app.N ? app.N.relList.findIndex(x => x.id === id) : 0;
   return REL_COLOURS[Math.max(0, i) % REL_COLOURS.length];
 }
 function relView() { return app.ui.tab === "release" || app.ui.tool === "release"; }
-function selectRel(id) { app.ui.rel = id; renderBase(); renderSubtools(); dirtyPanes("release"); }
+function selectRel(id) { app.ui.rel = id; relIndex(); renderBase(); renderSubtools(); dirtyPanes("release"); }
 function addRelease() {
   const id = "rl-" + uid();
   if (!edit("releasables", { [id]: { name: "", added: Date.now() } })) return;
   app.ui.rel = id; showTab("release"); renderSubtools();
   setTimeout(() => { const el = document.getElementById("rl-name-" + id); if (el) { el.scrollIntoView({ block: "nearest" }); el.focus(); } }, 60);
 }
-function relStates(id) { return [...app.N.relOf].filter(([, v]) => v === id).map(([s]) => s); }
+function relStates(id) { return [...(app.N.relSets.get(id) || [])]; }
 function paintRel(p) {  // the state of province p to (or from) the releasable picked
   const id = relCurrent(), N = app.N;
   if (!id || p < 0) return;
-  const s = N.prov[p].s, has = N.relOf.get(s), all = F("releasables"), remove = app.ui.relMode === "remove";
-  if (remove ? has !== id : has === id) return;
+  const s = N.prov[p].s, r = relById(id), mine = N.relSets.get(id) || new Set(), remove = app.ui.relMode === "remove";
+  if (remove ? !mine.has(s) : mine.has(s)) return;
+  if (remove && r.game && mine.size === 1) { flash("A releasable needs a state: give it another first"); return; }
   const d = {};
-  const statesOf = rid => {  // one saved with provinces is saved as the states it holds first
-    if (!d[rid]) d[rid] = Object.keys((all[rid] || {}).provinces || {}).length
-      ? { provinces: null, states: Object.fromEntries(relStates(rid).map(t => [N.stateKey[t], true])) } : { states: {} };
+  const statesOf = rid => {  // one held as the game has it, or saved with provinces, is saved as the states it holds first
+    if (d[rid]) return d[rid].states;
+    const q = relById(rid), whole = q.game ? !relLandChanged(q) : Object.keys(q.provinces || {}).length > 0;
+    d[rid] = whole ? { ...(q.game ? {} : { provinces: null }), states: Object.fromEntries(relStates(rid).map(t => [N.stateKey[t], true])) } : { states: {} };
     return d[rid].states;
   };
   statesOf(id)[N.stateKey[s]] = remove ? null : true;
-  if (!remove && has) statesOf(has)[N.stateKey[s]] = null;  // a state belongs to one releasable
+  if (!remove) for (const q of N.relList)  // a state belongs to one releasable (and to one revolter)
+    if (q.id !== id && relGroup(q) === relGroup(r) && (N.relSets.get(q.id) || new Set()).has(s)) {
+      if (q.game && (N.relSets.get(q.id) || new Set()).size === 1) continue;  // the game's last state of one stays
+      statesOf(q.id)[N.stateKey[s]] = null;
+    }
   edit("releasables", d);
 }
 function showRel(id) {
@@ -2772,10 +2815,22 @@ function renderReleasables(force) {
   if (!N || !app.index) return;
   if (!force && typingIn(pane)) { dirtyPanes("release"); return; }
   keepFocus(pane, () => {
-    const out = [h("div", { class: "sec" }, h("h4", null, "Releasables", h("small", { text: N.relList.length ? String(N.relList.length) : "" })),
+    const site = N.relList.filter(r => !r.game), game = N.relList.filter(r => r.game && r.game.kind !== "civil_war"),
+      war = N.relList.filter(r => r.game && r.game.kind === "civil_war");
+    const out = [h("div", { class: "sec" }, h("h4", null, "Releasables", h("small", { text: site.length ? String(site.length) : "" })),
       h("div", { class: "meta", text: "Nations that could be released from yours: in the game they can be set free from the diplomacy screen, on the states they have cores on. Give each its states, names, flag and ruler." }),
       h("div", null, h("button", { class: "btn small primary", type: "button", onclick: addRelease }, "Add a releasable")))];
-    for (const r of N.relList) out.push(relCard(r));
+    for (const r of site) out.push(relCard(r));
+    if (game.length) {
+      out.push(h("div", { class: "sec" }, h("h4", null, "In the game", h("small", { text: String(game.length) })),
+        h("div", { class: "meta", text: `The nations the game already lets ${N.name} release, as the mod has them now. Change any of it: names, government, ruler, flag, colour or states; an empty field keeps the game's, shown in grey.` })));
+      for (const r of game) out.push(gameRelCard(r));
+    }
+    if (war.length) {
+      out.push(h("div", { class: "sec" }, h("h4", null, "In the civil war", h("small", { text: String(war.length) })),
+        h("div", { class: "meta", text: `The nations that rise in ${N.name}'s civil war, as the mod has them now: released on their states when the communists execute the Prince, at war with ${N.name} at once. A state can belong to one of them and to a releasable too, as HOI4 lets cores overlap.` })));
+      for (const r of war) out.push(gameRelCard(r));
+    }
     return paneFrame(out);
   });
 }
@@ -2815,10 +2870,63 @@ function relCard(r) {
       portraitBox(leader.portrait, () => uploadInto("releasables", [id, "leader", "portrait"], "the portrait"), () => edit1({ leader: { portrait: null } }), "Ruler's portrait"),
       h("div", { class: "fields" },
         fieldOf("rl-lead-" + id, "Ruler", textInput("rl-lead-" + id, leader.name, "Its head of state", v => edit1({ leader: { name: v } }), "", 80), leader.name),
-        fieldOf("rl-desc-" + id, "Titles", textArea("rl-desc-" + id, leader.desc, "Shown on their portrait in game", v => edit1({ leader: { desc: v } }), 600), leader.desc))),
+        fieldOf("rl-desc-" + id, "Titles", textArea("rl-desc-" + id, leader.desc, "Shown on their portrait in game", v => edit1({ leader: { desc: v } }), 600), leader.desc),
+        traitPicker("rl-traits-" + id, traitList("ruler"), leader.traits, v => edit1({ leader: { traits: v } })))),
     fieldOf("rl-notes-" + id, "About it", textArea("rl-notes-" + id, r.notes, "Its people and history, why it would break away", v => edit1({ notes: v }), 2000), r.notes),
     resetButton("Delete this releasable", () => { edit("releasables", { [id]: null }); if (app.ui.rel === id) app.ui.rel = null; renderSubtools(); }, false, "Yes, delete it"));
   return card;
+}
+// one of the nations the game releases from this one, or raises in its civil war (2026-10-15): what is changed of it
+// is kept as g-<TAG> in the releasables document; an empty field keeps the game's
+function gameRelCard(r) {
+  const N = app.N, g = r.game, id = r.id, open = mapOpen(), col = relColour(id), lead = r.leader || {}, gl = g.ruler || {};
+  const edit1 = delta => edit("releasables", { [id]: delta }), nst = relStates(id).length, moved = relLandChanged(r);
+  const theirs = gl.id && !generated(gl);   // one of the author's characters: changed where they are
+  const orig = gl.copyOf ? (N.characters || []).find(c => c.id === gl.copyOf) : null;
+  const flagSrc = r.flag ? imgSrc(r.flag) : g.flag, gamePic = gl.portrait || (gl.base ? true : null);
+  const kindNote = g.kind === "civil_war"
+    ? `It rises in the civil war: released on its states when ${N.name}'s communists execute the Prince, and at war with ${N.name} at once.` + (g.warOnly ? " It exists only through the war: it has no cores before it." : "")
+    : `${N.name} can release it from the diplomacy screen: it has cores on its states.`;
+  const ruler = theirs
+    ? h("div", { class: "person" },
+        h("div", { class: "portrait", style: gl.portrait ? `background-image:url("${gl.portrait}")` : "" }, gl.portrait ? "" : "Base-game portrait"),
+        h("div", { class: "fields" }, h("div", { class: "who" }, h("b", { text: gl.name }), h("small", { text: "Ruler" })),
+          h("div", { class: "meta", text: orig ? `${orig.name}, ${N.name}'s ${roleLine(orig).toLowerCase() || "character"}: change her on the People tab, and the change comes here too.` : "One of the author's own characters." })))
+    : h("div", { class: "person" },
+        portraitBox(lead.portrait, () => uploadInto("releasables", [id, "leader", "portrait"], "the portrait"), () => edit1({ leader: { portrait: null } }), "Ruler's portrait", false, gamePic),
+        h("div", { class: "fields" },
+          fieldOf("rl-lead-" + id, "Ruler", textInput("rl-lead-" + id, lead.name, gl.name || "Its head of state", v => edit1({ leader: { name: v } }), "", 80), lead.name),
+          fieldOf("rl-desc-" + id, "Titles", textArea("rl-desc-" + id, lead.desc, gl.desc || "Shown on their portrait in game", v => edit1({ leader: { desc: v } }), 600), lead.desc),
+          traitPicker("rl-traits-" + id, traitList("ruler"), lead.traits !== undefined ? lead.traits : gl.traits, v => edit1({ leader: { traits: v } }), true)));
+  return h("div", { class: "relcard" + (app.ui.rel === id ? " sel" : ""), style: `--rel:${col}` },
+    h("div", { class: "relhead" },
+      h("input", { type: "color", value: col, title: "Its map colour", "aria-label": "Map colour", onchange: e => edit1({ colour: e.target.value }) }),
+      textInput("rl-name-" + id, r.name, g.name, v => edit1({ name: v }), "nameinput", 60),
+      h("span", { class: "badge", text: g.kind === "civil_war" ? "Civil war" : "In the game" }),
+      h("button", { class: "btn small", type: "button", "aria-pressed": String(app.ui.rel === id), onclick: () => selectRel(id) }, app.ui.rel === id ? "Picked" : "Pick")),
+    h("div", { class: "meta", text: kindNote }),
+    h("div", { class: "grid2" },
+      fieldOf("rl-adj-" + id, "Adjective", textInput("rl-adj-" + id, r.adj, g.adj, v => edit1({ adj: v }), "", 60), r.adj),
+      theirs ? fieldOf("rl-ruling-" + id, "Ruling sub-ideology", h("div", { class: "meta", text: `${subName(g.sub)}, its ruler's` }))
+        : fieldOf("rl-ruling-" + id, "Ruling sub-ideology", subSelect("rl-ruling-" + id, r.ruling, `As in the game: ${subName(g.sub)}`, v => edit1({ ruling: v })), r.ruling),
+      fieldOf("rl-def-" + id, "Full title", textInput("rl-def-" + id, r.def, g.def, v => edit1({ def: v }), "", 100), r.def, "full")),
+    h("div", { class: "relland" },
+      h("div", { class: "row" }, h("b", { text: "Land" }), h("span", { class: "meta", text: `${nst} state${nst === 1 ? "" : "s"}` + (moved ? ", changed" : ", as in the game") })),
+      h("div", { class: "chips" },
+        open ? h("button", { class: "btn small", type: "button", onclick: () => { selectRel(id); app.ui.relMode = "add"; setTool("release"); } }, "Change its states") : null,
+        nst ? h("button", { class: "btn small", type: "button", onclick: () => showRel(id) }, "Show") : null,
+        moved ? h("button", { class: "btn small", type: "button", onclick: () => edit1({ states: null }) }, "Back to the game's land") : null),
+      h("div", { class: "meta", text: open ? "Whole states: HOI4 gives a releasable cores on states, not provinces." : "Its land can be changed once the author has drawn your states." })),
+    h("div", { class: "flagslot" },
+      flagSrc ? h("img", { class: "flagbox", src: flagSrc, alt: "Its flag" }) : h("span", { class: "flagbox", text: "loading" }),
+      h("div", { style: "display:grid;gap:4px;min-width:0" }, h("b", { text: "Flag", style: "font-size:14px" }),
+        h("span", { class: "meta", text: r.flag ? `Yours, ${r.flag.w} × ${r.flag.h}` : "The game's" }),
+        h("div", { class: "chips" },
+          h("button", { class: "btn small", type: "button", onclick: () => uploadInto("releasables", [id, "flag"], "the flag") }, r.flag ? "Replace" : "Send a picture"),
+          r.flag ? h("button", { class: "btn small", type: "button", onclick: () => edit1({ flag: null }) }, "Back to the game's") : null))),
+    ruler,
+    fieldOf("rl-notes-" + id, "About it", textArea("rl-notes-" + id, r.notes, "Its people and history, anything the author should know", v => edit1({ notes: v }), 2000), r.notes),
+    resetButton("Undo every change to it", () => edit("releasables", { [id]: null }), !Object.keys(compact(F("releasables")[id] || {})).length, "Yes, undo them"));
 }
 
 // ---- politics: names under each government, the ruling sub-ideology
@@ -2858,7 +2966,7 @@ function renderPolitics(force) {
   keepFocus(pane, () => {
     const P = N.politics, f = F("politics"), names = f.names || {}, now = rulingNow(), out = [];
     const gov = [h("h4", null, "Government", h("small", { text: `starts ${ideoName(now.ideo)}` }))];
-    if (P.handmade) gov.push(h("div", { class: "note", text: "This nation's leaders are the author's own characters, so its sub-ideologies stay as the author made them. Its names below can still be changed." }));
+    if (P.handmade) gov.push(h("div", { class: "note", text: "This nation's leaders are the author's own characters: change them, their sub-ideologies among them (each within its ideology, which the focus tree names), on the People tab. Its names below can be changed here." }));
     else {
       const dflt = P.leaders[0] ? `Map default: ${subName(P.leaders[0][0])} (${ideoName(P.leaders[0][1])})` : "Map default: Absolute Monarchy";
       gov.push(h("div", { class: "field" + (f.ruling ? " set" : "") }, h("label", { for: "pol-ruling", text: "Ruling sub-ideology (the nation starts under its ideology)" }),
@@ -2888,11 +2996,13 @@ function renderPolitics(force) {
 }
 
 // ---- people: head of state, party leaders, generals and the rest
-function portraitBox(im, onPick, onClear, label, logo) {
-  const src = imgSrc(im), what = logo ? "logo" : "portrait";
-  const box = h("button", { class: "portrait" + (logo ? " logo" : ""), type: "button", title: im ? `Change the ${what}` : `Add a ${what}`, onclick: onPick,
-    style: src ? `background-image:url("${String(src).replace(/"/g, "%22")}")` : "" }, im ? (src ? "" : "loading") : label || `Add a ${what}`);
-  return h("div", { style: "display:grid;gap:4px" }, box, im ? h("button", { class: "btn small", type: "button", onclick: onClear }, "Remove") : null);
+// game: the picture the game has now (ours: a data URL), or true for a base-game portrait (Paradox's, never on the site)
+function portraitBox(im, onPick, onClear, label, logo, game) {
+  const src = imgSrc(im) || (!im && typeof game === "string" ? game : null), what = logo ? "logo" : "portrait";
+  const text = im ? (imgSrc(im) ? "" : "loading") : src ? "" : game === true ? "Base-game portrait: add your own" : label || `Add a ${what}`;
+  const box = h("button", { class: "portrait" + (logo ? " logo" : ""), type: "button", title: im || src ? `Change the ${what}` : `Add a ${what}`, onclick: onPick,
+    style: src ? `background-image:url("${String(src).replace(/"/g, "%22")}")` : "" }, text);
+  return h("div", { style: "display:grid;gap:4px" }, box, im ? h("button", { class: "btn small", type: "button", onclick: onClear }, game ? "Back to the game's" : "Remove") : null);
 }
 // a leader's traits: the base game's (index.traits, from scripts/vanilla_sync.py), as chips with a list to add more
 function traitList(role, slot) {
@@ -2902,12 +3012,12 @@ function traitList(role, slot) {
   if (role === "advisor") return (T.advisor || {})[slot] || [];
   return [];
 }
-function traitPicker(id, list, chosen, onval) {
+function traitPicker(id, list, chosen, onval, keepEmpty) {  // keepEmpty: no traits left is kept as [] (a game character's)
   const names = Object.fromEntries(list.map(t => [t[0], t[1]]));
   const have = (Array.isArray(chosen) ? chosen : []).filter(k => names[k]);
   const chips = h("div", { class: "chips" }, have.map(k => h("span", { class: "tchip", "aria-pressed": "true" }, names[k],
     h("button", { class: "x", type: "button", title: "Remove " + names[k], "aria-label": "Remove " + names[k],
-      onclick: () => { const v = have.filter(x => x !== k); onval(v.length ? v : null); } }, "×"))));
+      onclick: () => { const v = have.filter(x => x !== k); onval(v.length || keepEmpty ? v : null); } }, "×"))));
   if (have.length >= MAX_TRAITS) return h("div", { class: "field" }, h("label", { text: `Traits (at most ${MAX_TRAITS})` }), chips);
   const sel = h("select", { id, onchange: e => { const k = e.target.value; if (k) onval([...have, k]); } }, h("option", { value: "", text: have.length ? "Add another trait…" : "Add a trait…" }));
   const groups = {};
@@ -2976,12 +3086,64 @@ function companyRow(id, c) {
       h("div", { class: "meta", text: companyWhat(c.kind) }),
       textArea("pp-co-note-" + id, c.notes, "Notes for the author: what it makes, its history", v => edit("people", { [id]: { notes: v } }), 1000)));
 }
+// a commander's skill and stats (2026-10-15, the author: "Their stats should be editable"); the base game's start at
+// skill 1-5 and stats 0-6, the page takes up to 9
+const STAT_NAMES = { general: [["skill", "Skill"], ["attack", "Attack"], ["defense", "Defence"], ["planning", "Planning"], ["logistics", "Logistics"]],
+  admiral: [["skill", "Skill"], ["attack", "Attack"], ["defense", "Defence"], ["maneuvering", "Manoeuvre"], ["coordination", "Coord."]] };
+const STAT_DEFAULT = { general: { skill: 3, attack: 3, defense: 3, planning: 2, logistics: 2 }, admiral: { skill: 3, attack: 3, defense: 3, maneuvering: 2, coordination: 2 } };
+const RANKS = [["corps_commander", "General"], ["field_marshal", "Field marshal"]];
+function statsBlock(idp, kind, cur, dflt, onval) {
+  return h("div", { class: "field" + (STAT_NAMES[kind].some(([k]) => cur[k] != null) ? " set" : "") },
+    h("label", { text: "Skill and stats (the base game's start at skill 1–5, stats 0–6)" }),
+    h("div", { class: "stats" }, STAT_NAMES[kind].map(([k, l]) => h("label", { for: `${idp}-${k}` }, l,
+      numInput(`${idp}-${k}`, cur[k], String(dflt[k] != null ? dflt[k] : ""), v => onval({ [k]: v == null ? null : Math.max(k === "skill" ? 1 : 0, Math.min(9, v)) }), { max: 9 })))));
+}
+function rankSelect(id, value, dflt, onval) {
+  const sel = h("select", { id, "aria-label": "Rank", onchange: e => onval(e.target.value === dflt ? null : e.target.value) }, RANKS.map(([k, l]) => h("option", { value: k, text: l })));
+  sel.value = value || dflt || "corps_commander";
+  return sel;
+}
+const generated = c => /^[A-Z][A-Z0-9]{2}_leader_/.test(c.id);   // a ruler the build made, not one of the author's
+function roleLine(c) {
+  const out = [];
+  if (c.ruler) out.push("Head of state");
+  else if (c.ideo) out.push(`${ideoName(c.ideo)} party leader`);
+  if (c.general) out.push(c.general.rank === "field_marshal" ? "Field marshal" : "General");
+  if (c.admiral) out.push("Admiral");
+  return out.join(" · ");
+}
+// one of the nation's characters in the game (2026-10-15, the author: "Leaders already in the game should be represented
+// and editable, for example Roland or Serelle"): its changes kept as ch-<character id> in the people document
+function gameCharCard(c) {
+  const key = "ch-" + c.id, o = F("people")[key] || {}, ed = d => edit("people", { [key]: d }), idp = "pp-g-" + c.id;
+  const unit = c.general ? "general" : c.admiral ? "admiral" : null, u = c.general || c.admiral || {};
+  const fields = [h("div", { class: "who" }, h("b", { text: o.name || c.name }), h("small", { text: roleLine(c) })),
+    fieldOf(idp + "-name", "Name", textInput(idp + "-name", o.name, c.name, v => ed({ name: v }), "", 80), o.name)];
+  if (c.regnal != null) fields.push(fieldOf(idp + "-regnal", "Name once ruling", textInput(idp + "-regnal", o.regnal, c.regnal || "As now", v => ed({ regnal: v }), "", 80), o.regnal));
+  if (c.ideo) {
+    fields.push(fieldOf(idp + "-desc", "Titles or a few words (shown on their portrait in game)", textArea(idp + "-desc", o.desc, c.desc || "e.g. By the Grace of God, Prince of …", v => ed({ desc: v }), 600), o.desc));
+    if (!generated(c)) fields.push(fieldOf(idp + "-sub", `Sub-ideology (${ideoName(c.ideo)}: the focus tree names the ideology)`,
+      subSelect(idp + "-sub", o.sub, `As in the game: ${subName(c.sub)}`, v => ed({ sub: v }), c.ideo), o.sub));
+    fields.push(traitPicker(idp + "-traits", traitList("ruler"), o.traits !== undefined ? o.traits : c.traits, v => ed({ traits: v }), true));
+  }
+  if (unit) {
+    if (unit === "general") fields.push(fieldOf(idp + "-rank", "Rank", rankSelect(idp + "-rank", o.rank, u.rank, v => ed({ unit, rank: v })), o.rank));
+    fields.push(statsBlock(idp, unit, o, u, d => ed({ unit, ...d })));
+    const t = traitPicker(idp + "-utraits", traitList(unit), o.unitTraits !== undefined ? o.unitTraits : u.traits, v => ed({ unit, unitTraits: v }), true);
+    t.querySelector("label").textContent = unit === "general" ? "A general's traits, from the base game" : "An admiral's traits, from the base game";
+    fields.push(t);
+  }
+  fields.push(resetButton("Back to the game's", () => ed(null), !Object.keys(compact(o)).length, "Yes, undo my changes"));
+  return h("div", { class: "person" },
+    portraitBox(o.portrait, () => uploadInto("people", [key, "portrait"], "the portrait"), () => ed({ portrait: null }), null, false, c.portrait || (c.base ? true : null)),
+    h("div", { class: "fields" }, fields));
+}
 function characterRow(id, c) {  // a general, an admiral or an advisor
   return h("div", { class: "person" },
     portraitBox(c.portrait, () => uploadInto("people", [id, "portrait"], "the portrait"), () => edit("people", { [id]: { portrait: null } })),
     h("div", { class: "fields" },
       h("div", { class: "row", style: "display:flex;gap:6px;flex-wrap:wrap" },
-        (() => { const s = h("select", { "aria-label": "Role", onchange: e => edit("people", { [id]: { role: e.target.value, traits: null, slot: null } }) }, ROLES.map(([k, l]) => h("option", { value: k, text: l }))); s.value = c.role || "general"; return s; })(),
+        (() => { const s = h("select", { "aria-label": "Role", onchange: e => edit("people", { [id]: { role: e.target.value, traits: null, slot: null, rank: null, skill: null, attack: null, defense: null, planning: null, logistics: null, maneuvering: null, coordination: null } }) }, ROLES.map(([k, l]) => h("option", { value: k, text: l }))); s.value = c.role || "general"; return s; })(),
         (c.role || "general") === "advisor" ? (() => {
           const s = h("select", { "aria-label": "Post", onchange: e => edit("people", { [id]: { slot: e.target.value || null, traits: null } }) },
             h("option", { value: "", text: "Their post…" }), ((app.index.traits || {}).slots || []).map(([k, l]) => h("option", { value: k, text: l })));
@@ -2991,6 +3153,8 @@ function characterRow(id, c) {  // a general, an admiral or an advisor
       (c.role || "general") === "other" ? null :
         (c.role === "advisor" && !c.slot) ? h("div", { class: "meta", text: "Pick the advisor's post to give them traits." }) :
         traitPicker("pp-c-traits-" + id, traitList(c.role || "general", c.slot), c.traits, v => edit("people", { [id]: { traits: v } })),
+      (c.role || "general") === "general" ? fieldOf("pp-c-rank-" + id, "Rank", rankSelect("pp-c-rank-" + id, c.rank, "corps_commander", v => edit("people", { [id]: { rank: v } })), c.rank) : null,
+      ["general", "admiral"].includes(c.role || "general") ? statsBlock("pp-c-st-" + id, c.role || "general", c, STAT_DEFAULT[c.role || "general"], d => edit("people", { [id]: d })) : null,
       (c.role || "general") === "other" ? null : traitAsk("pp-c-ask-" + id, `${ROLES.find(r => r[0] === (c.role || "general"))[1].toLowerCase()} ${c.name || "(no name yet)"}`),
       textArea("pp-c-note-" + id, c.notes, "Notes for the author: skills, history", v => edit("people", { [id]: { notes: v } }), 1000)));
 }
@@ -3002,21 +3166,36 @@ function renderPeople(force) {
     const P = N.politics, ppl = F("people"), pol = F("politics"), now = rulingNow(), out = [];
     const ruler = ppl.ruler || {};
     const rulerDefault = P.leaders[0] ? P.leaders[0][2] : "";
+    // the nation's characters in the game (2026-10-15): the author's own are edited here as they are; a generated ruler
+    // and party leaders through the fields below, which follow the sub-ideologies picked
+    const game = N.characters || [], gameRuler = game.find(c => c.ruler) || null;
+    const gamePic = c => c ? (c.portrait || (c.base ? true : null)) : null;
+    const portraitNote = h("div", { class: "meta", text: "A portrait is cropped to HOI4's 156 × 210 from the top of the picture; send one with the face in the upper half." });
     // head of state
-    out.push(h("div", { class: "sec" }, h("h4", null, "Head of state", h("small", { text: P.handmade ? "the author's" : ideoName(now.ideo) })),
-      P.handmade ? h("div", { class: "note", text: "This nation's ruler is one of the author's own characters." }) :
+    if (P.handmade) {
+      const rc = game.filter(c => c.ruler);
+      out.push(h("div", { class: "sec" }, h("h4", null, "Head of state", h("small", { text: "the author's" })),
+        rc.length ? h("div", null, rc.map(gameCharCard)) : h("div", { class: "note", text: "This nation's ruler is one of the author's own characters." }),
+        rc.length ? portraitNote : null));
+    } else out.push(h("div", { class: "sec" }, h("h4", null, "Head of state", h("small", { text: ideoName(now.ideo) })),
+        gameRuler ? h("div", { class: "meta", text: `In the game now: ${gameRuler.name}, ${subName(gameRuler.sub)}${gameRuler.base ? ", with a base-game portrait" : ""}${gameRuler.traits && gameRuler.traits.length ? "" : ", no traits"}. What you enter here replaces it.` }) : null,
         h("div", { class: "person" },
-          portraitBox(ruler.portrait, () => uploadInto("people", ["ruler", "portrait"], "the portrait"), () => edit("people", { ruler: { portrait: null } })),
+          portraitBox(ruler.portrait, () => uploadInto("people", ["ruler", "portrait"], "the portrait"), () => edit("people", { ruler: { portrait: null } }), null, false, gamePic(gameRuler)),
           h("div", { class: "fields" },
             h("div", { class: "field" + (ruler.name ? " set" : "") }, h("label", { for: "pp-ruler-name", text: "Name" }),
               textInput("pp-ruler-name", ruler.name, rulerDefault || "A name from the nation's culture", v => edit("people", { ruler: { name: v } }), "", 80)),
             h("div", { class: "field" + (ruler.desc ? " set" : "") }, h("label", { for: "pp-ruler-desc", text: "Titles or a few words (shown on their portrait in game)" }),
-              textArea("pp-ruler-desc", ruler.desc, "e.g. By the Grace of God, Prince of …", v => edit("people", { ruler: { desc: v } }), 600)),
+              textArea("pp-ruler-desc", ruler.desc, (gameRuler && gameRuler.desc) || "e.g. By the Grace of God, Prince of …", v => edit("people", { ruler: { desc: v } }), 600)),
             traitPicker("pp-ruler-traits", traitList("ruler"), ruler.traits, v => edit("people", { ruler: { traits: v } })),
             traitAsk("pp-ruler-ask", "the head of state" + (ruler.name ? ` (${ruler.name})` : "")))),
-      P.handmade ? null : h("div", { class: "meta", text: "A portrait is cropped to HOI4's 156 × 210 from the top of the picture; send one with the face in the upper half." })));
+        portraitNote));
     // party leaders
-    if (!P.handmade) {
+    if (P.handmade) {
+      const pc = game.filter(c => !c.ruler && c.ideo);
+      if (pc.length) out.push(h("div", { class: "sec" }, h("h4", null, "The other parties"),
+        h("div", { class: "meta", text: "The author's own characters, and the leaders the game made for the other parties. Change their names, titles, portraits, traits and, for a general, skills; a sub-ideology stays within its ideology, which the focus tree names." }),
+        h("div", null, pc.map(gameCharCard))));
+    } else {
       const curParty = {};
       for (const [k, ideo] of P.leaders.slice(1)) curParty[ideo] = k;
       const parties = pol.parties || {};
@@ -3025,13 +3204,13 @@ function renderPeople(force) {
         h("div", null, app.index.ideologies.filter(([ideo]) => ideo !== now.ideo).map(([ideo, nm]) => {
           const sub = parties[ideo] === undefined ? null : parties[ideo], have = sub || curParty[ideo], p = ppl["party-" + ideo] || {};
           return h("div", { class: "person" },
-            portraitBox(p.portrait, () => uploadInto("people", ["party-" + ideo, "portrait"], "the portrait"), () => edit("people", { ["party-" + ideo]: { portrait: null } })),
+            portraitBox(p.portrait, () => uploadInto("people", ["party-" + ideo, "portrait"], "the portrait"), () => edit("people", { ["party-" + ideo]: { portrait: null } }), null, false, have ? gamePic(game.find(c => !c.ruler && c.ideo === ideo && c.sub === have)) : null),
             h("div", { class: "fields" },
               h("div", { class: "lab", style: "font-weight:700" }, nm),
               h("div", { class: "field" + (sub ? " set" : "") }, h("label", { for: "pp-sub-" + ideo, text: "Sub-ideology" }),
                 subSelect("pp-sub-" + ideo, sub, curParty[ideo] ? `Map default: ${subName(curParty[ideo])}` : "No set leader", x => edit("politics", { parties: { [ideo]: x } }), ideo)),
               have ? h("div", { class: "field" + (p.name ? " set" : "") }, h("label", { for: "pp-name-" + ideo, text: "Leader" }),
-                textInput("pp-name-" + ideo, p.name, "A name from the nation's culture", v => edit("people", { ["party-" + ideo]: { name: v } }), "", 80)) : null,
+                textInput("pp-name-" + ideo, p.name, ((game.find(c => !c.ruler && c.ideo === ideo && c.sub === have)) || {}).name || "A name from the nation's culture", v => edit("people", { ["party-" + ideo]: { name: v } }), "", 80)) : null,
               have ? traitPicker("pp-traits-" + ideo, traitList("ruler"), p.traits, v => edit("people", { ["party-" + ideo]: { traits: v } })) : null));
         }))));
     }
@@ -3045,9 +3224,9 @@ function renderPeople(force) {
       h("div", { class: "meta", text: "In the game they are the politics screen's political advisors, hired for political power, each with the base game's traits (more political power, stability, support for an ideology …)." }),
       h("div", null, pols.map(([id, c]) => characterRow(id, c))),
       h("div", null, h("button", { class: "btn small", type: "button", onclick: () => add("c-", { role: "advisor", slot: "political_advisor" }, "pp-c-name-") }, "Add a political advisor"))));
-    out.push(h("div", { class: "sec" }, h("h4", null, "Generals, admirals and other advisors", h("small", { text: `${others.length}` })),
+    out.push(h("div", { class: "sec" }, h("h4", null, "Generals, admirals and other advisors", h("small", { text: `${others.length + game.filter(c => !c.ideo).length}` })),
       h("div", { class: "meta", text: "Generals and admirals join the nation's army and navy at the start, and advisors its political screen (pick their post: theorist, chiefs of the army, navy and air force, high command). Give them traits from the base game, or ask the author for a new one; the notes are for the author." }),
-      h("div", null, others.map(([id, c]) => characterRow(id, c))),
+      h("div", null, game.filter(c => !c.ideo).map(gameCharCard), others.map(([id, c]) => characterRow(id, c))),
       h("div", null, h("button", { class: "btn small", type: "button", onclick: () => add("c-", { role: "general" }, "pp-c-name-") }, "Add a character"))));
     // companies (author, 2026-10-15: "allow people to create ... companies")
     const cos = Object.entries(ppl).filter(([k, v]) => k.startsWith("co-") && v && isObj(v));
@@ -3145,7 +3324,7 @@ function renderNation(force) {
       });
       applyBtn.onclick = () => { if (!plan) return; const d = {}; plan.forEach((v, s) => { d[N.stateKey[s]] = { pop: v }; }); if (edit("states", d)) { applyBtn.disabled = true; preview.textContent = "Done. Adjust single states on the State tab."; } };
       out.push(h("div", { class: "sec" }, h("h4", null, "Spread a total population"),
-        h("div", { class: "meta", text: "Enter the nation's population; each state gets a share by its size, more where it has cities." }),
+        h("div", { class: "meta", text: "Enter the nation's population; each state gets a share by its area, more where it has bigger cities (each city's size, on the Cities tab)." }),
         h("div", { class: "field" }, totalIn), preview, h("div", null, applyBtn),
         total > 3e8 ? h("div", { class: "warn", text: "Over 300 million: HOI4's biggest countries have about 500 million, and very large numbers can break the game's sums." }) : null));
     }
@@ -3234,8 +3413,8 @@ function requestForm() {
 }
 function spread(total) {
   const N = app.N, w = N.states.map((st, s) => {
-    const vp = N.cityList.filter(c => c.s === s).reduce((a, c) => a + (c.vp || 5), 0);
-    return Math.pow(st.area, 0.9) * (1 + vp / 8);
+    const big = N.cityList.filter(c => c.s === s).reduce((a, c) => a + cityWeight(c), 0);
+    return Math.pow(st.area, 0.9) * (1 + big / 8);
   });
   const sum = w.reduce((a, b) => a + b, 0) || 1;
   return w.map(x => Math.max(1000, Math.round(total * x / sum / 1000) * 1000));
