@@ -155,7 +155,15 @@ communist) are changed the same way. The ruling sub-ideology isn't on their Poli
 the map yet; **map tools** (open, closed or automatic, per nation); every **request** (set it
 done or declined, and reply; the player sees the reply with their nation); every
 **suggestion** (shown on the world map, or opened where it was drawn); **admins** (only you
-change them); and **Save every nation as a file**, the whole atlas in one file to send Claude.
+change them); **Start over** (2026-10-16, your "blank slate"): type CLEAR and press **Clear every nation** to delete
+everything entered for every nation with a password (facts, pictures, suggestions, requests, status and notes); the
+passwords, admins, nations not on the map yet and map-tool switches stay, and what a player's browser kept from before
+(unsent changes, an offline copy) is dropped rather than sent back. It can't be undone, so save every nation as a file
+first if you want a copy. And **Save every nation as a file**, the whole atlas in one file to send Claude.
+
+**The mod from the map alone** (2026-10-16): Rouental's page, the only one imported so far, was taken out of the mod
+(`source/gazetteer/`, with its river, railway, terrain, cities, admiral and "Test" releasable), so the mod is built from
+the `.pdn` alone until the next import.
 
 ## Getting the facts into the mod
 

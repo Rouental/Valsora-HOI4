@@ -68,19 +68,14 @@ def main():
     hide = {"continuous_focus_window", "search_tooltip", "shortcut_grid_container", "toggle_shortcuts", "techtree_stripes",
             "tutorial_glow_1", "tutorial_glow_2", "tutorial_glow_3", "tutorial_glow_4", "open_focus", "clear_search",
             "filter_grid_main_container", "grid"}
-    p = PP.Panel(hide=hide, samples={"national_focus_title": "National Focus", "type_to_search_text": "Search focuses"},
-                 outline_lists=False)
+    p = PP.Panel(hide=hide, samples={"national_focus_title": "Rouental Focus Tree", "type_to_search_text": "Search focuses",
+                                     "valsora_deco_nf_kicker": "National Focus"}, outline_lists=False)
     p.draw(cv, [("containerWindowType", win)], 0, 0, 1920, 1080)
     wx, wy = LF.WIN_X, LF.TOP
     # the filter chips (the game fills the grid: one chip per filter its tree uses; the generic tree's seven here)
     fx0 = 1920 + LF.FILTERS[0] + wx
     for i in range(7):
         tile(cv, "GFX_valsora_deco_nf_filter", 1 if i == 0 else 0, fx0 + i * 37, wy + LF.FILTERS[1])
-    # the scripted title, its full name and sub-ideology
-    V.draw_text(cv, "valsora_deco_title_30", "Rouentaise Focus Tree", wx + LF.TITLE["x"], wy + LF.TITLE["y"], LF.TITLE["w"],
-                "left", max_h=LF.TITLE["h"])
-    V.draw_text(cv, "valsora_deco_italic_15", "The Sacred Principality of Rouental · Absolute Monarchy",
-                wx + LF.SUBTITLE["x"], wy + LF.SUBTITLE["y"], LF.SUBTITLE["w"], "left", max_h=LF.SUBTITLE["h"])
 
     # the tree: Rouental's focuses where the game puts them (grid at 50, 50 inside the tree's 13 px margin)
     ox, oy = wx + 13 + 50 + 40, wy + LF.TREE_Y + 13 + 50 + 30

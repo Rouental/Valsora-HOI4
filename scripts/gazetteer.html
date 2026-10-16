@@ -606,13 +606,21 @@ function setMode(m) {
 const locked = () => !!(app.N && app.mode === "shared" && !app.N.K);
 function docRef(kind) { return app.db.doc(`${nPath(app.N.tag, app.N.K)}/${kind}`); }
 function localKey() { return "gazetteer:" + app.N.tag; }
-function saveLocal() { store(localKey(), JSON.stringify(app.local)); }
+function saveLocal() { app.local.__at = Date.now(); store(localKey(), JSON.stringify(app.local)); }
 function loadLocal() { try { app.local = JSON.parse(recall(localKey()) || "{}") || {}; } catch (e) { app.local = {}; } }
 function backupPending() {
   const p = {};
   for (const k of KINDS) { const d = merge(app.inflight[k] || {}, app.pending[k] || {}); if (Object.keys(d).length) p[k] = d; }
-  store("gazetteer-pending:" + app.N.tag, Object.keys(p).length ? JSON.stringify(p) : null);
+  store("gazetteer-pending:" + app.N.tag, Object.keys(p).length ? JSON.stringify({ ...p, __at: Date.now() }) : null);
 }
+// the owner's "Start over" (2026-10-16): what a browser kept from before it (unsent changes, an offline copy) is dropped,
+// so it can't come back into the cleared atlas
+async function loadReset() {
+  if (app.resetKnown || !app.db) return;
+  try { const s = await app.db.doc("planned/reset").get(); app.resetAt = (s.exists && s.data().at) || 0; } catch (e) { /* none */ }
+  app.resetKnown = true;
+}
+function staleSinceReset(at) { return !!app.resetAt && (at || 0) < app.resetAt; }
 function F(kind) {
   if (app.cache[kind]) return app.cache[kind];
   const d = app.docs[kind];
@@ -784,6 +792,7 @@ function watchShared() {
       const tag = location.hash.slice(1).toUpperCase();  // a link to a nation not on the map yet
       if (!app.N && app.index && tag && app.planned[tag] && !app.byTag[tag] && $("#desk").hidden) openNation(tag);
     }, () => {});
+    app.db.doc("planned/reset").onSnapshot(s => { app.resetAt = (s.exists && s.data().at) || 0; app.resetKnown = true; }, () => {});
     app.db.doc("planned/unlock").onSnapshot(s => {
       app.unlock = (s.exists && s.data()) || {};
       renderOwner(); renderList();
@@ -1149,11 +1158,45 @@ function renderOwner() {
     h("details", null, h("summary", null, "Suggestions"), h("div", { class: "inner" },
       h("div", { class: "lead", text: "What players drew with the Suggest tool, for when you or Merlo draw the map." }), h("div", null, sugBtn), h("div", null, sugList))),
     adminSec,
+    startOverSec(),
     h("div", { class: "chips" }, h("button", { class: "btn small primary", type: "button", onclick: saveAllFile }, "Save every nation as a file"), h("span", { class: "meta", text: app.ownerOut || "" })),
     h("div", { id: "own-out" }),
   ];
   keepFocus(el, () => build);
   [...el.querySelectorAll("details")].forEach((d, i) => { d.open = !!open[i]; });
+}
+// "Start over" (the author, 2026-10-16: "is there a way you could reset any edits made thus far? I'd like a blank slate"):
+// every nation's facts, pictures, requests, status and notes are deleted; its password, the admins, the nations not on
+// the map yet and the map-tool switches stay. planned/reset records when, so browsers drop what they kept from before.
+function startOverSec() {
+  const inp = h("input", { id: "own-reset", type: "text", placeholder: "Type CLEAR", "data-keep": true, autocomplete: "off", style: "flex:0 1 140px;min-width:0" });
+  const go = h("button", { class: "btn small danger", type: "button", disabled: app.resetBusy, onclick: () => {
+    if (inp.value.trim().toUpperCase() !== "CLEAR") { app.resetMsg = "Type CLEAR in the box first."; renderOwner(); return; }
+    clearEveryNation();
+  } }, app.resetBusy ? "Clearing…" : "Clear every nation");
+  return h("details", null, h("summary", null, "Start over"), h("div", { class: "inner" },
+    h("div", { class: "lead", text: "Deletes everything entered for every nation with a password: its facts, pictures, suggestions, requests, status and notes. Passwords, admins, nations not on the map yet and the map-tool switches stay, so players start again with the passwords they have. It can't be undone: save every nation as a file first if you want a copy." }),
+    h("div", { class: "chips" }, inp, go), h("span", { class: "meta", text: app.resetMsg || "" })));
+}
+async function clearEveryNation() {
+  if (app.resetBusy) return;
+  app.resetBusy = true; app.resetMsg = "Clearing every nation…"; renderOwner();
+  let nations = 0, docs = 0, failed = 0;
+  await eachKey(async (tag, K) => {
+    const qs = await app.db.collection(nPath(tag, K)).limit(1000).get();
+    for (const d of qs.docs) {
+      if (d.id === "key") continue;
+      try { await app.db.doc(`${nPath(tag, K)}/${d.id}`).delete(); docs++; } catch (e) { failed++; }
+    }
+    nations++;
+  });
+  try { await app.db.doc("planned/reset").set({ at: Date.now() }); } catch (e) { failed++; }
+  app.resetBusy = false;
+  app.resetMsg = failed ? `${nations} nations, ${docs} documents deleted; ${failed} could not be. Try again.`
+    : `Done: ${nations} nations cleared (${docs} documents). Passwords, admins and your switches are kept.`;
+  if (app.N) { for (const k of KINDS) { app.pending[k] = null; } app.local = {}; store("gazetteer-pending:" + app.N.tag, null); store(localKey(), null); }
+  app.ownerSug = null;
+  renderOwner(); loadOwnerData(true);
 }
 async function setUnlock(tag, v) {  // "open", "closed" or "" (automatic: open once its states are drawn)
   const next = { ...app.unlock };
@@ -1267,6 +1310,7 @@ async function openNation(tag, opt = {}) {
   // changes that never reached the atlas last time (tab closed while saving)
   try {
     const p = JSON.parse(recall("gazetteer-pending:" + tag) || "null");
+    app.pendingAt = p ? p.__at || 0 : 0;
     if (p) for (const k of KINDS) if (p[k]) app.pending[k] = merge(app.pending[k] || {}, p[k]);
   } catch (e) { /* none */ }
   $("#loading").hidden = true;
@@ -1341,6 +1385,12 @@ async function unlockWith(pw, quiet) {
   if (!ok || app.N !== N) { if (!quiet) renderLock("That password isn't right for " + N.name + "."); return false; }
   N.K = K;
   if (!app.isOwner) store("gazetteer-pw:" + N.tag, normPw(pw));
+  await loadReset();
+  if (app.N !== N) return false;
+  if (staleSinceReset(app.pendingAt) && KINDS.some(k => app.pending[k])) {  // unsent changes from before the owner started over
+    for (const k of KINDS) app.pending[k] = null;
+    store("gazetteer-pending:" + N.tag, null);
+  }
   attach();
   adoptLocal();
   renderLock(); refreshSave(); renderAllPanes();
@@ -1348,6 +1398,7 @@ async function unlockWith(pw, quiet) {
 }
 function adoptLocal() {  // facts kept on this device (offline, or locked out by a new password) join the atlas
   if (app.mode !== "shared") return;
+  if (staleSinceReset(app.local.__at)) { app.local = {}; store(localKey(), null); return; }   // kept from before "Start over"
   let any = false;
   for (const k of KINDS) if (app.local[k] && Object.keys(app.local[k]).length) {
     app.pending[k] = merge(app.local[k], app.pending[k] || {}); delete app.local[k]; app.cache[k] = null; any = true;
@@ -2496,7 +2547,7 @@ function keepFocus(pane, build) {  // rebuild a pane, keeping the focused field,
   try { sel = id && a.setSelectionRange && a.selectionStart != null ? [a.selectionStart, a.selectionEnd] : null; } catch (e) { sel = null; }
   const drafts = [...pane.querySelectorAll("[data-keep]")].map(el => [el.id, el.value]);
   const scroll = pane.scrollTop;
-  pane.replaceChildren(...build());
+  pane.replaceChildren(...build().filter(x => x != null && x !== false));   // a section left out (null) isn't drawn as text
   for (const [k, v] of drafts) { const el = document.getElementById(k); if (el && v) { el.value = v; el.dispatchEvent(new Event("input")); } }
   pane.scrollTop = scroll;
   if (id) { const b = document.getElementById(id); if (b) { b.value = val; b.focus({ preventScroll: true }); if (sel && b.setSelectionRange) try { b.setSelectionRange(...sel); } catch (e) { /* not text */ } } }

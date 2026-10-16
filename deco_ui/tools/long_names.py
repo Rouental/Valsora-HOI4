@@ -4,8 +4,9 @@
 
 Each name variant from the Valsora mod's English localisation (TAG, TAG_<ideology> and cosmetic tags) is
 greedy-wrapped at the large name font's metrics (layout.NAME_FONTS, the generated .fnt files); a name with a
-word wider than the box, or needing more than two lines, is listed in valsora_deco_long_name, which switches the
-medallion's name to the small cut. Run by make_topbar.py, and by the Valsora build (scripts/deco_ui.py) so a new
+word wider than the box, or needing more than one line, is listed in valsora_deco_long_name, which switches the
+medallion's name to the small cut (since v0.8.4: two lines of the large letters filled the box to the flag's frame,
+"for long names like Kampf, they ride up against the flag", the user, 2026-10-16). Run by make_topbar.py, and by the Valsora build (scripts/deco_ui.py) so a new
 country is caught at once. Without the mod's localisation the trigger is always true (small font everywhere).
 """
 import os
@@ -72,13 +73,13 @@ def write(VALSORA=VALSORA_DIR, MOD=MOD_DIR):
         names = dict(re.findall(r'^\s*([A-Za-z0-9_]+):\d*\s+"(.*)"\s*$', text, re.M))
         for base in sorted(tags | cosmetic):
             test = f"has_cosmetic_tag = {base}" if base in cosmetic else f"tag = {base}"
-            if base in names and not name_fits(names[base], L.NAME_FONTS[0], N["w"] - 2):
+            if base in names and not name_fits(names[base], L.NAME_FONTS[0], N["w"] - 2, lines=1):
                 clauses.append(test)
                 (long_cosmetic if base in cosmetic else long_tags).add(base)
                 continue
             for ideo in ideologies:
                 v = names.get(f"{base}_{ideo}")
-                if v and not name_fits(v, L.NAME_FONTS[0], N["w"] - 2):
+                if v and not name_fits(v, L.NAME_FONTS[0], N["w"] - 2, lines=1):
                     clauses.append(f"AND = {{ {test} has_government = {ideo} }}")
                     (long_cosmetic if base in cosmetic else long_tags).add(f"{base}_{ideo}")
         have_data = bool(tags)

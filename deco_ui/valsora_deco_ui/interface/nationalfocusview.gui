@@ -138,14 +138,24 @@ guiTypes = {
 		
 		instantTextboxType = {
 			name = "national_focus_title"
-			position = { x = 189 y = 12 }
+			position = { x = 187 y = 44 }
 			textureFile = ""
-			font = "valsora_deco_section_11"
+			font = "valsora_deco_title_30"
 			borderSize = {x = 0 y = 0}
 			text = "NATIONAL_FOCUS_TITLE"
+			maxWidth = 900
+			maxHeight = 40
+			format = left
+		}
+		instantTextboxType = {
+			name = "valsora_deco_nf_kicker"
+			position = { x = 189 y = 24 }
+			font = "valsora_deco_section_11"
+			text = "VAL_DECO_NF_KICKER"
 			maxWidth = 600
 			maxHeight = 16
 			format = left
+			alwaystransparent = yes
 		}
 
 		### start search field

@@ -33,9 +33,9 @@ ROU_ARMY_HISTORY = [
     *[f"add_equipment_to_stockpile = {{ type = {e} amount = {n} producer = ROU }}" for e, n in (
         ("infantry_equipment_1", 3000), ("support_equipment_1", 600), ("motorized_equipment_1", 1500),
         ("mechanized_equipment_1", 400), ("artillery_equipment_1", 500), ("anti_air_equipment_1", 300))],
-    # last, once the techs and the tank design exist
-    # the royal host's men come on top of the (tiny, Feudal Army) pool: see oob_manpower
-    "add_manpower = 150000",
+    # last, once the techs and the tank design exist (no extra manpower since 2026-10-16, the author: "I don't know if
+    # you're still giving nations the extra manpower to make sure their armies aren't empty, but if you are please
+    # remove it"; the divisions' men come out of the country's own pool)
     'set_oob = "ROU_2036"',
 ]
 
@@ -470,14 +470,6 @@ GENERIC_ARMY_TECH = ("set_technology = { infantry_weapons = 1 tech_support = 1 t
 def generic_divisions(n_states):
     """How many starting divisions a country of n_states gets."""
     return max(2, min(24, round(n_states / 6) + 2))
-
-
-def oob_manpower(n_divisions):
-    """History lines that give a country the men for its starting divisions: an OOB
-    division takes its manpower out of the country's pool (start_manpower_factor did not
-    stop that in game, 2026-10-04), and small countries' pools could not fill them.
-    About 10,000 men per division, with room to spare."""
-    return [f"add_manpower = {12000 * n_divisions}"]
 
 
 def generic_oob(tag, vps):

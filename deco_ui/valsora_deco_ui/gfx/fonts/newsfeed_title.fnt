@@ -1,5 +1,5 @@
 info face="Federo" size=24 bold=0 italic=0 charset="" unicode=1 stretchH=100 smooth=1 aa=1 padding=0,0,0,0 spacing=1,1 outline=0
-common lineHeight=35 base=25 scaleW=256 scaleH=512 pages=1 packed=0 alphaChnl=1 redChnl=0 greenChnl=0 blueChnl=0
+common lineHeight=35 base=26 scaleW=256 scaleH=512 pages=1 packed=0 alphaChnl=1 redChnl=0 greenChnl=0 blueChnl=0
 page id=0 file="newsfeed_title.dds"
 chars count=334
 char id=32    x=25    y=493   width=8     height=3     xoffset=-1    yoffset=24    xadvance=6     page=0  chnl=15

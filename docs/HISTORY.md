@@ -10,6 +10,19 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-16, later (the author's screenshots and `error.log` of v0.8.3, and: "I don't know if you're still giving
+  nations the extra manpower ... please remove it", "is there a way you could reset any edits made thus far? I'd like a
+  blank slate. The same goes for the mod. I'd like it just as it was on the last pdn, no extra rivers or internal
+  borders"): **the Deco UI v0.8.4**: the focus tree's title in its header (the game's own title in large gilt capitals
+  under a "National Focus" label; the scripted title had been docked in the tree's scrolling canvas, over the first row),
+  opaque headers on the focus tree and the side panels (the map showed through faintly), the focus shortcuts' and the
+  construction list's fold arrows in the deco style, the count badges (the decisions seal's and the top bar's others)
+  as small gilt-rimmed octagons, the large tabs drawn 4 px in from each side (the captured commanders' overlapped), the
+  empty general card's plus a smaller medallion in the middle of the chest, and the game's own bases on the fonts it
+  redraws (`error.log`: the tooltip font's base against the game's Cyrillic file). **No extra manpower** for the starting
+  divisions. **A blank slate**: the mod from the `.pdn` alone (Rouental's Gazetteer page, its river, railway, terrain,
+  cities, admiral and "Test" releasable out: 182 countries), and Owner tools › Start over on the site, which clears every
+  nation's entries (the author presses it) and keeps browsers from sending old copies back (`tests/gazetteer/reset.py`).
 - 2026-10-16 (the author's answers to the tech tree proposal's eight questions): no build. Recorded in
   `docs/TECH_TREE_2036.md`, whose calendar, tiers, drones, battleship line and orbital strike were reworked from them:
   a realistic 2036 (what is in development now is in full service, most nations at today's level, the superpowers a

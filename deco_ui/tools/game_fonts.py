@@ -24,7 +24,7 @@ import random
 import re
 import sys
 
-from paths import FONTS_SRC as G, VANILLA
+from paths import FONTS_SRC as G, MOD, VANILLA
 
 JOS = G + "josefinsans/JosefinSans[wght].ttf"
 FED = G + "federo/Federo-Regular.ttf"
@@ -136,6 +136,15 @@ def build_all():
         fb = dict(fallback=JOS, fb_weight=500) if face == FED else {}
         out.append(GF.build(name, face, size, rim, "ui", weight=wt, caps=caps, tracking=tr, kern_set=GF.ALNUM,
                             atlas=GF.fit_atlas, line=(lh, (top + bottom) / 2), diamond=True, **fb))
+        # the game's own base (v0.8.4): a font of several files (cg_16b with the game's hoi_16tooltip3, for Cyrillic)
+        # must give them one base, or the game logs "base (13) in 'gfx/fonts/hoi_16tooltip3.fnt' does not match
+        # previous fontfiles in font 'cg_16b'" (the user's error.log). The glyphs' offsets are measured from the line's
+        # top, so the text draws where it did.
+        fnt = MOD + f"gfx/fonts/{name}.fnt"
+        t = open(fnt, encoding="utf-8").read()
+        t2, n = re.subn(r"^(common lineHeight=\d+ base=)\d+", lambda m: m.group(1) + str(base), t, count=1, flags=re.M)
+        assert n == 1, fnt
+        open(fnt, "w", encoding="utf-8", newline="\n").write(t2)
     for o in out:
         print(f"{o['name']:28} {o['glyphs']} glyphs, atlas {o['atlas'][0]}x{o['atlas'][1]}, line {o['line']}")
     return out

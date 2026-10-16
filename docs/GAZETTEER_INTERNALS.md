@@ -24,8 +24,8 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   `work/gazetteer_site/` alone as the next commit of `gh-pages` through a worktree, pushed;
   nothing is committed when the site is unchanged). Pages redeploys in a minute or two (the
   "pages build and deployment" run in Actions; github.io itself can't be reached from
-  Claude's sandbox). Test the page first: `python3 tests/gazetteer/run.py`, `traits.py`, `companies.py` and
-  `ingame.py`.
+  Claude's sandbox). Test the page first: `python3 tests/gazetteer/run.py`, `traits.py`, `companies.py`, `ingame.py`
+  and `reset.py`.
 - **Firebase** (set up by the author, 2026-10-15): Firestore (Standard, production mode), Google
   sign-in with `rouental.github.io` among the authorized domains, the web app's settings in
   `source/gazetteer_site/firebase-config.json` (not secret). The rules,
@@ -119,6 +119,15 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   communist, whose ids its focus tree names) their names, titles, portraits and traits through `NAMED_LEADERS`.
   Unchanged characters stay byte for byte, and without facts the build is byte-identical. `check_mod.py` checks every
   commander's skill (1–9) and stats (0–9), and that they are its role's (mutation-tested, 2 of 2).
+- **Start over** (author, 2026-10-16: "is there a way you could reset any edits made thus far? I'd like a blank
+  slate"): Owner tools › Start over (`startOverSec`, `clearEveryNation`; the word CLEAR typed first) deletes every
+  document but `key` in each folder of `owner/keys`' nations (the rules let admins delete), then writes `planned/reset`
+  `{at}` (admins write `planned/*`; everyone reads it). Unsent changes a browser keeps (`gazetteer-pending:<TAG>`) and
+  an offline copy (`gazetteer:<TAG>`) carry the time they were saved (`__at`); one from before the reset is dropped
+  when the nation is unlocked (`loadReset`, `staleSinceReset`) instead of being written back. No rules change.
+  `tests/gazetteer/reset.py`. The mod's side of the blank slate: `source/gazetteer/` was removed (Rouental's page and
+  its assets, `installed.json`) with the flag the import had installed (`source/flags/TES.png`); without facts the
+  build is the `.pdn`'s alone.
 - **Admins** (author, 2026-10-15: "How would I go about making Merlo an admin on the Gazetteer
   as well, so he can manage passwords and such"): Owner tools › Admins (the author adds or
   removes a Google address: `admins/<address>`); an admin signs in with Google and gets every

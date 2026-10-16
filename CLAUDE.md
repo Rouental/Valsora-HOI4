@@ -7,7 +7,7 @@ under OneDrive — keep that segment in any absolute path). Valsora takes place 
 the game starts on 1 January 2036 (see "2036" under Decisions worth keeping).
 
 The map is the author's drawing at game size, 5120×2560: its land, rivers and the countries and states they
-outline region by region (161 nations on the map, 183 countries with the releasables and the civil war's), and the
+outline region by region (161 nations on the map, 182 countries with the releasables and the civil war's), and the
 sea provinces their friend Merlo drew. Rouental is the built-out nation (leaders, focus tree, civil war, army); the
 rest have set rulers and the game's generic content, moved to 2036. The interface is the author's art deco design,
 the Valsora Deco UI (`deco_ui/`). The Gazetteer, a web site, lets the author's friends fill in their own nations.
@@ -226,7 +226,7 @@ and what could make both smaller.
 | `fit_flag.py` | by hand: a flag the author sends in another shape → `source/flags/TAG.png` at 82:52 without resampling (plain field trimmed round an emblem, vertical bands made longer, stripes lengthened or made taller, a screenshot's frame cropped; quarters, crosses and borders refused) and `work/flag_fit_TAG.png` to check |
 | `build_flags15.sh` | by hand: the larger flags' test version (`docs/HD_FLAGS_TEST.md`) beside the mod: the Deco UI drawn for it in `work/deco_flags15/`, the mod in `work/build_flags15/`, `work/valsora_test_flags15.zip`; `build/` and `dist/` untouched |
 | `publish_site.sh` | by hand: the Gazetteer's site (`facts_export.py`, `gazetteer_site.py`) as the next commit of `gh-pages`, pushed; nothing when unchanged |
-| `tests/gazetteer/` | by hand, after `facts_export.py`: the Gazetteer page driven in Chromium with a stand-in for claude.ai's runtime: `run.py` (owner, friend, passwords, desktop and phone, light and dark), `traits.py` (traits and their requests), `companies.py` (political advisors, companies and their requests), `ingame.py` (the game's own characters and releasables, commanders' stats, cities' size); `harness.py` builds the test site in `work/gazetteer_test/` |
+| `tests/gazetteer/` | by hand, after `facts_export.py`: the Gazetteer page driven in Chromium with a stand-in for claude.ai's runtime: `run.py` (owner, friend, passwords, desktop and phone, light and dark), `traits.py` (traits and their requests), `companies.py` (political advisors, companies and their requests), `ingame.py` (the game's own characters and releasables, commanders' stats, cities' size), `reset.py` (Owner tools › Start over); `harness.py` builds the test site in `work/gazetteer_test/` |
 | `country_list.py` | by hand, after a build: `dist/world_map_labelled.png` (every country labelled) and `dist/countries.md` / `.csv` (name, full name, ideology, sub-ideology, culture, leader, states), read from the built mod |
 | `nation_sheet.py` | by hand, after a build: `dist/nations_by_continent.png`, every nation in the game under the continent of its capital: flag, ruler at the start (portrait of our own, or a "placeholder" box for a base-game one), full name, ideology and sub-ideology, culture, and a strip of its map colour (author, 2026-10-13) |
 | `collages.py` | by hand, after a build: `dist/flags_collage.png` (every custom flag, and the countries still on a placeholder stripe) and `dist/leaders_collage.png` (every custom leader: own portraits at 2×, named ones with base-game portraits as labelled tiles); `--continent NAME` writes only `dist/flags_<name>.png`, the flags of the nations whose capital is on that continent, naming below them those with land there and their capital elsewhere (2026-10-10, Araseos; 2026-10-12, Yastreovakia) |
@@ -411,8 +411,8 @@ in `scripts/mutation_test.py` (52, every one caught): run it after any change to
     white and navy, came on 2026-10-14). Guedelon's blue and Hollier's red are their flags' main colours. `pdn_tools.py recolour Countries OLD=NEW` keeps
     the `.pdn` in step.
   - **Every nation's record**, who drew, named and decided what and when, is `docs/NATIONS.md` (moved out of this
-    file on 2026-10-15). As built: 183 countries in the mod, the 161 on the map and 22 that own nothing at the start
-    (Rouental's 13 releasables and Belekria's Tethia, the civil war's 7, the Gazetteer's releasable "Test");
+    file on 2026-10-15). As built: 182 countries in the mod, the 161 on the map and 21 that own nothing at the start
+    (Rouental's 13 releasables and Belekria's Tethia, the civil war's 7);
     `dist/countries.md` lists every country's names, government, culture, ruler and states. Off the map but kept in
     `COUNTRIES`, and so left out of the mod: the United States of Solitas (to come back as a formable) and
     Russovichia (author, 2026-10-15).
@@ -570,11 +570,12 @@ Aislada is the worked example of a built-out nation:
   `history/units/<TAG>_2036.txt` (`nations.generic_oob`): "Infantry Division" (8
   infantry, 1 artillery, engineers, recon), about one per six states, 2 to 24, at the
   victory points of its states (capital first), plus the techs for them. An OOB
-  division takes its men out of the country's pool; `start_manpower_factor = 1.0` did
-  not stop that (in game, 2026-10-04: every army started empty), so each country's
-  history does `add_manpower` (12,000 per division; Rouental 150,000) just before
-  `set_oob`. State population is 300 per map pixel (`build_mod.POP_PER_PX`; 20 until
-  2026-10-04, when the whole world held 75 million and Seigne 7,000).
+  division takes its men out of the country's pool (`start_manpower_factor = 1.0` did
+  not stop that, in game, 2026-10-04). Until 2026-10-16 each country's history added
+  the men first (`add_manpower`, 12,000 per division; Rouental 150,000); the author
+  had it removed ("if you are please remove it"), so the divisions come out of the
+  country's own pool. State population is 300 per map pixel (`build_mod.POP_PER_PX`; 20 until
+  2026-10-04, when the whole world held 75 million and Seigne 7,000, and the pools were too small).
 - **Devlon's 15 test spirits** (author, 2026-10-14: to see how the politics screen shows many
   national spirits): `nations.TEST_SPIRITS`, ideas `DVL_test_spirit_1`..`15` with vanilla's generic
   pictures and no effects, added in Devlon's history. Remove the list and its `HISTORY` entry after
@@ -994,8 +995,8 @@ the page, its rules or its import.
     closed nation's map facts.
   - Only the author's Claude publishes the site (`gh-pages`, allowed for it alone: "it's ok to put it on a new branch").
 - **Republish** after map changes: `sh scripts/publish_site.sh "message"`; test the page first, after
-  `python3 scripts/facts_export.py`: `python3 tests/gazetteer/run.py`, `traits.py`, `companies.py` and `ingame.py`
-  (same folder).
+  `python3 scripts/facts_export.py`: `python3 tests/gazetteer/run.py`, `traits.py`, `companies.py`, `ingame.py` and
+  `reset.py` (same folder).
 - **Into the mod:** the author's **Save every nation as a file**, then `python3 scripts/gazetteer.py import FILE`
   (`source/gazetteer/<TAG>.json`, pictures in `source/gazetteer/assets/`, flags of HOI4's shape into `source/flags/`),
   a rebuild (`river_provinces.py` first after new rivers), `gazetteer.py suggestions` if there are any, and
@@ -1070,32 +1071,38 @@ it before touching the UI. In short:
 
 Where things stand; the history, date by date, is `docs/HISTORY.md` (add each day's entry at its top).
 
-- **The build** (2026-10-15): 21,078 provinces (20,690 land, 363 sea, 25 lakes), 62,183 province borders (HOI4
-  draws 65,536: `docs/BORDER_LIMIT.md`), 3,149 states, 122 strategic regions (42 sea); 183 countries in the mod,
+- **The build** (2026-10-16): 21,078 provinces (20,690 land, 363 sea, 25 lakes), 62,183 province borders (HOI4
+  draws 65,536: `docs/BORDER_LIMIT.md`), 3,149 states, 122 strategic regions (42 sea); 182 countries in the mod,
   161 of them on the map, 95 of those with a flag of their own (66 fly a stripe in their map colour); the states of
-  39 are the author's own lines (`gazetteer.finals`). Two starts, both on 1 January 2036. The Deco UI is v0.8.3 (the
-  ringed globe on the news masthead and, whole, as the superevent's crest; the keystone's diamond lowered).
+  39 are the author's own lines (`gazetteer.finals`). Two starts, both on 1 January 2036. The Deco UI is v0.8.4 (the
+  focus tree's title in its header, the empty general card's plus on the chest, the count badges and fold arrows in
+  the deco style, the large tabs apart, opaque panel headers, the game's font bases).
   Rouental has test decisions for every kind of event and a test superevent (`test_events.py`).
-  Rouental's Gazetteer page is in the build (`source/gazetteer/ROU.json`), its admiral among its characters; no
-  other nation's yet. The Gazetteer offers the base game's traits for every leader and takes requests for new ones,
+  **A blank slate** (author, 2026-10-16: "is there a way you could reset any edits made thus far? I'd like a blank
+  slate. The same goes for the mod. I'd like it just as it was on the last pdn, no extra rivers or internal borders"):
+  the mod is built from the `.pdn` alone, with no Gazetteer facts (`source/gazetteer/` removed: Rouental's page, its
+  river, railway, terrain, cities, admiral and "Test" releasable with its flag), and Owner tools › **Start over**
+  clears the site's atlas (the author presses it: Claude can't sign in to their Firebase). The Gazetteer offers the base game's traits for every leader and takes requests for new ones,
   and has political advisors and companies (arms makers and industrial concerns of the base game's kinds, with logos;
   requests for new kinds); since 2026-10-15 (later) it shows what the game already has, editable (the author's own
   characters with their stats; Rouental's 13 releasables, its civil war's 7 risers and Belekria's Tethia), commanders'
   skill and stats, and cities' size apart from their victory points (now labelled by importance). The test version with 1.5 times larger flags is built beside the mod by
   `sh scripts/build_flags15.sh` and sent as its own zip (`docs/HD_FLAGS_TEST.md`), not put into the mod.
-- **Seen in game last** (2026-10-15, the third round): the Deco UI v0.8.1 with Rouental's test decisions (the
-  author's screenshots): the country, long, news and leader events and the news page worked; the state and operative
-  events, a long option, the superevent's title, long names under the flag and the army badges under the medallion
-  didn't (all fixed in v0.8.2, not yet seen). The in-game error counter showed 8 errors: their `error.log` wasn't sent.
-  Not seen yet: the Deco UI v0.8.2 and v0.8.3, the two starts, Vilna and Placeholdgrad. The Deco UI's checklist for the
-  author is in `deco_ui/valsora_deco_ui/README.txt` (Things to check) and `deco_ui/CLAUDE.md` (section 10).
+- **Seen in game last** (2026-10-16): the Deco UI v0.8.3 (the author's screenshots and `error.log`): the army bar
+  looked good but for the empty cards' plus, off their chest; the decision counts were the game's round badges; the
+  focus tree's title and subtitle sat on its first row of focuses, the map showed faintly through its header, and its
+  shortcuts arrow was the game's copper one; the captured commanders' two tabs overlapped; one log line was ours (the
+  tooltip font's base against the game's Cyrillic file). All fixed in v0.8.4, not yet seen. The log's other lines are
+  the game's own (two Workshop mods, missing Italian and German tank models, SCO's and CSA's flags). Not seen yet
+  besides: the two starts, Vilna and Placeholdgrad. The Deco UI's checklist for the author is in
+  `deco_ui/valsora_deco_ui/README.txt` (Things to check) and `deco_ui/CLAUDE.md` (section 10).
 - **Waiting on the author:** the larger flags' test version (`docs/HD_FLAGS_TEST.md`); the panel picture proposals (on
   hold, the author: "I don't want to move ahead with the panel pictures just yet"); the tech tree (its eight questions
   answered on 2026-10-16 and recorded in `docs/TECH_TREE_2036.md`: a realistic 2036, the tree beginning where the base
   game's ends, nuclear weapons for the superpowers only, Krionik, Kampf and Fraxhemark or Sarkis as the superpowers;
   the author is still brainstorming and will say more about the tree's shape, so nothing is built until then); the other
   size options
-  (`docs/SPEED_AND_SIZE.md`); the `error.log` behind the 8 errors of their last test. Settled (2026-10-15): the news
+  (`docs/SPEED_AND_SIZE.md`). Settled (2026-10-15): the news
   masthead stays VALSORAN STANDARD, its globe the ringed one, the event cards' crest the keystone; the zip stays in
   `dist/` (Decisions worth keeping, "The mod's zip").
 
@@ -1105,11 +1112,11 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
    outlines (`apply_outlines.py`, about 1,300 px each), not lines of the author's; their Gazetteer map tools stay
    closed until the author draws them. The old `.pdn`'s country colours, moved to the new layout, are its Notes
    layer.
-2. **Terrain** is plains everywhere but Rouental's provinces (from its Gazetteer page); there are no trees, and the
+2. **Terrain** is plains everywhere; there are no trees, and the
    relief is noise. A generated terrain (with its own relief) exists as a test only, `terrain_test.py`
    (2026-10-12): the author said not to add it to the mod yet. It follows the author's geography where they gave
    it (the Vale of Reibonne). Rivers are only where the author or their friend drew them; railways wait (the
-   author, 2026-10-15), but for Rouental's one from its Gazetteer page.
+   author, 2026-10-15): there are none.
 3. **Country content**: Rouental (leaders, focus tree, civil war, royal host) and Merlovich (focus tree) are built
    out; every other country has its set ruler, generated characters, the generic focus tree and a generic infantry
    army. Generic portraits and name lists exist (see Cultures), scientists' too since 2026-10-14.

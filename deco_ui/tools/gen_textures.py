@@ -186,7 +186,11 @@ SHARED = {   # vanilla path: (w, h, html)
     "gfx/interface/generic_text_bg_108.dds": (108, 27,
         '<div style="position:absolute;inset:0;background:#0A0F12;box-shadow:inset 0 0 0 1px rgba(201,165,90,.35)"></div>'),
     "gfx/interface/tiles/tiling_sort_button.dds": (60, 23, bar(c=4, shine=.15)),
-    "gfx/interface/tab_large.dds": (516, 42, frames(516, 42, lit_bar(7), bar(DIM_FILL, "rgba(201,165,90,.4)", 7, .1))),
+    # drawn 4 px in from each side (v0.8.4): the game sets its tabs 250-256 px apart, overlapping the 258 px pictures by
+    # 2-8 px, which the game's slanted tabs hide and our chamfered bars didn't (the captured commanders' two tabs, the
+    # user's screenshot)
+    "gfx/interface/tab_large.dds": (516, 42, frames(516, 42, *(f'<div style="position:absolute;left:4px;right:4px;top:0;bottom:0">{b}</div>'
+                                                               for b in (lit_bar(7), bar(DIM_FILL, "rgba(201,165,90,.4)", 7, .1))))),
     "gfx/interface/intel_ledger/tab.dds": (520, 42, frames(520, 42, lit_bar(7), bar(DIM_FILL, "rgba(201,165,90,.4)", 7, .1))),
     "gfx/interface/diplo_filter_entry.dds": (246, 34, frames(246, 34, lit_bar(5), bar(c=5))),
     "gfx/interface/sort_button_100x29_2.dds": (200, 29, frames(200, 29, lit_bar(4), bar(c=4, shine=.15))),
@@ -683,7 +687,7 @@ def side_lines(h, top=0):
 # both vanilla textures (550x344) are replaced. Lacquer above the notch's bottom, everything but the notch (the
 # top bar's flag medallion and decisions seal show through it), the frame's verticals, a gilt edge round
 # the notch, the band's shadow, the jade wash and the rule under the title. Transparent below.
-HEAD = clipped('<div class="lac" style="position:absolute;inset:0;opacity:.97"></div>'
+HEAD = clipped('<div class="lac" style="position:absolute;inset:0"></div>'
                f'<div style="position:absolute;left:0;top:0;width:{PW}px;height:{LP.HEAD_GLOW_H}px;'
                'background:linear-gradient(180deg,rgba(46,110,96,.22),rgba(46,110,96,0))"></div>'
                f'<div style="position:absolute;left:0;top:0;width:{PW}px;height:12px;'
@@ -702,7 +706,7 @@ for rel in ("gfx/interface/pol_view_bg.dds", "gfx/interface/pol_view_bg_no_dlc.d
 # frame's verticals running through the top edge (they continue the header strip's), the frame along the
 # bottom with the big corner brackets
 add("pol_body", P + "body.dds", 192, 192,
-    '<div class="lac" style="position:absolute;inset:0;opacity:.97"></div>'
+    '<div class="lac" style="position:absolute;inset:0"></div>'
     '<div class="frame" style="left:0;right:0;bottom:0;height:1px;background:rgba(0,0,0,.6)"></div>'
     '<div class="frame" style="left:0;top:0;bottom:0;width:1px;background:rgba(0,0,0,.6)"></div>'
     '<div class="frame" style="right:0;top:0;bottom:0;width:1px;background:rgba(0,0,0,.6)"></div>'
@@ -720,7 +724,7 @@ import layout_panels as LPN
 def panel_head(w, px):
     nb, hh = LPN.NB, LPN.HEAD_H
     region = f"M0 0 H{w} V{nb} H0 Z"
-    lac = ('<div class="lac" style="position:absolute;inset:0;opacity:.97"></div>'
+    lac = ('<div class="lac" style="position:absolute;inset:0"></div>'
            f'<div style="position:absolute;left:0;top:0;width:{w}px;height:{LP.HEAD_GLOW_H}px;'
            'background:linear-gradient(180deg,rgba(46,110,96,.22),rgba(46,110,96,0))"></div>'
            f'<div style="position:absolute;left:0;top:0;width:{w}px;height:12px;'
@@ -973,7 +977,7 @@ def nf_header():
     between repeat. Lacquer, the jade wash, and a gilt rule along its foot (the mockup's border under the header)."""
     w, h = LF.HEAD_TILE_W, LF.HEAD_H
     notch = path_d(LPN.notch_outline(0, LF.WIN_X))
-    lac = ('<div class="lac" style="position:absolute;inset:0;opacity:.97"></div>'
+    lac = ('<div class="lac" style="position:absolute;inset:0"></div>'
            f'<div style="position:absolute;left:0;top:0;width:{w}px;height:{h}px;'
            'background:linear-gradient(180deg,rgba(46,110,96,.22),rgba(46,110,96,0))"></div>'
            f'<div style="position:absolute;left:0;top:0;width:{w}px;height:12px;'
@@ -1186,6 +1190,37 @@ def zoom_btn(glyph):
             f'<svg width="{Z_}" height="{Z_}" style="position:absolute;left:0;top:0" fill="none" stroke="#E3C77E" stroke-width="1.8">{glyph}</svg>')
 
 
+# the count badges (v0.8.4, the user: "The numbers by the decisions tab should be stylized like the rest of the UI"):
+# the game's topbar_alert_bg, 4 frames of 17 x 17 (grey, red, yellow, green: the decisions seal's two counts, the
+# intelligence agency's, the prototypes', the trade contracts', the officer corps'), replaced at its path: a small
+# lacquer octagon with a gilt rim, tinted by its frame's meaning; the game's number (hoi_16mbs, the deco face) on it
+def count_badge(fill, rim=GOLD_V):
+    w = 17
+    pts = [(4.5, .5), (12.5, .5), (16.5, 4.5), (16.5, 12.5), (12.5, 16.5), (4.5, 16.5), (.5, 12.5), (.5, 4.5)]
+    return plate(pts, fill, rim) + f'<div style="position:absolute;left:4px;top:2px;width:9px;height:1px;background:rgba(255,255,255,.12)"></div>'
+
+
+add("shared_topbar_alert_bg", "gfx/interface/topbar/toolbar/topbar_alert_bg.dds", 68, 17, frames(68, 17,
+    count_badge("linear-gradient(180deg,#1E2A30,#0B1014)"),
+    count_badge("linear-gradient(180deg,#9A2E26,#5A1512)", "linear-gradient(180deg,#F1DC9C,#B8954F)"),
+    count_badge("linear-gradient(180deg,#A07A2A,#5E4415)", "linear-gradient(180deg,#FFF3C8,#C9A55A)"),
+    count_badge("linear-gradient(180deg,#2E6E60,#153730)", "linear-gradient(180deg,#F1DC9C,#B8954F)")))
+
+
+# the fold arrows (v0.8.4; the user saw the game's copper arrow at the focus tree's lower left, its shortcuts' toggle):
+# the game's production_line_arrow_left / _right, 32 x 28, which the construction screen's fold and the peace
+# conference use too, replaced at their paths: a chamfered lacquer chip, gilt rim, a gilt chevron
+def fold_arrow(left):
+    w, h, c = 32, 28, 6
+    pts = [(c, 1), (w - c, 1), (w - 1, c), (w - 1, h - c), (w - c, h - 1), (c, h - 1), (1, h - c), (1, c)]
+    d = "M18.5 8.5l-6 5.5 6 5.5" if left else "M13.5 8.5l6 5.5-6 5.5"
+    return (plate(pts, "linear-gradient(180deg,#1E2A30,#0D1418)")
+            + f'<svg width="{w}" height="{h}" style="position:absolute;left:0;top:0"><path d="{d}" fill="none" stroke="#E3C77E" '
+            'stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>')
+
+
+add("shared_production_line_arrow_left", "gfx/interface/production_line_arrow_left.dds", 32, 28, fold_arrow(True))
+add("shared_production_line_arrow_right", "gfx/interface/production_line_arrow_right.dds", 32, 28, fold_arrow(False))
 add("nf_zoom_in", NF + "zoom_in.dds", Z_, Z_, zoom_btn(f'<path d="M{Z_ / 2 - 5} {Z_ / 2}h10M{Z_ / 2} {Z_ / 2 - 5}v10"/>'))
 add("nf_zoom_out", NF + "zoom_out.dds", Z_, Z_, zoom_btn(f'<path d="M{Z_ / 2 - 5} {Z_ / 2}h10"/>'))
 FL = LF.FILTER
@@ -1484,12 +1519,14 @@ def lg_add(w, h, lit, cx, plus=True):
          f'<path d="M{cx - half},{h * .92}C{cx - half},{sh + 6} {cx - hr - 4},{sh} {cx},{sh}C{cx + hr + 4},{sh} {cx + half},{sh + 6} '
          f'{cx + half},{h * .92}" fill="none" stroke="rgba(227,199,126,.55)" stroke-width="1.3"/>')
     if plus:
-        r = 9
-        my = h * .75
+        # v0.8.4 (the user: the + "isn't quite centered on their chest"): a smaller medallion in the middle of the chest,
+        # clear of the collar (r 9 reached the shoulders' apex at h * .58)
+        r = 6.5 if w < 66 else 7
+        my = (sh + h * .92) / 2
         fill, rim, pc = ("#2C665A", "#F1DC9C", "#FBEAB4") if lit else ("#11191E", "#C9A55A", "#E3C77E")
         s += (f'<rect x="{cx - r}" y="{my - r}" width="{2 * r}" height="{2 * r}" transform="rotate(45 {cx} {my})" fill="{fill}" '
               f'stroke="{rim}" stroke-width="1"/>'
-              f'<path d="M{cx - 5},{my}H{cx + 5}M{cx},{my - 5}V{my + 5}" stroke="{pc}" stroke-width="1.8" stroke-linecap="round"/>')
+              f'<path d="M{cx - 3.6},{my}H{cx + 3.6}M{cx},{my - 3.6}V{my + 3.6}" stroke="{pc}" stroke-width="1.6" stroke-linecap="round"/>')
     return s + "</svg>"
 
 

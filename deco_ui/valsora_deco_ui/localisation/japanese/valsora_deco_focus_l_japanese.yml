@@ -1,3 +1,2 @@
 ﻿l_japanese:
- VAL_DECO_NF_TITLE:0 "[ROOT.GetAdjective] Focus Tree"
- VAL_DECO_NF_SUBTITLE:0 "[ROOT.GetNameDefCap] · [GetValsoraDecoSubIdeology]"
+ VAL_DECO_NF_KICKER:0 "National Focus"

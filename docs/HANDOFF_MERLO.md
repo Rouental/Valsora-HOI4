@@ -247,7 +247,9 @@ password: https://rouental.github.io/Valsora-HOI4/
   - passwords: make one, change one, copy it to send to a player;
   - nations not on the map yet;
   - **map tools**, open or closed per nation;
-  - requests, suggestions, and **Save every nation as a file**.
+  - requests, suggestions, and **Save every nation as a file**;
+  - **Start over** (2026-10-16): clears every nation's entries, keeping the passwords. The
+    author's call: don't press it unless they ask.
   Only the author can add or remove admins.
 - **A nation's map tools** (states, cities, terrain, rivers, railways, supply hubs) open
   only once its states are the author's own lines.
@@ -307,7 +309,7 @@ steps relied on someone remembering.
 | Fit a flag | `python3 scripts/fit_flag.py TAG picture` | look at `work/flag_fit_TAG.png` before committing |
 | The larger flags' test version | `sh scripts/build_flags15.sh` | beside the mod (`work/`), never over it: no rebuild afterwards |
 | Publish the Gazetteer | `sh scripts/publish_site.sh "message"` | the author's Claude only |
-| Test the Gazetteer page | `python3 tests/gazetteer/run.py`, `traits.py`, `companies.py`, `ingame.py` (same folder) | after `python3 scripts/facts_export.py`; every change to `scripts/gazetteer.html` |
+| Test the Gazetteer page | `python3 tests/gazetteer/run.py`, `traits.py`, `companies.py`, `ingame.py`, `reset.py` (same folder) | after `python3 scripts/facts_export.py`; every change to `scripts/gazetteer.html` |
 
 Habits that save a session's time and keep its quality:
 - **Read the manual by section.** `CLAUDE.md` is long; search it (`grep -n`) for the part

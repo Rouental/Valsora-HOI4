@@ -1,4 +1,4 @@
-VALSORA DECO UI - v0.8.3 (for HOI4 1.19)
+VALSORA DECO UI - v0.8.4 (for HOI4 1.19)
 ========================================
 
 An art deco interface for the Valsora total conversion: core skin and fonts,
@@ -28,6 +28,37 @@ Valsora repository's scripts/common.py and rebuild (sh scripts/run_all.sh).
 The layout is built for 1920 px of UI width: 1920x1080 at 100% UI scale, or
 2560x1440 at up to 133%.
 
+
+NEW IN v0.8.4
+-------------
+  - Focus tree: the title is in the header ("NATIONAL FOCUS" over the
+    tree's name in large gilt capitals). It sat on the first row of focuses:
+    the game had put it inside the tree's scrolling canvas. The full name
+    and sub-ideology line under it is gone with it.
+  - Focus tree and side panels: the headers are opaque (the map's names
+    showed through faintly). The shortcuts arrow (lower left of the focus
+    tree) and the construction list's fold arrow are gilt chevrons on
+    lacquer chips, not the game's copper arrows.
+  - The counts on the decisions seal (and the top bar's other counts) are
+    small gilt-rimmed octagons in grey, red, gold and jade, not the game's
+    round badges.
+  - Tabs: the large tabs are drawn 4 px in from each side, so the captured
+    commanders' two tabs (and the research and trait screens') no longer
+    overlap.
+  - Army bar: the plus on an empty general or field marshal card is a
+    smaller medallion in the middle of the chest, clear of the shoulders.
+  - Fonts: the game's fonts the Deco UI redraws keep the game's own base
+    line, which the game checks against its Cyrillic files (error.log:
+    "base (13) in 'gfx/fonts/hoi_16tooltip3.fnt' does not match ...").
+
+Things to check in game (v0.8.4):
+  - the focus tree: the title in the header, nothing over the focuses,
+    no map showing through the header; the lower left arrow;
+  - the decisions seal's counts (start a decision with a time limit for a
+    red one);
+  - the captured commanders window (the army screen): two tabs apart;
+  - an empty general card: the plus on the chest;
+  - error.log: no "does not match previous fontfiles" line.
 
 NEW IN v0.8.3
 -------------

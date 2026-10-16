@@ -114,3 +114,14 @@ there). The build got faster without changing a byte (the user: "Is there anythi
 modding process"): `tools/build_all.py` runs independent steps side by side (81 s to 31 s), `preview_panels.py` draws
 the panels on four cores (41 s to 16 s), and `validate_preview.py` draws the top bar preview only when it runs itself,
 not each time a preview script imports it; every file and preview was compared byte for byte.
+
+**v0.8.4 (2026-10-16, not yet seen in game)**, from the user's screenshots and `error.log` of v0.8.3 ("The numbers by the
+decisions tab should be stylized like the rest of the UI", the empty general card's "+ isn't quite centered on their
+chest", "some problems in the focus tab", "The captured commanders tab has missing and captured bars overlapping"): the
+focus tree's title is the game's own (`national_focus_title`, the tree's name) in `valsora_deco_title_30` under a
+"National Focus" label, and the scripted GUI of v0.6 is gone (docked to `national_focus`, the game had put it in the
+tree's scrolling canvas: section 6); the focus tree's and the side panels' headers and body are opaque; the fold arrows
+(`production_line_arrow_left/right`, the focus shortcuts' toggle among them), the count badges (`topbar_alert_bg`, 4
+frames) are redrawn at the game's paths; `tab_large` is drawn 4 px in from each side; the empty card's plus is smaller
+and midway down the chest; `game_fonts.py` writes the game's own base into each font (the game logged cg_16b's against
+its `hoi_16tooltip3`), which `validate_preview.py` checks.

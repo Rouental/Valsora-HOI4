@@ -6,6 +6,38 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**The focus tree's title and subtitle sat on its first row of focuses** (2026-10-16, the author's screenshot of v0.8.3)
+- Cause: the scripted GUI that drew them was docked with `parent_window_token = national_focus`, which the game puts
+  inside the tree's scrolling canvas (`focus_tree_scripted_window_container`), not the window: the title landed ~124 px
+  lower than planned, over the focuses, and would have moved with the tree.
+- Fix (Deco UI v0.8.4): no scripted GUI; the game's own title (the tree's name, set by the game) is the large title in
+  the header, under a "National Focus" label of ours. The subtitle (full name and sub-ideology) is gone.
+
+**The map showed faintly through the focus tree's header** (2026-10-16, the same screenshot: a nation's name and
+capital in the header)
+- Cause: the headers' lacquer was drawn at 97 % opacity, as in the mockup's glassy panels; bright map text came through.
+- Fix (Deco UI v0.8.4): the focus tree's header, the side panels' headers and their body tile are opaque.
+
+**The focus tree's shortcuts arrow, the decision counts and the captured commanders' tabs were the game's look, or
+overlapped** (2026-10-16)
+- Cause: the arrow (`toggle_shortcuts`, the game's `production_line_arrow_left`) and the counts (`topbar_alert_bg`, 4
+  coloured frames) were never redrawn; the large tabs were, but as full-width chamfered bars, while the game sets them
+  250-256 px apart for 258 px pictures (its slanted tabs hide the overlap).
+- Fix (Deco UI v0.8.4): the arrows and the count badges redrawn at the game's paths (gilt chevrons on lacquer chips;
+  octagons in grey, red, gold and jade); the tabs drawn 4 px in from each side.
+
+**The empty general card's plus wasn't on the chest** (2026-10-16, the author: "the + isn't quite centered on their
+chest")
+- Cause: the plus medallion (a 9 px square turned on its corner) reached up to the shoulders' apex.
+- Fix (Deco UI v0.8.4): a smaller medallion (6.5-7 px) midway between the shoulders and the bust's foot.
+
+**error.log: "base (13) in 'gfx/fonts/hoi_16tooltip3.fnt' does not match previous fontfiles in font 'cg_16b'"**
+(2026-10-16)
+- Cause: the tooltip font is two files, ours (`cg_16b`, redrawn in v0.8) and the game's `hoi_16tooltip3` (its Cyrillic);
+  ours had base 14, the game's 13.
+- Fix (Deco UI v0.8.4): every font the Deco UI redraws keeps the game's own line height and base (`game_fonts.py`; the
+  glyphs' offsets are from the line's top, so nothing moves); `validate_preview.py` checks them against the game's.
+
 **The superevent's title was "all jumbled together"** (2026-10-15, the author's screenshot of the test superevent)
 - Cause: the Deco UI's superevent window has a baked title strip per superevent, and the scripted GUI gave a
   visibility trigger to each picture but none to the titles, so all eight drew over each other.

@@ -19,9 +19,13 @@ TOP = LPN.TOP                          # 62: flush under the band
 HEAD_H = LPN.HEAD_H                    # 114: the header picture, down past the seal's bottom
 TREE_Y = HEAD_H                        # the tree starts under it (vanilla: 47)
 HX = LPN.hx(WIN_X)                     # 187: the header's text starts right of the notch
-KICKER = dict(x=HX + 2, y=12, w=600, h=16)          # the game's own title, "National Focus", as a small label
-TITLE = dict(x=HX, y=27, w=900, h=40)                # scripted: "<Adjective> Focus Tree" (title_30)
-SUBTITLE = dict(x=HX + 2, y=71, w=900, h=22)         # scripted: "<full name> · <sub-ideology>" (italic_15)
+KICKER = dict(x=HX + 2, y=24, w=600, h=16)          # a label of ours, "National Focus" (section_11)
+# the game's own title, which the game sets to the tree's name ("Rouental Focus Tree"), in title_30. Until v0.8.4 it
+# was the small label and a scripted GUI drew "<Adjective> Focus Tree" and "<full name> · <sub-ideology>" here: the
+# game docks a scripted GUI with parent_window_token = national_focus in the tree's scrolling canvas
+# (focus_tree_scripted_window_container), so the title sat on the first row of focuses and moved with the tree
+# (the user's screenshot, 2026-10-16)
+TITLE = dict(x=HX, y=44, w=900, h=40)
 CONTROLS_CY = 52                       # the right-hand controls are centred on this row
 CLOSE = (-52, CONTROLS_CY - 17)        # UPPER_RIGHT, the politics screen's 34 px close diamond
 FIND = (-344, CONTROLS_CY - 21)        # the search box (40 px tall)

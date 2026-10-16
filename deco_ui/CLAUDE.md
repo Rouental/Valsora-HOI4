@@ -14,15 +14,15 @@ Treat assumed items as hypotheses.
 
 ---------------------------------------------------------------------------------------------------
 
-## 1. Status (v0.8.3)
+## 1. Status (v0.8.4)
 
-**v0.8.3 (2026-10-15)** is the current version: the event cards' keystone crest with its diamond lowered, the news
-masthead's ringed globe (the user's favourite), and, in the Valsora mod, the superevent's crest that globe, whole,
-across the frame's top edge. The user has seen v0.8.1 in game (2026-10-15, the third round: their screenshots led to
-v0.8.2); **v0.5.2 to v0.8.3 are not yet seen as a whole**: section 10 and the README's "Things to check" list what to
-look at first. **(in game)** so far: the main menu (its background, links and button row), the top bar (the right end
+**v0.8.4 (2026-10-16)** is the current version: the user's screenshots and `error.log` of v0.8.3 (section 10, the
+README): the focus tree's title in its header (the game's own title; the scripted one sat in the tree's canvas), opaque
+headers, deco fold arrows and count badges, the large tabs 4 px in from each side, the empty card's plus on the chest,
+and the game's font bases. The user has seen v0.8.3 in game (2026-10-16): the army bar "looks good". **v0.8.4 is not
+yet seen.** **(in game)** so far: the main menu (its background, links and button row), the top bar (the right end
 too, since v0.4.5), the politics screen (v0.4.7, v0.4.8), the side panels' notch and opening (v0.5, v0.5.1), the
-events and the news page (v0.8.1).
+events and the news page (v0.8.1), the army bar and the focus tree (v0.8.3).
 
 The history, version by version, with what the user saw in game and what it taught, is `docs/HISTORY.md`; the
 lessons that still hold are in section 6 (engine facts) and section 9 (pitfalls).
@@ -279,6 +279,13 @@ Build order matters. `gen_fonts` runs first because `layout.py` measures strings
   `political_title` comes before `pol_view_bg` in vanilla's file, so once `pol_view_bg` became an opaque
   header picture (v0.4.8) the title vanished under it in the preview; it is emptied and a label of our own
   is inserted after the picture.
+- **(in game, v0.8.3)** a scripted GUI with `parent_window_token = national_focus` is docked **inside the focus tree's
+  scrolling canvas** (vanilla's `tree>grid_window>focus_tree_scripted_window_container`), not the focus window: its
+  (0, 0) is ~(11, 124) in the window, and it moves with the tree. Use it for things that belong on the tree; the
+  header's title is the game's own `national_focus_title` since v0.8.4.
+- **(in game, v0.8.3, error.log)** a font of several files (`fontfiles` in `core.gfx`: `cg_16b` with the game's
+  `hoi_16tooltip3`) must give them one `base`; `game_fonts.py` writes the game's own line height and base into each
+  font it redraws.
 - **(in game, v0.4.7)** **Side panels are drawn over the top bar.** The politics panel (top at y 78) hid the
   medallion's name plate and the decisions seal. v0.4.8 puts the panel at the band's bottom (y 62,
   `layout_politics.TOP`) and leaves a **notch** the shape of the medallion and seal
@@ -572,11 +579,10 @@ level plates, chips, close diamond and fonts.
   `layout_panels.notch_poly(-3)`): its background is clear and click-through; first children are click-catchers
   beside the notch (to the window's right edge: `100%%` wide) and the header picture, a cornered tile 616 px wide
   whose left 260 px hold the notch and whose 96 px middle repeats to the window's width. The tree moves to y 114.
-- Header: the game's title (`national_focus_title`, "National Focus") is a small label; a scripted GUI docked to the
-  focus view (`parent_window_token = national_focus`, player context, `valsora_deco_focus_extras.gui`) draws the
-  title ("[ROOT.GetAdjective] Focus Tree", `valsora_deco_title_30`) and the full name and sub-ideology (the politics
-  screen's `GetValsoraDecoSubIdeology`, `valsora_deco_italic_15`). **(assumed)** the token works, and in player
-  context the title is the player's even when they look at another country's tree.
+- Header: a "National Focus" label of ours (`valsora_deco_nf_kicker`, `section_11`) over the game's own title
+  (`national_focus_title`, which the game sets to the tree's name, "Rouental Focus Tree") in `valsora_deco_title_30`.
+  Until v0.8.4 a scripted GUI drew the title and a subtitle (full name and sub-ideology); docked to `national_focus`,
+  the game put it in the tree's canvas, over the first row of focuses (section 6), so it is gone.
 - Each focus: the game swaps its `bg` button's sprite by state, so the picture is the medallion and the plate
   together (157 x 118, at item (9, -27): the octagon centred on the icon's (87.5, 20), the plate overlapping its
   foot): `focus_unavailable_bg`, `focus_can_start_bg` and `focus_completed_bg` at the game's paths (completed: the
@@ -706,6 +712,9 @@ GP.write_gui(MOD + "interface/x.gui", t)    # braces checked, engine_safe applie
 ## 9. Pitfalls already hit (do not repeat)
 
 - Stretching flags makes them pixelated. Keep them 1:1.
+- A picture the game lays out overlapping (the large tabs, 250-256 px apart for 258 px pictures) needs room drawn
+  in: the game's slanted tabs hid the overlap, our chamfered bars didn't (v0.8.3, the captured commanders).
+- Lacquer at 97 % shows the map's names through it (v0.8.3, the focus header): panels and headers are opaque.
 - New sprite names can collide. Prefix everything `GFX_valsora_deco_<screen>_...` and check with
   validate.
 - A new font must also be listed in `make_topbar.FONTS`, which writes `valsora_deco_fonts.gfx`,
@@ -749,6 +758,10 @@ GP.write_gui(MOD + "interface/x.gui", t)    # braces checked, engine_safe applie
 ## 10. Open items and things to check in game
 
 Check these first in the user's next screenshots and `error.log`:
+
+- **v0.8.4**: the focus tree's title in its header and nothing over the first row; its header opaque; the lower left
+  arrow in the deco style; the decisions seal's count badges (grey, red with a time limit); the captured commanders'
+  two tabs apart; an empty general card's plus on the chest; no "does not match previous fontfiles" in `error.log`.
 
 - **v0.8.3**: the news masthead's ringed globe at its size; a superevent's crest, the whole ringed globe across the
   frame's top edge; the event card's keystone, its diamond clear of the top step.

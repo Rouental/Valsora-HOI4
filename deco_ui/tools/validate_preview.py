@@ -286,6 +286,16 @@ for name, fd in list(fdefs.items()) + [("tahoma_60", dict(path="gfx/fonts/hoi_ma
             problems.append(f"{name}: char {c['id']} outside atlas")
     print(f"font {name}: {len(f['chars'])} chars, {len(f['kern'])} kerning pairs, atlas {W}x{H}, line {f['common']['lineHeight']}")
 
+# a font of several files must give them one base (the game's error.log, v0.8.3: "base (13) in
+# 'gfx/fonts/hoi_16tooltip3.fnt' does not match previous fontfiles in font 'cg_16b'"): the game's fonts we redraw keep
+# the game's own line height and base, so its companion files (Cyrillic, the tooltip's extras) still agree
+for n in _GFN.GAME:
+    _gt = open(VANILLA + f"gfx/fonts/{n}.fnt", encoding="utf-8-sig", errors="ignore").read()
+    ours, game = FONTS[n]["common"], dict(re.findall(r"(\w+)=(-?\d+)", re.search(r"^common .*$", _gt, re.M).group(0)))
+    for k in ("lineHeight", "base"):
+        if ours[k] != game[k]:
+            problems.append(f"gfx/fonts/{n}.fnt: {k} {ours[k]}, the game's {game[k]} (its other files must agree)")
+
 # ------------------------------------------------------------------ replaced vanilla textures keep vanilla sizes
 def tex_size(path):
     """(width, height) from a DDS or TGA header (vanilla's DDS may be compressed; only the header is read)"""
@@ -320,6 +330,10 @@ SAME_SIZE = ["gfx/interface/pol_view_bg.dds", "gfx/interface/pol_view_bg_no_dlc.
              "gfx/interface/generic_text_bg_108.dds", "gfx/interface/tiles/tiling_sort_button.dds",
              "gfx/interface/tab_large.dds", "gfx/interface/intel_ledger/tab.dds", "gfx/interface/diplo_filter_entry.dds",
              "gfx/interface/sort_button_100x29_2.dds", "gfx/interface/generic_checkbox.dds",
+             # the fold arrows (v0.8.4): the focus tree's shortcuts, the construction list, the peace conference
+             "gfx/interface/production_line_arrow_left.dds", "gfx/interface/production_line_arrow_right.dds",
+             # the count badges (v0.8.4): 4 frames the top bar picks by number
+             "gfx/interface/topbar/toolbar/topbar_alert_bg.dds",
              # the focus tree's links and exclusive marks (v0.6): the game cuts them into 16 and 32 px frames
              *[f"gfx/interface/focusview/focus_link_{k}.dds" for k in (
                  "up_down", "left_right", "down_left", "down_right", "up_left", "up_right", "down_left_right",

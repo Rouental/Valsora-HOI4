@@ -882,7 +882,7 @@ def main():
             continue
         mine.sort(key=lambda s: (s != capital_state[c], -len(states[s]), s))
         write(f"history/units/{tag}_2036.txt", nations.generic_oob(tag, [int(pid[state_capital[s]]) for s in mine]))
-        army[tag] = [nations.GENERIC_ARMY_TECH, *nations.oob_manpower(nations.generic_divisions(len(mine))),
+        army[tag] = [nations.GENERIC_ARMY_TECH,
                      f'set_oob = "{tag}_2036"']
     for c in present:
         tag, name, adj, col = COUNTRIES[c]

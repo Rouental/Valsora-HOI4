@@ -270,7 +270,7 @@
   "path": "gfx/interface/tab_large.dds",
   "w": 516,
   "h": 42,
-  "sig": "4645cc19b4c70f8d66c649018ecad70961fa314b453a3f05c0aaffb978043d2b"
+  "sig": "b64ff3632d1cd310c79279d90430cec8a1c9db018fed32d7229ce99eeddd3d03"
  },
  {
   "key": "shared_tab",
@@ -893,49 +893,49 @@
   "path": "gfx/interface/pol_view_bg.dds",
   "w": 550,
   "h": 344,
-  "sig": "f15b246ace17071f12eba11c8d5794b39ec9857f7248336a41e904ac2b373609"
+  "sig": "43f3d50d703cbe15f2baa4796f2b6a1724e0525734e148caf78587c97addca86"
  },
  {
   "key": "pol_head_pol_view_bg_no_dlc",
   "path": "gfx/interface/pol_view_bg_no_dlc.dds",
   "w": 550,
   "h": 344,
-  "sig": "e7913aaa9657349c2fb36a972e19f60c6f0a1821ebd8a5422fc87fb088c90b2b"
+  "sig": "b1e22f3a5a488eacdfb4c19beeb3b722bf296cd32e95e7c2bfc755733ea290c9"
  },
  {
   "key": "pol_body",
   "path": "gfx/interface/valsora_deco/politics/body.dds",
   "w": 192,
   "h": 192,
-  "sig": "b2b610ae339a67cabf01d039bb586aaa5d2dfc89a64390616b4a72348f3e8504"
+  "sig": "41440b52779143efc1f0d877157d1990ca2c651aa38d8c59f286b84b4b087036"
  },
  {
   "key": "panel_head_500_0",
   "path": "gfx/interface/valsora_deco/panels/head_500_0.dds",
   "w": 500,
   "h": 114,
-  "sig": "68c24eb8ed483097a48c59f8ca6d2fddbb62963260ecf015db5a5e83397e1801"
+  "sig": "6dc5b051532f2c003ddf3a6c45c5c1266ce0043d2e5eeabfed10b0b7b5fba307"
  },
  {
   "key": "panel_head_550_m6",
   "path": "gfx/interface/valsora_deco/panels/head_550_m6.dds",
   "w": 550,
   "h": 114,
-  "sig": "1f4b6b8c58b55c6c669fdb7dbb8abbb599da4c542a242b8a81acacb5c6f6190e"
+  "sig": "d312419f3988ba4bf3e3d3ceb3f60ef0e9602be45ca087294728e89d2fa773aa"
  },
  {
   "key": "panel_head_689_m6",
   "path": "gfx/interface/valsora_deco/panels/head_689_m6.dds",
   "w": 689,
   "h": 114,
-  "sig": "50fa79cfa708426323ef8d4b1eb8e7dc74c36e612de397437cff51fb5566a883"
+  "sig": "99836c21283b5dbaba9ea518eb18e3fb2d49d6f4d0cfb2ceafadab6383a8de18"
  },
  {
   "key": "panel_head_700_m9",
   "path": "gfx/interface/valsora_deco/panels/head_700_m9.dds",
   "w": 700,
   "h": 114,
-  "sig": "904f2acc50b21f6d90c99a7e118cc2f4437c382721572745c8cecf6cf5c6f7d0"
+  "sig": "2974f6fe0f8f6f92a638f5e7c27e540df2651a5d2ae9f8f567924d8b1918b4d4"
  },
  {
   "key": "pol_sections",
@@ -1152,7 +1152,7 @@
   "path": "gfx/interface/valsora_deco/focus/header.dds",
   "w": 616,
   "h": 114,
-  "sig": "b1a8ee667c03ad6adf308189df954749fa1f9e97f1cb5d2201614d04349e3173"
+  "sig": "fc5b55cf9e7b8af01560004ed2a36023fc7d5a039515e67913a248548b1dbddd"
  },
  {
   "key": "nf_tree_bg",
@@ -1328,6 +1328,27 @@
   "w": 232,
   "h": 40,
   "sig": "45916e669a64478a57c115bc48c7a2ebb933fa6519d1041d7fb2d8b131119139"
+ },
+ {
+  "key": "shared_topbar_alert_bg",
+  "path": "gfx/interface/topbar/toolbar/topbar_alert_bg.dds",
+  "w": 68,
+  "h": 17,
+  "sig": "5b97b34eef80fa048f4ca1dfa8a995879641a2cffd788c05e2930d02a7dc5e95"
+ },
+ {
+  "key": "shared_production_line_arrow_left",
+  "path": "gfx/interface/production_line_arrow_left.dds",
+  "w": 32,
+  "h": 28,
+  "sig": "b6107f71e610dd141c2590d293f43a23d065af254ef138d74b00597b11ec50ba"
+ },
+ {
+  "key": "shared_production_line_arrow_right",
+  "path": "gfx/interface/production_line_arrow_right.dds",
+  "w": 32,
+  "h": 28,
+  "sig": "3fbc1f8a93d4f1dc775bdb395b3d4cc6084ed074de4316e6d775d67d5106065c"
  },
  {
   "key": "nf_zoom_in",
@@ -1558,28 +1579,28 @@
   "path": "gfx/interface/unitcontrol/group_add_leader_bg.dds",
   "w": 61,
   "h": 83,
-  "sig": "7c69af3d474285547e0d0c6791174c1cdb2b203dd2a176de39d3213391000edf"
+  "sig": "61a319ddeff6305b832c3e6bf6f10b86e1d389a7de9e2787e48695353494c335"
  },
  {
   "key": "lg_add",
   "path": "gfx/interface/unitcontrol/group_add_leader.dds",
   "w": 122,
   "h": 83,
-  "sig": "9beb650ddc34e2eb5db8b916e6afb2b0bc7c89df8fc8038e78c9fddeaad94a01"
+  "sig": "38475b7c3358110c9a645ba3f34d888a5aa1d61eaeb08782597d107236ef4c38"
  },
  {
   "key": "lg_add_marshal_bg",
   "path": "gfx/interface/unitcontrol/group_add_marshal_bg.dds",
   "w": 70,
   "h": 96,
-  "sig": "67c12f4a8df37fca8808a410f623be7740123085b2697fc73105a2cad3415378"
+  "sig": "1cc160e02a4641a205c5334fe299803e00d05fff2186c7186c4249ce4cb12eb2"
  },
  {
   "key": "lg_add_marshal",
   "path": "gfx/interface/unitcontrol/group_add_marshal.dds",
   "w": 140,
   "h": 96,
-  "sig": "3bc46a90db96b2256718b860d137b5bad55edb00010d2ec8060ffa5916eb33b8"
+  "sig": "581f59a1704a6c32efd4223d7bca27f3ef7a139f4ad21eb37b642bce6a4a9344"
  },
  {
   "key": "lg_hq_alert",
