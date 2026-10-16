@@ -192,6 +192,10 @@ SPIRIT_SMALL = (33, 34)                            # vanilla's slot once there a
 # ---------------------------------------------------------------- faction | national focus
 SEC3_Y = SPIRITS["y"] + SPIRITS["h"] + 12          # 524
 FACTION_CARD = dict(x=X0, y=SEC3_Y + 16, w=240, h=78)
+FACTION_NAME_Y = 33                                # the name's centre (the game centres it on its position's y)
+# v0.9: the members' flags under the name, as the Government mockup has them (a scripted GUI's list over the game's
+# faction_members; each flag is the text icon [This.GetFlag], whose size in game is (assumed) about 20 x 13)
+FACTION_MEMBERS = dict(x=54, y=56, slot=(22, 16), n=8)
 FOCUS_CARD = dict(x=266, y=SEC3_Y + 16, w=X1 - 266, h=78)
 FOCUS_ICON = dict(cx=38, cy=39, scale=0.62)        # the focus picture, centred on the card's medallion
 FOCUS_TITLE = dict(x=76, y=8, w=158, h=36)

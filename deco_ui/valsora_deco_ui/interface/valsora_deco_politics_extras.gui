@@ -96,4 +96,38 @@ guiTypes = {
 			alwaystransparent = yes
 		}
 	}
+	containerWindowType = {
+		name = "valsora_deco_pol_faction_members_window"
+		position = { x = 72 y = 596 }
+		size = { width = 176 height = 16 }
+		Orientation = UPPER_LEFT
+		clipping = no
+		gridBoxType = {
+			name = "valsora_deco_pol_faction_members_grid"
+			position = { x = 0 y = 0 }
+			size = { width = 176 height = 16 }
+			slotsize = { width = 22 height = 16 }
+			max_slots = { x = 8 y = 1 }
+			format = "UPPER_LEFT"
+		}
+	}
+	containerWindowType = {
+		name = "valsora_deco_pol_faction_member_entry"
+		position = { x = 0 y = 0 }
+		size = { width = 22 height = 16 }
+		Orientation = UPPER_LEFT
+		clipping = no
+		instantTextBoxType = {
+			name = "valsora_deco_pol_faction_member_flag"
+			position = { x = 0 y = 0 }
+			font = "valsora_deco_value_15"
+			text = "VAL_DECO_POL_FACTION_MEMBER_FLAG"
+			format = left
+			maxWidth = 22
+			maxHeight = 16
+			fixedsize = yes
+			vertical_alignment = center
+			pdx_tooltip = "VAL_DECO_POL_FACTION_MEMBER_TT"
+		}
+	}
 }

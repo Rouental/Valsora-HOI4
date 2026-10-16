@@ -20,6 +20,8 @@
  VAL_DECO_POL_FACTION_ROLE:0 "[GetValsoraDecoFactionRole]"
  VAL_DECO_POL_FACTION_LEADER:0 "Leader"
  VAL_DECO_POL_FACTION_MEMBER:0 "Member"
+ VAL_DECO_POL_FACTION_MEMBER_FLAG:0 "[This.GetFlag]"
+ VAL_DECO_POL_FACTION_MEMBER_TT:0 "[This.GetNameDefCap]"
  VAL_DECO_POL_NONE:0 ""
  VAL_DECO_POL_POP_DEMOCRATIC:0 "[?party_popularity_100@democratic|0]%"
  VAL_DECO_POL_POP_COMMUNISM:0 "[?party_popularity_100@communism|0]%"

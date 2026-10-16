@@ -61,6 +61,11 @@ SKIP = {"power_balance_button", "autonomy_progress_view", "in_faction", "origina
         "continuous_glow", "continuous_small_glow", "tutorial_glow", "focus_cost", "pol_power_icon",
         "drop_continuous_focus_button", "idea_alert_glow", "dismantle_faction"}
 N_SPIRITS = 1          # Rouental has one; the second preview shows Devlon's 15 test spirits
+FACTION = False        # the third shows Rouental leading the Association, its members' flags under the name (v0.9)
+FACTION_NAME = "The Association of Reibonnaise States"
+FACTION_TAGS = ["ROU", "GDN", "LST", "EVR", "HLR", "SGV", "LZC", "SGN"]
+# a flag in text ([This.GetFlag]) is drawn at about this size (assumed: check in game)
+TEXT_FLAG = (20, 13)
 import layout_politics as LP  # noqa: E402
 # sample values as the game shows them (in game, v0.4.7)
 TEXT = {"political_title": "Government", "ideology": "Monarchist", "leader_name": "Roland II Cahun",
@@ -85,7 +90,9 @@ def render(cv, elems, px, py, pr, T, ctx=None):
             continue
         d = V.attrs(body)
         name = d.get("name")
-        if name in SKIP:
+        skip = (SKIP - {"in_faction", "valsora_deco_pol_faction_role_window"}) | {"no_faction"} if FACTION else \
+            SKIP | {"valsora_deco_pol_faction_members_window", "valsora_deco_pol_faction_member_entry"}
+        if name in skip or (name == "valsora_deco_pol_faction_member_entry"):
             continue
         pos = V.sub(body, "position")
         x, y = (int(float(v)) for v in V.xy(pos)) if pos else (0, 0)
@@ -119,6 +126,14 @@ def render(cv, elems, px, py, pr, T, ctx=None):
                 per = int(d.get("max_slots_horizontal", 7))
                 for i in range(N_SPIRITS):
                     V.paste(cv, SPIRIT.resize((30, 30), Image.LANCZOS), ax + (i % per) * sw + 1, ay + (i // per) * sh + 2)
+            elif name == "valsora_deco_pol_faction_members_grid":
+                for i, tag in enumerate(FACTION_TAGS[:int(V.xy(V.sub(body, "max_slots"))[0])]):
+                    try:
+                        fl = Image.open(VALSORA + f"gfx/flags/medium/{tag}.tga").convert("RGBA")
+                    except OSError:
+                        continue
+                    fl = fl.resize(TEXT_FLAG, Image.LANCZOS)
+                    V.paste(cv, fl, ax + i * sw, ay + (sh - fl.height) // 2)
             elif name == "idea_categories_grid":
                 for i, (cn, n) in enumerate(CATEGORIES):
                     render(cv, T["country_politics_idea_category_entry"], ax, ay + 14 + i * sh, ax + 550, T,
@@ -140,6 +155,9 @@ def render(cv, elems, px, py, pr, T, ctx=None):
                 for i, (_, col) in enumerate(PARTIES):
                     dr.pieslice((0, 0, 2 * r - 1, 2 * r - 1), -90 + i * 72, -90 + (i + 1) * 72, fill=col + (255,))
                 V.paste(cv, im, ax - r + 1, ay)
+                continue
+            if name == "faction_icon" and FACTION:
+                V.paste(cv, standin(40, 40, "A", True), ax, ay)
                 continue
             if name == "goal_icon":
                 im = standin(int(94 * scale), int(84 * scale), "focus")
@@ -183,6 +201,13 @@ def render(cv, elems, px, py, pr, T, ctx=None):
                 txt = FOCUS_TITLE
             elif name == "title" and d.get("text") == "POLITICS_NATIONAL_SPIRIT":
                 txt = "National Spirits"
+            elif name == "faction_name" and FACTION:
+                # the game centres the name on faction_name_position's y
+                V.draw_text(cv, d.get("font"), FACTION_NAME, px + 54, py + LP.FACTION_NAME_Y - 20,
+                            int(d.get("maxwidth", 0)) or None, "left", max_h=40, valign=True, check=name)
+                continue
+            elif name == "valsora_deco_pol_faction_role_text":
+                txt = "Leader"
             else:
                 txt = TEXT.get(name) or V.loc.get(d.get("text"), None) or POL_LOC.get(d.get("text"))
             if not txt:
@@ -219,7 +244,8 @@ if __name__ == "__main__":
     assert (int(shown[0]), int(shown[1])) == (LP.PANEL_X, LP.TOP), shown
     ex = V.load(M + "interface/valsora_deco_politics_extras.gui")
     base = cv.copy()
-    for N_SPIRITS, name in ((1, "preview_politics"), (15, "preview_politics_many_spirits")):
+    for N_SPIRITS, FACTION, name in ((1, False, "preview_politics"), (15, False, "preview_politics_many_spirits"),
+                                     (1, True, "preview_politics_faction")):
         cv = base.copy()
         # shown position: flush under the top bar's band
         render(cv, [("containerWindowType", [(k, v) for k, v in panel if not (k and k.lower() == "position")]

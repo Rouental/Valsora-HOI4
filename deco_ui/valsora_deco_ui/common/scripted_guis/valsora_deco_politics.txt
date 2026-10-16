@@ -21,4 +21,17 @@ scripted_gui = {
 		parent_window_token = politics_tab
 		visible = { is_in_faction = yes }
 	}
+	valsora_deco_pol_faction_members = {
+		context_type = player_context
+		window_name = "valsora_deco_pol_faction_members_window"
+		parent_window_token = politics_tab
+		visible = { is_in_faction = yes }
+		dynamic_lists = {
+			valsora_deco_pol_faction_members_grid = {
+				array = faction_members
+				change_scope = yes
+				entry_container = "valsora_deco_pol_faction_member_entry"
+			}
+		}
+	}
 }
