@@ -3,6 +3,7 @@
     python3 scripts/border_report.py                 # where the borders come from, and the re-cut estimates
     python3 scripts/border_report.py --terrain map   # sizes from the map's own Terrain layer, not the terrain test
     python3 scripts/border_report.py --preview       # also dist/border_room_preview.png (the most desert, now and re-cut)
+    python3 scripts/border_report.py --drawn-states  # what drawing their own states would cost the countries on cut ones
 
 HOI4 draws at most 65,536 province borders (borders.py). This says where ours come from (land or water, continent,
 pairs touching in more than one place) and estimates what re-cutting every state's provinces would give: one size
@@ -80,9 +81,10 @@ def terrain_types(source):
     return lut[idx]
 
 
-def recut(prov, kind, states, ttype, factor, base=BASE, deep=None, seed=1):
+def recut(prov, kind, states, ttype, factor, base=BASE, deep=None, seed=1, bases=None):
     """each state's land cut again into cells of base x factor[terrain] px (weighted k-means: a cell's weight is
-    the square of 1/size, so cells come out about that size); water stays. -> (map, land provinces)"""
+    the square of 1/size, so cells come out about that size); water stays; bases, if given, is each state's own
+    base size. -> (map, land provinces)"""
     rng = np.random.default_rng(seed)
     N = len(kind)
     state_of = np.full(N, -1, np.int64)
@@ -94,8 +96,8 @@ def recut(prov, kind, states, ttype, factor, base=BASE, deep=None, seed=1):
     order = np.argsort(st, kind="stable")
     ys, xs, st = ys[order], xs[order], st[order]
     bounds = np.r_[0, np.cumsum(np.bincount(st, minlength=len(states)))]
-    size = np.array([base * factor.get(t, 1.0) for t in TYPES])
-    w = 1.0 / size[np.maximum(ttype[ys, xs], 0)]
+    size = np.array([factor.get(t, 1.0) for t in TYPES])
+    w = 1.0 / (size[np.maximum(ttype[ys, xs], 0)] * (base if bases is None else np.asarray(bases, float)[st]))
     if deep is not None:
         w = np.where(deep[ys, xs], 1.0 / IMPASSABLE, w)
     new, nid = prov.copy(), N
@@ -185,7 +187,88 @@ def preview(prov, new, kind, ttype, out, size=(400, 600), scale=2):
     cv.save(out)
 
 
+def restate(states, owners, tags, target, centre, size, seed=1):
+    """the states of the countries in tags each split into states of about target px (k-means on their provinces'
+    centres, weighted by size): the author's drawn states, at that density, standing in for apply_outlines.py's cut.
+    Larger targets than a state's own size leave it whole. -> (states, which of them are the countries')"""
+    rng = np.random.default_rng(seed)
+    out, mine = [], []
+    for s, g in enumerate(states):
+        g = np.asarray(g)
+        area = size[g].sum()
+        k = int(round(area / target))
+        if owners[s] not in tags or k < 2 or len(g) < 2:
+            out.append(list(g))
+            mine.append(owners[s] in tags)
+            continue
+        k = min(k, len(g))
+        c, w = centre[g].astype(float), size[g].astype(float)
+        cc = c[rng.choice(len(g), size=k, replace=False, p=w / w.sum())]
+        for _ in range(12):
+            lab = ((c[:, None] - cc[None]) ** 2).sum(2).argmin(1)
+            for j in range(k):
+                m = lab == j
+                if m.any():
+                    cc[j] = np.average(c[m], axis=0, weights=w[m])
+        lab = ((c[:, None] - cc[None]) ** 2).sum(2).argmin(1)
+        for j in np.unique(lab):
+            out.append(list(g[lab == j]))
+            mine.append(True)
+    return out, mine
+
+
+def drawn_states(prov, kind):
+    """what drawing their own states would cost the countries whose states are still apply_outlines.py's cut
+    (gazetteer.finals), at Rouental's density and lighter ones: every scenario re-cut the same way as the first"""
+    import gazetteer
+    rj = json.load(open("work/regions.json"))
+    states, owners = rj["states"], rj["owners"]
+    reg = np.load("work/regions.npz")
+    centre, size = reg["centre"], reg["size"]
+    fin = gazetteer.finals()
+    cut = {t for t, v in fin.items() if not v}
+    area = Counter()
+    count = Counter()
+    provs = Counter()
+    for s, g in enumerate(states):
+        area[owners[s]] += int(size[g].sum())
+        count[owners[s]] += 1
+        provs[owners[s]] += len(g)
+    rou_state = area["ROU"] / count["ROU"]
+    rou_prov = area["ROU"] / provs["ROU"]
+    cut_area = sum(area[t] for t in cut)
+    print(f"{len(cut)} countries on cut states: {cut_area:,} px of land, {sum(count[t] for t in cut):,} states "
+          f"({cut_area / sum(count[t] for t in cut):.0f} px), {sum(provs[t] for t in cut):,} provinces; Rouental: states "
+          f"{rou_state:.0f} px, provinces {rou_prov:.0f} px")
+    flat = np.zeros(prov.shape, np.int8)
+    runs = [("today's states, 190 px provinces (the comparison)", None, BASE),
+            (f"states like Rouental's ({rou_state:.0f} px), 190 px provinces", rou_state, BASE),
+            (f"states like Rouental's, provinces like Rouental's ({rou_prov:.0f} px)", rou_state, rou_prov),
+            ("states of 800 px, 190 px provinces", 800, BASE),
+            ("states of 800 px, provinces 220 px", 800, 220)]
+    terrain = Path("work/terrain_test/terrain_class.npy").exists()
+    if terrain:      # the terrain test's terrain, standing in for the Terrain layer
+        runs.append(("states and provinces like Rouental's, sized by terrain", rou_state, rou_prov))
+    result = []
+    for name, target, pbase in runs:
+        st, mine = (states, [owners[s] in cut for s in range(len(states))]) if target is None else \
+            restate(states, owners, cut, target, centre, size)
+        bases = [pbase if m else BASE for m in mine]
+        by_terrain = "terrain" in name
+        m, n = recut(prov, kind, st, terrain_types("test") if by_terrain else flat, VANILLA if by_terrain else {}, BASE,
+                     None, bases=bases)
+        b = borders.count(m)[1]
+        result.append(dict(name=name, states=len(st), land=n, borders=b))
+        print(f"  {name:62s} {len(st):6,} states {n:7,} land provinces {b:7,} borders ({b - result[0]['borders']:+,})")
+    return result
+
+
 def main():
+    if "--drawn-states" in sys.argv:
+        z = np.load("work/provinces.npz")
+        res = drawn_states(z["prov"].astype(np.int64), z["kind"])
+        Path("work/border_report_states.json").write_text(json.dumps(res, indent=1, default=int))
+        return
     source = "map" if "--terrain" in sys.argv and sys.argv[sys.argv.index("--terrain") + 1] == "map" else "test"
     z = np.load("work/provinces.npz")
     prov, kind, cont = z["prov"].astype(np.int64), z["kind"], z["cont"]

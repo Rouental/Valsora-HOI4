@@ -71,6 +71,38 @@ mod), standing in for the terrain the author will paint, so the real figures wil
 Every new province adds about 3: provinces re-cut along new rivers (`river_provinces.py`), new state lines that
 split provinces, new islands. With 3,353 left, the map can take about 1,100 more provinces as it is.
 
+## Drawing the remaining nations' states (2026-10-16)
+
+What the author drawing their own states for the 122 nations still on Claude's cut ones (`gazetteer.finals`) would
+cost: `python3 scripts/border_report.py --drawn-states`. Those nations hold 3,406,261 px of land in 2,952 states
+(1,154 px each) and 18,873 provinces. Rouental, the densest drawn nation, has states of **395 px** (two provinces
+each) and provinces of **166 px** (its small states and its rivers). Each scenario splits the 122 nations' states into
+states of that size (a k-means of their provinces, standing in for the author's lines) and re-cuts the provinces,
+compared with the same re-cut of today's states:
+
+| drawn like this | states | land provinces | borders | change |
+|---|---|---|---|---|
+| today's states, 190 px provinces (the comparison) | 3,149 | 19,664 | 59,780 | |
+| **states like Rouental's (395 px)**, 190 px provinces | 8,890 | 19,823 | 60,397 | **+617** |
+| states **and provinces** like Rouental's (166 px) | 8,890 | 22,351 | 67,934 | **+8,154** |
+| states of 800 px, 190 px provinces | 4,655 | 19,640 | 59,844 | +64 |
+| states of 800 px, provinces of 220 px | 4,655 | 17,161 | 52,521 | −7,259 |
+| states and provinces like Rouental's, sized by terrain (the terrain test's) | 8,890 | 19,556 | 59,638 | −142 |
+
+- **The states cost almost nothing; the provinces cost everything.** States are only groups of provinces: drawing
+  them small adds about 600 borders, because the provinces inside are cut to 190 px whatever the state's size. On
+  today's map (62,183) that leaves about 2,700 under the limit.
+- **Rouental's province density everywhere does not fit**: about 8,150 more borders, roughly 70,300 on today's map,
+  4,800 over the limit. It comes from Rouental's rivers (`river_provinces.py`) and its many one-province states.
+- **With provinces sized by terrain** (desert 4 ×, mountains and marshes 1.8 × ..., as in the base game) even
+  Rouental's density everywhere fits, with about the room there is now. So the order matters: terrain first, or at
+  the same time as the states.
+- **The number of states** is the other cost: Rouental's density means about 8,900 states, eight times the base
+  game's 1,081 (we have 3,149). HOI4 sets no limit we know of, but every state carries buildings, supply and the AI's
+  plans, so the game would slow; states of about 800 px (4,700 states) would be the lighter choice.
+- Recommendation: draw the remaining nations' states at whatever size suits each; keep provinces at 190 px (or let
+  the terrain size them) outside the Vale of Reibonne; keep Rouental's density for the Vale.
+
 ## Recommendation
 
 - Nothing is needed now: 3,353 borders is enough for the river and state-line edits ahead.
