@@ -162,6 +162,10 @@ defined_text = {
 		localization_key = semi_constitutional_monarchy
 	}
 	text = {
+		trigger = { has_country_leader_ideology = regency_council }
+		localization_key = regency_council
+	}
+	text = {
 		trigger = { has_country_leader_ideology = theocrat }
 		localization_key = theocrat
 	}
@@ -323,6 +327,10 @@ defined_text = {
 	text = {
 		trigger = { has_country_leader_ideology = semi_constitutional_monarchy }
 		localization_key = semi_constitutional_monarchy_desc
+	}
+	text = {
+		trigger = { has_country_leader_ideology = regency_council }
+		localization_key = regency_council_desc
 	}
 	text = {
 		trigger = { has_country_leader_ideology = theocrat }

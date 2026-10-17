@@ -626,6 +626,15 @@ def main(mod):
                 err(f"{f.name} recruits unknown character {c}")
             if c not in keys:
                 err(f"character {c} has no localisation")
+    # every autonomy level a history sets is the game's or the mod's own (2026-10-17, Sombor's protectorate): a misspelt
+    # one leaves the subject independent, with only an error.log line
+    autonomy = set(vanilla_index("autonomy_states.txt"))
+    for f in (mod / "common/autonomous_states").glob("*.txt"):
+        autonomy |= set(re.findall(r"\bid\s*=\s*(\w+)", strip(f.read_text(encoding="utf-8-sig"))))
+    for f in (mod / "history/countries").glob("*.txt"):
+        for a in re.findall(r"autonomous_state\s*=\s*(\w+)", f.read_text(encoding="utf-8-sig")):
+            if a not in autonomy:
+                err(f"{f.name} sets an unknown autonomy level {a}")
     vanilla_generic = set(l.strip() for l in open("source/names/vanilla_portrait_sprites.txt")
                           if l.startswith("GFX_"))
     for f in (mod / "common/characters").glob("*.txt"):

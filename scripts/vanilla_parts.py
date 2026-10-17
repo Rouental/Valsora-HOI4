@@ -32,6 +32,14 @@ END_DATE = "2049.1.1.1"          # vanilla runs 13 years too
 DROP = {"common/ai_strategy/default.txt": ("slightly_naval_focused_nation", "more_naval_focused_nation",
                                            "default_area_priority", "default_area_priority_non_africa")}
 
+# Lines of vanilla's files changed or taken out: path -> [(vanilla's text, ours)]. The puppet (2026-10-17): with Death
+# or Dishonor, vanilla allows no puppet under a fascist overlord (Germany's are Reichskommissariats), but Valsora's
+# "Authoritarian" is every strongman and junta: Kampf's Hohenzburg and Illiricium's three Bleacherist republics are
+# puppets of Authoritarian overlords
+EDITS = {"common/autonomous_states/puppet.txt": [(
+    """\t\tif = {\n\t\t\tlimit = { has_dlc = "Death or Dishonor" }\n\t\t\tOVERLORD = { NOT = { has_government = fascism } }\n\t\t}\n""",
+    "\t\t# Valsora: Authoritarian overlords too (vanilla: no fascist overlord with Death or Dishonor)\n")]}
+
 DATE = re.compile(r"(?<![\w.@])(1[89]\d\d)(\.\d{1,2}\.\d{1,2})(?![\d])")
 START_YEAR = re.compile(r"(\bstart_year\s*=\s*)(1[89]\d\d)\b")
 GUI_YEAR = re.compile(r'(\btext\s*=\s*")(1[89]\d\d)(")')
@@ -82,6 +90,10 @@ def files():
             text = shift(text, gui=rel.endswith(".gui"))
             if rel in DROP:
                 text = drop_blocks(text, DROP[rel])
+            for old, new in EDITS.get(rel, []):
+                if old not in text.replace("\r\n", "\n"):
+                    raise SystemExit(f"vanilla_parts: {rel} no longer has the text Valsora changes (game updated?)")
+                text = text.replace("\r\n", "\n").replace(old, new)
             out.append((rel, text, bom))
     return out
 

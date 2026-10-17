@@ -11,7 +11,8 @@ The river pixels are the ones the build draws (work/world.npz from the last run 
 run_all.sh), not the raw lines, so they sit exactly on the new borders. Rebuild first.
 
 Only states where under ALIGNED of the river pixels lie on a province border are cut
-(2026-10-06: Merlovich's and Hoalepa's rivers, drawn later, were 13-58 % on borders).
+(2026-10-06: Merlovich's and Hoalepa's rivers, drawn later, were 13-58 % on borders), and
+never one whose provinces the author drew on "Necessary Provinces" (2026-10-17: Seigne's).
 
     python3 scripts/river_provinces.py        # edits source/HOI4 Mod Map.pdn in place
 """
@@ -48,6 +49,11 @@ def main():
           if (border & river & (St == sc)).sum() >= ALIGNED * (river & (St == sc)).sum()]
     print(f"{len(ok)} of {len(touched)} states crossed by rivers already have them on borders")
     touched = np.setdiff1d(touched, ok)
+    # states whose provinces the author drew (Necessary Provinces, pdn_tools.py provinces) keep them
+    drawn = np.unique(St[(L["Necessary Provinces"][..., 3] > 0) & (St >= 0)]) if "Necessary Provinces" in L else []
+    if len(np.intersect1d(touched, drawn)):
+        print(f"{len(np.intersect1d(touched, drawn))} of them keep the provinces the author drew")
+    touched = np.setdiff1d(touched, drawn)
     old = new = 0
     for n, sc in enumerate(touched):
         ys, xs = np.nonzero((St == sc) & land)

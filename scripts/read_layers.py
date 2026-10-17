@@ -41,7 +41,7 @@ SRC = Path(sys.argv[1] if len(sys.argv) > 1 else "work/pdn_game")
 LAYERS = ["Heightmap", "Terrain", "Rivers", "Continents", "Provinces", "Strategic Regions",
           "States", "Countries"]
 # rivers drawn as plain lines, converted by rivers.py
-OPTIONAL = ["Major Rivers", "Minor Rivers", "Cities"]
+OPTIONAL = ["Major Rivers", "Minor Rivers", "Cities", "Subregions"]
 # the author's layer names (2026-10-01: their editing layers are "Necessary …"); the
 # older names still work
 ALIASES = {"Major Rivers": "Necessary Major Rivers", "Minor Rivers": "Necessary Minor Rivers",
@@ -74,6 +74,37 @@ def load():
                 break
     if out["Provinces"].shape[:2] != (H, W):
         sys.exit(f"The .pdn must be {W}x{H} pixels.")
+    return out
+
+
+def read_subregions(L, lab, n):
+    """The author's Subregions layer (2026-10-17: Belekria's republics, Krionik's principalities, Pakitsk): every
+    painted patch, a colour's pixels joined across the 1-2 px gaps the author leaves along the state lines, as
+    [colour, its land provinces (each mostly painted in it), its centre x, y]. build_mod.py gives the patches to the
+    nations of nations.SUBREGIONS, a patch to the nearest seed of its colour (a colour serves two republics far apart;
+    a principality's islands are patches of their own)."""
+    if "Subregions" not in L:
+        return []
+    a = L["Subregions"]
+    painted = a[..., 3] > 0
+    col = (a[..., 0].astype(np.int64) << 16) | (a[..., 1].astype(np.int64) << 8) | a[..., 2]
+    psize = np.bincount(lab.ravel(), minlength=n)
+    out = []
+    for c in np.unique(col[painted]).tolist():
+        m = painted & (col == c)
+        comp, k = ndi.label(ndi.binary_dilation(m, iterations=2))
+        comp = np.where(m, comp, 0)
+        for q, sl in enumerate(ndi.find_objects(comp), 1):
+            if sl is None:
+                continue
+            pm = comp[sl] == q
+            if pm.sum() < 16:
+                continue
+            cnt = np.bincount(lab[sl][pm], minlength=n)
+            provs = np.nonzero(cnt * 2 >= psize)[0].tolist()
+            ys, xs = np.nonzero(pm)
+            if provs:
+                out.append([int(c), provs, int(xs.mean() + sl[1].start), int(ys.mean() + sl[0].start)])
     return out
 
 
@@ -444,7 +475,10 @@ def main():
     anchor, centre, size = anchors(lab, n)
     np.savez_compressed("work/regions.npz", anchor=anchor, centre=centre, size=size,
                         state_of=state_of, region_of=region_of)
-    json.dump(dict(states=states, regions=regions, owners=owners, cities=cities,
+    subregions = read_subregions(L, lab, n)
+    if subregions:
+        print(f"note: {len(subregions)} painted patches on the Subregions layer")
+    json.dump(dict(states=states, regions=regions, owners=owners, cities=cities, subregions=subregions,
                    adjacency=[[int(x), int(y), int(c)] for x, y, c in zip(a, b, cnt)]),
               open("work/regions.json", "w"))
     print(f"read {n} provinces ({(kind == 1).sum()} land, {(kind == 0).sum()} sea, "

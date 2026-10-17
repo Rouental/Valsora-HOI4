@@ -35,7 +35,7 @@ SAMPLE = dict(
              "a second line.", "Postpone the count.", "And a fourth."],
     # the game's country_capitulated.0.d_positive_collab_diff_ideology as the screenshot showed it (a blank first line)
     news_title="Cardonia Has Capitulated",
-    news_text=("\nthe Cardonian Kingdom has announced its total surrender to The Sacred Principality of Rouental. The "
+    news_text=("\nThe Cardonian Kingdom has announced its total surrender to The Sacred Principality of Rouental. The "
                "Rouentaise forces along with a number of independent Cardonian monarchist supporters have forced Arthur "
                "Campbell and his government into exile as a new government has been established to rule the Cardonian "
                "Kingdom in cooperation with The Sacred Principality of Rouental. Roland II Cahun has remarked that this "

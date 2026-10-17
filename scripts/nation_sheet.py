@@ -91,7 +91,7 @@ def main():
     files = own_portraits()
     colour = map_colours()
     later = {**{t: "civil war country" for t in nations.CIVIL_WAR},
-             **{t: "releasable" for t in nations.RELEASABLE}}
+             **{t: "releasable" for t in (*nations.RELEASABLE, *nations.SUBREGIONS)}}
     groups = {c: [] for c in CONTINENTS}
     for tag, r in table.items():
         groups[where[tag]].append(r)

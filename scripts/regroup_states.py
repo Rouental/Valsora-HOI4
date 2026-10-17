@@ -44,9 +44,12 @@ SLIVER = 40
 # placeholder countries whose states the author has drawn (Aislada, 2026-10-04: one
 # state per drawn region, not one per city)
 DRAWN_PLACEHOLDERS = {"AIS"}
-# countries whose only "state line" is a stray (none now: Gaellia's west border forks at
-# the coast, but the bit it closes off at (596, 2222) is another nation's, not Gaellia's)
-NOT_DRAWN = set()
+# countries whose state lines aren't their own (Gaellia's west border forks at the coast, but
+# the bit it closes off at (596, 2222) is another nation's, not Gaellia's). Belka (2026-10-17):
+# the lines inside it are Pakitsk's, which it took whole; its own states aren't drawn yet, so
+# taking it as drawn would make its land outside Pakitsk one state. Take it out when the
+# author draws Belka's states.
+NOT_DRAWN = {"BKA"}
 MIN_LINE, MIN_AREA = 8, 150  # a state line: at least this long, between areas this big
 CROSS = np.array([[0, 1, 0], [1, 1, 1], [0, 1, 0]])
 

@@ -422,6 +422,12 @@ def m_mapfont_size(mod):
     return "gfx/fonts/hoi_mapfont4.dds is 2048 x 2048"
 
 
+def m_autonomy(mod):
+    f = next(p.relative_to(mod).as_posix() for p in (mod / "history/countries").glob("KRI - *.txt"))
+    edit(mod, f, lambda t: t.replace("autonomy_valsora_protectorate", "autonomy_valsora_protectorat", 1))
+    return "sets an unknown autonomy level autonomy_valsora_protectorat"
+
+
 def m_song(mod):
     edit(mod, "events/valsora_superevents.txt", lambda t: t.replace('play_song = "valsora_gladiators"', 'play_song = "valsora_no_such_song"', 1))
     return "play_song valsora_no_such_song is not defined in music/"
@@ -431,7 +437,7 @@ BATCHES = {
     "map": [m_crlf, m_adjacency_end, m_strait_through_land, m_building_row, m_ships_in_port, m_earth_map_file, m_weather_big, m_supply_node_sea,
             m_railway_apart, m_x_crossing, m_land_low, m_terrain_ocean],
     "history": [m_technology, m_module, m_equipment, m_idea, m_battalion, m_define, m_earth_history, m_popularities,
-                m_ruling_party, m_recruit_unknown, m_faction_template, m_bookmark, m_descriptor],
+                m_ruling_party, m_recruit_unknown, m_faction_template, m_bookmark, m_descriptor, m_autonomy],
     "content": [m_decision_stand_in, m_event_stand_in, m_old_date, m_tree_label, m_start_year, m_trait, m_advisor_slot,
                 m_prerequisite, m_state_loc, m_decision_loc, m_trigger_for, m_scripted_effect, m_war_goal, m_song,
                 m_company_include, m_company_tag, m_company_loc, m_concern_trait, m_idea_loc, m_skill_range, m_skill_kind],

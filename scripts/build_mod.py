@@ -273,7 +273,8 @@ def main():
     owners = [by_tag[t] for t in rj["owners"]] if "owners" in rj else \
         [CONTINENTS[int(cont[g[0]]) - 1] for g in states]
     # countries that own a state, plus those released later (they own nothing at start)
-    later = {by_tag[t] for t in (*nations.CIVIL_WAR, *nations.RELEASABLE, *(r["tag"] for r in grel))}
+    later = {by_tag[t] for t in (*nations.CIVIL_WAR, *nations.RELEASABLE, *nations.SUBREGIONS,
+                                 *(r["tag"] for r in grel))}
     present = [c for c in COUNTRIES if c in owners or c in later]
     n = len(kind)
     pid = np.arange(n) + 1  # HOI4 province ids start at 1
@@ -409,6 +410,35 @@ def main():
         if f.get("name"):
             named[s] = state_name[s] = f["name"]
     state_by_name = {**by_old_name, **{nm: s for s, nm in named.items()}}
+    # nations whose land the author painted on the Subregions layer (2026-10-17: Belekria's republics, Krionik's
+    # principalities, Pakitsk), by a pixel inside: the states mostly painted there, the state at the pixel first (the
+    # capital). A painted patch goes to its own seed's nation, else to the nearest seed of its colour
+    state_px = [sum(int(size[i]) for i in g) for g in states]
+    patches = rj.get("subregions", [])
+    seeds_of = defaultdict(list)
+    for tag, (x, y) in nations.SUBREGIONS.items():
+        p = int(lab[y, x])
+        home = next((k for k, pt in enumerate(patches) if p in pt[1]), None)
+        if home is None:
+            raise SystemExit(f"nations.SUBREGIONS: ({x}, {y}) for {tag} is in no painted patch of the Subregions layer")
+        seeds_of[patches[home][0]].append((tag, home, x, y))
+    painted = defaultdict(set)
+    for k, (c, provs, cx, cy) in enumerate(patches):
+        cands = seeds_of.get(c)
+        if cands:
+            own = [t for t, h, _, _ in cands if h == k]
+            painted[own[0] if own else min(cands, key=lambda sd: (sd[2] - cx) ** 2 + (sd[3] - cy) ** 2)[0]].update(provs)
+    for tag, (x, y) in nations.SUBREGIONS.items():
+        cap = int(state_of[lab[y, x]])
+        inside = Counter()
+        for i in painted[tag]:
+            if state_of[i] >= 0:
+                inside[int(state_of[i])] += int(size[i])
+        land = [s for s, v in inside.items() if 2 * v >= state_px[s] and s != cap]
+        land = [cap] + sorted(land, key=lambda s: (-state_px[s], s))
+        for s in land:
+            state_by_name.setdefault(state_name[s], s)
+        nations.RELEASABLE[tag] = [state_name[s] for s in land]
     # the Gazetteer's changes to the countries the game releases (2026-10-15): their names, government, ruler and
     # colour as facts of their own tags, and their land in place of nations.py's lists (by name, the first the capital)
     gfacts_rel, gland = gazetteer.game_releasables(G, lab, state_of, rj["owners"], states, size, state_by_name,
@@ -421,6 +451,13 @@ def main():
         (nations.CIVIL_WAR if tag in nations.CIVIL_WAR else nations.RELEASABLE)[tag] = [state_name[s] for s in land]
     # cores of countries released later (nations.CIVIL_WAR), by state name
     extra_cores = defaultdict(list)
+    # ... and cores on states others own (nations.CORES, by a pixel inside each)
+    for tag, pts in nations.CORES.items():
+        for x, y in pts:
+            s = int(state_of[lab[y, x]])
+            if s < 0:
+                raise SystemExit(f"nations.CORES: ({x}, {y}) for {tag} is not in a state")
+            extra_cores[s].append(tag)
     for tag, names in (*nations.CIVIL_WAR.items(), *nations.RELEASABLE.items()):
         for nm in names:
             if nm not in state_by_name:

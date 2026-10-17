@@ -1,0 +1,22 @@
+# autonomy levels (puppet, dominion ...) (vanilla 1.19.3, scripts/vanilla_sync.py)
+autonomy_aat_defense_council_member
+autonomy_associated_dominion
+autonomy_austro_hungarian_subject
+autonomy_collaboration_government
+autonomy_colony
+autonomy_dominion
+autonomy_eu_member
+autonomy_integrated_puppet
+autonomy_personal_union
+autonomy_puppet
+autonomy_reichskommissariat
+autonomy_reichsprotectorate
+autonomy_satellite
+autonomy_sea_integrated_warlord_subject
+autonomy_sea_warlord_subject
+autonomy_supervised_state
+autonomy_taog_indonesian_union_state
+autonomy_volkskommissariat
+autonomy_wtt_imperial_associate
+autonomy_wtt_imperial_protectorate
+autonomy_wtt_imperial_subject

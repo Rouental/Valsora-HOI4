@@ -162,7 +162,67 @@ HISTORY = {
     # dominion until 2026-10-13)
     "KPF": ["set_autonomy = { target = HZB autonomous_state = autonomy_puppet }"],
     "ARK": ["diplomatic_relation = { country = OST relation = non_aggression_pact active = yes }"],
+    # 2026-10-17 (author): Sombor is Krionik's protectorate (PROTECTORATE below)
+    "KRI": ["set_autonomy = { target = SMB autonomous_state = autonomy_valsora_protectorate }"],
 }
+
+# A protectorate (author, 2026-10-17: "Sombor should become a protectorate of Krionik"): a subject that keeps its own
+# affairs while its protector answers for its defence and its foreign policy. The game's own protectorate is Japan's
+# alone, so Valsora has one: looser than a puppet (freedom from 0.6, between the puppet's 0.4 and the dominion's 0.8),
+# half its manpower and trade going to the overlord, at war when the overlord is. Krionik's only, until another has one.
+PROTECTORATE = """autonomy_state = {
+	id = autonomy_valsora_protectorate
+
+	default = yes
+	is_puppet = yes
+
+	min_freedom_level = 0.6
+
+	manpower_influence = 0.5
+
+	rule = {
+		desc = "RULE_DESC_IS_A_SUBJECT"
+
+		can_not_declare_war = yes
+		can_decline_call_to_war = no
+		can_be_spymaster = no
+		contributes_operatives = no
+		can_create_collaboration_government = no
+	}
+
+	modifier = {
+		autonomy_manpower_share = 0.5
+		extra_trade_to_overlord_factor = 0.5
+		overlord_trade_cost_factor = -0.5
+		peace_score_ratio_transferred_to_overlord = 0.1
+		lend_lease_tension_with_overlord = -0.40
+		research_sharing_per_country_bonus_factor = -0.25
+		faction_influence_contribution_factor = -0.25
+	}
+
+	ai_subject_wants_higher = {
+		factor = 1.0
+	}
+
+	ai_overlord_wants_lower = {
+		factor = 0.5
+	}
+
+	ai_overlord_wants_garrison = {
+		always = no
+	}
+
+	allowed = {
+		OVERLORD = { original_tag = KRI }
+	}
+
+	can_take_level = {
+	}
+
+	can_lose_level = {
+	}
+}
+"""
 
 # Country names while a given ideology rules: tag -> ideology -> (name, formal
 # name, adjective). Ideologies left out use the placeholder name from build_mod.py.
@@ -265,7 +325,7 @@ LEADERS = {
     "SKL": ["agrarian_socialism"], "TKY": ["prophetic_rule"],
     "PHG": ["radical_republicanism"],  # 2026-10-15: Vilna's old land and ideology (author)
     # 2026-10-11 (author)
-    "GOR": ["clerical_monarchism"], "SRK": ["revanchism"], "WAN": ["agrarianism"],
+    "GOR": ["clerical_monarchism"], "SRK": ["leninism"], "WAN": ["agrarianism"],
     "QNG": ["liberalism"], "XUE": ["conservatism"], "HLG": ["populism"], "ASC": ["liberalism"],
     "HDO": ["liberalism"], "KRN": ["leninism"], "DHI": ["feudalism"], "TSU": ["lordly_republic"],
     "CRT": ["despotism"], "KNH": ["liberalism"], "RDP": ["leninism"], "KZN": ["personal_union"],
@@ -295,10 +355,16 @@ LEADERS = {
     # 2026-10-07 (author)
     "MGD": ["personal_union"], "TCN": ["oligarchism"], "PTK": ["strongman_rule"],
     "SRN": ["elective_monarchy"], "LTH": ["populism"], "GLB": ["feudalism"],
-    "KPF": ["despotism"], "DUM": ["holy_order"], "TUP": ["socialism"], "STM": ["feudalism"],
+    "KPF": ["fascism_ideology"], "DUM": ["holy_order"], "TUP": ["socialism"], "STM": ["feudalism"],
     "DRV": ["marxism"], "ESC": ["marxism"], "HWT": ["marxism"], "SMR": ["leninism"],
-    "KRI": ["stratocracy"], "GOB": ["liberalism"], "ZUK": ["liberalism"], "SMN": ["socialism"],
+    "KRI": ["regency_council"], "GOB": ["liberalism"], "ZUK": ["liberalism"], "SMN": ["socialism"],
+    # 2026-10-17: Belekria's republics as Belekria (Vanguardism), Krionik's principalities princes (Claude's guesses)
+    **{t: ["leninism"] for t in ("DRK", "STB", "SDE", "SVT", "SRY", "KLF", "BLY", "KSP")},
+    **{t: ["despotism"] for t in ("ZST", "CRV", "MYL")},
     "RSV": ["council_communism"], "OST": ["despotism"],  # Hierocracy (author)
+    # 2026-10-17 (author): Krionik a Regency Council (Stratocracy before), Kampf Fascism (Absolute Monarchy
+    # before), Sarkis Vanguardism (Revanchism before), "so there are four great powers (those three +
+    # Fraxhemark), one for each ideology"
     # Rouental's democrats and communists, promoted by their focuses
     "ROU": ["constitutional_monarchism", "leninism"],
     # the continent placeholders: not chosen by the author, Monarchist as before
@@ -319,7 +385,9 @@ NAMED_LEADERS = {
     "SVM_leader_liberalism": ("Elias Garcovixa", "GFX_Portrait_South_America_Generic_3"),
     "PNC_leader_strongman_rule": ("Mauricio Gómez", "GFX_Portrait_Europe_Generic_1"),
     # a council, not a person: its portrait is the council's emblem (author, 2026-10-08)
-    "KRI_leader_stratocracy": ("Kriosaivak Council of Marshals", "GFX_portrait_KRI_council_of_marshals"),
+    # its regency since 2026-10-17 (author: "Their leader should remain the Council of Marshals"; a Stratocracy
+    # until then)
+    "KRI_leader_regency_council": ("Kriosaivak Council of Marshals", "GFX_portrait_KRI_council_of_marshals"),
     "LTH_leader_populism": ("Helmut Shulz", "GFX_portrait_LTH_helmut_shulz"),  # author, 2026-10-08
     "TUP_leader_socialism": ("Charlotte Gustoff", "GFX_portrait_TUP_charlotte_gustoff"),  # author, 2026-10-08
     "CNA_leader_leninism": ("Han Leji", "GFX_portrait_CNA_han_leji"),  # author, 2026-10-12
@@ -381,11 +449,32 @@ RELEASABLE = {
     "KOV": ["Kové"],
     "HVQ": ["Hevique", "Avarre"],
     "SRE": ["Serie", "Verdoyantes"],
-    # 2026-10-08 (author): Tethia starts as part of Belekria
-    "TTH": ["Tethia"],
+    # (2026-10-08, author: Tethia starts as part of Belekria; its land is its subregion since 2026-10-17, SUBREGIONS)
     # 2026-10-09, later (author): Rouental's islets off Solitas
     "ORT": ["Concorde et Volonté"],
 }
+# Nations whose land the author painted on the Subregions layer (2026-10-17: "Belekria's states have been defined and
+# its constituent republics defined so they can become releasables", Krionik's principalities, "Pakitsk is now part
+# of Belka but remains releasable"): tag -> a pixel inside its subregion. They own nothing at the start and hold cores
+# on the states mostly painted in it (build_mod.py), the state at the pixel their capital: a principality's city, a
+# republic's label, Tethia's named state
+SUBREGIONS = {
+    # Belekria's republics
+    "DRK": (1776, 293), "STB": (1796, 355), "SDE": (1914, 329), "SVT": (2019, 288), "SRY": (1995, 358),
+    "KLF": (2083, 356), "TTH": (2169, 342), "BLY": (1831, 401), "KSP": (1892, 411),
+    # Krionik's principalities, at their cities (Visokagorod, Vazgorod, Sedišta)
+    "ZST": (2077, 703), "CRV": (2269, 949), "MYL": (2441, 767),
+    # Pakitsk, Belka's since 2026-10-17
+    "PKT": (2523, 393),
+}
+# Cores on states other nations own, by a pixel inside each state (author, 2026-10-17: "Sminishia gains cores on its
+# old land"): what was Sminishia's before Belekria and West Sminishia took it that day (5 states of Belekria, West
+# Sminishia's 6)
+CORES = {
+    "SMN": [(2003, 414), (2034, 409), (2100, 401), (2131, 397), (2167, 408),
+            (1943, 450), (1978, 437), (1978, 467), (2007, 455), (2031, 462), (2054, 427)],
+}
+
 # Characters who are another one at the head of a civil war faction (author, 2026-10-02: "the same two women"): one
 # person, so what the Gazetteer changes on the original (name, titles, portrait, traits, skills) goes to the copy too
 COPIES = {"BRL_mahaut_vi": "ROU_mahaut_vi", "RLA_serelle_cahun": "ROU_serelle_cahun"}
@@ -606,7 +695,8 @@ FORMAL_NAMES = {
     "ESC": "the Wyrhterrepublik of Artzen",  # Eschland until 2026-10-09
     "HWT": "the Republik of Scealand",       # Hwitland until 2026-10-09
     "SMR": "the People's Republik of Someriania",
-    "KRI": "the Militariat State of the Kriosnika",  # "Regency" until 2026-10-08 (author)
+    "KRI": "the Royal Confederation of the Kriosnika",  # author, 2026-10-17 ("Militariat State" until then,
+                                                        # "Regency" until 2026-10-08)
     "GOB": "the Republic of Gorbastan",
     "ZUK": "the Republic of Zukchiva",
     "SMN": "the Worker's Republic of Sminishia",
@@ -630,6 +720,12 @@ FORMAL_NAMES = {
     # 2026-10-11 (author)
     "GOR": "the Holy Kingdom of Gorduchai",
     "SRK": "the People's State of Sarkis",
+    # 2026-10-17: Belekria's republics and Krionik's principalities (Claude's, after "the Union of Belekrian Republics"
+    # and the author's "constituent principalities")
+    **{t: f"the Socialist Republic of {n}" for t, n in (
+        ("DRK", "Drakonogolovnik"), ("STB", "Staraya Belekria"), ("SDE", "Sredneestvo"), ("SVT", "Severntochka"),
+        ("SRY", "Serayachasy"), ("KLF", "Kalnsfereta"), ("BLY", "Belayosen"), ("KSP", "Krasnoeporte"))},
+    **{t: f"the Principality of {n}" for t, n in (("ZST", "Zastava"), ("CRV", "Crvenognjište"), ("MYL", "Mylostrva"))},
     "WAN": "the Republic of Wanea",
     "QNG": "the Qinguo Republics",  # "the Qingou Republics" until 2026-10-13 (author)
     "XUE": "the Republic of Xuè",
@@ -737,6 +833,7 @@ LOCALISATION = [
     # the Reibonnaise opinion modifiers' names (author, 2026-10-04)
     ' valsora_reibonnaise_ties:0 "Seran Ties"',
     ' valsora_against_communism:0 "Seran Biases"',
+    ' autonomy_valsora_protectorate:0 "Protectorate"',  # PROTECTORATE
     ' AIS_communist_merlovich:0 "Communist Merlovich"',
     ' AIS_focus:0 "Aisladan Focus Tree"',
     ' AIS_nationstates_account:0 "Make a NationStates Account"',
@@ -1276,6 +1373,7 @@ CAPITALS = {
     "SVM": (2437, 1846),  # Marcanova
     "PNC": (1721, 1651),  # Rosas
     "LTH": (412, 1555),   # Thielfurt (author, 2026-10-07)
+    "KRI": (2269, 949),   # Vazgorod (author, 2026-10-17), in Crvenognjište
 }
 
 
@@ -1377,6 +1475,7 @@ def write_files(write, out, state_ids, state_vp):
     """Write every nation-specific file into the mod folder. state_ids: state name -> id;
     state_vp: state name -> its victory point province."""
     write("common/factions/templates/valsora_factions.txt", FACTION_TEMPLATES)
+    write("common/autonomous_states/valsora_protectorate.txt", PROTECTORATE)
     write("common/characters/AIS.txt", CHARACTERS)
     write("common/characters/ROU.txt", ROU_CHARACTERS)
     write("common/national_focus/rouental.txt", fill(ROU_FOCUS_TREE, state_ids))

@@ -207,6 +207,10 @@ TAG_CULTURE = {
     # 2026-10-08: Tethia Polish (author); the rest Claude's guesses from the names
     "TTH": dict(names="POL", portraits="europe", gfx="eastern_european"),
     "BLK": dict(names="SOV", portraits="europe", gfx="eastern_european"),
+    # 2026-10-17: Belekria's republics as Belekria, Krionik's principalities as Krionik (Claude's)
+    **{t: dict(names="SOV", portraits="europe", gfx="eastern_european")
+       for t in ("DRK", "STB", "SDE", "SVT", "SRY", "KLF", "BLY", "KSP")},
+    **{t: dict(names="SER", portraits="europe", gfx="eastern_european") for t in ("ZST", "CRV", "MYL")},
     "MRG": dict(names="HOL", portraits="europe", gfx="western_european"),  # Dutch (author)
     "ZWT": dict(names="HOL", portraits="europe", gfx="western_european"),
     "OCR": dict(names="GER", portraits="europe", gfx="western_european"),
@@ -414,9 +418,13 @@ NOT_SURNAMES = {"Petain", "Foch", "Joffre", "Salazar", "Napoléon", "Murat", "Da
 # famous names met in a list already in use (2026-10-13: Abalón's king drew "Carlos Franco",
 # New Paradise's leader "Graham Windsor"; later, the nation sheet showed Sicilianzo's
 # "Umberto di Savoia", Italy's last king, Solaria's "Felice Garibaldi" and Coraliza's
-# "Eugénio de Castro", a Portuguese poet): drawn again, like comment words, so that every
-# other leader keeps their name
-DRAW_AGAIN = {"Franco", "Windsor", "di Savoia", "Garibaldi", "de Castro"}
+# "Eugénio de Castro", a Portuguese poet; 2026-10-17, Belekria's republics: Drakonogolovnik's
+# "Yegor Dzhugashvili", Stalin's own surname, then "Emil Skobelev", the White General's,
+# "Fyodor Brezhnev" and "Yury Nikulin", the clown's full name, and Sredneestvo's "Aleksandr
+# Ostrovsky", the playwright's): drawn again, like comment words, so that every other leader
+# keeps their name
+DRAW_AGAIN = {"Franco", "Windsor", "di Savoia", "Garibaldi", "de Castro", "Dzhugashvili", "Skobelev",
+              "Brezhnev", "Nikulin", "Ostrovsky"}
 
 
 def _tokens(block):

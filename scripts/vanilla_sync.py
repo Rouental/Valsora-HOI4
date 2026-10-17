@@ -52,12 +52,33 @@ FILES = (
        # governments and resistance (compliance and resistance modifiers), an operation's outcome
        # (00_operations), the nuclear project (special projects)
        "events/Generic.txt", "events/LAR_occupation.txt", "events/LaR_espionage_operations.txt",
-       "events/Special_Project_Events.txt"])
+       "events/Special_Project_Events.txt",
+       # the puppet: Authoritarian (fascism) overlords keep plain puppets in Valsora (vanilla_parts.EDITS)
+       "common/autonomous_states/puppet.txt"])
 
 # localisation files whose generic names carry years ("1936 Cruiser Hull", "1938 Medium", the game
 # rule's "Focuses Only (Until 1938)")
 YEAR_NAME_FILES = ("designer_l_english.yml", "research_l_english.yml", "tank_modules_l_english.yml",
                    "game_rules_l_english.yml")
+
+
+# a country's definite name opening a sentence or a paragraph: "[Root.GetNameDef] has announced ..." gives "the
+# Cardonian Kingdom has announced ..." with Valsora's names, which start with "the" (2026-10-17, the author's screenshot
+# of a capitulation): such lines are shipped again with GetNameDefCap there
+OPENING_NAME = re.compile(r'((?:^|\\n|(?<!§)[.!?] +)\s*(?:§[A-Za-z])?\[[A-Za-z.]+\.)GetNameDef\]')  # §! closes a colour
+NAME_CAPS = Path("curated/localisation/english/replace/valsora_name_caps_l_english.yml")
+
+
+def name_caps(V):
+    """English lines of the game's with a country's definite name opening a sentence, as GetNameDefCap there: the
+    lines for source/vanilla/curated/localisation/english/replace/ (the mod ships them over the game's)"""
+    out = []
+    for f in sorted((V / "localisation/english").glob("*.yml")):
+        for line in f.read_text(encoding="utf-8-sig").splitlines():
+            m = re.match(r'^\s*([\w.\-]+):(\d*)\s*"(.*)"\s*$', line)
+            if m and OPENING_NAME.search(m[3]):
+                out.append(f' {m[1]}:{m[2] or 0} "{OPENING_NAME.sub(lambda g: g[1] + "GetNameDefCap]", m[3])}"')
+    return out
 
 
 def vanilla_dir(argv):
@@ -379,6 +400,14 @@ def main():
                     if isinstance(group, list):
                         ideas |= {k for k, _, v in group if k and isinstance(v, list) and k != "designer"}
     put("ideas.txt", sorted(ideas), "ideas (national spirits, laws, advisors)")
+    caps = OUT / NAME_CAPS
+    caps.parent.mkdir(parents=True, exist_ok=True)
+    caps.write_text("\ufeffl_english:\n # the game's lines with a country's name opening a sentence, capitalised "
+                    "(scripts/vanilla_sync.py, name_caps)\n" + "\n".join(name_caps(V)) + "\n", encoding="utf-8")
+    autonomy = set()
+    for f in sorted((V / "common/autonomous_states").glob("*.txt")):
+        autonomy |= set(re.findall(r"\bid\s*=\s*(\w+)", f.read_text(encoding="utf-8-sig")))
+    put("autonomy_states.txt", sorted(autonomy), "autonomy levels (puppet, dominion ...)")
 
     defines = []
     for f, ns in (("common/defines/00_defines.lua", "NDefines"), ("common/defines/00_graphics.lua", "NDefines_Graphics")):

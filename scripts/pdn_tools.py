@@ -46,17 +46,30 @@
         outline runs never reached, still in the placeholder build's 32 px bricks and
         96 px grid states (2026-10-15: Arvorenia's and Atrocha's islands, from the friend's
         build of 2026-10-05, and two island groups given whole).
+    python3 scripts/pdn_tools.py provinces
+        The author's province lines (the "Necessary Provinces" layer, read from 2026-10-17,
+        when they redrew Seigne's and Royalist Illiricium's): every state such a line
+        crosses gets exactly the provinces the lines and the state's own edges enclose, in
+        place of the ones cut for it (pieces under MIN_PROVINCE px join the neighbour they
+        share most border with, line pixels the nearest piece). A state the lines don't
+        divide is left as it is, with a note. States, countries and regions don't change.
+    python3 scripts/pdn_tools.py tidy
+        Merge every land province under MIN_PROVINCE px into the neighbouring province it
+        shares most border with, one of its own state first; a scrap that only touches
+        another state's provinces takes that state, country and region too. For the line
+        pixels a re-cut can leave as provinces of their own (2026-10-17: 30, mostly 1 px).
     python3 scripts/pdn_tools.py lakes
         Make each lake one province (the placeholder build cut them into 48 px squares),
         in the strategic region most of it was in.
     python3 scripts/pdn_tools.py blue_seas
         Recolour every sea province on the Provinces layer in its own blue (the author
         wants the sea easy to tell from land there). Colours only: nothing else changes.
-    python3 scripts/pdn_tools.py channel X1,Y1,X2,Y2 [...]
+    python3 scripts/pdn_tools.py channel X1,Y1,X2,Y2[,M] [...]
         Reopen a strait that closed when the world was scaled down: the cheapest
         4-connected path from the water at (X1, Y1) to the water at (X2, Y2), counting
         land pixels, becomes sea in the nearest sea province and region. Land provinces it
-        cuts apart are split (pieces of 16+ px) or merged into a neighbour.
+        cuts apart are split (pieces of 16+ px) or merged into a neighbour. The path stays within M px
+        (default 8) of the box the two ends make: M 0 cuts an islet's neck the sea goes round otherwise.
     python3 scripts/pdn_tools.py sea_zones [CELL]
         Regroup all sea provinces into larger sea regions (about CELL px across, default
         1536), and recolour the Strategic Regions layer so sea regions are blues and land
@@ -505,6 +518,82 @@ def recut(names, L, seeds, keep_states=False):
               f"{nprov} provinces")
 
 
+def provinces(names, L):
+    from skimage.measure import label as sklabel
+    t = L["Terrain"][..., :3]
+    land = ~((t == OCEAN).all(-1) | (t == LAKES).all(-1))
+    lines = (L["Necessary Provinces"][..., 3] > 0) & land
+    # the state and border lines divide too: their pixels belong to a state, and would join its pieces round a
+    # province line's end (2026-10-17, Royalist Illiricium's southern island)
+    every = lines | (((L["Necessary States"][..., 3] > 0) | (L["Necessary Borders"][..., 3] > 0)) & land)
+    P = code(L["Provinces"][..., :3])
+    St = np.where(L["States"][..., 3] > 0, code(L["States"][..., :3]), -1)
+    fresh = iter(palette(1024, False, 20261017, set(np.unique(P).tolist())))
+    for sc in sorted(set(np.unique(St[lines]).tolist()) - {-1}):
+        ys, xs = np.nonzero(St == sc)
+        sl = np.s_[ys.min():ys.max() + 1, xs.min():xs.max() + 1]
+        m = (St[sl] == sc) & land[sl]
+        cells = sklabel(m & ~every[sl], connectivity=1)
+        sizes = np.bincount(cells.ravel())[1:]
+        big = [q + 1 for q in np.argsort(-sizes) if sizes[q] >= MIN_PROVINCE]
+        if len(big) < 2:
+            print(f"state {sc:06x} at ({xs[0]}, {ys[0]}): its province lines don't divide it, left as it is")
+            continue
+        # small pieces join the big piece they share most border with; line pixels the nearest piece
+        for q in range(1, cells.max() + 1):
+            if q in big:
+                continue
+            piece = cells == q
+            ring = ndi.binary_dilation(piece, CROSS) & m & ~piece
+            nb = Counter(v for v in cells[ring].tolist() if v in big)
+            if nb:
+                cells[piece] = nb.most_common(1)[0][0]
+        iy, ix = ndi.distance_transform_edt(~np.isin(cells, big), return_distances=False, return_indices=True)
+        cells = np.where(m, cells[iy, ix], 0)
+        before = len(np.unique(P[sl][m]))
+        new = np.zeros(m.shape, np.int64)
+        for q in big:
+            new[cells == q] = next(fresh)
+        put(L["Provinces"][sl], new, m)
+        print(f"state {sc:06x} at ({xs[0]}, {ys[0]}): {before} provinces -> {len(big)} drawn ones "
+              f"({', '.join(str(int((cells == q).sum())) for q in big)} px)")
+
+
+def tidy(names, L):
+    t = L["Terrain"][..., :3]
+    land = ~((t == OCEAN).all(-1) | (t == LAKES).all(-1))
+    P = code(L["Provinces"][..., :3])
+    St = np.where(L["States"][..., 3] > 0, code(L["States"][..., :3]), -1)
+    u, inv, cnt = np.unique(np.where(land, P, -1), return_inverse=True, return_counts=True)
+    inv = inv.reshape(P.shape)
+    small = [i for i in range(len(u)) if u[i] >= 0 and cnt[i] < MIN_PROVINCE]
+    boxes = ndi.find_objects(inv + 1)
+    moved = 0
+    for i in sorted(small, key=lambda i: cnt[i]):
+        sl = boxes[i]
+        sl = np.s_[max(sl[0].start - 1, 0):sl[0].stop + 1, max(sl[1].start - 1, 0):sl[1].stop + 1]
+        m = (P[sl] == u[i]) & land[sl]
+        if not m.any():
+            continue
+        ring = ndi.binary_dilation(m, CROSS) & ~m & land[sl]
+        st = Counter(St[sl][m].tolist()).most_common(1)[0][0]
+        nb = Counter(zip(P[sl][ring].tolist(), St[sl][ring].tolist()))
+        same = {k: n for k, n in nb.items() if k[1] == st}
+        if not nb:
+            print(f"province {u[i]:06x} ({cnt[i]} px): no land neighbour, left as it is")
+            continue
+        (to_p, to_s) = max(same or nb, key=(same or nb).get)
+        if to_s != st:  # a scrap of another state: it joins that state outright
+            ref = (P[sl] == to_p) & land[sl]
+            for nm in ("States", "Countries", "Strategic Regions"):
+                L[nm][sl][m] = L[nm][sl][ref][0]
+            St[sl][m] = to_s
+        put(L["Provinces"][sl], np.full(m.shape, to_p, np.int64), m)
+        P[sl][m] = to_p
+        moved += 1
+    print(f"tidy: {moved} of {len(small)} provinces under {MIN_PROVINCE} px merged into a neighbour")
+
+
 def lakes(names, L):
     from skimage.measure import label as sklabel
     lake = (L["Terrain"][..., :3] == LAKES).all(-1)
@@ -557,10 +646,12 @@ def channel(names, L, pairs):
     terr = code(L["Terrain"][..., :3])
     sea = terr == code(np.array(OCEAN))
     land = ~sea & (terr != code(np.array(LAKES)))
-    for x1, y1, x2, y2 in pairs:
+    for x1, y1, x2, y2, *mm in pairs:
         if not (sea[y1, x1] and sea[y2, x2]):
             sys.exit(f"channel {x1},{y1} {x2},{y2}: both ends must be sea")
-        m = 8
+        # the path stays within M px of the two ends' box (8 by default): a smaller M keeps it from going round an
+        # islet the sea already surrounds but for a neck of land (2026-10-17: "Should be an island!")
+        m = mm[0] if mm else 8
         bx0, by0 = min(x1, x2) - m, min(y1, y2) - m
         bx1, by1 = max(x1, x2) + m + 1, max(y1, y2) + m + 1
         cost = land[by0:by1, bx0:bx1].astype(int)
@@ -656,6 +747,10 @@ def main():
         lakes(names, L)
     elif cmd == "blue_seas":
         blue_seas(names, L)
+    elif cmd == "provinces":
+        provinces(names, L)
+    elif cmd == "tidy":
+        tidy(names, L)
     elif cmd == "channel":
         channel(names, L, [tuple(int(v) for v in a.split(",")) for a in sys.argv[2:]])
     elif cmd == "sea_zones":

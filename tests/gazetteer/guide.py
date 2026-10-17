@@ -22,13 +22,13 @@ OWNER = "window.__me = {id: 'u_owner', name: 'The Author', isOwner: true};"
 
 
 def owner(b, url):
-    """passwords for Rouental (its map tools open) and Hollier (its states not drawn yet); the owner sees no guide"""
+    """passwords for Rouental (its map tools open) and Kieska (its states not drawn yet; Hollier until 2026-10-17); the owner sees no guide"""
     ctx, page, errs = H.new_page(b, (1440, 900), OWNER)
     page.goto(url)
     page.wait_for_selector("#owner:not([hidden])", timeout=20000)
     time.sleep(0.4)
     unfold(page, "Passwords")
-    pw = {tag: make_password(page, name, tag) for name, tag in (("Rouental", "ROU"), ("Hollier", "HLR"))}
+    pw = {tag: make_password(page, name, tag) for name, tag in (("Rouental", "ROU"), ("Kieska", "KSK"))}
     open_nation(page, "Rouental", "ROU")
     page.wait_for_function("app.N.K", timeout=5000)
     time.sleep(0.5)
@@ -97,12 +97,12 @@ def friend(b, url, size, theme, pw, store):
     check(not page.evaluate(shown()), f"{label}: the guide came back after a reload")
     page.click("#back")
     time.sleep(0.3)
-    page.fill("#q", "Hollier")
+    page.fill("#q", "Kieska")
     time.sleep(0.2)
-    open_nation(page, "Hollier", "HLR")
-    unlock(page, pw["HLR"])
+    open_nation(page, "Kieska", "KSK")
+    unlock(page, pw["KSK"])
     check(not page.evaluate(shown()), f"{label}: the guide came back on a second nation")
-    # the Guide button shows it again; on Hollier (its states not drawn yet) the map step is the Suggest tool's
+    # the Guide button shows it again; on Kieska (its states not drawn yet) the map step is the Suggest tool's
     page.click("#guide-btn")
     time.sleep(0.15)
     check(page.evaluate(shown()), f"{label}: the Guide button didn't show it")

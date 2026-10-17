@@ -6,8 +6,8 @@ Serelle. Their stats should be editable as well as their traits"), and cities' s
 Rouental (the author's own characters): Roland's name, sub-ideology (within his ideology) and traits, Serelle's rank,
 skills and a general's traits, saved as ch-<character id>; a general of the page's own with skills; the game's
 releasables and civil war revolters on the Releasables tab, Carcarelle renamed and given a state (its whole land saved
-as g-CRL), Brillagne's ruler pointing to Mahaut on the People tab; Belekria's Tethia (map tools closed: no land
-editing); a city's size and victory points; the every-nation file with all of it. Desktop and phone.
+as g-CRL), Brillagne's ruler pointing to Mahaut on the People tab; Belka's Pakitsk (map tools closed: no land editing;
+Belekria's and its Tethia until 2026-10-17, when the author drew Belekria's states); a city's size and victory points; the every-nation file with all of it. Desktop and phone.
 
     python3 scripts/facts_export.py          # after a build: the map data the page reads
     python3 tests/gazetteer/ingame.py        # PROBLEMS: none, screenshots in work/gazetteer_test/shots/
@@ -142,16 +142,16 @@ def owner(b, url, size):
     check(cs is not None, f"{label}: the city's size wasn't saved")
     page.screenshot(path=str(H.SHOTS / f"ingame_{label}_cities.png"))
 
-    # ---- Belekria: Tethia, map tools closed
+    # ---- Belka: Pakitsk, map tools closed (Belka's own states aren't drawn)
     page.click("#back")
     time.sleep(0.4)
-    make_password(page, "Belekria", "BLK")
-    open_nation(page, "Belekria", "BLK")
+    make_password(page, "Belka", "BKA")
+    open_nation(page, "Belka", "BKA")
     page.click("[data-tab=release]")
     time.sleep(0.4)
-    tth = page.inner_text("#pane-release .relcard:has(#rl-name-g-TTH)")
-    check("Tethia" in page.get_attribute("#rl-name-g-TTH", "placeholder") and "Change its states" not in tth
-          and "once the author has drawn your states" in tth, f"{label}: Tethia: {tth[:300]}")
+    pkt = page.inner_text("#pane-release .relcard:has(#rl-name-g-PKT)")
+    check("Pakitsk" in page.get_attribute("#rl-name-g-PKT", "placeholder") and "Change its states" not in pkt
+          and "once the author has drawn your states" in pkt, f"{label}: Pakitsk: {pkt[:300]}")
 
     # ---- every nation in a file
     page.click("#back")

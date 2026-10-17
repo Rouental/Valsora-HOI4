@@ -30,7 +30,14 @@ tech tree's year labels), and `common/ai_strategy/default.txt` loses its Earth-o
   (`LaR_espionage_operations.txt`), the nuclear project (`Special_Project_Events.txt`). The mod
   switches vanilla's `events` off, and these had been missing since the first build.
 
+- `common/autonomous_states/puppet.txt`: the puppet, without its clause refusing a fascist overlord with Death or
+  Dishonor (`vanilla_parts.EDITS`): Valsora's Authoritarian overlords keep plain puppets (2026-10-17).
+
 ## `curated/`: vanilla's, cut by hand
+
+`localisation/english/replace/valsora_name_caps_l_english.yml` (made by `vanilla_sync.py`, not by hand): the
+game's 170 English lines that open a sentence or paragraph with a country's definite name, `GetNameDefCap` there.
+Valsora's definite names start with "the" ("the Cardonian Kingdom has announced its total surrender", 2026-10-17).
 
 `common/on_actions/valsora_generic_on_actions.txt`: the generic hooks of vanilla's on_actions
 (elections, aces, army leaders, operatives, nuclear news, capitulations, civil wars), without
@@ -43,6 +50,7 @@ Lists made by `vanilla_sync.py`, one name per line (`traits.json` and `companies
 | file | holds | used by |
 |---|---|---|
 | `tags.txt` | Earth's 364 country tags and file names | Earth's history stand-ins; our tags must differ |
+| `autonomy_states.txt` | the autonomy levels (puppet, dominion ...) | `check_mod.py` (every level a history sets) |
 | `decisions.txt` | the 732 vanilla decisions that loaded files name, and their kind | the decision stand-ins |
 | `sprites.txt` | every sprite vanilla declares | `check_mod.py` |
 | `technologies.txt`, `equipment.txt`, `modules.txt`, `subunits.txt`, `ideas.txt`, `defines.txt` | vanilla's names of each | `check_mod.py` |

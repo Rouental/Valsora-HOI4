@@ -694,6 +694,45 @@ screenshot and `error.log`)
 
 ## Map problems found while building
 
+**New state lines cut 1,468 provinces into pieces down to 16 px** (2026-10-17, the author's states for Belekria,
+Krionik, Terreich and others)
+- Cause: `regroup_states.py` keeps the provinces and splits one only where a line crosses it; the provinces had been
+  cut for the old ~1,300 px states, so the new lines left 1,703 provinces under 80 px (307 before) and 1,480 more
+  provinces, enough to pass HOI4's 65,536 borders.
+- Fix: the provinces of every state the regrouping changed re-cut at ~190 px (`pdn_tools.py recut --keep-states`, one
+  seed per enclosed piece): 20,552 land provinces, 368 under 80 px, 61,767 borders. Only the drawn countries: a first
+  run also re-cut Fraxhemark, Kampf and Belka whole, since their provinces straddling the border had lost a few pixels
+  to the regrouping and their land, without lines, is one piece (undone). A seed's piece can hold another state's
+  line pixels, which became provinces of 1-5 px: `pdn_tools.py tidy` merges provinces under 16 px into a neighbour.
+
+**The river re-cut replaced the author's drawn provinces** (2026-10-17, Seigne's)
+- Cause: `river_provinces.py` re-cuts every state whose rivers aren't on province borders, and a river crosses Seigne.
+- Fix: it leaves alone every state the author's province lines cross; the drawn provinces were applied again.
+
+**Royalist Illiricium's new state line wasn't applied** (2026-10-17)
+- Cause: `regroup_states.py` counts a country as drawn only where two of its areas of 150+ px meet across a line; the
+  two island states are 128 and 149 px, so the moved line was ignored, and the lower state's pixels above it joined its
+  halves round the province line drawn in it.
+- Fix: each side of the line given the state most of it is in (by hand; a first try in a box that also held mainland
+  states moved 47 px of one into another, undone).
+
+**A Krionik island kept two cut states** (2026-10-17)
+- Cause: `regroup_states.py` leaves an island no line touches as it was, two states of the old cut: Krionik wasn't
+  "final" for the Gazetteer.
+- Fix: the two merged (the island has no line: one area, one state).
+
+**The disk filled up mid-run** (2026-10-17)
+- Cause: every decode of the `.pdn` is 1.4 GB (28 layers); four decodes for checking, plus the regrouping's own, left
+  nothing, and a script died while decoding (it saved nothing).
+- Fix: check decodes deleted as soon as they're read; the scripts' own folders (`work/pdn_*`) are made again when they
+  run.
+
+**Puppets of Authoritarian overlords were not allowed** (2026-10-17, found while making Kampf Fascist)
+- Cause: with Death or Dishonor the game's puppet level refuses a fascist overlord (Germany's subjects are
+  Reichskommissariats); Illiricium (Bleacherism, Authoritarian) had started with three puppets since 2026-10-01, and
+  Kampf's Hohenzburg would have joined them.
+- Fix: the mod ships the puppet level without that clause (`vanilla_parts.EDITS`).
+
 **The ivory war goal lists showed a cross of seams** (2026-10-17, the Deco UI v0.10's diplomacy preview)
 - Cause: the parchment tile they replace (`tiled_paper_w_frame_one_border`) is a cornered tile: the game repeats its
   middle and stretches its edges, so the first ivory sheet's gradients broke at every 64 px border.

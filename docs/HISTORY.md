@@ -10,6 +10,21 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-17, the night (the author's map, "Another thing to work on overnight: significant changes to the map", with
+  three flags): **Yastreovakia redrawn**. Belekria south over Sminishia's north and West Sminishia's old land, West
+  Sminishia over Sminishia's west end, Pakitsk into Belka (still releasable), Krionik's north-east to Belka and Kieska
+  (`pdn_tools.py border` and `cede`). States drawn for Belekria, Krionik, Terreich, Kurikia, San Sierra, Sennheiser,
+  Gorbastan, Zukchiva, the Sminishias, Pakitsk and Hollier (`regroup_states.py`, 3,149 states became 3,190), and the
+  provinces of the states they changed re-cut at ~190 px (the lines had cut 1,468 provinces into pieces; 61,767
+  borders after, 62,183 before); the first drawn provinces (Seigne's, Royalist Illiricium's: `pdn_tools.py provinces`);
+  two islands cut free of the coast; five cities, Vazgorod Krionik's capital. Krionik a Regency Council (Monarchist)
+  under the Council of Marshals, "the Royal Confederation of the Kriosnika"; Kampf Fascism, Sarkis Vanguardism: four
+  great powers, one per ideology with Fraxhemark. Sombor Krionik's protectorate (a level of the mod's own) and the
+  game's puppet allowed to Authoritarian overlords. Eleven new nations to release from the new Subregions layer
+  (Belekria's eight republics besides Tethia, Krionik's three principalities with the author's flags), Pakitsk's
+  cores, Sminishia's on its old land. The game's lines that open a sentence with "the …" capitalised (the author's
+  screenshot of a capitulation). 416 strait crossings (two new islands). The Gazetteer's map tools open for 48
+  nations (39 before). Rebuilt, all checks passed, 57 of 57 breaks caught.
 - 2026-10-17, later (the author's screenshots of v0.10, ending "That's all for now I think"): **the Deco UI v0.10.1**.
   The loading pictures from Valsora's map out of the mod until the map is final (kept by `make_loading.py`; the loading
   screen had shown the game's own picture, game setup the last of ours); corner brackets off the loading boxes and the

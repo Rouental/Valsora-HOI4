@@ -122,6 +122,8 @@ SUBTYPES = {
         ("semi_constitutional_monarchy", "Semi-Constitutional Monarchy",  # the author's, 2026-10-13 (Avesária)
          "A constitution and an elected parliament, but the monarch still appoints the "
          "government and holds real power over it."),
+        ("regency_council", "Regency Council",  # the author's, 2026-10-17 (Krionik); description Claude's
+         "The crown stands, but a council governs in its name until a sovereign takes it up."),
     ],
     "theocracy": [
         ("theocrat", "Hierocracy", "The clergy rule in the name of the divine."),

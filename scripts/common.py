@@ -276,6 +276,20 @@ COUNTRIES = {
     # 2026-10-15 (author): Vilna's old land, with its old flag and ideology and its paint; the adjective
     # is Claude's
     "placeholdgrad": ("PHG", "Placeholdgrad", "Placeholdgradian", (40, 140, 90)),
+    # 2026-10-17 (the author's names, painted on the Subregions layer; tags, adjectives and colours Claude's, the
+    # colours from the flags where there is one): Belekria's constituent republics (Tethia, already one, above) and
+    # Krionik's principalities, nations that can be released (nations.SUBREGIONS)
+    "drakonogolovnik": ("DRK", "Drakonogolovnik", "Drakonogolovnikan", (95, 75, 150)),
+    "staraya_belekria": ("STB", "Staraya Belekria", "Old Belekrian", (150, 35, 35)),
+    "sredneestvo": ("SDE", "Sredneestvo", "Sredneestvan", (225, 160, 120)),
+    "severntochka": ("SVT", "Severntochka", "Severntochkan", (110, 150, 70)),
+    "serayachasy": ("SRY", "Serayachasy", "Serayachasian", (70, 150, 200)),
+    "kalnsfereta": ("KLF", "Kalnsfereta", "Kalnsferetan", (200, 100, 30)),
+    "belayosen": ("BLY", "Belayosen", "Belayosenian", (225, 205, 110)),
+    "krasnoeporte": ("KSP", "Krasnoeporte", "Krasnoeportean", (110, 70, 55)),
+    "zastava": ("ZST", "Zastava", "Zastavan", (22, 100, 180)),               # flag blue
+    "crvenognjiste": ("CRV", "Crvenognjište", "Crvenognjištan", (10, 120, 110)),  # flag teal, lighter: Krionik's green
+    "mylostrva": ("MYL", "Mylostrva", "Mylostrvan", (215, 170, 25)),          # flag gold: its navy is Sennheiser's blue
 }
 # The placeholder countries, one per continent, are the recommended starts in the
 # bookmark; the rest are playable but not listed there.

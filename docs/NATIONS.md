@@ -549,3 +549,54 @@ fitted by Claude without stretching: Côtefer's plain yellow fly trimmed (1124 �
 taller with plain rows to three equal bands, the flowers centred in the white (1218 × 772), Mezzogiorno's bands
 lengthened at the foot so they keep their widths and the flower its place (1252 × 794)
 (`dist/flags_new_20261015.png`). Their map colours stay the three shades of blue.
+
+## 2026-10-17: Yastreovakia redrawn, Belekria's republics, Krionik's principalities
+
+**2026-10-17** (the author's map, names, governments and transfers; tags, adjectives, colours, cultures, formal names
+of the new releasables and their governments Claude's). **Borders moved** (Necessary Borders): **Belekria** expanded
+south, over Sminishia's north (5 states) and West Sminishia's old land (its "Claimed by Sminishia" note); **West
+Sminishia** took Sminishia's west end (6 states, where its label moved); **Pakitsk is part of Belka** but stays
+releasable (its 8 states, which the author drew, are Belka's; the erased Belka–Pakitsk line was kept as a state line
+so Pakitsk's states stay its own); **Krionik shrank**: a strip north of the new line went to Belka (2,845 px) and a
+piece east of it to Kieska (6,844 px, split along the line, `pdn_tools.py cede`). A bump of that piece by Sombor
+(about 950 px at (2623, 603)) is on Kieska's side of the new line but painted as Crvenognjište: Kieska owns it and
+Crvenognjište has a core on it (for the author to confirm). **Sminishia** has cores on its old land (the 11 states
+Belekria and West Sminishia took: `nations.CORES`). **States drawn** (Necessary States): Belekria (68 states),
+Krionik (132), Terreich (71), Kurikia (56), San Sierra (48), Sennheiser (16; not in the author's message, but its
+lines were drawn), Gorbastan (14), Zukchiva (12), Sminishia (9), Pakitsk (8), West Sminishia (6), Hollier (3: north,
+south and a small loop) and small edits in Cardonia and Placeholdaire; numbered for naming in
+`dist/state_numbers_belekria.png` (with the Sminishias), `_krionik`, `_terreich`, `_kurikia`, `_san_sierra`,
+`_sennheiser` and `_gorbastan_zukchiva`. **Provinces drawn** for the first time (Necessary Provinces): Seigne's two run
+north and south now, and Royalist Illiricium's two island states have two each. **Two islands** the drawing had joined
+to the coast by a neck ("Should be an island!") are islands again (`pdn_tools.py channel`). **Cities**: Bijelkop and
+South Bijelkop (West Sminishia), Visokagorod (Zastava), Sedišta (Mylostrva) and **Vazgorod, Krionik's capital**
+(Crvenognjište).
+
+**Governments** ("so there are four great powers (those three + Fraxhemark), one for each ideology"): **Krionik** is
+Monarchist, "**the Royal Confederation of the Kriosnika**" ("Confederate Kingdoms of the Kriosnika" in the first
+message, corrected), still led by the Kriosaivak Council of Marshals, under the author's new sub-ideology **Regency
+Council** (the description Claude's); **the Kampfian Empire** is Authoritarian, **Fascism** (Absolute Monarchy
+before; still "the Iron Empire of Kampf"); **Sarkis** is Communist, **Vanguardism** (Revanchism before). Their rulers
+keep their names (Max Reimer, Vahe Babaian). **Sombor is Krionik's protectorate**: the base game's protectorate is
+Japan's alone, so the mod has its own level, Protectorate (`autonomy_valsora_protectorate`: freer than a puppet, half
+its manpower and trade to the protector; Claude's numbers). Kampf's puppet Hohenzburg would have been refused under
+an Authoritarian overlord (the base game allows no puppet of a fascist one with Death or Dishonor; Illiricium's three
+had the same problem since 2026-10-01): the mod ships the puppet level without that clause.
+
+**Releasables painted on the new Subregions layer** (names on Subnames; each with cores on the states mostly painted
+in its colour, capital at the pixel in `nations.SUBREGIONS`): **Belekria's nine republics**, Drakonogolovnik DRK,
+Staraya Belekria STB, Sredneestvo SDE, Severntochka SVT, Serayachasy SRY, Kalnsfereta KLF, Belayosen BLY and
+Krasnoeporte KSP (new, each "the Socialist Republic of …", Vanguardism like Belekria, Russian culture, stripes in
+colours of Claude's until they have flags), and Tethia (its land the whole subregion now, 8 states, not one); 5 of
+Belekria's states, the strip from Sminishia, are in none. **Krionik's three principalities** (the author: "Flags are
+for Krionik's constituent principalities. More will be defined as I map out the other realms"): **Zastava** ZST
+(35 states, capital Visokagorod, flag blue, white and black with a crowned eagle, map colour its blue),
+**Crvenognjište** CRV (51, capital Vazgorod, flag dark teal with a white sun and band, map colour its teal, lighter:
+Krionik's own green is close), **Mylostrva** MYL (43, capital Sedišta, flag blue and gold with the royal arms, map
+colour its gold: its navy would merge with Sennheiser's blue), each "the Principality of …", Absolute Monarchy,
+Serbian like Krionik; 4 of Krionik's states are in none yet. Their rulers are generated from the base game's name
+lists (Drakonogolovnik's drew Dzhugashvili, Skobelev, Brezhnev and Nikulin before Makary Pustobriko, and
+Sredneestvo's Aleksandr Ostrovsky: those surnames are drawn again, `cultures.DRAW_AGAIN`). The flags came wider than 82:52: Crvenognjište's stripes
+made taller, Zastava's and Mylostrva's plain ends shortened (Mylostrva's 1 px frame, an export edge, cut off;
+`fit_flag.py` refused it, its mantle reaching the top, so by hand). And **Pakitsk** PKT, Belka's.
+`dist/preview_yastreovakia_20261017.png` shows the countries and the releasables.

@@ -55,10 +55,25 @@ files and so on). The build writes all of them.
 | **Necessary Cities** | named cities (victory points) | No: the dot only needs to be close |
 
 Your own layers: everything named **Necessary …** is what you edit for me to add to the
-mod (Necessary Borders, States, Names, Cities, Major / Minor Rivers; Necessary Provinces and
-Necessary Terrain are kept for later province and terrain detail). Anything with
-"Reference" in its name, and **Background** (plain white, for seeing better), is only
-for you. The build ignores every layer whose name it doesn't know.
+mod (Necessary Borders, States, Names, Cities, Major / Minor Rivers, Provinces; Necessary
+Terrain is kept for later terrain detail). Anything with "Reference" in its name, and
+**Background** (plain white, for seeing better), is only for you. The build ignores every
+layer whose name it doesn't know.
+
+- **Necessary Provinces** (read since 17 October 2026, when you redrew Seigne's and Royalist
+  Illiricium's): draw lines inside a state, and that state's provinces become exactly the
+  areas your lines and the state's own edges enclose; its old provinces are replaced. A line
+  must run from edge to edge (a state line, a border or the coast) to divide anything. States
+  you draw no province lines in keep the provinces I cut for them.
+- **Subregions** and **Subnames** (from 17 October 2026): paint the parts of a nation that
+  can break away (Belekria's republics, Krionik's principalities, Pakitsk inside Belka), one
+  colour per part, and write each part's name on Subnames. Each becomes a nation that can be
+  released, with cores on the states mostly painted in its colour. The same colour may serve
+  two parts far apart, and islands painted in a part's colour go with it. A new part needs a
+  line of code too (its tag, name and government), so tell me when you paint one.
+- **"Should be an island!"**: ring a piece of land that the drawing joined to its neighbour
+  by a thin neck, and I cut the neck so it is an island again (done by hand, not by the
+  build).
 
 On the **Provinces** layer the sea provinces are blues, so sea is easy to tell from land.
 They are made from the **Ocean Province Lines** layer (see "Sea provinces" below), so
