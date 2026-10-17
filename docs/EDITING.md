@@ -100,6 +100,21 @@ Each province is one solid patch of one colour. Any colour works, as long as:
   2026), so new land is cut into provinces of about 190 px; the build stops if the
   limit is passed.
 
+**How big a province should be** (your rule of thumb, 2026-10-17; the Gazetteer shows the
+same guide to your friends, with a ruler at the map's zoom):
+
+| land | size | for example |
+|---|---|---|
+| usual | about **160 px** (13 × 13), most between 120 and 240 | Cardonia's provinces (about 9 to a state) |
+| dense | down to about 120 px | crowded heartlands, big cities, river valleys, fronts |
+| sparse | 300 to 800 px | tundra (northern Yastreovakia), deserts (Usnistan), ice, high mountains, deep jungle |
+
+Rouental's provinces are about 150 px, much like Cardonia's: it looks detailed because its
+states are small (two or three provinces each). Each new province costs about 3 of the
+65,536 borders, and about 3,800 are left (October 2026), room for about 1,250 more
+provinces on the whole map: where you go smaller, go bigger somewhere empty. Never under
+16 px, or thinner than 3.
+
 A province is land, sea or lake depending on what the **Terrain** layer says under most
 of it. Provinces are numbered from the top-left corner, reading like a book. The numbers
 change when you add or remove a province, and that is fine: everything that refers to

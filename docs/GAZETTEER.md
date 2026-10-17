@@ -137,6 +137,13 @@ their browser, and **Nation › Save a file** gives them a file to send you. Loa
 Pictures (flags, portraits) are kept at up to 640 px, plenty for HOI4's 82 × 52 flags and
 156 × 210 portraits.
 
+**How big a province should be** (2026-10-17, the author: "maybe there should be a guide for province size? I think the
+ideal province size is something along the lines of what I've done for Cardonia"): the guide's third step, a section on
+the Map tab (**How big is a province?**) and **Sizes** above the map (three squares at the map's zoom, with the size of
+the nation's own provinces now) show it: usually about Cardonia's (160 map pixels), smaller (to about 120) for crowded
+land, larger (300 to 800) for empty land, and why (the border limit). A suggested area or state says how many provinces
+of each size it would hold. The numbers and pictures come from the build (`facts_export.py`, `index.json` `sizes`).
+
 **Overseas land** (Rouental's Concorde et Volonté, Krionik's colonies ...) has a box of its own
 in the map's lower right corner, beside the mainland's and the whole world's: a click opens it
 with every tool.

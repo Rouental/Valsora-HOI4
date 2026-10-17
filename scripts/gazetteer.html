@@ -171,6 +171,25 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .legend span { display: inline-flex; align-items: center; gap: 5px; }
 .legend i { width: 11px; height: 11px; border: 1px solid rgba(0,0,0,.25); }
 .has-insets .legend { top: 10px; bottom: auto; max-width: calc(100% - 70px); }
+/* the province size ruler (2026-10-17): the guide's three sizes as squares at the map's zoom, left of the zoom buttons */
+.sizes { position: absolute; right: 54px; top: 10px; display: flex; gap: 10px; align-items: flex-end; max-width: calc(100% - 74px);
+  padding: 6px 9px 5px; background: var(--sheet); border: 1px solid var(--rule); font-size: 11.5px; color: var(--ink-2); pointer-events: none; }
+.sizes[hidden] { display: none; }
+#sizebtn[aria-pressed="true"] { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); font-weight: 700; }
+.sizes figure { margin: 0; display: grid; justify-items: center; gap: 3px; min-width: 46px; }
+.sizes .sq { border: 1.5px solid var(--ink); background: rgba(255, 255, 255, .25); }
+.sizes figcaption { white-space: nowrap; text-align: center; line-height: 1.2; }
+.sizes figcaption b { color: var(--ink); font-weight: 600; }
+.sizes .hint { align-self: center; max-width: 150px; }
+/* the guide's pictures: three nations' provinces at one scale */
+.sizesec summary { cursor: pointer; list-style-position: outside; }
+.sizesec summary h4 { display: inline-flex; }
+.sizesec[open] summary { margin-bottom: 8px; }
+.sizepics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 2px 0 8px; }
+.sizepics figure { margin: 0; }
+.sizepics img { display: block; width: 100%; height: auto; image-rendering: pixelated; border: 1px solid var(--rule); border-radius: 3px; }
+.sizepics figcaption { font-size: 11.5px; color: var(--ink-2); margin-top: 3px; line-height: 1.25; }
+.sizepics figcaption b { color: var(--ink); font-weight: 600; }
 .status { font: 400 12.5px var(--font-data); color: var(--ink-2); min-height: 18px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 /* ledger */
@@ -308,6 +327,7 @@ optgroup { font-style: normal; }
 @media (pointer: coarse) {
   .tool, .seg button, .tchip, .btn.small, .inset { min-height: 38px; }
   .mapctl button { width: 42px; height: 42px; }
+  .sizes { right: 62px; max-width: calc(100% - 82px); }
 }
 @media (prefers-reduced-motion: no-preference) { .btn, .tool, .nrow, .tchip { transition: background .12s, border-color .12s; } }
 
@@ -389,6 +409,7 @@ optgroup { font-style: normal; }
             <button data-mode="terrain" aria-pressed="false">Terrain</button>
             <button data-mode="pop" aria-pressed="false">Population</button>
           </div>
+          <button class="btn small" id="sizebtn" type="button" title="Show how big a province should be, at the map's zoom" aria-pressed="false">Sizes</button>
           <button class="btn small" id="undo" type="button" title="Undo (Ctrl+Z)" disabled>Undo</button>
         </div>
       </div>
@@ -396,6 +417,7 @@ optgroup { font-style: normal; }
       <div class="sheetwrap" id="sheet">
         <canvas id="map"></canvas>
         <div class="mapctl"><button id="zin" title="Zoom in" aria-label="Zoom in">+</button><button id="zout" title="Zoom out" aria-label="Zoom out">&minus;</button><button id="fit" title="Fit the map" aria-label="Fit the map">&#9635;</button><button id="keybtn" title="Show or hide the key" aria-label="Show or hide the key" aria-pressed="true">?</button></div>
+        <div class="sizes" id="sizes" hidden aria-live="polite"></div>
         <div class="legend" id="legend"></div>
         <div class="insets" id="insets"></div>
         <div class="loading" id="loading">Unrolling the map&hellip;</div>
@@ -1420,6 +1442,65 @@ function goHome() {
   try { history.replaceState(null, "", location.pathname + location.search); } catch (e) { /* as above */ }
   renderList(); drawWorld(null); renderOwner(); refreshSave();
 }
+// ======================================================================= province sizes
+// The author, 2026-10-17: "maybe there should be a guide for province size? I think the ideal province size is something
+// along the lines of what I've done for Cardonia? Its okay to go smaller for more granular detail like Rouental, or larger
+// for barren provinces like northern Yastreo or the deserts of Usnistan will be, but there should be a rough idea."
+// The numbers come from the build (facts_export.py, index.json `sizes`): Cardonia's provinces, Rouental's, the map's
+// and its border budget; the pictures are three pieces of the map at one scale.
+function sizeFacts() { return (app.index && app.index.sizes) || null; }
+function sizeGuideBody(short) {
+  const z = sizeFacts(), B = s => h("b", { text: s });
+  if (!z) return [];
+  const room = Math.max(0, Math.floor((z.limit - z.borders) / Math.max(1, z.per_province) / 50) * 50);
+  const pic = (src, title, sub) => h("figure", null, h("img", { src, alt: title + ": " + sub, width: z.win[0] * z.scale, height: z.win[1] * z.scale }),
+    h("figcaption", null, B(title), h("br"), sub));
+  const out = [
+    h("div", { class: "sizepics" },
+      pic(z.pics.dense, "Rouental", `about ${z.rouental} px each`),
+      pic(z.pics.usual, "Cardonia", `about ${z.usual} px: the usual size`),
+      pic(z.pics.sparse, "Sparse land", `about ${z.sparse} px (northern Yastreovakia, cut larger)`)),
+    h("p", null, "Most provinces should be about the size of ", B("Cardonia's"), `: around ${z.usual} map pixels each (about ${Math.round(Math.sqrt(z.usual))} by ${Math.round(Math.sqrt(z.usual))}), most of them between ${z.usual_lo} and ${z.usual_hi}. A Cardonian state holds about ${Math.round(z.crd_provinces / Math.max(1, z.crd_states))} of them. The three pictures are at the same scale.`),
+    h("p", null, B("Smaller"), ` (down to about ${z.dense}) for crowded heartlands, big cities, river valleys and borders that will be fought over. Rouental's provinces are about ${z.rouental}; what makes it feel detailed is its many small states, two or three provinces each.`),
+    h("p", null, B("Larger"), " (300 to 800) for land few people live in or fight over: tundra like northern Yastreovakia, deserts like Usnistan's, ice, high mountains, deep jungle."),
+  ];
+  if (!short) out.push(
+    h("p", null, B("Why it matters:"), ` the game draws at most ${fmt(z.limit)} province borders, and the map uses ${fmt(z.borders)}. Each province adds about ${Math.round(z.per_province)}, so the whole map has room for about ${fmt(room)} more: wherever provinces get smaller, somewhere else has to get bigger.`),
+    h("p", null, "Never smaller than 16 pixels, or thinner than 3. ", B("Sizes"), ", above the map, shows these sizes on your map at its zoom."));
+  return out;
+}
+function renderSizes() {  // the ruler: squares of the guide's sizes at the map's zoom
+  const el = $("#sizes"), z = sizeFacts(), on = !!(app.ui.sizes && z && app.N && !curPart().world);
+  $("#sizebtn").setAttribute("aria-pressed", String(!!app.ui.sizes));
+  el.hidden = !on;
+  if (!on) return;
+  const s = app.view.s, side = a => Math.sqrt(a) * s, mine = app.N.prov.map(p => p.area).filter(a => a > 0).sort((a, b) => a - b);
+  const yours = mine.length ? Math.round(mine[mine.length >> 1] / 10) * 10 : 0;
+  if (side(z.usual) < 5) { el.replaceChildren(h("span", { class: "hint", text: "Zoom in to see the province sizes." })); return; }
+  if (side(z.sparse) > 150) { el.replaceChildren(h("span", { class: "hint", text: "Zoom out to see the province sizes." })); return; }
+  const sq = (a, title, sub) => h("figure", null, h("div", { class: "sq", style: `width:${side(a).toFixed(1)}px;height:${side(a).toFixed(1)}px` }),
+    h("figcaption", null, h("b", { text: title }), h("br"), sub));
+  el.replaceChildren(sq(z.dense, "Dense", `${z.dense} px`), sq(z.usual, "Usual", `${z.usual} px`), sq(z.sparse, "Sparse", `${z.sparse} px`),
+    yours ? h("span", { class: "hint", text: `Yours now: about ${yours} px each` }) : null);
+}
+function sugArea(it) {  // map pixels inside a suggested area (a state: only the land it keeps)
+  if (it.type === "state") {
+    let n = 0;
+    for (const P of app.N.parts || []) { if (P.world) continue; sugFill(P); const inf = (P.sugInfo || []).find(x => x.id === it.id); if (inf) n += inf.n; }
+    return n;
+  }
+  if (it.type !== "area" || it.pts.length < 3) return 0;
+  let a = 0;
+  it.pts.forEach(([x, y], i) => { const [x2, y2] = it.pts[(i + 1) % it.pts.length]; a += x * y2 - x2 * y; });
+  return Math.round(Math.abs(a) / 2);
+}
+function sugSizeNote(it) {
+  const z = sizeFacts(), a = sugArea(it);
+  if (!z || a < 16) return null;
+  const n = v => Math.max(1, Math.round(a / v));
+  return h("div", { class: "meta", text: `About ${fmt(a)} map pixels: ${n(z.usual)} province${n(z.usual) === 1 ? "" : "s"} of Cardonia's size (${n(z.sparse)} if sparse, ${n(z.dense)} if dense).` });
+}
+
 // ======================================================================= the quick-start guide
 // Five short steps, shown once in each browser the first time a player unlocks a nation (2026-10-16, the author's
 // overnight list: "a short illustrated walkthrough shown the first time someone opens their nation"); the Guide
@@ -1505,6 +1586,7 @@ function guideSteps(N) {
       h("p", null, "This is ", nm, "'s page in Valsora's atlas: the map on the left, its facts on the right."),
       h("p", null, "Whatever you enter is saved as you go (the chip at the top right says ", B("Saved"), "), and the author builds it into the mod.")] },
     map,
+    ...(sizeFacts() ? [{ node: h("div"), title: "How big is a province?", body: sizeGuideBody(true) }] : []),
     { pic: "ledger", title: "The facts", body: [
       h("p", null, "The tabs on the right hold the rest: ", B("Politics"), " (your names under each government, the ruling sub-ideology, the ruler and party leaders), ", B("People"), " (generals, admirals, advisors, companies), ", B("Releasables"), " (nations that can break away from yours) and ", B("Nation"), " (flag, map colour, culture, motto, anthem, and your name)."),
       N && N.open ? h("p", null, B("State"), " and ", B("Cities"), " show what you select on the map.") : null] },
@@ -1517,7 +1599,9 @@ function guideSteps(N) {
 }
 function showGuide(step = 0) {
   const steps = guideSteps(app.N), s = steps[step], last = step === steps.length - 1;
-  const pic = h("div"); pic.innerHTML = GPIC[s.pic];   // the page's own drawings, no outside text
+  const pic = h("div");
+  if (s.pic) pic.innerHTML = GPIC[s.pic];   // the page's own drawings, no outside text
+  else pic.append(s.node);                  // a step whose pictures are in its body (province sizes)
   const next = h("button", { class: "btn primary", type: "button", onclick: () => last ? closeGuide() : showGuide(step + 1) }, last ? "Start" : "Next");
   $("#guide-card").replaceChildren(
     h("div", { class: "gtop" }, h("p", { class: "eyebrow", text: `Quick start · ${step + 1} of ${steps.length}` }),
@@ -2084,6 +2168,7 @@ function draw() {
   drawQueued = false;
   const N = app.N;
   if (!N || $("#desk").hidden) return;
+  renderSizes();
   const cv = map.cv, [sw, sh] = sheetSize(), dpr = window.devicePixelRatio || 1;
   if (cv.width !== Math.round(sw * dpr) || cv.height !== Math.round(sh * dpr)) { cv.width = Math.round(sw * dpr); cv.height = Math.round(sh * dpr); }
   const ctx = map.ctx, P = curPart(), v = app.view;
@@ -2891,6 +2976,7 @@ function renderMapPane(force) {
         lab.setAttribute("aria-label", "What it is");
         return h("div", { class: "item" + (app.ui.sel.sug === it.id ? " sel" : "") },
           h("div", { class: "row" }, h("span", { class: "sugtype", text: it.type }), lab),
+          sugSizeNote(it),
           h("div", { class: "row" },
             h("button", { class: "btn small", type: "button", onclick: () => { app.ui.sel.sug = it.id; locate(it.pts[0][0], it.pts[0][1]); renderMapPane(true); } }, "Show"),
             it.type === "area" && !N.planned ? h("button", { class: "btn small", type: "button", title: "Keep only your land inside it, none of the states drawn before",
@@ -2898,6 +2984,10 @@ function renderMapPane(force) {
             h("button", { class: "btn small danger", type: "button", onclick: () => edit("suggest", { [it.id]: null }) }, "Delete")),
           textArea("sug-note-" + it.id, it.note, "More about it (optional)", v => edit("suggest", { [it.id]: { note: v || "" } }), 1000));
       })) : h("div", { class: "empty", text: "None yet." })));
+    // folded until opened; it stays as the player left it when the pane is drawn again
+    if (sizeFacts()) out.push(h("details", { class: "sec sizesec", open: !!app.ui.sizesOpen, ontoggle: e => { app.ui.sizesOpen = e.currentTarget.open; } },
+      h("summary", null, h("h4", null, "How big is a province?")),
+      ...sizeGuideBody(false)));
     if (mapOpen()) {
       const rivers = Object.entries(rv).filter(([, r]) => r && Array.isArray(r.pts));
       out.push(h("div", { class: "sec" }, h("h4", null, "Rivers you drew", h("small", { text: `${rivers.length}` })),
@@ -3748,6 +3838,7 @@ function wireStatic() {
   $("#grow").onclick = () => { const on = document.body.classList.toggle("ledger-big"); $("#grow").setAttribute("aria-pressed", String(on)); requestAnimationFrame(() => requestDraw()); };
   $("#keybtn").onclick = () => { app.ui.legend = !app.ui.legend; $("#keybtn").setAttribute("aria-pressed", String(app.ui.legend)); $("#legend").hidden = !app.ui.legend; };
   $("#keybtn").setAttribute("aria-pressed", String(app.ui.legend));
+  $("#sizebtn").onclick = () => { app.ui.sizes = !app.ui.sizes; renderSizes(); };
   document.addEventListener("keydown", e => {
     if (!app.N || $("#desk").hidden || !$("#guide").hidden) return;
     const typing = /INPUT|TEXTAREA|SELECT/.test((document.activeElement || {}).tagName || "");

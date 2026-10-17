@@ -226,6 +226,88 @@ def parts_of(mask4, gap4):
     return boxes
 
 
+# the province size guide (the author, 2026-10-17: "maybe there should be a guide for province size? I think the ideal
+# province size is something along the lines of what I've done for Cardonia ... smaller for more granular detail like
+# Rouental, or larger for barren provinces like northern Yastreo or the deserts of Usnistan"): the numbers the page
+# quotes, from the build, and three pictures at one scale
+GUIDE_SCALE = 2          # screen pixels per map pixel in the pictures
+GUIDE_WIN = (150, 96)    # map pixels shown in each
+SPARSE_PX = 420          # the sparse example's provinces, cut for the picture only
+SPARSE_AT = "BKA"        # northern Yastreovakia (Belka), the author's example of barren land
+
+
+def _window(mask, win):
+    """(x0, y0) of the window of size win holding most of mask"""
+    w, h = win
+    c = np.pad(mask.astype(np.int32).cumsum(0).cumsum(1), ((1, 0), (1, 0)))
+    tot = c[h:, w:] - c[:-h, w:] - c[h:, :-w] + c[:-h, :-w]
+    y0, x0 = np.unravel_index(int(tot.argmax()), tot.shape)
+    return int(x0), int(y0)
+
+
+def _guide_pic(lab, kind, own_px, tag, cut=None):
+    """the window of `tag`'s land as a picture: its land ivory, others' grey, provinces outlined, states darker;
+    `cut` re-cuts the land in view into provinces of that many map pixels (the sparse example)"""
+    x0, y0 = _window(own_px == tag, GUIDE_WIN)
+    w, h = GUIDE_WIN
+    L = lab[y0:y0 + h, x0:x0 + w].astype(np.int64)
+    k = kind[np.maximum(L, 0)]
+    mine = own_px[y0:y0 + h, x0:x0 + w] == tag
+    if cut:
+        from scipy.cluster.vq import kmeans2
+        import organic
+        land = k == 1
+        ys, xs = np.nonzero(land)
+        n = max(2, int(round(len(ys) / cut)))
+        cen, _ = kmeans2(np.c_[ys, xs].astype(float), n, seed=7, minit="++")
+        seeds = sorted({(int(ys[np.argmin((ys - cy) ** 2 + (xs - cx) ** 2)]), int(xs[np.argmin((ys - cy) ** 2 + (xs - cx) ** 2)]))
+                        for cy, cx in cen})
+        piece = organic.split(ys, xs, seeds, seed=3)
+        L = np.where(land, -2, L)
+        L[ys, xs] = 10 ** 7 + piece
+        mine = land
+    img = np.empty((h, w, 3), np.uint8)
+    img[:] = (168, 190, 206)                              # sea
+    img[k == 2] = (156, 184, 206)                         # lakes
+    img[(k == 1) & ~mine] = (205, 200, 188)               # neighbours
+    img[(k == 1) & mine] = (236, 226, 200)                # the nation
+    edge = np.zeros((h, w), bool)
+    edge[:, 1:] |= L[:, 1:] != L[:, :-1]
+    edge[1:] |= L[1:] != L[:-1]
+    land = k == 1
+    img[edge & land] = (150, 138, 112)
+    big = np.asarray(Image.fromarray(img).resize((w * GUIDE_SCALE, h * GUIDE_SCALE), Image.NEAREST)).copy()
+    return png_uri(Image.fromarray(big)), x0, y0
+
+
+def size_guide(lab, kind, owners, states, size):
+    """the numbers and pictures of the province size guide (index.json `sizes`)"""
+    import borders
+    own_px = np.full(lab.shape, "", object)
+    tag_of = np.full(len(kind), "", object)
+    for s, g in enumerate(states):
+        tag_of[g] = owners[s]
+    own_px = tag_of[np.maximum(lab, 0)]
+    own_px[lab < 0] = ""
+    by = defaultdict(list)
+    for s, g in enumerate(states):
+        by[owners[s]] += [int(size[i]) for i in g]
+    crd, rou = np.array(by["CRD"]), np.array(by["ROU"])
+    land = np.array([v for vs in by.values() for v in vs])
+    _, used = borders.count(lab)
+    pics = {}
+    for key, tag, cut in (("dense", "ROU", None), ("usual", "CRD", None), ("sparse", SPARSE_AT, SPARSE_PX)):
+        pics[key] = _guide_pic(lab, kind, own_px, tag, cut)[0]
+    r10 = lambda v: int(round(float(v) / 10) * 10)
+    return dict(
+        usual=r10(np.median(crd)), usual_lo=r10(np.percentile(crd, 10)), usual_hi=r10(np.percentile(crd, 90)),
+        rouental=r10(np.median(rou)), dense=r10(np.percentile(np.r_[crd, rou], 10)), sparse=SPARSE_PX,
+        world=r10(np.median(land)), provinces=int(len(land)),
+        borders=used, limit=borders.LIMIT, per_province=round(used / max(1, len(kind)), 2),
+        crd_states=len([o for o in owners if o == "CRD"]), crd_provinces=int(len(crd)),
+        scale=GUIDE_SCALE, win=list(GUIDE_WIN), pics=pics)
+
+
 def main():
     p = np.load("work/provinces.npz")
     lab, kind = p["prov"], p["kind"]
@@ -426,7 +508,7 @@ def main():
                      concerns=[[t, nm, rb] for t, nm, _pic, rb, _cost in co["concerns"]], research=co["research"])
     json.dump(dict(built=__import__("datetime").date.today().isoformat(), w=W, h=H,
                    terrains=TERRAINS, ideologies=IDEOLOGY_NAMES, subtypes=subtypes, earth=earth, known=known,
-                   traits=traits, companies=companies,
+                   traits=traits, companies=companies, sizes=size_guide(lab, kind, owners, states, size),
                    nations=index,
                    ids=dict(w=IDS[0], h=IDS[1], tags=tags, px=b64z(ids))),
               open(OUT / "index.json", "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))

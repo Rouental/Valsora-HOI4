@@ -1,7 +1,9 @@
 """The Gazetteer's quick-start guide (2026-10-16, the author's overnight list: "a short illustrated walkthrough shown
-the first time someone opens their nation"): five steps, shown once in a browser the first time a player unlocks a
+the first time someone opens their nation"): six steps (the province sizes since 2026-10-17), shown once in a browser the first time a player unlocks a
 nation, never to the owner by itself; Next, Back, Skip, Escape; the Guide button shows it again; its map step follows
-the nation (map tools open, or the states not drawn yet); it fits a phone.
+the nation (map tools open, or the states not drawn yet); it fits a phone. And the province size guide (2026-10-17, the
+author: "maybe there should be a guide for province size?"): its step, the ruler beside the zoom buttons at the map's
+zoom, the Map tab's section, and a suggested area's size in provinces.
 
     python3 scripts/facts_export.py          # after a build: the map data the page reads
     python3 tests/gazetteer/guide.py         # PROBLEMS: none, screenshots in work/gazetteer_test/shots/
@@ -60,7 +62,7 @@ def friend(b, url, size, theme, pw, store):
     unlock(page, pw["ROU"])
     check(page.evaluate(shown()), f"{label}: no guide on the first unlock")
     steps = page.evaluate("guideSteps(app.N).length")
-    check(steps == 5, f"{label}: {steps} steps")
+    check(steps == 6, f"{label}: {steps} steps")
     check("Welcome to Rouental" in page.inner_text("#guide-card"), f"{label}: the first step doesn't name the nation")
     # the card has the focus (Next would take the Enter that unlocked the nation: the first test found it skipping a step)
     check(page.evaluate("document.activeElement && document.activeElement.id") == "guide-card", f"{label}: the card isn't focused")
@@ -77,10 +79,17 @@ def friend(b, url, size, theme, pw, store):
     page.click("#guide-card button:has-text('Back')")
     time.sleep(0.15)
     check("Welcome to" in page.inner_text("#guide-card"), f"{label}: Back didn't go back")
-    for i in range(4):
+    for i in range(5):
         page.click("#guide-card button:has-text('Next')")
         time.sleep(0.1)
         page.screenshot(path=str(H.SHOTS / f"guide_{i + 2}_{label}.png"))
+        if i == 1:  # the province sizes: three pictures loaded, the card on the screen
+            text = page.inner_text("#guide-card")
+            check("How big is a province?" in text and "Cardonia" in text, f"{label}: the sizes step: {text[:120]}")
+            pics = page.evaluate("[...document.querySelectorAll('#guide-card .sizepics img')].map(i => i.complete && i.naturalWidth)")
+            check(len(pics) == 3 and all(pics), f"{label}: the sizes step's pictures: {pics}")
+            box = page.evaluate("(() => { const r = document.getElementById('guide-card').getBoundingClientRect(); return [r.left, r.top, r.right, r.bottom]; })()")
+            check(box[0] >= 0 and box[1] >= 0 and box[2] <= size[0] and box[3] <= size[1], f"{label}: the sizes card runs off the screen: {box}")
     check("Your password" in page.inner_text("#guide-card"), f"{label}: the last step isn't the password's")
     # a key pressed while the guide is open doesn't reach the map (S would pick the Suggest tool)
     tool = page.evaluate("app.ui.tool")
@@ -89,6 +98,7 @@ def friend(b, url, size, theme, pw, store):
     page.click("#guide-card button:has-text('Start')")
     time.sleep(0.2)
     check(not page.evaluate(shown()), f"{label}: Start didn't close the guide")
+    sizes(page, label, size)
     check(page.evaluate("localStorage.getItem('gazetteer-guided')") == "1", f"{label}: the guide isn't remembered")
     # not again on this browser: a reload (the password remembered) and another nation
     page.reload()
@@ -121,6 +131,44 @@ def friend(b, url, size, theme, pw, store):
     check(not page.evaluate(shown()), f"{label}: Skip didn't close the guide")
     ctx.close()
     return errs
+
+
+def sizes(page, label, size):
+    """the ruler, the Map tab's section and a suggested area's size"""
+    check(page.evaluate("document.getElementById('sizes').hidden"), f"{label}: the ruler shows before it is asked for")
+    page.click("#sizebtn")
+    for _ in range(3):  # close enough for Cardonia's size to show
+        if page.evaluate("document.querySelectorAll('#sizes .sq').length"):
+            break
+        page.click("#zin")
+        time.sleep(0.15)
+    sq = page.evaluate("[...document.querySelectorAll('#sizes .sq')].map(e => e.getBoundingClientRect().width)")
+    check(len(sq) == 3 and sq[0] < sq[1] < sq[2], f"{label}: the ruler's squares: {sq}")
+    z = page.evaluate("[app.index.sizes.usual, app.index.sizes.sparse, app.view.s]")
+    if len(sq) == 3:
+        check(abs(sq[1] - (z[0] ** 0.5) * z[2]) < 1.5, f"{label}: the usual square isn't to scale: {sq[1]} at zoom {z[2]}")
+    page.click("#zin")
+    time.sleep(0.15)
+    sq2 = page.evaluate("[...document.querySelectorAll('#sizes .sq')].map(e => e.getBoundingClientRect().width)")
+    check(not sq2 or (len(sq) == 3 and sq2[1] > sq[1]) or "Zoom out" in page.inner_text("#sizes"), f"{label}: the ruler didn't follow the zoom: {sq} -> {sq2}")
+    r = page.evaluate("(() => { const a = document.getElementById('sizes').getBoundingClientRect(), b = document.querySelector('.mapctl').getBoundingClientRect(); return [a.right, b.left, a.left]; })()")
+    check(r[0] <= r[1] and r[2] >= 0, f"{label}: the ruler runs into the zoom buttons or off the map: {r}")
+    page.screenshot(path=str(H.SHOTS / f"sizes_ruler_{label}.png"))
+    page.click("#sizebtn")
+    check(page.evaluate("document.getElementById('sizes').hidden"), f"{label}: the ruler didn't hide")
+    # the Map tab: the section, folded, keeps its fold when the pane is drawn again; a suggested area's size
+    page.evaluate("showTab('map')")
+    time.sleep(0.2)
+    page.evaluate("document.querySelector('#pane-map .sizesec summary').click()")
+    page.evaluate("""edit('suggest', {s_test1: {type: 'area', pts: [[600, 780], [700, 780], [700, 840], [600, 840]], label: 'A test', note: ''}})""")
+    time.sleep(0.3)
+    page.evaluate("renderMapPane(true)")
+    time.sleep(0.2)
+    check(page.evaluate("document.querySelector('#pane-map .sizesec').open"), f"{label}: the section folded when the pane was drawn again")
+    text = page.inner_text("#pane-map")
+    check("About 6,000 map pixels: 38 provinces of Cardonia" in text, f"{label}: the area's size: {[l for l in text.splitlines() if 'map pixels' in l][:2]}")
+    page.screenshot(path=str(H.SHOTS / f"sizes_pane_{label}.png"), full_page=False)
+    page.evaluate("edit('suggest', {s_test1: null})")
 
 
 def main():

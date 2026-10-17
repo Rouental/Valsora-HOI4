@@ -231,6 +231,14 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   left out; `facts_export.py` puts them in `index.json`), and **Ask for a new trait** is a request of kind `trait`.
   `check_mod.py` checks every trait of ours against the game's own (country leader traits for rulers and advisors,
   unit leader traits for commanders), each advisor's slot and its own `idea_token` (mutation-tested, 6 of 6).
+  **Province sizes** (2026-10-17): `index.json` `sizes` (`facts_export.size_guide`): Cardonia's median and 10th / 90th
+  percentiles, Rouental's median, the dense size (their 10th percentile), the sparse example's size (420), the map's
+  median, its border count, limit and borders per province (`borders.count`), and three pictures as data URIs (a
+  150 x 96 window of Rouental's, Cardonia's and Belka's north land, the window holding most of that nation, drawn at 2x;
+  Belka's re-cut at 420 px by `organic.split` for the picture only). The page's `sizeGuideBody` (the guide's step and the
+  Map tab's folded section), `renderSizes` (the ruler, drawn at every `draw()`: squares of side sqrt(px) x the zoom) and
+  `sugArea` (a suggested area by the shoelace sum; a drawn state by the land `sugFill` kept) read them. Tested by
+  `guide.py` (the step, the ruler's scale and zoom, the section's fold, an area's estimate).
   **Political advisors and companies** (author, 2026-10-15: "allow people to create political advisors and
   companies"): political advisors are advisors of `political_advisor` (`{role: "advisor", slot:
   "political_advisor"}`), in a section of their own. Companies are `co-<id>` entries of the `people` document (so the
