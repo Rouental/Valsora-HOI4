@@ -1,15 +1,21 @@
-"""Loading screens in the deco style, from Valsora's own map: a proposal, not in the mod (the user, 2026-10-16: "Do maybe
-3 or 4 loading screens as suggested in 8 as well, but don't add them yet").
+"""The loading screens, in the deco style, from Valsora's own map: four pictures in the background list (2026-10-17,
+v0.10; drawn as a proposal on 2026-10-16, "don't add them yet", then the author: "Please start applying the proposed
+changes to all the UI screens").
 
-    python3 tools/proposals_loading.py   -> art/proposals/loading_screens/load_1..4.jpg (1920 x 1440) and sheet.png
+    python3 tools/make_loading.py          -> valsora_deco_ui/gfx/loadingscreens/valsora_load_1..4.dds (1920 x 1440),
+                                              their 192 x 144 pictures for the background picker
+                                              (gfx/interface/valsora_deco/menu/valsora_load_N_small.dds), and
+                                              build/preview_loading.png (each as a 16:9 screen shows it, the game's
+                                              loading bar and tip drawn where it puts them)
 
-The game's loading screens are gfx/loadingscreens/load_<n>.dds, 1920 x 1440 like the menu background (at 16:9 the
-middle 1080 rows show, from row 180); the game draws its loading bar over the top centre (about 1,400 x 100 px) and
-the tip over the bottom centre (about 1,400 x 150), with its two logos in the lower corners (interface/load_screen.gui),
-so the pictures keep their titles and detail clear of those. Each is drawn from the Valsora build's map (work/, the
-repository's root): 1 the world in gilt, 2 Valsora rising (the masthead's globe, large), 3 the Vale of Reibonne,
-4 the nations. sheet.png shows each as the game would (16:9), the bar and the tip drawn as plain boxes where the game
-puts its own.
+The game draws no picture of its own on the loading screen (interface/load_screen.gui): it shows the backgrounds of the
+background manager, the list `make_menu.py` writes (common/frontend/backgrounds/base_backgrounds.txt), the main menu's
+picture among them. At 16:9 the middle 1080 rows of a 1920 x 1440 picture show, from row 180; the game draws its loading
+bar over the top centre (about 1,400 x 100 px) and the tip over the bottom centre (about 1,400 x 150), with its two logos
+in the lower corners, so the pictures keep their titles and detail clear of those. Each is drawn from the Valsora build's
+map (work/, the repository's root), so run it again after the map changes (then commit the .dds files): 1 the world in
+gilt, 2 Valsora rising (the masthead's globe, large), 3 the Vale of Reibonne, 4 the nations. The bar and the tip are
+the Deco UI's too (gen_textures.py, the ld_ keys).
 """
 import json
 import os
@@ -20,14 +26,17 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont
 from scipy import ndimage as ndi
 
 import globe_art as GA
-from paths import ROOT
+from paths import ROOT, MOD, BUILD
+from ddsutil import write_dds
 
 ROOT = ROOT.rstrip("/") + "/"
 REPO = os.path.dirname(ROOT.rstrip("/")) + "/"
 sys.path.insert(0, REPO + "scripts")
 from common import COUNTRIES  # noqa: E402
 
-OUT = ROOT + "art/proposals/loading_screens/"
+OUT = MOD + "gfx/loadingscreens/"
+SMALL = MOD + "gfx/interface/valsora_deco/menu/"
+NAMES = [f"valsora_load_{i}" for i in range(1, 5)]   # make_menu.py lists them in the background manager
 W, H, TOP = 1920, 1440, 180                 # the picture, and the first row a 16:9 screen shows
 VIS = (TOP, TOP + 1080)
 TITLE_Y = TOP + 118                          # under the game's loading bar (the top 100 rows of the screen)
@@ -141,7 +150,11 @@ def rays(img, cx, cy, n=48, a=.07, r0=0):
 
 
 def save(img, name):
-    Image.fromarray(np.clip(img, 0, 255).astype(np.uint8)).save(OUT + name, quality=90, optimize=True)
+    """the picture as an uncompressed DDS, as the game's own loading screens are, and its small picture for the picker"""
+    im = Image.fromarray(np.clip(img, 0, 255).astype(np.uint8)).convert("RGBA")
+    write_dds(im, OUT + name + ".dds")
+    write_dds(im.convert("RGB").resize((192, 144), Image.LANCZOS).convert("RGBA"), SMALL + name + "_small.dds")
+    return im
 
 
 # ------------------------------------------------------------------ the map
@@ -397,36 +410,49 @@ def screen_nations(kind, owner, tags):
 
 
 # ------------------------------------------------------------------ the sheet: as the game would show them
-def sheet(names):
+def sheet(pictures):
+    """build/preview_loading.png: each picture as a 16:9 screen shows it, with the game's loading bar and tip (the Deco
+    UI's pictures for them, when gen_textures.py has drawn them) where load_screen.gui puts them"""
+    from ddsutil import read_dds
+    def piece(name):
+        try:
+            return read_dds(MOD + "gfx/interface/" + name + ".dds").convert("RGBA")
+        except Exception:
+            return None
+    status, tip = piece("Loadingscreen_loadingstatus"), piece("Loadingscreen_loadingtip")
+    bar_bg, bar_fill = piece("LoadingScreen_Progress_1"), piece("LoadingScreen_Progress_2")
+    f = ImageFont.truetype(FEDERO, 28)
+    f2 = ImageFont.truetype(FEDERO, 22)
     tiles = []
-    f = ImageFont.truetype(JOSEFIN, 22)
-    for n in names:
-        im = Image.open(OUT + n).crop((0, TOP, W, TOP + 1080)).convert("RGB")
+    for pic in pictures:
+        im = pic.crop((0, TOP, W, TOP + 1080)).convert("RGBA")
         d = ImageDraw.Draw(im, "RGBA")
-        # where the game draws its loading bar (top centre) and the tip (bottom centre): plain boxes here
-        d.rectangle((260, 0, 1660, 96), fill=(8, 12, 16, 210), outline=(201, 165, 90, 255))
-        d.rectangle((492, 62, 1426, 84), outline=(201, 165, 90, 255))
-        d.rectangle((494, 64, 1100, 82), fill=(46, 110, 96, 255))
-        d.text((960, 32), "Loading the map", font=f, fill=(244, 236, 217, 255), anchor="mm")
-        d.rectangle((260, 933, 1660, 1080), fill=(8, 12, 16, 210), outline=(201, 165, 90, 255))
-        d.text((960, 990), "The game's loading tip goes here.", font=f, fill=(244, 236, 217, 255), anchor="mm")
-        tiles.append(im.resize((960, 540), Image.LANCZOS))
+        if status is not None:     # the status window: CENTER_UP, its picture at x -700 (1400 wide)
+            im.alpha_composite(status, (960 - 700, 0))
+            if bar_bg is not None:
+                im.alpha_composite(bar_bg, (960 - 468, 62))
+                im.alpha_composite(bar_fill.crop((0, 0, 560, bar_fill.height)), (960 - 468, 62))
+        d.text((960, 13 + 20), "LOADING THE MAP", font=f, fill=(244, 236, 217, 255), anchor="mm")
+        if tip is not None:        # the tip window: CENTER_DOWN, its picture at y -147
+            im.alpha_composite(tip, (960 - 700, 1080 - 147))
+        d.text((960, 1080 - 57), "A loading tip, in the game's own words.", font=f2, fill=(244, 236, 217, 255), anchor="mm")
+        tiles.append(im.convert("RGB").resize((960, 540), Image.LANCZOS))
     out = Image.new("RGB", (1920 + 12, 1080 + 12), (11, 16, 20))
     for i, t in enumerate(tiles):
         out.paste(t, ((i % 2) * 972, (i // 2) * 552))
-    out.save(OUT + "sheet.png", optimize=True)
+    out.save(BUILD + "preview_loading.png", optimize=True)
 
 
 if __name__ == "__main__":
     os.makedirs(OUT, exist_ok=True)
+    os.makedirs(SMALL, exist_ok=True)
     kind, cont, rivers, owner, tags = world()
-    names = []
-    for i, (label, draw) in enumerate((("the world", lambda: screen_world(kind, cont)),
-                                       ("Valsora rising", screen_rising),
-                                       ("the Vale of Reibonne", lambda: screen_vale(kind, rivers, owner, tags)),
-                                       ("the nations", lambda: screen_nations(kind, owner, tags))), 1):
-        save(draw(), f"load_{i}.jpg")
-        names.append(f"load_{i}.jpg")
-        print(f"load_{i}.jpg: {label}")
-    sheet(names)
-    print("wrote", OUT)
+    pictures = []
+    for name, (label, draw) in zip(NAMES, (("the world", lambda: screen_world(kind, cont)),
+                                           ("Valsora rising", screen_rising),
+                                           ("the Vale of Reibonne", lambda: screen_vale(kind, rivers, owner, tags)),
+                                           ("the nations", lambda: screen_nations(kind, owner, tags)))):
+        pictures.append(save(draw(), name))
+        print(f"{name}.dds: {label}")
+    sheet(pictures)
+    print("wrote", OUT, "and", BUILD + "preview_loading.png")

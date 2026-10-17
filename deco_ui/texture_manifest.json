@@ -364,6 +364,335 @@
   "sig": "f9d7afea3d2e3bf6ca142c987869e2e2a41b8b4fcde99a9de64ad73d22a58c98"
  },
  {
+  "key": "bp_bar",
+  "path": "gfx/interface/unitcontrol/battleplantools_bg.dds",
+  "w": 641,
+  "h": 79,
+  "sig": "d1904e65945f386795bb4a32b16511d733357a8c490b4aa4f8f0712be5d23e3e"
+ },
+ {
+  "key": "bp_areadef",
+  "path": "gfx/interface/unitcontrol/battleplantools_areadef_conf_bg.dds",
+  "w": 347,
+  "h": 79,
+  "sig": "c4e63f8368336802f84e8bae0cfd57bb4f5f77bb91fdd855c4362d02a05fa584"
+ },
+ {
+  "key": "bp_planning",
+  "path": "gfx/interface/unitcontrol/battleplantools_planning_bg.dds",
+  "w": 148,
+  "h": 125,
+  "sig": "9b51adbf06aa7402849c4ec0e6fadf64ed1fd977a45df1d44ad7ceda818397a5"
+ },
+ {
+  "key": "bp_cohesion",
+  "path": "gfx/interface/unitcontrol/battleplantools_cohesion_bg.dds",
+  "w": 188,
+  "h": 125,
+  "sig": "e3268d9d4b74ed8f8cfe7aff296f16d801bf06750a10326c461991328acbeeea"
+ },
+ {
+  "key": "bp_proximity",
+  "path": "gfx/interface/unitcontrol/hq_proximity_settings_bg.dds",
+  "w": 214,
+  "h": 125,
+  "sig": "fd104482d7b3afbdce1c63b5e489eeb710323f0e6c61a4e78c7d733c12ec76ac"
+ },
+ {
+  "key": "bp_overlay",
+  "path": "gfx/interface/unitcontrol/selected_order_overlay.dds",
+  "w": 62,
+  "h": 61,
+  "sig": "e95b142416c854e0295ec7f5435554281d650b497bc41800dff3342d90055467"
+ },
+ {
+  "key": "bp_execute_strip",
+  "path": "gfx/interface/unitcontrol/plan_execution_small.dds",
+  "w": 81,
+  "h": 27,
+  "sig": "c1f379a5b9a9d6ac9b024a02fadb5e648dc0d06e6c5317a4971946f7ad6ff47c"
+ },
+ {
+  "key": "bp_exercise",
+  "path": "gfx/interface/exercise_icon.dds",
+  "w": 28,
+  "h": 27,
+  "sig": "0160d3197291d4ecdb284dad96b894aa6b63ec3212e7ab6861567eba1506183b"
+ },
+ {
+  "key": "bp_exercise_anim",
+  "path": "gfx/interface/exercise_anim_strip_big.dds",
+  "w": 520,
+  "h": 26,
+  "sig": "090a83a66555051a826d3ef0239bbaf9955368d0667ab81eef8a2ca3219169b7"
+ },
+ {
+  "key": "bp_exercise_max",
+  "path": "gfx/interface/exercise_icon_stop_at_max_icon.dds",
+  "w": 14,
+  "h": 14,
+  "sig": "8a541050232d9b4196dbb6b87dd927b453e368de3c58a71ebd1e9b0bdcd5b07b"
+ },
+ {
+  "key": "bp_order_area_defense_btn",
+  "path": "gfx/interface/unitcontrol/order_area_defense_btn.dds",
+  "w": 70,
+  "h": 34,
+  "sig": "e43b8cac03ede3b72a474cb72ad483257611c4c09e7e8cf23bbb4fea851fa0e1"
+ },
+ {
+  "key": "bp_order_assign_units_btn",
+  "path": "gfx/interface/unitcontrol/order_assign_units_btn.dds",
+  "w": 70,
+  "h": 34,
+  "sig": "2d289557395306c8232b1e2be14cddddaced86cdf935768385e8484a75ff50cd"
+ },
+ {
+  "key": "bp_order_delete_btn",
+  "path": "gfx/interface/unitcontrol/order_delete_btn.dds",
+  "w": 70,
+  "h": 34,
+  "sig": "a7d0ae12d664dc0f5750d543f5ea415b4c5aa975429fe1064bdb201eed78e513"
+ },
+ {
+  "key": "bp_order_draw_blitz_btn",
+  "path": "gfx/interface/unitcontrol/order_draw_blitz_btn.dds",
+  "w": 70,
+  "h": 34,
+  "sig": "e317aa09ab56b92b27478ab19ea520825fb9dd32c80ad6317d23371e598dd265"
+ },
+ {
+  "key": "bp_order_draw_defence_btn",
+  "path": "gfx/interface/unitcontrol/order_draw_defence_btn.dds",
+  "w": 70,
+  "h": 34,
+  "sig": "689b716979c6cbc3513a16c13e623f96ab51669ddefff773b8f20517dd44a343"
+ },
+ {
+  "key": "bp_order_draw_fallback_btn",
+  "path": "gfx/interface/unitcontrol/order_draw_fallback_btn.dds",
+  "w": 70,
+  "h": 34,
+  "sig": "f8051ca8c9e474c2859e09401c8b19483e72d7792980c8672d203d9368dd1924"
+ },
+ {
+  "key": "bp_order_draw_naval_inv_btn",
+  "path": "gfx/interface/unitcontrol/order_draw_naval_inv_btn.dds",
+  "w": 70,
+  "h": 34,
+  "sig": "e684ca514610212174d6229115476e63657a8b3389f4c105be02aaa98e0afa11"
+ },
+ {
+  "key": "bp_order_draw_offence_btn",
+  "path": "gfx/interface/unitcontrol/order_draw_offence_btn.dds",
+  "w": 70,
+  "h": 34,
+  "sig": "578acaabea57a008445c29343f525afc97f9b1da671c4284e6731191056ba59f"
+ },
+ {
+  "key": "bp_order_draw_paradrop_btn",
+  "path": "gfx/interface/unitcontrol/order_draw_paradrop_btn.dds",
+  "w": 70,
+  "h": 34,
+  "sig": "03728e4e1625f3c95d221c9c2495aa9a732ebf2b89e2274522d4d22146ac1758"
+ },
+ {
+  "key": "bp_order_reshape_btn",
+  "path": "gfx/interface/unitcontrol/order_reshape_btn.dds",
+  "w": 70,
+  "h": 34,
+  "sig": "3f5039dc539515a81057fdbd18633883d3fd5e149424370817354751023c2b9c"
+ },
+ {
+  "key": "bp_order_unassign_units_btn",
+  "path": "gfx/interface/unitcontrol/order_unassign_units_btn.dds",
+  "w": 70,
+  "h": 34,
+  "sig": "9eb7f73e46690ea4a419e377bff464d686e30dcad37e0e6e79da1f151e50217a"
+ },
+ {
+  "key": "bp_order_draw_naval_inv_with_harbor_btn",
+  "path": "gfx/interface/unitcontrol/order_draw_naval_inv_with_harbor_btn.dds",
+  "w": 71,
+  "h": 32,
+  "sig": "d66f279757db7c461a8e79d7bf60fa3258e5d1f476ad754f0f06f524b65aa8d8"
+ },
+ {
+  "key": "bp_cohesion_balanced",
+  "path": "gfx/interface/unitcontrol/cohesion_balanced.dds",
+  "w": 80,
+  "h": 36,
+  "sig": "4a0176ee81e3801f592784b8623c18840d18f83454b004bc8b4071d828abbb1c"
+ },
+ {
+  "key": "bp_cohesion_immobile",
+  "path": "gfx/interface/unitcontrol/cohesion_immobile.dds",
+  "w": 80,
+  "h": 36,
+  "sig": "baa4bd421ed0679a6da5ec1a6cd38fbe2bd4a12a04ed40f06721d70449d4181a"
+ },
+ {
+  "key": "bp_cohesion_loose",
+  "path": "gfx/interface/unitcontrol/cohesion_loose.dds",
+  "w": 80,
+  "h": 36,
+  "sig": "abdf7fa41ec02e53b0490a5d96bdf086af96e1384dd45a98153ec8c435784b06"
+ },
+ {
+  "key": "bp_cohesion_strict",
+  "path": "gfx/interface/unitcontrol/cohesion_strict.dds",
+  "w": 80,
+  "h": 36,
+  "sig": "7fc62dc7fa77d6f902fffb215f00671f0a34d1481ad17df527c69a37d93ebae8"
+ },
+ {
+  "key": "bp_execute_fast",
+  "path": "gfx/interface/unitcontrol/execute_fast.dds",
+  "w": 80,
+  "h": 36,
+  "sig": "1dd0a7cb60b01b61fe05110c12bfadc4f31b60331c4ed04ac2709cb264274df1"
+ },
+ {
+  "key": "bp_execute_mid",
+  "path": "gfx/interface/unitcontrol/execute_mid.dds",
+  "w": 80,
+  "h": 36,
+  "sig": "9668ee4cf43ad90bb9056f3dda6744c7e434e8f5a5a5093191255e4e0457287c"
+ },
+ {
+  "key": "bp_execute_slow",
+  "path": "gfx/interface/unitcontrol/execute_slow.dds",
+  "w": 80,
+  "h": 36,
+  "sig": "d20e7e8760dfd034343ed7805e0e6fdbc5e0da330f36e083add23e994d6dfcb4"
+ },
+ {
+  "key": "bp_proximity_close",
+  "path": "gfx/interface/unitcontrol/proximity_close.dds",
+  "w": 80,
+  "h": 36,
+  "sig": "d962d81ccb7ab161326eb9f67864990dea8cb866b02f41b967aca2855c65511c"
+ },
+ {
+  "key": "bp_proximity_far",
+  "path": "gfx/interface/unitcontrol/proximity_far.dds",
+  "w": 80,
+  "h": 36,
+  "sig": "afb073024b1140d3df3f1e27599d42876d4e2c23f8c096c26258e3d0a02ef324"
+ },
+ {
+  "key": "bp_proximity_free_control",
+  "path": "gfx/interface/unitcontrol/proximity_free_control.dds",
+  "w": 80,
+  "h": 36,
+  "sig": "242a0ac303c1a38e64bf251ccb413a9f94ffa7f1131ef403a34edb3ec5c8703d"
+ },
+ {
+  "key": "bp_proximity_frontline",
+  "path": "gfx/interface/unitcontrol/proximity_frontline.dds",
+  "w": 80,
+  "h": 36,
+  "sig": "96e67b625ffd693565c7e3ebc81690239ae49db79343ba1f1291222e15ff51d3"
+ },
+ {
+  "key": "bp_proximity_medium",
+  "path": "gfx/interface/unitcontrol/proximity_medium.dds",
+  "w": 80,
+  "h": 36,
+  "sig": "6f4491a8e35242f730f7f7ce449bf8abc4895d0180059dc1c026e6a5cdffc701"
+ },
+ {
+  "key": "bp_garr_airbase",
+  "path": "gfx/interface/unitcontrol/garr_airbase.dds",
+  "w": 80,
+  "h": 36,
+  "sig": "e42c26b6b5b825523fb19ae6221aaa2c1cc0c5cf2e2e1076f8de00a17e5c36df"
+ },
+ {
+  "key": "bp_garr_borders",
+  "path": "gfx/interface/unitcontrol/garr_borders.dds",
+  "w": 80,
+  "h": 36,
+  "sig": "ac1c074e640d3559792e6eef9ccffd2c1d01d7d9869806e4d5f37f8919a5db18"
+ },
+ {
+  "key": "bp_garr_coastline",
+  "path": "gfx/interface/unitcontrol/garr_coastline.dds",
+  "w": 80,
+  "h": 36,
+  "sig": "dd1e8ab46f6d7bdeda47818ec769965bcd17d2008b722027a43ebdfc4baf1db5"
+ },
+ {
+  "key": "bp_garr_facility",
+  "path": "gfx/interface/unitcontrol/garr_facility.dds",
+  "w": 80,
+  "h": 36,
+  "sig": "59f5347c3fcb153ab2e4e4b0f61f643db5dd21514010379dbcad6818ebc50895"
+ },
+ {
+  "key": "bp_garr_fort",
+  "path": "gfx/interface/unitcontrol/garr_fort.dds",
+  "w": 80,
+  "h": 36,
+  "sig": "4b3b7a8242177e3634ce76259f8703453d6c6c9407e4ed76ed792908e4d7da80"
+ },
+ {
+  "key": "bp_garr_port",
+  "path": "gfx/interface/unitcontrol/garr_port.dds",
+  "w": 80,
+  "h": 36,
+  "sig": "d5de13bb4f1859de1c11d3a90325a42dce65e5bb9922772431e526b9e2bcdfc5"
+ },
+ {
+  "key": "bp_garr_rail",
+  "path": "gfx/interface/unitcontrol/garr_rail.dds",
+  "w": 80,
+  "h": 36,
+  "sig": "e5156aa85a9dd48aae462945f9ed2dccf56295db8115f55c62a45439a0ec6cc5"
+ },
+ {
+  "key": "bp_garr_vp",
+  "path": "gfx/interface/unitcontrol/garr_vp.dds",
+  "w": 80,
+  "h": 36,
+  "sig": "edc94e66bd9c6bab3d1cea538f98ec264c2d293a739a03bf1261ccedbaa6b9ea"
+ },
+ {
+  "key": "wf_w_close",
+  "path": "gfx/interface/tiles/tiled_window_w_close.dds",
+  "w": 192,
+  "h": 192,
+  "sig": "f2242e6bbd1369906cd002e161c57bbe1b4827dfe5c66687ddc3fbed58bf706e"
+ },
+ {
+  "key": "wf_pol_goal",
+  "path": "gfx/interface/tiles/tiled_window_pol_goal.dds",
+  "w": 382,
+  "h": 382,
+  "sig": "b142a911b2105246f0f1ffb68f803aade4c27f27cd4d3357d9472fb6f247cd31"
+ },
+ {
+  "key": "wf_pol_goal_popup",
+  "path": "gfx/interface/pol_goal_popup_bg.dds",
+  "w": 480,
+  "h": 382,
+  "sig": "9b895767f7cf54e56ee51f77a2943a0f4034b1db294c47c46fff3d241f02f5fe"
+ },
+ {
+  "key": "wf_hint",
+  "path": "gfx/interface/tutorial/hint_bg.dds",
+  "w": 613,
+  "h": 576,
+  "sig": "e5937174bb8970c69a0d3732cdf9e50a1d41a154e7a4a2906bcff14b67859174"
+ },
+ {
+  "key": "wf_tension",
+  "path": "gfx/interface/world_tension_bg.dds",
+  "w": 527,
+  "h": 534,
+  "sig": "5f30f43a77897e09c33badec8ac6aec4a304da3f1c50ef4107bcf359c4368dc4"
+ },
+ {
   "key": "mm_column",
   "path": "gfx/interface/mapmode/mapmode_main_bg.dds",
   "w": 87,
@@ -1748,5 +2077,103 @@
   "w": 172,
   "h": 232,
   "sig": "f38fef8f52d2381292e189453587a6a1b62c00924a15f5a021f5f8d8ce5052bf"
+ },
+ {
+  "key": "sc_up",
+  "path": "gfx/interface/scroll_up.dds",
+  "w": 16,
+  "h": 16,
+  "sig": "34f7ddca46e15c2c53d5e72957aa6086e1e1ccc631d1adac062cffe66e70b5da"
+ },
+ {
+  "key": "sc_right",
+  "path": "gfx/interface/scroll_right.dds",
+  "w": 16,
+  "h": 16,
+  "sig": "70ec5bc9f8ba9cab3e9cf8c82a3644839141c54755dd8ae6245e9421a0478944"
+ },
+ {
+  "key": "sc_down",
+  "path": "gfx/interface/scroll_down.dds",
+  "w": 16,
+  "h": 16,
+  "sig": "bc9a5c60c3a07a0b9eb89ba5596f02801600f037e2a13c32e4d2133c45a0ab56"
+ },
+ {
+  "key": "sc_left",
+  "path": "gfx/interface/scroll_left.dds",
+  "w": 16,
+  "h": 16,
+  "sig": "2e874d8668af86adfd2dac5648178e081d5a650561c85c730b060b6337aa401d"
+ },
+ {
+  "key": "sc_thumb",
+  "path": "gfx/interface/scroll_drager.dds",
+  "w": 16,
+  "h": 16,
+  "sig": "048f9dffcb940f3074cad83d598edd95d643068babfefd8e02b5b42a1a34f71c"
+ },
+ {
+  "key": "sc_track",
+  "path": "gfx/interface/scroll_track.dds",
+  "w": 12,
+  "h": 12,
+  "sig": "444016595bd0fb25ed435cdf4a5a58371c74d9ef2eec67c7a0586bce3264a1d4"
+ },
+ {
+  "key": "sc_track_h",
+  "path": "gfx/interface/scroll_track_horisontal.dds",
+  "w": 12,
+  "h": 12,
+  "sig": "4e56f1acba42fb0a180e265b6491b05ae70b081de3345aa6c4838f43bbbbe6b9"
+ },
+ {
+  "key": "sc_backdrop",
+  "path": "gfx/interface/scrollbar_vertical_bg.dds",
+  "w": 18,
+  "h": 156,
+  "sig": "ef412e25988e31ddcfd835b795ac1b22da0fe09d8f0b5f201c8f6ae0ee036c1f"
+ },
+ {
+  "key": "sc_backdrop_h",
+  "path": "gfx/interface/scrollbar_horisontal_bg.dds",
+  "w": 156,
+  "h": 18,
+  "sig": "cf3955630c94252b806398303ad0078a8b8098442882b6edd775e0c041d241a8"
+ },
+ {
+  "key": "sc_slider_bar",
+  "path": "gfx/interface/slider_bg.dds",
+  "w": 404,
+  "h": 42,
+  "sig": "bf49ba940771b9ffa4774eac765097eaad0af5a5b1412a3fd45c56dbe1e30db5"
+ },
+ {
+  "key": "ld_status",
+  "path": "gfx/interface/Loadingscreen_loadingstatus.dds",
+  "w": 1400,
+  "h": 92,
+  "sig": "2b17655044665ff2ebc4ca08c9e09e865ea5ac90ebd8eb37b3fddc329b0883d6"
+ },
+ {
+  "key": "ld_tip",
+  "path": "gfx/interface/Loadingscreen_loadingtip.dds",
+  "w": 1400,
+  "h": 148,
+  "sig": "76cdb06a0aab4c17e88aecd40c669d2257d56602f4e40cbcdb8924bc02436547"
+ },
+ {
+  "key": "ld_track",
+  "path": "gfx/interface/LoadingScreen_Progress_1.dds",
+  "w": 934,
+  "h": 40,
+  "sig": "8f7f48a7bab7b8b8eba5cd996e905e9263f65ab62746f7aa3bb58cd347652e33"
+ },
+ {
+  "key": "ld_fill",
+  "path": "gfx/interface/LoadingScreen_Progress_2.dds",
+  "w": 934,
+  "h": 40,
+  "sig": "4fdb9e4c8bb9249043b93631a117001d8da39b5b1bcc93f3a970853bd5281fb1"
  }
 ]

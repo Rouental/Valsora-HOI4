@@ -199,6 +199,18 @@ tools/
   make_research.py          countrytechtreeview.gui (from Valsora's copy) and doctrines/doctrines_view.gui: the focus tree's
                             notched header (v0.9); --research-only for the Valsora build
   designer_art.py           the designers' and the commander pickers' pictures (v0.9; gen_textures.py adds them)
+  art_util.py               the helpers gen_textures.py and the art modules share (v0.10, moved out of gen_textures.py
+                            unchanged): chamfer(), bar(), lit_bar(), frames(), vanilla_frames(), gilt(), img_tag()
+  *_art.py                  art modules (v0.10): each a list ADDS = [(key, path, w, h, function -> html)], which
+                            gen_textures.py draws (ART_MODULES): battleplan_art.py (the battle plan toolbar, bp_),
+                            window_art.py (the window frames the core skin missed, wf_), mapview_art.py (the selected
+                            armies', fleets' and operatives' badges, mv_), combat_art.py (the land battle, cb_),
+                            diplo_art.py (the diplomatic action windows, dp_), setup_art.py (game setup, gs_),
+                            popup_art.py (the sometimes-seen windows of one picture each, pp_)
+  make_loading.py           the four loading screens (v0.10; drawn as a proposal on 2026-10-16): run by hand, needs the
+                            Valsora build's work/; build/preview_loading.png
+  preview_battleplan.py     build/preview_battleplan.png (+ _vanilla); preview_windows.py, preview_mapviews.py,
+                            preview_combat.py, preview_diplo.py, preview_setup.py, preview_popups.py likewise (v0.10)
   medallion_check.py        the windows the medallion would hide (v0.9): every top-level window in the top left corner
                             is MOVED, NOTCHED or REVIEWED with a reason; validate_preview.py runs it and its selftest
   preview_research.py       build/preview_research.png, preview_doctrines.png (+ _vanilla)
@@ -501,6 +513,14 @@ Build order matters. `gen_fonts` runs first because `layout.py` measures strings
   base_backgrounds.txt` holds `name = { }` entries for `gfx/loadingscreens/<name>.dds`, plus a
   `GFX_<name>_small` (192x144) sprite for the picker. The mod's `base_backgrounds.txt` **replaces**
   the game's, so only the Valsora background is listed. **(in game)** The Valsora background shows.
+- **The loading screen** (`load_screen.gui`) has no picture of its own: as far as the game's files show, its list of
+  backgrounds is also its list of loading pictures (the game's own lists its nine `load_1` ... `load_9` beside the DLCs' menu pictures). Since
+  v0.10 the list is the menu's picture and then the four loading screens (`make_loading.py`). **Assumed, to see in
+  game:** that the menu keeps the first entry as its default (the game's file says the default "will be decided by
+  latest dlc"; ours name no DLC), and which picture the loading screen shows (one of the list, or the one the menu's
+  "Change background" picked). Its bar and tip are the Deco UI's (`ld_` in `gen_textures.py`, at the game's sizes:
+  `Loadingscreen_loadingstatus` 1400 x 92, `Loadingscreen_loadingtip` 1400 x 148, the progress bar's two 934 x 40
+  pictures), the texts on them the game's fonts (`loadscreen_header`, `loadscreen_tip`, redrawn).
 - The bottom panel (`mainmenu_panel_bottom`, 1320x140) is anchored `CENTER_DOWN` (bare, see the
   Orientation note above) at `(-660, -166)` with no `Origo`. v0.4.5 is the first build in which the
   game accepts that anchor **(assumed** until the user's next screenshot**)**. It has
@@ -719,7 +739,20 @@ the files it embeds, with the project's own folder written `<root>`, so it is th
 list as stale), and a texture whose signature matches and whose file exists is skipped. `--all` redraws all;
 `gen_textures.py <prefix> ...` those whose key starts with a prefix (`lg_`, `ev_` ...); `--sign` draws nothing and
 records the textures on disk as drawn from today's code (after a change to the signature itself). A redraw changes a
-few anti-aliased pixels: `restore_noise.py` puts those textures back.
+few anti-aliased pixels: `restore_noise.py` puts those textures back. `VALSORA_TEXTURE_MANIFEST=<file>` (v0.10) reads and
+writes another manifest, so a test drawing (a helper's, side by side with others) leaves the committed one alone; the
+textures it draws then read as stale to `validate_preview` until they are drawn with the real one.
+
+**The art modules (v0.10).** A screen whose look is a set of the game's pictures, redrawn at its paths and sizes, has a
+module of its own (`battleplan_art.py`, `window_art.py`, `mapview_art.py` ...: the project map) with
+`ADDS = [(key, path, w, h, function)]`; `gen_textures.py` imports each in `ART_MODULES` and draws the function's HTML
+(designer_art.py, v0.9, was the first). Every module has a key prefix of its own and a preview beside the game's (the
+`_vanilla` one shows the game's art: only sent, never committed). The loading bar and tip (`ld_`) and the scroll bars
+and sliders (`sc_`) are in `gen_textures.py` itself.
+
+**make_loading.py** (v0.10, run by hand). The four loading screens from Valsora's map (`gfx/loadingscreens/
+valsora_load_1..4.dds`, 1920 x 1440, and their 192 x 144 pictures), drawn from the Valsora build's `work/`: run it again
+after the map changes, then rebuild. `make_menu.py` lists them in `base_backgrounds.txt` after the menu's own picture.
 
 **make_menu.py.**
 

@@ -15,6 +15,8 @@ from PIL import Image
 from playwright.sync_api import sync_playwright
 from ddsutil import write_dds as _wd
 from icons import icon as _icon
+from art_util import (STRIPES, BAR_FILL, LIT_FILL, DIM_FILL, GOLD, chamfer, bar, frames, lit_bar,  # noqa: F401
+                      GILT_RAMP, vanilla_frames, gilt, img_tag)
 
 from paths import MOD, PNG, ART, BUILD, FONTS_SRC, CHROMIUM, MANIFEST, ROOT
 os.makedirs(PNG, exist_ok=True)
@@ -58,10 +60,6 @@ body{background:transparent;font-family:sans-serif}
 .ico{display:flex;align-items:center;justify-content:center}
 svg{display:block}
 """
-
-def chamfer(c):
-    return f"polygon({c}px 0,calc(100% - {c}px) 0,100% {c}px,100% calc(100% - {c}px),calc(100% - {c}px) 100%,{c}px 100%,0 calc(100% - {c}px),0 {c}px)"
-
 
 
 def svg(name, size=24, color="#E3C77E", sw=1.5):
@@ -144,30 +142,6 @@ for (w, h) in [(148, 34), (221, 34), (123, 34), (261, 34), (359, 34), (223, 32),
 # contents follow the deco style with no .gui change. Two-frame sprites keep vanilla's order, which differs per
 # sprite: the tabs, the diplomacy filters and sort_button_100x29_2 are lit in frame 1 (countrytechnologyview.gui
 # starts its shown tab at frame 1), sort_button_202x29 and the checkbox in frame 2.
-STRIPES = "repeating-linear-gradient(90deg,rgba(255,255,255,.025) 0 1px,transparent 1px 7px)"
-BAR_FILL = "linear-gradient(180deg,#1A252C,#0E1519)"
-LIT_FILL = "linear-gradient(180deg,#2C665A,#163A33)"           # jade, as the top bar's lit buttons
-DIM_FILL = "linear-gradient(180deg,#141D22,#0B1014)"
-
-
-def bar(fill=BAR_FILL, rim="rgba(201,165,90,.6)", c=5, shine=.22):
-    """a chamfered lacquer bar with a gilt hairline: header strips, list headers, footers, tabs"""
-    return (f'<div style="position:absolute;inset:0;background:{rim};clip-path:{chamfer(c)}"></div>'
-            f'<div style="position:absolute;inset:1px;clip-path:{chamfer(max(1, c - .4))};background:{STRIPES},{fill}"></div>'
-            f'<div style="position:absolute;left:{c + 3}px;right:{c + 3}px;top:2px;height:1px;background:rgba(241,220,156,{shine})"></div>')
-
-
-def frames(w, h, *parts):
-    fw = w // len(parts)
-    return "".join(f'<div style="position:absolute;left:{i * fw}px;top:0;width:{fw}px;height:{h}px">{p}</div>'
-                   for i, p in enumerate(parts))
-
-
-def lit_bar(c=5):
-    return bar(LIT_FILL, GOLD, c, .35)
-
-
-GOLD = "linear-gradient(180deg,#E8CD84,#8B6A2C)"
 SHARED = {   # vanilla path: (w, h, html)
     "gfx/interface/closebutton.dds": (32, 33,
         '<div style="position:absolute;left:5px;top:5.5px;width:22px;height:22px;transform:rotate(45deg);border:1px solid #E3C77E;'
@@ -205,10 +179,13 @@ SHARED = {   # vanilla path: (w, h, html)
 for rel, (w, h, html) in SHARED.items():
     add("shared_" + rel.split("/")[-1][:-4], rel, w, h, html)
 
-# v0.9: the designers' and the commander pickers' background pictures (designer_art.py), at the game's paths and sizes
-import designer_art as _DA  # noqa: E402
-for _key, _rel, _w, _h, _fn in _DA.ADDS:
-    add(_key, _rel, _w, _h, _fn())
+# pictures drawn in modules of their own, each an ADDS list of (key, path, w, h, function): the designers' and the
+# commander pickers' (v0.9, designer_art.py), and the screens docs/SCREEN_INVENTORY.md suggested (2026-10-17)
+import importlib as _il  # noqa: E402
+ART_MODULES = ["designer_art", "battleplan_art", "mapview_art", "combat_art", "diplo_art", "setup_art", "window_art", "popup_art"]
+for _m in ART_MODULES:
+    for _key, _rel, _w, _h, _fn in _il.import_module(_m).ADDS:
+        add(_key, _rel, _w, _h, _fn())
 
 # ---------------------------------------------------------------- map modes and minimap (lower right, v0.5)
 # Replaced at their vanilla paths, sizes and frame counts (interface/mapmodes_interface.gui and Valsora's
@@ -221,36 +198,6 @@ import io as _io
 from paths import VANILLA as _VANILLA
 
 MM = "gfx/interface/mapmode/"
-GILT_RAMP = [(0.0, (46, 32, 12)), (0.35, (122, 92, 38)), (0.62, (201, 165, 90)), (0.85, (232, 205, 132)), (1.0, (251, 236, 186))]
-
-
-def vanilla_frames(rel, n):
-    im = Image.open(_VANILLA + rel).convert("RGBA")
-    fw = im.width // n
-    return [im.crop((i * fw, 0, (i + 1) * fw, im.height)) for i in range(n)]
-
-
-def gilt(img, gain=1.0, alpha=1.0, grey=0.0):
-    """a vanilla glyph in gilt: its shading mapped onto the gilt ramp, its alpha kept"""
-    a = np.asarray(img, dtype=float)
-    lum = a[..., :3].mean(-1)
-    m = a[..., 3] > 96
-    lo, hi = (np.percentile(lum[m], 4), np.percentile(lum[m], 99)) if m.any() else (0.0, 255.0)
-    tt = np.clip((lum - lo) / max(1.0, hi - lo) * gain, 0, 1)
-    xs = [s for s, _ in GILT_RAMP]
-    col = np.stack([np.interp(tt, xs, [c[i] for _, c in GILT_RAMP]) for i in range(3)], -1)
-    if grey:
-        col = col * (1 - grey) + col.mean(-1, keepdims=True) * grey
-    return Image.fromarray(np.clip(np.dstack([col, a[..., 3] * alpha]), 0, 255).astype(np.uint8), "RGBA")
-
-
-def img_tag(img, x=0, y=0):
-    b = _io.BytesIO()
-    img.save(b, "PNG")
-    return (f'<img src="data:image/png;base64,{base64.b64encode(b.getvalue()).decode()}" '
-            f'style="position:absolute;left:{x}px;top:{y}px;width:{img.width}px;height:{img.height}px">')
-
-
 def octagon(w, h, c):
     return f"polygon({c}px 0,{w - c}px 0,{w}px {c}px,{w}px {h - c}px,{w - c}px {h}px,{c}px {h}px,0 {h - c}px,0 {c}px)"
 
@@ -1646,6 +1593,144 @@ add("ev_leader_frame", EV + "event_leader_frame.dds", 172, 232,
     f'<path d="{LF_BODY}" fill="none" stroke="url(#g)" stroke-width="1.4"/>'
     f'<path d="{_cham(5, 5, 167, 227, 5)}" fill="none" stroke="rgba(201,165,90,.4)"/>'
     f'<path d="{LF_HOLE}" fill="none" stroke="url(#g)" stroke-width="1.6"/></svg>')
+
+# ---------------------------------------------------------------- scroll bars and sliders (v0.10)
+# The game's scroll bars (interface/core.gui: standardlistbox_slider, right_vertical_slider and their kin) and value
+# sliders (trade, lend-lease, the popups: GFX_slider_bg behind a horizontal scroll bar) draw these pictures, replaced
+# at their paths and sizes (general_stuff.gfx, countrytradeview.gfx): the arrows and the thumb 16 x 16, the track a
+# cornered tile 12 x 12 (border 4) stretched along the bar, the bars' backdrops cornered tiles 18 x 156 (border y 52)
+# and 156 x 18 (border x 52), the value slider's bar 404 x 42 with its groove where the game's is (x 52-352: the
+# scroll bar starts 52 px into it, its track 4 px down from y 13). Until v0.10 they were the game's grey metal.
+SC = "gfx/interface/"
+
+
+def sc_arrow(rot):
+    """a gilt triangle pointing up, turned by rot degrees, in a 16 x 16 square"""
+    return ('<svg width="16" height="16" viewBox="0 0 16 16" style="position:absolute;left:0;top:0">'
+            '<defs><linearGradient id="sa" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F1DC9C"/>'
+            '<stop offset="1" stop-color="#9C7A36"/></linearGradient></defs>'
+            f'<g transform="rotate({rot} 8 8)"><path d="M8 3.5L13 11.5H3z" fill="url(#sa)" stroke="#0B1014" stroke-width="1" '
+            'stroke-linejoin="round"/></g></svg>')
+
+
+def sc_thumb():
+    return ('<div style="position:absolute;left:3px;top:3px;width:10px;height:10px;transform:rotate(45deg);'
+            f'background:{GOLD_V};box-shadow:0 0 0 1px #0B1014"></div>'
+            '<div style="position:absolute;left:5.5px;top:5.5px;width:5px;height:5px;transform:rotate(45deg);background:#0B1014"></div>'
+            '<div style="position:absolute;left:7px;top:7px;width:2px;height:2px;transform:rotate(45deg);background:#F1DC9C"></div>')
+
+
+def sc_track(horizontal):
+    """a slim dark rail with gilt hairlines along it, its ends rounded inside the tile's 4 px corners"""
+    a, b = ("top:4px;height:4px;left:1px;right:1px", "left:1px;right:1px") if horizontal else ("left:4px;width:4px;top:1px;bottom:1px", "")
+    return (f'<div style="position:absolute;{a};background:#070A0C;border-radius:2px;'
+            'box-shadow:0 0 0 1px rgba(201,165,90,.55)"></div>')
+
+
+def sc_backdrop(horizontal):
+    """the strip behind a scroll bar: lacquer between gilt hairlines, a cross rule near each end (in the tile's fixed
+    52 px ends, clear of the arrows), the middle plain so it repeats seamlessly"""
+    if horizontal:
+        return ('<div style="position:absolute;left:0;right:0;top:1px;bottom:1px;background:' + STRIPES + ',linear-gradient(180deg,#141E24,#0B1115)"></div>'
+                '<div style="position:absolute;left:0;right:0;top:1px;height:1px;background:rgba(201,165,90,.55)"></div>'
+                '<div style="position:absolute;left:0;right:0;bottom:1px;height:1px;background:rgba(201,165,90,.55)"></div>'
+                '<div style="position:absolute;left:22px;top:3px;bottom:3px;width:1px;background:rgba(201,165,90,.45)"></div>'
+                '<div style="position:absolute;right:22px;top:3px;bottom:3px;width:1px;background:rgba(201,165,90,.45)"></div>')
+    return ('<div style="position:absolute;top:0;bottom:0;left:1px;right:1px;background:' + STRIPES + ',linear-gradient(90deg,#141E24,#0B1115)"></div>'
+            '<div style="position:absolute;top:0;bottom:0;left:1px;width:1px;background:rgba(201,165,90,.55)"></div>'
+            '<div style="position:absolute;top:0;bottom:0;right:1px;width:1px;background:rgba(201,165,90,.55)"></div>'
+            '<div style="position:absolute;top:22px;left:3px;right:3px;height:1px;background:rgba(201,165,90,.45)"></div>'
+            '<div style="position:absolute;bottom:22px;left:3px;right:3px;height:1px;background:rgba(201,165,90,.45)"></div>')
+
+
+def sc_slider_bar():
+    """the value slider's bar: a chamfered lacquer plate, its groove where the game's is, a diamond in each end cap"""
+    pts = [(9, 5), (395, 5), (402, 12), (402, 30), (395, 37), (9, 37), (2, 30), (2, 12)]
+    out = (f'<div style="position:absolute;inset:0;background:{GOLD_V};clip-path:{poly(pts)}"></div>'
+           f'<div style="position:absolute;inset:0;background:{LAC},linear-gradient(180deg,#18232A,#0D1418);clip-path:{poly(inset_poly(pts, 1.2))}"></div>'
+           '<div style="position:absolute;left:50px;width:304px;top:12px;height:18px;background:#070A0C;'
+           'box-shadow:inset 0 0 0 1px rgba(201,165,90,.6),inset 0 2px 3px rgba(0,0,0,.7)"></div>')
+    for cx in (26, 378):
+        out += (f'<div style="position:absolute;left:{cx - 5}px;top:16px;width:10px;height:10px;transform:rotate(45deg);'
+                'background:#0B1014;box-shadow:0 0 0 1.2px #C9A55A"></div>'
+                f'<div style="position:absolute;left:{cx - 2}px;top:19px;width:4px;height:4px;transform:rotate(45deg);background:#E3C77E"></div>'
+                f'<div style="position:absolute;left:{cx - 18}px;top:21px;width:9px;height:1px;background:rgba(201,165,90,.5)"></div>'
+                f'<div style="position:absolute;left:{cx + 9}px;top:21px;width:9px;height:1px;background:rgba(201,165,90,.5)"></div>')
+    return out
+
+
+for _k, _rot in [("up", 0), ("right", 90), ("down", 180), ("left", 270)]:
+    add("sc_" + _k, SC + f"scroll_{_k}.dds", 16, 16, sc_arrow(_rot))
+add("sc_thumb", SC + "scroll_drager.dds", 16, 16, sc_thumb())
+add("sc_track", SC + "scroll_track.dds", 12, 12, sc_track(False))
+add("sc_track_h", SC + "scroll_track_horisontal.dds", 12, 12, sc_track(True))
+add("sc_backdrop", SC + "scrollbar_vertical_bg.dds", 18, 156, sc_backdrop(False))
+add("sc_backdrop_h", SC + "scrollbar_horisontal_bg.dds", 156, 18, sc_backdrop(True))
+add("sc_slider_bar", SC + "slider_bg.dds", 404, 42, sc_slider_bar())
+
+
+# ---------------------------------------------------------------- the loading screen's bar and tip (v0.10)
+# interface/load_screen.gui: the status window (CENTER_UP) draws Loadingscreen_loadingstatus (1400 x 92) at x -700, its
+# text (loadscreen_header: the game's hoi_30header, redrawn by game_fonts.py) in y 13-53 and the progress bar (934 x 35,
+# GFX_loadingstatus_progress: textureFile1 LoadingScreen_Progress_2 is the fill, textureFile2 _1 the track) at
+# (-468, 62); the tip window (CENTER_DOWN) draws Loadingscreen_loadingtip (1400 x 148) at y -147 and its text centred
+# about y -57. The game's pictures use x 211-1188 of their 1400 px; so do these: a lacquer plate hanging from the
+# screen's top edge, the track in its lower part, and a plate standing on the bottom edge under the tip.
+LD = "gfx/interface/"
+
+
+def ld_plate(w, h, x0, x1, y0, y1, hang):
+    """a lacquer plate x0-x1, y0-y1 with chamfered free corners (the bottom ones if it hangs from the top edge, else
+    the top ones), a gilt rim and a diamond in the middle of its free edge (ld_rule adds the inner hairline)"""
+    c = 14
+    if hang:
+        pts = [(x0, y0), (x1, y0), (x1, y1 - c), (x1 - c, y1), (x0 + c, y1), (x0, y1 - c)]
+    else:
+        pts = [(x0 + c, y0), (x1 - c, y0), (x1, y0 + c), (x1, y1), (x0, y1), (x0, y0 + c)]
+    mid = (x0 + x1) / 2
+    dy = y1 if hang else y0
+    return (f'<div style="position:absolute;inset:0;background:{GOLD_V};clip-path:{poly(pts)}"></div>'
+            f'<div style="position:absolute;inset:0;background:{LAC},linear-gradient(180deg,#141E24,#0B1115);'
+            f'clip-path:{poly(inset_poly(pts, 1.4))}"></div>'
+            + f'<div style="position:absolute;left:{mid - 6}px;top:{dy - 6}px;width:12px;height:12px;transform:rotate(45deg);'
+              f'background:#0B1014;box-shadow:0 0 0 1.5px #C9A55A"></div>'
+            + f'<div style="position:absolute;left:{mid - 2}px;top:{dy - 2}px;width:4px;height:4px;transform:rotate(45deg);background:#E3C77E"></div>')
+
+
+def ld_rule(pts):
+    """the hairline 5 px inside a plate (an SVG outline of the inset polygon)"""
+    q = " ".join(f"{x},{y}" for x, y in inset_poly(pts, 5))
+    return (f'<svg width="1400" height="160" style="position:absolute;left:0;top:0"><polygon points="{q}" fill="none" '
+            'stroke="rgba(201,165,90,.42)" stroke-width="1"/></svg>')
+
+
+def ld_status():
+    x0, x1, y0, y1 = 206, 1194, 0, 92
+    c = 14
+    pts = [(x0, y0 - 6), (x1, y0 - 6), (x1, y1 - c), (x1 - c, y1), (x0 + c, y1), (x0, y1 - c)]
+    return ld_plate(1400, 92, x0, x1, y0 - 6, y1, True) + ld_rule(pts) + \
+        '<i class="ck sm bl" style="left:212px;bottom:6px"></i><i class="ck sm br" style="right:212px;bottom:6px"></i>'
+
+
+def ld_tip():
+    x0, x1, y0, y1 = 206, 1194, 22, 154
+    c = 14
+    pts = [(x0 + c, y0), (x1 - c, y0), (x1, y0 + c), (x1, y1), (x0, y1), (x0, y0 + c)]
+    return ld_plate(1400, 148, x0, x1, y0, y1, False) + ld_rule(pts) + \
+        '<i class="ck sm tl" style="left:212px;top:28px"></i><i class="ck sm tr" style="right:212px;top:28px"></i>'
+
+
+TRACK = (6, 18)       # the progress bar's rows inside its 40 px picture: screen y 68-80, inside the status plate
+add("ld_status", LD + "Loadingscreen_loadingstatus.dds", 1400, 92, ld_status())
+add("ld_tip", LD + "Loadingscreen_loadingtip.dds", 1400, 148, ld_tip())
+add("ld_track", LD + "LoadingScreen_Progress_1.dds", 934, 40,
+    f'<div style="position:absolute;left:0;right:0;top:{TRACK[0]}px;height:{TRACK[1] - TRACK[0]}px;background:#080C0F;'
+    'box-shadow:inset 0 0 0 1px rgba(201,165,90,.65),inset 0 2px 3px rgba(0,0,0,.6)"></div>')
+add("ld_fill", LD + "LoadingScreen_Progress_2.dds", 934, 40,
+    f'<div style="position:absolute;left:1px;right:1px;top:{TRACK[0] + 1}px;height:{TRACK[1] - TRACK[0] - 2}px;'
+    'background:linear-gradient(180deg,#F1DC9C,#C9A55A 55%,#8B6A2C)"></div>'
+    f'<div style="position:absolute;left:1px;right:1px;top:{TRACK[0] + 2}px;height:1px;background:rgba(255,246,214,.6)"></div>')
+
 
 # ---------------------------------------------------------------- render
 G = FONTS_SRC
