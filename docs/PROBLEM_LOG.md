@@ -6,6 +6,24 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**The division designer's combat width wasn't centred in its ring** (2026-10-17, the author: "Combat width isn't
+centered")
+- Cause: the ring was drawn round (309, 249), but the game draws the number in `combat_width_view`'s 40 x 20 box at
+  (290, 240), centred: its ink centres on (310.5, 250.5), 1.5 px right of and below the ring's centre. The game centres
+  text at the box's x plus half the room left, rounded up; our previews rounded down, so they showed it 1 px off the
+  other way.
+- Fix (Deco UI v0.10.1): the ring, its sunburst and diamonds centred on the number (`designer_art.COMBAT_WIDTH`),
+  measured against the author's screenshot pixel by pixel.
+
+**The commander cards' skill was off centre and unreadable** (2026-10-17, the author: "Skill is not centered, and the
+white won't show on the tan. I like the aesthetic though.")
+- Cause: the game draws the skill white (`hoi_30header`) in a 50 x 18 box at (1, 19), its ink centred on x 26, rows 28
+  to 40; the card's tan diamond was centred lower, at (27, 48), so the white number stood on the stripes above it.
+- Fix (Deco UI v0.10.1): a dark lacquer diamond in a gilt rim where the number is (`designer_art.skill_diamond`, centred
+  on (26, 34.5); the navy card's box is left-aligned, so its diamond is at x 25), the striped strip centred on it, and a
+  lacquer channel between the strip and the portrait. A "1" on the navy card still sits 2.5 px left (the game
+  left-aligns it there).
+
 **The loading screen showed the game's own picture, and game setup a loading picture** (2026-10-17, the author's
 screenshots of the Deco UI v0.10)
 - Cause: v0.10 listed four loading pictures from Valsora's map in the menu's background list, assuming the loading

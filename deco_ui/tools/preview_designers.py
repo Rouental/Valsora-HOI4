@@ -27,6 +27,12 @@ SAMPLES = {"combat_width_text": "12", "skill": "4", "title": "General", "name": 
            "leader_stat_attack": "4", "leader_stat_defense": "2", "leader_stat_planning": "3",
            "leader_stat_logistics": "3", "leader_stat_maneuvering": "3", "leader_stat_coordination": "2"}
 
+# what the game shows only on demand: an army HQ's template (its header bar and panels lie over the ring and the
+# columns), and the windows that open over the designer (the battalion picker, the equipment and symbol pickers, the
+# 3D model picker, the niche icons)
+HIDE = {"hq_overlay_images", "designerregimentswindow", "division_equipment_view", "div_templ_custom_icon_view",
+        "div_template_select_model", "niche_icon_selector"}
+
 
 class GamePanel(PP.Panel):
     """the game's placement of centred text: the start rounded up, not down"""
@@ -46,7 +52,7 @@ def draw(vanilla):
         elems = V.load(path)
         win = PP.find_window(elems, name)
         cv = PP.backdrop(False)
-        p = GamePanel(vanilla_only=vanilla, outline_lists=True, vars_=PP.gui_vars(path), samples=SAMPLES)
+        p = GamePanel(vanilla_only=vanilla, outline_lists=True, vars_=PP.gui_vars(path), samples=SAMPLES, hide=HIDE)
         p.draw(cv, [("containerWindowType", win)], dx, dy, 1920, 1080)
         if name == "armyleaderwindow":
             gx, gy = next((b[1], b[2]) for b in p.boxes if b[0] == "leaders_grid")
@@ -69,7 +75,7 @@ def draw(vanilla):
 def zoom(cvs, boxes, z=4):
     """the combat width's ring (the division designer) and the left ends of the three cards, at 4x"""
     x, y = boxes["combat_width_view"]
-    crops = [cvs[1][y - 30:y + 54, x - 30:x + 70]]
+    crops = [cvs[1][y - 30:y + 71, x - 40:x + 81]]          # the ring in the middle (the text box: 40 x 20 at y + 10)
     crops += [cvs[2][cy:cy + 98, cx:cx + 130] for cx, cy in (boxes[c] for c in CARDS)]
     ims = [Image.fromarray((np.clip(c, 0, 1) * 255).astype(np.uint8)) for c in crops]
     ims = [im.resize((im.width * z, im.height * z), Image.NEAREST) for im in ims]

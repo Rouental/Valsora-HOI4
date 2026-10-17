@@ -340,7 +340,7 @@
   "path": "gfx/interface/division_designer_popup_bg_new.dds",
   "w": 1200,
   "h": 720,
-  "sig": "54ee7c8e4433c08faa0e234315a9f608cb6dcf700d3a6e2d0a73470324e8efff"
+  "sig": "327ba6097a8e3a7d59eb091095f800fbcddb8766c347e3b0ee6378d51df9b1ae"
  },
  {
   "key": "dsg_tank",
@@ -375,21 +375,21 @@
   "path": "gfx/interface/leader_selection_entry_bg.dds",
   "w": 510,
   "h": 98,
-  "sig": "1cb4910b0eb50c7a32ffb9fdde80bdde4f32673fe1c8577083decad9b6cd4961"
+  "sig": "27f1f462aa45ee5c66f6b376f130d4de5e34361766a67703c1e6978c9c1d6136"
  },
  {
   "key": "ldr_card_navy",
   "path": "gfx/interface/naval_leader_selection_entry_bg.dds",
   "w": 510,
   "h": 98,
-  "sig": "73a47045ee1c24ec35659b834bd454b3fb3ac69733bb3bbdcc7a40f191ec1a4d"
+  "sig": "747fe6fdacd4ffa0ef13d5499be1bfa01c4bfc705328d6b51088628a56bac4e5"
  },
  {
   "key": "ldr_card_captured",
   "path": "gfx/interface/marshal_captured_bg.dds",
   "w": 510,
   "h": 98,
-  "sig": "f9d7afea3d2e3bf6ca142c987869e2e2a41b8b4fcde99a9de64ad73d22a58c98"
+  "sig": "33c143798a5f26fc053a420e507d696a2ab8bc75a0ca7652512d18073dc2be5d"
  },
  {
   "key": "bp_bar",
