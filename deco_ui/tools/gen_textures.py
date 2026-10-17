@@ -112,6 +112,11 @@ add("win_plain_bg2", "gfx/interface/tiles/tiled_plain_bg2.dds", 182, 186, window
 add("win_plain_bg_small", "gfx/interface/tiles/tiled_plain_bg_small.dds", 48, 48, window(48, 48, dict(rule="single")))
 add("win_small", "gfx/interface/tiles/tiled_window_small.dds", 96, 96, window(96, 96, dict(rule="single", corners="small")))
 add("win_small_small", "gfx/interface/tiles/tiled_window_small_small.dds", 48, 48, window(48, 48, dict(rule="single")))
+# the small header chip (core.gfx GFX_tiled_header_1, border 8): behind the selected army's organisation and strength
+# bars, the division designer's HQ bar, game setup's group headers (v0.10)
+add("win_header_1", "gfx/interface/tiles/tiled_header_1.dds", 77, 38,
+    f'<div style="position:absolute;inset:1px;background:rgba(201,165,90,.55);clip-path:{chamfer(3)}"></div>'
+    f'<div style="position:absolute;inset:2px;background:{STRIPES},{DIM_FILL};clip-path:{chamfer(2.6)}"></div>')
 add("mini_dialog", "gfx/interface/tiles/tiled_mini_dialog.dds", 32, 32,
     '<div class="lac" style="position:absolute;inset:0"></div><div class="frame" style="inset:0;border:1px solid #9C7A36"></div>')
 # tooltip background (vanilla ToolTip textBoxType: tiles_dialog.tga, borderSize 18). The game loads a .dds of

@@ -91,6 +91,13 @@
   "sig": "c2242b1c8c70cb38fc2e111f7940361151d39d8ef7b38cc7db55f27f5ed7d502"
  },
  {
+  "key": "win_header_1",
+  "path": "gfx/interface/tiles/tiled_header_1.dds",
+  "w": 77,
+  "h": 38,
+  "sig": "b972ef8385e4c8a5ef629e971b91a254e5be9ff5ee20573d05fb8674e466032a"
+ },
+ {
   "key": "mini_dialog",
   "path": "gfx/interface/tiles/tiled_mini_dialog.dds",
   "w": 32,
@@ -656,6 +663,181 @@
   "w": 80,
   "h": 36,
   "sig": "edc94e66bd9c6bab3d1cea538f98ec264c2d293a739a03bf1261ccedbaa6b9ea"
+ },
+ {
+  "key": "mv_army_bg",
+  "path": "gfx/interface/unitcontrol/army_group_bg.dds",
+  "w": 437,
+  "h": 109,
+  "sig": "d36b5bc94e629f6e27a5c70851e7dee61918be973aeb049f96cc4513fff380d0"
+ },
+ {
+  "key": "mv_army_group_bg",
+  "path": "gfx/interface/unitcontrol/army_group_group_bg.dds",
+  "w": 436,
+  "h": 110,
+  "sig": "ec8aaac239c41b2e95bbbba7b2e7958578b4410c8174c6e00e0554294b98770e"
+ },
+ {
+  "key": "mv_div_count",
+  "path": "gfx/interface/div_count_bg.dds",
+  "w": 93,
+  "h": 35,
+  "sig": "b9ca00922df2b7b6e7f23d12950c3ea542a3286897269ad9d910aa081131e53d"
+ },
+ {
+  "key": "mv_group_div_count",
+  "path": "gfx/interface/group_div_count_bg.dds",
+  "w": 92,
+  "h": 39,
+  "sig": "97f70b0e193a901df4e6e07058edfafabe13c9f4e7a974894bf43fb7893442d0"
+ },
+ {
+  "key": "mv_leader_frame",
+  "path": "gfx/interface/unitcontrol/unit_leader_portrait_frame_badge.dds",
+  "w": 59,
+  "h": 79,
+  "sig": "07f0ad640edbb30eac97810814291377db261e1c0cda48f15ecee57ef92a42bd"
+ },
+ {
+  "key": "mv_group_leader_frame",
+  "path": "gfx/interface/unitcontrol/group_leader_portrait_frame_badge.dds",
+  "w": 59,
+  "h": 79,
+  "sig": "05f03e0c0832ba6232bbe42436f10a2285ad4b62e27a1fd48d0f55a2193c93d9"
+ },
+ {
+  "key": "mv_unassign",
+  "path": "gfx/interface/unitcontrol/btn_unassign.dds",
+  "w": 31,
+  "h": 31,
+  "sig": "675c50d1bb1bc58f4a9cd97750c1a3399e4646d9a20e7c3f56ebec729744c249"
+ },
+ {
+  "key": "mv_close",
+  "path": "gfx/interface/naviesview/btn_close.dds",
+  "w": 31,
+  "h": 31,
+  "sig": "f570014cf755e5122501504d8cf2bfab396d2d895bd28c09b0da6a34e59b0004"
+ },
+ {
+  "key": "mv_leader_details",
+  "path": "gfx/interface/unitcontrol/leader_details_icon.dds",
+  "w": 24,
+  "h": 25,
+  "sig": "32573ef8637a2782ee8355a77037dd862f5c345f493d9bec668753ce5fac5ed9"
+ },
+ {
+  "key": "mv_select_all_short",
+  "path": "gfx/interface/unitcontrol/select_all_armylist_short_button.dds",
+  "w": 52,
+  "h": 23,
+  "sig": "2a8f9173b20a85ad19719eb1c33425a43022d49c8e1a7f5b7f40cdcec4c54f22"
+ },
+ {
+  "key": "mv_motor_btn",
+  "path": "gfx/interface/unitcontrol/motorization_level_toggle_button.dds",
+  "w": 44,
+  "h": 23,
+  "sig": "d2fa43361f13d6833dbfbc54215d11f1624f3ad104964ad627d4b2be413c53e7"
+ },
+ {
+  "key": "mv_motor_strip",
+  "path": "gfx/interface/unitcontrol/motorization_level_toggle_strip.dds",
+  "w": 90,
+  "h": 23,
+  "sig": "e117645f9d316c355a2c1128ac3b903a66fc80de0cbb93603eb113f4a6549569"
+ },
+ {
+  "key": "mv_railway_gun",
+  "path": "gfx/interface/unitcontrol/army_railway_gun_toggles_button.dds",
+  "w": 44,
+  "h": 23,
+  "sig": "309eca5d17884df11e29f8c067a60948856e1c3c05fe29abf07d3ce15616cbc5"
+ },
+ {
+  "key": "mv_armies_divisions",
+  "path": "gfx/interface/army_group_toggle_armies_divisions_btn.dds",
+  "w": 88,
+  "h": 23,
+  "sig": "30aebc1d947e6af1c718ea6e322b74d0db3412ec821413d6924e88037b8b345a"
+ },
+ {
+  "key": "mv_select_wings",
+  "path": "gfx/interface/unitcontrol/army_select_wings_button.dds",
+  "w": 44,
+  "h": 23,
+  "sig": "18a1ffd31ede04d460d86bc841764e6020bcc8a770ea4c7b386745cf08e208de"
+ },
+ {
+  "key": "mv_expeditionary",
+  "path": "gfx/interface/unitcontrol/expeditionary_force_button_bg.dds",
+  "w": 264,
+  "h": 32,
+  "sig": "a2aa4f3c247ada2e6556cf5374c8fb6459993ad58194a20118376f2a45a10d68"
+ },
+ {
+  "key": "mv_fleet_bg",
+  "path": "gfx/interface/naviesview/fleet_bg.dds",
+  "w": 493,
+  "h": 166,
+  "sig": "8954fc5b63a20ad3ecaf007c18defbed70444d6f09c9f329147ea26d941cb89a"
+ },
+ {
+  "key": "mv_fleet_hl",
+  "path": "gfx/interface/naviesview/fleet_bg_hl.dds",
+  "w": 497,
+  "h": 170,
+  "sig": "71498e66bbe4a3550f6d0c5df37ef7996974b68bf8585bea155ae60a95425fa7"
+ },
+ {
+  "key": "mv_naval_leader_frame",
+  "path": "gfx/interface/naval_unit_leader_frame.dds",
+  "w": 69,
+  "h": 95,
+  "sig": "da63a2a875bb7c19057f46a27b8badf7eaf7517fd7d608542a5f127e5c512539"
+ },
+ {
+  "key": "mv_select_all",
+  "path": "gfx/interface/select_all_armylist_btn.dds",
+  "w": 136,
+  "h": 23,
+  "sig": "dbd1bfce7e368c648e5b209c22635e68c5bad69ae6747572f8ade2107cdca95b"
+ },
+ {
+  "key": "mv_pride",
+  "path": "gfx/interface/naviesview/pride_of_the_fleet_icon.dds",
+  "w": 32,
+  "h": 30,
+  "sig": "0087fefac4199f98a4e1eebe05e92e599bb6a9ce21751683fbbe6c3b165f709f"
+ },
+ {
+  "key": "mv_operative_badge",
+  "path": "gfx/interface/operatives/operative_leader_badge.dds",
+  "w": 437,
+  "h": 109,
+  "sig": "4f23d6daca2a5d36cb5cb6cef032d4e9af1e077db6271c29f28ea4a92b747e47"
+ },
+ {
+  "key": "mv_operative_bar_bg",
+  "path": "gfx/interface/operatives/operative_activity_progress_bar_bg.dds",
+  "w": 359,
+  "h": 17,
+  "sig": "51424ed84617d6f78c8af11e64bfa2d16242a006f043c82656618c56af258b2e"
+ },
+ {
+  "key": "mv_air_base_row",
+  "path": "gfx/interface/airview/base_entry_bg.dds",
+  "w": 548,
+  "h": 48,
+  "sig": "d18c3b90baa7322fce26778caed123d8c888b275e14d00d0b0067a1b479ee540"
+ },
+ {
+  "key": "mv_air_wing_rows",
+  "path": "gfx/interface/airview/wing_entry_bg.dds",
+  "w": 1096,
+  "h": 48,
+  "sig": "5363db7e78d2cce9a9279c28d2fe72ac07eed9660cd870445f1cf956a127b686"
  },
  {
   "key": "wf_w_close",
