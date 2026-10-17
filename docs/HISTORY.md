@@ -10,6 +10,9 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-17, later (the author: "Apply all the green and yellow strait crossings, I'll judge the others later"): the
+  414 strait crossings up to 10 px of sea are in the mod (`source/straits.json`, `straits.py approve --max-gap 10`);
+  every landmass within 10 px of another is reachable on foot. All checks passed.
 - 2026-10-17 (the author: "Sure, do 1, 3, and 7", of a list of things to do until they got home):
   - **Strait crossings, proposed** (1): `scripts/straits.py find` links every landmass once across its narrowest strait
     (a minimum spanning tree over open sea): 492 crossings for 606 landmasses, `dist/straits_map.png` (each ringed by
