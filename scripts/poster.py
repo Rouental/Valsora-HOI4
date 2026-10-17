@@ -156,6 +156,8 @@ def load_data():
         named = bool(name) and (name in dot_names or not name.endswith(" City"))
         if capital or named:
             cities.append(dict(name=name if named else "", x=x, y=y, capital=capital, tag=own))
+    for i, c in enumerate(cities):
+        c["i"] = i
     d["cities"] = cities
     # relief: the terrain test's own, else the build's heightmap
     rf = WORK / "terrain_test/relief.npy"
@@ -376,8 +378,8 @@ def render_map(d, s, Q):
     log("map: washes and ribbons")
     rel = d["relief"]
     # soft relief: the lowlands' noise calmed, the ranges kept; two lights, as an engraver's
-    r1 = ndi.gaussian_filter(rel, 2.2)
-    r2 = ndi.gaussian_filter(rel, 1.0)
+    r1 = ndi.gaussian_filter(rel, 2.6)
+    r2 = ndi.gaussian_filter(rel, 1.6)
     w_hi = np.clip((r1 - 104) / 30, 0, 1)
     rs = r1 * (1 - w_hi) + r2 * w_hi
     hs = 0.7 * hillshade(rs, 315, 40, z=0.45) + 0.3 * hillshade(rs, 260, 50, z=0.45)
@@ -387,11 +389,12 @@ def render_map(d, s, Q):
     shade = resample(hsx, s, hy=Hp, wx=Wp)
     relp = resample(r1, s, hy=Hp, wx=Wp)
     # shadows toward a warm sepia, lights toward the paper: an engraved look, not plastic
-    dark = np.clip(-shade * 1.5, 0, 0.55)
-    light = np.clip(shade * 1.3, 0, 0.35)
+    dark = np.clip(-shade * 1.25, 0, 0.42)
+    light = np.clip(shade * 1.2, 0, 0.30)
     hi = np.clip((relp - 140) / 70, 0, 1)            # the high ranges paler, as on an old plate
     rgb += (np.array([246, 241, 228], np.float32) - rgb) * (0.28 * hi + light)[..., None]
-    rgb += (np.array([92, 78, 64], np.float32) - rgb) * dark[..., None]
+    # shadows keep the wash's hue, a little warmer: darker, not greyer
+    rgb *= (1 - dark[..., None] * np.array([0.50, 0.53, 0.58], np.float32))
     del shade, relp, hi, dark, light, hsx
     log("map: relief")
 
@@ -625,7 +628,7 @@ def disk_mask(r):
 # all fitting is in map px, with type sizes in full-size print px (SCALE print px per map px):
 # a draft lays out exactly as the print does
 NATION = dict(face="federo", wght=400)
-F_MIN, F_LEAD = 21, 23        # the smallest name inside a nation; the size of names beside one
+F_MIN, F_LEAD = 19, 23        # the smallest name inside a nation; the size of names beside one
 
 
 def norm_angle(a):
@@ -661,6 +664,15 @@ class Shape:
         k = int(np.argmax(self.D))
         self.py, self.px = np.unravel_index(k, self.D.shape)
         self.xs, self.ys, self.w = xs, ys, w
+        # straight lines go through the deepest point and a few other deep ones
+        from skimage.feature import peak_local_max
+        md = max(4, int(0.12 * math.sqrt(len(xs))))
+        pk = peak_local_max(self.D, min_distance=md, threshold_rel=0.45, num_peaks=6, exclude_border=False)
+        self.anchors = [(self.px, self.py)] + [(int(x), int(y)) for y, x in pk
+                                               if (int(x), int(y)) != (self.px, self.py)]
+        ix, iy = int(round(self.cx)), int(round(self.cy))
+        if 0 <= iy < m.shape[0] and 0 <= ix < m.shape[1] and m[iy, ix]:
+            self.anchors.append((self.cx, self.cy))
 
     def paths(self, angles, curved=True):
         """Candidate centre lines: (sample xs, ys in crop px, angle at the middle, curved?)."""
@@ -671,8 +683,9 @@ class Shape:
             v = -(self.xs - self.cx) * s_ + (self.ys - self.cy) * c
             umin, umax = u.min() - 2, u.max() + 2
             uu = np.arange(umin, umax + 0.5, 0.5)
-            vp = -(self.px - self.cx) * s_ + (self.py - self.cy) * c
-            out.append((uu, np.full_like(uu, vp), th, False))
+            for ax_, ay_ in self.anchors:
+                vp = -(ax_ - self.cx) * s_ + (ay_ - self.cy) * c
+                out.append((uu, np.full_like(uu, vp), th, False))
             if curved and len(u) > 40:
                 b = np.floor((u - umin) / 2).astype(int)
                 order = np.lexsort((self.D[self.ys, self.xs], b))
@@ -896,8 +909,65 @@ def free_spot(blocked, w, h, pref, margin):
 
 
 # the furniture on the map plate (map px): (w, h) and where it should go
-COMPASS = dict(w=300, h=300, pref=(4520, 330))
-LEGEND = dict(w=780, h=430, pref=(2050, 2330))
+COMPASS = dict(w=360, h=360, pref=(4560, 360))
+EDGE, CORNER = 22, 175     # map px kept clear along the plate's edges and in its corners (the fans)
+
+
+def marker_hit(marks, box, own):
+    """Whether a box (map px) comes within any marker's disk but the city's own."""
+    xs = [p[0] for p in box]
+    ys = [p[1] for p in box]
+    qx = np.clip(marks[:, 0], min(xs), max(xs))
+    qy = np.clip(marks[:, 1], min(ys), max(ys))
+    near = np.hypot(marks[:, 0] - qx, marks[:, 1] - qy) < marks[:, 2]
+    near[own] = False
+    return bool(near.any())
+
+
+def place_city_names(d, occ, items, cities, areas, nation_of, marks):
+    """City names beside their markers, the first free of eight places (map px)."""
+    kind = d["kind"]
+    H, W = kind.shape
+    land = kind == 1
+    owner = d["owner"]
+    for c in cities:
+        size = 26 if c["capital"] else 22
+        wght = 600 if c["capital"] else 400
+        L = measure("josefin", wght, c["name"], size, 0.02) / SCALE
+        hh = cap_h("josefin", wght) * size * 0.5 / SCALE
+        desc = 0.32 * size / SCALE      # room for descenders below the line
+        g = c["r"] + 6 / SCALE
+        cx, cy = c["x"] + 0.5, c["y"] + 0.5
+        own = nation_of.get(c["tag"], -1)
+        best = None
+        for rank, (dx, dy, al) in enumerate(((1, 0, "l"), (-1, 0, "r"), (0.7, -0.75, "l"), (0.7, 0.75, "l"),
+                                             (-0.7, -0.75, "r"), (-0.7, 0.75, "r"), (0, -1.1, "c"),
+                                             (0, 1.15, "c"))):
+            ox = cx + dx * g
+            oy = cy + dy * (g + hh)
+            if al == "l":
+                bx0, bx1 = ox, ox + L
+            elif al == "r":
+                bx0, bx1 = ox - L, ox
+            else:
+                bx0, bx1 = ox - L / 2, ox + L / 2
+            box = rect(bx0 - 2 / SCALE, oy - hh - 3 / SCALE, bx1 + 2 / SCALE, oy + hh + desc + 2 / SCALE)
+            if occ.hit(box) or marker_hit(marks, box, c["i"]):
+                continue
+            ys_ = np.clip(np.arange(int(oy - hh), int(oy + hh) + 1), 0, H - 1)
+            xs_ = np.clip(np.arange(int(bx0), int(bx1) + 1), 0, W - 1)
+            o = owner[np.ix_(ys_, xs_)]
+            foreign = ((o >= 0) & (o != own)).mean()     # over a neighbour's land
+            cost = rank + 6 * foreign
+            if best is None or cost < best[0]:
+                best = (cost, bx0, oy, bx1, box, land[np.ix_(ys_, xs_)].mean() >= 0.5)
+        if best is None:
+            log(f"layout: no room for {c['name']}")
+            continue
+        cost, bx0, oy, bx1, box, on_land = best
+        occ.stamp(box)
+        items["cities"].append(dict(name=c["name"], x0=bx0, y=oy, size=size, wght=wght,
+                                    ink=on_land, capital=c["capital"]))
 
 
 def layout_labels(d):
@@ -907,7 +977,12 @@ def layout_labels(d):
     occ = Occ(H, W)
     items = dict(nations=[], leaders=[], cities=[], oceans=[], continents=[], furniture={})
     blocked = kind != 0
-    for key, spec in (("compass", COMPASS), ("legend", LEGEND)):
+    if not d.get("window"):
+        for x0_, y0_, x1_, y1_ in ((0, 0, W, EDGE), (0, H - EDGE, W, H), (0, 0, EDGE, H), (W - EDGE, 0, W, H),
+                                   (0, 0, CORNER, CORNER), (W - CORNER, 0, W, CORNER), (0, H - CORNER, CORNER, H),
+                                   (W - CORNER, H - CORNER, W, H)):
+            occ.stamp(rect(x0_, y0_, x1_, y1_))
+    for key, spec in (("compass", COMPASS),):
         if d.get("window"):
             break
         pos = free_spot(blocked, spec["w"], spec["h"], spec["pref"], 14)
@@ -917,15 +992,25 @@ def layout_labels(d):
         x, y = pos
         items["furniture"][key] = (x, y, spec["w"], spec["h"])
         occ.stamp(rect(x - 8, y - 8, x + spec["w"] + 8, y + spec["h"] + 8))
-    # markers
+    # markers: kept apart, so a name is tested against every marker but its own
     cap_r, dot_r = 13 / SCALE, 7 / SCALE
+    occ_m = Occ(H, W)
     for c in d["cities"]:
         r = cap_r if c["capital"] else dot_r
         c["r"] = r
-        occ.stamp(circle_pts(c["x"] + 0.5, c["y"] + 0.5, r + 4 / SCALE))
+        occ_m.stamp(circle_pts(c["x"] + 0.5, c["y"] + 0.5, r + 4 / SCALE))
+    marks = np.array([(c["x"] + 0.5, c["y"] + 0.5, c["r"] + 3 / SCALE) for c in d["cities"]])
+    areas = np.bincount(owner[owner >= 0], minlength=len(d["nations"]))
+    nation_of = d["tag_i"]
+    nation_name = {r["tag"]: r["name"].casefold() for r in d["nations"]}
+    named = [c for c in d["cities"] if c["name"] and c["name"].casefold() != nation_name.get(c["tag"])]
+    by_size = lambda c: -areas[nation_of.get(c["tag"], 0)]
+    # the capitals' names first, so the nations' names leave room for them
+    place_city_names(d, occ, items, sorted([c for c in named if c["capital"]], key=by_size), areas,
+                     nation_of, marks)
+    taken = occ.map_res() | occ_m.map_res()
     # ---- nations, inside their land
     objs = ndi.find_objects(owner + 1)
-    areas = np.bincount(owner[owner >= 0], minlength=len(d["nations"]))
     order = np.argsort(-areas)
     pending = []
     for i in order:
@@ -940,12 +1025,7 @@ def layout_labels(d):
         sizes = np.bincount(lab.ravel())
         sizes[0] = 0
         main = lab == int(np.argmax(sizes))
-        holes = np.zeros_like(main)
-        for c in d["cities"]:
-            if x0 <= c["x"] < x1 and y0 <= c["y"] < y1:
-                rr = c["r"] + 3 / SCALE
-                yy, xx = np.ogrid[y0:y1, x0:x1]
-                holes |= (xx + 0.5 - c["x"] - 0.5) ** 2 + (yy + 0.5 - c["y"] - 0.5) ** 2 <= rr * rr
+        holes = taken[y0:y1, x0:x1]       # markers and the capitals' names
         shape = Shape(main, y0, x0, holes)
         area = areas[i] * SCALE ** 2
         f_hi = float(np.clip(0.125 * math.sqrt(area), F_MIN + 2, 170))
@@ -962,52 +1042,73 @@ def layout_labels(d):
             pending.append(i)
             continue
         res.update(x=res["x"] + x0, y=res["y"] + y0, tag=r["tag"], gp=gp, name=name)
-        if gp:   # the ornament under the name: the lines move up to make room
+        if gp:   # the ornament under the name, in the room block() left below the lines
             ch = res["cap"]
-            res["offs"] = [o - 0.475 * ch for o in res["offs"]]
             res["orn"] = res["offs"][-1] + ch / 2 + 0.55 * ch
         items["nations"].append(res)
         occ.stamp(band(res["x"], res["y"], res["arc"], res["centre"], res["length"] / SCALE,
                        res["half"] / SCALE, 4 / SCALE))
     log(f"layout: {len(items['nations'])} names inside their nations, {len(pending)} beside")
     land = kind == 1
-    # ---- city names, capitals first
-    jos = dict(face="josefin")
-    for c in sorted(d["cities"], key=lambda c: (not c["capital"], -areas[d["tag_i"].get(c["tag"], 0)])):
-        if not c["name"]:
+    place_city_names(d, occ, items, sorted([c for c in named if not c["capital"]], key=by_size), areas,
+                     nation_of, marks)
+    occ.a |= occ_m.a
+    # ---- oceans
+    water = kind == 0
+    dwater = ndi.distance_transform_edt(water)
+    taken = occ.map_res()
+    for o, oname in enumerate(d["ocean_names"]):
+        m_all = (d["ocean"] == o) & water
+        tot = int(m_all.sum())
+        if tot < 500:
             continue
-        size = 24 if c["capital"] else 20.5
-        wght = 600 if c["capital"] else 400
-        L = measure("josefin", wght, c["name"], size, 0.02) / SCALE
-        hh = cap_h("josefin", wght) * size * 0.5 / SCALE
-        asc = hh * 1.0
-        desc = 0.32 * size / SCALE      # room for descenders below the line
-        g = c["r"] + 5 / SCALE
-        cx, cy = c["x"] + 0.5, c["y"] + 0.5
-        placed = None
-        for dx, dy, al in ((1, 0, "l"), (-1, 0, "r"), (0.7, -0.75, "l"), (0.7, 0.75, "l"),
-                           (-0.7, -0.75, "r"), (-0.7, 0.75, "r"), (0, -1.1, "c"), (0, 1.15, "c")):
-            ox = cx + dx * g
-            oy = cy + dy * (g + hh)
-            if al == "l":
-                bx0, bx1 = ox, ox + L
-            elif al == "r":
-                bx0, bx1 = ox - L, ox
+        # the ocean's large pieces (the seam cuts some in two), the widest halved: a name in each
+        lab_o, n_o = ndi.label(m_all)
+        sizes = np.bincount(lab_o.ravel())
+        sizes[0] = 0
+        pieces = []
+        for k in range(1, n_o + 1):
+            if sizes[k] < max(0.18 * tot, 12000) and k != int(np.argmax(sizes)):
+                continue
+            pm = lab_o == k
+            xs_ = np.nonzero(pm.any(0))[0]
+            if xs_[-1] - xs_[0] > 3000 and sizes[k] > 600000:
+                mid = int(np.median(np.nonzero(pm)[1]))
+                left, right = pm.copy(), pm.copy()
+                left[:, mid:] = False
+                right[:, :mid] = False
+                pieces += [left, right]
             else:
-                bx0, bx1 = ox - L / 2, ox + L / 2
-            box = rect(bx0 - 2 / SCALE, oy - asc - 3 / SCALE, bx1 + 2 / SCALE, oy + hh + desc + 2 / SCALE)
-            if not occ.hit(box):
-                placed = (bx0, oy, bx1)
-                occ.stamp(box)
-                break
-        if placed is None:
-            log(f"layout: no room for {c['name']}")
-            continue
-        bx0, oy, bx1 = placed
-        ys_, xs_ = int(np.clip(oy, 0, H - 1)), np.clip(np.arange(int(bx0), int(bx1) + 1), 0, W - 1)
-        on_land = land[ys_, xs_].mean() >= 0.5
-        items["cities"].append(dict(name=c["name"], x0=bx0, y=oy, size=size, wght=wght,
-                                    ink=on_land, capital=c["capital"]))
+                pieces.append(pm)
+        small = tot < 200000
+        for m in pieces:
+            ys, xs = np.nonzero(m)
+            y0, y1, x0, x1 = ys.min(), ys.max() + 1, xs.min(), xs.max() + 1
+            taken = occ.map_res()
+            crop = m[y0:y1, x0:x1] & (dwater[y0:y1, x0:x1] > (3 if small else 7)) & \
+                ~ndi.binary_dilation(taken[y0:y1, x0:x1], iterations=3 if small else 6)
+            shape = Shape(crop, y0, x0)
+            area = tot * SCALE ** 2
+            f_hi = float(np.clip(0.030 * math.sqrt(area), 34, 96))
+            text = oname.upper()
+            opts = [[text]]
+            two = split2(text)
+            if two:
+                opts.append(two)
+            degs = (0, 8, -8, 16, -16, 30, -30, 45, -45) if small else (0, 8, -8, 16, -16)
+            angles = {round(math.radians(a), 4) for a in degs}
+            if shape.ok and abs(shape.theta) < 0.5:
+                angles.add(round(shape.theta, 4))
+            res = fit_label(shape, opts, 18 if small else 22, f_hi, 0.25 if small else 0.45,
+                            0.8 if small else 1.1, dict(face="bodoni_i", wght=400),
+                            margin_k=0.15 if small else 0.3, angles=sorted(angles))
+            if res is None:
+                log(f"layout: no room for the {oname} ({x0}, {y0})")
+                continue
+            res.update(x=res["x"] + x0, y=res["y"] + y0, name=text)
+            items["oceans"].append(res)
+            occ.stamp(band(res["x"], res["y"], res["arc"], res["centre"], res["length"] / SCALE,
+                           res["half"] / SCALE, 4 / SCALE))
     # ---- small nations: the name beside, with a leader line
     for i in pending:
         r = d["nations"][i]
@@ -1043,7 +1144,7 @@ def layout_labels(d):
                 tx = min(max(ax, bx0 - 3 / SCALE), bx0 + L + 3 / SCALE)
                 ty = min(max(ay, ly - hh - 4 / SCALE), ly + hh + 4 / SCALE)
                 seg = np.hypot(tx - ax, ty - ay)
-                cost = seg + 60 * landf / SCALE * 1.75
+                cost = seg + 110 * landf
                 if best is None or cost < best[0]:
                     best = (cost, bx0, ly, tx, ty, landf)
             if best is not None and best[0] < rad * 1.6:
@@ -1065,38 +1166,6 @@ def layout_labels(d):
         items["leaders"].append(dict(name=name, x0=bx0, y=ly, size=size, ink=landf >= 0.5,
                                      leader=leader, tag=r["tag"], gp=r["tag"] in GREAT_POWERS))
     log(f"layout: {len(items['cities'])} city names, {len(items['leaders'])} names beside")
-    # ---- oceans
-    water = kind == 0
-    dwater = ndi.distance_transform_edt(water)
-    taken = occ.map_res()
-    for o, oname in enumerate(d["ocean_names"]):
-        m = (d["ocean"] == o) & water
-        if m.sum() < 500:
-            continue
-        ys, xs = np.nonzero(m)
-        y0, y1, x0, x1 = ys.min(), ys.max() + 1, xs.min(), xs.max() + 1
-        small = m.sum() < 60000
-        crop = m[y0:y1, x0:x1] & (dwater[y0:y1, x0:x1] > (3 if small else 7)) & ~ndi.binary_dilation(taken[y0:y1, x0:x1], iterations=3 if small else 6)
-        shape = Shape(crop, y0, x0)
-        area = m.sum() * SCALE ** 2
-        f_hi = float(np.clip(0.030 * math.sqrt(area), 34, 96))
-        text = oname.upper()
-        opts = [[text]]
-        two = split2(text)
-        if two:
-            opts.append(two)
-        res = fit_label(shape, opts, 22, f_hi, 0.25 if small else 0.45, 0.8 if small else 1.1,
-                        dict(face="bodoni_i", wght=400), margin_k=0.15 if small else 0.3,
-                        angles=sorted({0.0, round(math.radians(8), 4), round(math.radians(-8), 4),
-                                       round(math.radians(16), 4), round(math.radians(-16), 4),
-                                       round(shape.theta, 4) if shape.ok and abs(shape.theta) < 0.5 else 0.0}))
-        if res is None:
-            log(f"layout: no room for the {oname}")
-            continue
-        res.update(x=res["x"] + x0, y=res["y"] + y0, name=text)
-        items["oceans"].append(res)
-        occ.stamp(band(res["x"], res["y"], res["arc"], res["centre"], res["length"] / SCALE,
-                       res["half"] / SCALE, 4 / SCALE))
     # ---- continents: very large and faint, under everything
     cont = d["cont"]
     for c, cname in enumerate(CONTINENT_NAMES, 1):
@@ -1206,7 +1275,7 @@ def render_labels(rgb, land_a, items, d, s, Q):
                  it["offs"][0] * Q)
     col = (np.array(INK, np.float32)[None, None] * land_a[..., None]
            + np.array(GILT, np.float32)[None, None] * (1 - land_a[..., None]))
-    rgb += (col - rgb) * (lay * (0.12 + 0.10 * (1 - land_a)))[..., None]
+    rgb += (col - rgb) * (lay * (0.075 + 0.145 * (1 - land_a)))[..., None]
     log("labels: continents")
     # oceans: gilt italic capitals, the water lining cleared round them
     lay[:] = 0
@@ -1285,36 +1354,40 @@ def render_labels(rgb, land_a, items, d, s, Q):
                  path.length / 2, 0)
     composite(rgb, halo_of(ink, 3.2 * Q), (240, 233, 214), 0.62)
     composite(rgb, halo_of(cream, 3.2 * Q), PAL["deep"], 0.8)
-    composite(rgb, orn, BRONZE, 0.95)
+    composite(rgb, orn, (96, 70, 26), 0.95)
     composite(rgb, ink, INK, 0.96)
     composite(rgb, cream, CREAM, 0.96)
     log("labels: names")
 
 
 def draw_ornament(layer, path, s_mid, off, half_w, cap):
-    """The great powers' mark under their names: a diamond between two hairlines."""
+    """The great powers' mark under their names: a diamond between two hairlines fading out."""
     p2 = path.offset(off)
-    k = int(round(cap * 0.28))
-    n = int(half_w * 2)
-    for j in range(n):
-        sj = s_mid - half_w + j
-        if abs(sj - s_mid) < cap * 0.55:
+    k = 4
+    pts = [p2.at(s) for s in np.linspace(s_mid - half_w, s_mid + half_w, 61)]
+    xs = [p[0] for p in pts]
+    ys = [p[1] for p in pts]
+    pad = int(cap) + 4
+    x0, y0 = int(min(xs)) - pad, int(min(ys)) - pad
+    w, h = int(max(xs)) + pad - x0, int(max(ys)) + pad - y0
+    img = Image.new("L", (w * k, h * k), 0)
+    dr = ImageDraw.Draw(img)
+    gap = cap * 0.62
+    lw = max(int(round(max(cap * 0.055, 1.1) * k)), 1)
+    for i in range(60):
+        sa = s_mid - half_w + (i + 0.5) * 2 * half_w / 60
+        if abs(sa - s_mid) < gap:
             continue
-        fade = 1 - (abs(sj - s_mid) / half_w) ** 2
-        x, y, a = p2.at(sj)
-        xi, yi = int(round(x)), int(round(y))
-        w = max(cap * 0.035, 0.6)
-        if 0 <= yi < layer.shape[0] and 0 <= xi < layer.shape[1]:
-            layer[yi, xi] = max(layer[yi, xi], min(1.0, w) * fade)
+        fade = 1 - ((abs(sa - s_mid) - gap) / (half_w - gap)) ** 1.5
+        (xa, ya, _), (xb, yb, _) = pts[i], pts[i + 1]
+        dr.line([((xa - x0) * k, (ya - y0) * k), ((xb - x0) * k, (yb - y0) * k)],
+                fill=int(255 * max(fade, 0)), width=lw)
     x, y, a = p2.at(s_mid)
-    r = cap * 0.3
-    pts = [(x + r * math.cos(a + q), y + r * math.sin(a + q)) for q in (0, math.pi / 2, math.pi, 3 * math.pi / 2)]
-    side = int(r * 2 + 6)
-    img = Image.new("L", (side * 4, side * 4), 0)
-    ox, oy = int(x) - side // 2, int(y) - side // 2
-    ImageDraw.Draw(img).polygon([((px - ox) * 4, (py - oy) * 4) for px, py in pts], fill=255)
-    small = np.asarray(img.resize((side, side), Image.LANCZOS), np.float32) / 255
-    paste_max(layer, small, ox, oy)
+    r = cap * 0.34
+    dr.polygon([((x + r * math.cos(a + q) - x0) * k, (y + r * 0.8 * math.sin(a + q) * 0 + r * math.sin(a + q) - y0) * k)
+                for q in (0, math.pi / 2, math.pi, 3 * math.pi / 2)], fill=255)
+    small = np.asarray(img.resize((w, h), Image.LANCZOS), np.float32) / 255
+    paste_max(layer, small, x0, y0)
 
 
 # --------------------------------------------------------------------------------- frame
@@ -1575,9 +1648,11 @@ def compass(cv, cx, cy, R):
                     fill=255, width=max(int(q(1.6 if deg % 45 == 0 else 1.0) * k), 1))
     cv.shapes(x0, y0, ring, ring, rings, GILT, 0.95)
 
-    def points(dr, k, half):
+    def points(dr, k, rank, half):
         c = ring / 2 * k
         for i in range(16):
+            if (0 if i % 4 == 0 else 1 if i % 2 == 0 else 2) != rank:
+                continue
             a = -math.pi / 2 + i * math.pi / 8
             L = R * (0.86 if i % 4 == 0 else 0.62 if i % 2 == 0 else 0.44)
             wd = R * (0.13 if i % 4 == 0 else 0.10 if i % 2 == 0 else 0.07)
@@ -1585,10 +1660,13 @@ def compass(cv, cx, cy, R):
             side = a + (math.pi / 2 if half else -math.pi / 2)
             base = (c + wd * k * math.cos(side), c + wd * k * math.sin(side))
             dr.polygon([(c, c), tip, base], fill=255)
-    order = sorted(range(16), key=lambda i: (i % 4 == 0, i % 2 == 0))
-    # minor points first, then the main ones over them: each point a light and a dark half
-    for half, col in ((True, GILT_HI), (False, BRONZE)):
-        cv.shapes(x0, y0, ring, ring, lambda dr, k, h=half: points(dr, k, h), col, 1.0)
+            if not half:   # a fine dark rim round the whole point
+                other = (c + wd * k * math.cos(a - math.pi / 2), c + wd * k * math.sin(a - math.pi / 2))
+                dr.line([other, tip, base], fill=255, width=max(int(q(1.2) * k), 1))
+    # the minor points first, the main ones over them: each point a light and a dark half
+    for rank in (2, 1, 0):
+        for half, col in ((True, GILT_HI), (False, BRONZE)):
+            cv.shapes(x0, y0, ring, ring, lambda dr, k, r=rank, h=half: points(dr, k, r, h), col, 1.0)
 
     def hub(dr, k):
         c = ring / 2 * k
@@ -1597,7 +1675,7 @@ def compass(cv, cx, cy, R):
     cv.shapes(x0, y0, ring, ring, hub, LACQUER, 1.0)
     for lab, a in (("N", -90), ("E", 0), ("S", 90), ("W", 180)):
         rr = R * 1.12
-        put_text(cv, lab, "federo", 400, q(58) if lab == "N" else q(40), 0,
+        put_text(cv, lab, "federo", 400, q(70) if lab == "N" else q(44), 0,
                  cx + rr * math.cos(math.radians(a)), cy + rr * math.sin(math.radians(a)),
                  GILT, gilt=lab == "N")
 
@@ -1855,8 +1933,47 @@ def compose(m, items, d, Q):
     side_w = (W - q(3060)) / 2 - q(420)
     legend(cv, mx0, band_top + q(10), mx0 + side_w, band_bot, d, Q, s)
     great_powers(cv, mx0 + Wp - side_w, band_top + q(10), mx0 + Wp, band_bot, d, Q, s)
-    frieze(cv, mx0, mx0 + Wp, my0 + Hp + q(GAP), d)
+    end = frieze(cv, mx0, mx0 + Wp, my0 + Hp + q(GAP), d)
+    imprint = ("VALSORA  ·  A HEARTS OF IRON IV TOTAL CONVERSION  ·  DRAWN FROM THE MOD'S MAP  ·  "
+               "THE WORLD OF THE EAST PACIFIC")
+    yi = (end + H - q(76)) / 2
+    L = measure("josefin", 600, imprint, q(22), 0.4)
+    put_text(cv, imprint, "josefin", 600, q(22), 0.4, W / 2, yi, LABEL, 0.9)
+    diamond(cv, W / 2 - L / 2 - q(40), yi, q(5), GILT_RULE)
+    diamond(cv, W / 2 + L / 2 + q(40), yi, q(5), GILT_RULE)
     return cv
+
+
+def save_outputs(img, out_dir, Q, draft=False):
+    """The print, a preview about 2,400 px wide, and four close-ups at the print's resolution."""
+    stem = "valsora_2036_poster"
+    if draft:
+        img.save(out_dir / "draft.png")
+        log(f"saved {out_dir / 'draft.png'} {img.size}")
+        return
+    full = out_dir / f"{stem}.png"
+    img.save(full, optimize=True)
+    mb = full.stat().st_size / 1e6
+    log(f"saved {full} {img.size}, {mb:.1f} MB")
+    if mb > 60:   # too big to pass round: a high-quality JPEG beside it
+        img.save(out_dir / f"{stem}.jpg", quality=93, subsampling=0, optimize=True)
+        log(f"saved {stem}.jpg")
+    pw = 2400
+    img.resize((pw, round(img.height * pw / img.width)), Image.LANCZOS).save(out_dir / f"{stem}_preview.png",
+                                                                             optimize=True)
+    mx0, my0 = (img.width - round(MAP_W * SCALE * Q)) / 2, TOP * Q
+    m = lambda x, y: (round(mx0 + x * SCALE * Q), round(my0 + y * SCALE * Q))
+    W = img.width
+    crops = {
+        "vale_of_reibonne": (*m(380, 560), *m(1150, 1090)),           # Rouental and the Vale
+        "yastreovakia": (*m(1480, 60), *m(3420, 1180)),
+        "cartouche": (round(W / 2 - 1800 * Q), round(110 * Q), round(W / 2 + 1800 * Q), round(TOP * Q - 40 * Q)),
+        "flag_frieze": (round(W / 2 - 1700 * Q), m(0, MAP_H)[1] + round(70 * Q), round(W / 2 + 1700 * Q),
+                        img.height - round(110 * Q)),
+    }
+    for k, box in crops.items():
+        img.crop(box).save(out_dir / f"{stem}_detail_{k}.png", optimize=True)
+    log("saved the preview and the close-ups")
 
 
 # ------------------------------------------------------------------------------------- main
@@ -1904,10 +2021,10 @@ def main():
         log("saved the window")
         return
     cv = compose(m, items, d, Q)
+    del m
     img = Image.fromarray(np.clip(cv.a, 0, 255).astype(np.uint8))
-    name = "valsora_2036_poster.png" if not args.draft else "draft.png"
-    img.save(out_dir / name)
-    log(f"saved {out_dir / name} {img.size}")
+    del cv
+    save_outputs(img, out_dir, Q, draft=bool(args.draft))
 
 
 if __name__ == "__main__":

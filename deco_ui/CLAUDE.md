@@ -1102,6 +1102,9 @@ The user asked (2026-10-14) for one install, keeping the option of going back to
 Deco UI changes it. Its eight suggestions were all done in v0.10, and more; what is still the game's is listed there
 (the unit counters on the map, the right-click menu, commander trait trees, operations, the war overview, the peace
 conference, the multiplayer and career screens, achievements ...).
+Mockups of those 20 screens (2026-10-17, proposals, not in the mod) are in `art/proposals/next_screens/`, with what
+each would take and a suggested order (its README); the inventory's right-click menu does use pictures (its two
+buttons are the game's; its frame is the tooltip's tile, already deco).
 
 1. Process the user's screenshots and `error.log` of v0.5.2 to v0.8 (section 10 and the README's checklist): the
    side panels, the focus tree, the army bar, the events, the fonts.
