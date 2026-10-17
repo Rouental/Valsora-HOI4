@@ -5,8 +5,10 @@ band, plates and recessed panels where its lists and pictures go, a ruled sheet 
 text, a footer band. The panels' places are the game's, measured from its own pictures (they have to lie under what the
 game draws on them); everything else is drawn here: lacquer plates with gilt hairlines, recessed lacquer panels, an
 ivory sheet ruled in sepia (it stays light: the game's text on it is dark), gilt corner brackets, and on the division
-designer a sunburst and diamond in place of the game's eagle. The commander cards stay parchment-light for the same
-reason, with a gilt rim, a lacquer portrait well and an emblem strip in the card's colour.
+designer a gilt ring with a sunburst and diamonds in place of the game's eagle, round the combat width the game writes
+there. The commander cards stay parchment-light for the same reason, with a gilt rim, a lacquer portrait well and an
+emblem strip in the card's colour, a lacquer diamond in it under the game's white skill number. The ring and the
+diamond are centred where the game draws its numbers (COMBAT_WIDTH, SKILL_ARMY, SKILL_NAVY), measured in game.
 
 gen_textures.py adds them (keys dsg_* and ldr_*); validate_preview.py holds them to the game's sizes.
 """
@@ -100,19 +102,22 @@ def sheet(x0, y0, x1, y1, head, cols, rows):
 
 
 def ornament(cx, cy, span):
-    """the division designer's centre piece: a gilt ring (the game's toggle sits in it), speed-line wings, a sunburst"""
-    out = (f'<div style="position:absolute;left:{cx - 44}px;top:{cy - 44}px;width:88px;height:88px;border-radius:50%;'
+    """the division designer's centre piece: a gilt ring round the game's combat width, speed-line wings, a sunburst.
+    (cx, cy) is the middle of a pixel (x.5): the ring, sunburst and diamonds are odd sizes and the 1 px wings whole
+    rows, so all of it sits square round that point with no half-pixel edges"""
+    assert cx % 1 == .5 and cy % 1 == .5, "the ornament centres on a pixel's middle"
+    out = (f'<div style="position:absolute;left:{cx - 44.5}px;top:{cy - 44.5}px;width:89px;height:89px;border-radius:50%;'
            'background:repeating-conic-gradient(rgba(227,199,126,.22) 0deg 3deg,transparent 3deg 11deg);'
            '-webkit-mask:radial-gradient(circle,#000 30%,transparent 70%)"></div>')
     for dy, ln in [(-6, span), (0, span - 22), (6, span - 44)]:
         for side in (0, 1):
-            x = cx - 24 - ln if side == 0 else cx + 24
+            x = cx - 24.5 - ln if side == 0 else cx + 24.5
             grad = "90deg,rgba(201,165,90,0),#C9A55A" if side == 0 else "90deg,#C9A55A,rgba(201,165,90,0)"
-            out += f'<div style="position:absolute;left:{x}px;top:{cy + dy}px;width:{ln}px;height:1px;background:linear-gradient({grad})"></div>'
+            out += f'<div style="position:absolute;left:{x:g}px;top:{cy - .5 + dy:g}px;width:{ln}px;height:1px;background:linear-gradient({grad})"></div>'
     for side in (-1, 1):
-        out += (f'<div style="position:absolute;left:{cx + side * 30 - 4}px;top:{cy - 4}px;width:8px;height:8px;'
+        out += (f'<div style="position:absolute;left:{cx + side * 30 - 4.5:g}px;top:{cy - 4.5:g}px;width:9px;height:9px;'
                 'background:#E3C77E;transform:rotate(45deg)"></div>')
-    out += (f'<div style="position:absolute;left:{cx - 17}px;top:{cy - 17}px;width:34px;height:34px;border-radius:50%;'
+    out += (f'<div style="position:absolute;left:{cx - 17.5:g}px;top:{cy - 17.5:g}px;width:35px;height:35px;border-radius:50%;'
             'background:radial-gradient(circle,#0B1014 60%,#16212A);box-shadow:0 0 0 1.5px #C9A55A,0 0 0 4px rgba(11,16,20,.9),0 0 0 5px rgba(201,165,90,.45)"></div>')
     return out
 
@@ -155,16 +160,27 @@ def ship(w=1092, h=553):
             + footer(w, 494, 541))
 
 
+# where the game draws the division's combat width (divisiondesignerview.gui: combat_width_view at (290, 230), its text
+# at (0, 10), 40 x 20, centred, hoi_18mbs): the game starts centred text at the box's x + (40 - width) / 2 rounded up
+# (measured in game, 2026-10-17: "12" and the commander cards' numbers), so a number's ink is centred on x 310.5 (310
+# to 311 by its digits) and on y 250.5 (the digits' rows 246-254). Until 2026-10-17 the ring sat at (309, 249), and the
+# author's screenshot showed the "12" 1.5 px right of its centre and 1.5 px below.
+COMBAT_WIDTH = (310.5, 250.5)
+
+
 def division(w=1200, h=720):
     cols = [36, 138, 240, 342, 444]
-    lines = gilt_line(37, 277, 584, 277, "rgba(201,165,90,.75)") + gilt_line(309, 266, 309, 277, "rgba(201,165,90,.75)")
+    cx, cy = COMBAT_WIDTH
+    ring_foot = int(cy + 17.5)
+    lines = (gilt_line(37, 277, 584, 277, "rgba(201,165,90,.75)")
+             + gilt_line(int(cx), ring_foot, int(cx), 277, "rgba(201,165,90,.75)"))
     for x in cols:
         lines += gilt_line(x, 277, x, 550, "rgba(201,165,90,.6)") + gilt_line(x, 549, x + 20, 549, "rgba(201,165,90,.6)")
     lines += gilt_line(583, 277, 583, 288, "rgba(201,165,90,.75)")
     return (frame_base(w, h) + header(w, 40)
             + band(16, 45, 644, 97) + band(16, 99, 644, 155) + band(16, 157, 644, 181) + band(16, 184, 644, 222)
             + inset((12, 224, 647, 608), "linear-gradient(180deg,#10181D,#0A0F12)")
-            + ornament(309, 249, 120) + lines
+            + ornament(cx, cy, 120) + lines
             + inset((543, 288, 625, 502), "linear-gradient(180deg,#06090B,#040607)")
             + inset((46, 527, 536, 594), "linear-gradient(180deg,#06090B,#040607)")
             + gilt_line(652, 46, 652, 608, "rgba(201,165,90,.35)")
@@ -183,18 +199,45 @@ def leader_window(w=550, h=607):
             + inset((9, 71, 524, 544)) + footer(w, 546, 597))
 
 
-def leader_card(stripe, stone=False, w=510, h=98):
-    """a commander's card: emblem strip, portrait well, the parchment body with the name's dotted line and the box at
-    its top right (the game's)"""
+# where the game draws a commander's skill (unitleaderwindow.gui: "skill", hoi_30header, white, its box 50 x 18 at
+# (1, 19), centred, on the army's and the captured cards; at (20, 19) and left-aligned on the navy's): the digits' ink
+# fills rows 28-40 (centre 34.5), and is centred on x 26 on an army card (25.5-26.5 by the digit; the game rounds a
+# centred text's start up, measured in game 2026-10-17) and on about x 25 on a navy card (24.5-25.5; a "1" at 22.5).
+# Until 2026-10-17 a tan diamond sat at (27, 48), under the white number (the author: "Skill is not centered, and the
+# white won't show on the tan").
+SKILL_ARMY = (26, 34.5)
+SKILL_NAVY = (25, 34.5)
+
+
+def skill_diamond(cx, cy, r=20.5):
+    """the skill's setting: a lacquer diamond (the game's white number reads on it) in a gilt rim, a dark line and a
+    faint gilt one round it, centred on the number; r is the outer half-diagonal (20.5: rows 14-55, clear of the game's
+    trait icon and captured flag frame from row 56; the core's 14.8 holds a "10")"""
+    pts = [(cx, cy - r), (cx + r, cy), (cx, cy + r), (cx - r, cy)]
+    return (_layer(pts, "rgba(201,165,90,.5)")
+            + _layer(_shrink(pts, 1), "rgba(11,16,20,.85)")
+            + _layer(_shrink(pts, 2.5), "linear-gradient(135deg,#F1DC9C,#C9A55A 50%,#8B6A2C)")
+            + _layer(_shrink(pts, 4), f"radial-gradient(circle at {cx}px {cy}px,#1E2C36,#0B1014 15px)"))
+
+
+def leader_card(stripe, stone=False, skill=SKILL_ARMY, w=510, h=98):
+    """a commander's card: emblem strip with the skill's diamond, portrait well, the parchment body with the name's
+    dotted line and the box at its top right (the game's). The strip is centred on the skill (its stripes symmetric
+    round it), and a lacquer channel between gilt rules fills the rest of the way to the portrait well (x 55)"""
     body = ("linear-gradient(180deg,#E6E1D6,#CFC9BB)" if stone else "linear-gradient(180deg,#F0E6CC,#E1D2AC)")
     s1, s2 = stripe
+    cx, cy = skill
+    band = 2 * cx - 1                       # the strip runs from x 1 to 2 cx - 1, so its middle is the skill's
+    phase = (cx - 3 - 1) % 12               # a stripe of s1 centred on the skill
     return (f'<div style="position:absolute;left:0;top:1px;width:{w}px;height:{h - 2}px;background:#9C7A36"></div>'
             f'<div style="position:absolute;left:1px;top:2px;width:{w - 2}px;height:{h - 4}px;background:{body}"></div>'
-            f'<div style="position:absolute;left:1px;top:2px;width:54px;height:{h - 4}px;'
-            f'background:repeating-linear-gradient(90deg,{s1} 0 6px,{s2} 6px 12px)"></div>'
-            '<div style="position:absolute;left:19px;top:40px;width:16px;height:16px;background:#E3C77E;transform:rotate(45deg);'
-            'box-shadow:0 0 0 2px rgba(11,16,20,.55)"></div>'
-            f'<div style="position:absolute;left:55px;top:2px;width:1px;height:{h - 4}px;background:#C9A55A"></div>'
+            f'<div style="position:absolute;left:1px;top:2px;width:{band - 1}px;height:{h - 4}px;'
+            f'background:repeating-linear-gradient(90deg,{s1} {phase}px {phase + 6}px,{s2} {phase + 6}px {phase + 12}px)"></div>'
+            f'<div style="position:absolute;left:{band}px;top:2px;width:1px;height:{h - 4}px;background:#C9A55A"></div>'
+            f'<div style="position:absolute;left:{band + 1}px;top:2px;width:{54 - band}px;height:{h - 4}px;'
+            f'background:{LAC},linear-gradient(180deg,#16212A,#0B1014)"></div>'
+            + skill_diamond(cx, cy)
+            + f'<div style="position:absolute;left:55px;top:2px;width:1px;height:{h - 4}px;background:#C9A55A"></div>'
             f'<div style="position:absolute;left:56px;top:2px;width:64px;height:{h - 4}px;background:linear-gradient(180deg,#16212A,#0B1014)"></div>'
             f'<div style="position:absolute;left:120px;top:2px;width:1px;height:{h - 4}px;background:#C9A55A"></div>'
             f'<div style="position:absolute;left:300px;top:2px;width:{w - 301}px;height:{h - 4}px;background:linear-gradient(90deg,rgba(120,90,40,0),rgba(120,90,40,.10))"></div>'
@@ -212,6 +255,6 @@ ADDS = [
     ("dsg_ship", "gfx/interface/equipmentdesigner/ship_designer_popup_bg.dds", 1092, 553, ship),
     ("ldr_window", "gfx/interface/leader_selection_bg.dds", 550, 607, leader_window),
     ("ldr_card", "gfx/interface/leader_selection_entry_bg.dds", 510, 98, lambda: leader_card(("#7A2E26", "#9A4A3A"))),
-    ("ldr_card_navy", "gfx/interface/naval_leader_selection_entry_bg.dds", 510, 98, lambda: leader_card(("#2C4256", "#476178"))),
+    ("ldr_card_navy", "gfx/interface/naval_leader_selection_entry_bg.dds", 510, 98, lambda: leader_card(("#2C4256", "#476178"), skill=SKILL_NAVY)),
     ("ldr_card_captured", "gfx/interface/marshal_captured_bg.dds", 510, 98, lambda: leader_card(("#6E6A62", "#8E877C"), stone=True)),
 ]
