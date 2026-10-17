@@ -1,0 +1,1396 @@
+<title>Valsora Atlas</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Federo&family=Josefin+Sans:ital,wght@0,300;0,400;0,600;0,700;1,400&display=swap">
+<style>
+/* Layout: the whole world full-bleed under a lacquer band (an ivory sheet in light mode); a gilt-framed card docks
+   right and becomes a bottom sheet on phones; the key sits lower left, the zoom lower right. */
+:root {
+  --bg: #E6DDC6; --panel: #F6EFDF; --panel-2: #EEE4CD; --ink: #1D272D; --ink-2: #3A464C; --label: #7B6943;
+  --muted: #8A816E; --gilt: #8B6A2C; --gilt-hi: #6B501C; --rule: #B48F44; --rule-soft: rgba(139,106,44,.32);
+  --jade: #2E6E60; --jade-soft: rgba(46,110,96,.14); --coral: #B4493B; --amber: #A87414;
+  --g1: #A07A33; --g2: #6F531F; --g3: #A9853E; --g4: #5E4518; --stripe: rgba(120,90,30,.045);
+  --shadow: 0 12px 34px rgba(60,44,14,.22); --focus: #2E6E60;
+  --sea: #9DB2BC; --lake: #B6C9D2; --void: #D6CCB2; --map-muted: #BCB5A3; --map-unowned: #A39D8E;
+  --map-ink: #2A2722; --veil: rgba(236,228,206,.58); --halo: rgba(250,246,236,.9); --halo-ink: #1D272D;
+  --font-display: 'Federo', 'Copperplate', 'Optima', Georgia, serif;
+  --font-body: 'Josefin Sans', 'Futura', 'Century Gothic', 'Avenir Next', system-ui, sans-serif;
+  --band-h: 58px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0B1014; --panel: #11191E; --panel-2: #17222A; --ink: #F4ECD9; --ink-2: #E2D8C0; --label: #B7A680;
+    --muted: #8F8670; --gilt: #E3C77E; --gilt-hi: #F1DC9C; --rule: #C9A55A; --rule-soft: rgba(201,165,90,.34);
+    --jade: #3E8C7A; --jade-soft: rgba(46,110,96,.38); --coral: #EE8C7E; --amber: #E7B75A;
+    --g1: #FBF0C8; --g2: #E8CB82; --g3: #B08B41; --g4: #EDD596; --stripe: rgba(255,255,255,.022);
+    --shadow: 0 18px 50px rgba(0,0,0,.6); --focus: #F1DC9C;
+    --sea: #1B2E39; --lake: #2A4757; --void: #070A0C; --map-muted: #4C5358; --map-unowned: #6A6A62;
+    --map-ink: #0E1215; --veil: rgba(4,6,8,.52); --halo: rgba(10,14,17,.85); --halo-ink: #F6EEDC;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0B1014; --panel: #11191E; --panel-2: #17222A; --ink: #F4ECD9; --ink-2: #E2D8C0; --label: #B7A680;
+  --muted: #8F8670; --gilt: #E3C77E; --gilt-hi: #F1DC9C; --rule: #C9A55A; --rule-soft: rgba(201,165,90,.34);
+  --jade: #3E8C7A; --jade-soft: rgba(46,110,96,.38); --coral: #EE8C7E; --amber: #E7B75A;
+  --g1: #FBF0C8; --g2: #E8CB82; --g3: #B08B41; --g4: #EDD596; --stripe: rgba(255,255,255,.022);
+  --shadow: 0 18px 50px rgba(0,0,0,.6); --focus: #F1DC9C;
+  --sea: #1B2E39; --lake: #2A4757; --void: #070A0C; --map-muted: #4C5358; --map-unowned: #6A6A62;
+  --map-ink: #0E1215; --veil: rgba(4,6,8,.52); --halo: rgba(10,14,17,.85); --halo-ink: #F6EEDC;
+  color-scheme: dark;
+}
+[hidden] { display: none !important; }
+html, body { height: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 14px; overflow: hidden;
+  -webkit-font-smoothing: antialiased; }
+button, input, select { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.lacquer { background: repeating-linear-gradient(90deg, var(--stripe) 0 1px, transparent 1px 7px),
+  linear-gradient(180deg, var(--panel-2), var(--panel)); }
+
+/* the band */
+#band { position: fixed; inset: 0 0 auto; z-index: 20; padding-top: env(safe-area-inset-top, 0px);
+  border-bottom: 1px solid var(--rule); box-shadow: 0 1px 0 var(--bg), 0 2px 0 var(--rule-soft), var(--shadow); }
+.band-in { height: var(--band-h); display: flex; align-items: center; gap: 20px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.mark { display: flex; flex-direction: column; line-height: 1; flex: none; }
+.mark-name { font-family: var(--font-display); font-size: 25px; letter-spacing: .2em; text-transform: uppercase;
+  background: linear-gradient(180deg, var(--g1) 0%, var(--g2) 44%, var(--g3) 58%, var(--g4) 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent; }
+.mark-sub { margin-top: 5px; font-size: 10px; letter-spacing: .24em; text-transform: uppercase; color: var(--label); white-space: nowrap; }
+.mark-sub b { color: var(--gilt); font-weight: 600; }
+#modes { display: flex; gap: 2px; flex: 1; justify-content: center; min-width: 0; }
+.tab { border: 1px solid transparent; background: none; padding: 8px 11px 6px; cursor: pointer; color: var(--ink-2);
+  font-family: var(--font-display); font-size: 13px; letter-spacing: .12em; text-transform: uppercase; white-space: nowrap;
+  clip-path: polygon(6px 0, calc(100% - 6px) 0, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0 calc(100% - 6px), 0 6px); }
+.tab:hover { color: var(--gilt-hi); background: var(--jade-soft); }
+.tab[aria-pressed="true"] { color: var(--gilt-hi); background: var(--jade-soft); border-color: var(--rule); }
+.tab[disabled] { opacity: .38; cursor: default; background: none; }
+#mode-select { display: none; background: var(--panel); border: 1px solid var(--rule); padding: 7px 10px; min-width: 0;
+  font-family: var(--font-display); letter-spacing: .1em; text-transform: uppercase; font-size: 13px; }
+.search { position: relative; flex: none; width: 270px; }
+#q { width: 100%; box-sizing: border-box; background: var(--panel); border: 1px solid var(--rule-soft); padding: 8px 12px 7px 34px;
+  font-size: 14px; outline: none; }
+#q:focus { border-color: var(--rule); }
+.search svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); pointer-events: none; }
+#results { position: absolute; right: 0; top: calc(100% + 6px); width: max(100%, 340px); max-width: calc(100vw - 32px);
+  margin: 0; padding: 4px 0; list-style: none; max-height: min(60vh, 460px); overflow-y: auto; border: 1px solid var(--rule);
+  box-shadow: var(--shadow); z-index: 30; }
+#results li { display: flex; align-items: center; gap: 10px; padding: 7px 12px; cursor: pointer; }
+#results li[aria-selected="true"], #results li:hover { background: var(--jade-soft); }
+#results .rname { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#results .rsub { color: var(--muted); font-size: 12px; }
+#results .rkind { font-size: 9.5px; letter-spacing: .2em; text-transform: uppercase; color: var(--label); flex: none; }
+#results .empty { color: var(--muted); cursor: default; }
+.iconbtn { display: none; background: none; border: 1px solid var(--rule-soft); width: 38px; height: 34px; padding: 0;
+  cursor: pointer; place-items: center; }
+
+/* the map */
+#map { position: fixed; left: 0; top: calc(var(--band-h) + env(safe-area-inset-top, 0px));
+  width: 100%; height: calc(100% - var(--band-h) - env(safe-area-inset-top, 0px)); /* a canvas keeps its own ratio unless sized */
+  touch-action: none; cursor: grab; display: block; background: var(--void); }
+#map.dragging { cursor: grabbing; }
+
+/* tooltip */
+#tip { position: fixed; z-index: 25; pointer-events: none; max-width: 300px; padding: 9px 12px 8px; border: 1px solid var(--rule);
+  box-shadow: var(--shadow); font-size: 13px; line-height: 1.45; }
+#tip .t1 { display: flex; align-items: center; gap: 8px; font-family: var(--font-display); font-size: 15px; letter-spacing: .05em; color: var(--gilt-hi); }
+#tip .row { color: var(--ink-2); }
+#tip .row b { color: var(--ink); font-weight: 600; }
+#tip .lab { color: var(--label); font-size: 10px; letter-spacing: .18em; text-transform: uppercase; margin-right: 4px; }
+#tip .xy { margin-top: 4px; padding-top: 4px; border-top: 1px solid var(--rule-soft); color: var(--muted); font-size: 11.5px;
+  font-variant-numeric: tabular-nums; display: flex; justify-content: space-between; gap: 12px; }
+.chg { display: inline-block; padding: 0 5px; margin-right: 3px; font-size: 11px; border: 1px solid currentColor; }
+
+/* card and sheet */
+#card { position: fixed; z-index: 22; right: max(16px, env(safe-area-inset-right, 0px)); top: calc(var(--band-h) + env(safe-area-inset-top, 0px) + 14px);
+  width: min(390px, calc(100vw - 32px)); max-height: calc(100% - var(--band-h) - env(safe-area-inset-top, 0px) - 14px - 70px - env(safe-area-inset-bottom, 0px));
+  display: flex; flex-direction: column; border: 1px solid var(--rule);
+  box-shadow: inset 0 0 0 4px var(--panel), inset 0 0 0 5px var(--rule-soft), var(--shadow); }
+#card::before, #card::after { content: ""; position: absolute; width: 16px; height: 16px; pointer-events: none; }
+#card::before { left: 7px; top: 7px; border-top: 2px solid var(--gilt); border-left: 2px solid var(--gilt); }
+#card::after { right: 7px; bottom: 7px; border-bottom: 2px solid var(--gilt); border-right: 2px solid var(--gilt); }
+.sheet-grip { display: none; }
+.card-scroll { overflow-y: auto; padding: 20px 22px 20px; overscroll-behavior: contain; }
+.card-head { display: flex; gap: 14px; align-items: flex-start; }
+.card-head .titles { flex: 1; min-width: 0; }
+.eyebrow { font-size: 10px; letter-spacing: .24em; text-transform: uppercase; color: var(--label); }
+.card-head h2 { margin: 3px 0 2px; font-family: var(--font-display); font-weight: 400; font-size: 26px; line-height: 1.1;
+  letter-spacing: .04em; color: var(--gilt-hi); text-wrap: balance; overflow-wrap: anywhere; }
+.formal { font-style: italic; color: var(--ink-2); font-size: 14px; line-height: 1.35; }
+.x { flex: none; background: none; border: 1px solid var(--rule-soft); width: 30px; height: 30px; cursor: pointer; color: var(--gilt);
+  font-size: 18px; line-height: 1; padding: 0; transform: rotate(45deg); }
+.x span { display: inline-block; transform: rotate(-45deg); }
+.x:hover { border-color: var(--rule); }
+.flag { display: inline-block; flex: none; background-image: url("flags.png"); background-repeat: no-repeat;
+  box-shadow: 0 0 0 1px var(--rule); image-rendering: auto; }
+.flag.none { background: var(--panel-2); }
+.rule { height: 1px; margin: 16px 0 14px; background: linear-gradient(90deg, transparent, var(--rule) 12%, var(--rule) 88%, transparent); position: relative; }
+.rule::after { content: ""; position: absolute; left: 50%; top: -3px; width: 6px; height: 6px; margin-left: -3px; background: var(--panel);
+  border: 1px solid var(--rule); transform: rotate(45deg); }
+.ruler { display: flex; gap: 14px; align-items: center; }
+.portrait { flex: none; width: 58px; height: 78px; background-image: url("portraits.jpg"); background-repeat: no-repeat;
+  box-shadow: 0 0 0 1px var(--rule), 0 0 0 4px var(--panel), 0 0 0 5px var(--rule-soft); border-radius: 29px 29px 0 0; }
+.portrait.none { background: var(--panel-2); display: grid; place-items: center; font-family: var(--font-display); color: var(--label); font-size: 20px; }
+.ruler .who { font-family: var(--font-display); font-size: 18px; letter-spacing: .03em; }
+.gov { display: flex; align-items: center; gap: 7px; color: var(--ink-2); margin-top: 3px; }
+.sw { display: inline-block; width: 10px; height: 10px; transform: rotate(45deg); box-shadow: 0 0 0 1px var(--rule-soft); flex: none; }
+dl.facts { display: grid; grid-template-columns: minmax(84px, max-content) 1fr; gap: 6px 14px; margin: 0; }
+dl.facts dt { color: var(--label); font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; padding-top: 2px; }
+dl.facts dd { margin: 0; min-width: 0; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+dl.facts dd .dim { color: var(--muted); }
+h3 { margin: 16px 0 8px; font-family: var(--font-display); font-weight: 400; font-size: 12.5px; letter-spacing: .2em; text-transform: uppercase; color: var(--gilt); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; max-width: 100%; padding: 4px 8px 3px 5px; background: var(--panel-2);
+  border: 1px solid var(--rule-soft); cursor: pointer; font-size: 13px; line-height: 1.2; text-align: left; }
+.chip:hover { border-color: var(--rule); background: var(--jade-soft); }
+.chip.plain { padding-left: 8px; }
+.chip small { color: var(--muted); font-size: 11px; }
+.link { background: none; border: 0; padding: 0; color: var(--gilt-hi); cursor: pointer; text-decoration: underline; text-decoration-color: var(--rule-soft);
+  text-underline-offset: 3px; text-align: left; }
+.link:hover { text-decoration-color: var(--rule); }
+.act { margin-top: 16px; width: 100%; padding: 9px 12px 7px; background: var(--jade-soft); border: 1px solid var(--rule); cursor: pointer;
+  font-family: var(--font-display); letter-spacing: .14em; text-transform: uppercase; font-size: 12.5px; color: var(--gilt-hi); }
+.act:hover { background: var(--jade); color: #F6EEDC; }
+details { margin-top: 14px; }
+details summary { cursor: pointer; font-family: var(--font-display); font-size: 12.5px; letter-spacing: .2em; text-transform: uppercase; color: var(--gilt); }
+details ol { margin: 8px 0 0; padding: 0; list-style: none; columns: 2; column-gap: 14px; }
+details li { break-inside: avoid; padding: 2px 0; font-size: 13px; }
+details li .n { color: var(--muted); font-variant-numeric: tabular-nums; font-size: 11.5px; margin-right: 4px; }
+.note { margin-top: 12px; color: var(--ink-2); font-size: 13px; line-height: 1.45; }
+.stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin: 4px 0 16px; }
+.stat { border: 1px solid var(--rule-soft); padding: 8px 8px 6px; text-align: center; }
+.stat .v { font-family: var(--font-display); font-size: 21px; font-variant-numeric: tabular-nums; }
+.stat .k { font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--label); margin-top: 2px; }
+ul.list { list-style: none; margin: 0; padding: 0; }
+ul.list li { display: flex; gap: 8px; align-items: baseline; padding: 4px 0; border-bottom: 1px solid var(--rule-soft); font-size: 13px; }
+ul.list li:last-child { border-bottom: 0; }
+ul.list li .grow { flex: 1; min-width: 0; }
+ul.list li .num { color: var(--muted); font-variant-numeric: tabular-nums; font-size: 12px; flex: none; }
+
+/* key */
+#legend { position: fixed; z-index: 21; left: max(16px, env(safe-area-inset-left, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  width: 290px; max-width: calc(100vw - 32px); border: 1px solid var(--rule); box-shadow: var(--shadow); }
+#legend .lg-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 14px 8px;
+  border-bottom: 1px solid var(--rule-soft); cursor: pointer; user-select: none; }
+#legend .lg-title { font-family: var(--font-display); font-size: 14px; letter-spacing: .16em; text-transform: uppercase; color: var(--gilt-hi); }
+#legend .caret { color: var(--gilt); font-size: 12px; transition: transform .2s; }
+#legend.closed .caret { transform: rotate(180deg); }
+#legend.closed .lg-body { display: none; }
+#legend.closed .lg-head { border-bottom: 0; }
+.lg-body { padding: 10px 14px 12px; max-height: min(46vh, 420px); overflow-y: auto; }
+.lg-body p { margin: 0 0 9px; color: var(--ink-2); font-size: 12.5px; line-height: 1.45; }
+.keys { display: grid; grid-template-columns: 1fr 1fr; gap: 5px 10px; margin-bottom: 8px; }
+.keys.one { grid-template-columns: 1fr; }
+.key { display: flex; align-items: center; gap: 7px; font-size: 12px; line-height: 1.25; min-width: 0; }
+.key i { flex: none; width: 14px; height: 10px; box-shadow: 0 0 0 1px var(--rule-soft); }
+.key i.line { background: linear-gradient(180deg, transparent 4px, var(--lc) 4px 6px, transparent 6px), #b9b08a; }
+.toggles { display: flex; gap: 16px; padding-top: 8px; border-top: 1px solid var(--rule-soft); }
+.toggles label { display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-2); }
+.toggles input { accent-color: var(--jade); margin: 0; }
+#legend-btn { display: none; }
+
+/* zoom */
+#zoom { position: fixed; z-index: 21; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  display: flex; align-items: center; gap: 0; border: 1px solid var(--rule); box-shadow: var(--shadow); }
+#zoom button { width: 38px; height: 36px; background: none; border: 0; border-left: 1px solid var(--rule-soft); cursor: pointer;
+  color: var(--gilt-hi); font-size: 19px; line-height: 1; padding: 0; }
+#zoom button:first-of-type { border-left: 0; }
+#zoom button:hover { background: var(--jade-soft); }
+#zoom .zl { padding: 0 10px 0 12px; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; min-width: 44px; text-align: right; }
+
+/* loading */
+#loading { position: fixed; inset: 0; z-index: 40; display: grid; place-items: center; background: var(--bg);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.load-plate { text-align: center; padding: 34px 40px 28px; border: 1px solid var(--rule); max-width: 420px;
+  box-shadow: inset 0 0 0 4px var(--panel), inset 0 0 0 5px var(--rule-soft), var(--shadow); }
+.load-plate .mark-name { font-size: 34px; display: block; }
+.load-plate .mark-sub { display: block; margin-top: 8px; }
+#load-step { margin-top: 22px; color: var(--ink-2); font-size: 13.5px; min-height: 1.4em; }
+.load-bar { margin: 12px auto 0; width: 220px; height: 3px; background: var(--rule-soft); position: relative; overflow: hidden; }
+.load-bar i { position: absolute; inset: 0 auto 0 0; width: 0; background: var(--gilt); transition: width .25s; }
+#load-error { margin-top: 18px; color: var(--coral); font-size: 13px; line-height: 1.5; text-align: left; white-space: pre-wrap; }
+
+/* tablets and narrow desktops: modes in a list */
+@media (max-width: 1360px) {
+  #modes { display: none; }
+  #mode-select { display: block; margin-left: auto; }
+}
+/* phones: two rows in the band, the card a bottom sheet, the key behind a button */
+@media (max-width: 760px) {
+  :root { --band-h: 98px; }
+  .band-in { display: grid; grid-template-columns: 1fr auto; grid-template-rows: 48px 40px; gap: 4px 10px; align-items: center; }
+  .mark { grid-column: 1; grid-row: 1; }
+  .mark-name { font-size: 20px; }
+  .mark-sub { margin-top: 4px; font-size: 9px; letter-spacing: .2em; }
+  .iconbtn { display: grid; grid-column: 2; grid-row: 1; }
+  #mode-select { grid-column: 1; grid-row: 2; margin-left: 0; width: 100%; }
+  #legend-btn { display: block; grid-column: 2; grid-row: 2; height: 34px; padding: 0 12px; background: var(--panel); border: 1px solid var(--rule-soft);
+    font-family: var(--font-display); letter-spacing: .14em; text-transform: uppercase; font-size: 12px; cursor: pointer; }
+  .search { display: none; position: absolute; left: max(16px, env(safe-area-inset-left, 0px)); right: calc(max(16px, env(safe-area-inset-right, 0px)) + 48px);
+    top: calc(env(safe-area-inset-top, 0px) + 7px); width: auto; z-index: 31; }
+  body.searching .search { display: block; }
+  body.searching .mark { visibility: hidden; }
+  #q { font-size: 16px; }
+  #results { left: 0; right: auto; width: calc(100vw - 32px); }
+  #legend { width: auto; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(64px + env(safe-area-inset-bottom, 0px)); }
+  #legend .lg-head { display: none; }
+  #legend:not(.open) { display: none; }
+  #legend.closed .lg-body { display: block; }
+  #card { left: 0; right: 0; top: auto; bottom: 0; width: auto; max-height: 58%; border-left: 0; border-right: 0; border-bottom: 0;
+    padding-bottom: env(safe-area-inset-bottom, 0px); box-shadow: 0 -1px 0 var(--rule-soft), var(--shadow); }
+  #card::before, #card::after { display: none; }
+  .sheet-grip { display: block; flex: none; height: 22px; cursor: pointer; position: relative; border: 0; background: none; width: 100%; padding: 0; }
+  .sheet-grip::after { content: ""; position: absolute; left: 50%; top: 9px; width: 44px; height: 4px; margin-left: -22px; background: var(--rule-soft); }
+  #card.collapsed { max-height: 92px; }
+  #card.collapsed .card-scroll { overflow: hidden; }
+  .card-scroll { padding: 2px max(16px, env(safe-area-inset-right, 0px)) 18px max(16px, env(safe-area-inset-left, 0px)); }
+  .card-head h2 { font-size: 22px; }
+  body.has-card #zoom, body.has-card #legend { display: none; }
+  #zoom .zl { display: none; }
+  .stat-row { grid-template-columns: repeat(2, 1fr); }
+  details ol { columns: 1; }
+  #tip { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<header id="band" class="lacquer">
+  <div class="band-in">
+    <div class="mark"><span class="mark-name">Valsora</span><span class="mark-sub">Atlas &middot; <b id="built">the last build</b></span></div>
+    <nav id="modes" aria-label="Map modes"></nav>
+    <select id="mode-select" aria-label="Map mode"></select>
+    <div class="search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" style="color: var(--gilt)" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>
+      <input id="q" type="search" placeholder="Search nations, states, cities" autocomplete="off" spellcheck="false" aria-label="Search the map" aria-controls="results">
+      <ul id="results" class="lacquer" role="listbox" hidden></ul>
+    </div>
+    <button id="search-btn" class="iconbtn" type="button" aria-label="Search the map"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" style="color: var(--gilt)" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg></button>
+    <button id="legend-btn" type="button" aria-controls="legend" aria-expanded="false">Key</button>
+  </div>
+</header>
+
+<canvas id="map" aria-label="The map of Valsora"></canvas>
+<div id="tip" class="lacquer" hidden></div>
+<aside id="card" class="lacquer" hidden aria-live="polite">
+  <button class="sheet-grip" type="button" aria-label="Fold or unfold the card"></button>
+  <div class="card-scroll" id="card-body"></div>
+</aside>
+<section id="legend" class="lacquer" aria-label="Key">
+  <div class="lg-head" id="lg-head"><span class="lg-title" id="lg-title">Political</span><span class="caret" aria-hidden="true">&#9662;</span></div>
+  <div class="lg-body" id="lg-body"></div>
+</section>
+<div id="zoom" class="lacquer">
+  <span class="zl" id="zl">&times;1</span>
+  <button type="button" id="z-in" aria-label="Zoom in">+</button>
+  <button type="button" id="z-out" aria-label="Zoom out">&minus;</button>
+  <button type="button" id="z-home" aria-label="Show the whole world">&#9671;</button>
+</div>
+<div id="loading">
+  <div class="load-plate lacquer">
+    <span class="mark-name">Valsora</span>
+    <span class="mark-sub">Atlas of the last build</span>
+    <div id="load-step">Opening the atlas&hellip;</div>
+    <div class="load-bar"><i id="load-bar"></i></div>
+    <div id="load-error" hidden></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+// ------------------------------------------------------------------ constants and state
+const TILE = 2560;            // the map is drawn on canvases this wide (two for Valsora's 5120)
+const MAX_ZOOM = 32;
+const MODES = [
+  { id: 'political', name: 'Political', click: 'country' },
+  { id: 'states', name: 'States', click: 'state' },
+  { id: 'provinces', name: 'Provinces', click: 'state' },
+  { id: 'regions', name: 'Regions', click: 'region' },
+  { id: 'releasables', name: 'Releasables', click: 'state' },
+  { id: 'cities', name: 'Cities', click: 'state' },
+  { id: 'terrain', name: 'Terrain', click: 'state' },
+  { id: 'test', name: 'Terrain test', click: 'state', needs: 'test' },
+  { id: 'changes', name: 'Changes', click: 'state' },
+];
+// which borders each mode draws: accent (gilt), strong (ink), mid (fill x .7), weak (fill x .86)
+// bits: 1 province, 2 state, 4 country, 8 strategic region, 16 coast, 32 Subregions part
+const EDGES = {
+  political: { accent: 0, strong: 4 | 16, mid: 2, weak: 0 },
+  states: { accent: 0, strong: 4 | 16, mid: 2, weak: 0 },
+  provinces: { accent: 0, strong: 2 | 4 | 16, mid: 0, weak: 1 },
+  regions: { accent: 0, strong: 8 | 16, mid: 4, weak: 2 },
+  releasables: { accent: 32, strong: 4 | 16, mid: 0, weak: 2 },
+  cities: { accent: 0, strong: 4 | 16, mid: 0, weak: 2 },
+  terrain: { accent: 0, strong: 16, mid: 4, weak: 0 },
+  test: { accent: 0, strong: 16, mid: 4, weak: 0 },
+  changes: { accent: 0, strong: 16, mid: 4, weak: 2 },
+};
+const STATE_PALETTE = ['#c9b37a', '#86a894', '#b48596', '#8496bd', '#c99d74', '#98b67c', '#a291c2', '#d0c08e', '#79a8b0', '#bf8f78'];
+const CHANGE_COLOURS = { owner: '#ee8c7e', state: '#e7b75a', region: '#5fb8a4', redrawn: '#a88ee0' };
+const IDEOLOGY_NAMES = { neutrality: 'Monarchist', democratic: 'Democratic', fascism: 'Authoritarian', communism: 'Communist', theocracy: 'Theocratic' };
+const AUTONOMY = { puppet: 'Puppet', valsora_protectorate: 'Protectorate', dominion: 'Dominion', colony: 'Colony',
+  integrated_puppet: 'Integrated puppet', reichskommissariat: 'Reichskommissariat', satellite: 'Satellite', free: 'Free' };
+
+const S = { mode: 'political', rivers: true, labels: true, sel: null, hover: null, focus: null, legendOpen: true };
+let A, PV, CH;                // atlas.json, provinces.json, changes.json
+let W, H, N, NT, HW;          // map size, provinces, tiles, half width
+let ids, edge, riverIx, riverVal, shade, tshade = null, tcls = null;
+let pKind, pState, pRegion, pOwner, pPatch, pChange, pFlow;
+let bx0, by0, bx1, by1;       // each province's box (by id = index + 1)
+let stateAdj = [];            // state -> neighbouring states
+let CI = {};                  // tag -> country index
+let coreStates = {};          // tag -> states it has a core on
+const tiles = [];             // {cv, ctx, img, u32, x0, w}
+const V = { s: 0.4, ox: 0, oy: 0, vw: 0, vh: 0, dpr: 1 };
+let canvas, ctx, veilCv, veilCtx;
+const $ = (q) => document.querySelector(q);
+const fmt = new Intl.NumberFormat('en-GB');
+const store = {
+  get(k) { try { return localStorage.getItem('valsora-atlas:' + k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem('valsora-atlas:' + k, v); } catch (e) { /* optional */ } },
+};
+
+// ------------------------------------------------------------------ colours
+function hexToRgb(h) { h = h.replace('#', '').trim(); if (h.length === 3) h = h.split('').map(c => c + c).join('');
+  const v = parseInt(h, 16); return [(v >> 16) & 255, (v >> 8) & 255, v & 255]; }
+function cssColour(name) {
+  const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  if (v.startsWith('#')) return hexToRgb(v);
+  const m = v.match(/[\d.]+/g); return m ? m.slice(0, 3).map(Number) : [128, 128, 128];
+}
+const pack = (r, g, b) => ((255 << 24) | (b << 16) | (g << 8) | r) >>> 0;
+const packHex = (h) => { const [r, g, b] = hexToRgb(h); return pack(r, g, b); };
+function scaleC(c, f) { // f in 0..256
+  return ((255 << 24) | ((((c >> 16) & 255) * f >> 8) << 16) | ((((c >> 8) & 255) * f >> 8) << 8) | ((c & 255) * f >> 8)) >>> 0; }
+function mixC(a, b, t) { // t in 0..1 toward b
+  const ar = a & 255, ag = (a >> 8) & 255, ab = (a >> 16) & 255, br = b & 255, bg = (b >> 8) & 255, bb = (b >> 16) & 255;
+  return pack(Math.round(ar + (br - ar) * t), Math.round(ag + (bg - ag) * t), Math.round(ab + (bb - ab) * t)); }
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const plain = (s) => String(s ?? '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+const cap = (s) => s ? s[0].toUpperCase() + s.slice(1) : s;
+
+// ------------------------------------------------------------------ loading
+function step(text, frac) { $('#load-step').textContent = text; $('#load-bar').style.width = Math.round(frac * 100) + '%'; }
+const tick = () => new Promise(r => setTimeout(r, 0));
+async function getJSON(name) {
+  const r = await fetch(name);
+  if (!r.ok) throw new Error(`${name}: the server answered ${r.status}`);
+  return r.json();
+}
+async function pixels(name) {
+  const r = await fetch(name);
+  if (!r.ok) throw new Error(`${name}: the server answered ${r.status}`);
+  const blob = await r.blob();
+  let bmp;
+  try { bmp = await createImageBitmap(blob, { colorSpaceConversion: 'none', premultiplyAlpha: 'none' }); }
+  catch (e) { bmp = await createImageBitmap(blob); }
+  const w = bmp.width, h = bmp.height;
+  const c = document.createElement('canvas'); c.width = w; c.height = h;
+  const g = c.getContext('2d', { willReadFrequently: true });
+  g.drawImage(bmp, 0, 0);
+  const d = g.getImageData(0, 0, w, h).data;
+  if (bmp.close) bmp.close();
+  c.width = c.height = 1;
+  return { w, h, d };
+}
+function grey(img) { const n = img.w * img.h, out = new Uint8Array(n), d = img.d; for (let i = 0; i < n; i++) out[i] = d[i * 4]; return out; }
+
+async function boot() {
+  try {
+    step('Reading the tables…', 0.05);
+    [A, PV, CH] = await Promise.all([getJSON('atlas.json'), getJSON('provinces.json'), getJSON('changes.json').catch(() => null)]);
+    W = A.w; H = A.h; N = PV.kind.length; NT = Math.ceil(W / TILE); HW = W >> 1;
+    $('#built').textContent = 'build of ' + niceDate(A.built);
+    step(`Unfolding ${fmt.format(N)} provinces…`, 0.2);
+    const prov = await pixels('prov.png');
+    if (prov.w !== W || prov.h !== H) throw new Error(`prov.png is ${prov.w} x ${prov.h}, the tables say ${W} x ${H}`);
+    ids = N + 1 < 65536 ? new Uint16Array(W * H) : new Uint32Array(W * H);
+    { const d = prov.d, n = W * H; let max = 0;
+      for (let i = 0; i < n; i++) { const v = (d[i * 4] << 16) | (d[i * 4 + 1] << 8) | d[i * 4 + 2]; ids[i] = v; if (v > max) max = v; }
+      if (max > N) throw new Error(`prov.png names province ${max - 1}, the tables have ${N}: the files come from different exports`); }
+    prov.d = null;
+    await tick();
+    step('Reading the rivers and relief…', 0.4);
+    const [rv, sh] = await Promise.all([pixels('rivers.png'), pixels('shade.png')]);
+    const rg = grey(rv); const ri = [];
+    for (let i = 0; i < rg.length; i++) if (rg[i]) ri.push(i);
+    riverIx = Int32Array.from(ri); riverVal = Uint8Array.from(ri.map(i => rg[i]));
+    shade = grey(sh);
+    await tick();
+    step('Drawing the borders…', 0.55);
+    tables();
+    await tick();
+    prepare();
+    await tick();
+    step('Colouring the map…', 0.8);
+    setupCanvas();
+    restore();
+    buildModes();
+    paint();
+    homeView();
+    step('Ready', 1);
+    $('#loading').hidden = true;
+    applyHash();
+    legend();
+    if (S.mode === 'changes' && !S.sel) showChanges();
+    if (document.fonts) document.fonts.ready.then(() => { widths.clear(); draw(); });
+  } catch (err) {
+    console.error(err);
+    step('The atlas could not open.', 0);
+    const e = $('#load-error'); e.hidden = false;
+    e.textContent = String(err.message || err) + '\n\nThe page needs its data files beside it (atlas.json, provinces.json, prov.png …): run python3 scripts/atlas_export.py and publish work/atlas/ with the page.';
+  }
+}
+function niceDate(s) {
+  if (!s) return '';
+  const [d, t] = s.split(' '); const [y, m, dd] = d.split('-').map(Number);
+  const mon = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][m - 1];
+  return `${dd} ${mon} ${y}${t ? ', ' + t : ''}`;
+}
+
+// ------------------------------------------------------------------ tables
+function tables() {
+  A.countries.forEach((c, i) => { CI[c.tag] = i; });
+  const n1 = N + 1;
+  pKind = new Uint8Array(n1); pKind[0] = 255;
+  pState = new Int32Array(n1).fill(-1); pRegion = new Int32Array(n1).fill(-1);
+  pOwner = new Int16Array(n1).fill(-1); pPatch = new Int16Array(n1).fill(-1);
+  pChange = new Uint8Array(n1); pFlow = new Int32Array(n1).fill(-1);
+  for (let p = 0; p < N; p++) { pKind[p + 1] = PV.kind[p]; pState[p + 1] = PV.state[p]; pRegion[p + 1] = PV.region[p]; }
+  A.states.forEach((s, k) => { const o = CI[s.owner] ?? -1; for (const p of s.provs) pOwner[p + 1] = o; });
+  A.subregions.forEach((sr, k) => { for (const p of sr.provs) if (pPatch[p + 1] < 0) pPatch[p + 1] = k; });
+  if (CH && CH.provinces) for (const [p, f, fl] of CH.provinces) { pChange[p + 1] = f; pFlow[p + 1] = fl; }
+  A.states.forEach((s, k) => { for (const c of s.cores) (coreStates[c] ||= []).push(k); });
+}
+
+function prepare() {
+  const n1 = N + 1;
+  bx0 = new Int32Array(n1).fill(W); by0 = new Int32Array(n1).fill(H); bx1 = new Int32Array(n1).fill(-1); by1 = new Int32Array(n1).fill(-1);
+  edge = new Uint8Array(W * H);
+  const adj = new Set();
+  const diff = (a, b) => {
+    let e = 1;
+    const la = pKind[a] === 1, lb = pKind[b] === 1;
+    if (la !== lb) e |= 16;
+    else if (la) {
+      if (pOwner[a] !== pOwner[b]) e |= 4;
+      const sa = pState[a], sb = pState[b];
+      if (sa !== sb) { e |= 2; if (sa >= 0 && sb >= 0) adj.add(sa < sb ? sa * 65536 + sb : sb * 65536 + sa); }
+    }
+    if (pRegion[a] !== pRegion[b]) e |= 8;
+    if (pPatch[a] !== pPatch[b]) e |= 32;
+    return e;
+  };
+  for (let y = 0; y < H; y++) {
+    const row = y * W, last = y === H - 1;
+    let runStart = 0;
+    for (let x = 0; x < W; x++) {
+      const i = row + x, a = ids[i];
+      const b = x < W - 1 ? ids[i + 1] : ids[row];
+      let e = 0;
+      if (b !== a) e = diff(a, b);
+      if (!last) { const c = ids[i + W]; if (c !== a) e |= diff(a, c); }
+      edge[i] = e;
+      if (x === W - 1 || b !== a) { // a run of one province ends here
+        if (runStart < bx0[a]) bx0[a] = runStart;
+        if (x > bx1[a]) bx1[a] = x;
+        if (y < by0[a]) by0[a] = y;
+        by1[a] = y;
+        runStart = x + 1;
+      }
+    }
+  }
+  stateAdj = A.states.map(() => []);
+  for (const k of adj) { const a = Math.floor(k / 65536), b = k % 65536; stateAdj[a].push(b); stateAdj[b].push(a); }
+  // the states mode: a colour unlike the neighbours', greedily
+  const used = new Int8Array(A.states.length).fill(-1);
+  for (let s = 0; s < A.states.length; s++) {
+    const taken = new Set(stateAdj[s].map(t => used[t]));
+    let k = (s * 7) % STATE_PALETTE.length, tries = 0;
+    while (taken.has(k) && tries < STATE_PALETTE.length) { k = (k + 1) % STATE_PALETTE.length; tries++; }
+    used[s] = k;
+  }
+  A.states.forEach((s, k) => { s._c = used[k]; });
+}
+
+// ------------------------------------------------------------------ painting
+function setupCanvas() {
+  canvas = $('#map'); ctx = canvas.getContext('2d');
+  veilCv = document.createElement('canvas'); veilCtx = veilCv.getContext('2d');
+  for (let t = 0; t < NT; t++) {
+    const x0 = t * TILE, w = Math.min(W, x0 + TILE) - x0;
+    const cv = document.createElement('canvas'); cv.width = w; cv.height = H;
+    const c2 = cv.getContext('2d');
+    const img = c2.createImageData(w, H);
+    tiles.push({ cv, ctx: c2, img, u32: new Uint32Array(img.data.buffer), x0, w });
+  }
+  resize();
+  new ResizeObserver(resize).observe(canvas);
+}
+
+function fillTable(mode) {
+  const f = new Uint32Array(N + 1);
+  const sea = pack(...cssColour('--sea')), lake = pack(...cssColour('--lake')), muted = pack(...cssColour('--map-muted'));
+  const unowned = pack(...cssColour('--map-unowned'));
+  const cc = A.countries.map(c => packHex(c.colour));
+  const water = (k) => k === 0 ? sea : lake;
+  f[0] = sea;
+  if (mode === 'political' || mode === 'cities') {
+    const dimTo = pack(...cssColour('--map-muted'));
+    for (let id = 1; id <= N; id++) { const k = pKind[id]; if (k !== 1) { f[id] = water(k); continue; }
+      const o = pOwner[id]; let c = o >= 0 ? cc[o] : unowned; if (mode === 'cities') c = mixC(c, dimTo, 0.55); f[id] = c; }
+  } else if (mode === 'states') {
+    const pal = STATE_PALETTE.map(packHex);
+    for (let id = 1; id <= N; id++) { const k = pKind[id]; if (k !== 1) { f[id] = water(k); continue; }
+      const s = pState[id]; f[id] = s >= 0 ? pal[A.states[s]._c] : unowned; }
+  } else if (mode === 'provinces') {
+    for (let id = 1; id <= N; id++) { const c = PV.colour[id - 1]; f[id] = pack((c >> 16) & 255, (c >> 8) & 255, c & 255); }
+  } else if (mode === 'regions') {
+    const rc = A.regions.map(r => packHex(r.colour));
+    for (let id = 1; id <= N; id++) { const r = pRegion[id], k = pKind[id];
+      let c = r >= 0 ? rc[r] : water(k); if (k === 2) c = mixC(c, lake, 0.55); f[id] = c; }
+  } else if (mode === 'releasables') {
+    const sc = A.states.map((s) => releasableColour(s, cc, muted));
+    for (let id = 1; id <= N; id++) { const k = pKind[id]; if (k !== 1) { f[id] = water(k); continue; }
+      const s = pState[id]; f[id] = s >= 0 ? sc[s] : unowned; }
+  } else if (mode === 'terrain') {
+    const tc = PV.terrains.map(t => packHex(A.terrain.colours[t] || 'b0ba78'));
+    for (let id = 1; id <= N; id++) { const k = pKind[id]; f[id] = k === 1 ? tc[PV.terrain[id - 1]] : water(k); }
+  } else if (mode === 'test') {
+    const land = packHex('8c8a7c');
+    for (let id = 1; id <= N; id++) { const k = pKind[id]; f[id] = k === 1 ? land : water(k); }
+  } else if (mode === 'changes') {
+    const col = { 1: packHex(CHANGE_COLOURS.owner), 2: packHex(CHANGE_COLOURS.state), 4: packHex(CHANGE_COLOURS.region), 8: packHex(CHANGE_COLOURS.redrawn) };
+    for (let id = 1; id <= N; id++) { const k = pKind[id], fl = pChange[id];
+      let c = k === 1 ? muted : water(k);
+      if (fl) c = fl & 1 ? col[1] : fl & 2 ? col[2] : fl & 4 ? col[4] : col[8];
+      f[id] = c; }
+  }
+  return f;
+}
+function releasableColour(s, cc, muted) {
+  const others = s.cores.filter(c => c !== s.owner && CI[c] !== undefined);
+  if (S.focus) {
+    const fi = CI[S.focus];
+    if (s.cores.includes(S.focus)) return cc[fi];
+    if (s.owner === S.focus) return mixC(cc[fi], muted, 0.6);
+    return muted;
+  }
+  if (!others.length) return mixC(cc[CI[s.owner]] ?? muted, muted, 0.72);
+  others.sort((a, b) => (coreStates[a]?.length || 0) - (coreStates[b]?.length || 0));
+  return cc[CI[others[0]]];
+}
+
+function paint() {
+  const m = S.mode, cfg = EDGES[m], fill = fillTable(m);
+  const AC = cfg.accent, ST = cfg.strong, MI = cfg.mid, WK = cfg.weak;
+  const strong = pack(...cssColour('--map-ink')), accent = packHex('#e8cd84');
+  const sh = m === 'terrain' ? shade : (m === 'test' ? tshade : null);
+  const cls = m === 'test' ? tcls : null;
+  const testCol = m === 'test' && A.test ? [0, ...A.test.classes.map(c => packHex(c[2]))] : null;
+  const hatchA = packHex('8c8a7c'), hatchB = packHex('6e6c60');
+  for (const t of tiles) {
+    const out = t.u32, x0 = t.x0, x1 = t.x0 + t.w, tw = t.w;
+    for (let y = 0; y < H; y++) {
+      const row = y * W, orow = y * tw - x0, srow = (y >> 1) * HW;
+      for (let x = x0; x < x1; x++) {
+        const i = row + x, id = ids[i];
+        let c = fill[id];
+        if (sh !== null && pKind[id] === 1) {
+          if (cls !== null) { const k = cls[i]; c = k ? testCol[k] : (((x + y) & 7) < 2 ? hatchB : hatchA); }
+          const f = sh[srow + (x >> 1)] * 2;
+          const r = Math.min(255, (c & 255) * f >> 8), g = Math.min(255, ((c >> 8) & 255) * f >> 8), b = Math.min(255, ((c >> 16) & 255) * f >> 8);
+          c = ((255 << 24) | (b << 16) | (g << 8) | r) >>> 0;
+        }
+        const e = edge[i];
+        if (e !== 0) {
+          if (e & AC) c = accent;
+          else if (e & ST) c = strong;
+          else if (e & MI) c = scaleC(c, 178);
+          else if (e & WK) c = scaleC(c, 220);
+        }
+        out[orow + x] = c;
+      }
+    }
+  }
+  if (S.rivers) {
+    const major = packHex('2f5fae'), minor = packHex('4f86cc'), src = packHex('3fae5a'), inflow = packHex('d8483e'), out_ = packHex('e6c440');
+    for (let k = 0; k < riverIx.length; k++) {
+      const i = riverIx[k], v = riverVal[k] - 1, x = i % W, y = (i - x) / W, t = tiles[(x / TILE) | 0];
+      t.u32[y * t.w + (x - t.x0)] = v === 0 ? src : v === 1 ? inflow : v === 2 ? out_ : v >= 6 ? major : minor;
+    }
+  }
+  for (const t of tiles) t.ctx.putImageData(t.img, 0, 0);
+  draw();
+}
+
+// ------------------------------------------------------------------ view
+function resize() {
+  const r = canvas.getBoundingClientRect();
+  V.dpr = Math.min(window.devicePixelRatio || 1, 2);
+  V.vw = r.width; V.vh = r.height;
+  canvas.width = Math.round(r.width * V.dpr); canvas.height = Math.round(r.height * V.dpr);
+  veilCv.width = canvas.width; veilCv.height = canvas.height;
+  clampView(); draw();
+}
+const minZoom = () => Math.min(V.vw / W, V.vh / H) * 0.92;
+function clampView() {
+  V.s = Math.max(minZoom(), Math.min(MAX_ZOOM, V.s));
+  V.ox = ((V.ox % W) + W) % W;
+  const hs = H * V.s;
+  if (hs <= V.vh) V.oy = -(V.vh - hs) / 2 / V.s;
+  else V.oy = Math.max(-24 / V.s, Math.min(H - V.vh / V.s + 24 / V.s, V.oy));
+}
+function homeView() {
+  // the whole world where it fits; on a tall screen (a phone) about half of it, around the Vale of Reibonne
+  const fit = Math.min(V.vw / W, V.vh / H);
+  V.s = H * fit < V.vh * 0.45 ? Math.min(V.vh / H, (V.vw / W) * 2.2) : fit;
+  V.ox = H * fit < V.vh * 0.45 ? 760 - V.vw / 2 / V.s : 0; V.oy = 0; clampView(); draw();
+}
+function zoomAt(sx, sy, ns) {
+  const mx = V.ox + sx / V.s, my = V.oy + sy / V.s;
+  V.s = Math.max(minZoom(), Math.min(MAX_ZOOM, ns));
+  V.ox = mx - sx / V.s; V.oy = my - sy / V.s; clampView(); draw();
+}
+function toMap(sx, sy) { const x = Math.floor(V.ox + sx / V.s), y = Math.floor(V.oy + sy / V.s); return [((x % W) + W) % W, y]; }
+function idAt(x, y) { return y >= 0 && y < H ? ids[y * W + x] : 0; }
+// the screen x of each copy of a map x (the world wraps)
+function copies(mx, margin, fn) {
+  const ws = W * V.s; let sx = (mx - V.ox) * V.s; sx = ((sx % ws) + ws) % ws;
+  for (let x = sx - ws; x < V.vw + margin; x += ws) if (x > -margin) fn(x);
+}
+let frameReq = 0;
+function draw() { if (!frameReq && ctx) frameReq = requestAnimationFrame(frame); }
+function frame() {
+  frameReq = 0;
+  const g = ctx, s = V.s, d = V.dpr;
+  g.setTransform(d, 0, 0, d, 0, 0);
+  g.fillStyle = `rgb(${cssColour('--void').join(',')})`; g.fillRect(0, 0, V.vw, V.vh);
+  g.imageSmoothingEnabled = s < 1; g.imageSmoothingQuality = 'high';
+  const ws = W * s, y0 = Math.round(-V.oy * s), y1 = Math.round((H - V.oy) * s);
+  for (let bx = -V.ox * s; bx < V.vw; bx += ws) {
+    for (const t of tiles) {
+      const a = Math.round(bx + t.x0 * s), b = Math.round(bx + (t.x0 + t.w) * s);
+      if (b < 0 || a > V.vw) continue;
+      g.drawImage(t.cv, a, y0, b - a, y1 - y0);
+    }
+  }
+  if (S.sel && S.sel.mask) drawSelection(g);
+  if (S.hover && S.hover.outline && (!S.sel || S.hover.key !== S.sel.key)) drawOutline(g, S.hover.outline, 0.85);
+  if (S.labels) drawLabels(g);
+  if (S.mode === 'cities') drawCities(g);
+  if (S.mode === 'changes') drawRemoved(g);
+  $('#zl').textContent = '×' + (s >= 10 ? s.toFixed(0) : s >= 1 ? s.toFixed(1) : s.toFixed(2));
+}
+function placeMasked(g, m, fn) { copies(m.x0, m.w * V.s + 2, (sx) => fn(sx, (m.y0 - V.oy) * V.s)); }
+function drawSelection(g) {
+  const m = S.sel.mask, s = V.s, v = veilCtx, d = V.dpr;
+  v.setTransform(d, 0, 0, d, 0, 0);
+  v.globalCompositeOperation = 'source-over'; v.clearRect(0, 0, V.vw, V.vh);
+  v.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--veil'); v.fillRect(0, 0, V.vw, V.vh);
+  v.globalCompositeOperation = 'destination-out'; v.imageSmoothingEnabled = s < 1;
+  placeMasked(v, m, (sx, sy) => v.drawImage(m.fill, sx, sy, m.w * s, m.h * s));
+  v.globalCompositeOperation = 'source-over';
+  g.save(); g.setTransform(1, 0, 0, 1, 0, 0); g.globalAlpha = S.sel.kind === 'country' || S.sel.kind === 'flow' ? 1 : 0.5; g.drawImage(veilCv, 0, 0); g.restore();
+  drawOutline(g, m, 1);
+}
+function drawOutline(g, m, alpha) {
+  const s = V.s; g.save(); g.globalAlpha = alpha; g.imageSmoothingEnabled = s < 1;
+  const offs = s < 1.5 ? [[0, 0], [1, 0], [-1, 0], [0, 1], [0, -1]] : [[0, 0]];
+  placeMasked(g, m, (sx, sy) => { for (const [dx, dy] of offs) g.drawImage(m.line, sx + dx, sy + dy, m.w * s, m.h * s); });
+  g.restore();
+}
+
+// ------------------------------------------------------------------ selection masks
+function maskOf(provs, colour) {
+  const inSet = new Uint8Array(N + 1);
+  let x0 = W, y0 = H, x1 = -1, y1 = -1;
+  for (const p of provs) { const id = p + 1; inSet[id] = 1;
+    if (bx0[id] < x0) x0 = bx0[id]; if (by0[id] < y0) y0 = by0[id]; if (bx1[id] > x1) x1 = bx1[id]; if (by1[id] > y1) y1 = by1[id]; }
+  if (x1 < 0) return null;
+  const w = x1 - x0 + 1, h = y1 - y0 + 1;
+  const fill = document.createElement('canvas'); fill.width = w; fill.height = h;
+  const line = document.createElement('canvas'); line.width = w; line.height = h;
+  const fi = fill.getContext('2d').createImageData(w, h), li = line.getContext('2d').createImageData(w, h);
+  const fu = new Uint32Array(fi.data.buffer), lu = new Uint32Array(li.data.buffer);
+  const col = packHex(colour), solid = 0xff000000;
+  for (let y = 0; y < h; y++) {
+    const gy = y + y0, row = gy * W;
+    for (let x = 0; x < w; x++) {
+      const gx = x + x0, id = ids[row + gx];
+      if (!inSet[id]) continue;
+      fu[y * w + x] = solid;
+      const l = gx > 0 ? ids[row + gx - 1] : ids[row + W - 1], r = gx < W - 1 ? ids[row + gx + 1] : ids[row];
+      const u = gy > 0 ? ids[row - W + gx] : 0, dn = gy < H - 1 ? ids[row + W + gx] : 0;
+      if (!inSet[l] || !inSet[r] || !inSet[u] || !inSet[dn]) lu[y * w + x] = col;
+    }
+  }
+  fill.getContext('2d').putImageData(fi, 0, 0); line.getContext('2d').putImageData(li, 0, 0);
+  return { fill, line, x0, y0, w, h };
+}
+function provsOf(kind, k) {
+  if (kind === 'state') return A.states[k].provs;
+  if (kind === 'region') { const out = []; for (let p = 0; p < N; p++) if (PV.region[p] === k) out.push(p); return out; }
+  const c = A.countries[k];
+  const st = c.states.length ? c.states : (c.claims || []);
+  return st.flatMap(s => A.states[s].provs);
+}
+function select(kind, k, opts = {}) {
+  if (k == null || k < 0) { clearSelection(); return; }
+  const key = kind + ':' + k;
+  if (!S.sel || S.sel.key !== key) S.sel = { kind, k, key, mask: maskOf(provsOf(kind, k), '#f1dc9c') };
+  showCard(kind, k);
+  if (opts.fly) flyTo(boxOf(kind, k), opts.point);
+  try { history.replaceState(null, '', '#' + hashFor(kind, k)); } catch (e) { /* optional */ }
+  draw();
+}
+function clearSelection() { S.sel = null; hideCard(); if (S.mode === 'changes') showChanges(); try { history.replaceState(null, '', location.pathname); } catch (e) { /* */ } draw(); }
+function hashFor(kind, k) { return kind === 'country' ? A.countries[k].tag : kind === 'state' ? 's' + (k + 1) : 'r' + (k + 1); }
+function applyHash() {
+  const h = (location.hash || '').slice(1);
+  if (/^[A-Z]{3}$/.test(h) && CI[h] !== undefined) select('country', CI[h], { fly: true });
+  else if (/^s\d+$/.test(h)) { const k = +h.slice(1) - 1; if (A.states[k]) select('state', k, { fly: true }); }
+  else if (/^r\d+$/.test(h)) { const k = +h.slice(1) - 1; if (A.regions[k]) select('region', k, { fly: true }); }
+  else if (/^p\d+$/.test(h)) { const p = +h.slice(1) - 1; if (p >= 0 && p < N && PV.state[p] >= 0) select('state', PV.state[p], { fly: true }); }
+}
+function boxOf(kind, k) {
+  if (kind === 'state') return A.states[k].box;
+  if (kind === 'country') {
+    const c = A.countries[k];
+    if (c.box) return c.box;
+    const st = c.claims || []; if (!st.length) return null;
+    return unionBox(st.map(s => A.states[s].box));
+  }
+  const m = S.sel && S.sel.key === kind + ':' + k ? S.sel.mask : maskOf(provsOf(kind, k), '#fff');
+  return m ? [m.x0, m.y0, m.x0 + m.w, m.y0 + m.h] : null;
+}
+function unionBox(bs) {
+  // the boxes of the largest cluster: those within 900 px of the biggest one
+  const big = bs.reduce((a, b) => ((b[2] - b[0]) * (b[3] - b[1]) > (a[2] - a[0]) * (a[3] - a[1]) ? b : a));
+  const cx = (big[0] + big[2]) / 2, cy = (big[1] + big[3]) / 2;
+  const near = bs.filter(b => Math.abs((b[0] + b[2]) / 2 - cx) < 900 && Math.abs((b[1] + b[3]) / 2 - cy) < 900);
+  return [Math.min(...near.map(b => b[0])), Math.min(...near.map(b => b[1])), Math.max(...near.map(b => b[2])), Math.max(...near.map(b => b[3]))];
+}
+
+// ------------------------------------------------------------------ flying
+let flight = 0;
+function available() {
+  const card = $('#card'), wide = window.matchMedia('(min-width: 761px)').matches;
+  let w = V.vw, h = V.vh;
+  if (!card.hidden) { const r = card.getBoundingClientRect(); if (wide) w = Math.max(200, r.left - 16); else h = Math.max(160, V.vh - r.height); }
+  return { w, h };
+}
+function flyTo(box, point) {
+  if (!box && !point) return;
+  const av = available();
+  let s1, cx, cy;
+  if (point) { s1 = Math.max(V.s, 4); cx = point[0]; cy = point[1]; }
+  else {
+    const bw = Math.max(box[2] - box[0], 8), bh = Math.max(box[3] - box[1], 8);
+    s1 = Math.min(av.w * 0.78 / bw, av.h * 0.78 / bh, 10);
+    cx = (box[0] + box[2]) / 2; cy = (box[1] + box[3]) / 2;
+  }
+  s1 = Math.max(minZoom(), Math.min(MAX_ZOOM, s1));
+  const s0 = V.s, c0x = V.ox + av.w / 2 / s0, c0y = V.oy + av.h / 2 / s0;
+  let dx = cx - c0x; dx = ((dx % W) + W * 1.5) % W - W / 2;
+  const dy = cy - c0y;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const t0 = performance.now(), dur = reduce ? 0 : 650, id = ++flight;
+  const stepf = (now) => {
+    if (id !== flight) return;
+    const t = dur ? Math.min(1, (now - t0) / dur) : 1, e = t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    const s = Math.exp(Math.log(s0) + (Math.log(s1) - Math.log(s0)) * e);
+    V.s = s; V.ox = c0x + dx * e - av.w / 2 / s; V.oy = c0y + dy * e - av.h / 2 / s;
+    clampView(); draw();
+    if (t < 1) requestAnimationFrame(stepf);
+  };
+  requestAnimationFrame(stepf);
+}
+
+// ------------------------------------------------------------------ labels
+const widths = new Map();
+const DISPLAY = "Federo, 'Copperplate', 'Optima', Georgia, serif";
+const BODY = "'Josefin Sans', 'Futura', 'Century Gothic', 'Avenir Next', system-ui, sans-serif";
+function width100(text, family, spacing) {
+  const key = family + '|' + spacing + '|' + text;
+  let w = widths.get(key);
+  if (w === undefined) { ctx.save(); ctx.font = `100px ${family}`; if ('letterSpacing' in ctx) ctx.letterSpacing = spacing * 100 + 'px';
+    w = ctx.measureText(text).width; ctx.restore(); widths.set(key, w); }
+  return w;
+}
+function overlaps(boxes, b) { for (const o of boxes) if (b[0] < o[2] && b[2] > o[0] && b[1] < o[3] && b[3] > o[1]) return true; return false; }
+function label(g, text, x, y, fs, opts, boxes) {
+  const ang = (opts.angle || 0) * Math.PI / 180, fam = opts.family || DISPLAY, sp = opts.spacing ?? 0.12;
+  const tw = width100(text, fam, sp) * fs / 100;
+  const ca = Math.abs(Math.cos(ang)), sa = Math.abs(Math.sin(ang));
+  const hw = (tw * ca + fs * sa) / 2 + 2, hh = (tw * sa + fs * ca) / 2 + 1;
+  let drawn = false;
+  copies(x, tw, (sx) => {
+    const sy = (y - V.oy) * V.s;
+    if (sy < -fs * 2 || sy > V.vh + fs * 2) return;
+    const b = [sx - hw, sy - hh, sx + hw, sy + hh];
+    if (boxes && overlaps(boxes, b)) return;
+    if (boxes) boxes.push(b);
+    g.save(); g.translate(sx, sy); if (ang) g.rotate(ang);
+    g.font = `${opts.weight || ''} ${fs.toFixed(1)}px ${fam}`; if ('letterSpacing' in g) g.letterSpacing = (sp * fs).toFixed(2) + 'px';
+    g.textAlign = 'center'; g.textBaseline = 'middle'; g.lineJoin = 'round';
+    g.globalAlpha = opts.alpha ?? 1;
+    g.strokeStyle = opts.halo; g.lineWidth = Math.max(2.2, fs * 0.2); g.strokeText(text, 0, 0);
+    g.fillStyle = opts.ink; g.fillText(text, 0, 0);
+    g.restore(); drawn = true;
+  });
+  return drawn;
+}
+function inkPair() {
+  const root = getComputedStyle(document.documentElement);
+  return { halo: root.getPropertyValue('--halo').trim() || 'rgba(10,14,17,.85)', ink: root.getPropertyValue('--halo-ink').trim() || '#F6EEDC' };
+}
+function drawLabels(g) {
+  const s = V.s, boxes = [], { halo, ink } = inkPair(), m = S.mode;
+  const countryLabels = (alpha) => {
+    const list = [];
+    A.countries.forEach((c, i) => { for (const lb of c.labels) list.push([c, lb]); });
+    list.sort((a, b) => b[1][5] - a[1][5]);
+    for (const [c, lb] of list) {
+      const text = c.name.toUpperCase();
+      const w = width100(text, DISPLAY, 0.12) / 100;
+      const fs = Math.min(lb[3] * s * 0.8 / w, lb[4] * s * 0.62, 46);
+      if (fs < 8.5) continue;
+      label(g, text, lb[0], lb[1], fs, { angle: lb[2], halo, ink, alpha }, boxes);
+    }
+  };
+  if (m === 'political' || m === 'terrain' || m === 'test' || m === 'changes') countryLabels(m === 'political' ? 1 : 0.85);
+  else if (m === 'cities') countryLabels(0.55);
+  else if (m === 'states') {
+    if (s < 0.9) { countryLabels(0.9); return; }
+    const vis = visibleStates();
+    vis.sort((a, b) => A.states[b].area - A.states[a].area);
+    for (const k of vis) { const st = A.states[k];
+      const fs = Math.min(Math.sqrt(st.area) * s * 0.16, 20); if (fs < 9) continue;
+      const shown = label(g, st.name, st.label[0], st.label[1], fs, { family: BODY, weight: 600, spacing: 0.02, halo, ink }, boxes);
+      if (shown && fs >= 12) label(g, 'State ' + (k + 1), st.label[0], st.label[1] + fs * 1.05 / s, fs * 0.62, { family: BODY, spacing: 0.08, halo, ink, alpha: 0.8 }, null);
+    }
+  } else if (m === 'provinces') {
+    if (s < 3.5) { if (s >= 0.9) { stateNames(g, boxes, halo, ink); } else countryLabels(0.9); return; }
+    const [x0, y0] = toMap(0, 0), x1 = x0 + V.vw / s, y1 = y0 + V.vh / s;
+    for (let p = 0; p < N; p++) {
+      let x = PV.x[p]; const y = PV.y[p];
+      if (y < y0 || y > y1) continue;
+      if (x < x0) x += W; if (x > x1) continue;
+      const fs = Math.min(Math.sqrt(PV.size[p]) * s * 0.3, 15); if (fs < 8) continue;
+      label(g, String(p + 1), PV.x[p], y, fs, { family: BODY, weight: 600, spacing: 0, halo, ink }, boxes);
+    }
+  } else if (m === 'regions') {
+    const order = A.regions.map((r, k) => k).sort((a, b) => A.regions[b].area - A.regions[a].area);
+    for (const k of order) { const r = A.regions[k];
+      const fs = Math.min(Math.sqrt(r.area) * s * 0.11, r.kind === 'sea' ? 22 : 24); if (fs < 9) continue;
+      label(g, r.kind === 'sea' ? r.name : r.name.toUpperCase(), r.label[0], r.label[1], fs,
+        { family: r.kind === 'sea' ? BODY : DISPLAY, weight: r.kind === 'sea' ? 'italic 400' : '', spacing: r.kind === 'sea' ? 0.06 : 0.1, halo, ink, alpha: r.kind === 'sea' ? 0.8 : 1 }, boxes); }
+  } else if (m === 'releasables') {
+    const items = [];
+    A.countries.forEach((c, i) => {
+      if (S.focus && c.tag !== S.focus) return;
+      const st = c.states.length ? [] : (c.claims || []);
+      if (!st.length) return;
+      let ax = 0, ay = 0, aw = 0; const ref = A.states[st[0]].label;
+      for (const s_ of st) { const q = A.states[s_]; let x = q.label[0]; if (x - ref[0] > W / 2) x -= W; if (ref[0] - x > W / 2) x += W;
+        if (Math.abs(x - ref[0]) > 900 || Math.abs(q.label[1] - ref[1]) > 900) continue; ax += x * q.area; ay += q.label[1] * q.area; aw += q.area; }
+      items.push([c, ax / aw, ay / aw, aw]);
+    });
+    items.sort((a, b) => b[3] - a[3]);
+    for (const [c, x, y, a] of items) {
+      const fs = Math.min(Math.sqrt(a) * s * 0.13, 22); if (fs < 9) continue;
+      label(g, c.name, x, y, fs, { family: DISPLAY, spacing: 0.06, halo, ink }, boxes);
+    }
+  }
+}
+function stateNames(g, boxes, halo, ink) {
+  const vis = visibleStates(); vis.sort((a, b) => A.states[b].area - A.states[a].area);
+  for (const k of vis) { const st = A.states[k]; const fs = Math.min(Math.sqrt(st.area) * V.s * 0.14, 18); if (fs < 9) continue;
+    label(g, st.name, st.label[0], st.label[1], fs, { family: BODY, weight: 600, spacing: 0.02, halo, ink, alpha: 0.9 }, boxes); }
+}
+function visibleStates() {
+  const [x0, y0] = toMap(0, 0), s = V.s, x1 = x0 + V.vw / s, y1 = y0 + V.vh / s, out = [];
+  A.states.forEach((st, k) => { let x = st.label[0]; const y = st.label[1]; if (y < y0 - 20 || y > y1 + 20) return;
+    if (x < x0 - 40) x += W; if (x > x1 + 40) return; out.push(k); });
+  return out;
+}
+function star(g, x, y, r) {
+  g.beginPath();
+  for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, rr = i % 2 ? r * 0.45 : r; g.lineTo(x + Math.cos(a) * rr, y + Math.sin(a) * rr); }
+  g.closePath();
+}
+function drawCities(g) {
+  const s = V.s, { halo, ink } = inkPair(), boxes = [];
+  const list = A.cities.slice().sort((a, b) => (b.cap - a.cap) || (b.v - a.v) || (b.named - a.named));
+  const k = Math.max(0.7, Math.min(1.8, Math.sqrt(s)));
+  // markers first, smallest last so the important ones stay readable
+  for (const c of list.slice().reverse()) {
+    if (!c.named && s < 1.1) continue;
+    const r = (c.cap ? 6.5 : c.v >= 20 ? 4.6 : c.v >= 10 ? 4 : c.named ? 3.4 : 2.4) * k;
+    copies(c.x, 10, (sx) => { const sy = (c.y - V.oy) * s;
+      if (sy < -10 || sy > V.vh + 10) return;
+      g.save(); g.translate(sx, sy);
+      g.lineWidth = 1.4; g.strokeStyle = 'rgba(14,18,21,.9)';
+      g.fillStyle = c.cap ? '#f1dc9c' : c.named ? '#e3c77e' : 'rgba(227,199,126,.75)';
+      if (c.cap) { star(g, 0, 0, r); g.fill(); g.stroke(); }
+      else { g.beginPath(); g.moveTo(0, -r); g.lineTo(r, 0); g.lineTo(0, r); g.lineTo(-r, 0); g.closePath(); g.fill(); g.stroke(); }
+      g.restore(); });
+  }
+  for (const c of list) {
+    const show = c.cap ? s >= 0.5 : c.named ? s >= 0.9 : s >= 3;
+    if (!show) continue;
+    const fs = c.cap ? 13 : c.named ? 12 : 11;
+    const r = (c.cap ? 6.5 : 4) * k;
+    label(g, c.n, c.x + (r + 4 + width100(c.n, BODY, 0.02) * fs / 200) / s, c.y, fs, { family: BODY, weight: c.cap ? 700 : 600, spacing: 0.02, halo, ink }, boxes);
+  }
+}
+function drawRemoved(g) {
+  if (!CH || !CH.statesRemoved) return;
+  const s = V.s;
+  for (const [name, owner, x, y] of CH.statesRemoved) copies(x, 12, (sx) => { const sy = (y - V.oy) * s;
+    g.save(); g.strokeStyle = CHANGE_COLOURS.owner; g.lineWidth = 2; const r = 5;
+    g.beginPath(); g.moveTo(sx - r, sy - r); g.lineTo(sx + r, sy + r); g.moveTo(sx + r, sy - r); g.lineTo(sx - r, sy + r); g.stroke(); g.restore(); });
+}
+
+// ------------------------------------------------------------------ hover and tooltips
+let lastTipId = -1, hoverReq = 0, hoverPt = null;
+function onHover(e) {
+  hoverPt = [e.clientX, e.clientY];
+  if (!hoverReq) hoverReq = requestAnimationFrame(() => { hoverReq = 0; doHover(); });
+}
+function doHover() {
+  if (!hoverPt || !ids) return;
+  const r = canvas.getBoundingClientRect();
+  const [x, y] = toMap(hoverPt[0] - r.left, hoverPt[1] - r.top);
+  const id = idAt(x, y), tip = $('#tip');
+  if (!id) { tip.hidden = true; setHover(null); lastTipId = -1; return; }
+  if (id !== lastTipId) { tip.innerHTML = tipHTML(id - 1, x, y); lastTipId = id; hoverTarget(id - 1); }
+  const xy = tip.querySelector('.xy span'); if (xy) xy.textContent = `x ${x} · y ${y}`;
+  if (S.mode === 'test' && tcls) { const t = tip.querySelector('.tt'); if (t) t.textContent = testName(x, y); }
+  tip.hidden = false;
+  const tw = tip.offsetWidth, th = tip.offsetHeight;
+  let tx = hoverPt[0] + 18, ty = hoverPt[1] + 18;
+  if (tx + tw > window.innerWidth - 8) tx = hoverPt[0] - tw - 14;
+  if (ty + th > window.innerHeight - 8) ty = hoverPt[1] - th - 14;
+  tip.style.left = Math.max(8, tx) + 'px'; tip.style.top = Math.max(8, ty) + 'px';
+}
+function testName(x, y) { const k = tcls[y * W + x]; return k ? A.test.classes[k - 1][1] : 'no test data here (land added since)'; }
+function hoverTarget(p) {
+  const mode = MODES.find(m => m.id === S.mode);
+  let kind = mode.click, k = -1;
+  if (kind === 'country') { const st = PV.state[p]; k = st >= 0 ? CI[A.states[st].owner] : -1; }
+  else if (kind === 'state') k = PV.state[p];
+  else k = PV.region[p];
+  if (k == null || k < 0 || window.matchMedia('(hover: none)').matches) { setHover(null); return; }
+  const key = kind + ':' + k;
+  if (S.hover && S.hover.key === key) return;
+  const provs = provsOf(kind, k);
+  setHover({ key, outline: provs.length < 4000 ? maskOf(provs, '#e3c77e') : null });
+}
+function setHover(h) { if ((S.hover && S.hover.key) !== (h && h.key)) { S.hover = h; draw(); } }
+function flagHTML(tag, scale = 1) {
+  const c = A.countries[CI[tag]]; const f = A.flag;
+  if (!c || c.flag < 0) return `<span class="flag none" style="width:${f.w * scale}px;height:${f.h * scale}px"></span>`;
+  const col = c.flag % f.cols, row = Math.floor(c.flag / f.cols);
+  return `<span class="flag" style="width:${(f.w * scale).toFixed(1)}px;height:${(f.h * scale).toFixed(1)}px;background-size:${(f.cols * f.w * scale).toFixed(1)}px auto;background-position:${(-col * f.w * scale).toFixed(1)}px ${(-row * f.h * scale).toFixed(1)}px" aria-hidden="true"></span>`;
+}
+const cname = (tag) => { const c = A.countries[CI[tag]]; return c ? c.name : (CH && CH.names && CH.names[tag]) || tag; };
+function changeText(p) {
+  const f = pChange[p + 1]; if (!f) return '';
+  const parts = [];
+  if (f & 1) { const fl = CH.flows[pFlow[p + 1]]; parts.push(`<span class="chg" style="color:${CHANGE_COLOURS.owner}">owner</span>${fl && fl[0] ? 'was ' + esc(cname(fl[0])) : 'was unowned'}`); }
+  if (f & 2) parts.push(`<span class="chg" style="color:${CHANGE_COLOURS.state}">state</span>`);
+  if (f & 4) parts.push(`<span class="chg" style="color:${CHANGE_COLOURS.region}">region</span>`);
+  if (f & 8) parts.push(`<span class="chg" style="color:${CHANGE_COLOURS.redrawn}">redrawn</span>`);
+  return parts.join(' ');
+}
+function tipHTML(p, x, y) {
+  const kind = PV.kind[p], st = PV.state[p], rg = PV.region[p], out = [];
+  const region = rg >= 0 ? A.regions[rg] : null;
+  if (kind === 1 && st >= 0) {
+    const s = A.states[st], c = A.countries[CI[s.owner]];
+    out.push(`<div class="t1">${flagHTML(s.owner, 0.32)}<span>${esc(c ? c.name : s.owner)}</span></div>`);
+    out.push(`<div class="row"><span class="lab">State ${st + 1}</span><b>${esc(s.name)}</b></div>`);
+  } else out.push(`<div class="t1"><span>${kind === 0 ? 'Sea' : kind === 2 ? 'Lake' : 'Land'}</span></div>`);
+  const terr = PV.terrains[PV.terrain[p]];
+  out.push(`<div class="row"><span class="lab">Province ${p + 1}</span>${esc(terr)}${PV.coast[p] ? ' · coastal' : ''} · ${fmt.format(PV.size[p])} px</div>`);
+  if (region) out.push(`<div class="row"><span class="lab">${region.kind === 'sea' ? 'Sea region' : 'Region'} ${rg + 1}</span>${esc(region.name)}</div>`);
+  if (S.mode === 'releasables' && st >= 0) { const cores = A.states[st].cores;
+    out.push(`<div class="row"><span class="lab">Cores</span>${cores.length ? cores.map(t => esc(cname(t))).join(', ') : 'none'}</div>`); }
+  if (S.mode === 'cities' && st >= 0) { const vp = A.states[st].vp;
+    if (vp.length) out.push(`<div class="row"><span class="lab">Victory points</span>${vp.map(v => esc(v[2]) + ' ' + v[1]).join(', ')}</div>`); }
+  if (S.mode === 'test') out.push(`<div class="row"><span class="lab">Test</span><span class="tt"></span></div>`);
+  if (S.mode === 'changes') { const t = changeText(p); out.push(`<div class="row">${t || '<span class="lab">Unchanged</span>'}</div>`); }
+  const mode = MODES.find(m => m.id === S.mode);
+  out.push(`<div class="xy"><span>x ${x} · y ${y}</span><span>${mode.click === 'country' ? 'click: nation · shift: state' : mode.click === 'region' ? 'click: region' : 'click: state · shift: nation'}</span></div>`);
+  return out.join('');
+}
+
+// ------------------------------------------------------------------ cards
+function showCard(kind, k) {
+  const body = $('#card-body');
+  body.innerHTML = kind === 'country' ? countryCard(k) : kind === 'state' ? stateCard(k) : regionCard(k);
+  openCard();
+}
+function openCard() { const c = $('#card'); c.hidden = false; c.classList.remove('collapsed'); document.body.classList.add('has-card'); $('#card-body').scrollTop = 0; }
+function hideCard() { $('#card').hidden = true; document.body.classList.remove('has-card'); }
+const chipC = (tag, extra = '') => `<button class="chip" type="button" data-go="country:${esc(tag)}">${flagHTML(tag, 0.28)}<span>${esc(cname(tag))}</span>${extra}</button>`;
+const chipS = (s, extra = '') => `<button class="chip plain" type="button" data-go="state:${s}">${esc(A.states[s].name)}${extra}</button>`;
+const people = (n) => n >= 1e6 ? (n / 1e6).toFixed(n >= 1e7 ? 1 : 2) + ' million' : fmt.format(n);
+function head(eyebrow, title, sub, flag) {
+  return `<div class="card-head">${flag || ''}<div class="titles"><div class="eyebrow">${eyebrow}</div><h2>${esc(title)}</h2>${sub ? `<div class="formal">${esc(sub)}</div>` : ''}</div>
+    <button class="x" type="button" data-close aria-label="Close the card"><span>&times;</span></button></div>`;
+}
+function countryCard(i) {
+  const c = A.countries[i], P = A.portrait, out = [];
+  const landTotal = A.countries.reduce((a, x) => a + x.area, 0);
+  out.push(head(`Nation · ${c.tag}${c.continent ? ' · ' + c.continent : ''}`, c.name, cap(c.full) !== c.name ? cap(c.full) : '', flagHTML(c.tag, 1)));
+  out.push('<div class="rule"></div>');
+  const pic = c.portrait >= 0
+    ? `<span class="portrait" style="background-size:${P.cols * 58}px auto;background-position:${-(c.portrait % P.cols) * 58}px ${-Math.floor(c.portrait / P.cols) * 78}px" aria-hidden="true"></span>`
+    : `<span class="portrait none" aria-hidden="true" title="a base-game portrait">${esc((c.ruler || '?').split(' ').map(w => w[0]).slice(0, 2).join(''))}</span>`;
+  const icol = A.ideologies[c.ideology] || '888888';
+  out.push(`<div class="ruler">${pic}<div><div class="eyebrow">Ruler at the start</div><div class="who">${esc(c.ruler || '—')}</div>
+    <div class="gov"><i class="sw" style="background:#${icol}"></i>${esc(IDEOLOGY_NAMES[c.ideology] || c.ideology)}${c.sub ? ' · ' + esc(c.sub) : ''}</div></div></div>`);
+  out.push('<div class="rule"></div>');
+  if (c.states.length) {
+    out.push(`<div class="stat-row"><div class="stat"><div class="v">${c.states.length}</div><div class="k">States</div></div>
+      <div class="stat"><div class="v">${fmt.format(c.provs)}</div><div class="k">Provinces</div></div>
+      <div class="stat"><div class="v">${fmt.format(c.area)}</div><div class="k">Land px</div></div>
+      <div class="stat"><div class="v">${(c.pop / 1e6).toFixed(c.pop >= 1e7 ? 0 : 1)}</div><div class="k">Million</div></div></div>`);
+  }
+  const dl = [];
+  if (c.capital >= 0) { const s = A.states[c.capital]; const vp = s.vp.find(v => v[1] >= 10) || s.vp[0];
+    dl.push(['Capital', `<button class="link" type="button" data-go="state:${c.capital}">${esc(vp ? vp[2] : s.name)}</button>${vp && vp[2] !== s.name ? ` <span class="dim">in ${esc(s.name)}</span>` : ''}`]); }
+  if (c.states.length) {
+    dl.push(['Land', `${fmt.format(c.area)} map pixels <span class="dim">· ${(100 * c.area / landTotal).toFixed(2)} % of the world's</span>`]);
+    dl.push(['Population', people(c.pop) + ' <span class="dim">(state manpower)</span>']);
+  } else {
+    const how = c.kind === 'civil_war' ? `rises in ${esc(cname(c.parent))}'s civil war${c.warOnly ? ', and only through it' : ''}` : c.parent ? `can be released from ${esc(cname(c.parent))}` : 'owns nothing at the start';
+    dl.push(['At the start', `No land: ${how}`]);
+  }
+  if (c.culture) dl.push(['Names', esc(c.culture)]);
+  if (c.adj) dl.push(['Adjective', esc(c.adj)]);
+  if (c.faction) dl.push(['Faction', `${c.faction[1] ? 'Leads ' : 'Member of '}${esc(c.faction[0])}`]);
+  if (c.overlord) dl.push(['Overlord', `${chipC(c.overlord[0], `<small>${esc(AUTONOMY[c.overlord[1]] || c.overlord[1])}</small>`)}`]);
+  if (c.subjects.length) dl.push(['Subjects', `<div class="chips">${c.subjects.map(([t, kd]) => chipC(t, `<small>${esc(AUTONOMY[kd] || kd)}</small>`)).join('')}</div>`]);
+  out.push(`<dl class="facts">${dl.map(([a, b]) => `<dt>${a}</dt><dd>${b}</dd>`).join('')}</dl>`);
+  if (c.neighbours.length) out.push(`<h3>Neighbours</h3><div class="chips">${c.neighbours.map(t => chipC(t)).join('')}</div>`);
+  if (c.bySea.length) out.push(`<h3>Across a strait</h3><div class="chips">${c.bySea.map(t => chipC(t)).join('')}</div>`);
+  if (c.releasables.length) out.push(`<h3>Can be released from its land</h3><div class="chips">${c.releasables.map(t => chipC(t)).join('')}</div>`);
+  if (c.claims.length) {
+    const by = {}; for (const s of c.claims) (by[A.states[s].owner] ||= []).push(s);
+    out.push(`<h3>${c.states.length ? 'Cores on others’ land' : 'Its cores'}</h3><div class="chips">${Object.entries(by).map(([o, ss]) => chipC(o, `<small>${ss.length} state${ss.length > 1 ? 's' : ''}</small>`)).join('')}</div>`);
+  }
+  if (c.claims.length || c.releasables.length) out.push(`<button class="act" type="button" data-act="cores:${esc(c.tag)}">Show ${c.states.length && !c.claims.length ? 'what can be released from it' : 'its cores'} on the map</button>`);
+  if (c.states.length) {
+    const st = c.states.slice().sort((a, b) => A.states[a].name.localeCompare(A.states[b].name));
+    out.push(`<details><summary>Its ${c.states.length} state${c.states.length > 1 ? 's' : ''}</summary><ol>${st.map(s => `<li><span class="n">${s + 1}</span><button class="link" type="button" data-go="state:${s}">${esc(A.states[s].name)}</button></li>`).join('')}</ol></details>`);
+  }
+  return out.join('');
+}
+function stateCard(k) {
+  const s = A.states[k], out = [], c = A.countries[CI[s.owner]];
+  out.push(head(`State ${k + 1}${s.cat ? ' · ' + esc(s.cat.replace(/_/g, ' ')) : ''}${s.capital ? ' · capital' : ''}`, s.name, '', flagHTML(s.owner, 0.62)));
+  out.push('<div class="rule"></div>');
+  const dl = [];
+  dl.push(['Owner', chipC(s.owner)]);
+  dl.push(['Cores', s.cores.length ? `<div class="chips">${s.cores.map(t => chipC(t)).join('')}</div>` : '<span class="dim">none</span>']);
+  const r = A.regions[s.region];
+  if (r) dl.push(['Region', `<button class="link" type="button" data-go="region:${s.region}">${esc(r.name)}</button> <span class="dim">(${s.region + 1})</span>`]);
+  dl.push(['Population', people(s.pop)]);
+  dl.push(['Area', `${fmt.format(s.area)} map pixels${s.coast ? ' <span class="dim">· coastal</span>' : ''}`]);
+  dl.push(['Provinces', `${s.provs.length} <span class="dim">· ${s.provs.slice(0, 14).map(p => p + 1).join(', ')}${s.provs.length > 14 ? ' …' : ''}</span>`]);
+  const b = s.b || {}, bl = [];
+  if (b.infrastructure) bl.push(`infrastructure ${b.infrastructure}`);
+  if (b.industrial_complex) bl.push(`${b.industrial_complex} civilian`);
+  if (b.arms_factory) bl.push(`${b.arms_factory} military`);
+  if (b.dockyard) bl.push(`${b.dockyard} dockyard${b.dockyard > 1 ? 's' : ''}`);
+  if (b.air_base) bl.push(`air base ${b.air_base}`);
+  if (b.anti_air_building) bl.push(`anti-air ${b.anti_air_building}`);
+  if (s.naval) bl.push(`naval base ${s.naval}`);
+  if (bl.length) dl.push(['Buildings', bl.join(' · ')]);
+  const res = Object.entries(s.res || {}); if (res.length) dl.push(['Resources', res.map(([a, v]) => `${esc(a)} ${v}`).join(' · ')]);
+  out.push(`<dl class="facts">${dl.map(([a, v]) => `<dt>${a}</dt><dd>${v}</dd>`).join('')}</dl>`);
+  if (s.vp.length) {
+    const cityAt = new Set(A.cities.filter(x => x.s === k && x.dot).map(x => x.p));
+    out.push(`<h3>Victory points</h3><ul class="list">${s.vp.map(([p, v, n]) => `<li><span class="grow">${esc(n)}${cityAt.has(p) ? ' <span class="dim">· a city on the map</span>' : ''}</span><span class="num">province ${p + 1}</span><span class="num">${v}</span></li>`).join('')}</ul>`);
+  }
+  if (S.mode === 'changes' && CH && CH.counts) {
+    const ch = s.provs.filter(p => pChange[p + 1]);
+    out.push(`<h3>Since the last export</h3><div class="note">${ch.length ? `${ch.length} of its ${s.provs.length} provinces changed: ${[...new Set(ch.map(p => changeText(p)))].join('; ')}` : 'Unchanged.'}</div>`);
+  }
+  if (c && c.states.length > 1) out.push(`<button class="act" type="button" data-go="country:${esc(s.owner)}">The nation: ${esc(c.name)}</button>`);
+  return out.join('');
+}
+function regionCard(k) {
+  const r = A.regions[k], out = [];
+  out.push(head(`${r.kind === 'sea' ? 'Sea region' : 'Strategic region'} ${k + 1}`, r.name, '', `<span class="sw" style="width:22px;height:22px;margin:8px 6px 0;background:#${r.colour}"></span>`));
+  out.push('<div class="rule"></div>');
+  const owners = {}; for (const s of r.states) owners[A.states[s].owner] = (owners[A.states[s].owner] || 0) + 1;
+  const dl = [['Provinces', fmt.format(r.provs)], ['Area', fmt.format(r.area) + ' map pixels']];
+  if (r.states.length) dl.push(['States', r.states.length]);
+  out.push(`<dl class="facts">${dl.map(([a, v]) => `<dt>${a}</dt><dd>${v}</dd>`).join('')}</dl>`);
+  if (r.states.length) {
+    out.push(`<h3>Nations in it</h3><div class="chips">${Object.entries(owners).sort((a, b) => b[1] - a[1]).map(([t, n]) => chipC(t, `<small>${n}</small>`)).join('')}</div>`);
+    out.push(`<details><summary>Its ${r.states.length} states</summary><ol>${r.states.map(s => `<li><span class="n">${s + 1}</span><button class="link" type="button" data-go="state:${s}">${esc(A.states[s].name)}</button></li>`).join('')}</ol></details>`);
+  }
+  return out.join('');
+}
+function showChanges() {
+  const body = $('#card-body'), out = [];
+  out.push(head('Since the last export', 'Changes', CH && CH.prev ? `Compared with the export of ${niceDate(CH.prevExported)} (build of ${niceDate(CH.prev)})` : ''));
+  out.push('<div class="rule"></div>');
+  if (!CH || !CH.counts) {
+    out.push(`<div class="note">${esc(CH ? CH.note : 'No changes file was found.')}</div>`);
+    out.push(`<div class="note">Each run of <code>python3 scripts/atlas_export.py</code> keeps the export before it in work/atlas_prev/ and compares the two.</div>`);
+  } else {
+    const c = CH.counts;
+    out.push(`<div class="stat-row">${[['owner', c.owner, 'Owner'], ['state', c.state, 'State'], ['region', c.region, 'Region'], ['redrawn', c.redrawn, 'Redrawn']]
+      .map(([k, v, t]) => `<div class="stat" style="border-color:${CHANGE_COLOURS[k]}"><div class="v">${fmt.format(v)}</div><div class="k">${t}</div></div>`).join('')}</div>`);
+    out.push(`<div class="note">Provinces: ${fmt.format(c.provincesBefore)} then, ${fmt.format(c.provincesNow)} now. States: ${fmt.format(c.statesBefore)} then, ${fmt.format(c.statesNow)} now.</div>`);
+    if (CH.flows.length) out.push(`<h3>Changed hands</h3><ul class="list">${CH.flows.slice(0, 60).map(([a, b, n], k) =>
+      `<li><span class="grow"><button class="link" type="button" data-act="flow:${k}">${esc(a ? cname(a) : 'unowned')} → ${esc(b ? cname(b) : 'unowned')}</button></span><span class="num">${n} province${n > 1 ? 's' : ''}</span></li>`).join('')}</ul>`);
+    const lists = [
+      ['States added', CH.statesAdded.map(([s, n, o]) => `<li><span class="grow"><button class="link" type="button" data-go="state:${s}">${esc(n)}</button></span><span class="num">${esc(cname(o))}</span></li>`)],
+      ['States removed', CH.statesRemoved.map(([n, o, x, y]) => `<li><span class="grow"><button class="link" type="button" data-act="pt:${x},${y}">${esc(n)}</button></span><span class="num">was ${esc(cname(o))}'s</span></li>`)],
+      ['States renamed', CH.statesRenamed.map(([s, a, b]) => `<li><span class="grow"><button class="link" type="button" data-go="state:${s}">${esc(b)}</button></span><span class="num">was ${esc(a)}</span></li>`)],
+      ['Nations added', CH.countriesAdded.map(([t, n]) => `<li><span class="grow"><button class="link" type="button" data-go="country:${esc(t)}">${esc(n)}</button></span><span class="num">${esc(t)}</span></li>`)],
+      ['Nations removed', CH.countriesRemoved.map(([t, n]) => `<li><span class="grow">${esc(n)}</span><span class="num">${esc(t)}</span></li>`)],
+      ['Now on the map', CH.onMapAdded.map(([t, n]) => `<li><span class="grow"><button class="link" type="button" data-go="country:${esc(t)}">${esc(n)}</button></span><span class="num">${esc(t)}</span></li>`)],
+      ['Off the map now', CH.onMapRemoved.map(([t, n]) => `<li><span class="grow">${esc(n)}</span><span class="num">${esc(t)}</span></li>`)],
+    ];
+    for (const [t, items] of lists) if (items.length) out.push(`<h3>${t} <span style="color:var(--muted)">· ${items.length}</span></h3><ul class="list">${items.slice(0, 80).join('')}${items.length > 80 ? `<li><span class="grow dim">and ${items.length - 80} more</span></li>` : ''}</ul>`);
+    if (!CH.provinces.length && !lists.some(l => l[1].length)) out.push('<div class="note">Nothing changed between the two exports.</div>');
+  }
+  body.innerHTML = out.join('');
+  openCard();
+}
+function onCardClick(e) {
+  const t = e.target.closest('[data-go],[data-act],[data-close]'); if (!t) return;
+  if (t.hasAttribute('data-close')) { clearSelection(); return; }
+  const go = t.getAttribute('data-go');
+  if (go) { const [kind, key] = go.split(':');
+    if (kind === 'country') select('country', CI[key], { fly: true }); else select(kind, +key, { fly: true }); return; }
+  const [act, arg] = t.getAttribute('data-act').split(':');
+  if (act === 'cores') { S.focus = arg; setMode('releasables', true); select('country', CI[arg], { fly: true }); }
+  else if (act === 'flow') { const k = +arg; const ps = CH.provinces.filter(q => q[2] === k).map(q => q[0]);
+    const m = maskOf(ps, '#ee8c7e'); if (m) { S.sel = { kind: 'flow', k, key: 'flow:' + k, mask: m }; flyTo([m.x0, m.y0, m.x0 + m.w, m.y0 + m.h]); draw(); } }
+  else if (act === 'pt') { const [x, y] = arg.split(',').map(Number); flyTo(null, [x, y]); }
+}
+
+// ------------------------------------------------------------------ the key
+function swatch(col, text, line) { return `<div class="key"><i${line ? ' class="line"' : ''} style="${line ? '--lc' : 'background'}:${col}"></i><span>${text}</span></div>`; }
+function legend() {
+  const m = S.mode, mode = MODES.find(x => x.id === m), out = [];
+  $('#lg-title').textContent = mode.name;
+  const ink = `rgb(${cssColour('--map-ink').join(',')})`;
+  if (m === 'political') {
+    out.push(`<p>Every nation in its map colour, as the game draws it at the start, 1 January 2036. ${A.counts.onMap} of the ${A.counts.countries} nations in the mod own land.</p>`);
+    out.push(`<div class="keys">${swatch(ink, 'Nation border', true)}${swatch('#8a7a58', 'State border', true)}</div>`);
+  } else if (m === 'states') {
+    out.push(`<p>${fmt.format(A.counts.states)} states, each in a colour unlike its neighbours'. Names show as you zoom in; the numbers are the game's.</p>`);
+  } else if (m === 'provinces') {
+    out.push(`<p>${fmt.format(A.counts.provinces)} provinces in their colours on the Provinces layer: ${fmt.format(A.counts.land)} land, ${A.counts.sea} sea, ${A.counts.lakes} lakes. Province numbers show from ×3.5.</p>`);
+    out.push(`<div class="keys">${swatch(ink, 'State border', true)}</div>`);
+  } else if (m === 'regions') {
+    const land = A.regions.filter(r => r.kind === 'land').length;
+    out.push(`<p>${A.counts.regions} strategic regions: ${land} on land, ${A.counts.regions - land} at sea. Land regions are never blue; sea regions always are.</p>`);
+    out.push(`<div class="keys">${swatch(ink, 'Region border', true)}</div>`);
+  } else if (m === 'releasables') {
+    out.push(S.focus ? `<p>The cores of <b>${esc(cname(S.focus))}</b>, in its colour. <button class="link" type="button" id="unfocus">Show every nation's</button></p>`
+      : `<p>Land holding another nation's core, in that nation's colour (the one with the fewest cores, where several). Land with only its owner's core is faded. Gilt lines bound the parts painted on the Subregions layer.</p>`);
+    out.push(`<div class="keys">${swatch('#e8cd84', 'Subregions part', true)}${swatch(`rgb(${cssColour('--map-muted').join(',')})`, 'Only the owner’s core')}</div>`);
+  } else if (m === 'cities') {
+    out.push(`<p>${A.counts.cities} cities drawn on the map and ${fmt.format(A.cities.length)} victory points. Capitals are named at every zoom, cities from ×0.9, the other victory points from ×3.</p>`);
+    out.push(`<div class="keys one">${swatch('#f1dc9c', 'Capital (star) · city (diamond)')}${swatch('rgba(227,199,126,.75)', 'A state’s victory point without a city')}</div>`);
+  } else if (m === 'terrain') {
+    const types = [...new Set(PV.terrain)].map(i => PV.terrains[i]);
+    out.push(`<p>Each province's terrain in the build, shaded by the build's heightmap. The build has plains everywhere for now (Known gaps: terrain).</p>`);
+    out.push(`<div class="keys">${types.map(t => swatch('#' + (A.terrain.colours[t] || 'b0ba78'), esc(t))).join('')}</div>`);
+  } else if (m === 'test') {
+    out.push(`<p><b>A proposal, not in the mod.</b> scripts/terrain_test.py's terrain for each continent from its real-world model, with its own relief. Hatched land was added after the test was made.</p>`);
+    out.push(`<div class="keys">${A.test.classes.map(([k, n, c]) => swatch('#' + c, esc(n))).join('')}</div>`);
+  } else if (m === 'changes') {
+    out.push(CH && CH.counts ? `<p>Provinces with a new owner, state or region, or redrawn, since the export of ${niceDate(CH.prevExported)} (the first that applies). Crosses mark states that are gone.</p>`
+      : `<p>${esc(CH ? CH.note : 'No changes file.')}</p>`);
+    out.push(`<div class="keys">${swatch(CHANGE_COLOURS.owner, 'New owner')}${swatch(CHANGE_COLOURS.state, 'New state')}${swatch(CHANGE_COLOURS.region, 'New region')}${swatch(CHANGE_COLOURS.redrawn, 'Redrawn')}</div>`);
+  }
+  out.push(`<div class="toggles"><label for="opt-rivers"><input type="checkbox" id="opt-rivers"${S.rivers ? ' checked' : ''}> Rivers</label><label for="opt-labels"><input type="checkbox" id="opt-labels"${S.labels ? ' checked' : ''}> Names</label></div>`);
+  $('#lg-body').innerHTML = out.join('');
+  $('#opt-rivers').onchange = (e) => { S.rivers = e.target.checked; store.set('rivers', S.rivers ? '1' : '0'); paint(); };
+  $('#opt-labels').onchange = (e) => { S.labels = e.target.checked; store.set('labels', S.labels ? '1' : '0'); draw(); };
+  const un = $('#unfocus'); if (un) un.onclick = () => { S.focus = null; paint(); legend(); };
+}
+
+// ------------------------------------------------------------------ modes
+function buildModes() {
+  const nav = $('#modes'), sel = $('#mode-select');
+  nav.innerHTML = ''; sel.innerHTML = '';
+  for (const m of MODES) {
+    const off = m.needs === 'test' && !A.test;
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'tab'; b.textContent = m.name; b.dataset.mode = m.id;
+    if (off) { b.disabled = true; b.title = 'No terrain test in this export'; }
+    b.onclick = () => setMode(m.id); nav.appendChild(b);
+    const o = document.createElement('option'); o.value = m.id; o.textContent = m.name + (m.id === 'test' ? ' (proposal)' : ''); o.disabled = off; sel.appendChild(o);
+  }
+  sel.onchange = () => setMode(sel.value);
+  markMode();
+}
+function markMode() {
+  for (const b of document.querySelectorAll('.tab')) b.setAttribute('aria-pressed', b.dataset.mode === S.mode ? 'true' : 'false');
+  $('#mode-select').value = S.mode;
+}
+async function setMode(id, keepFocus) {
+  if (id === 'test' && !A.test) return;
+  if (id === 'test' && !tcls) {
+    $('#lg-body').innerHTML = '<p>Loading the terrain test…</p>';
+    try { const [c, sh] = await Promise.all([pixels('terrain_test.png'), pixels('terrain_shade.png')]); tcls = grey(c); tshade = grey(sh); }
+    catch (err) { $('#lg-body').innerHTML = `<p>The terrain test did not load: ${esc(err.message || err)}</p>`; return; }
+  }
+  if (!keepFocus && id !== 'releasables') S.focus = null;
+  S.mode = id; store.set('mode', id); markMode(); lastTipId = -1; S.hover = null;
+  paint(); legend();
+  if (id === 'changes' && !S.sel) showChanges();
+  else if (id !== 'changes' && !S.sel) hideCard();
+  else if (S.sel && S.sel.kind !== 'flow') showCard(S.sel.kind, S.sel.k);
+}
+function restore() {
+  const m = store.get('mode'); if (m && MODES.some(x => x.id === m) && m !== 'test') S.mode = m;
+  if (store.get('rivers') === '0') S.rivers = false;
+  if (store.get('labels') === '0') S.labels = false;
+  if (store.get('legend') === 'closed') $('#legend').classList.add('closed');
+}
+
+// ------------------------------------------------------------------ search
+let results = [], active = 0;
+function searchIndex() {
+  if (searchIndex.list) return searchIndex.list;
+  const list = [];
+  A.countries.forEach((c, i) => list.push({ kind: 'Nation', text: c.name, sub: c.states.length ? `${c.tag} · ${c.states.length} states` : `${c.tag} · no land at the start`, keys: plain([c.name, c.full, c.tag, c.adj].join(' ')), go: ['country', i], tag: c.tag, w: 3 }));
+  A.states.forEach((s, k) => list.push({ kind: 'State', text: s.name, sub: `State ${k + 1} · ${cname(s.owner)}`, keys: plain(s.name), go: ['state', k], tag: s.owner, w: 2 }));
+  A.cities.forEach((c) => { if (c.named) list.push({ kind: c.cap ? 'Capital' : 'City', text: c.n, sub: `${A.states[c.s].name} · ${cname(A.states[c.s].owner)}`, keys: plain(c.n), go: ['city', c], tag: A.states[c.s].owner, w: c.cap ? 2.5 : 1.5 }); });
+  A.regions.forEach((r, k) => list.push({ kind: r.kind === 'sea' ? 'Sea region' : 'Region', text: r.name, sub: `Region ${k + 1}`, keys: plain(r.name), go: ['region', k], w: 1 }));
+  return (searchIndex.list = list);
+}
+function runSearch(q) {
+  const ul = $('#results'); q = q.trim();
+  if (!q) { ul.hidden = true; results = []; return; }
+  results = [];
+  let m;
+  if ((m = q.match(/^(\d{1,4})\s*[, ]\s*(\d{1,4})$/))) { const x = +m[1], y = +m[2];
+    if (x < W && y < H) results.push({ kind: 'Pixel', text: `x ${x}, y ${y}`, sub: 'the map pixel', go: ['pixel', [x, y]] }); }
+  if ((m = q.match(/^(?:state|s)\s*#?(\d+)$/i)) && A.states[+m[1] - 1]) { const k = +m[1] - 1; results.push({ kind: 'State', text: A.states[k].name, sub: `State ${k + 1}`, go: ['state', k], tag: A.states[k].owner }); }
+  if ((m = q.match(/^(?:province|prov|p)\s*#?(\d+)$/i)) && +m[1] >= 1 && +m[1] <= N) { const p = +m[1] - 1; results.push({ kind: 'Province', text: `Province ${p + 1}`, sub: PV.state[p] >= 0 ? A.states[PV.state[p]].name : PV.kind[p] === 0 ? 'sea' : 'lake', go: ['province', p] }); }
+  if ((m = q.match(/^(?:region|r)\s*#?(\d+)$/i)) && A.regions[+m[1] - 1]) { const k = +m[1] - 1; results.push({ kind: 'Region', text: A.regions[k].name, sub: `Region ${k + 1}`, go: ['region', k] }); }
+  const pq = plain(q);
+  if (pq.length >= 1) {
+    const scored = [];
+    for (const it of searchIndex()) {
+      const at = it.keys.indexOf(pq); if (at < 0) continue;
+      const exactTag = it.tag && it.kind === 'Nation' && it.tag.toLowerCase() === pq;
+      const score = (exactTag ? 100 : 0) + (at === 0 ? 10 : (it.keys[at - 1] === ' ' ? 6 : 0)) + it.w - it.text.length / 40;
+      scored.push([score, it]);
+    }
+    scored.sort((a, b) => b[0] - a[0]);
+    for (const [, it] of scored.slice(0, 14)) results.push(it);
+  }
+  active = 0;
+  ul.innerHTML = results.length ? results.map((r, k) => `<li role="option" data-k="${k}" aria-selected="${k === 0}">${r.tag ? flagHTML(r.tag, 0.3) : ''}<span class="rname">${esc(r.text)} <span class="rsub">${esc(r.sub || '')}</span></span><span class="rkind">${r.kind}</span></li>`).join('')
+    : `<li class="empty">Nothing by that name. Try a nation, a state, a city, a region, “s694”, “p4752” or a pixel such as 660,805.</li>`;
+  ul.hidden = false;
+}
+function choose(r) {
+  if (!r) return;
+  $('#results').hidden = true; $('#q').blur(); document.body.classList.remove('searching');
+  const [kind, v] = r.go;
+  if (kind === 'city') { select('state', v.s); flyTo(null, [v.x, v.y]); }
+  else if (kind === 'pixel') { const id = idAt(v[0], v[1]); if (id && PV.state[id - 1] >= 0) select('state', PV.state[id - 1]); flyTo(null, v); }
+  else if (kind === 'province') { const p = v; if (PV.state[p] >= 0) select('state', PV.state[p]); flyTo(null, [PV.x[p], PV.y[p]]); }
+  else select(kind, v, { fly: true });
+}
+
+// ------------------------------------------------------------------ input
+function setupInput() {
+  const pointers = new Map(); let drag = null, pinch = null;
+  canvas.addEventListener('pointerdown', (e) => {
+    try { canvas.setPointerCapture(e.pointerId); } catch (err) { /* a pointer the browser won't capture */ }
+    pointers.set(e.pointerId, [e.clientX, e.clientY]); flight++;
+    if (pointers.size === 1) drag = { x: e.clientX, y: e.clientY, ox: V.ox, oy: V.oy, moved: false, t: performance.now() };
+    else if (pointers.size === 2) { const [a, b] = [...pointers.values()]; const r = canvas.getBoundingClientRect();
+      const mx = (a[0] + b[0]) / 2 - r.left, my = (a[1] + b[1]) / 2 - r.top;
+      pinch = { d: Math.hypot(a[0] - b[0], a[1] - b[1]), s: V.s, mapX: V.ox + mx / V.s, mapY: V.oy + my / V.s }; if (drag) drag.moved = true; }
+  });
+  canvas.addEventListener('pointermove', (e) => {
+    if (!pointers.has(e.pointerId)) { if (e.pointerType === 'mouse') onHover(e); return; }
+    pointers.set(e.pointerId, [e.clientX, e.clientY]);
+    if (pinch && pointers.size >= 2) { const [a, b] = [...pointers.values()]; const r = canvas.getBoundingClientRect();
+      const mx = (a[0] + b[0]) / 2 - r.left, my = (a[1] + b[1]) / 2 - r.top, d = Math.hypot(a[0] - b[0], a[1] - b[1]);
+      V.s = Math.max(minZoom(), Math.min(MAX_ZOOM, pinch.s * d / pinch.d)); V.ox = pinch.mapX - mx / V.s; V.oy = pinch.mapY - my / V.s; clampView(); draw(); return; }
+    if (drag) { const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+      if (!drag.moved && Math.hypot(dx, dy) > 5) { drag.moved = true; canvas.classList.add('dragging'); $('#tip').hidden = true; }
+      if (drag.moved) { V.ox = drag.ox - dx / V.s; V.oy = drag.oy - dy / V.s; clampView(); draw(); } }
+  });
+  const end = (e) => {
+    if (!pointers.has(e.pointerId)) return;
+    pointers.delete(e.pointerId);
+    if (pointers.size < 2) pinch = null;
+    if (pointers.size === 1) { const [p] = [...pointers.values()]; drag = { x: p[0], y: p[1], ox: V.ox, oy: V.oy, moved: true }; return; }
+    if (pointers.size === 0) {
+      if (drag && !drag.moved && e.type === 'pointerup') click(e);
+      drag = null; canvas.classList.remove('dragging');
+    }
+  };
+  canvas.addEventListener('pointerup', end); canvas.addEventListener('pointercancel', end);
+  canvas.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse' && !pointers.size) { $('#tip').hidden = true; setHover(null); lastTipId = -1; } });
+  canvas.addEventListener('wheel', (e) => { e.preventDefault(); flight++;
+    const r = canvas.getBoundingClientRect(); let dy = e.deltaY; if (e.deltaMode === 1) dy *= 33; if (e.deltaMode === 2) dy *= 400;
+    zoomAt(e.clientX - r.left, e.clientY - r.top, V.s * Math.exp(-dy * (e.ctrlKey ? 0.01 : 0.0018))); }, { passive: false });
+  canvas.addEventListener('dblclick', (e) => { const r = canvas.getBoundingClientRect(); zoomAt(e.clientX - r.left, e.clientY - r.top, V.s * 2); });
+  const centre = (f) => { const r = canvas.getBoundingClientRect(); zoomAt(r.width / 2, r.height / 2, V.s * f); };
+  $('#z-in').onclick = () => centre(1.6); $('#z-out').onclick = () => centre(1 / 1.6); $('#z-home').onclick = () => { flight++; homeView(); };
+  window.addEventListener('keydown', (e) => {
+    if (e.target.matches('input, select, textarea')) { if (e.key === 'Escape') { e.target.blur(); $('#results').hidden = true; document.body.classList.remove('searching'); } return; }
+    if (e.key === '+' || e.key === '=') centre(1.4); else if (e.key === '-' || e.key === '_') centre(1 / 1.4);
+    else if (e.key === '0') homeView(); else if (e.key === 'Escape') clearSelection();
+    else if (e.key === '/') { e.preventDefault(); document.body.classList.add('searching'); $('#q').focus(); }
+    else if (e.key.startsWith('Arrow')) { const d = 120 / V.s; if (e.key === 'ArrowLeft') V.ox -= d; if (e.key === 'ArrowRight') V.ox += d; if (e.key === 'ArrowUp') V.oy -= d; if (e.key === 'ArrowDown') V.oy += d; clampView(); draw(); }
+  });
+  $('#card').addEventListener('click', onCardClick);
+  $('#card .sheet-grip').onclick = () => $('#card').classList.toggle('collapsed');
+  $('#lg-head').onclick = () => { const l = $('#legend'); l.classList.toggle('closed'); store.set('legend', l.classList.contains('closed') ? 'closed' : 'open'); };
+  $('#legend-btn').onclick = () => { const l = $('#legend'); const open = !l.classList.contains('open'); l.classList.toggle('open', open); $('#legend-btn').setAttribute('aria-expanded', String(open)); };
+  const q = $('#q');
+  q.addEventListener('input', () => runSearch(q.value));
+  q.addEventListener('focus', () => { if (q.value) runSearch(q.value); });
+  q.addEventListener('keydown', (e) => {
+    const lis = [...$('#results').querySelectorAll('li[data-k]')];
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); if (!lis.length) return; active = (active + (e.key === 'ArrowDown' ? 1 : -1) + lis.length) % lis.length;
+      lis.forEach((li, k) => li.setAttribute('aria-selected', String(k === active))); lis[active].scrollIntoView({ block: 'nearest' }); }
+    else if (e.key === 'Enter') { e.preventDefault(); choose(results[active]); }
+  });
+  q.addEventListener('blur', () => setTimeout(() => { $('#results').hidden = true; }, 180));
+  $('#results').addEventListener('pointerdown', (e) => { const li = e.target.closest('li[data-k]'); if (li) { e.preventDefault(); choose(results[+li.dataset.k]); } });
+  $('#search-btn').onclick = () => { const on = !document.body.classList.contains('searching'); document.body.classList.toggle('searching', on); if (on) q.focus(); else { q.blur(); $('#results').hidden = true; } };
+  const reTheme = () => { if (ids) { paint(); legend(); } };
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', reTheme);
+  new MutationObserver(reTheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+}
+function click(e) {
+  const r = canvas.getBoundingClientRect();
+  const [x, y] = toMap(e.clientX - r.left, e.clientY - r.top);
+  const id = idAt(x, y); if (!id) { clearSelection(); return; }
+  const p = id - 1, mode = MODES.find(m => m.id === S.mode);
+  let kind = mode.click;
+  if (e.shiftKey) kind = kind === 'country' ? 'state' : 'country';
+  const st = PV.state[p];
+  if (kind === 'region') { if (PV.region[p] >= 0) select('region', PV.region[p]); return; }
+  if (st < 0) { if (PV.region[p] >= 0) select('region', PV.region[p]); else clearSelection(); return; }
+  if (kind === 'country') select('country', CI[A.states[st].owner]); else select('state', st);
+}
+
+setupInputLater();
+function setupInputLater() { const go = () => { boot().then(() => { if (canvas) setupInput(); }); }; if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', go); else go(); }
+</script>

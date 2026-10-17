@@ -77,7 +77,8 @@ New detail goes into those files; this one gets a line.
   by hand on the `.pdn` (`pdn_tools`, `apply_outlines`, `regroup_states`, `sea_provinces`, `river_provinces`,
   `merge_provinces`, `land_regions`, `pdn_diff`, `pdn_check`, `pdn_recover`, `writepdn`, `nrbf`, `organic`, `rivers`);
   flags (`import_flags`, `fit_flag`); after a build, reports and maps (`country_list`, `nation_sheet`, `collages`,
-  `state_map`, `region_map`, `border_report`, `superevent_preview`); the Gazetteer (`facts_export`, `gazetteer`,
+  `state_map`, `region_map`, `border_report`, `superevent_preview`, and the Valsora Atlas `atlas_export` +
+  `atlas.html`, the build in a browser, not in the mod: `docs/ATLAS.md`); the Gazetteer (`facts_export`, `gazetteer`,
   `gazetteer_site`, `publish_site.sh`, `tests/gazetteer/`); vanilla (`vanilla_sync`, `pdxscript`); tests not in the
   game (`terrain_test`, `usnistan_prototype`); `build_flags15.sh` (the larger flags' test version).
 - **HOI4's hard rules** (all checked by `check_mod.py`): the map is 5120×2560 (the largest size under the game's cap);
