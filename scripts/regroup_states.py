@@ -20,7 +20,13 @@ source/HOI4 Mod Map.pdn (its own object graph is the template) and prints, per c
 how many states it had and has, and any two of the author's state names
 (source/state_names.json) that now fall in one state.
 
-    python3 scripts/regroup_states.py
+    python3 scripts/regroup_states.py [--recut]
+
+With --recut (2026-10-17, the efficiency night) the provinces the new lines cut into pieces are cut again: every
+state of the countries with their own lines where a province changed is cut into ~190 px organic provinces
+(`pdn_tools.recut --keep-states`, one seed per area its lines enclose; an area of more than three states is left
+alone), then scraps under MIN_PROVINCE px join a neighbour (`pdn_tools.tidy`). That night the lines had cut 1,468
+provinces into pieces down to 16 px, and this was a script of its own.
 """
 import json
 import shutil
@@ -79,6 +85,7 @@ def main():
     K = np.where(L["Countries"][..., 3] > 0, code(L["Countries"][..., :3]), -1)
     S = np.where(L["States"][..., 3] > 0, code(L["States"][..., :3]), -1)
     P = code(L["Provinces"][..., :3])
+    P0 = P.copy()  # for --recut: the provinces before the lines split them
     R = code(L["Strategic Regions"][..., :3])
     tag_of = {code(np.array(v[3])): v[0] for k, v in COUNTRIES.items()
               if k not in PLACEHOLDERS or v[0] in DRAWN_PLACEHOLDERS}
@@ -228,10 +235,45 @@ def main():
     put(L["States"], np.maximum(newS, 0), newS >= 0)
     put(L["Countries"], np.maximum(K, 0), K >= 0)
     put(L["Strategic Regions"], R, np.ones((H, W), bool))
+    if "--recut" in sys.argv:
+        recut_changed(names, L, P0, land, lines, {tag_of[c] for c in inner})
     tmp = PDN.with_suffix(".tmp")
     write_pdn(PDN, tmp, [L[nm] for nm in names])
     shutil.move(tmp, PDN)
     print(f"wrote {PDN}")
+
+
+def recut_changed(names, L, P0, land, lines, drawn):
+    """--recut: cut again the provinces of every state of `drawn` (tags) where a province changed"""
+    import pdn_tools as T
+    P1 = code(L["Provinces"][..., :3])
+    changed = land & (P0 != P1)
+    touched_p = set(np.unique(P1[changed]).tolist()) | set(np.unique(P0[changed]).tolist())
+    touched = land & np.isin(P1, list(touched_p))
+    St = np.where(L["States"][..., 3] > 0, code(L["States"][..., :3]), -1)
+    # only the drawn countries: a neighbour's province straddling the border loses a few pixels to the regrouping,
+    # and its whole land (no lines inside) would be cut again from one seed
+    cols = [code(np.array(v[3])) for v in COUNTRIES.values() if v[0] in drawn]
+    touched &= np.isin(code(L["Countries"][..., :3]), cols)
+    states = set(np.unique(St[touched]).tolist()) - {-1}
+    print(f"--recut: {int(changed.sum())} land px changed province, {len(touched_p)} provinces, {len(states)} states")
+    if not states:
+        return
+    sel = land & np.isin(St, list(states)) & ~lines
+    lab = sklabel(sel, connectivity=1)
+    seeds = []
+    for i, sl in enumerate(ndi.find_objects(lab), 1):
+        m = lab[sl] == i
+        if m.sum() < MIN_PROVINCE:
+            continue
+        if len(np.unique(St[sl][m])) > 3:
+            print(f"  left alone: an area of {len(np.unique(St[sl][m]))} states at ({sl[1].start}, {sl[0].start})")
+            continue
+        d = ndi.distance_transform_edt(m)
+        y, x = np.unravel_index(np.argmax(d), d.shape)
+        seeds.append((int(x + sl[1].start), int(y + sl[0].start)))
+    T.recut(names, L, seeds, keep_states=True)
+    T.tidy(names, L)
 
 
 if __name__ == "__main__":

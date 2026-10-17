@@ -333,6 +333,18 @@ Paint Bucket on the state.
 layer by painting part of it in a new colour. Then repaint that part on the Countries
 layer.
 
+**Move a country border with lines** (the usual way since 2026-10-01). Redraw it on
+**Necessary Borders**. The land the new line encloses goes to the country holding most of
+that area, which is right for most moves (all three on 2026-10-17). When it isn't, draw a
+stroke, any colour, on a layer named **Necessary Owners**, from the land that changes hands
+into its new owner's land. Do the same when you only move a **label** to give land away,
+since no line says it. (`pdn_tools.py owners`; `docs/WORKFLOW.md` has the rest.)
+
+**Merge a country into another but keep it releasable** (Pakitsk into Belka). Move the
+old border from Necessary Borders to Necessary States instead of erasing it (select the
+line, cut, switch layer, paste), so its states survive. Then paint it on **Subregions**,
+only inside the land of the nation it belongs to.
+
 **Split a province in two.** Provinces layer, pick a new colour, paint over half the
 province with the Pencil or a hard-edged brush. Both halves must stay solid patches.
 
@@ -366,7 +378,7 @@ neighbours were made:
    divide it into **states**.
 3. Every closed-off patch of land becomes a state; a large patch becomes several
    states that together fill its shape. Every state is then cut into small provinces
-   (about 12 × 12 pixels). Leave no gaps in the lines, or the patch will leak into its
+   (about 13 × 13 pixels). Leave no gaps in the lines, or the patch will leak into its
    neighbour.
 4. Write each country's name in or next to its patches on **Necessary Names**; a short
    line from a label points to an island it belongs to.
@@ -377,3 +389,8 @@ neighbours were made:
    through it on Necessary States: only the states you cut are redone. If new lines
    close off an area you don't mean as a country yet, say so and it is left alone. A script (`scripts/apply_outlines.py`) turns the patches into
    states, provinces and owners on the real layers, and makes new countries.
+
+**Keep a copy before a big edit** ("HOI4 Mod Map 2026-10-18.pdn"). If the files live in a
+folder OneDrive syncs, pause syncing while paint.net saves, or work on copies outside it:
+a file synced halfway through a save can end up damaged. If one does, send it anyway:
+`pdn_recover.py` saves every layer still whole.

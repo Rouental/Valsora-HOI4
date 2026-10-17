@@ -13,12 +13,15 @@ rest have set rulers and the game's generic content, moved to 2036. The interfac
 the Valsora Deco UI (`deco_ui/`). The Gazetteer, a web site, lets the author's friends fill in their own nations.
 
 **Where things are written down:**
-- this file: the manual (rules, decisions, the pipeline, what HOI4 requires) and where things stand;
+- this file: the short manual (rules, one line per decision, the pipeline in brief) and where things stand; in full:
+  `docs/MAP_PIPELINE.md` (the map, every script, what HOI4 requires, vanilla switched off), `docs/DECISIONS.md`,
+  `docs/CONTENT.md` (nations, ideologies, cultures, superevents);
 - `docs/NATIONS.md`: every nation, who named and decided what; `docs/HISTORY.md`: the build's history, date by
   date; `docs/PROBLEM_LOG.md`: every problem, its cause and its fix;
 - `docs/EDITING.md`: the author's guide to the `.pdn`; `docs/GAZETTEER.md`: the Gazetteer (and how it works, for Claude:
   `docs/GAZETTEER_INTERNALS.md`; every function of the site, for the author to sort: `docs/GAZETTEER_FUNCTIONS.md`);
-  `docs/HANDOFF_MERLO.md`: for Merlo's Claude; `deco_ui/CLAUDE.md`: the interface's own manual;
+  `docs/HANDOFF_MERLO.md`: for Merlo's Claude; `deco_ui/CLAUDE.md`: the interface's own manual (its versions:
+  `deco_ui/docs/VERSIONS.md`); `docs/WORKFLOW.md`: how a map update goes, and what makes it faster for both sides;
 - proposals waiting for the author: `docs/TECH_TREE_2036.md`, `docs/BORDER_LIMIT.md`,
   `deco_ui/art/proposals/`, the larger flags' test version (`docs/HD_FLAGS_TEST.md`); plans: `docs/ROUENTAL_ARMY.md`,
   `docs/CIVIL_WAR_NOTES.md`.
@@ -35,402 +38,88 @@ deco_ui/    the Valsora Deco UI, the mod's interface (its own CLAUDE.md; see bel
 docs/       the records (nations, history, problems), the author's guides, proposals
 ```
 
-## The editable map: `source/HOI4 Mod Map.pdn`
+## Read before you change
 
-The author edits this file from now on; `docs/EDITING.md` is their guide (keep it in
-step with `read_layers.py`). It is exactly game size (5120×2560, one pixel = one map
-pixel), and each layer is one kind of game data, found **by name**. Bottom to top:
-Heightmap, Terrain, Rivers, Continents, Provinces, Strategic Regions, Ocean Province Lines
-(Merlo's sea borders, from 2026-10-12: read by `sea_provinces.py`, not by the build), States,
-Countries, and "Notes (ignored by the build)". **The author's editing layers are named "Necessary …"**
-(from 2026-10-01): Necessary Borders (country lines), Necessary States (state lines; it
-was called "Necessary Provinces" before), Necessary Names (labels; a short line points
-to an island), Necessary Major / Minor Rivers (plain river lines; the old "Major Rivers"
-/ "Minor Rivers" still work), Necessary Cities (from 2026-10-01: a dot of any colour
-but black per city, its name written beside it in black), Necessary Provinces (from 2026-10-17: province lines
-inside a state, applied by hand, `pdn_tools.py provinces`). Necessary Terrain is reserved for later detail and not
-read yet. **Subregions** and **Subnames** (from 2026-10-17): the parts of a nation that can be released (Belekria's
-republics, Krionik's principalities, Pakitsk), one colour per part (a colour may serve two parts far apart), the names
-written on Subnames; `read_layers.py` records every painted patch and `build_mod.py` gives them to `nations.SUBREGIONS`.
-**"Should be an island!"** (2026-10-17): rings round land the drawing joined to its neighbour, cut by hand
-(`pdn_tools.py channel`). "… Reference" layers, "Notes" and "Background" (white) are only for the author. Unknown
-layer names are ignored.
-- **Provinces**: one colour per province, which is also its provinces.bmp colour. Ids
-  are assigned in reading order (first pixel, row by row), so they shift when provinces
-  change. Refer to places by `capital:TAG`, never by id.
-- **Terrain**: vanilla terrain.bmp palette colours. Ocean (index 15) means sea, the
-  lakes colour (14) means lake, and anything else is land. The game gets 15 for all
-  water. A province's kind and terrain type are the majority of its pixels.
-- **Everything else is decided per province by majority.** Blank provinces on States,
-  Countries, Strategic Regions or Continents take the nearest painted area of the right
-  kind, with a note. Region colours count only on their own kind (a colour is a sea
-  region if most of its pixels are sea). A blank land province joins its state's region.
-- **Countries** are matched by exact colour to `common.COUNTRIES`, per state; a country
-  owning no state is left out of the mod.
-- **Errors and notes.** Real errors (split or tiny provinces, black or transparent
-  pixels, mixed or split regions, a state in two regions) stop the build with a numbered
-  list of (x, y) pixel positions. X-crossings are repaired automatically.
-- **Cities** (`read_layers.read_cities`): each dot is a city in the land province under
-  it (or the nearest). The names are pixels, so they are typed into
-  `source/city_names.json` ("x,y" of the dot → name; a dot moved up to 12 px keeps its
-  name). An unnamed dot, two in one province, or a repeated name stops the build. In
-  `build_mod.py` the first city of a state becomes its victory point (worth `CITY_VP` =
-  5, or 10 as the capital), and further ones are extra victory points. Capitals are
-  set by `nations.CAPITALS` (the dot's pixel); any other country's capital is the
-  sizeable state nearest the centre of its land, chosen again on the continent holding
-  most of it if it falls on one holding under a third (2026-10-10: Estande's had drifted
-  onto its islands east of Terreich). Winterthorn CRD, Venezzo CTF, Alqira ILR, Malin MZG,
-  Prestozza ETR, Monte Gnolia KIL (author, 2026-10-01), besides Rêverie ROU. First nine: Winterthorn, Vair, Carcarelle, Rêverie, Venezzo, Alqira,
-  Malin, Prestozza, Monte Gnolia.
-- **Heightmap**: clamped to 94 / 96 on the wrong side of sea level.
-- **Rivers** (`rivers.py`). HOI4 needs rivers 1 px wide, edge-connected only, with
-  exactly one green source per system and red flow-ins where tributaries join (vanilla
-  wiki). The author draws plain lines on "Major Rivers" / "Minor Rivers" (any colour).
-  `rivers.trace` converts them:
-  - it skeletonises the lines and picks the mouth as the end nearest water, extending
-    it up to 8 px to reach the water;
-  - the main stem runs to the farthest end, preferring major pixels; side branches
-    become tributaries, recursively;
-  - diagonal steps get corners, and loops/U-turns are shortcut;
-  - branches under 6 px are dropped;
-  - widths: major 7→8, minor 3→4 (7+ is a large river), per pixel by the layer it was
-    drawn on, so a river can change size along its course (`MAJOR_WIDTH`,
-    `MINOR_WIDTH`; 7→9 and 4→5 until 2026-10-06, far too wide beside Valsora's small
-    provinces in the author's screenshots);
-  - a tributary that stops short of its river (or ends next to a 45° staircase, which
-    no single pixel can join without a 2×2 block) is linked by the shortest clean path
-    of up to 6 pixels, from its end or up to 4 pixels back; branches joining at a
-    corner pixel the main river gained are followed too (2026-10-01 fixes).
-  The exact-palette "Rivers" layer wins where set, and river pixels on water are
-  dropped. `check_mod.py` checks the result with `rivers.problems`.
-- **Provinces follow rivers** (`river_provinces.py`, by hand, author's request
-  2026-09-30). HOI4's river penalty only applies to a river *between* the provinces of
-  an attack. After a build, the script takes the drawn rivers from `work/world.npz`,
-  splits each crossed state's land into banks, cuts each bank into ~150 px organic
-  provinces, gives river pixels to the province beside them, then merges stray bits.
-  States do not change. First run: 37 states, 113 provinces became 111; river pixels on
-  a province border went from 77 % to 90 % (the rest are corner pixels of diagonal
-  steps, still along the border). Rerun it whenever rivers or outlines change. It only
-  re-cuts states where under 85 % of the river pixels lie on a border (`ALIGNED`);
-  2026-10-06 it fixed Merlovich's and Hoalepa's rivers (13–58 % → 71–100 %; 91 % map-wide).
-- **Outlines → states** (`apply_outlines.py`, run by hand, not by `run_all.sh`).
-  The author draws 1-px country borders on "Borders" and state lines on "Necessary
-  Provinces" (the author's layer name; they are **states**, author's correction).
-  - Every enclosed patch becomes a state. Patches over 2,000 px are k-means split into
-    ~1,300 px states that fill the same shape (1,000 / 650 until 2026-10-04: the author
-    wants fewer states). This only happens where the author left a country's state
-    lines blank.
-  - **The author's own state lines are kept as drawn** (2026-10-04: "do not split any
-    states that I have created"). `regroup_states.py` makes every drawn area one state
-    in each country that has state lines inside it (two of its areas sharing at least
-    8 px of line, both 150+ px): first run CRD 22, KRK 11 (+ islands), LNT 10, ROU 54,
-    SSA 7 (+ islands), STO 4. `apply_outlines.py` no longer re-cuts a finished country
-    (`RECUT_DONE = False`) unless `OWNERS` seeds a new country inside it.
-  - Every state is cut into ~190 px provinces (`PROVINCE_AREA`; ~150 px for a granular
-    map until 2026-10-12, when HOI4's border limit was hit: see Province borders below;
-    placeholder bricks elsewhere are 1,024 px). Pieces are forced 4-connected.
-  - **Borders are organic** (`organic.py`, from 2026-09-29 on). k-means places the
-    pieces; then each grows from the pixel nearest its k-means centre by a compact
-    watershed over fractal noise (compactness 0.2 / spacing, noise at 0.6 / 0.25 / 0.09
-    of the spacing). The author approved this wiggliness from a preview.
-  - Areas outlined earlier (Rouental and neighbours, Cardonia) keep their k-means
-    borders, and placeholder bricks stay: the author will outline more nations and
-    touch borders up by hand, rather than re-cutting what exists.
-  - `OWNERS` names patches by seed pixel; the rest go to `DEFAULT_OWNER`. Each run only
-    needs the new region: patches already painted in a real (non-placeholder) country
-    colour are skipped, and past runs' seeds are kept as comments.
-  - **Split states are re-cut.** A done patch is cut again (organic, keeping its
-    country) only when a new line splits one of its states (more pieces across lines
-    than the state has anyway, so islets across water don't count). These drawn pieces
-    stay states even under `MIN_STATE`. First used 2026-09-30: 13 Rouental pieces. The script decodes
-    its input `.pdn` itself (`work/pdn_outlines`).
-  - `CITY_STATES` (cut a patch into one state per city dot) was used once for Aislada
-    and **rejected by the author** (2026-10-04, later: it split their drawn states).
-    Aislada's drawn regions are now one state each through `regroup_states.py`
-    (`DRAWN_PLACEHOLDERS`): 9 states plus 6 islands; the circle around Hirane is one.
-  - Islets under 150 px join the nearest state of their country within 300 px
-    (`ISLET_REACH`); farther ones (Rouental's two islets off Solitas) share a state of
-    their own. Only states made in the same run count: an islet by an older state of its
-    country is joined to it with `pdn_tools.py attach` (2026-10-12, Myehn's). `LEAVE` lists patches the lines close off by accident (the land south
-    of Entroterra and Estande), which stay as they are.
-  - Cut placeholder provinces and states are cleaned up iteratively: scraps join a
-    neighbour (a new province's scrap stays in its state), never a new state, and
-    states are forced into one region. Only provinces the outlines made or cut are
-    tidied (2026-10-09: untouched ones the tidy-up box clipped had pieces merged away).
-  - It rewrites Provinces / States / Countries / Strategic Regions and saves
-    `source/HOI4 Mod Map.pdn`, using the author's upload as the template;
-    `writepdn` copies the object graph verbatim when the size is unchanged.
-- **Regenerating the file.** `make_game_pdn.py` writes it from a placeholder build.
-  `writepdn.py` copies the original `.pdn`'s object graph (nine layers), patches the size
-  fields (19 widths, 19 heights, 9 strides, 9 lengths) and rewrites each layer's name,
-  visibility and opacity. It would overwrite the author's edits, so don't run it casually.
-- **Round trip.** The first layer build matched the placeholder build exactly (same
-  province colours, states, owners, regions and bitmaps), with only the ids renumbered.
+This file is the short manual, loaded into every session; the detail is in `docs/`, moved there word for word on
+2026-10-17 (the efficiency night). Read the part you are about to touch first:
+- the map, the `.pdn`, any script of the pipeline, what HOI4 requires, the vanilla content switched off:
+  `docs/MAP_PIPELINE.md`;
+- a decision below, in full with the author's words: `docs/DECISIONS.md`;
+- nations, leaders, ideologies, cultures, superevents (`nations.py`, `ideologies.py`, `cultures.py`, `superevents.py`):
+  `docs/CONTENT.md`;
+- the interface: `deco_ui/CLAUDE.md` (and its versions, `deco_ui/docs/VERSIONS.md`); the Gazetteer:
+  `docs/GAZETTEER_INTERNALS.md`.
+New detail goes into those files; this one gets a line.
 
-## Rebuilding
+## The map and the pipeline (in full: `docs/MAP_PIPELINE.md`)
 
-`sh scripts/run_all.sh` from the repo root: about 2 minutes from `HOI4 Mod Map.pdn` (2026-10-15: `read_layers.py`
-57 s, `build_mod.py` 31 s, then `check_mod.py`, `export_canvas.py` and `package.py` side by side, 15 s; the new zip
-replaces `dist/valsora_test.zip` only if `check_mod.py` passes; the logs are in `work/logs/`), about 1 minute when the
-map hasn't changed: `read_layers.py` is skipped while nothing it reads has changed (`scripts/stamp.py`: the script and the modules
-of `scripts/` it imports, the files in `source/` and `source/gazetteer/`, the decoded layers by size and time).
-`FORCE=1 sh scripts/run_all.sh` reruns it. Placeholder mode (used when that file is absent) takes about 2.5 minutes,
-plus about 2 minutes for the one-time decode of the original `.pdn`. Needs `pip install -r requirements.txt` (numpy,
-scipy, pillow, scikit-image, pinned: the same versions give the same files; Playwright for the Deco UI's textures
-and the Gazetteer's tests). `VALSORA_BUILD` builds into another folder (`common.BUILD`; the test versions). Output is
-deterministic, the zip included (`package.py` gives every entry one fixed date, so the same mod gives the same bytes and
-a rebuild that changed nothing adds nothing to git). `docs/SPEED_AND_SIZE.md` has the timings, the repository's size
-and what could make both smaller.
+- **The editable map** is `source/HOI4 Mod Map.pdn`, exactly game size (5120×2560, one pixel = one map pixel), a layer
+  per kind of game data found **by name** (Heightmap, Terrain, Rivers, Continents, Provinces, Strategic Regions, Ocean
+  Province Lines, States, Countries ...). The author's editing layers are "Necessary ..." (Borders, States, Provinces,
+  Names, Major / Minor Rivers, Cities), plus Subregions / Subnames (releasables' land) and "Should be an island!";
+  references and notes are ignored. Their guide is `docs/EDITING.md`: keep it in step with `read_layers.py`.
+- **Refer to places by `capital:TAG` or by pixel, never by province id**: ids follow reading order and shift.
+  Countries are matched by exact colour to `common.COUNTRIES`; everything else is decided per province by majority.
+- **Rebuild:** `sh scripts/run_all.sh` from the repo root (about 2 minutes; `read_layers.py` is skipped while its
+  inputs are unchanged, `FORCE=1` reruns it; logs in `work/logs/`). Needs `pip install -r requirements.txt`. Output is
+  deterministic, the zip included. **A clean `check_mod.py` run is the bar for shipping a build**; run
+  `scripts/mutation_test.py` after any change to `check_mod.py`, and add a break for every new check.
+- **When the author sends a `.pdn`** (each step in `docs/MAP_PIPELINE.md`): `pdn_check.py` the upload;
+  `pdn_diff.py CURRENT UPLOAD` (every change and where, before/after pictures in `work/pdn_diff/`, and the areas the
+  moved country lines enclose); if their copy is older than ours, merge (keep our game layers, take their own layers);
+  then as needed `pdn_tools.py owners` (settle the moved borders; plan first, `--apply`), `apply_outlines.py` (new
+  outlines), `regroup_states.py --recut` (their state lines; the provinces the lines cut are cut again),
+  `pdn_tools.py provinces` (their province lines), `pdn_tools.py channel` (islands to cut free), `river_provinces.py`
+  (after new rivers); rebuild; `state_map.py` for the newly drawn states to name; send the `.pdn` back.
+- **The scripts** (each one's detail in `docs/MAP_PIPELINE.md`'s table): the build (`readpdn`, `read_layers`,
+  `build_mod`, `deco_ui`, `check_mod`, `export_canvas`, `package`, with `nations`, `cultures`, `ideologies`,
+  `superevents`, `superevents_deco`, `test_events`, `minimap`, `globe`, `vanilla_parts`, `straits`, `borders`);
+  by hand on the `.pdn` (`pdn_tools`, `apply_outlines`, `regroup_states`, `sea_provinces`, `river_provinces`,
+  `merge_provinces`, `land_regions`, `pdn_diff`, `pdn_check`, `pdn_recover`, `writepdn`, `nrbf`, `organic`, `rivers`);
+  flags (`import_flags`, `fit_flag`); after a build, reports and maps (`country_list`, `nation_sheet`, `collages`,
+  `state_map`, `region_map`, `border_report`, `superevent_preview`); the Gazetteer (`facts_export`, `gazetteer`,
+  `gazetteer_site`, `publish_site.sh`, `tests/gazetteer/`); vanilla (`vanilla_sync`, `pdxscript`); tests not in the
+  game (`terrain_test`, `usnistan_prototype`); `build_flags15.sh` (the larger flags' test version).
+- **HOI4's hard rules** (all checked by `check_mod.py`): the map is 5120×2560 (the largest size under the game's cap);
+  **at most 65,536 province borders** (about 3,800 left; new land is cut at ~190 px; `borders.py` counts); provinces
+  one 4-connected blob of 16+ px, no 2×2 window of four provinces; `definition.csv` CRLF; localisation UTF-8 with BOM;
+  every province in one strategic region, a state's provinces in one, naval regions contiguous; the map files exactly
+  map-sized. Map errors crash on launch unless the game runs with `-debug`: always test with it.
+- **Vanilla content**: Earth's history, events, decisions, AI strategies, on_actions and bookmarks are switched off
+  (`replace_path`, the same lines in `descriptor.mod` and the launcher's `valsora_test.mod`); vanilla's generic content
+  comes back as the mod's own (`source/vanilla/`), with stand-ins for what Earth's content still names.
 
-| step | does |
-|---|---|
-| `readpdn.py` | decodes a `.pdn` into one RGBA `.npy` per layer, plus `layers.txt` |
-| `read_layers.py` | **normal mode**: the layers of `HOI4 Mod Map.pdn` → provinces, states, regions, owners, heights, terrain, rivers, and the Subregions layer's painted patches (`work/regions.json`, 2026-10-17) |
-| `blocks.py` | placeholder mode only: land mask, continent blocks, removes Antarctica |
-| `layout.py` | placeholder mode only: scales every block and pushes them apart |
-| `compose.py` | placeholder mode only: game-resolution land / ocean / lakes, continent per pixel |
-| `provinces.py` | placeholder mode only: brick provinces, sliver merging, X-crossing repair |
-| `regions.py` | placeholder mode only: states, strategic regions |
-| `make_game_pdn.py` / `writepdn.py` | turn a placeholder build into a fresh `HOI4 Mod Map.pdn`; `writepdn` writes any `.pdn` from a template's object graph, and adds layers on top when given more than the template has (2026-10-13, the flag file) |
-| `nrbf.py` | reads a `.pdn`'s .NET object graph into records with their byte spans (used by `writepdn` to add layers) |
-| `apply_outlines.py` | by hand: the author's outline layers → provinces, states, countries in the `.pdn` |
-| `pdn_tools.py` | by hand: `navigable` (lake → sea with its own region), `sea_zones` (regroup and recolour regions; refused on a map with Ocean Province Lines), `give` (whole states to a country), `recolour`, `channel` (reopen a strait: the cheapest water-to-water path between two sea pixels becomes sea; `X1,Y1,X2,Y2,M` keeps the path within M px, M 0 to cut an islet's neck the sea goes round otherwise), `border` (the land a moved Necessary Borders line encloses → a country), `cede` (the land of one country a moved line cuts off → another, for countries without state lines: only the first country's pixels count, provinces are split along the line; what a split state loses is a state of its own from 600 px (`CEDED_STATE`), smaller slivers join a state that moved whole), `merge_small` (a country's sliver states join a neighbour), `attach` (a state goes to a country and joins its nearest state, regions too: for an islet or sliver too small to be a state), `add_land` (the water under a layer's paint, default "Islands to Add", becomes a country's land: plains, the nearest land's height, continent and region, a province per island, one new state), `recut` (placeholder land the outline runs never reached cut like an outlined patch: the piece of a country's land around a pixel becomes ~1,300 px states (one up to 2,000 px) and ~190 px organic provinces, each new state in the region most of it lies in; `--keep-states` cuts only the provinces), `lakes` (each lake one province, in the region most of it was in), `provinces` (2026-10-17: every state the author's Necessary Provinces lines cross gets exactly the provinces those lines and its edges enclose), `tidy` (land provinces under 16 px join the neighbour they share most border with, of their own state first) |
-| `strategic_regions.py` | retired 2026-10-12 (refuses to run on a map with Ocean Province Lines, unless `--force`): sea regions = the author's oceans, one each, with names (`source/region_names.json`); land untouched |
-| `sea_provinces.py` | by hand: the sea from the Ocean Province Lines layer (Merlo's): `build` (provinces from the lines, cut to HOI4's size limit, colours and regions kept by overlap), `seam` (borders and regions meet across the left/right wrap), `names` (`source/region_names.json`: "<ocean> <n>" west to east), `check` (report only) |
-| `river_provinces.py` | by hand, after a build: re-cuts the provinces of every state a river crosses so rivers run between provinces, never a state whose provinces the author drew (2026-10-17) |
-| `borders.py` | HOI4's province border count (pairs of touching provinces, each separate stretch of shared boundary once, land and water alike) and its limit, 65,536; `check_mod.py` uses it; run alone, it counts the last build's |
-| `border_report.py` | by hand, after a build: where the province borders come from, and what re-cutting the provinces (one size, a bigger one, sizes by terrain like the base game's, impassable desert) would free; `docs/BORDER_LIMIT.md` (2026-10-15), `--terrain map` once the Terrain layer is painted; `--drawn-states` (2026-10-16): what drawing their own states would cost the nations still on cut ones, at Rouental's density and lighter ones |
-| `merge_provinces.py` | by hand, after a build: merges the smallest land provinces into a neighbour in the same state (never across a river, never two city provinces, at most 400 px) until the borders are down to a target (default 60,000), on the Provinces layer |
-| `redraw_flags.py` | unused: Fraxhemark's stand-in flag (writes `work/FRX_standin.png`); the author's own `FRX.png` replaced it |
-| `land_regions.py` | by hand, after a build (2026-10-16): the land strategic regions from the nations, on the Strategic Regions layer: a nation (its land on one continent) of over 1.5 × 30,000 px is cut into regions of its own (area-weighted k-means centres, each state joining the nearest along the nation's land), one of 0.6–1.5 × is one region, smaller ones are grouped with small neighbours (longest border first, up to 1.25 ×), a group under 0.25 × joins its neighbour's region, a lake the region it borders most; sea regions untouched; `--target PX`, `--dry` (only `work/land_regions_preview.png`). First run: 137 land regions (80 grid ones before), 5,843 to 59,193 px; Rouental and the seven other Association states one region, the Vale. Run `region_map.py` after the rebuild |
-| `region_map.py` | by hand, after a build (2026-10-16): `dist/region_numbers.png`, the 137 land strategic regions numbered for the author to name, `dist/region_names.md` (a table to fill in) and `dist/region_numbers.json` (number → the region's colour); `--apply FILE` ("12 = Name" lines, or the filled table) puts the names into `source/region_names.json` by colour, which the build reads; `--draft` (2026-10-17) writes `dist/region_names_draft.md`, Claude's first draft of every name in the same table (a nation's only region its name, several of one nation compass names round its centre, islands "the ... Isles", two or three nations together their names, four or more the sea their coast faces or their biggest nation's coast, Rouental's the Vale of Reibonne), for the author to change and `--apply` |
-| `straits.py` | by hand, after a build (2026-10-17): strait crossings (`adjacencies.csv`, type `sea`). `find`: the narrowest strait between every two landmasses over open sea (where their coasts' nearest-pixel zones meet; lakes and other land block it), each landmass linked once (a minimum spanning tree, narrowest first; big landmass pairs every 150 px of a long strait too), through the sea province the strait's line crosses most that touches both sides: `dist/straits_proposed.json` and `dist/straits_map.png` (full size, each crossing ringed by width and numbered). `approve [--max-gap PX] [--drop N,..] [--add N,..]` writes `source/straits.json` (each crossing by pixels: a coast pixel each side and a sea pixel, since ids shift), which `build_mod.py` reads (`straits.rows`; without it no crossings, the build unchanged). First run: 492 crossings for 606 landmasses (313 up to 6 px of sea, 414 up to 10, the default; the base game's 151 span 2-30 px, median 4); 72 islets lie over 20 px from any land. **In the mod since 2026-10-17**: the 414 up to 10 px (the author: "Apply all the green and yellow strait crossings, I'll judge the others later"); the 78 wider ones (orange 10-15 px, red 15-20) wait for the author |
-| `state_map.py` | by hand, after a build: a numbered map of some countries' states (`dist/state_numbers_<name>.png` + `.json`, number → tag and pixel), for the author to name them; `--names` labels them with their names instead |
-| `terrain_test.py` | by hand, a test not in the game (author, 2026-10-12: "do not add it to the mod yet"): terrain for the whole map from each continent's real-world model (Nonscio western Europe, Araseos Germany, Yastreovakia eastern Europe and Russia, Usnistan the Middle East and Africa, Orientalis Asia, Solitas loosely the New World, Aislada Australia): its own relief with hand-placed ranges (the Alps down the bay east of Rouental, Tibet and the Himalaya at Ganden, the Ethiopian highlands by Mekele ...), every drawn river in a valley that falls steadily to its mouth, a climate per continent (latitude frame, prevailing winds and monsoons carrying the sea's moisture inland, rain shadows, hand-placed wet and dry areas, wetter where rivers are drawn), terrain.bmp classes (woods on uplands and slopes, farmland on low ground, along rivers and coasts, marsh only where water gathers), and each province's majority type. **The Vale of Reibonne** is the author's (2026-10-12: "Rouental and the Reibonnaise nations are in the Vale of Reibonne and are mostly surrounded by mountains and hills, except the Reliette gap which is open plains"): a low farmland floor ringed by the ranges they drew on their fief map's Mountains layer (`source/vale_ranges.png`, projected from `work/pdn_rmap`: the Osgrande Mountains north, the Nossine north-east, the Bastionne east, the Hollier inside Hollier, the Anarlaine south-west, and the Firime Highlands, hills, north-west) and by hills along the rest of its land border; the Reliette gap (west, between the coast and the Anarlaine, into Placeholdaire) open plains; Marais Verte marsh. Writes `work/terrain_test/` and `dist/terrain_test_map.png`, `terrain_test_provinces.png`, `terrain_test_vale.png` |
-| `usnistan_prototype.py` | by hand, a prototype not in the game: a fully generated Usnistan (relief, climate terrain, rivers, ~800 provinces, states, 6 placeholder countries, cities) into `work/usnistan/` and `dist/usnistan_*.png` (author asked for an example, 2026-10-02) |
-| `regroup_states.py` | by hand, after `apply_outlines.py`: in every country with state lines of its own, each drawn area becomes exactly one state (provinces kept, split only where a line crosses them; `NOT_DRAWN`: Belka, whose only lines are Pakitsk's). After a big redraw, re-cut the provinces of the states it changed (`pdn_tools.py recut --keep-states`, one seed per piece, only in the countries drawn; then `tidy`): on 2026-10-17 the new lines had cut 1,468 provinces into pieces down to 16 px |
-| `import_flags.py` | by hand: the author's flag `.pdn` (one layer per flag, named after the nation) → `source/flags/TAG.png`; a stored flag is replaced when any pixel differs at the same size, or by more than resampling would at another size (`changed`, 2026-10-09); see-through pixels are filled from the nearest solid one first (`opaque`), since the game shows them as holes |
-| `organic.py` | organic splitting (seeded watershed over noise), used by `apply_outlines.py` |
-| `rivers.py` | plain river lines → HOI4 rivers.bmp format, and the river rules check |
-| `build_mod.py` | every mod file |
-| `deco_ui.py` | the Valsora Deco UI into the build (`common.DECO_UI`; see Deco UI below): Valsora's own copies of what it replaces kept in `work/deco_base/`, its long-name trigger and politics screen made from this build, then `deco_ui/valsora_deco_ui/` copied in (a file both ship stops the build unless the Deco UI replaces it on purpose) |
-| `nations.py` | hand-written per-nation content (leaders, portraits, focus trees), used by `build_mod.py` |
-| `superevents.py` | TNO-style superevent windows, their texts, picture and music |
-| `test_events.py` | Rouental's test decisions (2026-10-15, until the testing is done): one per kind of event window, and the test superevent |
-| `superevents_deco.py` | the superevent window in the Deco UI's style (`DECO_UI`, 2026-10-15): the mockup's board drawn with numpy and Pillow, a title strip per superevent, the texts measured against their boxes |
-| `superevent_preview.py` | by hand, after a build with the Deco UI: `dist/preview_superevent.png`, a superevent's window as the game should draw it, from the built files (its .gui, sprites, title strip and picture) with the texts in the Deco UI's own fonts (`python3 scripts/superevent_preview.py [ID ...]`, 2 s) |
-| `cultures.py` | generic portraits, name lists and graphical culture per continent / country |
-| `ideologies.py` | the five ideologies: ideology file, renamed localisation, theocracy icon |
-| `minimap.py` | the minimap (lower right): Valsora's land on parchment instead of vanilla's Earth, its frame, window and slide (2026-10-13); with the Deco UI (`DECO_UI`) gilt land and coasts on lacquer in a gilt frame, same sizes, and the start date picture the same (2026-10-14); the Vale of Reibonne start's picture, the Vale close up (2026-10-15) |
-| `globe.py` | the world tension globe (top bar, 10 frames) and its small icon: Valsora instead of Earth (2026-10-14), cracking into lava as tension grows (redrawn the same day: the first flames "didn't come out too well"); run alone, `dist/tension_globe_preview.png` |
-| `vanilla_parts.py` | vanilla's parts in the mod, for `build_mod.py`: the vanilla files it ships moved to 2036, the stand-ins for what Earth's content still names (decisions, events, country histories), the start and end dates, the AI's faction theaters |
-| `vanilla_sync.py` | by hand, after a game update: refreshes `source/vanilla/` from the author's copy of the game (`Rouental/HOI4-Files`): the vanilla files the mod ships changed, and lists of vanilla's names (and its traits and kinds of company, `index/traits.json` and `index/companies.json`, for the Gazetteer, and its autonomy levels, `index/autonomy_states.txt`), and the game's English lines that open a sentence with a country's definite name, capitalised (`GetNameDefCap`: "the Cardonian Kingdom has announced ..." in the author's screenshot, 2026-10-17; `curated/localisation/english/replace/valsora_name_caps_l_english.yml`) |
-| `pdxscript.py` | a reader for Paradox script (nested `key = value` blocks), used by `vanilla_sync.py` |
-| `check_mod.py` | re-reads the built files and checks every rule below |
-| `export_canvas.py` | previews in `dist/` |
-| `package.py` | `dist/valsora_test.zip` (reproducible: fixed dates and permissions, sorted) |
-| `stamp.py` | `fresh` / `save` a step's inputs, so `run_all.sh` skips `read_layers.py` while they are unchanged (`FORCE=1` reruns it) |
-| `mutation_test.py` | by hand, after changing `check_mod.py`: breaks hard-linked copies of the build in 56 known ways (map files, history, content, files), runs `check_mod.py` on each batch side by side, and fails unless every break is reported (a miss is retried alone, in case another break hid it); 30 s. Add a break for every new check (2026-10-15: it found our on_actions' scripted effects unchecked) |
-| `fit_flag.py` | by hand: a flag the author sends in another shape → `source/flags/TAG.png` at 82:52 without resampling (plain field trimmed round an emblem, vertical bands made longer, stripes lengthened or made taller, a screenshot's frame cropped; quarters, crosses and borders refused) and `work/flag_fit_TAG.png` to check |
-| `build_flags15.sh` | by hand: the larger flags' test version (`docs/HD_FLAGS_TEST.md`) beside the mod: the Deco UI drawn for it in `work/deco_flags15/`, the mod in `work/build_flags15/`, `work/valsora_test_flags15.zip`; `build/` and `dist/` untouched |
-| `publish_site.sh` | by hand: the Gazetteer's site (`facts_export.py`, `gazetteer_site.py`) as the next commit of `gh-pages`, pushed; nothing when unchanged |
-| `tests/gazetteer/` | by hand, after `facts_export.py`: the Gazetteer page driven in Chromium with a stand-in for claude.ai's runtime: `run.py` (owner, friend, passwords, desktop and phone, light and dark), `traits.py` (traits and their requests), `companies.py` (political advisors, companies and their requests), `ingame.py` (the game's own characters and releasables, commanders' stats, cities' size), `reset.py` (Owner tools › Start over), `guide.py` (the quick-start guide); `harness.py` builds the test site in `work/gazetteer_test/` |
-| `country_list.py` | by hand, after a build: `dist/world_map_labelled.png` (every country labelled) and `dist/countries.md` / `.csv` (name, full name, ideology, sub-ideology, culture, leader, states), read from the built mod |
-| `nation_sheet.py` | by hand, after a build: `dist/nations_by_continent.png`, every nation in the game under the continent of its capital: flag, ruler at the start (portrait of our own, or a "placeholder" box for a base-game one), full name, ideology and sub-ideology, culture, and a strip of its map colour (author, 2026-10-13) |
-| `collages.py` | by hand, after a build: `dist/flags_collage.png` (every custom flag, and the countries still on a placeholder stripe) and `dist/leaders_collage.png` (every custom leader: own portraits at 2×, named ones with base-game portraits as labelled tiles); `--continent NAME` writes only `dist/flags_<name>.png`, the flags of the nations whose capital is on that continent, naming below them those with land there and their capital elsewhere (2026-10-10, Araseos; 2026-10-12, Yastreovakia) |
-| `facts_export.py` | by hand, after a build: the Gazetteer's map data into `work/gazetteer/` (`index.json`, `world.png`, `n/<TAG>.json` per nation: its states, provinces, cities and politics as built, its flag, its land and the neighbours' around it as province numbers per pixel, in parts, with the rivers, and whether its states are drawn, `final`), published with the page |
-| `gazetteer.html` | the Gazetteer (see below): the page where friends fill in their nations' facts; the web site's (`gazetteer_site.py`), or a claude.ai artifact with its own database (the first version) |
-| `gazetteer_site.py` | the Gazetteer's web site into `work/gazetteer_site/` (the page with the Firebase project's settings, the SDK bundle from `source/gazetteer_site/`, `facts_export.py`'s map data), committed alone on the `gh-pages` branch, which GitHub Pages serves; `--emulator` builds it for Firebase's local emulators (tests) |
-| `gazetteer.py` | the Gazetteer's facts into `source/gazetteer/<TAG>.json` (pictures in `source/gazetteer/assets/`): `paths KEYS.json` (each nation's atlas folder `n/<TAG>/<key>` from the owner's passwords), `pull DIR` (the atlas as the ArtifactData tool saves it, pictures fetched by asset id into `DIR/assets/`), `import FILE.json` (a file saved from the page or the site, pictures inside; drops the map facts of nations whose states aren't drawn; gives releasables their tags), `status` (releasables' cores, and what is left to do by hand), `suggestions` (`dist/gazetteer_suggestions.png`, a layer for the `.pdn`); `finals` (whose states are the author's); and the functions `read_layers.py` (terrain, rivers, cities) and `build_mod.py` (state facts, capitals, railways, supply hubs, names, sub-ideologies, rulers and party leaders with titles and portraits, characters, companies, map colours, releasables) call |
+## Decisions worth keeping (each in full: `docs/DECISIONS.md`)
 
-**A clean `check_mod.py` run is the bar for shipping a build.** It was mutation-tested
-(CRLF, X-crossing, missing building row, state split across regions, descriptor
-mismatch, missing localisation) and catches all of them. Since 2026-10-14 it also checks
-our files against vanilla's own names (`source/vanilla/index`): sprites, technologies,
-equipment, modules, battalions, ideas, defines, the map files the mod inherits, the
-stand-ins for Earth's decisions and tags, every event fired (by focus, effect, event or
-on_action) and 2036 (mutation-tested: 19 breaks, all caught). The checks that judge our
-scripting (tags targeted, popularities, ideologies) skip vanilla's shipped files. Since 2026-10-15 the breaks are kept
-in `scripts/mutation_test.py` (56, every one caught): run it after any change to `check_mod.py`. Since 2026-10-16 it
-also fails on a letter of our text or name lists that a font the mod ships lacks (a bitmap font draws nothing for it),
-on a letter of a name drawn on the map (countries, states, regions, victory points) that the map font lacks, and on a
-map font texture over 2048 x 1024 (the game refuses it and draws no names: 2026-10-16).
-
-## Decisions worth keeping
-
-- **2036** (author, 2026-10-14: "Valsora takes place in 2036"). Everything the game dates
-  moves a hundred years (`vanilla_parts.py`):
-  - the clock: `START_DATE` 2036.1.1.12, `END_DATE` 2049.1.1.1 (vanilla also runs 13
-    years) and `TENSION_TIME_SCALE_START_DATE` in `common/defines/valsora_game.lua`, the
-    bookmark's date, and our history (last elections 2032, rulers' terms to 2065, order of
-    battle files `<TAG>_2036`);
-  - the tech tree: every technology's `start_year` (research ahead of it is penalised) and
-    the tree's year labels (`interface/countrytechtreeview.gui`);
-  - the date conditions of the generic content the mod ships (laws, the generic focus
-    tree, AI templates and strategies, faction goals, special projects, raids, medals,
-    events) and the game rule "war goals from focuses only, until 1938 / 1939 / 1940"
-    (2038 ..., `diplomacy_scripted_triggers.txt`);
-  - the generic names with years ("2036 Cruiser Hull", "Heavy cruiser 2040", the game
-    rule's options), in `localisation/english/replace/`.
-  Equipment keeps vanilla's `year`: licence costs count it from 1936
-  (`LICENSE_IC_COST_YEAR_INCREASE`), so moving it would only make licences dearer.
-  `check_mod.py` fails on any 18xx or 19xx date, `start_year` or tech tree label in the
-  built files, and on a start date or bookmark outside 2036 (mutation-tested).
-- **Railways wait** (author, 2026-10-15: "Let's leave railways off for now. The location of cities might change,
-  and the mod doesn't need to be playable yet"): the map has only the lines drawn on the Gazetteer (one, Rouental's),
-  so supply hubs away from a capital aren't connected. Don't generate a network until the author asks.
-- **Province sizes by terrain** (author, 2026-10-15, on `docs/BORDER_LIMIT.md`: "For cases like desert, yes. But for
-  others like Rouental, keep it dense"): when the Terrain layer is painted, deserts and land like them may get larger
-  provinces to free borders; Rouental keeps its ~190 px ones.
-- **The mod's zip stays in `dist/`, committed** (author, 2026-10-15: "Keep it as is. When we start getting to more
-  substantial builds, I'll start transferring to the releases page"), and is sent in the chat too. A session like this
-  one can't publish releases: GitHub's proxy answers "Creating, editing, or deleting releases is not permitted for this
-  session type" (HTTP 403), so the Releases page, when it comes, is the author's to publish by hand (Claude gives them
-  the zip and the notes). Don't work around that rule (no workflow or tag that publishes for the session).
-  The old zips stay in the history too (author: "leave it until it becomes a problem"): removing them means
-  rewriting it (`docs/SPEED_AND_SIZE.md`), only with the author's go-ahead.
-- **Test content until the first public build** (author, 2026-10-15: "I'll remove all the test stuff before the first
-  public build"): Devlon's spirits and Rouental's test decisions stay until the author takes them out.
-- **Map size 5120×2560.** HOI4 needs both sides to be multiples of 256 and the area to stay
-  under ~13,238,272 px. 5120×2560 = 13,107,200 is the largest size under that cap, and
-  2:1 matches the author's canvas. It is proven in the wild (the Mappa Mundi mod ships this
-  size). At this size every per-pixel map file has to be generated: the vanilla ones are
-  5632×2048.
-- **Read the `.pdn` directly.** `PDN3` + 3-byte header length + XML header, then a .NET
-  BinaryFormatter graph ending in `0x0B`, then per layer: format byte 0, chunk size
-  (u32 BE, 262144), then gzip chunks `(index u32 BE, size u32 BE, data)` in any order.
-  Pixels are BGRA. Land is **any opaque pixel of layer 1** ("Land & Borders & Colours");
-  the 1px coastline layer lies on the land's inner edge.
-- **Continents move as rigid blocks** (`blocks.py`): each block is a core landmass, named
-  by seed pixels, plus the islands nearest to it. Nonscio + Araseos are **one block**
-  because the Aikos / Midtierre archipelago interlocks them; they are split into two
-  continents afterwards by nearest main landmass. Hand overrides, all by source seed
-  pixel in `blocks.py`: the island at (9574, 3082) belongs to Orientalis (author's
-  continents map); the island at (2615, 4051) north of Araseos belongs to Araseos; the
-  islet at (1087, 6590) south-west of Araseos is deleted (author's request).
-- **Antarctica** is the landmass touching the bottom edge. Islets within 5 px of it are
-  removed with it; three real islands south of Usnistan are kept.
-- **Scale 0.375** output px per source px (a straight fit would be 0.366; the previous
-  5632×2048 build used 0.293). At 0.38 the tightest gaps drop to ~91 px.
-- **Layout** (`layout.py`): start from the source layout, stretched vertically into
-  Antarctica's space. Then push apart every pair of blocks closer than 100 px along the
-  line between their nearest coasts, with a fading pull back to the start. The wrap seam
-  (x = 0) is a wall no block may cross. `compose.py` then centres the final land exactly
-  (equal margins top/bottom and either side of the seam) and records the shift in
-  `work/world.npz`, which `export_canvas.py` applies too.
-- **Provinces are bricks** (at sea only until 2026-10-12, when Merlo's hand-drawn sea
-  provinces replaced them; see Sea provinces below): 32 px on land, 128 px at sea, 48 px on lakes, with odd rows
-  offset by half a brick so only three provinces meet at grid corners. Bricks never cross
-  the seam (the edge half-bricks of odd rows are folded into their neighbour). Pieces under
-  25% of a brick merge into the same-kind neighbour with the longest shared border.
-  Remaining X-crossings (coasts, seam) are fixed by moving single pixels, never letting a
-  lake touch the sea. **No bricks are left** (2026-10-15, author: "there are areas of the map
-  that still have the old placeholder states and provinces"): every lake is one province
-  (`pdn_tools.py lakes`: four lakes had 2-10 squares, 13 merged, among them the lake by Xue and
-  Ungar's), and the land no outline run had reached, 87 brick provinces in 32 px squares and
-  96 px grid states, was cut like an outlined patch (`pdn_tools.py recut`): Arvorenia's and
-  Atrocha's islands (the friend's build of 2026-10-05; Arvorenia 34 → 56 states, Atrocha 14 →
-  26), Kurikia's KU island and Belekria's island group south of the BE islets (their one state
-  each kept, `--keep-states`, so Kurikia's map tools stay open). They are found as provinces
-  whose borders with other land provinces run 60 % or more on the brick grid (organic ones:
-  under 20 %). `dist/preview_recut_20261015.png` shows them before and after.
-- **Straits are traced, not averaged** (`layout.channels`). Shrinking by area filled in
-  channels narrower than ~1.5 output px and fused 21 large islands to their neighbours
-  (author's report). The water's centre line is traced at source resolution and kept as
-  4-connected water wherever the land on either side belongs to two different source
-  landmasses. That reopened 44 straits. `dist/strait_fixes_map.png` and
-  `strait_fixes_*.png` show each one before and after.
-- **Islands under 16 px are dropped and ponds under 64 px filled.** About 660 islets go
-  this way; they are 1–4 px specks at game scale.
-- **Enclosed water becomes lakes**, including the author's inland seas (Piscary, Norlany,
-  Sasurs).
-  - The two inland seas that have islands are navigable sea (author's request), each in
-    a sea region of its own: Nonscio's, south of Rouental, and Yastreovakia's northern
-    one. They were made with `pdn_tools.py navigable`.
-  - Other lakes stay lakes.
-- **Sea provinces and sea regions are Merlo's** (the author's friend, 2026-10-12; merged
-  with the author's approval, which reverses their 2026-09-30 wish to keep each ocean
-  one region). Merlo drew the sea's borders by hand on a new layer, **Ocean Province
-  Lines** (red lines), and his scripts (`build_sea.py`, `regroup_sea.py`, not in the
-  repo: they ran on his machine) made 362 sea provinces from them in place of the 645
-  bricks (35 areas over HOI4's size limit cut by wobbly lines, drawn into the layer
-  too) and grouped them into 42 sea regions of about 9 provinces inside each ocean
-  (South Demetric 8, Northern Ocean 6, North Menotius 6, South Menotius 5, Arctic
-  Ocean 4, Northern Friedlich 4, Southern Friedlich 3, Midtierre Sea 2, North Demetric
-  2, Piscary and Norlany 1 each); each province went whole to the ocean covering most
-  of it, which moved 8.7 % of the sea to another ocean. Land, lakes and every other
-  layer were untouched (checked pixel by pixel; one pixel at (2337, 933), sea on Terrain
-  but painted into a Krionik land province, became sea), and his built mod matched our
-  build of his file byte for byte. Our own `scripts/sea_provinces.py` now does the job
-  from the layer: `build` (provinces from the lines; a line pixel keeps its province
-  while that borders it, so unchanged lines give back the same provinces: 22 px
-  differed on Merlo's file), `seam`, `names`, `check`. **The wrap is seamless**
-  (`seam`, at the author's request): Merlo's borders met the two edges at different
-  rows (up to 43 px apart, two with no partner, plus line bits drawn along the edge
-  columns); now every border meets both edges at the same row (pairs bent to meet
-  halfway; the right edge's border at row 229 continued across the wrap, which split a
-  province: 363 sea provinces; a big province that reached the right edge only by a
-  5 px neck, rows 958–975, pulled back), the lines within a few dozen px of the edges
-  are redrawn from the result, and the two provinces facing each other across the wrap
-  share a sea region (10 provinces changed region, the most even choice), so the oceans
-  continue across it too. Names are "<ocean> <n>" west to east (`names`), the oceans'
-  spelling as on the author's ocean map ("North Demetric", "Northern Friedlich").
-  `strategic_regions.py` and `pdn_tools.py sea_zones` would undo all this and refuse to
-  run on a map with the lines layer.
-- **Sea regions were the author's oceans, unsplit** (`strategic_regions.py`, 2026-09-30,
-  until 2026-10-12).
-  Each sea province takes its ocean from `source/ref_oceans.webp` and each ocean is ONE
-  region, as big as the map shows it: the author will edit them later. Split only where
-  HOI4 forces it (a sea region must be connected); none needed it. 11 sea regions:
-  Northern Ocean, North / South Demetric, North / South Menotius, Northern / Southern
-  Friedlich, Midtierre Sea, Arctic Ocean, plus the navigable Piscary and Norlany seas.
-  - The reference maps use an **older arrangement of the continents** than the drawing,
-    so positions are mapped per continent: game → drawing through `work/layout.json`
-    and the recovered centring shift (36, 16); drawing → reference by a per-continent
-    shift fitted by overlap (Nonscio and Araseos fitted apart). Each continent votes
-    for an ocean, weighted 1/(distance+20)²; stray bits join their neighbour; the top
-    edge is forced to Northern Ocean and the bottom to Arctic (the mapping cut the
-    Arctic in two).
-  - An earlier version also regrouped land regions and cut oceans into ~350k px pieces;
-    **the author rejected it**: land regions stay as they were (the grid ones), and
-    oceans stay whole.
-  - Sea names are keyed by region colour in `source/region_names.json`; land regions
-    keep their generic names.
-- **Region colours.** Sea regions are always blues (hue 0.53–0.70). Land regions are
-  never blue, cyan or indigo (hue 0.42–0.82 is excluded), so the author can tell them
-  apart on the layer.
-- **States** bucket land provinces on a 96 px grid per continent, split into connected
-  pieces; small island pieces join the nearest state within 160 px. **Land regions**
-  bucketed whole states on a 384 px grid until 2026-10-16, when they were made from the
-  nations (`land_regions.py`, the author: "could you please regenerate them taking into
-  account the nations now on the map?"): 137 of them, of whole states, big nations cut
-  into several, small neighbours grouped; **sea regions** bucketed sea provinces on a 512 px
-  grid (Merlo's since 2026-10-12) and must stay contiguous. Lakes go into the land region
-  they border most.
+- **2036** (author, 2026-10-14): everything the game dates moves a hundred years (clock, tech tree years, generic
+  content's dates, names with years; equipment keeps vanilla's `year`); `check_mod.py` fails on any 18xx or 19xx date.
+- **Railways wait** (author, 2026-10-15): only the lines drawn on the Gazetteer; don't generate a network until asked.
+- **Province sizes by terrain** (author, 2026-10-15): deserts and the like may get larger provinces once the Terrain
+  layer is painted; Rouental keeps its dense ones. The guide's numbers (2026-10-17): usually Cardonia's ~160 px,
+  down to ~120 for crowded land, 300 to 800 for empty land.
+- **The mod's zip stays in `dist/`, committed** (author, 2026-10-15) and is sent in the chat too. This session can't
+  publish releases (GitHub answers 403): the Releases page, when it comes, is the author's to publish by hand; don't
+  work around that. Old zips stay in the history unless the author says otherwise.
+- **Test content until the first public build** (author, 2026-10-15): Devlon's spirits and Rouental's test decisions
+  stay until the author takes them out.
+- **Read the `.pdn` directly** (its format: `docs/DECISIONS.md`); the placeholder mode's layout of the continents
+  (rigid blocks, scale 0.375, straits traced, islets dropped, Antarctica removed) is history now that the author draws
+  at game size.
+- **No bricks are left** (2026-10-15): every lake is one province and all land is cut like an outlined patch.
+- **Enclosed water becomes lakes**; the two inland seas with islands are navigable sea.
+- **Sea provinces and sea regions are Merlo's** (2026-10-12, the author's friend; `sea_provinces.py`), seamless across
+  the wrap; `strategic_regions.py` and `pdn_tools.py sea_zones` refuse to run on the map.
+- **Region colours**: sea regions always blues, land regions never blue, cyan or indigo.
+- **Land strategic regions are made from the nations** (`land_regions.py`, 2026-10-16), 137 of them.
 - **Countries**:
-  - One placeholder per continent: NSC ARS AIS SLT YAS USN ORI (`SOL` is a vanilla
-    tag, so Solitas is `SLT`); Araseos has no land left since 2026-10-09, nor Nonscio and
-    Yastreovakia since 2026-10-12, nor Orientalis, Usnistan and Solitas since 2026-10-13,
-    so ARS, NSC, YAS, ORI, USN and SLT are left out of the mod. Merlovich (AIS, still on
-    the placeholder's paint) is the only one left. Until 2026-10-15 the placeholders were the only countries the
-    bookmark recommended (author's wish, to keep the start menu short).
-  - **Two starts on 1 January 2036** (`common/bookmarks/valsora.txt`, `build_mod.py`): **Valsora** recommends
-    Rouental (author, 2026-10-15: "add Rouental to the recommended nations") and Merlovich; **the Vale of Reibonne**
-    recommends Rouental and the seven other Association states (`nations.REIBONNAISE`), its picture the Vale close
-    up with the eight lit and their borders (`minimap.close_up`). Two, because with one start the game skips its
-    scenario screen, so Back on the country screen went to it and was sent straight on again: no way back to the
-    menu (the author's video, 2026-10-15). The histories are short and factual; the author may write their own.
-  - Colours follow the flags (author): Rouental royal green, Guedelon blue, Hollier red, Seigne white,
-    Evriches yellow, Lustiana black, Selgrave dark maroon, Lanzerac purple (its new flag's,
-    2026-10-09; dark gold before), Cardonia deep purple (kept when its own flag, black,
-    white and navy, came on 2026-10-14). Guedelon's blue and Hollier's red are their flags' main colours. `pdn_tools.py recolour Countries OLD=NEW` keeps
-    the `.pdn` in step.
-  - **Every nation's record**, who drew, named and decided what and when, is `docs/NATIONS.md` (moved out of this
-    file on 2026-10-15). As built: 193 countries in the mod, the 160 on the map and 33 that own nothing at the start
-    (Rouental's 13 releasables, Belekria's 9 republics, Krionik's 3 principalities, Pakitsk, the civil war's 7);
-    `dist/countries.md` lists every country's names, government, culture, ruler and states. Off the map but kept in
-    `COUNTRIES`, and so left out of the mod: the United States of Solitas (to come back as a formable) and
-    Russovichia (author, 2026-10-15).
+  - Placeholders (one per continent) are left out once they own nothing; only Merlovich (AIS) is left.
+  - Two starts on 1 January 2036: Valsora (Rouental, Merlovich) and the Vale of Reibonne (the Association's eight);
+    two, because with one the game skips its scenario screen and Back loops.
+  - Colours follow the flags (author); `pdn_tools.py recolour Countries OLD=NEW` keeps the `.pdn` in step.
+  - **Every nation's record**, who drew, named and decided what and when, is `docs/NATIONS.md`. As built: 193
+    countries in the mod, the 160 on the map and 33 that own nothing at the start (Rouental's 13 releasables,
+    Belekria's 9 republics, Krionik's 3 principalities, Pakitsk, the civil war's 7); `dist/countries.md` lists them.
+    Off the map but kept in `COUNTRIES`: the United States of Solitas and Russovichia.
   - **A new or changed nation** (the rules the record kept to):
     - The author's are the names, governments, formal names and rulers, and whatever else they name. Claude picks
       the rest (tag, map colour, adjective, culture), says so in the record and in a code comment (`# Claude's
@@ -444,558 +133,40 @@ map font texture over 2048 x 1024 (the game refuses it and draws no names: 2026-
       the lines close off by accident); islands go with the labels the author writes beside them, and labels
       written on Necessary Borders are moved to Necessary Names. Land changes hands with `pdn_tools.py`: `give`
       (whole states), `attach` (a piece joins the new owner's nearest state), `border` and `cede` (along a moved
-      line).
+      line), `owners` (every moved line at once).
     - A map colour comes from the flag where there is one, and moves off a neighbour's it would merge with. A flag
       that comes later doesn't change the colour unless the author asks.
-    - Flags in another shape are fitted to 82:52 without stretching (Flags, under Nation content).
+    - Flags in another shape are fitted to 82:52 without stretching (`fit_flag.py`).
   - The adjectives of the neighbours are guesses; the author may rename them.
-- **State names** are the author's, in `source/state_names.json` ("x,y" of a pixel
-  inside the state → name, since ids shift; `build_mod.py` stops if a pixel is in no
-  state or two name one state). Unnamed states are "Country N". First set (2026-10-01):
-  Rouental's 54 and its seven neighbours', numbered by `state_map.py`; then (2026-10-02)
-  21 Chouan, the islets off Solitas Concorde et Volonté, and Rolantelle split by a new
-  state line into Ghessone (west) and Rolantelle (east); Maïeul split into Moelle
-  (north; Selgrave takes it in the civil war) and Maïeul (south). 2026-10-05: Cardonia's 27
-  (from `dist/state_numbers_cardonia.png`; numbers 6, 11 and 12 merged into Llainfair, the
-  island east of Coreilia). `state_map.py --names` draws a
-  country's states with their names (`dist/state_names_<name>.png`).
-- **Localisation keys are our own** (`VAL_STATE_n`, `VAL_REGION_n`), so vanilla's
-  `STATE_n` / `STRATEGICREGION_n` Earth names never show. Victory point names have to
-  reuse vanilla's `VICTORY_POINTS_<id>` keys, so they live in `localisation/english/replace/`.
+- **State names** are the author's, in `source/state_names.json` ("x,y" of a pixel inside the state, since ids shift);
+  unnamed states are "Country N"; `state_map.py` numbers a country's states for naming.
+- **Localisation keys are our own** (`VAL_STATE_n`, `VAL_REGION_n`); victory point names reuse vanilla's
+  `VICTORY_POINTS_<id>` keys in `localisation/english/replace/`.
 
-## Nation content (`nations.py`)
+## Nation content, ideologies, cultures, superevents (in full: `docs/CONTENT.md`)
 
-Aislada is the worked example of a built-out nation:
-- **Leader.** The Great Merlovich (`AIS_merlovich`; "Merlovich" until 2026-10-04) is defined in `common/characters/AIS.txt` as a
-  neutrality (`despotism`) country leader and recruited from the country history.
-- **Portrait.** Referenced as a sprite (`GFX_portrait_AIS_merlovich`, declared in
-  `interface/valsora_portraits.gfx`), the way vanilla does it. The image is a 156×210 DDS
-  cropped from `source/merlovich_emu.png`.
-- **Focus tree.** `common/national_focus/aislada.txt` is picked for AIS by
-  `country = { factor = 0 modifier = { add = 10 tag = AIS } }`. It is one chain:
-  1. NationStates account: +25 political power.
-  2. Become Cartographer: −0.5 stability.
-  3. Fucking Explode: capital state −100 manpower, communism 100%, ruling party
-     communism, then `promote_character = AIS_communist_merlovich` ("Communist
-     Merlovich", `marxism`, same portrait washed red by `nations.redden`) and retire
-     the original.
-     **`recruit_character` is ignored outside history files** (error.log: "should only
-     happen in game/history files"), so both Merlovichs are recruited in the country
-     history; the communist one sits as communist party leader until the focus.
-- **Icons.** Vanilla icons only, checked against vanilla `interface/goals.gfx`.
-- **Portraits** live in `source/portraits/` and are registered in `nations.PORTRAITS`
-  (source, crop box, optional red tint). Each becomes `gfx/leaders/VAL/<name>.dds` and a
-  `GFX_portrait_<name>` sprite. Transparent pixels, and a crop box reaching past the
-  picture (to fit a round emblem), show `nations.PORTRAIT_BG` (dark charcoal).
-- **City names**: `nations.CITY_NAMES` overrides victory point names, keyed by
-  `"capital:TAG"` (e.g. Rouental's capital is "Rêverie") or
-  by province id. Ids shift whenever the map is rebuilt, so prefer the capital key;
-  `build_mod.py` stops if a named id is no longer a victory point.
-- **Rouental (ROU)** is the country the author outlined inside Nonscio. Everything
-  first built for NSC moved to it, with `NSC_` renamed `ROU_`; NSC is plain "Nonscio"
-  again. `nations.IDEOLOGY_NAMES["ROU"]`: "Rouental" on the map for every government,
-  with the author's formal names (2026-09-30): Monarchist "The Sacred Principality",
-  Authoritarian "The Grand Principality", Theocratic "The Most Seran State",
-  Democratic "The Principality" (a constitutional monarchy, since later that day), Communist
-  "The People's Republic" (all "… of Rouental");
-  adjective Rouentaise. (The first names, Perfect / Powerful / Boring / Shitty
-  Rouental, were dropped.)
-  - **Capital: Rêverie**, the one-province state the author drew at (660, 805)
-    ("Rouental 27" in that build), set by `nations.CAPITALS` (tag → pixel, since state
-    ids shift). Neighbours' capitals are named by `CITY_NAMES` "capital:TAG": Guedelon,
-    Evriches, Argent-sur-Seigne (SGN), Grande Hollier, Lanzerac, Villerose (SGV),
-    Tanière (LST).
-  - Leaders are in `common/characters/ROU.txt`: **Roland II Cahun** ("Roland Cahun"
-    until 2026-10-08; `despotism`, leads at start; his description, shown on his portrait,
-    is the author's list of his titles: `desc` in his leader role, after `ideology`, which
-    `check_mod.py` and `country_list.py` expect first) and Serelle Cahun
-    (`fascism_ideology`, fascist party leader; **Serelle VI Cahun** once she rules
-    Rouental by any route: `nations.REGNAL_NAMES`, renamed by `set_character_name` in the
-    on_ruling_party_change on_action; HMMLA's copy keeps her name). Serelle is also
-    a general from the start (corps commander, skill 4, armor officer; HMMLA's copy
-    too). Polite, Steady and Accept Reality only remove her party role
-    (`remove_country_leader_role`), so she stays a general; Rudely (communist) retires
-    her outright (author, 2026-10-02).
-  - Portraits come from `source/portraits/roland_cahun.png` and `serelle_cahun.png`.
-  - `common/national_focus/rouental.txt` has four mutually exclusive focuses in one row:
-    - Kick Out the Parasites (Polite): democratic, elections on, both Cahuns retired.
-    - Kick Out Your Brother: fascist, Serelle promoted, Roland retired.
-    - Steady As She Goes (the author's; Habsburg icon): non-aligned, Roland promoted,
-      Serelle retired.
-    - Kick Out the Parasites (Rudely): communist, both Cahuns retired.
-      Rudely also moves the capital to Carcarelle (`set_capital`, author 2026-10-02)
-      and gets Rouental cast out of the Association at once (`rudely_effects`: dismantled,
-      re-formed under Hollier with the other six). The communist flag
-      (`ROU_communism.png`) is the author's Liberté flag, as is the Reibonne's.
-      - **Execute the Prince** (under it, x = 6, y = 1): plays superevent
-        `rou_civil_war` (the author's photo `source/superevents/rou_civil_war.jpg`, the
-        author's quote and song, Rafael Krux's "Epic Church Organ"), sets
-        country flag `ROU_civil_war` and starts the **Rouentaise civil war**
-        (author, 2026-10-02; `nations.CIVIL_WAR`, `civil_war_effects`):
-        - Rouental becomes the Reibonne (cosmetic tag `ROU_REIBONNE`, "The People's
-          Republic of the Reibonne", flag `ROU_REIBONNE.png`, communist maroon).
-        - Lustiana takes Maïeul and Serpette, Hollier takes Chirac, Selgrave takes
-          Moelle (`ANNEX`), and the
-          Association becomes "The Alliance of the Vale": there is no effect to rename a
-          faction, so Hollier dismantles it and founds one from
-          `faction_template_alliance_of_the_vale` with the same members.
-        - Seven countries that own nothing at the start are `release`d and declare war
-          (`annex_everything`). They have cores on their states from the start,
-          except `CIVIL_WAR_ONLY` (FTH, RLA: the author wants them to exist only
-          through the war), whose cores are added by the focus just before. (An
-          Alliance of the East, AOE, was dropped on 2026-10-02 for the annexations.)
-          The author's plans for the war (events, rival factions) are in
-          `docs/CIVIL_WAR_NOTES.md`:
-          Brillagne BRL (the Holy State of Brillagne; theocratic Rouental's ruler, a
-          copy `BRL_mahaut_vi`, and flag); Crépuscule CRP (Principality; Absolute
-          Monarchy); Reliette RLT (Grand Duchy; Feudalism); The Marches MRC (Alliance
-          of the Marcher Lords; Oligarchy); HMMLA RLA (Her Majesty's Most Loyal
-          Army; map name HMMLA, the author's, 2026-10-02; Strongman Rule, `RLA_serelle_cahun`; flag the fox quarter of `ROU.png`,
-          which is also `ROU_fascism.png`); Vair VAI (Duchy; Feudalism); The Faithful FTH
-          (the Faithful Children of the Goddess and Her Saint; Holy Order). States
-          are named in `CIVIL_WAR` (first = capital); the focus file writes
-          `@STATE:<name>@`, which `nations.fill` turns into ids. Two countries may
-          share a name: their country files get the tag appended.
-    - Left to right: Polite, Brother, Steady, Rudely.
-  - The democratic and communist parties have no defined leader, so the game generates one.
-  - **Accept Reality** (x = 8) is the fifth mutually exclusive path. It makes Rouental
-    theocratic under **Mahaut VI** (`theocrat`; portrait from
-    `source/portraits/mahaut_vi.jpg`; recruited in history as theocratic party leader),
-    retires both Cahuns and plays superevent `rou_reality`.
-  - **Plans for Cardonia** (x = 11, cost 1, not exclusive) creates an `annex_everything`
-    war goal on CRD. It is for testing wars without justifying.
-  - **Faction.** ROU starts as leader of "The Association of Reibonnaise States",
-    together with GDN, LST, EVR, HLR, SGV, LZC and SGN.
-    - **Reibonnaise opinions** (author, 2026-10-02; `nations.REIBONNAISE`): +20
-      `valsora_reibonnaise_ties` between them, none while either is communist, and −20
-      `valsora_against_communism` towards every communist country. The scripted effect
-      `valsora_reibonnaise_opinions` re-sets them on `on_startup` and every
-      `on_ruling_party_change`. `common/ai_strategy/valsora_reibonnaise.txt` makes the
-      AI want them as allies (alliance 200, befriend 100) while neither is communist.
-    - Lanzerac and Guedelon (Lordly Republics, democratic) left the Association at
-      once. Likely cause: a member needs 30 % support for the leader's ideology
-      (`IDEOLOGY_JOIN_FACTION_MIN_LEVEL`) and they had 20 % monarchists. They now start
-      democratic 40, monarchist 30, the rest 10 (`nations.POPULARITIES`).
-    - Its template, `faction_template_reibonnaise_association` in
-      `common/factions/templates/valsora_factions.txt`, uses vanilla's generic manifest,
-      goal, rules and icon.
-    - ROU's history does `create_faction_from_template` + `add_to_faction`, the way
-      vanilla ENG does in 1.19.
-- **Releasables from the Subregions layer** (2026-10-17): `nations.SUBREGIONS` (tag -> a pixel inside its painted
-  part) makes Belekria's republics, Krionik's principalities, Tethia and Pakitsk releasable: cores on the states mostly
-  painted in that part, the state at the pixel the capital (a patch of the same colour joins the nearest seed of it,
-  so islands follow and one colour may serve two parts). `nations.RELEASABLE` (by state name) stays for Rouental's.
-  `nations.CORES` (tag -> a pixel per state) gives cores on states others own (Sminishia's old land).
-- **Subjects** (`nations.HISTORY`, `set_autonomy`): the game's levels, and the mod's **Protectorate**
-  (`autonomy_valsora_protectorate`, `nations.PROTECTORATE`, Krionik's only: Sombor). The mod ships the game's puppet
-  level without its "no fascist overlord" clause (`vanilla_parts.EDITS`): Valsora's Authoritarian overlords (Kampf,
-  Illiricium) keep plain puppets. `check_mod.py` checks every autonomy level a history sets (mutation-tested).
-- **Starting armies** (author, 2026-10-02): every country owning land but Rouental gets
-  `history/units/<TAG>_2036.txt` (`nations.generic_oob`): "Infantry Division" (8
-  infantry, 1 artillery, engineers, recon), about one per six states, 2 to 24, at the
-  victory points of its states (capital first), plus the techs for them. An OOB
-  division takes its men out of the country's pool (`start_manpower_factor = 1.0` did
-  not stop that, in game, 2026-10-04). Until 2026-10-16 each country's history added
-  the men first (`add_manpower`, 12,000 per division; Rouental 150,000); the author
-  had it removed ("if you are please remove it"), so the divisions come out of the
-  country's own pool. State population is 300 per map pixel (`build_mod.POP_PER_PX`; 20 until
-  2026-10-04, when the whole world held 75 million and Seigne 7,000, and the pools were too small).
-- **Devlon's 15 test spirits** (author, 2026-10-14: to see how the politics screen shows many
-  national spirits): `nations.TEST_SPIRITS`, ideas `DVL_test_spirit_1`..`15` with vanilla's generic
-  pictures and no effects, added in Devlon's history. Remove the list and its `HISTORY` entry after
-  the test. `check_mod.py` checks every idea's picture exists.
-- **Rouental's test decisions** (author, 2026-10-15: "Give decisions to Rouental to spawn generic events of each type /
-  layout, and a superevent for testing. The superevent should use the clown music and placeholder anime girl image"):
-  `test_events.py`, the category "Test Events" (`ROU_test_events`, for Rouental's player), free and repeatable, each
-  firing a placeholder event (namespace `valsora_test`): a country event; a long one with four options; a state event
-  (from the capital); a news event and a major one (sent to every country); a leader event (a random general of
-  Rouental's: the portrait window); an operative event (an operative created first if there is none; shown only with
-  La Résistance); and the test superevent (`rou_test`, "This Is Only a Test": the anime picture and Entry of the
-  Gladiators). Texts are Claude's; no option does anything. Take the category out when the testing is done (the
-  author will, before the first public build). Fixed after the first test (2026-10-15): the state event names
-  `trigger_for = controller` (without it the game shows a state event to no one: `check_mod.py` checks it), and the
-  operative decision first gives Rouental an intelligence agency (`create_intelligence_agency`) and an operative.
-- **Opinion modifier names**: `valsora_reibonnaise_ties` is "Seran Ties" and
-  `valsora_against_communism` "Seran Biases" (author, 2026-10-04).
-- **Named generated rulers**: `nations.NAMED_LEADERS` gives a generated ruler the
-  author's name and portrait: Illiricium's is **Ema Milize**
-  (`source/portraits/ema_milize.png`); Krionik's is a council, the **Kriosaivak Council of
-  Marshals**, with its emblem as the portrait; Leithanien's is **Helmut Shulz**
-  (`helmut_shulz.png`) and Terreich's **Charlotte Gustoff** (`charlotte_gustoff.webp`,
-  cropped from a photo) (author, 2026-10-08); Chineasia's is **Han Leji**
-  (`han_leji.png`, author, 2026-10-12). Solitas' new rulers (2026-10-13) and Tsuruma's
-  **Akihiro Tanaka** (2026-10-13, later) are named without portraits (`None`): they keep
-  a generic portrait of their culture.
-- **Nation names** come from `COUNTRIES` in `build_mod.py`: name and adjective feed
-  `TAG`, `TAG_DEF`, `TAG_ADJ`, the per-ideology variants (`TAG_communism` etc.) and the
-  continent key.
-
-- **Rouental's names** (2026-10-02): the author's fiefs are
-  `source/names/rouental_fiefs.txt` (393 fiefs under 14 headings; `cultures.fiefs`).
-  **Every fief is a vassal of the Crown; the headings are cultural groups, not vassals**
-  (author's correction), and the governorates between vassals and Crown have no power.
-  The author will give each fief its title; per-fief levies wait for that. They give
-  Rouental's name list noble surnames ("de Beaufort", "d'Aurifort") and its division
-  names: "The Royal Host" (Garde Royale, Ost de <royal fief>) and "Vassal Levies"
-  (Levée de <fief>, numbered "%de" as vanilla requires), in
-  `common/units/names_divisions/ROU_names_divisions.txt`. The levy-army design is in
-  `docs/ROUENTAL_ARMY.md`. Built: the **Feudal Army** spirit (`ROU_feudal_army`:
-  recruitable population −80 %, training ×2, PP −10 %, stability −5 %; anime placeholder
-  icon) and the **royal host** (`history/units/ROU_2036.txt`: 2 armoured, 2 mechanised,
-  8 motorised divisions, full support, plus techs, a "Char Royal" tank and a stockpile).
-  The levies themselves are not built: tiers and costs await the author.
-  - The author's detailed fief map (`Rouental_Map_TEMP_2.pdn`, 8000×4471, decoded in
-    `work/pdn_rmap`) was overlaid on the game's states (axis-aligned fit, IoU 0.885;
-    game x = 0.0396 fx + 572.1, y = 0.0379 fy + 747.4). Every label was read and placed:
-    `docs/ROUENTAL_FIEFS.md`, `dist/rouental_fiefs_overlay.png` and
-    `source/rouental_fiefs_by_state.json` (state name → its fiefs by cultural group).
-- **Flags** are `source/flags/TAG.png`, any size (HOI4 gets 82×52, 41×26 and 10×7
-  32-bit TGAs, bottom-left origin). `TAG_<ideology>.png` is used only while that
-  ideology rules: Rouental's banner of arms is `ROU.png` and its blue-white-gold
-  tricolour is `ROU_democratic.png` (author's choice). The other seven were cropped
-  from the author's flag sheet. Countries without a PNG get a placeholder stripe in
-  their map colour. Flags sent in another shape are fitted to 82:52 without stretching:
-  scaled evenly, then plain field added inside the stripes (or plain sides trimmed), so
-  emblems keep their shape (2026-10-13, the author's wish). Vertical bands get plain rows
-  above and below instead, so their widths stay (Qinguo), and a field division that must
-  reach the corners is redrawn at the new width round the unchanged emblems (Ganden's
-  border and mountain triangle).
-- **Formal names** (`nations.FORMAL_NAMES`, e.g. "the County of Evriches") feed
-  `TAG_DEF` and the per-ideology `_DEF` keys that have no `IDEOLOGY_NAMES` entry.
-
-## Ideologies (`ideologies.py`)
-
-The author's five ideologies. The internal keys stay vanilla's so vanilla script keeps
-working; names come from `localisation/english/replace/`:
-- `democratic` Democratic and `communism` Communist are unchanged.
-- `fascism` is Authoritarian, coloured black (20,20,20).
-- `neutrality` is Monarchist, coloured purple (128,48,168).
-- `theocracy` Theocratic is **new**, coloured white (238,238,238).
-- **Subtypes** (sub-ideologies) are the author's set of 2026-09-30, in
-  `ideologies.SUBTYPES` (key, name, description); a renamed vanilla subtype keeps its
-  key (e.g. `despotism` is "Absolute Monarchy", `leninism` "Vanguardism", `theocrat`
-  "Hierocracy"). Democratic: Conservatism, Liberalism, Social Democracy, Populism,
-  Agrarianism, Constitutional Monarchy. Communist: Orthodox Marxism, Vanguardism, Party
-  Centralism, Council Communism, Anarcho-Communism, Agrarian Socialism. Authoritarian:
-  Military Junta, Fascism, Corporatism, Strongman Rule, Technocracy, Revanchism.
-  Monarchist: Absolute Monarchy, Oligarchy, Feudalism, Enlightened Absolutism, Elective
-  Monarchy, Legitimism, and the author's **Personal Union** (2026-10-07, Merlgould) and
-  **Khanate** (2026-10-09, Sanada) and **Semi-Constitutional Monarchy** (2026-10-13,
-  Avesária, then Bromé) and **Regency Council** (2026-10-17, Krionik); Democratic also has the author's **Stratocracy**
-  (2026-10-07, Krionik until 2026-10-17) and **Radical Republicanism** (2026-10-09, Vilna). Authoritarian also has the author's **Bleacherism** (Alban
-  supremacy; officially a senatorial republic under a strongman): ILR CTF ETR MZG;
-  KIL is Legitimism; and **Humanism** (2026-10-12, the Humanist State: humans above
-  Valsora's other races, apartheid-style). Theocratic: Hierocracy, Clerical Monarchism,
-  Holy Order, Synodal Rule, Prophetic Rule, and the author's **Divine Republicanism**
-  (2026-10-12, Muqadasa Salamat). Vanilla's Earth-bound ones (`nazism`, `japan_militarism_ideology`
-  …, `ideologies.HIDDEN`) stay defined because vanilla's characters and focus files name
-  them, but are never given to generated leaders. The author wanted no more on 2026-09-30, and
-  has added their own since (above).
-- Subtype descriptions start with the subtype's name ("Feudalism: …"), so it shows on
-  mouse-over (author). `lordly_republic` "Lordly Republic" (democratic) is the author's
-  own: a republic in which the nobility and clergy retain significant power.
-- **Every ruler is a set character** (author, 2026-09-30: no subtype left to chance).
-  `nations.LEADERS` gives each tag its subtypes; the first leads the country, and the
-  country starts under that subtype's ideology (elections on if democratic).
-  `cultures.leaders` makes the characters (`common/characters/valsora_leaders.txt`,
-  id `TAG_leader_<subtype>`, never `TAG_<subtype>`, which the game reads as the country's name under that subtype): a name from the culture's list (famous surnames skipped, full
-  names unique map-wide; famous ones met in a list already in use, like Franco and Windsor on
-  2026-10-13 (and di Savoia, Garibaldi and de Castro, seen on the nation sheet), are drawn again (`cultures.DRAW_AGAIN`), so no one else's name changes) and a generic politician portrait of the culture, seeded by
-  tag. Hand-made rulers (`HAND_MADE`: ROU, AIS) keep theirs; Rouental also gets
-  `ROU_leader_constitutional_monarchism` and `ROU_leader_leninism`, promoted by the Polite and Rudely
-  focuses. Author's picks: CRD Enlightened Absolutism; EVR, SGN Feudalism; HLR, STO
-  Absolute Monarchy; LST Elective Monarchy; SGV Oligarchy; LZC, GDN Lordly Republic;
-  LNT Conservatism; RMD Social Democracy; RST Revanchism; VLN Liberalism; ESD, CRZ
-  Constitutional Monarchy; PLH Prophetic Rule. The six continent placeholders were not
-  chosen and default to Absolute Monarchy. Characters: Roland feudalism, Serelle
-  strongman_rule, Mahaut theocrat, Communist Merlovich anarchist_communism.
-  `check_mod.py` checks every country has a recruited leader of its ruling ideology
-  (mutation-tested). Its party icon `GFX_ideology_theocracy_group` is
-  a placeholder, `source/ideologies/theocracy_placeholder.png` (the anime picture),
-  centre-cropped to 64×64. The author and a friend will draw the real icons.
-- **Party list.** Vanilla's politics view fits four 16 px party rows. `interface/countrypoliticsview.gui`
-  is vanilla's (`source/interface/`) with `parties_grid` rows at 13 px, so five fit;
-  `check_mod.py` checks it.
-
-How it's built:
-- `common/ideologies/00_ideologies.txt` overrides vanilla. It is vanilla's file
-  (`source/ideologies/`) with the colours changed and a theocracy block modelled on
-  neutrality.
-- Every country starts at 20% for each ideology; every `set_popularities` lists all five.
-- `check_mod.py` checks that popularities name real ideologies and sum to 100, that
-  every `ruling_party` / `has_government` is an ideology, and that character
-  sub-ideologies exist.
-
-**Map colours come from `common/countries/colors.txt`**, not the `color` in each
-country file. Tags missing there got random colours in-game, which is why most were
-wrong until the build wrote its own (`color` plus a lighter `color_ui`).
-
-**Map colour per government** (`nations.LOOKS`) uses cosmetic tags `TAG_GOV_<IDEOLOGY>` (not `TAG_<IDEOLOGY>`: its flag would clash with `TAG_<ideology>.tga` on Windows, which ignores case; `check_mod.py` checks file names for this),
-defined in `common/countries/cosmetic.txt`. An `on_ruling_party_change` on_action sets
-them, or drops them for ideologies with no entry, so every route to power recolours the
-country. Their flags reuse `source/flags/TAG_<ideology>.png`, and their names are
-localised for every ideology. Rouental:
-
-| Government | Map colour | Flag |
-|---|---|---|
-| Monarchist, Authoritarian | royal green | banner of arms |
-| Democratic | tan | tricolour |
-| Communist | maroon (128, 16, 16) | the author's Liberté flag (was plain maroon) |
-| Theocratic | gold | sword and fleurs quarter of the banner |
-
-## Cultures (`cultures.py`): generic portraits, names, graphical culture
-
-Vanilla's generic portrait lists (`portraits/*.txt`) are keyed by Earth continents, which
-don't exist here. That was the cause of "Failed to generate a portrait / name" and
-"unknown continent europe" in error.log. So the build writes:
-- **`portraits/valsora_portraits.txt`.** One `continent = { name = <ours> … }` block per
-  continent, plus `TAG = { … }` blocks for countries that look different. Each block has
-  army / navy / political (per ideology) lists of vanilla 1.19 generic sprites.
-  `source/names/vanilla_portrait_sprites.txt` is the list of those sprites, copied from
-  vanilla `interface/_random_portraits.gfx`; `check_mod.py` checks against it.
-- **`common/names/valsora_names.txt`.** Each tag gets a vanilla culture's name block
-  (`source/names/vanilla_names.txt`). UTF-8 without BOM, like vanilla.
-- **Graphical culture** in `common/countries`.
-- **Who gets what:**
-  - The continent defaults (author's choices) all use Europe portraits except where
-    noted: Nonscio ENG, Araseos ITA, Aislada AST (commonwealth gfx), Solitas SWE,
-    Yastreovakia POL. Usnistan is PER with Arab + African portraits and middle_eastern
-    gfx; Orientalis is JAP with Asian portraits and asian gfx.
-  - The author's flags can come as one `.pdn` with a layer per flag
-    (`import_flags.py`; 2026-10-04: its "Marchers" layer showed The Marches had been
-    given the three-lozenge flag, which is its "Duchy of the Mountains"; fixed).
-    2026-10-05: **the author swapped the Marches' flag to the three lozenges** after
-    all ("the sword didn't read well"; the sword flag is now the file's "Spare" layer),
-    and redrew Fraxhemark's.
-  - Overrides are in `TAG_CULTURE`: the Reibonnaise states (ROU SGN EVR HLR SGV LST LZC
-    GDN) and Placeholdros (LNT) use FRA names and France portraits (author: French for now);
-    RST VLN ESD CRZ PLH use POR names (added to `source/names/vanilla_names.txt` from
-    vanilla) and Europe portraits.
-- **Scientists** (2026-10-14): every continent and country block also has
-  `scientist = { male female }`, vanilla's generic scientist portraits
-  (`interface/_scientists_portraits.gfx`: Europe's for European, French, Iberian and
-  American cultures as vanilla does for North America, Arabia's and Africa's for Usnistan,
-  Asia's, India's, South America's). Without them every generated scientist logged "Failed
-  to generate a portrait … scientist" and then, on every save load, an empty icon (`""` and
-  `"_small"`, icon_entry.cpp): 156 + 568 lines in the 2026-10-02 log. Operatives use
-  vanilla's default (an unknown silhouette).
-- **Vanilla's portrait files** (`00_portraits.txt`, the DLCs' `01_anniversary`, `02_tiger`,
-  `03_mtg`, `027_lar` and `998_scientist_portraits.txt`) are keyed by Earth continents: 139
-  error.log lines ("unknown continent europe", then an unexpected token per list). The mod
-  ships a file under each name (`cultures.VANILLA_PORTRAIT_FILES`); `00_portraits.txt`
-  keeps vanilla's `default` block (fallback and operative portraits). `check_mod.py` checks
-  all six and the scientist lists (mutation-tested).
-
-## Superevents (`superevents.py`)
-
-TNO-style, built only from vanilla pieces. **Confirmed in-game** (author, 2026-09-29):
-the first build showed window, picture and text, but no music and no background (both
-fixed below and confirmed: music plays, background shows). Title and quote are
-white via `§W…§!` in their localisation (the typewriter fonts draw dark). How they work:
-- **Calling one.** `valsora_superevent_<id> = yes` (inside `hidden_effect` in a focus).
-  It sets global flag `valsora_superevent_<id>`, clearing the others, and fires hidden
-  event `valsora_superevent.N` for every human player.
-- **The event** sets country flag `valsora_superevent_open` and does
-  `play_song = "valsora_gladiators"`, the way vanilla plays its speeches.
-- **The window.** A `player_context` scripted GUI (`valsora_superevent_window`) is
-  visible while that flag is set. Title, quote and author come from scripted
-  localisation keyed on the global flags. There is one picture icon per distinct image,
-  shown via `<element>_visible` triggers. The close button's `_click` clears the flag.
-- **Assets.** The music is `source/superevents/*.ogg`: the first 45 s of the author's
-  MP3s with a 4 s fade, Vorbis like vanilla music (`SONGS` in `superevents.py`).
-- **Songs must belong to a music station**, or `play_song` logs "Song doesnt exist" (the
-  first build had only an `.asset`).
-  - Layout, from the Music Mod Creation Tool's HOI4 template: `music/valsora/` holds the
-    `.ogg`, `valsora.asset` (`music = { name file volume }`) and `valsora.txt`
-    (`music_station = "valsora"` + `music = { song chance }`, here chance factor 0).
-  - The station also needs `interface/valsora_music_station.gui` (`valsora_faceplate`
-    and `valsora_stations_entry`), a 2-frame cover sprite, and loc `valsora_TITLE`
-    ("Valsora Radio") plus each song key.
-- **Pictures** are cropped to 2:1 and scaled to 840×420 DDS.
-- **Background.** `GFX_tiled_window_transparent` is see-through (vanilla's event window
-  gets its look from separate header/footer images), so the window has its own
-  generated background, `superevent_bg.dds`: dark, with gold frames.
-- **With the Deco UI** (`DECO_UI`, 2026-10-15; `superevents_deco.py`): the mockup's Superevent board
-  (`deco_ui/art/mockups/source/Superevent.html`), drawn with numpy and Pillow. The window covers the screen: a dark
-  veil over the map (a cornered tile) with faint gilt rays round the middle and the board's vignette (drawn at half
-  size, scale 2), and the panel centred on it, every element a direct child of the window (the visibility triggers
-  name them): one picture holds the crest, the 900 x 645 frame (lacquer, gilt border, corner brackets, the rings round
-  the picture) and the now-playing tab; over it a title strip per superevent (gilt Federo capitals between stepped
-  hairlines, baked, since the hairlines follow the title's width: long titles shrink to fit), the picture with gilt
-  fans and arcs in its corners, a diamond on its lower edge, the quote (`valsora_deco_italic_18`, curly quotes, no
-  `§W`), the attribution (`valsora_deco_section_11`), the gilt "History Marches On" button (Esc closes it too) and the
-  song (`ValsoraSupereventSong`, "Valsora Radio · Rafael Krux — Epic Church Organ", `valsora_deco_label`). The
-  build measures every quote, attribution and song with the Deco UI's font files and stops if one would not fit its
-  box (a box too short drops lines silently). **Seen in game** (2026-10-15, the test superevent): all eight titles
-  drew at once (only the pictures had visibility triggers; each title has its own since, from the superevent's
-  flag), and the author asked for something other than the guillotine: the crest's medallion is lacquer and holds
-  **Valsora rising** (the top half of the Deco UI's globe, `globe_art.globe`), `superevents_deco.EMBLEM`; a compass
-  star, an hourglass and a laurel wreath are `EMBLEMS` too, shown in `deco_ui/art/proposals/crests/`.
-- **Current set.** Eight superevents: one per Rouental leadership focus (five), the
-  Rouentaise civil war (Execute the Prince; the author's soldier photo), AIS
-  "Fucking Explode" and the test one, fired by Rouental's test decisions (`rou_test`, last so the others keep their
-  event ids). The quotes are Claude-written except the civil war's (the
-  author's); all but the civil war use the author's anime picture and Entry of the
-  Gladiators. The civil war has Rafael Krux's "Epic Church Organ" (`valsora_organ`,
-  `epic_church_organ.ogg`, made with the ffmpeg bundled in the `imageio_ffmpeg` Python
-  package: first 45 s, 4 s fade, Vorbis 160k); it replaced "Monsieur d'Elbée", which
-  the author didn't like.
-- **Checks.** `check_mod.py` checks scripted effects and events that are used, songs
-  and their files, scripted localisation keys, and GUI window, element, sprite and
-  button-text references (mutation-tested). Since 2026-10-15 decisions count among the users of effects and events,
-  our events' titles, descriptions and options and our decisions and categories must be localised (hidden events and
-  never-visible decisions excepted), and a decision's short icon name (`generic_x`) must be a sprite
-  (mutation-tested: 9 breaks, all caught).
-- **error.log on that test** also had 128 pairs of `Icon definition "" / "_small"`
-  (icon_entry.cpp) when a second game was started: scientists generated without a
-  portrait, one pair per scientist on each load; fixed 2026-10-14 (see Cultures).
-
-`check_mod.py` also checks that recruited characters exist and are localised, that portrait
-sprites resolve to files, and that every focus id and prerequisite is valid and localised.
-
-## What HOI4 requires (verified against vanilla 1.19.3 files)
-
-- `provinces.bmp`: 24-bit, 40-byte BITMAPINFOHEADER (no V4/V5), under 40 MiB. Every
-  province is one 4-connected blob of at least 8 px (16 here), with a box under 1/8 of the
-  map each way. No 2×2 window may hold four provinces; this check wraps across the seam.
-- `definition.csv`: **CRLF**, first row `0;0;0;0;land;false;unknown;0`, ids contiguous from
-  1, land continent ≥ 1, sea/lake continent 0. Terrain values: `plains` / `ocean` / `lakes`.
-- `heightmap.bmp`: 8-bit greyscale; the water plane is 95 (`WATER_HEIGHT = 9.5`). Land must
-  be > 95, water < 95. `terrain.bmp`: index 0 = plains, 15 = ocean (lakes too). `rivers.bmp`:
-  255 = land, 254 = water. `cities.bmp`: map-sized; index 4 is in no city group, so no town
-  meshes. All of these must be exactly map-sized.
-- 8-bit BMPs with a full 256-colour palette write `biClrUsed = 0`, as vanilla does; with
-  256 there the game logs "Palette in rivers.bmp is probably not correct".
-- `trees.bmp`: any size (vanilla 75/256 of the map). `world_normal.bmp`: half size,
-  24-bit, flat = RGB (128,128,255).
-- `map/terrain/`: `colormap_rgb_cityemissivemask_a.dds` and `fow_rgb_waterspec_a.dds` at
-  half size; `colormap_water_0/1/2.dds` at 1/2, 1/4 and 1/8. Uncompressed A8R8G8B8 with one
-  mip loads fine. Rows run top-down, unlike BMP.
-- `buildings.txt` (`state;type;x;height;z;rot;adjacent_sea`, with z = 2560 − pixel y):
-  - **Per state:** air_base, anti_air_building ×3, arms_factory ×6, industrial_complex ×6,
-    fuel_silo, nuclear_reactor_spawn, radar_station, rocket_site_spawn (also used by
-    rocket_site and mega_gun_emplacement), stronghold_network, synthetic_refinery, and
-    dockyard if the state is coastal.
-  - **Per land province:** bunker, special_project_facility_spawn, supply_node.
-  - **Per coastal province:** naval_base_spawn and floating_harbor (both naming the sea
-    province), naval_headquarters, naval_supply_hub, coastal_bunker.
-- `unitstacks.txt`: land provinces need types {0,1,9,10,21,22,38}; sea provinces need
-  {0,1,2,9,10,11,12,21,22,23,30,31,38}; lakes need none. The game places the kinds a
-  province lacks itself, badly: ships in port (19, 20) "too far away from center" in two of
-  Merlo's large sea provinces (error.log, 2026-10-14). So every kind vanilla's own map has
-  is written (`build_mod.py`, read from vanilla's file): 0, 9, 10, 21, 38 near the centre;
-  1-8 and 22-29 part of the way toward each neighbour, longest borders first, facing it;
-  11-18 and 30-37 fleets on a ring round a sea province's centre; 19 and 20 ships in port,
-  on a coastal province's coast and just offshore (at the centre elsewhere). The last
-  column is vanilla's offset: 0.3 on land and in port, 1.0 at sea. `check_mod.py` wants 19
-  and 20 everywhere but on lakes (mutation-tested).
-- `weatherpositions.txt`: each strategic region needs a `small` and a **`big`** row (not
-  "large").
-- Other rules:
-  - Every province is in exactly one strategic region, and a state's provinces all share
-    one; naval regions are contiguous. State and region ids are contiguous.
-  - Supply nodes and railways only go on provinces that are in states.
-  - `adjacencies.csv` keeps the `-1;-1;;-1;-1;-1;-1;-1;-1` end line. A strait crossing is
-    `From;To;sea;Through;-1;-1;-1;-1;;Comment` (two land provinces, the sea province between; -1 lets the game place
-    the crossing's line, as most of vanilla's do); `check_mod.py` checks every row (mutation-tested).
-  - Localisation is UTF-8 **with BOM**.
-  - `ambient_object.txt` frame positions follow the map height: top frame at H+142, logo
-    at H+82.
-- **At most 65,536 province borders** (HOI4 wiki, Map modding: an integer overflows and
-  the rest are not drawn, "usually hit at about 21000 provinces"). A border is a stretch
-  of boundary two touching provinces share, land or water alike; a pair touching in
-  several places has several. They are made in province id order (here reading order),
-  so a map over the limit loses its province and state lines from some row down
-  (2026-10-12, author's screenshots: 73,231 borders, no lines south of row ~1995; the
-  count put the overflow at row ~1990). `check_mod.py` counts them (`borders.py`) and
-  fails over the limit, with a note within 4,000 of it. `merge_provinces.py` merged
-  4,313 small provinces: 20,454 provinces, 60,318 borders, land provinces 186 px on
-  average (river pixels still 91 % on borders), and new outlines are cut at ~190 px.
-- **The minimap is a fixed picture**, not drawn from the map: `gfx/minimap/minimap.dds`
-  (sprite `GFX_minimap_world`, vanilla `interface/unitview.gfx`), shown at its own size
-  inside `gfx/minimap/border.dds` (drawn at -5, -5). The window sits at the lower right
-  (`interface/minimap.gui`: vanilla x = -343 y = -98, for its 268×97 picture (border
-  276×105, read from vanilla's own files on 2026-10-14; "about 263" was a guess before) plus
-  the 75 px of map-mode buttons), and `MINIMAP_TOGGLE_SHIFT` (vanilla 270) is how far ctrl+m
-  slides it away. Until 2026-10-13 ours showed vanilla's Earth (author's screenshot).
-  `minimap.py` draws Valsora's at 194×97 (the map's 2:1) with the window at x = -274 and a
-  slide of 202, as Equestria at War does for its 2:1 minimap (5 px further from the
-  buttons than vanilla's); `check_mod.py` checks all four (mutation-tested). **In game**
-  (2026-10-14, author's screenshot): Valsora's land, beside the map-mode buttons.
-- **The world tension globe is a fixed picture too**: `gfx/interface/world_tension_icon_big_strip.dds`
-  (sprite `GFX_world_tension_icon_big_strip`, vanilla `interface/topbar.gfx`), ten 49×49 frames
-  side by side, one per tenth of world tension (vanilla's Earth catches fire frame by frame),
-  and a small 29×25 icon, `world_tension_icon.dds` (diplomacy view, peace conference). Until
-  2026-10-14 both showed Earth (author's screenshot). `globe.py` draws Valsora's: the land
-  on a lit sphere seen from above Nonscio and Araseos (orthographic, the map read as
-  longitude and latitude). As tension grows it burns from below as vanilla's does: glowing lava
-  cracks (the borders of random cells on the sphere, warped) spread upwards ahead of the heat, the
-  surface chars to a dark red crust that keeps the light and shape, and a molten glow rises from
-  the bottom (the first version painted flames over the disc, an orange blur at 100 %, author's
-  screenshot, 2026-10-14). The small icon is ringed with flames; `check_mod.py` checks both sizes (mutation-tested);
-  `python3 scripts/globe.py` writes `dist/tension_globe_preview.png`.
-- Map errors crash on launch unless the game runs with `-debug`. Always test with it.
-
-## Vanilla content switched off
-
-`replace_path`: history/states, history/countries, history/units, history/general,
-map/strategicregions, events, common/decisions, common/ai_strategy,
-common/ai_strategy_plans, common/on_actions, common/bookmarks. `descriptor.mod` and the
-launcher's `valsora_test.mod` must carry the same lines. The launcher reads the outer file,
-so ship both. Each replaced folder keeps at least one valid file.
-
-The following vanilla files are overridden:
-- `tutorial/tutorial.txt`, cut down to its one step with no ids. Vanilla's refers to Earth
-  states and provinces.
-- The 21 ENG/FRA/GER/ITA/JAP/SOV/USA files in `common/ai_navy/{goals,fleet,taskforce}`,
-  emptied.
-- The minimap's picture and frame (`gfx/minimap/minimap.dds`, `border.dds`) and
-  `interface/minimap.gui` (vanilla's, `source/interface/vanilla_minimap.gui`, with the
-  window moved), plus `MINIMAP_TOGGLE_SHIFT` in `common/defines/valsora_graphics.lua`.
-- The six portrait files of vanilla and its DLCs (see Cultures).
-- The world tension globe and its small icon (`gfx/interface/world_tension_icon_big_strip.dds`,
-  `world_tension_icon.dds`).
-- The start date's picture (`GFX_select_date_valsora`, `minimap.write_bookmark`: Valsora on
-  the minimap's parchment, in place of 1936's soldiers).
-- `common/ai_faction_theaters/ai_faction_theaters.txt`: the AI's faction theaters, one per
-  continent with the sea regions on its coasts (split where they don't connect), in place
-  of vanilla's Earth ones (Barbarossa, North Africa ...: 30 error.log lines, 2026-10-14).
-- Everything in `source/vanilla/` (below).
-
-**Vanilla's generic content comes back as the mod's own** (2026-10-14, read from the
-author's copy of the game). The replaced folders also held what every country uses, so
-from the first build there were no election, ace, war justification, nuclear, capitulation
-or operative events, no faction and demand events (`Generic.txt`), no collaboration
-governments (`LAR_occupation.txt`), no generic AI strategies and no generic on_actions.
-`source/vanilla/` (its README lists it all) now holds:
-- `files/`: exact copies of the vanilla files the mod ships changed (`vanilla_sync.py`);
-  `vanilla_parts.py` moves their dates to 2036 and cuts Earth-only blocks out of the AI's
-  `default.txt` (Japan's, the USA's and Britain's naval focus, Earth's area priorities);
-- `curated/common/on_actions/valsora_generic_on_actions.txt`: vanilla's generic hooks
-  (elections, aces, war justification, army leaders, doctrines, compliance, nuclear and
-  capitulation news, the end of an ideological civil war, operatives), cut by hand from
-  vanilla's on_actions without their Earth parts. Vanilla's peace conference hooks only
-  clear flags on Earth states, so none came back;
-- `index/`: lists of vanilla's names, which `check_mod.py` checks ours against (sprites,
-  technologies, equipment, modules, battalions, ideas, defines, map files).
-And stand-ins, so what vanilla still names exists (error.log, 2026-10-14):
-- **Decisions**: `replace_path` is not recursive, so vanilla's decision categories still
-  load, as do the focus trees, ideas and scripted triggers that name its decisions (1,142
-  lines of "Invalid decision" / "Invalid Decision ID"). `vanilla_parts.stand_ins` writes a
-  never-visible decision of the same kind (decision, mission, targeted, state-targeted) for
-  each of the 732 names, in the category `valsora_vanilla_stand_ins`.
-- **Earth's country tags** stay defined (vanilla's technologies, AI and peace conference
-  name them; removing them would break those files): each of the 364 has a history file
-  (`TAG - Name.txt`: capital state 1, owning nothing, monarchist), for the 728 lines of
-  "is missing a history file". `check_mod.py` requires every one and no more in them.
-- **Events** the shipped files fire only for Earth's countries (Denmark's election,
-  Munich's Czech crisis, ...) are hidden empty events
-  (`events/valsora_vanilla_event_stand_ins.txt`).
-
-Left loaded on purpose, and noisy in `error.log`:
-- National focus: it holds the generic tree our countries use.
-- Ideas, MIOs, scripted effects and triggers, ai_areas, operations and achievements. They
-  reference vanilla ids, which the previous build showed the game tolerates.
+- **Rouental (ROU)** is the built-out nation: capital Rêverie (`nations.CAPITALS`), Roland II Cahun and Serelle Cahun
+  (`common/characters/ROU.txt`), a focus tree of five mutually exclusive paths (Polite, Kick Out Your Brother, Steady
+  As She Goes, Rudely with Execute the Prince and the Rouentaise civil war, Accept Reality), the Association of
+  Reibonnaise States, the Feudal Army spirit and the royal host. Merlovich (AIS) has its own focus tree. Every other
+  country has its set ruler, generated characters, the generic focus tree and a generic infantry army.
+- **Every ruler is a set character** (author, 2026-09-30): `nations.LEADERS` gives each tag its sub-ideologies, the
+  first leads; `cultures.leaders` makes them (`TAG_leader_<subtype>`, never `TAG_<subtype>`), names unique map-wide,
+  famous surnames drawn again (`cultures.DRAW_AGAIN`). Named generated rulers: `nations.NAMED_LEADERS`.
+- **`recruit_character` is ignored outside history files**: recruit every character in the country history.
+- **Five ideologies** (`ideologies.py`): vanilla's keys, the author's names (`fascism` Authoritarian, `neutrality`
+  Monarchist, `theocracy` new); sub-ideologies are the author's (`ideologies.SUBTYPES`), each description starting with
+  its name; every `set_popularities` lists all five.
+- **Map colours come from `common/countries/colors.txt`**; colour per government by cosmetic tags `TAG_GOV_<IDEOLOGY>`
+  (never `TAG_<IDEOLOGY>`: its flag would clash on Windows, which ignores case).
+- **Releasables**: `nations.RELEASABLE` (by state name), `nations.SUBREGIONS` (from the Subregions layer), cores on
+  others' states `nations.CORES`, an owner without its core `nations.NO_OWNER_CORE`; subjects by `set_autonomy` (the
+  mod's own Protectorate; the puppet level without its "no fascist overlord" clause).
+- **Cultures** (`cultures.py`): generic portraits, name lists, graphical culture and scientists per continent and
+  country, since vanilla's are keyed by Earth continents.
+- **Superevents** (`superevents.py`, `superevents_deco.py`): TNO-style windows built from vanilla pieces; songs must
+  belong to a music station; the Deco UI's board measures every text against its box.
+- **Flags** are `source/flags/TAG.png` (any size; `TAG_<ideology>.png` while that ideology rules).
 
 ## The Gazetteer (`docs/GAZETTEER.md`; the working detail: `docs/GAZETTEER_INTERNALS.md`)
 
@@ -1033,17 +204,9 @@ the page, its rules or its import.
   Without facts the build is byte-identical. `GAZETTEER_DIR` / `GAZETTEER_FLAGS` point the scripts at other folders
   (tests: never import a test file into `source/gazetteer/`).
 
-## Deco UI (`deco_ui/`): part of the mod
+## Deco UI (`deco_ui/`): part of the mod (its manual: `deco_ui/CLAUDE.md`; its versions: `deco_ui/docs/VERSIONS.md`)
 
-**The Valsora Deco UI** is the author's art deco interface, made with another Claude session (v0.1–v0.4.4)
-and moved here on 2026-10-14 (v0.4.5–v0.4.8 the same day: the politics screen flush under the top bar,
-styled tooltips). **Since v0.5 (2026-10-14, later) it is part of the Valsora mod** (author: "roll the UI mod
-into the main Valsora mod, but with the knowledge that I might eventually want it taken out again ... I'd like
-to simplify things to only have the one install"): a restyled top bar, every side panel (the politics screen
-re-laid to its mockup; 16 others flush under the top bar with a notch for the flag medallion and a deco header,
-v0.5), the state panel, focus tree, map modes and minimap (v0.5), main menu (the Valsora background) and a core
-skin. `deco_ui/CLAUDE.md` is its full handoff guide (engine facts, generators, what is confirmed in game); read
-it before touching the UI. In short:
+**The Valsora Deco UI** is the author's art deco interface, part of the Valsora mod since v0.5 (2026-10-14; author: "roll the UI mod into the main Valsora mod, but with the knowledge that I might eventually want it taken out again ... I'd like to simplify things to only have the one install"). Read `deco_ui/CLAUDE.md` before touching the UI. In short:
 - **One switch:** `DECO_UI` in `scripts/common.py`. True: `scripts/deco_ui.py` (after `build_mod.py`)
   copies `deco_ui/valsora_deco_ui/` into the build, and `minimap.py` draws the minimap in its style. False:
   the game's own interface (`build_mod.py` empties the build first, so nothing of the Deco UI is left).
@@ -1065,62 +228,8 @@ it before touching the UI. In short:
   (mutation-tested). Every letter of the mod's English text and name lists must be in every font in `gfx/fonts`
   (2026-10-16: Plaija's Vietnamese names; the fonts have Vietnamese since, composed where a face lacks it; the factory
   diamond, U+25C6, only in the value fonts that draw it; mutation-tested).
-- There is no separate release any more (`dist/valsora_deco_ui.zip` was removed). The author was told to delete
-  the old `mod/valsora_deco_ui/` and `mod/valsora_deco_ui.mod` and take it out of the playset: left in, it
-  loads after Valsora and puts its older files back.
 - Its `reference/` (the game's files, git-ignored) must never be committed: it is Paradox's content.
-- **v0.6 and v0.7** (2026-10-15, not yet seen in game): the focus tree after its mockup (v0.6; the focus icons are
-  the game's, as the author asked); the army bar (`make_leadergroups.py`, textures `lg_*`, numbers in
-  `layout_armybar.py`) and the events (`make_events.py`, textures `ev_*`) in the deco style at the game's paths and
-  sizes (v0.7). Their previews, `deco_ui/build/preview_armybar.png` and `preview_events.png`, show the game's art
-  beside ours, so they stay in the git-ignored `build/` and are only sent to the author.
-- **v0.8** (2026-10-15, the second night, not yet seen in game): **the game's own fonts** redrawn in the deco faces at
-  their paths (`deco_ui/tools/game_fonts.py`, 28 fonts: tooltips, lists, the designer, leader and unit screens,
-  settings, window titles; the author: "could you switch to the art deco fonts throughout the UI? for example,
-  currently the title of Roland is displayed in the base game's font"), a size or two under the game's so its text
-  keeps fitting the game's boxes; the army bar's play / stop row centred over each general; event options centred
-  between the picture and the card's edge; a gilt Valsoran globe in the middle of WORLD NEWS. A mockup of **larger
-  flags** is in `deco_ui/art/proposals/hd_flags/`, **not in the mod** (author: "Maybe do a mockup of how it could look,
-  but don't add anything to do with it into the mod yet"): it needs the seven flags we have only at 82 x 52.
-- **v0.8.1** (2026-10-15, later): the news masthead is **VALSORAN (globe) STANDARD** (the author: WORLD NEWS "still looks
-  lopsided ... maybe swap to something like "Valsoran Standard" or Clarion or Dispatch ... so both words are the same
-  length"), the globe redrawn to read at 60 px, and the news page centred under it. Other names:
-  `deco_ui/art/proposals/news_masthead/`. The author kept it (2026-10-15).
-- **v0.8.2** (2026-10-15, the third round, from the author's screenshots of v0.8.1): the superevent shows one title
-  and Valsora rising in its crest; the event cards' crest is a stepped keystone (`deco_ui/tools/crests.py`); a long
-  option's three lines fit (`valsora_deco_option_14`); a name of two lines shows both under the flag
-  (`layout.NAME_SLACK`); the selected armies' badges, the air wings and the operatives start below the medallion
-  (`make_mapviews.py`); the news globe is lit. Options for the globe and the crests: `deco_ui/art/proposals/news_globe/`
-  and `crests/`. The larger flags' test version is drawn from the same tools (`VALSORA_FLAG_SCALE`).
-- **v0.9** (2026-10-16, the night, not yet seen in game; the author: "do 1 (though be prepared to possibly revert
-  it,)"): the research trees and the doctrine screen under the focus tree's notched header (`make_research.py`; the
-  research file is Valsora's, made again by `scripts/deco_ui.py`, REPLACES), the designers' and commander pickers'
-  pictures (`designer_art.py`), the faction's members' flags on the politics screen, the hot-join window below the
-  medallion, and `medallion_check.py` (a window under the medallion fails the Deco UI's build). The restyled screens
-  are one commit, `8dece16`: `git revert 8dece16` and a rebuild of both take them out. The focus in progress in the
-  focus tree's header, a bar under a focus and a one-spirit card have no hook in the game (`deco_ui/CLAUDE.md` section
-  12). **Four loading screens** from Valsora's map were drawn as a proposal (`deco_ui/art/proposals/loading_screens/`:
-  "don't add them yet"); they were in the mod in v0.10 only (out again in v0.10.1, kept for later).
-- **v0.10** (2026-10-17, not yet seen in game; the author: "Please start applying the proposed changes to all the UI
-  screens"): every suggestion of `deco_ui/docs/SCREEN_INVENTORY.md` and more, as pictures at the game's paths and sizes
-  with its layouts kept: the loading screens (`deco_ui/tools/make_loading.py`, in the background list after the menu's
-  picture) and a gilt loading bar; scroll bars and sliders; the selected armies', fleets' and operatives' badges; the
-  battle plan toolbar; the land and naval battles; the diplomatic action windows, a gilt line emblem per action; game
-  setup; the window frames and popup headers the core skin had missed; the settings, the trade offer and other windows
-  seen now and then. One art module per screen (`deco_ui/tools/*_art.py`, `ART_MODULES`), each with a preview beside
-  the game's (only sent: the game's art).
-- **v0.10.1** (2026-10-17, later, not yet seen in game; from the author's screenshots of v0.10): the loading pictures
-  out of the mod again until the map is final (the author: "The globe map should be kept for later ... the map's not
-  finalized quite yet"; the loading screen showed the game's own pictures anyway, and game setup had taken the last of
-  ours as its background), kept by `make_loading.py` (into `deco_ui/build/`, `--into-mod` to put them back); no corner
-  brackets on the loading boxes and the battle plan bar, its icons centred; game setup a card wider for "Other
-  countries", its details tidied and the ideology wheel as on the politics screen (`make_setup.py`); the logistics
-  values a size smaller; the decision counts beside the seal; the division designer's combat width and the commanders'
-  skill centred (the game rounds centred text up, measured on the screenshots); the fleet panel's long names fit; the
-  news story a size smaller so it ends above the page's rule.
-- **Proposals for the side panels' own pictures** (research, production, the market, the overview strip, the
-  intelligence agency, the spirit banners) are in `deco_ui/art/proposals/panel_pictures/`, **not in the mod**
-  (author, 2026-10-15: "don't put them in the mod yet. I'd like to see and approve them first").
+- **Now v0.10.1** (2026-10-17, not yet seen in game). v0.9's restyled screens are one commit, `8dece16`: `git revert 8dece16` and a rebuild of both take them out. Previews that show the game's own art stay in the git-ignored `deco_ui/build/` and are only sent to the author. Proposals not in the mod, waiting for the author: `deco_ui/art/proposals/` (panel pictures: "I'd like to see and approve them first"; the larger flags: "don't add anything to do with it into the mod yet").
 
 ## Current state
 
@@ -1133,18 +242,7 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   states of 48 are the author's own lines (`gazetteer.finals`; 39 until 2026-10-17's map: Belekria, Krionik, Terreich,
   Gorbastan, Zukchiva, Sennheiser, Sminishia, West Sminishia and Hollier joined). The four great powers, one per
   ideology but Theocratic (author, 2026-10-17): Krionik (Monarchist), Kampf (Authoritarian), Sarkis (Communist),
-  Fraxhemark (Democratic); great in name for now (their industry is as drawn). Two starts, both on 1 January 2036. The Deco UI is v0.10.1 (the
-  author's findings on v0.10: loading pictures out until the map is final, game setup's ninth card, the battle plan
-  bar, the decision counts beside the seal, the combat width and commanders' skill centred, the fleet's names, the news
-  story), after v0.10 (the scroll bars, the selected units' badges, the battle plan toolbar, the battles,
-  the diplomatic actions, game setup and the popups in the deco style: `deco_ui/docs/SCREEN_INVENTORY.md` counts 34
-  screens restyled, 45 re-skinned, 16 still the game's), after v0.9.1 (the map's names back, the
-  designers' statistics dark, the doctrine tabs clear of the name, fuel, supply and convoys in the top bar's strip and
-  the alerts across to the right-hand tray, the production alert a ring round its crown), after v0.9 (the research
-  trees and doctrines under a notched header, the designers' and commander pickers' pictures, the faction's members'
-  flags, a check for windows under the medallion) and v0.8.4 (the focus tree's title in its header, the count
-  badges and fold arrows, Vietnamese letters in every font, the small letters for names of two lines, the navy's panel
-  below the medallion). The Gazetteer shows players a quick-start guide the first time they unlock a nation.
+  Fraxhemark (Democratic); great in name for now (their industry is as drawn). Two starts, both on 1 January 2036. The Deco UI is v0.10.1 (`deco_ui/docs/VERSIONS.md`). The Gazetteer shows players a quick-start guide the first time they unlock a nation.
   Rouental has test decisions for every kind of event and a test superevent (`test_events.py`).
   **A blank slate** (author, 2026-10-16: "is there a way you could reset any edits made thus far? I'd like a blank
   slate. The same goes for the mod. I'd like it just as it was on the last pdn, no extra rivers or internal borders"):
@@ -1161,23 +259,7 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   bar" and the commanders' card's look liked; the loading screen showed the game's own picture, corner brackets stuck
   out of the loading boxes and the battle plan bar, its icons off centre, "Other countries" off the edge of game
   setup, its details disorganised, the combat width and the commanders' skill off centre (white on tan), the fleet's
-  names running over, a news story over its rule: all fixed in v0.10.1, not yet seen. Before that (2026-10-16, later):
-  the Deco UI v0.9 (the author's screenshots and `error.log`): the
-  research and doctrine screens "mostly look good" and the faction's flags "look amazing"; no names on the map (the
-  map font's texture too large for the game), the designers' statistics white on the ivory sheet, the doctrine tabs
-  into the name under the flag, a long faction name cut off, the LEADER tag off centre, the seal's badges unequally
-  far, the music button against the right-hand tray's edge and "an odd green bar" (the production alert's halo) between
-  Construction and Production: all fixed in v0.9.1, not yet seen. The log's last two lines ("Invalid effect 'TAG'",
-  file "") came from the console, not the mod. Before that (2026-10-16): the Deco UI v0.8.3 (the author's screenshots and `error.log`): the army bar
-  looked good but for the empty cards' plus, off their chest; the decision counts were the game's round badges; the
-  focus tree's title and subtitle sat on its first row of focuses, the map showed faintly through its header, and its
-  shortcuts arrow was the game's copper one; the captured commanders' two tabs overlapped; one log line was ours (the
-  tooltip font's base against the game's Cyrillic file); later screenshots: long names (the Kampfian Empire) against
-  the flag's frame, the navy's panel under the medallion, and Plaija's Vietnamese names missing letters. All fixed in
-  v0.8.4, not yet seen. The log's other lines are
-  the game's own (two Workshop mods, missing Italian and German tank models, SCO's and CSA's flags). Not seen yet
-  besides: the two starts, Vilna and Placeholdgrad. The Deco UI's checklist for the author is in
-  `deco_ui/valsora_deco_ui/README.txt` (Things to check) and `deco_ui/CLAUDE.md` (section 10).
+  names running over, a news story over its rule: all fixed in v0.10.1, not yet seen. Older findings, all fixed since: `deco_ui/docs/VERSIONS.md`. Not seen yet besides: the two starts, Vilna and Placeholdgrad. The Deco UI's checklist for the author is in `deco_ui/valsora_deco_ui/README.txt` (Things to check) and `deco_ui/CLAUDE.md` (section 10).
 - **Waiting on the author:** from the 2026-10-17 map: names for the new states (`dist/state_numbers_belekria.png`,
   `_krionik`, `_terreich`, `_kurikia`, `_san_sierra`, `_sennheiser`, `_gorbastan_zukchiva`, and Cardonia's 5 and
   Hollier's 1 new ones), flags for Belekria's eight new republics, and the bump of Kieska's new land by Sombor that is
@@ -1213,7 +295,8 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
 4. **What still reads as the 1940s**: the tech tree's names, descriptions and pictures (its dates are 2036's;
    `docs/TECH_TREE_2036.md` is a proposal), the 3D models, and the game's own pictures inside the side panels (the
    Deco UI's proposals wait for approval).
-5. **Province borders**: 3,353 left under HOI4's limit for new outlines (`docs/BORDER_LIMIT.md`).
+5. **Province borders**: 3,769 left under HOI4's limit (61,767 of 65,536, 2026-10-17), room for about 1,250 more
+   provinces (`docs/BORDER_LIMIT.md`).
 
 ## Working with the author
 

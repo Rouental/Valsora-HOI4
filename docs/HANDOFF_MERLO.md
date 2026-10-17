@@ -8,7 +8,7 @@ Read this file first, then follow it. Its aim is that what you make merges into 
 author's mod without rework, and looks and reads as if one hand made it.
 
 **What wins when sources disagree:**
-1. The repository's `CLAUDE.md` is the full manual and wins over this file.
+1. The repository's `CLAUDE.md` and the docs it points to (`docs/MAP_PIPELINE.md`, `docs/DECISIONS.md`, `docs/CONTENT.md`) are the full manual and win over this file.
 2. The code wins over both.
 3. The author's word wins over everything. Quote them, with the date.
 

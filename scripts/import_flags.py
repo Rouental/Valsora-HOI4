@@ -8,7 +8,13 @@ replaced only if the picture differs (see changed()). See-through pixels are fil
 first (opaque()), since the game shows them as holes in the flag.
 
     python3 scripts/import_flags.py <flags.pdn> ["Layer name=TAG" ...]
+    python3 scripts/import_flags.py <folder> ["File name=TAG" ...]
+
+A folder (2026-10-17) holds one PNG per flag, named after its nation the way a layer would be ("Krionik.png"); a
+leading number is ignored, so the layers pdn_recover.py saves from a damaged flag file ("07_Krionik.png") import as
+they are.
 """
+import re
 import subprocess
 import sys
 import unicodedata
@@ -84,9 +90,16 @@ def changed(path, a):
 
 
 def main():
-    subprocess.run([sys.executable, str(Path(__file__).parent / "readpdn.py"), sys.argv[1], str(WORK)],
-                   check=True, stdout=subprocess.DEVNULL)
-    names = (WORK / "layers.txt").read_text().splitlines()
+    src = Path(sys.argv[1])
+    if src.is_dir():  # one PNG per flag
+        files = sorted(src.glob("*.png"))
+        names = [re.sub(r"^\d+_", "", f.stem) for f in files]
+        pixels = lambda k: np.asarray(Image.open(files[k]).convert("RGBA"))
+    else:
+        subprocess.run([sys.executable, str(Path(__file__).parent / "readpdn.py"), str(src), str(WORK)],
+                       check=True, stdout=subprocess.DEVNULL)
+        names = (WORK / "layers.txt").read_text().splitlines()
+        pixels = lambda k: np.load(WORK / f"layer{k}.npy")
     match = dict(ALIASES)
     for key, (tag, name, _, _) in COUNTRIES.items():
         for k in (key, tag, name):
@@ -99,7 +112,7 @@ def main():
         if tag is None:
             print(f"  {nm!r}: no country of that name, skipped")
             continue
-        raw = np.load(WORK / f"layer{k}.npy")
+        raw = pixels(k)
         a = opaque(raw)
         im = Image.fromarray(a, "RGBA")
         out = FLAGS / f"{tag}.png"

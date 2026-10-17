@@ -32,6 +32,15 @@
         the part a split state loses becomes a state of its own if it has CEDED_STATE px
         or more, and otherwise joins a neighbouring state that moved whole (or becomes a
         state of its own if none touches it).
+    python3 scripts/pdn_tools.py owners [--apply] [X,Y=COUNTRY ...]
+        Settle every area the Necessary Borders lines enclose that holds two nations' land (a border the author moved
+        through a nation, or a merge): the whole area goes to one nation, taken from an X,Y=COUNTRY given for a pixel
+        in it, else from a stroke on the "Necessary Owners" layer (any colour) that starts in the area and ends in the
+        new owner's land, else to the nation holding most of it. X,Y=COUNTRY also moves an area holding one nation (a
+        label the author moved). Without --apply it only prints the plan and saves nothing. Applied, a nation whose
+        states lie wholly inside the area hands them over as they are (as `border`); one whose states the line
+        crosses is cut along it (as `cede`). Areas listed in OWNERS_KEEP are left alone. Then regroup_states.py.
+        (2026-10-17, the efficiency night: the three border moves of that day's upload were each the area's majority.)
     python3 scripts/pdn_tools.py merge_small COUNTRY MIN_PX
         Merge COUNTRY's states smaller than MIN_PX into the neighbouring state of the same
         country they share most border with (States layer), e.g. the slivers a moved
@@ -410,6 +419,98 @@ def cede(names, L, frm, to, seeds):
     print(f"{moved.sum()} px -> {to}; states that moved whole: {len(whole)}")
 
 
+OWNERS_KEEP = []  # (x, y) pixels in areas whose two nations stay as they are (none known: the 2026-10-17 map has none)
+
+
+def owners(names, L, given, apply):
+    """the `owners` command; returns whether anything was changed"""
+    from common import COUNTRIES
+    key_of = {**{v[0]: k for k, v in COUNTRIES.items()}, **{k: k for k in COUNTRIES}}
+    col = {k: code(np.array(v[3])) for k, v in COUNTRIES.items()}
+    key_of_code = {c: k for k, c in col.items()}
+    t = L["Terrain"][..., :3]
+    land = ~((t == OCEAN).all(-1) | (t == LAKES).all(-1))
+    lines = L["Necessary Borders"][..., 3] > 0
+    cells, _ = ndi.label(land & ~lines, CROSS)
+    K = code(L["Countries"][..., :3])
+    St = code(L["States"][..., :3])
+    keep = {int(cells[y, x]) for x, y in OWNERS_KEEP}
+    # strokes: each blob's two farthest points; an end in a mixed area, the other in the owner's land
+    strokes = []
+    if "Necessary Owners" in L:
+        bl, n = ndi.label(L["Necessary Owners"][..., 3] > 0, np.ones((3, 3)))
+        for i, sl in enumerate(ndi.find_objects(bl), 1):
+            ys, xs = np.nonzero(bl[sl] == i)
+            ys, xs = ys + sl[0].start, xs + sl[1].start
+            a = int(np.argmin(xs + ys)); d = (xs - xs[a]) ** 2 + (ys - ys[a]) ** 2; b = int(np.argmax(d))
+            d2 = (xs - xs[b]) ** 2 + (ys - ys[b]) ** 2; a = int(np.argmax(d2))
+            strokes.append(((int(xs[a]), int(ys[a])), (int(xs[b]), int(ys[b]))))
+    plan = {}  # cell -> (owner key, why)
+    for (x, y), country in given:
+        c = int(cells[y, x])
+        if c == 0:
+            raise SystemExit(f"({x}, {y}) is on a line or at sea: give a pixel inside the area")
+        plan[c] = (key_of[country], f"given at ({x}, {y})")
+    mixed = {}
+    for c, sl in enumerate(ndi.find_objects(cells), 1):
+        if sl is None or c in keep:
+            continue
+        m = cells[sl] == c
+        n = int(m.sum())
+        if n < 50:
+            continue
+        share = Counter(K[sl][m].tolist()).most_common()
+        share = [(k, v) for k, v in share if k in key_of_code]
+        if len(share) > 1 and share[1][1] >= max(100, 0.03 * n):
+            mixed[c] = share
+    for c, share in mixed.items():
+        if c in plan:
+            continue
+        for p, q in strokes:
+            for s0, s1 in ((p, q), (q, p)):
+                if int(cells[s0[1], s0[0]]) == c and int(cells[s1[1], s1[0]]) != c and K[s1[1], s1[0]] in key_of_code:
+                    plan[c] = (key_of_code[K[s1[1], s1[0]]], f"a stroke from ({s0[0]}, {s0[1]}) to ({s1[0]}, {s1[1]})")
+        if c not in plan:
+            plan[c] = (key_of_code[share[0][0]], "most of it")
+    if not plan:
+        print("no area inside the country lines holds two nations: nothing to settle")
+        return False
+    tag = {k: v[0] for k, v in COUNTRIES.items()}
+    for c, (owner, why) in plan.items():
+        m = cells == c
+        ys, xs = np.nonzero(m)
+        share = Counter(K[m].tolist()).most_common()
+        print(f"area at ({xs[len(xs) // 2]}, {ys[len(ys) // 2]}), {int(m.sum())} px -> {tag[owner]} ({why}): "
+              + ", ".join(f"{tag.get(key_of_code.get(k), f'#{k:06x}')} {v}" for k, v in share[:5]))
+    if not apply:
+        print("(a plan only: --apply to make it)")
+        return False
+    for c, (owner, why) in plan.items():
+        m = cells == c
+        for k, v in Counter(K[m].tolist()).most_common():
+            frm = key_of_code.get(k)
+            if frm is None or frm == owner:
+                continue
+            theirs = (K == k) & m
+            states = np.unique(St[theirs])
+            whole = all(not ((St == s) & (K == k) & land & ~lines & ~m).any() for s in states.tolist())
+            if whole:  # its states lie inside the area: they change hands as they are
+                inside = np.isin(St, states) & (K == k)
+                L["Countries"][inside, :3] = COUNTRIES[owner][3]
+                print(f"  {tag[frm]}: {len(states)} whole states ({int(inside.sum())} px) -> {tag[owner]}")
+            else:  # the line crosses its states: cut them along it
+                comp, n = ndi.label(theirs & ~lines, CROSS)
+                seeds = []
+                for j, sl in enumerate(ndi.find_objects(comp), 1):
+                    yy, xx = np.nonzero(comp[sl] == j)
+                    seeds.append((int(xx[len(xx) // 2] + sl[1].start), int(yy[len(yy) // 2] + sl[0].start)))
+                print(f"  {tag[frm]}: cut along the line ({len(seeds)} pieces)")
+                cede(names, L, frm, owner, seeds)
+                K = code(L["Countries"][..., :3])
+                St = code(L["States"][..., :3])
+    return True
+
+
 def merge_small(names, L, country, min_px):
     from common import COUNTRIES
     t = L["Terrain"][..., :3]
@@ -738,6 +839,15 @@ def main():
         border(names, L, sys.argv[2], [tuple(int(v) for v in a.split(",")) for a in sys.argv[3:]])
     elif cmd == "cede":
         cede(names, L, sys.argv[2], sys.argv[3], [tuple(int(v) for v in a.split(",")) for a in sys.argv[4:]])
+    elif cmd == "owners":
+        given = []
+        for a in sys.argv[2:]:
+            if a == "--apply":
+                continue
+            xy, country = a.split("=")
+            given.append((tuple(int(v) for v in xy.split(",")), country))
+        if not owners(names, L, given, "--apply" in sys.argv):
+            return
     elif cmd == "merge_small":
         merge_small(names, L, sys.argv[2], int(sys.argv[3]))
     elif cmd == "recut":
