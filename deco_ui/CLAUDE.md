@@ -129,6 +129,12 @@ the same as vanilla, go with what you showed in your mockup."*
   - icons: the mockup's simple line style. A detailed two-tone set was tried in v0.4 and the user
     did not like it (v0.4.1 went back to line icons), so keep icons as clean line art
   - decisions matter more than factions (decisions got the prominent seal)
+  - **no icon of the game's changes without the user's yes** (2026-10-17, the user: "Last night I noticed you
+    replaced some icons that I didn't want you to yet"; v0.10 had redrawn 73 icons with the screens it restyled):
+    a new or redrawn icon is shown as a proposal first (`art/proposals/`), frames and backgrounds of screens the
+    user asks for go ahead as before. `tools/changes_sheets.py` draws every picture the Deco UI replaces beside the
+    game's (`build/changes/`, git-ignored: the game's art), with the icons on sheets of their own; the review deck
+    built from them is a private claude.ai artifact, https://claude.ai/artifact/WxH6pzaLijuyFLie5YbaKa
 
 ## 3. Quick start
 
@@ -262,6 +268,9 @@ tools/
   game_fonts.py             the game's 28 fonts redrawn in the deco faces at their paths; --measure sizes them (v0.8)
   preview_game_fonts.py     build/preview_game_fonts.png: the game's fonts beside ours (needs the game's font textures)
   restore_noise.py          puts back textures that only changed by anti-aliasing noise (v0.8)
+  changes_sheets.py         build/changes/: every picture the mod replaces at the game's paths beside the game's, by
+                            screen and date added, the icon-sized ones on sheets of their own, and the elements a .gui
+                            of ours points at a new picture ("swaps"); index.json lists them (2026-10-17, for review)
   proposals_*.py            the proposals in art/proposals/ (panel pictures, larger flags, masthead names, the news
                             globe, the crests): not in the mod
   validate_preview.py       static checks + a preview renderer that reads the generated .gui/.gfx
