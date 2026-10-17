@@ -277,8 +277,8 @@ FI = L.FACTION_INIT
 t = set_attrs(t, "initiative_text", position=(FI["dx"], FI["dy"]), Orientation="UPPER_LEFT", font=L.SMALL_FONT,
               maxWidth=FI["w"], maxHeight=FI["h"], format="centre")
 
-# decisions: the seal hanging from the flag medallion, with its two count badges on the right edge and the
-# alert glow (vanilla textures replaced at their paths, sized to the seal) underneath
+# decisions: the seal hanging from the flag medallion, with its two count badges in the plate's shoulders either
+# side of it (v0.10.1) and the alert glow (vanilla textures replaced at their paths, sized to the seal) underneath
 t = set_attrs(t, "after_faction_button", position=(0, 0), clipping="no")
 sx, sy = L.SEAL["x"] - CMX, L.SEAL["y"] - CMY
 t = set_attrs(t, "decision_view_alert_glow", position=(sx - L.SEAL_GLOW, sy - L.SEAL_GLOW))

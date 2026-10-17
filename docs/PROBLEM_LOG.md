@@ -6,6 +6,49 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**The loading screen showed the game's own picture, and game setup a loading picture** (2026-10-17, the author's
+screenshots of the Deco UI v0.10)
+- Cause: v0.10 listed four loading pictures from Valsora's map in the menu's background list, assuming the loading
+  screen drew from it (assumed, not known). It doesn't: it showed one of the game's own loading pictures (its Chinese
+  front). The frontend (game setup) took the last picture of the list as its background instead.
+- Fix (Deco UI v0.10.1): the list is the menu's picture alone again, and the four pictures are out of the mod, kept for
+  later (the author: "The globe map should be kept for later ... the map's not finalized quite yet"; `make_loading.py`
+  draws them into `deco_ui/build/`, `--into-mod` puts them back). Showing our own would mean replacing the game's
+  `gfx/loadingscreens/load_*.dds` themselves (not tried).
+
+**Corner brackets stuck out past the loading boxes' and the battle plan bar's corners** (2026-10-17, the author: "The
+boxes for the loading screen have the little decoration sticking out of the corner"; "The corners are odd and sticking
+out on this bar too")
+- Cause: the deco corner brackets were drawn square over plates whose corners are chamfered, so their ends showed
+  outside the cut corners.
+- Fix (Deco UI v0.10.1): the loading bar and tip, the battle plan bar and its pop-ups have no brackets.
+
+**The battle plan buttons' icons weren't centred** (2026-10-17, the author: "icons aren't all centered")
+- Cause: the game's glyphs sit off centre in their own pictures, and v0.10 placed each picture, not its ink, in the
+  well; a setting's lit frame also drew a second plate under the gilt one.
+- Fix (Deco UI v0.10.1): each glyph is centred in its well by its ink's bounds (`battleplan_art.centred`), the lit
+  frame is its plate alone. (The greyed fourth button in the screenshot is the game's disabled state.)
+
+**"Other countries" stuck out past the country selection** (2026-10-17, the author's screenshot of the Vale of
+Reibonne start)
+- Cause: the game lays its 150 px country cards from x 15, eight to the 1225 px window; the Vale start has eight
+  nations and "Other countries", nine.
+- Fix (Deco UI v0.10.1): `make_setup.py` widens the window to 1375 px (75 px each side, since it is centred), moves
+  everything under the cards back where it was on screen and the more-countries button with the right edge, and the
+  picture is drawn at the new width. guipatch.py knows neither `dropDownBoxType` nor `expandButton`: their lines are
+  replaced by hand.
+
+**Game setup's country details were "a little disorganized", and its ideology wheel unlike the politics screen's**
+(2026-10-17, the author's screenshot)
+- Cause: the portrait, faction emblem, wheel and spirits stood 9, 3 and 7 px apart on different lines, the emblem's
+  well and the wheel overlapping; the wheel's ring and centre were the game's shapes recoloured.
+- Fix (Deco UI v0.10.1): the four on one centre line 10 px apart; the wheel's ring (gilt, a dark inner rule) and its
+  dark centre with a gilt rim as on the politics screen.
+
+**The top bar's logistics values were a little big for their cell** (2026-10-17, the author: "maybe shrink the text on
+it just a little so it fits better?")
+- Fix (Deco UI v0.10.1): a new 11 px value font for them (`valsora_deco_value_11`; 12 px before).
+
 **No names on the map** (2026-10-16, the author: "Names seem to have disappeared in the new build")
 - Cause: `error.log`: "Failed to load texture larger than MAX_TEXTURE_SIZE: gfx/fonts/hoi_mapfont4.tga". The Deco UI's
   map font (it replaces the game's at its path) got the Vietnamese letters with every other font in v0.8.4, and its
