@@ -5,7 +5,3 @@
 # Format (from the game's own file): name_of_dds_file = { } with the .dds in gfx/loadingscreens,
 # plus a GFX_<name>_small sprite (192x144) for the background picker.
 valsora_menu = { }
-valsora_load_1 = { }
-valsora_load_2 = { }
-valsora_load_3 = { }
-valsora_load_4 = { }

@@ -559,6 +559,7 @@ TC = """		textcolors = {
 FONTS = [("valsora_deco_value_17", "0xfff4ecd9", "readout values (U+25C6 is a diamond, for the factory counts)"),
          ("valsora_deco_value_15", "0xfff4ecd9", "tray values, world tension, daily political power"),
          ("valsora_deco_value_12", "0xfff4ecd9", "badges: experience, faction initiative"),
+         ("valsora_deco_value_11", "0xfff4ecd9", "the top bar's logistics cell: fuel, supply, convoys"),
          ("valsora_deco_blank", "0xfff4ecd9", "invisible: hides the game's factory number, which a scripted GUI redraws"),
          ("valsora_deco_label", "0xffb7a680", "small tracked capitals (screens' labels)"),
          ("valsora_deco_label_tb", "0xffb7a680", "the top bar's readout labels: small capitals tracked 1 px less"),

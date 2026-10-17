@@ -396,35 +396,35 @@
   "path": "gfx/interface/unitcontrol/battleplantools_bg.dds",
   "w": 641,
   "h": 79,
-  "sig": "d1904e65945f386795bb4a32b16511d733357a8c490b4aa4f8f0712be5d23e3e"
+  "sig": "843ba84b0c418fb654316e83da126914d3906af8636c018ad93f8c0b7a5f3359"
  },
  {
   "key": "bp_areadef",
   "path": "gfx/interface/unitcontrol/battleplantools_areadef_conf_bg.dds",
   "w": 347,
   "h": 79,
-  "sig": "c4e63f8368336802f84e8bae0cfd57bb4f5f77bb91fdd855c4362d02a05fa584"
+  "sig": "336a150562ec4d038c74b51dd5730047eff10d2e678759ae64584247e1c42bb2"
  },
  {
   "key": "bp_planning",
   "path": "gfx/interface/unitcontrol/battleplantools_planning_bg.dds",
   "w": 148,
   "h": 125,
-  "sig": "9b51adbf06aa7402849c4ec0e6fadf64ed1fd977a45df1d44ad7ceda818397a5"
+  "sig": "6ccb8449f31988e8315ba98cb73f7b8f02a6d7e30b2e53f673c0ff432aa7bd02"
  },
  {
   "key": "bp_cohesion",
   "path": "gfx/interface/unitcontrol/battleplantools_cohesion_bg.dds",
   "w": 188,
   "h": 125,
-  "sig": "e3268d9d4b74ed8f8cfe7aff296f16d801bf06750a10326c461991328acbeeea"
+  "sig": "7ae887cfb77ee0f96363487036adef8be54b5b756586ac1668a300f04f3be8d1"
  },
  {
   "key": "bp_proximity",
   "path": "gfx/interface/unitcontrol/hq_proximity_settings_bg.dds",
   "w": 214,
   "h": 125,
-  "sig": "fd104482d7b3afbdce1c63b5e489eeb710323f0e6c61a4e78c7d733c12ec76ac"
+  "sig": "fe23a9b0fc6789f483a2893793029bb25aea963d8d978106432dd19aba0a2082"
  },
  {
   "key": "bp_overlay",
@@ -466,224 +466,224 @@
   "path": "gfx/interface/unitcontrol/order_area_defense_btn.dds",
   "w": 70,
   "h": 34,
-  "sig": "e43b8cac03ede3b72a474cb72ad483257611c4c09e7e8cf23bbb4fea851fa0e1"
+  "sig": "4205dc9c2d4aa8459ab709666ca334b5fb1a66ce0bd9e5b5d7776976c9a77189"
  },
  {
   "key": "bp_order_assign_units_btn",
   "path": "gfx/interface/unitcontrol/order_assign_units_btn.dds",
   "w": 70,
   "h": 34,
-  "sig": "2d289557395306c8232b1e2be14cddddaced86cdf935768385e8484a75ff50cd"
+  "sig": "c121c77a38f8ec86109a43f7d2acf31e0b0b1dbf2414eaaa0f477d50e3578a47"
  },
  {
   "key": "bp_order_delete_btn",
   "path": "gfx/interface/unitcontrol/order_delete_btn.dds",
   "w": 70,
   "h": 34,
-  "sig": "a7d0ae12d664dc0f5750d543f5ea415b4c5aa975429fe1064bdb201eed78e513"
+  "sig": "e6ea29a284134d76abe70544c30f4f32b6c5221e9486c6d402877836c78190f6"
  },
  {
   "key": "bp_order_draw_blitz_btn",
   "path": "gfx/interface/unitcontrol/order_draw_blitz_btn.dds",
   "w": 70,
   "h": 34,
-  "sig": "e317aa09ab56b92b27478ab19ea520825fb9dd32c80ad6317d23371e598dd265"
+  "sig": "260ff4adca69f19a43be3b689b7cd3cdc7e22d3cf0b7b4cdeab1917160b30c68"
  },
  {
   "key": "bp_order_draw_defence_btn",
   "path": "gfx/interface/unitcontrol/order_draw_defence_btn.dds",
   "w": 70,
   "h": 34,
-  "sig": "689b716979c6cbc3513a16c13e623f96ab51669ddefff773b8f20517dd44a343"
+  "sig": "66b510acec21c8c381b562f2fbc1b941ab76bc013bb58c98f9e7553eb9252d01"
  },
  {
   "key": "bp_order_draw_fallback_btn",
   "path": "gfx/interface/unitcontrol/order_draw_fallback_btn.dds",
   "w": 70,
   "h": 34,
-  "sig": "f8051ca8c9e474c2859e09401c8b19483e72d7792980c8672d203d9368dd1924"
+  "sig": "7ef3340dcfa42e4303e85b084956d45274e793fc00a5bb8fa48893ddebc84cf7"
  },
  {
   "key": "bp_order_draw_naval_inv_btn",
   "path": "gfx/interface/unitcontrol/order_draw_naval_inv_btn.dds",
   "w": 70,
   "h": 34,
-  "sig": "e684ca514610212174d6229115476e63657a8b3389f4c105be02aaa98e0afa11"
+  "sig": "43340bd9c492f650a32dc372a0db48f1f7fdf65308d5d13d61af256bfbc34735"
  },
  {
   "key": "bp_order_draw_offence_btn",
   "path": "gfx/interface/unitcontrol/order_draw_offence_btn.dds",
   "w": 70,
   "h": 34,
-  "sig": "578acaabea57a008445c29343f525afc97f9b1da671c4284e6731191056ba59f"
+  "sig": "f949dbe8e026617eca129e849925d181f7c8342bc2489ade51ad5dfe5da66868"
  },
  {
   "key": "bp_order_draw_paradrop_btn",
   "path": "gfx/interface/unitcontrol/order_draw_paradrop_btn.dds",
   "w": 70,
   "h": 34,
-  "sig": "03728e4e1625f3c95d221c9c2495aa9a732ebf2b89e2274522d4d22146ac1758"
+  "sig": "079a2e9c65e6cbc7d32ad15ca6d8dfff2c6c0d36fe0b52f95ef7e61dc3225340"
  },
  {
   "key": "bp_order_reshape_btn",
   "path": "gfx/interface/unitcontrol/order_reshape_btn.dds",
   "w": 70,
   "h": 34,
-  "sig": "3f5039dc539515a81057fdbd18633883d3fd5e149424370817354751023c2b9c"
+  "sig": "6b9ae198f6f295e8c28c163201615b451fa46dfb5acc0507e10bc7c8f64c5903"
  },
  {
   "key": "bp_order_unassign_units_btn",
   "path": "gfx/interface/unitcontrol/order_unassign_units_btn.dds",
   "w": 70,
   "h": 34,
-  "sig": "9eb7f73e46690ea4a419e377bff464d686e30dcad37e0e6e79da1f151e50217a"
+  "sig": "d645720d30314ca43e4b9a0eb3a7a5bdd7e95c40c5516feeb1f03c6037d041ca"
  },
  {
   "key": "bp_order_draw_naval_inv_with_harbor_btn",
   "path": "gfx/interface/unitcontrol/order_draw_naval_inv_with_harbor_btn.dds",
   "w": 71,
   "h": 32,
-  "sig": "d66f279757db7c461a8e79d7bf60fa3258e5d1f476ad754f0f06f524b65aa8d8"
+  "sig": "baaeb41d158a3f22e279504c7238674cba1bb02cbf73367f610b3e1427323f78"
  },
  {
   "key": "bp_cohesion_balanced",
   "path": "gfx/interface/unitcontrol/cohesion_balanced.dds",
   "w": 80,
   "h": 36,
-  "sig": "4a0176ee81e3801f592784b8623c18840d18f83454b004bc8b4071d828abbb1c"
+  "sig": "c78fa24a1bcc1f86089342020d4c9ebf8ba9e1fda498ec180f7562dca2a5cad6"
  },
  {
   "key": "bp_cohesion_immobile",
   "path": "gfx/interface/unitcontrol/cohesion_immobile.dds",
   "w": 80,
   "h": 36,
-  "sig": "baa4bd421ed0679a6da5ec1a6cd38fbe2bd4a12a04ed40f06721d70449d4181a"
+  "sig": "5d647b51d03a94d0fd240478b4ed230a0f328ecf43369eb8faef80b7bea7d7ee"
  },
  {
   "key": "bp_cohesion_loose",
   "path": "gfx/interface/unitcontrol/cohesion_loose.dds",
   "w": 80,
   "h": 36,
-  "sig": "abdf7fa41ec02e53b0490a5d96bdf086af96e1384dd45a98153ec8c435784b06"
+  "sig": "143c70facf98267914ed7364796d8f3621e2faa95d7f41f74b8e42d61ad260e2"
  },
  {
   "key": "bp_cohesion_strict",
   "path": "gfx/interface/unitcontrol/cohesion_strict.dds",
   "w": 80,
   "h": 36,
-  "sig": "7fc62dc7fa77d6f902fffb215f00671f0a34d1481ad17df527c69a37d93ebae8"
+  "sig": "22cbbabf7541202fd56ef5f34fe25305ca9ebeae3a99fddf8da7424024e09bf8"
  },
  {
   "key": "bp_execute_fast",
   "path": "gfx/interface/unitcontrol/execute_fast.dds",
   "w": 80,
   "h": 36,
-  "sig": "1dd0a7cb60b01b61fe05110c12bfadc4f31b60331c4ed04ac2709cb264274df1"
+  "sig": "f4c58f61511a9a68737040e5cf68c642019f589a06779f329a2b797900e67662"
  },
  {
   "key": "bp_execute_mid",
   "path": "gfx/interface/unitcontrol/execute_mid.dds",
   "w": 80,
   "h": 36,
-  "sig": "9668ee4cf43ad90bb9056f3dda6744c7e434e8f5a5a5093191255e4e0457287c"
+  "sig": "d66d78abcd22fefcdf31ca3b86da2f52299cc247e8d1bc5d89b2c84712b3a7c7"
  },
  {
   "key": "bp_execute_slow",
   "path": "gfx/interface/unitcontrol/execute_slow.dds",
   "w": 80,
   "h": 36,
-  "sig": "d20e7e8760dfd034343ed7805e0e6fdbc5e0da330f36e083add23e994d6dfcb4"
+  "sig": "5dd9edcea0cbac47bd5ca53f2a3870717a971b08b10db9ef58ca8f6e4628e4c5"
  },
  {
   "key": "bp_proximity_close",
   "path": "gfx/interface/unitcontrol/proximity_close.dds",
   "w": 80,
   "h": 36,
-  "sig": "d962d81ccb7ab161326eb9f67864990dea8cb866b02f41b967aca2855c65511c"
+  "sig": "f928057a9c6e857215bebf6c94170abae1f3827c1c0de099bf691df10364a628"
  },
  {
   "key": "bp_proximity_far",
   "path": "gfx/interface/unitcontrol/proximity_far.dds",
   "w": 80,
   "h": 36,
-  "sig": "afb073024b1140d3df3f1e27599d42876d4e2c23f8c096c26258e3d0a02ef324"
+  "sig": "dd5f842f333f2e6bea4dddbff559a2c400499a89f5d93d6dfa9e622d64c155ea"
  },
  {
   "key": "bp_proximity_free_control",
   "path": "gfx/interface/unitcontrol/proximity_free_control.dds",
   "w": 80,
   "h": 36,
-  "sig": "242a0ac303c1a38e64bf251ccb413a9f94ffa7f1131ef403a34edb3ec5c8703d"
+  "sig": "156b92be75573674fdec95cce446461d848c8ae198e25438a25f7522f5e9244e"
  },
  {
   "key": "bp_proximity_frontline",
   "path": "gfx/interface/unitcontrol/proximity_frontline.dds",
   "w": 80,
   "h": 36,
-  "sig": "96e67b625ffd693565c7e3ebc81690239ae49db79343ba1f1291222e15ff51d3"
+  "sig": "baad3c1d8e0bdb2388d4f52a4bd320c1410fd968636f98fb664dfc0b9b215ec4"
  },
  {
   "key": "bp_proximity_medium",
   "path": "gfx/interface/unitcontrol/proximity_medium.dds",
   "w": 80,
   "h": 36,
-  "sig": "6f4491a8e35242f730f7f7ce449bf8abc4895d0180059dc1c026e6a5cdffc701"
+  "sig": "243a37aa4fc9efda99fbdffa60ac8fd7dfb84a61b6176e9221ce1c0514b1d15b"
  },
  {
   "key": "bp_garr_airbase",
   "path": "gfx/interface/unitcontrol/garr_airbase.dds",
   "w": 80,
   "h": 36,
-  "sig": "e42c26b6b5b825523fb19ae6221aaa2c1cc0c5cf2e2e1076f8de00a17e5c36df"
+  "sig": "0b0f392dcce31c218d6d552bcc3259c9590671fe1a54f4cfb08af7f87a1fa52c"
  },
  {
   "key": "bp_garr_borders",
   "path": "gfx/interface/unitcontrol/garr_borders.dds",
   "w": 80,
   "h": 36,
-  "sig": "ac1c074e640d3559792e6eef9ccffd2c1d01d7d9869806e4d5f37f8919a5db18"
+  "sig": "c7b62f9fcfba05ce6a0e3f110766a128fdc2719d4bd60e368f11575cb20db6c8"
  },
  {
   "key": "bp_garr_coastline",
   "path": "gfx/interface/unitcontrol/garr_coastline.dds",
   "w": 80,
   "h": 36,
-  "sig": "dd1e8ab46f6d7bdeda47818ec769965bcd17d2008b722027a43ebdfc4baf1db5"
+  "sig": "2a01d79ab8d0409703328523cf0013af7811c9857f676c44c63401be6e314686"
  },
  {
   "key": "bp_garr_facility",
   "path": "gfx/interface/unitcontrol/garr_facility.dds",
   "w": 80,
   "h": 36,
-  "sig": "59f5347c3fcb153ab2e4e4b0f61f643db5dd21514010379dbcad6818ebc50895"
+  "sig": "2e80c733285d9ac01fd85ecddc990ff54a78d31748cdb5095c1a99bed6438d7d"
  },
  {
   "key": "bp_garr_fort",
   "path": "gfx/interface/unitcontrol/garr_fort.dds",
   "w": 80,
   "h": 36,
-  "sig": "4b3b7a8242177e3634ce76259f8703453d6c6c9407e4ed76ed792908e4d7da80"
+  "sig": "f79e7d6ca92d0f4804b3d595c8825876b12db5f0a3de0999d1fcc4b19cae5c56"
  },
  {
   "key": "bp_garr_port",
   "path": "gfx/interface/unitcontrol/garr_port.dds",
   "w": 80,
   "h": 36,
-  "sig": "d5de13bb4f1859de1c11d3a90325a42dce65e5bb9922772431e526b9e2bcdfc5"
+  "sig": "e26639602151cd002153c3c9200a7825ceff594c2a05c4083eeaf5656654194e"
  },
  {
   "key": "bp_garr_rail",
   "path": "gfx/interface/unitcontrol/garr_rail.dds",
   "w": 80,
   "h": 36,
-  "sig": "e5156aa85a9dd48aae462945f9ed2dccf56295db8115f55c62a45439a0ec6cc5"
+  "sig": "4f3f1db1237f2eb08a9e5c3ee1b196fa8d31bb43dee60ee54f88f8657b701554"
  },
  {
   "key": "bp_garr_vp",
   "path": "gfx/interface/unitcontrol/garr_vp.dds",
   "w": 80,
   "h": 36,
-  "sig": "edc94e66bd9c6bab3d1cea538f98ec264c2d293a739a03bf1261ccedbaa6b9ea"
+  "sig": "e6ef3a00eaba1ad9af93c1a327b9f7d022b55edf6b118da64477a534d63bedd1"
  },
  {
   "key": "mv_army_bg",
@@ -1199,9 +1199,9 @@
  {
   "key": "gs_country_bg",
   "path": "gfx/interface/country_selection_bg.dds",
-  "w": 1225,
+  "w": 1375,
   "h": 728,
-  "sig": "9ef8820ad4e0decc187580cf01517ae6b200a13999330811f9e7eb931256dd70"
+  "sig": "ccc0caebcc49a37f646d9b09bfb21510a900c43a7d18fbfa370b0e1995472cea"
  },
  {
   "key": "gs_date_bg",
@@ -1215,7 +1215,7 @@
   "path": "gfx/interface/lobby_right_sidepanel_bg.dds",
   "w": 492,
   "h": 301,
-  "sig": "88653f3ddb78d73087e5c5071454c252bc4eb660685f08e6f96eb9d2dd036ba5"
+  "sig": "40deddf076d768d23071b197a649b3fabf9091ae1233fa1607224cc200f12a46"
  },
  {
   "key": "gs_card",
@@ -1264,14 +1264,14 @@
   "path": "gfx/interface/small_pol_piechart_frame.dds",
   "w": 67,
   "h": 68,
-  "sig": "ec9ec4b54eecb918c7bcb278fe78e022a2b9f730112def85c839e0e8a23c5361"
+  "sig": "dbb5cf54e14995b9e4dffe28b3e687b5896eb99311286ed1b0dfaaf0c302b816"
  },
  {
   "key": "gs_pie_glass",
   "path": "gfx/interface/small_pol_piechart_overlay.dds",
   "w": 54,
   "h": 54,
-  "sig": "c089654c23e77379b4d86715916ba4f8f8334aca45eef3c3b5ac59fe70b93159"
+  "sig": "1d217b6d6bc83125b3e86ce537ce1e19cf0c6983d493449b24ccc083de5f0a81"
  },
  {
   "key": "gs_upper_bar",
@@ -1803,7 +1803,7 @@
   "path": "gfx/interface/valsora_deco/topbar_medallion.dds",
   "w": 156,
   "h": 148,
-  "sig": "c66177bedf6b972767d94240565ab4688debd796ed45747e22b6d1630ff02894"
+  "sig": "a7c6eef0db0418f1d57ed88720b6b00635437aa18f21950f7d2bc3b7755a84c7"
  },
  {
   "key": "flag_mask",
@@ -3077,14 +3077,14 @@
   "path": "gfx/interface/Loadingscreen_loadingstatus.dds",
   "w": 1400,
   "h": 92,
-  "sig": "2b17655044665ff2ebc4ca08c9e09e865ea5ac90ebd8eb37b3fddc329b0883d6"
+  "sig": "b2ec4def5defb2e1d6e1e934b4e5114c42b55e842a37e63fa3e2adae56b4fb30"
  },
  {
   "key": "ld_tip",
   "path": "gfx/interface/Loadingscreen_loadingtip.dds",
   "w": 1400,
   "h": 148,
-  "sig": "76cdb06a0aab4c17e88aecd40c669d2257d56602f4e40cbcdb8924bc02436547"
+  "sig": "9fa88a36da87711a1f9b77be5a29a42dfef76bbd0109a26f6fe38a31268bc150"
  },
  {
   "key": "ld_track",

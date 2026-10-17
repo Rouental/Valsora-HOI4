@@ -139,28 +139,34 @@ def title_marks(cx, cy, half):
     return out
 
 
-# ---------------------------------------------------------------- the country selection (1225 x 728)
-CS_W, CS_H = 1225, 728
-CS_TAB = (409, 815)                 # the tab's top edge (the game's: 411-813 at y 4, 377-847 where it meets the body)
-CS_CARDS = (14, 44, 1211, 316)      # the major countries' cards: 150 apart from x 15, their frames y 51-314
-CS_FILTERS = (8, 318, 1217, 356)    # the filter buttons, 33 tall at y 321
-CS_LISTS = (14, 359, 1211, 441)     # the minor cards (y 361-440) and the mini flags (two rows from y 360)
+# ---------------------------------------------------------------- the country selection (1375 x 728)
+# The game's picture and window are 1225 wide: eight cards 150 apart. The Vale of Reibonne start recommends eight
+# nations, so with "Other countries" there are nine, and the ninth stuck out past the frame (the author's screenshot,
+# v0.10). Since v0.10.1 the window and this picture are one card wider (make_setup.py widens the window, keeps it centred
+# and moves the panels under the cards DX to the right, so they stay centred too); the cards still start at x 15.
+CS_W, CS_H = 1375, 728
+DX = (CS_W - 1225) // 2             # how far the centred panels moved right
+CS_TAB = (409 + DX, 815 + DX)       # the tab's top edge (the game's: 411-813 at y 4, 377-847 where it meets the body)
+CS_CARDS = (14, 44, CS_W - 14, 316)  # the major countries' cards: 150 apart from x 15, their frames y 51-314
+CS_FILTERS = (8, 318, CS_W - 8, 356)  # the filter buttons, 33 tall at y 321
+CS_LISTS = (14, 359, CS_W - 14, 441)  # the minor cards (y 361-440) and the mini flags (two rows from y 360)
 CS_SPLIT = 444                      # the double rule over the lower panels
-CS_INFO = (32, 457, 418, 703)       # the facts' sheet: the game's parchment 33-420 x 455-703
-CS_HIST = (807, 457, 1193, 703)     # the history's sheet: the game's 808-1195 x 455-703
+CS_INFO = (32 + DX, 457, 418 + DX, 703)    # the facts' sheet: the game's parchment 33-420 x 455-703
+CS_HIST = (807 + DX, 457, 1193 + DX, 703)  # the history's sheet: the game's 808-1195 x 455-703
 CS_HEAD = 487                       # the game's red rule under both sheets' titles
 CS_ROWS = (527, 568, 608, 648)      # its dotted rules between the five facts
 
 
 def country_bg(w=CS_W, h=CS_H):
+    mid = w / 2
     out = body(tab_body(w, h, CS_TAB, 3, 35))
     # the tab: a raised plate under the game's title (hoi_24header, light), marks either side of its 340 px box
-    out += _layer(_shrink([(377, 36), (409, 4), (815, 4), (847, 36)], 7), "linear-gradient(180deg,#1C2830,#141D23)")
-    out += title_marks(612, 21, 186)
+    out += _layer(_shrink([(377 + DX, 36), (409 + DX, 4), (815 + DX, 4), (847 + DX, 36)], 7), "linear-gradient(180deg,#1C2830,#141D23)")
+    out += title_marks(mid, 21, 186)
     # the cards' well, quiet rays from the filter band's middle
     x0, y0, x1, y1 = CS_CARDS
-    out += (inset(CS_CARDS, "linear-gradient(180deg,#0C1216,#080C0F)") + glow(x0 + 1, y0 + 1, x1 - 1, y1 - 1, 612, y1, .09)
-            + rays(x0 + 1, y0 + 1, x1 - 1, y1 - 1, 612, y1 + 40, .04, 80))
+    out += (inset(CS_CARDS, "linear-gradient(180deg,#0C1216,#080C0F)") + glow(x0 + 1, y0 + 1, x1 - 1, y1 - 1, mid, y1, .09)
+            + rays(x0 + 1, y0 + 1, x1 - 1, y1 - 1, mid, y1 + 40, .04, 80))
     # the filter band, the lists' well
     fx0, fy0, fx1, fy1 = CS_FILTERS
     out += (band(fx0, fy0, fx1, fy1) + gilt_line(fx0, fy0, fx1, fy0, "rgba(201,165,90,.75)")
@@ -171,9 +177,9 @@ def country_bg(w=CS_W, h=CS_H):
     # the facts and the history on ivory (the game writes them in black typewriter)
     out += paper(*CS_INFO, CS_HEAD, CS_ROWS) + paper(*CS_HIST, CS_HEAD)
     # the middle: the name over a hairline, the faction emblem in an octagonal well, the spirits' and focuses' wells
-    out += rule_diamond(446, 779, 478)
-    out += inset(cham_pts(445, 483, 523, 561, 13), "linear-gradient(180deg,#0E151A,#080C0F)", "rgba(201,165,90,.75)")
-    out += inset((533, 483, 781, 559)) + inset((445, 568, 781, 668))
+    out += rule_diamond(446 + DX, 779 + DX, 478)
+    out += inset(cham_pts(445 + DX, 483, 523 + DX, 561, 13), "linear-gradient(180deg,#0E151A,#080C0F)", "rgba(201,165,90,.75)")
+    out += inset((533 + DX, 483, 781 + DX, 559)) + inset((445 + DX, 568, 781 + DX, 668))
     return out + brackets(5, 37, w - 5, h - 5)
 
 
@@ -198,16 +204,25 @@ def date_bg(w=SD_W, h=SD_H):
 
 
 # ---------------------------------------------------------------- the country's details (492 x 301)
+# v0.10.1 (the author: "The country info is a little disorganized"): the game's portrait, faction emblem, pie and spirits
+# sat 9, 3 and 7 px apart, the emblem's well and the pie's overlapping; make_setup.py spaces them 10 px apart on one
+# centre line (y 62), and the pie is the politics screen's (a gilt ring and a dark centre: "the style of the ideology
+# wheel should be same as on the politics screen").
+DT_EMBLEM = (107, 25, 181, 99)       # the emblem's octagonal well (the game's 66 x 68 emblem at (111, 28))
+DT_PIE = (225, 62)                   # the pie's centre (radius 26)
+DT_SPIRITS = (265, 20, 472, 106)     # the spirits' well (their grids from x 271)
+
+
 def details_bg(w=492, h=301):
     out = body(_rect(3, 0, 477, 297))
     out += band(7, 6, 473, 119)
-    # the portrait (the game's frame at (27, 15), 69 x 95), the faction emblem (66 x 68 at (105, 30)), the pie's well,
-    # the spirits (from (253, 28): three large or two rows of six small)
+    # the portrait (the game's frame at (27, 15), 69 x 95), the faction emblem, the pie's well, the spirits
     out += inset((23, 11, 100, 114), "linear-gradient(180deg,#0A0F12,#06090B)")
-    out += inset(cham_pts(101, 27, 176, 102, 14), "linear-gradient(180deg,#0E151A,#080C0F)", "rgba(201,165,90,.75)")
-    out += ('<div style="position:absolute;left:171.5px;top:27px;width:72px;height:72px;border-radius:50%;'
+    out += inset(cham_pts(*DT_EMBLEM, 14), "linear-gradient(180deg,#0E151A,#080C0F)", "rgba(201,165,90,.75)")
+    cx, cy = DT_PIE
+    out += (f'<div style="position:absolute;left:{cx - 35}px;top:{cy - 35}px;width:70px;height:70px;border-radius:50%;'
             'background:radial-gradient(circle,#080C0F 60%,#101820);box-shadow:0 0 0 1px rgba(201,165,90,.45)"></div>')
-    out += inset((248, 20, 470, 106))
+    out += inset(DT_SPIRITS)
     out += double_rule(8, 472, 122)
     # the five facts (hoi_20bs, light), with faint gilt dots between them
     out += inset((18, 130, 460, 287), "linear-gradient(180deg,#0C1216,#090D10)")
@@ -359,22 +374,24 @@ def photo_corners():
     return _svg(126, 166, "".join(s) + f'<g {rot}>{"".join(g)}</g>')
 
 
-# the small pie's ring (67 x 68 at (174, 29)) and the glass over the pie (54 x 54 at (180, 35)); the game draws the pie
-# (radius 26) under both, so the ring's inner band covers its edge
+# The small pie (radius 26, centred on make_setup.PIE) as the politics screen draws its own (gen_textures.py, pol_pie_ring):
+# a gilt ring round it (the frame, 67 x 68, placed centred on the pie: its centre at (33, 34)) and a dark centre with a
+# gilt rim, two thirds of the radius (the overlay, 54 x 54, centred on the pie). Only this screen uses them (v0.10.1).
+PIE_R = 26
+
+
 def pie_frame():
-    cx, cy = 33.5, 34
-    return _svg(67, 68,
-                f'<circle cx="{cx}" cy="{cy}" r="29.5" fill="none" stroke="#0B1014" stroke-width="5"/>'
-                f'<circle cx="{cx}" cy="{cy}" r="27.6" fill="none" stroke="url(#gs_g)" stroke-width="1.3"/>'
-                f'<circle cx="{cx}" cy="{cy}" r="31.6" fill="none" stroke="rgba(201,165,90,.6)" stroke-width="1"/>'
-                + "".join(_sdiamond(cx + 31.6 * math.cos(a), cy + 31.6 * math.sin(a), 3.4)
-                          for a in (0, math.pi / 2, math.pi, 3 * math.pi / 2)))
+    cx, cy, r = 33, 34, PIE_R
+    return (f'<div style="position:absolute;left:{cx - r - 1}px;top:{cy - r - 1}px;width:{2 * r + 2}px;height:{2 * r + 2}px;'
+            'border-radius:50%;box-shadow:inset 0 0 0 1.5px #0B1014"></div>'
+            f'<div style="position:absolute;left:{cx - r - 3}px;top:{cy - r - 3}px;width:{2 * r + 6}px;height:{2 * r + 6}px;'
+            'border-radius:50%;box-shadow:inset 0 0 0 2px #D2B064"></div>')
 
 
 def pie_overlay():
-    return ('<div style="position:absolute;left:1px;top:1px;width:52px;height:52px;border-radius:50%;'
-            'background:radial-gradient(ellipse at 34% 26%,rgba(255,250,235,.16),rgba(255,250,235,0) 46%),'
-            'radial-gradient(circle,rgba(0,0,0,0) 70%,rgba(0,0,0,.28) 100%)"></div>')
+    hole = round(PIE_R * .66)
+    return (f'<div style="position:absolute;left:{27 - hole / 2}px;top:{27 - hole / 2}px;width:{hole}px;height:{hole}px;'
+            'border-radius:50%;background:radial-gradient(circle,#16212A,#0B1115);box-shadow:0 0 0 1.5px #D2B064"></div>')
 
 
 # ---------------------------------------------------------------- the map's lobby: its bars, plates and buttons
@@ -524,8 +541,11 @@ def mapmode(icon_name, selected):
 
 DIFFICULTY = ("civilian", "recruit", "regular", "veteran", "elite")
 
+# drawn at another size than the game's, for the window make_setup.py widens (validate_preview.py lets them be)
+RESIZED = {"gfx/interface/country_selection_bg.dds"}
+
 ADDS = [
-    ("gs_country_bg", "gfx/interface/country_selection_bg.dds", CS_W, CS_H, country_bg),
+    ("gs_country_bg", "gfx/interface/country_selection_bg.dds", CS_W, CS_H, country_bg),   # wider: make_setup.py
     ("gs_date_bg", "gfx/interface/select_date_bg.dds", SD_W, SD_H, date_bg),
     ("gs_details_bg", "gfx/interface/lobby_right_sidepanel_bg.dds", 492, 301, details_bg),
     # the game's .gfx names .tga files for the card and the country selection picture; it loads a .dds of the same

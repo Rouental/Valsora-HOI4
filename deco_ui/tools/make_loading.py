@@ -1,6 +1,8 @@
-"""The loading screens, in the deco style, from Valsora's own map: four pictures in the background list (2026-10-17,
+"""The loading screens, in the deco style, from Valsora's own map: four pictures for the background list (2026-10-17,
 v0.10; drawn as a proposal on 2026-10-16, "don't add them yet", then the author: "Please start applying the proposed
-changes to all the UI screens").
+changes to all the UI screens"). Out of the mod again in v0.10.1, kept for later (the author: "The globe map should be
+kept for later, and I might return to the others but the map's not finalized quite yet"): by default they are drawn
+into build/loading_screens/; --into-mod writes them where the mod would ship them (and make_menu.LOADING lists them).
 
     python3 tools/make_loading.py          -> valsora_deco_ui/gfx/loadingscreens/valsora_load_1..4.dds (1920 x 1440),
                                               their 192 x 144 pictures for the background picker
@@ -34,8 +36,13 @@ REPO = os.path.dirname(ROOT.rstrip("/")) + "/"
 sys.path.insert(0, REPO + "scripts")
 from common import COUNTRIES  # noqa: E402
 
-OUT = MOD + "gfx/loadingscreens/"
-SMALL = MOD + "gfx/interface/valsora_deco/menu/"
+# out of the mod since v0.10.1 (kept for later): they are drawn into build/loading_screens/, or into the mod with
+# --into-mod (then list them in make_menu.LOADING)
+if "--into-mod" in sys.argv:
+    OUT = MOD + "gfx/loadingscreens/"
+    SMALL = MOD + "gfx/interface/valsora_deco/menu/"
+else:
+    OUT = SMALL = BUILD + "loading_screens/"
 NAMES = [f"valsora_load_{i}" for i in range(1, 5)]   # make_menu.py lists them in the background manager
 W, H, TOP = 1920, 1440, 180                 # the picture, and the first row a 16:9 screen shows
 VIS = (TOP, TOP + 1080)

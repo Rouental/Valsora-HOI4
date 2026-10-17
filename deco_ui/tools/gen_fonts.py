@@ -477,6 +477,8 @@ if __name__ == "__main__":
     out.append(build("valsora_deco_value_15", JOS, 15, 1, "ui", weight=700, kern_set=ALNUM, atlas=(512, 256), diamond=True))
     # small numbers: badges (experience, faction initiative) and the trays
     out.append(build("valsora_deco_value_12", JOS, 12, 1, "ui", weight=700, kern_set=ALNUM, atlas=(512, 256)))
+    # a size down, for the top bar's logistics cell (v0.10.1, the author: "maybe shrink the text on it just a little")
+    out.append(build("valsora_deco_value_11", JOS, 11, 1, "ui", weight=700, kern_set=ALNUM, atlas=(512, 256)))
     # invisible twin of value_17: hides an engine number we redraw ourselves, keeping its box/tooltip
     out.append(build("valsora_deco_blank", JOS, 17, 1, "ui", weight=700, atlas=(512, 256), blank=True))
     # small tracked capitals for the readout labels (mockup .rl: Josefin 600 9.5px, .17em)

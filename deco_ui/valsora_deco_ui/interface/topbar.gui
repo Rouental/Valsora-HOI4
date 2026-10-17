@@ -476,8 +476,8 @@ guiTypes = {
 		
 		instantTextBoxType = {
 			name ="convoys_count"
-			position = { x = 1355 y = 39 }
-			font = "valsora_deco_value_12"
+			position = { x = 1355 y = 37 }
+			font = "valsora_deco_value_11"
 			text = "0"
 			format = left
 			maxWidth = 38
@@ -512,8 +512,8 @@ guiTypes = {
 		
 		instantTextBoxType = {
 			name ="fuel_value"
-			position = { x = 1355 y = 9 }
-			font = "valsora_deco_value_12"
+			position = { x = 1355 y = 7 }
+			font = "valsora_deco_value_11"
 			text = "999d"
 			format = left
 			maxWidth = 38
@@ -547,8 +547,8 @@ guiTypes = {
 		
 		instantTextBoxType = {
 			name ="supply_value"
-			position = { x = 1355 y = 24 }
-			font = "valsora_deco_value_12"
+			position = { x = 1355 y = 22 }
+			font = "valsora_deco_value_11"
 			text = "999d"
 			format = left
 			maxWidth = 38
@@ -824,7 +824,7 @@ guiTypes = {
 				iconType = {
 					name = "decisionview_amount_timeout_bg"
 					spriteType = "GFX_topbar_alert_bg"
-					position = { x = -135 y = 112 }
+					position = { x = -149 y = 116 }
 					alwaystransparent = yes
 					frame = 2
 
@@ -832,7 +832,7 @@ guiTypes = {
 
 				instantTextBoxType = {
 					name ="decisionview_amount_timeout_items"
-					position = { x = -137 y = 112 }
+					position = { x = -151 y = 116 }
 					font = "hoi_16mbs"
 					text = "999"
 					format = center
@@ -844,14 +844,14 @@ guiTypes = {
 				iconType = {
 					name = "decisionview_amount_to_take_bg"
 					spriteType = "GFX_topbar_alert_bg"
-					position = { x = -66 y = 112 }
+					position = { x = -52 y = 116 }
 					alwaystransparent = yes
 					frame = 1
 				}
 
 				instantTextBoxType = {
 					name ="decisionview_amount_to_take_items"
-					position = { x = -68 y = 112 }
+					position = { x = -54 y = 116 }
 					font = "hoi_16mbs"
 					text = "999"
 					format = center

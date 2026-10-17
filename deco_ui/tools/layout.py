@@ -57,7 +57,8 @@ SHADOW_H = 8                     # click-through soft shadow below the band
 # ------------------------------------------------------------------ flag medallion (left)
 # v0.3: the flag is shown at the game's native 82x52 (stretching it pixelates: flags are not smoothed)
 MED = dict(x=14, y=0, w=156, h=148)               # vanilla "background" icon
-MED_STEPS = (122, 135)                            # y where the plate steps in to 12%/88%, then 26%/74%
+MED_STEPS = (122, 139)                            # y where the plate steps in to 12%/88%, then 26%/74%
+# (135 until v0.10.1: the shoulders between the steps are now as tall as the decision count badges they hold)
 FLAG = dict(x=51, y=18, w=82, h=52)               # player_flag (own 82x52 masked shield, 1:1)
 NAME = dict(x=16, y=78, w=152, h=40)              # scripted-GUI country name, 1-2 lines, centred both ways
 # a test version with larger flags (VALSORA_FLAG_SCALE, the Valsora mod's common.FLAG_SCALE; v0.8.2): the flag at
@@ -89,7 +90,14 @@ BELOW_MEDALLION = SEAL["y"] + SEAL["h"] + 4
 # over the top bar, leaves the plate and the seal uncovered (layout_politics.NOTCH), so they stay visible
 # v0.9.1: the user's screenshot had the seal 2.7 px from the timeout badge and 4.7 px from the other ("they should both
 # be the same distance away from the decision button"): the timeout badge 2 px further left
-DEC_BADGES = dict(timeout=(SEAL["x"] - 23, SEAL["y"] - 7), to_take=(SEAL["x"] + SEAL["w"] + 2, SEAL["y"] - 7))
+# v0.10.1 (the author's screenshot, the shoulders either side of the seal outlined: "Maybe move the notifications on
+# this screen to something like this"): each badge centred in a shoulder of the plate, between its two steps (12 % to
+# 26 % of the medallion's width, and 74 % to 88 %), its top on the first step. The badge's picture is drawn 2 px right
+# of the position the game's number is given (as the game's own are), so the position is 2 px left of the picture.
+_shoulder = lambda f0, f1: MED["x"] + MED["w"] * (f0 + f1) / 2
+DEC_BADGE = 17                                       # the game's topbar_alert_bg (the Deco UI's count badge)
+DEC_BADGES = dict(timeout=(round(_shoulder(.12, .26) - DEC_BADGE / 2) - 2, MED_STEPS[0]),
+                  to_take=(round(_shoulder(.74, .88) - DEC_BADGE / 2) - 2, MED_STEPS[0]))
 FACTION_LOGO = dict(dx=8, dy=11, scale=0.85)      # faction logo (32 px miniature) centred in the crown's ring
 FACTION_INIT = dict(dx=24, dy=33, w=24, h=14)     # faction initiative: bottom-right corner of the crown
 
@@ -120,9 +128,9 @@ ITEMS = [  # key, loc key, label, widest value the engine is likely to write
 # the strip until then; now they are the strip's last cell, after Factories: three rows, each an icon, the value and
 # the game's ratio bar under the value
 LOG = ["fuel", "supply", "convoys"]
-LOG_FONT = "valsora_deco_value_12"
+LOG_FONT = "valsora_deco_value_11"               # value_12 until v0.10.1 (the author: "shrink the text ... just a little")
 LOG_ICON, LOG_ROW_H, LOG_Y0 = 13, 15, 7          # rows at y 7, 22, 37 (the readouts' hover areas are y 6-52)
-LOG_VALUE_W = 38                                 # "999.9K" in value_12
+LOG_VALUE_W = 38                                 # "999.9K" in value_12 (value_11 since v0.10.1: room to spare)
 LOG_W = 2 + LOG_ICON + 4 + LOG_VALUE_W + 2
 BAR_W, BAR_H = LOG_VALUE_W, 2
 

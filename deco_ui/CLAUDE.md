@@ -224,8 +224,11 @@ tools/
                             armies', fleets' and operatives' badges, mv_), combat_art.py (the land battle, cb_),
                             diplo_art.py (the diplomatic action windows, dp_), setup_art.py (game setup, gs_),
                             popup_art.py (the sometimes-seen windows of one picture each, pp_)
-  make_loading.py           the four loading screens (v0.10; drawn as a proposal on 2026-10-16): run by hand, needs the
-                            Valsora build's work/; build/preview_loading.png
+  make_loading.py           the four loading screens (v0.10, out of the mod again in v0.10.1, kept for later): run by
+                            hand into build/loading_screens/ (--into-mod: where the mod would ship them); needs the
+                            Valsora build's work/
+  make_setup.py             frontendgamesetupview.gui (v0.10.1): the country selection one card wider (nine cards for
+                            the Vale start), the country's details spaced; its pictures are setup_art.py's
   preview_battleplan.py     build/preview_battleplan.png (+ _vanilla); preview_windows.py, preview_mapviews.py,
                             preview_combat.py, preview_diplo.py, preview_setup.py, preview_popups.py likewise (v0.10)
   medallion_check.py        the windows the medallion would hide (v0.9): every top-level window in the top left corner
@@ -530,14 +533,17 @@ Build order matters. `gen_fonts` runs first because `layout.py` measures strings
   base_backgrounds.txt` holds `name = { }` entries for `gfx/loadingscreens/<name>.dds`, plus a
   `GFX_<name>_small` (192x144) sprite for the picker. The mod's `base_backgrounds.txt` **replaces**
   the game's, so only the Valsora background is listed. **(in game)** The Valsora background shows.
-- **The loading screen** (`load_screen.gui`) has no picture of its own: as far as the game's files show, its list of
-  backgrounds is also its list of loading pictures (the game's own lists its nine `load_1` ... `load_9` beside the DLCs' menu pictures). Since
-  v0.10 the list is the menu's picture and then the four loading screens (`make_loading.py`). **Assumed, to see in
-  game:** that the menu keeps the first entry as its default (the game's file says the default "will be decided by
-  latest dlc"; ours name no DLC), and which picture the loading screen shows (one of the list, or the one the menu's
-  "Change background" picked). Its bar and tip are the Deco UI's (`ld_` in `gen_textures.py`, at the game's sizes:
-  `Loadingscreen_loadingstatus` 1400 x 92, `Loadingscreen_loadingtip` 1400 x 148, the progress bar's two 934 x 40
-  pictures), the texts on them the game's fonts (`loadscreen_header`, `loadscreen_tip`, redrawn).
+- **The loading screen** (`load_screen.gui`) has no picture of its own. v0.10 listed four loading pictures from
+  Valsora's map in the background list after the menu's own, assuming the loading screen drew from it. **(in game,
+  2026-10-17)**: the loading screen showed one of the game's own pictures (its Chinese front: it picks from the game's
+  loading pictures, not our list), and the frontend (game setup) took the last picture of the list as its background.
+  Since v0.10.1 the list is the menu's picture alone again, and the four pictures are kept for later (the author: "The
+  globe map should be kept for later, and I might return to the others but the map's not finalized quite yet";
+  `make_loading.py` draws them into `build/loading_screens/`). Showing our own on the loading screen would mean
+  replacing the game's `gfx/loadingscreens/load_*.dds` themselves (not tried). The bar and tip are the Deco UI's
+  (`ld_` in `gen_textures.py`: `Loadingscreen_loadingstatus` 1400 x 92, `Loadingscreen_loadingtip` 1400 x 148, the
+  progress bar's two 934 x 40 pictures), the texts on them the game's fonts (`loadscreen_header`, `loadscreen_tip`,
+  redrawn); **(in game)** they show; their corner brackets poked through the chamfers and are gone (v0.10.1).
 - The bottom panel (`mainmenu_panel_bottom`, 1320x140) is anchored `CENTER_DOWN` (bare, see the
   Orientation note above) at `(-660, -166)` with no `Origo`. v0.4.5 is the first build in which the
   game accepts that anchor **(assumed** until the user's next screenshot**)**. It has
@@ -767,9 +773,21 @@ module of its own (`battleplan_art.py`, `window_art.py`, `mapview_art.py` ...: t
 `_vanilla` one shows the game's art: only sent, never committed). The loading bar and tip (`ld_`) and the scroll bars
 and sliders (`sc_`) are in `gen_textures.py` itself.
 
-**make_loading.py** (v0.10, run by hand). The four loading screens from Valsora's map (`gfx/loadingscreens/
-valsora_load_1..4.dds`, 1920 x 1440, and their 192 x 144 pictures), drawn from the Valsora build's `work/`: run it again
-after the map changes, then rebuild. `make_menu.py` lists them in `base_backgrounds.txt` after the menu's own picture.
+**make_loading.py** (v0.10, run by hand). The four loading screens from Valsora's map (1920 x 1440, and their 192 x 144
+pictures), drawn from the Valsora build's `work/`. Out of the mod since v0.10.1 (section 6, Main menu): drawn into
+`build/loading_screens/`; `--into-mod` writes them where the mod would ship them, and `make_menu.LOADING` lists them.
+
+**make_setup.py** (v0.10.1). The game's `frontendgamesetupview.gui`, two changes, every element kept. The country
+selection (`gamesetup_interesting_countries_window`) is `setup_art.CS_W` = 1375 px wide instead of 1225: the game lays
+its 150 px country cards from x 15, eight to the window, and the Vale of Reibonne start has nine with "Other countries"
+(the ninth stuck out past the frame: the author's screenshot). The window is centred, so it grows `setup_art.DX` = 75 px
+each side; everything under the cards (title, filters, facts, name, spirits, focuses, history) moves 75 px right so it
+stays put on screen, the more-countries dropdown's button and list follow the right edge (guipatch knows neither
+`dropDownBoxType` nor its `expandButton`: those lines are replaced by hand). Its picture is drawn at the new width
+(`setup_art.RESIZED`, which `validate_preview.py`'s same-size check lets be). The country's details
+(`gamesetup_country_details`): portrait, faction emblem, pie and spirits 10 px apart on one centre line (they were 9, 3
+and 7 px apart, the emblem's well and the pie's overlapping: "a little disorganized"), and the pie's ring (the frame)
+and dark centre (the overlay) centred on it, the politics screen's style.
 
 **make_menu.py.**
 

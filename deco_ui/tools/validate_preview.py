@@ -325,7 +325,8 @@ import designer_art as _DA  # noqa: E402
 # the art modules (v0.9, v0.10) redraw the game's pictures at its sizes: every one is held to them
 import importlib as _il  # noqa: E402
 from art_util import ART_MODULES as _ART  # noqa: E402
-SAME_SIZE = [r for _m in _ART for _k, r, _w, _h, _f in _il.import_module(_m).ADDS] + [
+_RESIZED = {r for _m in _ART for r in getattr(_il.import_module(_m), "RESIZED", ())}   # laid out by a patched .gui
+SAME_SIZE = [r for _m in _ART for _k, r, _w, _h, _f in _il.import_module(_m).ADDS if r not in _RESIZED] + [
              "gfx/interface/pol_view_bg.dds", "gfx/interface/pol_view_bg_no_dlc.dds", "gfx/interface/tiles/tiles_dialog.dds",
              # the panels' shared pieces (v0.5): the game lays them out at vanilla's sizes
              "gfx/interface/closebutton.dds", "gfx/interface/header_bg.dds", "gfx/interface/category_header.dds",
@@ -394,10 +395,6 @@ for p in glob.glob(M + "gfx/interface/button_*.dds"):
 import json  # noqa: E402
 from paths import MANIFEST  # noqa: E402
 _man = {m["path"] for m in json.load(open(MANIFEST))}
-# the loading screens (v0.10) are make_loading.py's, drawn by hand from the Valsora build's map (make_menu.py lists them;
-# make_loading.py is not imported: it puts the Valsora scripts, with their own layout.py, first on the path)
-_man |= {p for i in range(1, 5) for p in (f"gfx/loadingscreens/valsora_load_{i}.dds",
-                                           f"gfx/interface/valsora_deco/menu/valsora_load_{i}_small.dds")}
 for f in glob.glob(M + "gfx/**/*", recursive=True):
     rel = f[len(M):].replace(os.sep, "/")
     if os.path.isfile(f) and not rel.startswith("gfx/fonts/") and rel not in _man:

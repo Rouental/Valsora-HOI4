@@ -98,7 +98,11 @@ GP.check(t)
 GP.write_gui(MOD + "interface/frontendmainview.gui", t)
 
 # ---------------------------------------------------------------- background registration
-LOADING = [f"valsora_load_{i}" for i in range(1, 5)]       # make_loading.py draws them (v0.10)
+# the loading screens make_loading.py draws were listed here in v0.10; out again in v0.10.1 (the author: "The globe map
+# should be kept for later, and I might return to the others but the map's not finalized quite yet"; listed, the game
+# also took the last of them for the frontend's background). To bring them back: their names here, and make_loading.py
+# --into-mod.
+LOADING = []
 for _n in LOADING:
     assert os.path.isfile(MOD + f"gfx/loadingscreens/{_n}.dds"), f"{_n}.dds is missing: run tools/make_loading.py"
 os.makedirs(MOD + "common/frontend/backgrounds", exist_ok=True)

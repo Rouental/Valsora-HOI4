@@ -6,8 +6,8 @@ from paths import MOD, VANILLA, BUILD
 from ddsutil import read_dds
 
 UC = "gfx/interface/unitcontrol/"
-BAR = [("exercise_icon", "gfx/interface/", -25, 37, 1, 1), ("execute_mid", UC, 4, 32, 2, 0), ("cohesion_balanced", UC, 40, 32, 2, 0),
-       ("proximity_close", UC, 77, 33, 2, 0), ("order_draw_naval_inv_btn", UC, 124, 33, 2, 0),
+BAR = [("exercise_icon", "gfx/interface/", -25, 37, 1, 1), ("execute_mid", UC, 4, 32, 2, 1), ("cohesion_balanced", UC, 40, 32, 2, 1),
+       ("proximity_close", UC, 77, 33, 2, 1), ("order_draw_naval_inv_btn", UC, 124, 33, 2, 0),
        ("order_draw_naval_inv_with_harbor_btn", UC, 158, 33, 2, 0), ("order_draw_paradrop_btn", UC, 194, 33, 2, 0),
        ("order_draw_defence_btn", UC, 239, 33, 2, 0), ("order_draw_offence_btn", UC, 276, 33, 2, 1),
        ("order_draw_blitz_btn", UC, 311, 33, 2, 0), ("order_draw_fallback_btn", UC, 355, 33, 2, 0),

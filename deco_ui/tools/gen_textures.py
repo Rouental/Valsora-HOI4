@@ -1732,16 +1732,15 @@ def ld_status():
     x0, x1, y0, y1 = 206, 1194, 0, 92
     c = 14
     pts = [(x0, y0 - 6), (x1, y0 - 6), (x1, y1 - c), (x1 - c, y1), (x0 + c, y1), (x0, y1 - c)]
-    return ld_plate(1400, 92, x0, x1, y0 - 6, y1, True) + ld_rule(pts) + \
-        '<i class="ck sm bl" style="left:212px;bottom:6px"></i><i class="ck sm br" style="right:212px;bottom:6px"></i>'
+    return ld_plate(1400, 92, x0, x1, y0 - 6, y1, True) + ld_rule(pts)   # no corner brackets: they poked through the
+    # chamfers (the author's screenshot, v0.10)
 
 
 def ld_tip():
     x0, x1, y0, y1 = 206, 1194, 22, 154
     c = 14
     pts = [(x0 + c, y0), (x1 - c, y0), (x1, y0 + c), (x1, y1), (x0, y1), (x0, y0 + c)]
-    return ld_plate(1400, 148, x0, x1, y0, y1, False) + ld_rule(pts) + \
-        '<i class="ck sm tl" style="left:212px;top:28px"></i><i class="ck sm tr" style="right:212px;top:28px"></i>'
+    return ld_plate(1400, 148, x0, x1, y0, y1, False) + ld_rule(pts)
 
 
 TRACK = (6, 18)       # the progress bar's rows inside its 40 px picture: screen y 68-80, inside the status plate

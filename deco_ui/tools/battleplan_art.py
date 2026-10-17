@@ -15,7 +15,7 @@ gen_textures.py adds them (keys bp_*).
 import numpy as np
 from PIL import Image
 
-from art_util import STRIPES, GOLD, LIT_FILL, DIM_FILL, chamfer, frames, vanilla_frames, gilt, img_tag
+from art_util import STRIPES, GOLD, LIT_FILL, chamfer, frames, vanilla_frames, gilt, img_tag
 
 UC = "gfx/interface/unitcontrol/"
 LAC = "linear-gradient(180deg,#18232A,#0D1418)"
@@ -40,7 +40,7 @@ def plate(w, y1=77, legs=(), body=(30, 69)):
                 'box-shadow:inset 0 0 0 1px rgba(201,165,90,.35),inset 0 3px 4px rgba(0,0,0,.6)"></div>')
     for x0, x1 in legs:
         out += leg(x0, x1, y1, 124)
-    return out + '<i class="ck sm tl" style="left:4px;top:4px"></i><i class="ck sm tr" style="right:4px;top:4px"></i>'
+    return out   # no corner brackets: in a chamfered plate they poke through the corners (the author's screenshot, v0.10)
 
 
 def leg(x0, x1, y0, y1):
@@ -68,7 +68,7 @@ def bar():
             gx = (WELLS[gi - 1][-1][1] + group[0][0]) / 2
             out += (f'<div style="position:absolute;left:{gx - 3}px;top:46px;width:6px;height:6px;transform:rotate(45deg);'
                     'background:#C9A55A"></div>')
-    return out + '<i class="ck sm bl" style="left:4px;bottom:4px"></i><i class="ck sm br" style="right:4px;bottom:4px"></i>'
+    return out
 
 
 def glyph(img, cut=0):
@@ -80,25 +80,37 @@ def glyph(img, cut=0):
     return Image.fromarray(a.astype(np.uint8), "RGBA")
 
 
+def centred(img, fw, fh):
+    """the glyph moved so that its visible pixels are centred in a frame fw x fh (the game's glyphs sit off centre in
+    their own pictures: the author's screenshot, v0.10, "icons aren't all centered")"""
+    box = img.getchannel("A").point(lambda a: 255 if a > 40 else 0).getbbox()
+    if not box:
+        return img
+    out = Image.new("RGBA", (fw, fh), (0, 0, 0, 0))
+    x0, y0, x1, y1 = box
+    out.alpha_composite(img.crop(box), (round((fw - (x1 - x0)) / 2), round((fh - (y1 - y0)) / 2)))
+    return out
+
+
 def order_button(rel, w, h):
-    """an order button (2 frames): its glyph in gilt, and lit (the second frame) over a jade glow"""
+    """an order button (2 frames): its glyph in gilt, centred, and lit (the second frame) over a jade glow"""
     f0, f1 = vanilla_frames(rel, 2)
     fw = w // 2
+    f0 = centred(f0, fw, h)
     glow = (f'<div style="position:absolute;left:{fw / 2 - 15}px;top:{h / 2 - 14}px;width:30px;height:28px;border-radius:50%;'
             'background:radial-gradient(ellipse,rgba(46,110,96,.75),rgba(46,110,96,0) 70%)"></div>')
     return frames(w, h, img_tag(gilt(f0)), glow + img_tag(gilt(f0, 1.2)))
 
 
 def setting_button(rel, cut=0):
-    """a setting button (80 x 36, 2 frames of 40): the chosen setting (frame 1) on a jade plate, the others (frame 2) on
-    a plain one, the game's glyph in gilt on both (taken from its plain frame)"""
+    """a setting button (80 x 36, 2 frames of 40): the chosen setting (frame 1) on a jade plate, the others (frame 2)
+    the glyph alone (v0.10.1: the bar shows the current setting's frame 2 in a well of its own, and a plate of its own
+    inside the well read as a second, misaligned frame); the game's glyph in gilt, centred (taken from its plain frame)"""
     f0, f1 = vanilla_frames(rel, 2)
-    g = glyph(f1, cut)
+    g = centred(glyph(f1, cut), 40, 36)
     lit = (f'<div style="position:absolute;inset:2px 3px;background:{GOLD};clip-path:{chamfer(5)}"></div>'
            f'<div style="position:absolute;inset:3.2px 4.2px;background:{STRIPES},{LIT_FILL};clip-path:{chamfer(4.4)}"></div>')
-    dim = (f'<div style="position:absolute;inset:2px 3px;background:rgba(201,165,90,.55);clip-path:{chamfer(5)}"></div>'
-           f'<div style="position:absolute;inset:3.2px 4.2px;background:{STRIPES},{DIM_FILL};clip-path:{chamfer(4.4)}"></div>')
-    return frames(80, 36, lit + img_tag(gilt(g, 1.15)), dim + img_tag(gilt(g)))
+    return frames(80, 36, lit + img_tag(gilt(g, 1.15)), img_tag(gilt(g)))
 
 
 def strip(rel, w, h, n, gain=1.0):

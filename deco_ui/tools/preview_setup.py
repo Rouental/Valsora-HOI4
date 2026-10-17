@@ -13,6 +13,7 @@ so they stay in the git-ignored build/ folder.
 """
 import copy
 import math
+import os
 import re
 
 import numpy as np
@@ -20,9 +21,11 @@ from PIL import Image, ImageDraw
 
 import preview_panels as PP
 import validate_preview as V
-from paths import BUILD, VALSORA, VANILLA
+from paths import BUILD, MOD, VALSORA, VANILLA
+import setup_art as SA
 
 GUI = VANILLA + "interface/frontendgamesetupview.gui"
+GUI_MOD = MOD + "interface/frontendgamesetupview.gui"      # make_setup.py's (v0.10.1): the wider selection
 TYPEWRITER = ("hoi4_typewriter16", "hoi4_typewriter22")
 INK = (0, 0, 0)
 SW, SH = 1920, 1080
@@ -39,10 +42,11 @@ def _norm(body):
 
 
 ELEMS = _norm(V.load(GUI))
+ELEMS_MOD = _norm(V.load(GUI_MOD)) if os.path.isfile(GUI_MOD) else ELEMS
 
 
-def window(name):
-    w = PP.find_window(ELEMS, name)
+def window(name, vanilla=True):
+    w = PP.find_window(ELEMS if vanilla else ELEMS_MOD, name)
     assert w is not None, name
     return copy.deepcopy(w)
 
@@ -120,7 +124,7 @@ class Setup(PP.Panel):
 # ---------------------------------------------------------------- sample content (Valsora's)
 VALE = ["ROU", "GDN", "LST", "EVR", "HLR", "SGV", "LZC", "SGN"]
 NAMES = {"ROU": "Rouental", "GDN": "Guedelon", "LST": "Lustiana", "EVR": "Evriches", "HLR": "Hollier",
-         "SGV": "Selgrave", "LZC": "Lanzerac", "SGN": "Seigne", "AIS": "Merlovich"}
+         "SGV": "Selgrave", "LZC": "Lanzerac", "SGN": "Seigne", "AIS": "Merlovich", "OTHER": "Other countries"}
 
 
 def img(path):
@@ -139,6 +143,8 @@ def flag(tag, size="large"):
 
 
 def portrait(tag, i):
+    if tag == "OTHER":
+        return img(VANILLA + "gfx/leaders/leader_unknown.dds")
     if tag == "ROU":
         return img(VALSORA + "gfx/leaders/VAL/ROU_roland_cahun.dds")
     return img(VANILLA + f"gfx/leaders/Europe/Portrait_Europe_Generic_{1 + i % 3}.dds")
@@ -199,8 +205,10 @@ def bars(cv, vanilla, hide=()):
 def country_selection(vanilla):
     cv = PP.backdrop(False)
     bars(cv, vanilla)
-    w = window("gamesetup_interesting_countries_window")
-    WX, WY = (SW - 1225) // 2, (SH - 717) // 2
+    w = window("gamesetup_interesting_countries_window", vanilla)
+    WW = int(next(V.attrs(v)["width"] for k, v in w if k == "size"))
+    dx = (WW - 1225) // 2                       # how far make_setup.py moved the panels under the cards
+    WX, WY = (SW - WW) // 2, (SH - 717) // 2
     hide = {"minor_country_leader", "minor_portrait_overlay"}
     samples = {"nation_title": "The Sacred Principality of Rouental", "leader": "Roland II Cahun", "ideology": "Monarchist",
                "government": "Absolute Monarchy", "elections": "None", "party": "The Crown",
@@ -210,8 +218,8 @@ def country_selection(vanilla):
     p = Setup(vanilla_only=vanilla, outline_lists=False, hide=hide, samples=samples, frames={"pol_faction_icon": 3})
     p.draw(cv, [("containerWindowType", placed(w, 0, 0))], WX, WY, SW, SH)
     # the major countries' cards (the game's country_entry, 150 apart from (15, 41)), the first selected
-    entry = window("country_entry")
-    for i, tag in enumerate(VALE):
+    entry = window("country_entry", vanilla)
+    for i, tag in enumerate(VALE + ["OTHER"]):     # the Vale start: eight nations and "Other countries"
         ex, ey = WX + 15 + 150 * i, WY + 41
         po = portrait(tag, i)
         if po:
@@ -226,19 +234,19 @@ def country_selection(vanilla):
     for i, n in enumerate(IDEAS):
         im = idea(n)
         if im:
-            V.paste(cv, im, WX + 542 + 60 * i + 30 - im.width / 2, WY + 486 + 33 - im.height / 2)
+            V.paste(cv, im, WX + dx + 542 + 60 * i + 30 - im.width / 2, WY + 486 + 33 - im.height / 2)
     for i, n in enumerate(GOALS):
         im = goal(n)
         if im:
-            V.paste(cv, im, WX + 477 + 105 * i + 30 - im.width / 2, WY + 580 + 40 - im.height / 2)
+            V.paste(cv, im, WX + dx + 477 + 105 * i + 30 - im.width / 2, WY + 580 + 40 - im.height / 2)
     # the pinned portrait: 0.696 of the portrait, turned by the .gui's rotation (-0.04: clockwise on screen, about its
     # middle), then the overlay over it
     po = scaled(portrait("ROU", 0), .696)
     rot = po.rotate(-math.degrees(.04), resample=Image.BICUBIC, expand=True)
-    cx, cy = WX + 289 + po.width / 2, WY + 457 + po.height / 2
+    cx, cy = WX + dx + 289 + po.width / 2, WY + 457 + po.height / 2
     V.paste(cv, rot, cx - rot.width / 2, cy - rot.height / 2)
     k, b = find(w, "minor_portrait_overlay")
-    Setup(vanilla_only=vanilla).draw(cv, [(k, b)], WX, WY, 1225, 717)
+    Setup(vanilla_only=vanilla).draw(cv, [(k, b)], WX, WY, WW, 717)
     return cv
 
 
@@ -268,7 +276,7 @@ def start_selection(vanilla):
 def lobby(vanilla):
     cv = PP.backdrop(False)
     # the country's details at the upper right (upper_right, show (20, 90))
-    w = window("gamesetup_country_details")
+    w = window("gamesetup_country_details", vanilla)
     WX, WY = SW - 20 - 492, 90
     hide = {"country_leader", "country_leader_frame", "pol_view_bg", "piechart_frame", "spirit_grid_over_defined"}
     p = Setup(vanilla_only=vanilla, outline_lists=False, hide=hide, frames={"pol_faction_icon": 3},
@@ -276,17 +284,22 @@ def lobby(vanilla):
                        "elections": "None", "party": "The Crown"})
     p.draw(cv, [("containerWindowType", placed(w, 0, 0))], WX, WY, SW, SH)
     V.paste(cv, scaled(portrait("ROU", 0), .4), WX + 30, WY + 20)
-    V.paste(cv, pie(), WX + 205 - 26, WY + 37)
+    k, b = find(w, "political_pie_chart")
+    pos = next(V.attrs(v) for kk, v in b if kk == "position")
+    PX, PY = int(pos["x"]), int(pos["y"])                           # the chart: its x the centre, its top at y - 3
+    V.paste(cv, pie(), WX + PX + 20 - 26, WY + PY - 3)
     for name in ("country_leader_frame",):
         k, b = find(w, name)
         Setup(vanilla_only=vanilla).draw(cv, [(k, b)], WX, WY, 492, 301)
     for name in ("pol_view_bg", "piechart_frame"):
         k, b = find(w, name)
-        Setup(vanilla_only=vanilla).draw(cv, [(k, b)], WX + 185, WY + 40, 100, 100)
+        Setup(vanilla_only=vanilla).draw(cv, [(k, b)], WX + PX, WY + PY, 100, 100)
     for i, n in enumerate(IDEAS):
         im = idea(n)
         if im:
-            V.paste(cv, im, WX + 253 + 60 * i + 30 - im.width / 2, WY + 30 + 34 - im.height / 2)
+            k2, b2 = find(w, "spirit_grid")
+            gx = int(next(V.attrs(v) for kk, v in b2 if kk == "position")["x"])
+            V.paste(cv, im, WX + gx + 60 * i + 30 - im.width / 2, WY + 30 + 34 - im.height / 2)
     # the difficulty panel (lower_right, show (5, -85), 598 x 196), normal selected
     g = window("gamesetup_gameplay_settings_window")
     GX, GY = SW - 5 - 598, SH - 85 - 196
