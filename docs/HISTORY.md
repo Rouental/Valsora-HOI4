@@ -23,7 +23,13 @@ states and countries came next.
   owners` (settles them), `regroup_states.py --recut` (both checked against that night's hand-made result), and
   `CLAUDE.md` a quarter of its size (117 KB to 30 KB, the detail moved word for word into `docs/MAP_PIPELINE.md`,
   `docs/DECISIONS.md`, `docs/CONTENT.md` and `deco_ui/docs/VERSIONS.md`). **The Valsora Atlas** (not in the mod): the
-  build's world in a browser, published as a private Artifact (`docs/ATLAS.md`).
+  build's world in a browser, published as a private Artifact (`docs/ATLAS.md`). Three more surprises, none in the
+  mod: **the tech tree's full mockup** (`docs/tech_tree_mockup/`: 559 technologies, 91 new and 468 of the game's renamed,
+  the special projects and doctrines, the Cold War as the floor, a page with what each kind of nation starts with and
+  every folder as an in-game screen, a private Artifact; nine questions in its README), **a world map poster**
+  (`dist/posters/`, 9600 x 6570 in the Deco UI's style, 160 flags round it: `docs/POSTER.md`) and **the Deco UI's next
+  20 screens** as mockups (`deco_ui/art/proposals/next_screens/`: the unit counters, division and ship details, trait
+  trees, the peace conference ..., with what each would take).
 - 2026-10-17, the night (the author's map, "Another thing to work on overnight: significant changes to the map", with
   three flags): **Yastreovakia redrawn**. Belekria south over Sminishia's north and West Sminishia's old land, West
   Sminishia over Sminishia's west end, Pakitsk into Belka (still releasable), Krionik's north-east to Belka and Kieska

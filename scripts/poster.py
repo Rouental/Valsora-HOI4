@@ -2,7 +2,7 @@
 uses reads it, and it only reads the last build.
 
     python3 scripts/poster.py              # dist/posters/: the print, a preview, four close-ups
-    python3 scripts/poster.py --draft 0.3  # the same at 30 % size, quickly, into the scratch folder
+    python3 scripts/poster.py --draft 0.3  # the same at 30 % size, quickly, into the temporary folder
 
 The world as a vintage atlas plate in the style of the Valsora Deco UI (lacquer and ivory, gilt
 hairlines, stepped corners, sunbursts, Federo capitals): shaded relief (the terrain test's own
@@ -13,24 +13,25 @@ leader line), the oceans' and continents' names, the capitals, and a frame with 
 a compass rose, a scale bar, a legend and every nation's flag.
 
 Read from (all read-only): work/world.npz, work/provinces.npz, work/regions.npz,
-work/terrain_test/relief.npy, build/valsora_test (states, countries, colours, localisation,
-strategic regions, placeholder flags), dist/countries.csv, source/flags/, source/city_names.json,
-source/region_names.json, deco_ui/source_fonts/ (OFL fonts, used to render text only).
-See docs/POSTER.md.
+work/terrain_test/relief.npy, build/valsora_test (states, countries, colours, localisation with the
+victory points' and sea regions' names, strategic regions, stand-in flags), dist/countries.csv,
+source/flags/, source/city_names.json, deco_ui/source_fonts/ (OFL fonts, used to render text only).
+Writes dist/posters/ (tests and drafts: the temporary folder). See docs/POSTER.md.
 """
 import argparse
 import csv
 import json
 import math
+import pickle
 import re
-import sys
+import tempfile
 import time
 import unicodedata
 from functools import lru_cache
 from pathlib import Path
 
 import numpy as np
-from PIL import Image, ImageDraw, ImageFilter, ImageFont
+from PIL import Image, ImageDraw, ImageFont
 from scipy import ndimage as ndi
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -203,6 +204,8 @@ def crop_data(d, win):
         d[k] = d[k][sl]
     d["cities"] = [dict(c, x=c["x"] - x0, y=c["y"] - y0) for c in d["cities"]
                    if x0 <= c["x"] < x1 and y0 <= c["y"] < y1]
+    for i, c in enumerate(d["cities"]):
+        c["i"] = i
     d["window"] = (x0, y0)
     return d
 
@@ -229,12 +232,6 @@ def resample(a, s, y0=0, x0=0, oy=0, ox=0, hy=None, wx=None):
     r = np.swapaxes(r, 0, 1)
     r = _rows(r, s, wx, x0, ox)
     return np.ascontiguousarray(np.swapaxes(r, 0, 1))
-
-
-def nearest(a, s, Hp, Wp):
-    yi = np.minimum(((np.arange(Hp) + 0.5) / s).astype(np.int64), a.shape[0] - 1)
-    xi = np.minimum(((np.arange(Wp) + 0.5) / s).astype(np.int64), a.shape[1] - 1)
-    return a[yi][:, xi]
 
 
 def line(dist, half):
@@ -1109,7 +1106,8 @@ def layout_labels(d):
             items["oceans"].append(res)
             occ.stamp(band(res["x"], res["y"], res["arc"], res["centre"], res["length"] / SCALE,
                            res["half"] / SCALE, 4 / SCALE))
-    # ---- small nations: the name beside, with a leader line
+    # ---- small nations: the name beside, with a leader line; never over another small nation
+    tiny = np.isin(owner, pending)
     for i in pending:
         r = d["nations"][i]
         name = r["name"].upper()
@@ -1140,11 +1138,13 @@ def layout_labels(d):
                 xs_ = np.clip(np.arange(int(bx0), int(bx0 + L) + 1), 0, W - 1)
                 ys_ = np.clip(np.arange(int(ly - hh), int(ly + hh) + 1), 0, H - 1)
                 landf = land[np.ix_(ys_, xs_)].mean()
+                under = owner[np.ix_(ys_, xs_)]
+                others = (tiny[np.ix_(ys_, xs_)] & (under != i)).mean()
                 # the leader: from the nation to the box's nearest point
                 tx = min(max(ax, bx0 - 3 / SCALE), bx0 + L + 3 / SCALE)
                 ty = min(max(ay, ly - hh - 4 / SCALE), ly + hh + 4 / SCALE)
                 seg = np.hypot(tx - ax, ty - ay)
-                cost = seg + 110 * landf
+                cost = seg + 45 * landf + 3000 * others
                 if best is None or cost < best[0]:
                     best = (cost, bx0, ly, tx, ty, landf)
             if best is not None and best[0] < rad * 1.6:
@@ -1193,10 +1193,6 @@ def layout_labels(d):
 
 
 # ----------------------------------------------------------------------------- rendering
-def to_print(v, s):
-    return (np.asarray(v, float) + 0.0) * s
-
-
 def gilt_gradient(h):
     ys = np.linspace(0, 1, max(h, 2))
     out = np.zeros((len(ys), 3), np.float32)
@@ -1288,42 +1284,35 @@ def render_labels(rgb, land_a, items, d, s, Q):
     composite(rgb, halo, PAL["deep"], 0.85)
     composite(rgb, lay, PAL["ocean_ink"], 0.95)
     log("labels: oceans")
-    # leader lines and markers
+    # leader lines (a dot on the nation, a hairline to its name) and markers
     lead = np.zeros((Hp, Wp), np.float32)
+    k = 4
     for it in items["leaders"]:
-        if it["leader"]:
-            ax, ay, tx, ty = it["leader"]
-            X0, Y0, X1, Y1 = P(ax), P(ay), P(tx), P(ty)
-            n = int(max(abs(X1 - X0), abs(Y1 - Y0)) * 2) + 2
-            img = Image.new("L", (Wp, 1))   # placeholder to keep PIL imported paths simple
-            xs = np.linspace(X0, X1, n)
-            ys = np.linspace(Y0, Y1, n)
-            for x_, y_ in zip(xs, ys):
-                xi, yi = int(x_), int(y_)
-                if 1 <= xi < Wp - 2 and 1 <= yi < Hp - 2:
-                    fx, fy = x_ - xi, y_ - yi
-                    w = max(1.0 * Q, 0.6)
-                    lead[yi, xi] = max(lead[yi, xi], (1 - fx) * (1 - fy) * w + 0.0)
-                    lead[yi, xi + 1] = max(lead[yi, xi + 1], fx * (1 - fy) * w)
-                    lead[yi + 1, xi] = max(lead[yi + 1, xi], (1 - fx) * fy * w)
-                    lead[yi + 1, xi + 1] = max(lead[yi + 1, xi + 1], fx * fy * w)
-            r = 3.2 * Q
-            yy, xx = np.ogrid[-int(r) - 2:int(r) + 3, -int(r) - 2:int(r) + 3]
-            dot = np.clip(r + 0.5 - np.hypot(xx - (X0 - int(X0)), yy - (Y0 - int(Y0))), 0, 1)
-            paste_max(lead, dot.astype(np.float32), int(X0) - int(r) - 2, int(Y0) - int(r) - 2)
-    lead = np.clip(lead * 1.6, 0, 1)
+        if not it["leader"]:
+            continue
+        ax, ay, tx, ty = it["leader"]
+        X0, Y0, X1, Y1 = P(ax), P(ay), P(tx), P(ty)
+        pad = int(6 * Q) + 3
+        ox, oy = int(min(X0, X1)) - pad, int(min(Y0, Y1)) - pad
+        w, h = int(abs(X1 - X0)) + 2 * pad + 2, int(abs(Y1 - Y0)) + 2 * pad + 2
+        img = Image.new("L", (w * k, h * k), 0)
+        dr = ImageDraw.Draw(img)
+        dr.line([((X0 - ox) * k, (Y0 - oy) * k), ((X1 - ox) * k, (Y1 - oy) * k)], fill=255,
+                width=max(int(round(1.5 * Q * k)), 1))
+        r = 3.4 * Q * k
+        dr.ellipse([(X0 - ox) * k - r, (Y0 - oy) * k - r, (X0 - ox) * k + r, (Y0 - oy) * k + r], fill=255)
+        paste_max(lead, np.asarray(img.resize((w, h), Image.LANCZOS), np.float32) / 255, ox, oy)
     col = (np.array(INK, np.float32)[None, None] * land_a[..., None]
            + np.array(CREAM, np.float32)[None, None] * (1 - land_a[..., None]))
     rgb += (col - rgb) * (0.85 * lead)[..., None]
+    del lead, col
     img = Image.fromarray(np.clip(rgb, 0, 255).astype(np.uint8))
     caps = {False: capital_sprite(Q), True: capital_sprite(Q, gp=True)}
     dot = city_sprite(Q)
     for c in d["cities"]:
         sp = caps[c["tag"] in GREAT_POWERS] if c["capital"] else dot
-        X, Y = P(c["x"] + 0.5 - 0.5) + 0.5 * s - s / 2, P(c["y"])
         X, Y = P(c["x"]), P(c["y"])
-        img.alpha_composite(sp, (int(round(X - sp.width / 2)), int(round(Y - sp.height / 2)))) \
-            if img.mode == "RGBA" else img.paste(sp, (int(round(X - sp.width / 2)), int(round(Y - sp.height / 2))), sp)
+        img.paste(sp, (int(round(X - sp.width / 2)), int(round(Y - sp.height / 2))), sp)
     rgb[:] = np.asarray(img, np.float32)
     log("labels: markers")
     # nation, city and beside names: ink on land, cream on the sea
@@ -1391,7 +1380,7 @@ def draw_ornament(layer, path, s_mid, off, half_w, cap):
 
 
 # --------------------------------------------------------------------------------- frame
-TOP, SIDE, GAP, BOTTOM = 940, 320, 96, 150      # full-size px round the map plate
+TOP, GAP, BOTTOM = 940, 96, 150      # full-size px above, below and under the map plate
 FRIEZE_COLS = 40
 
 
@@ -1968,8 +1957,9 @@ def save_outputs(img, out_dir, Q, draft=False):
         "vale_of_reibonne": (*m(380, 560), *m(1150, 1090)),           # Rouental and the Vale
         "yastreovakia": (*m(1480, 60), *m(3420, 1180)),
         "cartouche": (round(W / 2 - 1800 * Q), round(110 * Q), round(W / 2 + 1800 * Q), round(TOP * Q - 40 * Q)),
-        "flag_frieze": (round(W / 2 - 1700 * Q), m(0, MAP_H)[1] + round(70 * Q), round(W / 2 + 1700 * Q),
-                        img.height - round(110 * Q)),
+        # sixteen whole columns of flags under the frieze's title
+        "flag_frieze": (round(W / 2 - 8 * 8960 / FRIEZE_COLS * Q) - round(6 * Q), m(0, MAP_H)[1] + round(70 * Q),
+                        round(W / 2 + 8 * 8960 / FRIEZE_COLS * Q) + round(6 * Q), img.height - round(110 * Q)),
     }
     for k, box in crops.items():
         img.crop(box).save(out_dir / f"{stem}_detail_{k}.png", optimize=True)
@@ -1982,13 +1972,14 @@ def main():
     ap.add_argument("--draft", type=float, default=0, help="render at this fraction of print size")
     ap.add_argument("--out", default=None)
     ap.add_argument("--reuse-layout", nargs="?", const=True, default=None,
-                    help="(tests) keep the layout in the scratch folder and reuse it")
+                    help="(tests) keep the layout in the temporary folder and reuse it")
     ap.add_argument("--no-map", action="store_true", help="(tests) the frame only")
     ap.add_argument("--palette", default="lacquer", choices=sorted(PALETTES))
     ap.add_argument("--window", default="", help="x0,y0,x1,y1 in map px: only that part (tests)")
     args = ap.parse_args()
     Q = args.draft or 1.0
-    out_dir = Path(args.out) if args.out else (OUT if not args.draft else Path("/tmp/claude-0/poster_scratch"))
+    tmp = Path(tempfile.gettempdir()) / "valsora_poster"   # drafts and tests: never into the repository
+    out_dir = Path(args.out) if args.out else (OUT if not (args.draft or args.window or args.no_map) else tmp)
     out_dir.mkdir(parents=True, exist_ok=True)
     global PAL
     PAL = PALETTES[args.palette]
@@ -1996,16 +1987,14 @@ def main():
     if args.window:
         d = crop_data(d, [int(v) for v in args.window.split(",")])
     s = SCALE * Q
-    cache = Path("/tmp/claude-0/poster_scratch/layout.pkl")
+    cache = tmp / "layout.pkl"
     if args.reuse_layout and cache.exists():
-        import pickle
         items = pickle.loads(cache.read_bytes())
         for c, cc in zip(d["cities"], items.pop("_cities")):
             c.update(cc)
     else:
         items = layout_labels(d)
         if args.reuse_layout is not None:
-            import pickle
             cache.parent.mkdir(parents=True, exist_ok=True)
             cache.write_bytes(pickle.dumps(dict(items, _cities=d["cities"])))
     if args.no_map:   # (tests) the frame round an empty plate
