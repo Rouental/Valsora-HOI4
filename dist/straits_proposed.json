@@ -1,0 +1,13290 @@
+{
+ "note": "Proposed strait crossings (scripts/straits.py find): approve with `python3 scripts/straits.py approve`.",
+ "default_gap": 10,
+ "crossings": [
+  {
+   "a": [
+    1668,
+    271
+   ],
+   "b": [
+    1659,
+    275
+   ],
+   "through": [
+    1667,
+    271
+   ],
+   "gap": 9.8,
+   "kind": "link",
+   "name": "Belekria 6 - Belekria 5",
+   "owners": [
+    "BLK",
+    "BLK"
+   ],
+   "landmass_px": [
+    566361,
+    1255
+   ],
+   "through_touches_both": true,
+   "n": 1
+  },
+  {
+   "a": [
+    2277,
+    205
+   ],
+   "b": [
+    2283,
+    187
+   ],
+   "through": [
+    2277,
+    204
+   ],
+   "gap": 19.0,
+   "kind": "link",
+   "name": "Belka 3 - Belka 1",
+   "owners": [
+    "BKA",
+    "BKA"
+   ],
+   "landmass_px": [
+    566361,
+    901
+   ],
+   "through_touches_both": true,
+   "n": 2
+  },
+  {
+   "a": [
+    2608,
+    195
+   ],
+   "b": [
+    2604,
+    195
+   ],
+   "through": [
+    2607,
+    195
+   ],
+   "gap": 4.0,
+   "kind": "link",
+   "name": "Sanada 18 - Sanada 6",
+   "owners": [
+    "SNA",
+    "SNA"
+   ],
+   "landmass_px": [
+    566361,
+    600
+   ],
+   "through_touches_both": true,
+   "n": 3
+  },
+  {
+   "a": [
+    3199,
+    189
+   ],
+   "b": [
+    3201,
+    193
+   ],
+   "through": [
+    3199,
+    190
+   ],
+   "gap": 4.5,
+   "kind": "link",
+   "name": "Sanada 13 - Sanada 24",
+   "owners": [
+    "SNA",
+    "SNA"
+   ],
+   "landmass_px": [
+    566361,
+    380
+   ],
+   "through_touches_both": true,
+   "n": 4
+  },
+  {
+   "a": [
+    3211,
+    173
+   ],
+   "b": [
+    3213,
+    174
+   ],
+   "through": [
+    3212,
+    173
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Sanada 13 - Sanada 13",
+   "owners": [
+    "SNA",
+    "SNA"
+   ],
+   "landmass_px": [
+    566361,
+    34
+   ],
+   "through_touches_both": true,
+   "n": 5
+  },
+  {
+   "a": [
+    3222,
+    198
+   ],
+   "b": [
+    3216,
+    198
+   ],
+   "through": [
+    3221,
+    198
+   ],
+   "gap": 6.0,
+   "kind": "link",
+   "name": "Sanada 14 - Sanada 24",
+   "owners": [
+    "SNA",
+    "SNA"
+   ],
+   "landmass_px": [
+    828,
+    380
+   ],
+   "through_touches_both": true,
+   "n": 6
+  },
+  {
+   "a": [
+    3252,
+    196
+   ],
+   "b": [
+    3253,
+    198
+   ],
+   "through": [
+    3252,
+    197
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Sanada 14 - Sanada 14",
+   "owners": [
+    "SNA",
+    "SNA"
+   ],
+   "landmass_px": [
+    828,
+    20
+   ],
+   "through_touches_both": true,
+   "n": 7
+  },
+  {
+   "a": [
+    3270,
+    177
+   ],
+   "b": [
+    3259,
+    182
+   ],
+   "through": [
+    3269,
+    177
+   ],
+   "gap": 12.1,
+   "kind": "link",
+   "name": "Sanada 7 - Sanada 14",
+   "owners": [
+    "SNA",
+    "SNA"
+   ],
+   "landmass_px": [
+    2956,
+    828
+   ],
+   "through_touches_both": true,
+   "n": 8
+  },
+  {
+   "a": [
+    3364,
+    187
+   ],
+   "b": [
+    3367,
+    187
+   ],
+   "through": [
+    3365,
+    187
+   ],
+   "gap": 3.0,
+   "kind": "link",
+   "name": "Sanada 17 - Sanada 15",
+   "owners": [
+    "SNA",
+    "SNA"
+   ],
+   "landmass_px": [
+    2956,
+    339
+   ],
+   "through_touches_both": true,
+   "n": 9
+  },
+  {
+   "a": [
+    3391,
+    164
+   ],
+   "b": [
+    3387,
+    173
+   ],
+   "through": [
+    3391,
+    165
+   ],
+   "gap": 9.8,
+   "kind": "link",
+   "name": "Sanada 1 - Sanada 15",
+   "owners": [
+    "SNA",
+    "SNA"
+   ],
+   "landmass_px": [
+    41,
+    339
+   ],
+   "through_touches_both": true,
+   "n": 10
+  },
+  {
+   "a": [
+    3402,
+    153
+   ],
+   "b": [
+    3396,
+    158
+   ],
+   "through": [
+    3401,
+    154
+   ],
+   "gap": 7.8,
+   "kind": "link",
+   "name": "Sanada 1 - Sanada 1",
+   "owners": [
+    "SNA",
+    "SNA"
+   ],
+   "landmass_px": [
+    1030,
+    41
+   ],
+   "through_touches_both": true,
+   "n": 11
+  },
+  {
+   "a": [
+    148,
+    613
+   ],
+   "b": [
+    147,
+    621
+   ],
+   "through": [
+    148,
+    614
+   ],
+   "gap": 8.1,
+   "kind": "link",
+   "name": "Cascadia 7 - Cascadia 19",
+   "owners": [
+    "CSC",
+    "CSC"
+   ],
+   "landmass_px": [
+    185,
+    645
+   ],
+   "through_touches_both": true,
+   "n": 12
+  },
+  {
+   "a": [
+    161,
+    608
+   ],
+   "b": [
+    164,
+    611
+   ],
+   "through": [
+    162,
+    609
+   ],
+   "gap": 4.2,
+   "kind": "link",
+   "name": "Cascadia 7 - Cascadia 5",
+   "owners": [
+    "CSC",
+    "CSC"
+   ],
+   "landmass_px": [
+    185,
+    384
+   ],
+   "through_touches_both": true,
+   "n": 13
+  },
+  {
+   "a": [
+    168,
+    607
+   ],
+   "b": [
+    167,
+    609
+   ],
+   "through": [
+    168,
+    608
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Cascadia 5 - Cascadia 5",
+   "owners": [
+    "CSC",
+    "CSC"
+   ],
+   "landmass_px": [
+    17,
+    384
+   ],
+   "through_touches_both": true,
+   "n": 14
+  },
+  {
+   "a": [
+    174,
+    604
+   ],
+   "b": [
+    172,
+    606
+   ],
+   "through": [
+    173,
+    605
+   ],
+   "gap": 2.8,
+   "kind": "link",
+   "name": "Cascadia 15 - Cascadia 5",
+   "owners": [
+    "CSC",
+    "CSC"
+   ],
+   "landmass_px": [
+    83261,
+    17
+   ],
+   "through_touches_both": true,
+   "n": 15
+  },
+  {
+   "a": [
+    182,
+    513
+   ],
+   "b": [
+    177,
+    511
+   ],
+   "through": [
+    181,
+    513
+   ],
+   "gap": 5.4,
+   "kind": "link",
+   "name": "Cascadia 4 - Cascadia 7",
+   "owners": [
+    "CSC",
+    "CSC"
+   ],
+   "landmass_px": [
+    3083,
+    23
+   ],
+   "through_touches_both": true,
+   "n": 16
+  },
+  {
+   "a": [
+    198,
+    560
+   ],
+   "b": [
+    199,
+    562
+   ],
+   "through": [
+    198,
+    561
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Cascadia 12 - Cascadia 7",
+   "owners": [
+    "CSC",
+    "CSC"
+   ],
+   "landmass_px": [
+    20,
+    26
+   ],
+   "through_touches_both": true,
+   "n": 17
+  },
+  {
+   "a": [
+    206,
+    563
+   ],
+   "b": [
+    203,
+    563
+   ],
+   "through": [
+    205,
+    563
+   ],
+   "gap": 3.0,
+   "kind": "link",
+   "name": "Cascadia 7 - Cascadia 7",
+   "owners": [
+    "CSC",
+    "CSC"
+   ],
+   "landmass_px": [
+    39,
+    26
+   ],
+   "through_touches_both": true,
+   "n": 18
+  },
+  {
+   "a": [
+    218,
+    561
+   ],
+   "b": [
+    216,
+    561
+   ],
+   "through": [
+    217,
+    561
+   ],
+   "gap": 2.0,
+   "kind": "link",
+   "name": "Cascadia 12 - Cascadia 7",
+   "owners": [
+    "CSC",
+    "CSC"
+   ],
+   "landmass_px": [
+    83261,
+    39
+   ],
+   "through_touches_both": true,
+   "n": 19
+  },
+  {
+   "a": [
+    222,
+    597
+   ],
+   "b": [
+    222,
+    602
+   ],
+   "through": [
+    222,
+    598
+   ],
+   "gap": 5.0,
+   "kind": "link",
+   "name": "Cascadia 12 - Cascadia 7",
+   "owners": [
+    "CSC",
+    "CSC"
+   ],
+   "landmass_px": [
+    83261,
+    45
+   ],
+   "through_touches_both": true,
+   "n": 20
+  },
+  {
+   "a": [
+    221,
+    607
+   ],
+   "b": [
+    225,
+    616
+   ],
+   "through": [
+    221,
+    608
+   ],
+   "gap": 9.8,
+   "kind": "link",
+   "name": "Cascadia 7 - Cascadia 18",
+   "owners": [
+    "CSC",
+    "CSC"
+   ],
+   "landmass_px": [
+    45,
+    1294
+   ],
+   "through_touches_both": true,
+   "n": 21
+  },
+  {
+   "a": [
+    280,
+    488
+   ],
+   "b": [
+    280,
+    490
+   ],
+   "through": [
+    280,
+    489
+   ],
+   "gap": 2.0,
+   "kind": "link",
+   "name": "Cascadia 3 - Cascadia 5",
+   "owners": [
+    "CSC",
+    "CSC"
+   ],
+   "landmass_px": [
+    3083,
+    29
+   ],
+   "through_touches_both": true,
+   "n": 22
+  },
+  {
+   "a": [
+    346,
+    484
+   ],
+   "b": [
+    346,
+    503
+   ],
+   "through": [
+    346,
+    485
+   ],
+   "gap": 19.0,
+   "kind": "link",
+   "name": "Cascadia 3 - Cascadia 6",
+   "owners": [
+    "CSC",
+    "CSC"
+   ],
+   "landmass_px": [
+    3083,
+    83261
+   ],
+   "through_touches_both": true,
+   "n": 23
+  },
+  {
+   "a": [
+    599,
+    567
+   ],
+   "b": [
+    598,
+    565
+   ],
+   "through": [
+    599,
+    566
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Greater Cardia - Greater Cardia",
+   "owners": [
+    "CRD",
+    "CRD"
+   ],
+   "landmass_px": [
+    507955,
+    34
+   ],
+   "through_touches_both": true,
+   "n": 24
+  },
+  {
+   "a": [
+    617,
+    553
+   ],
+   "b": [
+    617,
+    555
+   ],
+   "through": [
+    617,
+    554
+   ],
+   "gap": 2.0,
+   "kind": "link",
+   "name": "Greater Cardia - Greater Cardia",
+   "owners": [
+    "CRD",
+    "CRD"
+   ],
+   "landmass_px": [
+    38,
+    507955
+   ],
+   "through_touches_both": true,
+   "n": 25
+  },
+  {
+   "a": [
+    687,
+    584
+   ],
+   "b": [
+    689,
+    582
+   ],
+   "through": [
+    688,
+    583
+   ],
+   "gap": 2.8,
+   "kind": "link",
+   "name": "Greater Cardia - Greater Cardia",
+   "owners": [
+    "CRD",
+    "CRD"
+   ],
+   "landmass_px": [
+    507955,
+    20
+   ],
+   "through_touches_both": true,
+   "n": 26
+  },
+  {
+   "a": [
+    913,
+    634
+   ],
+   "b": [
+    904,
+    633
+   ],
+   "through": [
+    912,
+    634
+   ],
+   "gap": 9.1,
+   "kind": "link",
+   "name": "Kurikia 6 - Llainfair",
+   "owners": [
+    "KRK",
+    "CRD"
+   ],
+   "landmass_px": [
+    507955,
+    2216
+   ],
+   "through_touches_both": true,
+   "n": 27
+  },
+  {
+   "a": [
+    922,
+    565
+   ],
+   "b": [
+    916,
+    571
+   ],
+   "through": [
+    921,
+    566
+   ],
+   "gap": 8.5,
+   "kind": "link",
+   "name": "Sheet - Polkria",
+   "owners": [
+    "CRD",
+    "CRD"
+   ],
+   "landmass_px": [
+    547,
+    842
+   ],
+   "through_touches_both": true,
+   "n": 28
+  },
+  {
+   "a": [
+    923,
+    621
+   ],
+   "b": [
+    920,
+    612
+   ],
+   "through": [
+    923,
+    620
+   ],
+   "gap": 9.5,
+   "kind": "link",
+   "name": "Kurikia 6 - Polkria",
+   "owners": [
+    "KRK",
+    "CRD"
+   ],
+   "landmass_px": [
+    507955,
+    842
+   ],
+   "through_touches_both": true,
+   "n": 29
+  },
+  {
+   "a": [
+    925,
+    535
+   ],
+   "b": [
+    920,
+    540
+   ],
+   "through": [
+    924,
+    536
+   ],
+   "gap": 7.1,
+   "kind": "link",
+   "name": "Kurikia 2 - Sheet",
+   "owners": [
+    "KRK",
+    "CRD"
+   ],
+   "landmass_px": [
+    236,
+    547
+   ],
+   "through_touches_both": true,
+   "n": 30
+  },
+  {
+   "a": [
+    924,
+    564
+   ],
+   "b": [
+    931,
+    566
+   ],
+   "through": [
+    925,
+    564
+   ],
+   "gap": 7.3,
+   "kind": "link",
+   "name": "Sheet - Kurikia 4",
+   "owners": [
+    "CRD",
+    "KRK"
+   ],
+   "landmass_px": [
+    547,
+    525
+   ],
+   "through_touches_both": true,
+   "n": 31
+  },
+  {
+   "a": [
+    943,
+    514
+   ],
+   "b": [
+    935,
+    517
+   ],
+   "through": [
+    942,
+    514
+   ],
+   "gap": 8.5,
+   "kind": "link",
+   "name": "Kurikia 1 - Kurikia 2",
+   "owners": [
+    "KRK",
+    "KRK"
+   ],
+   "landmass_px": [
+    368,
+    236
+   ],
+   "through_touches_both": true,
+   "n": 32
+  },
+  {
+   "a": [
+    946,
+    589
+   ],
+   "b": [
+    946,
+    593
+   ],
+   "through": [
+    946,
+    590
+   ],
+   "gap": 4.0,
+   "kind": "link",
+   "name": "Kurikia 4 - Kurikia 4",
+   "owners": [
+    "KRK",
+    "KRK"
+   ],
+   "landmass_px": [
+    525,
+    69
+   ],
+   "through_touches_both": true,
+   "n": 33
+  },
+  {
+   "a": [
+    949,
+    551
+   ],
+   "b": [
+    944,
+    556
+   ],
+   "through": [
+    948,
+    552
+   ],
+   "gap": 7.1,
+   "kind": "link",
+   "name": "Kurikia 3 - Kurikia 4",
+   "owners": [
+    "KRK",
+    "KRK"
+   ],
+   "landmass_px": [
+    269,
+    525
+   ],
+   "through_touches_both": true,
+   "n": 34
+  },
+  {
+   "a": [
+    962,
+    498
+   ],
+   "b": [
+    959,
+    500
+   ],
+   "through": [
+    961,
+    498
+   ],
+   "gap": 3.6,
+   "kind": "link",
+   "name": "Belekria 43 - Kurikia 1",
+   "owners": [
+    "BLK",
+    "KRK"
+   ],
+   "landmass_px": [
+    17,
+    368
+   ],
+   "through_touches_both": true,
+   "n": 35
+  },
+  {
+   "a": [
+    964,
+    489
+   ],
+   "b": [
+    964,
+    493
+   ],
+   "through": [
+    964,
+    490
+   ],
+   "gap": 4.0,
+   "kind": "link",
+   "name": "Belekria 43 - Belekria 43",
+   "owners": [
+    "BLK",
+    "BLK"
+   ],
+   "landmass_px": [
+    2237,
+    17
+   ],
+   "through_touches_both": true,
+   "n": 36
+  },
+  {
+   "a": [
+    1033,
+    445
+   ],
+   "b": [
+    1034,
+    447
+   ],
+   "through": [
+    1033,
+    446
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Belekria 43 - Belekria 43",
+   "owners": [
+    "BLK",
+    "BLK"
+   ],
+   "landmass_px": [
+    30,
+    2237
+   ],
+   "through_touches_both": true,
+   "n": 37
+  },
+  {
+   "a": [
+    1052,
+    452
+   ],
+   "b": [
+    1055,
+    454
+   ],
+   "through": [
+    1053,
+    452
+   ],
+   "gap": 3.6,
+   "kind": "link",
+   "name": "Belekria 43 - Belekria 43",
+   "owners": [
+    "BLK",
+    "BLK"
+   ],
+   "landmass_px": [
+    2237,
+    412
+   ],
+   "through_touches_both": true,
+   "n": 38
+  },
+  {
+   "a": [
+    1071,
+    417
+   ],
+   "b": [
+    1083,
+    423
+   ],
+   "through": [
+    1072,
+    417
+   ],
+   "gap": 13.4,
+   "kind": "link",
+   "name": "Belekria 42 - Belekria 42",
+   "owners": [
+    "BLK",
+    "BLK"
+   ],
+   "landmass_px": [
+    35,
+    44
+   ],
+   "through_touches_both": true,
+   "n": 39
+  },
+  {
+   "a": [
+    1088,
+    426
+   ],
+   "b": [
+    1088,
+    446
+   ],
+   "through": [
+    1088,
+    427
+   ],
+   "gap": 20.0,
+   "kind": "link",
+   "name": "Belekria 42 - Belekria 43",
+   "owners": [
+    "BLK",
+    "BLK"
+   ],
+   "landmass_px": [
+    44,
+    412
+   ],
+   "through_touches_both": true,
+   "n": 40
+  },
+  {
+   "a": [
+    1096,
+    407
+   ],
+   "b": [
+    1086,
+    418
+   ],
+   "through": [
+    1095,
+    408
+   ],
+   "gap": 14.9,
+   "kind": "link",
+   "name": "Belekria 42 - Belekria 42",
+   "owners": [
+    "BLK",
+    "BLK"
+   ],
+   "landmass_px": [
+    56,
+    44
+   ],
+   "through_touches_both": true,
+   "n": 41
+  },
+  {
+   "a": [
+    1110,
+    405
+   ],
+   "b": [
+    1126,
+    406
+   ],
+   "through": [
+    1111,
+    405
+   ],
+   "gap": 16.0,
+   "kind": "link",
+   "name": "Belekria 42 - Belekria 42",
+   "owners": [
+    "BLK",
+    "BLK"
+   ],
+   "landmass_px": [
+    56,
+    141
+   ],
+   "through_touches_both": true,
+   "n": 42
+  },
+  {
+   "a": [
+    1149,
+    411
+   ],
+   "b": [
+    1148,
+    413
+   ],
+   "through": [
+    1149,
+    412
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Belekria 42 - Belekria 42",
+   "owners": [
+    "BLK",
+    "BLK"
+   ],
+   "landmass_px": [
+    141,
+    21
+   ],
+   "through_touches_both": true,
+   "n": 43
+  },
+  {
+   "a": [
+    1168,
+    439
+   ],
+   "b": [
+    1165,
+    440
+   ],
+   "through": [
+    1167,
+    439
+   ],
+   "gap": 3.2,
+   "kind": "link",
+   "name": "Belekria 42 - Belekria 42",
+   "owners": [
+    "BLK",
+    "BLK"
+   ],
+   "landmass_px": [
+    104,
+    243
+   ],
+   "through_touches_both": true,
+   "n": 44
+  },
+  {
+   "a": [
+    1244,
+    433
+   ],
+   "b": [
+    1246,
+    434
+   ],
+   "through": [
+    1245,
+    433
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Belekria 42 - Belekria 42",
+   "owners": [
+    "BLK",
+    "BLK"
+   ],
+   "landmass_px": [
+    79,
+    25
+   ],
+   "through_touches_both": true,
+   "n": 45
+  },
+  {
+   "a": [
+    1971,
+    595
+   ],
+   "b": [
+    1971,
+    599
+   ],
+   "through": [
+    1971,
+    596
+   ],
+   "gap": 4.0,
+   "kind": "link",
+   "name": "Vilna 2 - Vilna 2",
+   "owners": [
+    "VIL",
+    "VIL"
+   ],
+   "landmass_px": [
+    132,
+    141
+   ],
+   "through_touches_both": true,
+   "n": 46
+  },
+  {
+   "a": [
+    1979,
+    591
+   ],
+   "b": [
+    1983,
+    592
+   ],
+   "through": [
+    1980,
+    591
+   ],
+   "gap": 4.1,
+   "kind": "link",
+   "name": "Vilna 2 - Vilna 2",
+   "owners": [
+    "VIL",
+    "VIL"
+   ],
+   "landmass_px": [
+    132,
+    246
+   ],
+   "through_touches_both": true,
+   "n": 47
+  },
+  {
+   "a": [
+    1990,
+    601
+   ],
+   "b": [
+    1992,
+    603
+   ],
+   "through": [
+    1991,
+    602
+   ],
+   "gap": 2.8,
+   "kind": "link",
+   "name": "Vilna 2 - Vilna 2",
+   "owners": [
+    "VIL",
+    "VIL"
+   ],
+   "landmass_px": [
+    246,
+    55
+   ],
+   "through_touches_both": true,
+   "n": 48
+  },
+  {
+   "a": [
+    2014,
+    596
+   ],
+   "b": [
+    2001,
+    592
+   ],
+   "through": [
+    2013,
+    596
+   ],
+   "gap": 13.6,
+   "kind": "link",
+   "name": "Vilna 1 - Vilna 2",
+   "owners": [
+    "VIL",
+    "VIL"
+   ],
+   "landmass_px": [
+    1469,
+    246
+   ],
+   "through_touches_both": true,
+   "n": 49
+  },
+  {
+   "a": [
+    2032,
+    566
+   ],
+   "b": [
+    2037,
+    570
+   ],
+   "through": [
+    2033,
+    567
+   ],
+   "gap": 6.4,
+   "kind": "link",
+   "name": "Gorbastan 11 - Vilna 1",
+   "owners": [
+    "GOB",
+    "VIL"
+   ],
+   "landmass_px": [
+    566361,
+    1469
+   ],
+   "through_touches_both": true,
+   "n": 50
+  },
+  {
+   "a": [
+    2315,
+    379
+   ],
+   "b": [
+    2314,
+    381
+   ],
+   "through": [
+    2315,
+    380
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Belka 27 - Belka 31",
+   "owners": [
+    "BKA",
+    "BKA"
+   ],
+   "landmass_px": [
+    567,
+    265
+   ],
+   "through_touches_both": true,
+   "n": 51
+  },
+  {
+   "a": [
+    2317,
+    336
+   ],
+   "b": [
+    2314,
+    352
+   ],
+   "through": [
+    2317,
+    337
+   ],
+   "gap": 16.3,
+   "kind": "link",
+   "name": "Belka 20 - Belka 27",
+   "owners": [
+    "BKA",
+    "BKA"
+   ],
+   "landmass_px": [
+    566361,
+    567
+   ],
+   "through_touches_both": true,
+   "n": 52
+  },
+  {
+   "a": [
+    2363,
+    434
+   ],
+   "b": [
+    2365,
+    438
+   ],
+   "through": [
+    2363,
+    435
+   ],
+   "gap": 4.5,
+   "kind": "link",
+   "name": "Belka 33 - Belka 33",
+   "owners": [
+    "BKA",
+    "BKA"
+   ],
+   "landmass_px": [
+    32,
+    873
+   ],
+   "through_touches_both": true,
+   "n": 53
+  },
+  {
+   "a": [
+    2406,
+    373
+   ],
+   "b": [
+    2390,
+    385
+   ],
+   "through": [
+    2405,
+    374
+   ],
+   "gap": 20.0,
+   "kind": "link",
+   "name": "Belka 26 - Belka 23",
+   "owners": [
+    "BKA",
+    "BKA"
+   ],
+   "landmass_px": [
+    566361,
+    69
+   ],
+   "through_touches_both": true,
+   "n": 54
+  },
+  {
+   "a": [
+    2408,
+    625
+   ],
+   "b": [
+    2411,
+    629
+   ],
+   "through": [
+    2409,
+    626
+   ],
+   "gap": 5.0,
+   "kind": "link",
+   "name": "Krionik 26 - Krionik 26",
+   "owners": [
+    "KRI",
+    "KRI"
+   ],
+   "landmass_px": [
+    566361,
+    58
+   ],
+   "through_touches_both": true,
+   "n": 55
+  },
+  {
+   "a": [
+    2423,
+    616
+   ],
+   "b": [
+    2424,
+    620
+   ],
+   "through": [
+    2423,
+    617
+   ],
+   "gap": 4.1,
+   "kind": "link",
+   "name": "Krionik 26 - Krionik 26",
+   "owners": [
+    "KRI",
+    "KRI"
+   ],
+   "landmass_px": [
+    566361,
+    22
+   ],
+   "through_touches_both": true,
+   "n": 56
+  },
+  {
+   "a": [
+    2927,
+    580
+   ],
+   "b": [
+    2923,
+    590
+   ],
+   "through": [
+    2927,
+    581
+   ],
+   "gap": 10.8,
+   "kind": "link",
+   "name": "Volstokn 56 - Volstokn 56",
+   "owners": [
+    "VSK",
+    "VSK"
+   ],
+   "landmass_px": [
+    566361,
+    25
+   ],
+   "through_touches_both": true,
+   "n": 57
+  },
+  {
+   "a": [
+    2991,
+    623
+   ],
+   "b": [
+    2989,
+    627
+   ],
+   "through": [
+    2991,
+    624
+   ],
+   "gap": 4.5,
+   "kind": "link",
+   "name": "Volstokn 61 - Volstokn 62",
+   "owners": [
+    "VSK",
+    "VSK"
+   ],
+   "landmass_px": [
+    566361,
+    17
+   ],
+   "through_touches_both": true,
+   "n": 58
+  },
+  {
+   "a": [
+    3181,
+    549
+   ],
+   "b": [
+    3192,
+    551
+   ],
+   "through": [
+    3182,
+    549
+   ],
+   "gap": 11.2,
+   "kind": "link",
+   "name": "Volstokn 54 - Volstokn 54",
+   "owners": [
+    "VSK",
+    "VSK"
+   ],
+   "landmass_px": [
+    1833,
+    43
+   ],
+   "through_touches_both": true,
+   "n": 59
+  },
+  {
+   "a": [
+    3185,
+    578
+   ],
+   "b": [
+    3200,
+    583
+   ],
+   "through": [
+    3186,
+    578
+   ],
+   "gap": 15.8,
+   "kind": "link",
+   "name": "Volstokn 54 - Volstokn 60",
+   "owners": [
+    "VSK",
+    "VSK"
+   ],
+   "landmass_px": [
+    1833,
+    393
+   ],
+   "through_touches_both": true,
+   "n": 60
+  },
+  {
+   "a": [
+    133,
+    705
+   ],
+   "b": [
+    129,
+    709
+   ],
+   "through": [
+    132,
+    706
+   ],
+   "gap": 5.7,
+   "kind": "link",
+   "name": "Cascadia 24 - Cascadia 21",
+   "owners": [
+    "CSC",
+    "CSC"
+   ],
+   "landmass_px": [
+    917,
+    98
+   ],
+   "through_touches_both": true,
+   "n": 61
+  },
+  {
+   "a": [
+    137,
+    639
+   ],
+   "b": [
+    143,
+    645
+   ],
+   "through": [
+    138,
+    640
+   ],
+   "gap": 8.5,
+   "kind": "link",
+   "name": "Cascadia 19 - Cascadia 21",
+   "owners": [
+    "CSC",
+    "CSC"
+   ],
+   "landmass_px": [
+    645,
+    565
+   ],
+   "through_touches_both": true,
+   "n": 62
+  },
+  {
+   "a": [
+    151,
+    662
+   ],
+   "b": [
+    155,
+    670
+   ],
+   "through": [
+    151,
+    663
+   ],
+   "gap": 8.9,
+   "kind": "link",
+   "name": "Cascadia 21 - Cascadia 24",
+   "owners": [
+    "CSC",
+    "CSC"
+   ],
+   "landmass_px": [
+    565,
+    917
+   ],
+   "through_touches_both": true,
+   "n": 63
+  },
+  {
+   "a": [
+    228,
+    655
+   ],
+   "b": [
+    228,
+    660
+   ],
+   "through": [
+    228,
+    656
+   ],
+   "gap": 5.0,
+   "kind": "link",
+   "name": "Cascadia 18 - Cascadia 7",
+   "owners": [
+    "CSC",
+    "CSC"
+   ],
+   "landmass_px": [
+    1294,
+    30
+   ],
+   "through_touches_both": true,
+   "n": 64
+  },
+  {
+   "a": [
+    252,
+    880
+   ],
+   "b": [
+    252,
+    883
+   ],
+   "through": [
+    252,
+    881
+   ],
+   "gap": 3.0,
+   "kind": "link",
+   "name": "Cascadia 41 - Cascadia 41",
+   "owners": [
+    "CSC",
+    "CSC"
+   ],
+   "landmass_px": [
+    83261,
+    18
+   ],
+   "through_touches_both": true,
+   "n": 65
+  },
+  {
+   "a": [
+    313,
+    788
+   ],
+   "b": [
+    312,
+    790
+   ],
+   "through": [
+    313,
+    789
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Cardonia 28 - Romanoddle 2",
+   "owners": [
+    "CRD",
+    "RMD"
+   ],
+   "landmass_px": [
+    581,
+    10113
+   ],
+   "through_touches_both": true,
+   "n": 66
+  },
+  {
+   "a": [
+    392,
+    866
+   ],
+   "b": [
+    387,
+    864
+   ],
+   "through": [
+    391,
+    866
+   ],
+   "gap": 5.4,
+   "kind": "link",
+   "name": "Romanoddle 19 - Romanoddle 14",
+   "owners": [
+    "RMD",
+    "RMD"
+   ],
+   "landmass_px": [
+    507955,
+    10113
+   ],
+   "through_touches_both": true,
+   "n": 67
+  },
+  {
+   "a": [
+    430,
+    802
+   ],
+   "b": [
+    434,
+    810
+   ],
+   "through": [
+    430,
+    803
+   ],
+   "gap": 8.9,
+   "kind": "link",
+   "name": "Cascadia 39 - Romanoddle 7",
+   "owners": [
+    "CSC",
+    "RMD"
+   ],
+   "landmass_px": [
+    657,
+    41
+   ],
+   "through_touches_both": true,
+   "n": 68
+  },
+  {
+   "a": [
+    441,
+    809
+   ],
+   "b": [
+    437,
+    811
+   ],
+   "through": [
+    440,
+    809
+   ],
+   "gap": 4.5,
+   "kind": "link",
+   "name": "Romanoddle 7 - Romanoddle 7",
+   "owners": [
+    "RMD",
+    "RMD"
+   ],
+   "landmass_px": [
+    52,
+    41
+   ],
+   "through_touches_both": true,
+   "n": 69
+  },
+  {
+   "a": [
+    451,
+    807
+   ],
+   "b": [
+    455,
+    814
+   ],
+   "through": [
+    452,
+    808
+   ],
+   "gap": 8.1,
+   "kind": "link",
+   "name": "Romanoddle 7 - Romanoddle 7",
+   "owners": [
+    "RMD",
+    "RMD"
+   ],
+   "landmass_px": [
+    52,
+    2102
+   ],
+   "through_touches_both": true,
+   "n": 70
+  },
+  {
+   "a": [
+    457,
+    867
+   ],
+   "b": [
+    457,
+    857
+   ],
+   "through": [
+    457,
+    866
+   ],
+   "gap": 10.0,
+   "kind": "link",
+   "name": "Romanoddle 24 - Romanoddle 13",
+   "owners": [
+    "RMD",
+    "RMD"
+   ],
+   "landmass_px": [
+    507955,
+    2102
+   ],
+   "through_touches_both": true,
+   "n": 71
+  },
+  {
+   "a": [
+    472,
+    763
+   ],
+   "b": [
+    472,
+    769
+   ],
+   "through": [
+    472,
+    764
+   ],
+   "gap": 6.0,
+   "kind": "link",
+   "name": "Cascadia 34 - Cascadia 37",
+   "owners": [
+    "CSC",
+    "CSC"
+   ],
+   "landmass_px": [
+    83261,
+    1449
+   ],
+   "through_touches_both": true,
+   "n": 72
+  },
+  {
+   "a": [
+    501,
+    822
+   ],
+   "b": [
+    509,
+    822
+   ],
+   "through": [
+    502,
+    822
+   ],
+   "gap": 8.0,
+   "kind": "link",
+   "name": "Romanoddle 9 - Romanoddle 9",
+   "owners": [
+    "RMD",
+    "RMD"
+   ],
+   "landmass_px": [
+    2102,
+    41
+   ],
+   "through_touches_both": true,
+   "n": 73
+  },
+  {
+   "a": [
+    523,
+    755
+   ],
+   "b": [
+    520,
+    762
+   ],
+   "through": [
+    523,
+    756
+   ],
+   "gap": 7.6,
+   "kind": "link",
+   "name": "Cascadia 35 - Cascadia 37",
+   "owners": [
+    "CSC",
+    "CSC"
+   ],
+   "landmass_px": [
+    59,
+    1449
+   ],
+   "through_touches_both": true,
+   "n": 74
+  },
+  {
+   "a": [
+    534,
+    717
+   ],
+   "b": [
+    534,
+    721
+   ],
+   "through": [
+    534,
+    718
+   ],
+   "gap": 4.0,
+   "kind": "link",
+   "name": "Wersh 17 - Placeholdaire 1",
+   "owners": [
+    "WRS",
+    "LNT"
+   ],
+   "landmass_px": [
+    83261,
+    902
+   ],
+   "through_touches_both": true,
+   "n": 75
+  },
+  {
+   "a": [
+    552,
+    768
+   ],
+   "b": [
+    550,
+    774
+   ],
+   "through": [
+    552,
+    769
+   ],
+   "gap": 6.3,
+   "kind": "link",
+   "name": "Placeholdaire 2 - Placeholdaire 3",
+   "owners": [
+    "LNT",
+    "LNT"
+   ],
+   "landmass_px": [
+    400,
+    1543
+   ],
+   "through_touches_both": true,
+   "n": 76
+  },
+  {
+   "a": [
+    565,
+    836
+   ],
+   "b": [
+    565,
+    832
+   ],
+   "through": [
+    565,
+    835
+   ],
+   "gap": 4.0,
+   "kind": "link",
+   "name": "Placeholdaire 5 - Placeholdaire 3",
+   "owners": [
+    "LNT",
+    "LNT"
+   ],
+   "landmass_px": [
+    507955,
+    1543
+   ],
+   "through_touches_both": true,
+   "n": 77
+  },
+  {
+   "a": [
+    566,
+    752
+   ],
+   "b": [
+    566,
+    754
+   ],
+   "through": [
+    566,
+    753
+   ],
+   "gap": 2.0,
+   "kind": "link",
+   "name": "Placeholdaire 1 - Placeholdaire 2",
+   "owners": [
+    "LNT",
+    "LNT"
+   ],
+   "landmass_px": [
+    902,
+    400
+   ],
+   "through_touches_both": true,
+   "n": 78
+  },
+  {
+   "a": [
+    596,
+    736
+   ],
+   "b": [
+    595,
+    734
+   ],
+   "through": [
+    596,
+    735
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "South Whitemore - Waypath Island",
+   "owners": [
+    "CRD",
+    "CRD"
+   ],
+   "landmass_px": [
+    507955,
+    882
+   ],
+   "through_touches_both": true,
+   "n": 79
+  },
+  {
+   "a": [
+    624,
+    643
+   ],
+   "b": [
+    618,
+    638
+   ],
+   "through": [
+    623,
+    642
+   ],
+   "gap": 7.8,
+   "kind": "link",
+   "name": "North Whitemore - Lesser Cardia",
+   "owners": [
+    "CRD",
+    "CRD"
+   ],
+   "landmass_px": [
+    507955,
+    661
+   ],
+   "through_touches_both": true,
+   "n": 80
+  },
+  {
+   "a": [
+    751,
+    937
+   ],
+   "b": [
+    746,
+    943
+   ],
+   "through": [
+    750,
+    938
+   ],
+   "gap": 7.8,
+   "kind": "link",
+   "name": "Estande 2 - Estande 4",
+   "owners": [
+    "ESD",
+    "ESD"
+   ],
+   "landmass_px": [
+    323,
+    2455
+   ],
+   "through_touches_both": true,
+   "n": 81
+  },
+  {
+   "a": [
+    771,
+    928
+   ],
+   "b": [
+    777,
+    925
+   ],
+   "through": [
+    772,
+    928
+   ],
+   "gap": 6.7,
+   "kind": "link",
+   "name": "Estande 2 - Estande 3",
+   "owners": [
+    "ESD",
+    "ESD"
+   ],
+   "landmass_px": [
+    323,
+    16
+   ],
+   "through_touches_both": true,
+   "n": 82
+  },
+  {
+   "a": [
+    782,
+    925
+   ],
+   "b": [
+    786,
+    929
+   ],
+   "through": [
+    783,
+    926
+   ],
+   "gap": 5.7,
+   "kind": "link",
+   "name": "Estande 3 - Estande 3",
+   "owners": [
+    "ESD",
+    "ESD"
+   ],
+   "landmass_px": [
+    16,
+    248
+   ],
+   "through_touches_both": true,
+   "n": 83
+  },
+  {
+   "a": [
+    800,
+    911
+   ],
+   "b": [
+    797,
+    927
+   ],
+   "through": [
+    800,
+    912
+   ],
+   "gap": 16.3,
+   "kind": "link",
+   "name": "Brillagne - Estande 3",
+   "owners": [
+    "ROU",
+    "ESD"
+   ],
+   "landmass_px": [
+    311,
+    248
+   ],
+   "through_touches_both": true,
+   "n": 84
+  },
+  {
+   "a": [
+    815,
+    945
+   ],
+   "b": [
+    807,
+    938
+   ],
+   "through": [
+    814,
+    944
+   ],
+   "gap": 10.6,
+   "kind": "link",
+   "name": "Fraxhemark 74 - Estande 3",
+   "owners": [
+    "FRX",
+    "ESD"
+   ],
+   "landmass_px": [
+    507955,
+    248
+   ],
+   "through_touches_both": true,
+   "n": 85
+  },
+  {
+   "a": [
+    1942,
+    794
+   ],
+   "b": [
+    1936,
+    797
+   ],
+   "through": [
+    1941,
+    794
+   ],
+   "gap": 6.7,
+   "kind": "link",
+   "name": "Krionik 88 - Krionik 88",
+   "owners": [
+    "KRI",
+    "KRI"
+   ],
+   "landmass_px": [
+    566361,
+    28
+   ],
+   "through_touches_both": true,
+   "n": 86
+  },
+  {
+   "a": [
+    2284,
+    890
+   ],
+   "b": [
+    2293,
+    887
+   ],
+   "through": [
+    2285,
+    890
+   ],
+   "gap": 9.5,
+   "kind": "link",
+   "name": "Krionik 131 - Krionik 128",
+   "owners": [
+    "KRI",
+    "KRI"
+   ],
+   "landmass_px": [
+    566361,
+    2345
+   ],
+   "through_touches_both": true,
+   "n": 87
+  },
+  {
+   "a": [
+    2314,
+    721
+   ],
+   "b": [
+    2316,
+    717
+   ],
+   "through": [
+    2314,
+    720
+   ],
+   "gap": 4.5,
+   "kind": "link",
+   "name": "Krionik 71 - Krionik 61",
+   "owners": [
+    "KRI",
+    "KRI"
+   ],
+   "landmass_px": [
+    566361,
+    474
+   ],
+   "through_touches_both": true,
+   "n": 88
+  },
+  {
+   "a": [
+    2315,
+    953
+   ],
+   "b": [
+    2316,
+    957
+   ],
+   "through": [
+    2315,
+    954
+   ],
+   "gap": 4.1,
+   "kind": "link",
+   "name": "Krionik 136 - Krionik 138",
+   "owners": [
+    "KRI",
+    "KRI"
+   ],
+   "landmass_px": [
+    516,
+    445
+   ],
+   "through_touches_both": true,
+   "n": 89
+  },
+  {
+   "a": [
+    2331,
+    955
+   ],
+   "b": [
+    2326,
+    961
+   ],
+   "through": [
+    2330,
+    956
+   ],
+   "gap": 7.8,
+   "kind": "link",
+   "name": "Krionik 137 - Krionik 138",
+   "owners": [
+    "KRI",
+    "KRI"
+   ],
+   "landmass_px": [
+    651,
+    445
+   ],
+   "through_touches_both": true,
+   "n": 90
+  },
+  {
+   "a": [
+    2338,
+    931
+   ],
+   "b": [
+    2339,
+    933
+   ],
+   "through": [
+    2338,
+    932
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Krionik 133 - Krionik 137",
+   "owners": [
+    "KRI",
+    "KRI"
+   ],
+   "landmass_px": [
+    2345,
+    651
+   ],
+   "through_touches_both": true,
+   "n": 91
+  },
+  {
+   "a": [
+    2340,
+    828
+   ],
+   "b": [
+    2343,
+    832
+   ],
+   "through": [
+    2341,
+    829
+   ],
+   "gap": 5.0,
+   "kind": "link",
+   "name": "Krionik 98 - Krionik 117",
+   "owners": [
+    "KRI",
+    "KRI"
+   ],
+   "landmass_px": [
+    566361,
+    1303
+   ],
+   "through_touches_both": true,
+   "n": 92
+  },
+  {
+   "a": [
+    2344,
+    710
+   ],
+   "b": [
+    2346,
+    712
+   ],
+   "through": [
+    2345,
+    711
+   ],
+   "gap": 2.8,
+   "kind": "link",
+   "name": "Krionik 61 - Krionik 68",
+   "owners": [
+    "KRI",
+    "KRI"
+   ],
+   "landmass_px": [
+    474,
+    913
+   ],
+   "through_touches_both": true,
+   "n": 93
+  },
+  {
+   "a": [
+    2347,
+    667
+   ],
+   "b": [
+    2350,
+    668
+   ],
+   "through": [
+    2348,
+    667
+   ],
+   "gap": 3.2,
+   "kind": "link",
+   "name": "Krionik 44 - Krionik 44",
+   "owners": [
+    "KRI",
+    "KRI"
+   ],
+   "landmass_px": [
+    566361,
+    41
+   ],
+   "through_touches_both": true,
+   "n": 94
+  },
+  {
+   "a": [
+    2366,
+    868
+   ],
+   "b": [
+    2368,
+    874
+   ],
+   "through": [
+    2366,
+    869
+   ],
+   "gap": 6.3,
+   "kind": "link",
+   "name": "Krionik 117 - Krionik 129",
+   "owners": [
+    "KRI",
+    "KRI"
+   ],
+   "landmass_px": [
+    1303,
+    3848
+   ],
+   "through_touches_both": true,
+   "n": 95
+  },
+  {
+   "a": [
+    2407,
+    899
+   ],
+   "b": [
+    2405,
+    900
+   ],
+   "through": [
+    2406,
+    899
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Krionik 126 - Krionik 129",
+   "owners": [
+    "KRI",
+    "KRI"
+   ],
+   "landmass_px": [
+    46582,
+    3848
+   ],
+   "through_touches_both": true,
+   "n": 96
+  },
+  {
+   "a": [
+    2404,
+    798
+   ],
+   "b": [
+    2410,
+    798
+   ],
+   "through": [
+    2405,
+    798
+   ],
+   "gap": 6.0,
+   "kind": "link",
+   "name": "Krionik 96 - Krionik 102",
+   "owners": [
+    "KRI",
+    "KRI"
+   ],
+   "landmass_px": [
+    3459,
+    246
+   ],
+   "through_touches_both": true,
+   "n": 97
+  },
+  {
+   "a": [
+    2410,
+    750
+   ],
+   "b": [
+    2414,
+    749
+   ],
+   "through": [
+    2411,
+    750
+   ],
+   "gap": 4.1,
+   "kind": "link",
+   "name": "Krionik 74 - Krionik 82",
+   "owners": [
+    "KRI",
+    "KRI"
+   ],
+   "landmass_px": [
+    3459,
+    333
+   ],
+   "through_touches_both": true,
+   "n": 98
+  },
+  {
+   "a": [
+    2439,
+    761
+   ],
+   "b": [
+    2435,
+    758
+   ],
+   "through": [
+    2438,
+    760
+   ],
+   "gap": 5.0,
+   "kind": "link",
+   "name": "Krionik 86 - Krionik 82",
+   "owners": [
+    "KRI",
+    "KRI"
+   ],
+   "landmass_px": [
+    46582,
+    333
+   ],
+   "through_touches_both": true,
+   "n": 99
+  },
+  {
+   "a": [
+    2589,
+    728
+   ],
+   "b": [
+    2590,
+    730
+   ],
+   "through": [
+    2589,
+    729
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Krionik 62 - Krionik 62",
+   "owners": [
+    "KRI",
+    "KRI"
+   ],
+   "landmass_px": [
+    566361,
+    35
+   ],
+   "through_touches_both": true,
+   "n": 100
+  },
+  {
+   "a": [
+    2625,
+    715
+   ],
+   "b": [
+    2630,
+    721
+   ],
+   "through": [
+    2626,
+    716
+   ],
+   "gap": 7.8,
+   "kind": "link",
+   "name": "Krionik 62 - Krionik 67",
+   "owners": [
+    "KRI",
+    "KRI"
+   ],
+   "landmass_px": [
+    566361,
+    2905
+   ],
+   "through_touches_both": true,
+   "n": 101
+  },
+  {
+   "a": [
+    2660,
+    795
+   ],
+   "b": [
+    2671,
+    795
+   ],
+   "through": [
+    2661,
+    795
+   ],
+   "gap": 11.0,
+   "kind": "link",
+   "name": "Krionik 79 - Krionik 103",
+   "owners": [
+    "KRI",
+    "KRI"
+   ],
+   "landmass_px": [
+    2905,
+    354
+   ],
+   "through_touches_both": true,
+   "n": 102
+  },
+  {
+   "a": [
+    2682,
+    813
+   ],
+   "b": [
+    2687,
+    818
+   ],
+   "through": [
+    2683,
+    814
+   ],
+   "gap": 7.1,
+   "kind": "link",
+   "name": "Krionik 103 - Krionik 116",
+   "owners": [
+    "KRI",
+    "KRI"
+   ],
+   "landmass_px": [
+    354,
+    250
+   ],
+   "through_touches_both": true,
+   "n": 103
+  },
+  {
+   "a": [
+    2796,
+    811
+   ],
+   "b": [
+    2782,
+    802
+   ],
+   "through": [
+    2795,
+    810
+   ],
+   "gap": 16.6,
+   "kind": "link",
+   "name": "Skillia 3 - Skillia 2",
+   "owners": [
+    "SKL",
+    "SKL"
+   ],
+   "landmass_px": [
+    4394,
+    325
+   ],
+   "through_touches_both": true,
+   "n": 104
+  },
+  {
+   "a": [
+    4063,
+    957
+   ],
+   "b": [
+    4061,
+    954
+   ],
+   "through": [
+    4062,
+    956
+   ],
+   "gap": 3.6,
+   "kind": "link",
+   "name": "Sarkis 90 - Sarkis 90",
+   "owners": [
+    "SRK",
+    "SRK"
+   ],
+   "landmass_px": [
+    783842,
+    25
+   ],
+   "through_touches_both": true,
+   "n": 105
+  },
+  {
+   "a": [
+    4633,
+    851
+   ],
+   "b": [
+    4632,
+    853
+   ],
+   "through": [
+    4633,
+    852
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Sarkis 39 - Sarkis 49",
+   "owners": [
+    "SRK",
+    "SRK"
+   ],
+   "landmass_px": [
+    783842,
+    26
+   ],
+   "through_touches_both": true,
+   "n": 106
+  },
+  {
+   "a": [
+    282,
+    1111
+   ],
+   "b": [
+    279,
+    1111
+   ],
+   "through": [
+    281,
+    1111
+   ],
+   "gap": 3.0,
+   "kind": "link",
+   "name": "Romanoddle 90 - Romanoddle 91",
+   "owners": [
+    "RMD",
+    "RMD"
+   ],
+   "landmass_px": [
+    507955,
+    94
+   ],
+   "through_touches_both": true,
+   "n": 107
+  },
+  {
+   "a": [
+    286,
+    1116
+   ],
+   "b": [
+    285,
+    1118
+   ],
+   "through": [
+    286,
+    1117
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Romanoddle 90 - Romanoddle 92",
+   "owners": [
+    "RMD",
+    "RMD"
+   ],
+   "landmass_px": [
+    507955,
+    35
+   ],
+   "through_touches_both": true,
+   "n": 108
+  },
+  {
+   "a": [
+    323,
+    1185
+   ],
+   "b": [
+    323,
+    1193
+   ],
+   "through": [
+    323,
+    1186
+   ],
+   "gap": 8.0,
+   "kind": "link",
+   "name": "Vultuca 19 - Vultuca 19",
+   "owners": [
+    "PLH",
+    "PLH"
+   ],
+   "landmass_px": [
+    39,
+    97
+   ],
+   "through_touches_both": true,
+   "n": 109
+  },
+  {
+   "a": [
+    336,
+    1172
+   ],
+   "b": [
+    325,
+    1180
+   ],
+   "through": [
+    335,
+    1173
+   ],
+   "gap": 13.6,
+   "kind": "link",
+   "name": "Vultuca 19 - Vultuca 19",
+   "owners": [
+    "PLH",
+    "PLH"
+   ],
+   "landmass_px": [
+    507955,
+    39
+   ],
+   "through_touches_both": true,
+   "n": 110
+  },
+  {
+   "a": [
+    349,
+    1113
+   ],
+   "b": [
+    349,
+    1111
+   ],
+   "through": [
+    349,
+    1112
+   ],
+   "gap": 2.0,
+   "kind": "link",
+   "name": "Vultuca 6 - Vultuca 4",
+   "owners": [
+    "PLH",
+    "PLH"
+   ],
+   "landmass_px": [
+    507955,
+    654
+   ],
+   "through_touches_both": true,
+   "n": 111
+  },
+  {
+   "a": [
+    362,
+    1194
+   ],
+   "b": [
+    352,
+    1206
+   ],
+   "through": [
+    361,
+    1195
+   ],
+   "gap": 15.6,
+   "kind": "link",
+   "name": "Vultuca 25 - Vultuca 25",
+   "owners": [
+    "PLH",
+    "PLH"
+   ],
+   "landmass_px": [
+    507955,
+    18
+   ],
+   "through_touches_both": true,
+   "n": 112
+  },
+  {
+   "a": [
+    371,
+    1069
+   ],
+   "b": [
+    367,
+    1071
+   ],
+   "through": [
+    370,
+    1069
+   ],
+   "gap": 4.5,
+   "kind": "link",
+   "name": "Vultuca 1 - Vultuca 2",
+   "owners": [
+    "PLH",
+    "PLH"
+   ],
+   "landmass_px": [
+    360,
+    440
+   ],
+   "through_touches_both": true,
+   "n": 113
+  },
+  {
+   "a": [
+    385,
+    1099
+   ],
+   "b": [
+    383,
+    1098
+   ],
+   "through": [
+    384,
+    1099
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Merlgould 1 - Vultuca 3",
+   "owners": [
+    "MGD",
+    "PLH"
+   ],
+   "landmass_px": [
+    507955,
+    247
+   ],
+   "through_touches_both": true,
+   "n": 114
+  },
+  {
+   "a": [
+    387,
+    1081
+   ],
+   "b": [
+    388,
+    1083
+   ],
+   "through": [
+    387,
+    1082
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Vultuca 1 - Vultuca 3",
+   "owners": [
+    "PLH",
+    "PLH"
+   ],
+   "landmass_px": [
+    360,
+    247
+   ],
+   "through_touches_both": true,
+   "n": 115
+  },
+  {
+   "a": [
+    540,
+    1212
+   ],
+   "b": [
+    541,
+    1216
+   ],
+   "through": [
+    540,
+    1213
+   ],
+   "gap": 4.1,
+   "kind": "link",
+   "name": "Estande 59 - Estande 62",
+   "owners": [
+    "ESD",
+    "ESD"
+   ],
+   "landmass_px": [
+    507955,
+    258
+   ],
+   "through_touches_both": true,
+   "n": 116
+  },
+  {
+   "a": [
+    545,
+    1228
+   ],
+   "b": [
+    549,
+    1231
+   ],
+   "through": [
+    546,
+    1229
+   ],
+   "gap": 5.0,
+   "kind": "link",
+   "name": "Estande 62 - Anglost 3",
+   "owners": [
+    "ESD",
+    "AGL"
+   ],
+   "landmass_px": [
+    258,
+    10926
+   ],
+   "through_touches_both": true,
+   "n": 117
+  },
+  {
+   "a": [
+    572,
+    1199
+   ],
+   "b": [
+    570,
+    1204
+   ],
+   "through": [
+    572,
+    1200
+   ],
+   "gap": 5.4,
+   "kind": "link",
+   "name": "Estande 52 - Estande 61",
+   "owners": [
+    "ESD",
+    "ESD"
+   ],
+   "landmass_px": [
+    507955,
+    371
+   ],
+   "through_touches_both": true,
+   "n": 118
+  },
+  {
+   "a": [
+    602,
+    1222
+   ],
+   "b": [
+    598,
+    1225
+   ],
+   "through": [
+    601,
+    1223
+   ],
+   "gap": 5.0,
+   "kind": "link",
+   "name": "Estande 60 - Estande 60",
+   "owners": [
+    "ESD",
+    "ESD"
+   ],
+   "landmass_px": [
+    507955,
+    16
+   ],
+   "through_touches_both": true,
+   "n": 119
+  },
+  {
+   "a": [
+    604,
+    1241
+   ],
+   "b": [
+    602,
+    1242
+   ],
+   "through": [
+    603,
+    1241
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Estande 63 - Estande 63",
+   "owners": [
+    "ESD",
+    "ESD"
+   ],
+   "landmass_px": [
+    507955,
+    456
+   ],
+   "through_touches_both": true,
+   "n": 120
+  },
+  {
+   "a": [
+    608,
+    1260
+   ],
+   "b": [
+    604,
+    1261
+   ],
+   "through": [
+    607,
+    1260
+   ],
+   "gap": 4.1,
+   "kind": "link",
+   "name": "Sicilianzo 1 - Estande 63",
+   "owners": [
+    "SCZ",
+    "ESD"
+   ],
+   "landmass_px": [
+    507955,
+    22
+   ],
+   "through_touches_both": true,
+   "n": 121
+  },
+  {
+   "a": [
+    614,
+    1277
+   ],
+   "b": [
+    610,
+    1281
+   ],
+   "through": [
+    613,
+    1278
+   ],
+   "gap": 5.7,
+   "kind": "link",
+   "name": "Sicilianzo 1 - Anglost 12",
+   "owners": [
+    "SCZ",
+    "AGL"
+   ],
+   "landmass_px": [
+    507955,
+    164
+   ],
+   "through_touches_both": true,
+   "n": 122
+  },
+  {
+   "a": [
+    735,
+    998
+   ],
+   "b": [
+    745,
+    1003
+   ],
+   "through": [
+    736,
+    998
+   ],
+   "gap": 11.2,
+   "kind": "link",
+   "name": "Estande 7 - Estande 7",
+   "owners": [
+    "ESD",
+    "ESD"
+   ],
+   "landmass_px": [
+    2455,
+    23
+   ],
+   "through_touches_both": true,
+   "n": 123
+  },
+  {
+   "a": [
+    773,
+    1060
+   ],
+   "b": [
+    771,
+    1049
+   ],
+   "through": [
+    773,
+    1059
+   ],
+   "gap": 11.2,
+   "kind": "link",
+   "name": "Republican Illiricium 7 - Estande 8",
+   "owners": [
+    "ILR",
+    "ESD"
+   ],
+   "landmass_px": [
+    507955,
+    562
+   ],
+   "through_touches_both": true,
+   "n": 124
+  },
+  {
+   "a": [
+    891,
+    1173
+   ],
+   "b": [
+    891,
+    1177
+   ],
+   "through": [
+    891,
+    1174
+   ],
+   "gap": 4.0,
+   "kind": "link",
+   "name": "San Sierra 1 - Holy See 1",
+   "owners": [
+    "SSA",
+    "SEE"
+   ],
+   "landmass_px": [
+    507955,
+    286
+   ],
+   "through_touches_both": true,
+   "n": 125
+  },
+  {
+   "a": [
+    897,
+    1210
+   ],
+   "b": [
+    899,
+    1213
+   ],
+   "through": [
+    898,
+    1211
+   ],
+   "gap": 3.6,
+   "kind": "link",
+   "name": "San Sierra 1 - San Sierra 4",
+   "owners": [
+    "SSA",
+    "SSA"
+   ],
+   "landmass_px": [
+    507955,
+    173
+   ],
+   "through_touches_both": true,
+   "n": 126
+  },
+  {
+   "a": [
+    904,
+    1228
+   ],
+   "b": [
+    903,
+    1230
+   ],
+   "through": [
+    904,
+    1229
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "San Sierra 4 - San Sierra 8",
+   "owners": [
+    "SSA",
+    "SSA"
+   ],
+   "landmass_px": [
+    173,
+    574
+   ],
+   "through_touches_both": true,
+   "n": 127
+  },
+  {
+   "a": [
+    917,
+    1181
+   ],
+   "b": [
+    915,
+    1182
+   ],
+   "through": [
+    916,
+    1181
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "San Sierra 2 - Holy See 1",
+   "owners": [
+    "SSA",
+    "SEE"
+   ],
+   "landmass_px": [
+    1551,
+    286
+   ],
+   "through_touches_both": true,
+   "n": 128
+  },
+  {
+   "a": [
+    920,
+    1140
+   ],
+   "b": [
+    920,
+    1144
+   ],
+   "through": [
+    920,
+    1141
+   ],
+   "gap": 4.0,
+   "kind": "link",
+   "name": "Republican Illiricium 17 - Royalist Illiricium 1",
+   "owners": [
+    "ILR",
+    "KIL"
+   ],
+   "landmass_px": [
+    507955,
+    311
+   ],
+   "through_touches_both": true,
+   "n": 129
+  },
+  {
+   "a": [
+    1002,
+    1238
+   ],
+   "b": [
+    1005,
+    1238
+   ],
+   "through": [
+    1003,
+    1238
+   ],
+   "gap": 3.0,
+   "kind": "link",
+   "name": "San Sierra 7 - San Sierra 9",
+   "owners": [
+    "SSA",
+    "SSA"
+   ],
+   "landmass_px": [
+    507955,
+    20
+   ],
+   "through_touches_both": true,
+   "n": 130
+  },
+  {
+   "a": [
+    1024,
+    1139
+   ],
+   "b": [
+    1027,
+    1143
+   ],
+   "through": [
+    1025,
+    1140
+   ],
+   "gap": 5.0,
+   "kind": "link",
+   "name": "Fraxhemark 132 - Devlon 1",
+   "owners": [
+    "FRX",
+    "DVL"
+   ],
+   "landmass_px": [
+    507955,
+    28
+   ],
+   "through_touches_both": true,
+   "n": 131
+  },
+  {
+   "a": [
+    1040,
+    1258
+   ],
+   "b": [
+    1039,
+    1260
+   ],
+   "through": [
+    1040,
+    1259
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "San Sierra 10 - San Sierra 10",
+   "owners": [
+    "SSA",
+    "SSA"
+   ],
+   "landmass_px": [
+    16,
+    241
+   ],
+   "through_touches_both": true,
+   "n": 132
+  },
+  {
+   "a": [
+    1049,
+    1260
+   ],
+   "b": [
+    1047,
+    1259
+   ],
+   "through": [
+    1048,
+    1260
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "San Sierra 10 - San Sierra 10",
+   "owners": [
+    "SSA",
+    "SSA"
+   ],
+   "landmass_px": [
+    19,
+    241
+   ],
+   "through_touches_both": true,
+   "n": 133
+  },
+  {
+   "a": [
+    1050,
+    1254
+   ],
+   "b": [
+    1052,
+    1258
+   ],
+   "through": [
+    1050,
+    1255
+   ],
+   "gap": 4.5,
+   "kind": "link",
+   "name": "San Sierra 10 - San Sierra 10",
+   "owners": [
+    "SSA",
+    "SSA"
+   ],
+   "landmass_px": [
+    22,
+    19
+   ],
+   "through_touches_both": true,
+   "n": 134
+  },
+  {
+   "a": [
+    1052,
+    1245
+   ],
+   "b": [
+    1053,
+    1249
+   ],
+   "through": [
+    1052,
+    1246
+   ],
+   "gap": 4.1,
+   "kind": "link",
+   "name": "San Sierra 10 - San Sierra 10",
+   "owners": [
+    "SSA",
+    "SSA"
+   ],
+   "landmass_px": [
+    16,
+    22
+   ],
+   "through_touches_both": true,
+   "n": 135
+  },
+  {
+   "a": [
+    1053,
+    1261
+   ],
+   "b": [
+    1057,
+    1266
+   ],
+   "through": [
+    1054,
+    1262
+   ],
+   "gap": 6.4,
+   "kind": "link",
+   "name": "San Sierra 10 - San Sierra 5",
+   "owners": [
+    "SSA",
+    "SSA"
+   ],
+   "landmass_px": [
+    19,
+    318
+   ],
+   "through_touches_both": true,
+   "n": 136
+  },
+  {
+   "a": [
+    1064,
+    1272
+   ],
+   "b": [
+    1069,
+    1272
+   ],
+   "through": [
+    1065,
+    1272
+   ],
+   "gap": 5.0,
+   "kind": "link",
+   "name": "San Sierra 5 - San Sierra 5",
+   "owners": [
+    "SSA",
+    "SSA"
+   ],
+   "landmass_px": [
+    318,
+    16
+   ],
+   "through_touches_both": true,
+   "n": 137
+  },
+  {
+   "a": [
+    1080,
+    1267
+   ],
+   "b": [
+    1074,
+    1271
+   ],
+   "through": [
+    1079,
+    1268
+   ],
+   "gap": 7.2,
+   "kind": "link",
+   "name": "San Sierra 5 - San Sierra 5",
+   "owners": [
+    "SSA",
+    "SSA"
+   ],
+   "landmass_px": [
+    129,
+    16
+   ],
+   "through_touches_both": true,
+   "n": 138
+  },
+  {
+   "a": [
+    1103,
+    1254
+   ],
+   "b": [
+    1099,
+    1257
+   ],
+   "through": [
+    1102,
+    1255
+   ],
+   "gap": 5.0,
+   "kind": "link",
+   "name": "San Sierra 5 - San Sierra 5",
+   "owners": [
+    "SSA",
+    "SSA"
+   ],
+   "landmass_px": [
+    116,
+    129
+   ],
+   "through_touches_both": true,
+   "n": 139
+  },
+  {
+   "a": [
+    1100,
+    1234
+   ],
+   "b": [
+    1104,
+    1243
+   ],
+   "through": [
+    1100,
+    1235
+   ],
+   "gap": 9.8,
+   "kind": "link",
+   "name": "San Sierra 5 - San Sierra 5",
+   "owners": [
+    "SSA",
+    "SSA"
+   ],
+   "landmass_px": [
+    74,
+    116
+   ],
+   "through_touches_both": true,
+   "n": 140
+  },
+  {
+   "a": [
+    1817,
+    1212
+   ],
+   "b": [
+    1814,
+    1207
+   ],
+   "through": [
+    1816,
+    1211
+   ],
+   "gap": 5.8,
+   "kind": "link",
+   "name": "Edrus - Staile",
+   "owners": [
+    "AIS",
+    "AIS"
+   ],
+   "landmass_px": [
+    44936,
+    295
+   ],
+   "through_touches_both": true,
+   "n": 141
+  },
+  {
+   "a": [
+    1849,
+    1184
+   ],
+   "b": [
+    1850,
+    1180
+   ],
+   "through": [
+    1849,
+    1183
+   ],
+   "gap": 4.1,
+   "kind": "link",
+   "name": "Ecleb - Staile",
+   "owners": [
+    "AIS",
+    "AIS"
+   ],
+   "landmass_px": [
+    44936,
+    184
+   ],
+   "through_touches_both": true,
+   "n": 142
+  },
+  {
+   "a": [
+    2157,
+    1138
+   ],
+   "b": [
+    2146,
+    1150
+   ],
+   "through": [
+    2156,
+    1139
+   ],
+   "gap": 16.3,
+   "kind": "link",
+   "name": "Morena - Morena",
+   "owners": [
+    "AIS",
+    "AIS"
+   ],
+   "landmass_px": [
+    298,
+    26
+   ],
+   "through_touches_both": true,
+   "n": 143
+  },
+  {
+   "a": [
+    2447,
+    1006
+   ],
+   "b": [
+    2440,
+    1014
+   ],
+   "through": [
+    2446,
+    1007
+   ],
+   "gap": 10.6,
+   "kind": "link",
+   "name": "Krionik 140 - Krionik 141",
+   "owners": [
+    "KRI",
+    "KRI"
+   ],
+   "landmass_px": [
+    311,
+    261
+   ],
+   "through_touches_both": true,
+   "n": 144
+  },
+  {
+   "a": [
+    2442,
+    980
+   ],
+   "b": [
+    2446,
+    984
+   ],
+   "through": [
+    2443,
+    981
+   ],
+   "gap": 5.7,
+   "kind": "link",
+   "name": "Krionik 135 - Krionik 140",
+   "owners": [
+    "KRI",
+    "KRI"
+   ],
+   "landmass_px": [
+    3848,
+    311
+   ],
+   "through_touches_both": true,
+   "n": 145
+  },
+  {
+   "a": [
+    2508,
+    1231
+   ],
+   "b": [
+    2507,
+    1233
+   ],
+   "through": [
+    2508,
+    1232
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Cultists 4 - Cultists 4",
+   "owners": [
+    "CUL",
+    "CUL"
+   ],
+   "landmass_px": [
+    47,
+    502
+   ],
+   "through_touches_both": true,
+   "n": 146
+  },
+  {
+   "a": [
+    2508,
+    1255
+   ],
+   "b": [
+    2517,
+    1258
+   ],
+   "through": [
+    2509,
+    1255
+   ],
+   "gap": 9.5,
+   "kind": "link",
+   "name": "Cultists 4 - Cultists 3",
+   "owners": [
+    "CUL",
+    "CUL"
+   ],
+   "landmass_px": [
+    502,
+    32
+   ],
+   "through_touches_both": true,
+   "n": 147
+  },
+  {
+   "a": [
+    2520,
+    1264
+   ],
+   "b": [
+    2515,
+    1270
+   ],
+   "through": [
+    2519,
+    1265
+   ],
+   "gap": 7.8,
+   "kind": "link",
+   "name": "Cultists 3 - Cultists 5",
+   "owners": [
+    "CUL",
+    "CUL"
+   ],
+   "landmass_px": [
+    32,
+    964
+   ],
+   "through_touches_both": true,
+   "n": 148
+  },
+  {
+   "a": [
+    2521,
+    1256
+   ],
+   "b": [
+    2519,
+    1256
+   ],
+   "through": [
+    2520,
+    1256
+   ],
+   "gap": 2.0,
+   "kind": "link",
+   "name": "Cultists 3 - Cultists 3",
+   "owners": [
+    "CUL",
+    "CUL"
+   ],
+   "landmass_px": [
+    1104,
+    32
+   ],
+   "through_touches_both": true,
+   "n": 149
+  },
+  {
+   "a": [
+    2572,
+    1001
+   ],
+   "b": [
+    2573,
+    1009
+   ],
+   "through": [
+    2572,
+    1002
+   ],
+   "gap": 8.1,
+   "kind": "link",
+   "name": "Sennheiser 15 - Sennheiser 21",
+   "owners": [
+    "SNH",
+    "SNH"
+   ],
+   "landmass_px": [
+    85,
+    313
+   ],
+   "through_touches_both": true,
+   "n": 150
+  },
+  {
+   "a": [
+    2577,
+    991
+   ],
+   "b": [
+    2576,
+    993
+   ],
+   "through": [
+    2577,
+    992
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Sennheiser 15 - Sennheiser 15",
+   "owners": [
+    "SNH",
+    "SNH"
+   ],
+   "landmass_px": [
+    46582,
+    85
+   ],
+   "through_touches_both": true,
+   "n": 151
+  },
+  {
+   "a": [
+    2580,
+    1277
+   ],
+   "b": [
+    2576,
+    1281
+   ],
+   "through": [
+    2579,
+    1278
+   ],
+   "gap": 5.7,
+   "kind": "link",
+   "name": "Cultists 1 - Cultists 7",
+   "owners": [
+    "CUL",
+    "CUL"
+   ],
+   "landmass_px": [
+    908,
+    710
+   ],
+   "through_touches_both": true,
+   "n": 152
+  },
+  {
+   "a": [
+    2584,
+    1223
+   ],
+   "b": [
+    2577,
+    1235
+   ],
+   "through": [
+    2583,
+    1224
+   ],
+   "gap": 13.9,
+   "kind": "link",
+   "name": "Cultists 1 - Cultists 1",
+   "owners": [
+    "CUL",
+    "CUL"
+   ],
+   "landmass_px": [
+    24,
+    908
+   ],
+   "through_touches_both": true,
+   "n": 153
+  },
+  {
+   "a": [
+    2584,
+    1188
+   ],
+   "b": [
+    2586,
+    1190
+   ],
+   "through": [
+    2585,
+    1189
+   ],
+   "gap": 2.8,
+   "kind": "link",
+   "name": "Anglost 1 - Anglost 1",
+   "owners": [
+    "AGL",
+    "AGL"
+   ],
+   "landmass_px": [
+    1089,
+    31
+   ],
+   "through_touches_both": true,
+   "n": 154
+  },
+  {
+   "a": [
+    2594,
+    1026
+   ],
+   "b": [
+    2598,
+    1028
+   ],
+   "through": [
+    2595,
+    1026
+   ],
+   "gap": 4.5,
+   "kind": "link",
+   "name": "Sennheiser 21 - Sennheiser 22",
+   "owners": [
+    "SNH",
+    "SNH"
+   ],
+   "landmass_px": [
+    313,
+    349
+   ],
+   "through_touches_both": true,
+   "n": 155
+  },
+  {
+   "a": [
+    2614,
+    986
+   ],
+   "b": [
+    2612,
+    990
+   ],
+   "through": [
+    2614,
+    987
+   ],
+   "gap": 4.5,
+   "kind": "link",
+   "name": "Sennheiser 16 - Sennheiser 19",
+   "owners": [
+    "SNH",
+    "SNH"
+   ],
+   "landmass_px": [
+    46582,
+    273
+   ],
+   "through_touches_both": true,
+   "n": 156
+  },
+  {
+   "a": [
+    2627,
+    1278
+   ],
+   "b": [
+    2625,
+    1281
+   ],
+   "through": [
+    2626,
+    1279
+   ],
+   "gap": 3.6,
+   "kind": "link",
+   "name": "Cultists 2 - Cultists 6",
+   "owners": [
+    "CUL",
+    "CUL"
+   ],
+   "landmass_px": [
+    1109,
+    757
+   ],
+   "through_touches_both": true,
+   "n": 157
+  },
+  {
+   "a": [
+    2642,
+    1252
+   ],
+   "b": [
+    2634,
+    1257
+   ],
+   "through": [
+    2641,
+    1253
+   ],
+   "gap": 9.4,
+   "kind": "link",
+   "name": "Kampfian Empire 1 - Cultists 2",
+   "owners": [
+    "KPF",
+    "CUL"
+   ],
+   "landmass_px": [
+    27405,
+    1109
+   ],
+   "through_touches_both": true,
+   "n": 158
+  },
+  {
+   "a": [
+    2794,
+    1169
+   ],
+   "b": [
+    2795,
+    1171
+   ],
+   "through": [
+    2794,
+    1170
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Anglost 2 - Anglost 2",
+   "owners": [
+    "AGL",
+    "AGL"
+   ],
+   "landmass_px": [
+    27,
+    118
+   ],
+   "through_touches_both": true,
+   "n": 159
+  },
+  {
+   "a": [
+    2836,
+    1210
+   ],
+   "b": [
+    2835,
+    1195
+   ],
+   "through": [
+    2836,
+    1209
+   ],
+   "gap": 15.0,
+   "kind": "link",
+   "name": "Muqadasa Salamat 5 - Kilkire-Foraois 1",
+   "owners": [
+    "MQS",
+    "KKB"
+   ],
+   "landmass_px": [
+    27405,
+    28
+   ],
+   "through_touches_both": true,
+   "n": 160
+  },
+  {
+   "a": [
+    2888,
+    1272
+   ],
+   "b": [
+    2903,
+    1272
+   ],
+   "through": [
+    2889,
+    1272
+   ],
+   "gap": 15.0,
+   "kind": "link",
+   "name": "Muqadasa Salamat 6 - Sarza 1",
+   "owners": [
+    "MQS",
+    "SRZ"
+   ],
+   "landmass_px": [
+    27405,
+    26
+   ],
+   "through_touches_both": true,
+   "n": 161
+  },
+  {
+   "a": [
+    3889,
+    996
+   ],
+   "b": [
+    3886,
+    993
+   ],
+   "through": [
+    3888,
+    995
+   ],
+   "gap": 4.2,
+   "kind": "link",
+   "name": "Sarkis 110 - Sarkis 110",
+   "owners": [
+    "SRK",
+    "SRK"
+   ],
+   "landmass_px": [
+    783842,
+    19
+   ],
+   "through_touches_both": true,
+   "n": 162
+  },
+  {
+   "a": [
+    4299,
+    1269
+   ],
+   "b": [
+    4297,
+    1268
+   ],
+   "through": [
+    4298,
+    1269
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Charity 23 - Charity 25",
+   "owners": [
+    "CRT",
+    "CRT"
+   ],
+   "landmass_px": [
+    783842,
+    2736
+   ],
+   "through_touches_both": true,
+   "n": 163
+  },
+  {
+   "a": [
+    407,
+    1466
+   ],
+   "b": [
+    389,
+    1468
+   ],
+   "through": [
+    406,
+    1466
+   ],
+   "gap": 18.1,
+   "kind": "link",
+   "name": "Peatiktist 2 - Terrabis-Seran 3",
+   "owners": [
+    "PTK",
+    "TBS"
+   ],
+   "landmass_px": [
+    11694,
+    764
+   ],
+   "through_touches_both": true,
+   "n": 164
+  },
+  {
+   "a": [
+    402,
+    1443
+   ],
+   "b": [
+    398,
+    1440
+   ],
+   "through": [
+    401,
+    1442
+   ],
+   "gap": 5.0,
+   "kind": "link",
+   "name": "Peatiktist 2 - Transcainia 7",
+   "owners": [
+    "PTK",
+    "TCN"
+   ],
+   "landmass_px": [
+    11694,
+    31
+   ],
+   "through_touches_both": true,
+   "n": 165
+  },
+  {
+   "a": [
+    461,
+    1492
+   ],
+   "b": [
+    461,
+    1494
+   ],
+   "through": [
+    461,
+    1493
+   ],
+   "gap": 2.0,
+   "kind": "link",
+   "name": "Serentia 1 - Serentia 2",
+   "owners": [
+    "SRN",
+    "SRN"
+   ],
+   "landmass_px": [
+    55,
+    462868
+   ],
+   "through_touches_both": true,
+   "n": 166
+  },
+  {
+   "a": [
+    462,
+    1485
+   ],
+   "b": [
+    461,
+    1491
+   ],
+   "through": [
+    462,
+    1486
+   ],
+   "gap": 6.1,
+   "kind": "link",
+   "name": "Transcainia 6 - Serentia 1",
+   "owners": [
+    "TCN",
+    "SRN"
+   ],
+   "landmass_px": [
+    11694,
+    55
+   ],
+   "through_touches_both": true,
+   "n": 167
+  },
+  {
+   "a": [
+    470,
+    1354
+   ],
+   "b": [
+    472,
+    1356
+   ],
+   "through": [
+    471,
+    1355
+   ],
+   "gap": 2.8,
+   "kind": "link",
+   "name": "Anglost 24 - Anglost 29",
+   "owners": [
+    "AGL",
+    "AGL"
+   ],
+   "landmass_px": [
+    11694,
+    1057
+   ],
+   "through_touches_both": true,
+   "n": 168
+  },
+  {
+   "a": [
+    505,
+    1392
+   ],
+   "b": [
+    507,
+    1391
+   ],
+   "through": [
+    506,
+    1392
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Transcainia 4 - Anglost 32",
+   "owners": [
+    "TCN",
+    "AGL"
+   ],
+   "landmass_px": [
+    11694,
+    291
+   ],
+   "through_touches_both": true,
+   "n": 169
+  },
+  {
+   "a": [
+    516,
+    1350
+   ],
+   "b": [
+    513,
+    1352
+   ],
+   "through": [
+    515,
+    1350
+   ],
+   "gap": 3.6,
+   "kind": "link",
+   "name": "Anglost 22 - Anglost 27",
+   "owners": [
+    "AGL",
+    "AGL"
+   ],
+   "landmass_px": [
+    472,
+    286
+   ],
+   "through_touches_both": true,
+   "n": 170
+  },
+  {
+   "a": [
+    515,
+    1372
+   ],
+   "b": [
+    516,
+    1374
+   ],
+   "through": [
+    515,
+    1373
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Anglost 27 - Anglost 32",
+   "owners": [
+    "AGL",
+    "AGL"
+   ],
+   "landmass_px": [
+    286,
+    291
+   ],
+   "through_touches_both": true,
+   "n": 171
+  },
+  {
+   "a": [
+    523,
+    1316
+   ],
+   "b": [
+    519,
+    1321
+   ],
+   "through": [
+    522,
+    1317
+   ],
+   "gap": 6.4,
+   "kind": "link",
+   "name": "Anglost 16 - Anglost 22",
+   "owners": [
+    "AGL",
+    "AGL"
+   ],
+   "landmass_px": [
+    10926,
+    472
+   ],
+   "through_touches_both": true,
+   "n": 172
+  },
+  {
+   "a": [
+    524,
+    1488
+   ],
+   "b": [
+    519,
+    1493
+   ],
+   "through": [
+    523,
+    1489
+   ],
+   "gap": 7.1,
+   "kind": "link",
+   "name": "Anglost 45 - Serentia 3",
+   "owners": [
+    "AGL",
+    "SRN"
+   ],
+   "landmass_px": [
+    3028,
+    54
+   ],
+   "through_touches_both": true,
+   "n": 173
+  },
+  {
+   "a": [
+    566,
+    1349
+   ],
+   "b": [
+    566,
+    1353
+   ],
+   "through": [
+    566,
+    1350
+   ],
+   "gap": 4.0,
+   "kind": "link",
+   "name": "Anglost 20 - Anglost 28",
+   "owners": [
+    "AGL",
+    "AGL"
+   ],
+   "landmass_px": [
+    10926,
+    4418
+   ],
+   "through_touches_both": true,
+   "n": 174
+  },
+  {
+   "a": [
+    589,
+    1436
+   ],
+   "b": [
+    589,
+    1439
+   ],
+   "through": [
+    589,
+    1437
+   ],
+   "gap": 3.0,
+   "kind": "link",
+   "name": "Anglost 39 - Anglost 42",
+   "owners": [
+    "AGL",
+    "AGL"
+   ],
+   "landmass_px": [
+    349,
+    3028
+   ],
+   "through_touches_both": true,
+   "n": 175
+  },
+  {
+   "a": [
+    591,
+    1410
+   ],
+   "b": [
+    593,
+    1416
+   ],
+   "through": [
+    591,
+    1411
+   ],
+   "gap": 6.3,
+   "kind": "link",
+   "name": "Anglost 33 - Anglost 39",
+   "owners": [
+    "AGL",
+    "AGL"
+   ],
+   "landmass_px": [
+    4418,
+    349
+   ],
+   "through_touches_both": true,
+   "n": 176
+  },
+  {
+   "a": [
+    641,
+    1489
+   ],
+   "b": [
+    642,
+    1491
+   ],
+   "through": [
+    641,
+    1490
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Peatiktist 1 - Peatiktist 3",
+   "owners": [
+    "PTK",
+    "PTK"
+   ],
+   "landmass_px": [
+    1878,
+    1050
+   ],
+   "through_touches_both": true,
+   "n": 177
+  },
+  {
+   "a": [
+    649,
+    1491
+   ],
+   "b": [
+    650,
+    1489
+   ],
+   "through": [
+    649,
+    1490
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Peatiktist 3 - Peatiktist 3",
+   "owners": [
+    "PTK",
+    "PTK"
+   ],
+   "landmass_px": [
+    1050,
+    28
+   ],
+   "through_touches_both": true,
+   "n": 178
+  },
+  {
+   "a": [
+    651,
+    1435
+   ],
+   "b": [
+    650,
+    1437
+   ],
+   "through": [
+    651,
+    1436
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Anglost 40 - Peatiktist 1",
+   "owners": [
+    "AGL",
+    "PTK"
+   ],
+   "landmass_px": [
+    160,
+    1878
+   ],
+   "through_touches_both": true,
+   "n": 179
+  },
+  {
+   "a": [
+    649,
+    1592
+   ],
+   "b": [
+    653,
+    1598
+   ],
+   "through": [
+    650,
+    1593
+   ],
+   "gap": 7.2,
+   "kind": "link",
+   "name": "Daravon 1 - Peatiktist 11",
+   "owners": [
+    "DRV",
+    "PTK"
+   ],
+   "landmass_px": [
+    1984,
+    257
+   ],
+   "through_touches_both": true,
+   "n": 180
+  },
+  {
+   "a": [
+    658,
+    1419
+   ],
+   "b": [
+    659,
+    1421
+   ],
+   "through": [
+    658,
+    1420
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Danelaw 7 - Anglost 40",
+   "owners": [
+    "DNL",
+    "AGL"
+   ],
+   "landmass_px": [
+    507955,
+    160
+   ],
+   "through_touches_both": true,
+   "n": 181
+  },
+  {
+   "a": [
+    665,
+    1504
+   ],
+   "b": [
+    666,
+    1506
+   ],
+   "through": [
+    665,
+    1505
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Peatiktist 3 - Peatiktist 3",
+   "owners": [
+    "PTK",
+    "PTK"
+   ],
+   "landmass_px": [
+    1050,
+    19
+   ],
+   "through_touches_both": true,
+   "n": 182
+  },
+  {
+   "a": [
+    693,
+    1482
+   ],
+   "b": [
+    694,
+    1484
+   ],
+   "through": [
+    693,
+    1483
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Peatiktist 4 - Peatiktist 4",
+   "owners": [
+    "PTK",
+    "PTK"
+   ],
+   "landmass_px": [
+    19,
+    1141
+   ],
+   "through_touches_both": true,
+   "n": 183
+  },
+  {
+   "a": [
+    695,
+    1509
+   ],
+   "b": [
+    697,
+    1508
+   ],
+   "through": [
+    696,
+    1509
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Peatiktist 3 - Peatiktist 4",
+   "owners": [
+    "PTK",
+    "PTK"
+   ],
+   "landmass_px": [
+    1050,
+    1141
+   ],
+   "through_touches_both": true,
+   "n": 184
+  },
+  {
+   "a": [
+    796,
+    1502
+   ],
+   "b": [
+    796,
+    1506
+   ],
+   "through": [
+    796,
+    1503
+   ],
+   "gap": 4.0,
+   "kind": "link",
+   "name": "Normania 4 - Anglost 46",
+   "owners": [
+    "NRM",
+    "AGL"
+   ],
+   "landmass_px": [
+    507955,
+    2160
+   ],
+   "through_touches_both": true,
+   "n": 185
+  },
+  {
+   "a": [
+    815,
+    1545
+   ],
+   "b": [
+    817,
+    1547
+   ],
+   "through": [
+    816,
+    1546
+   ],
+   "gap": 2.8,
+   "kind": "link",
+   "name": "Anglost 47 - Anglost 47",
+   "owners": [
+    "AGL",
+    "AGL"
+   ],
+   "landmass_px": [
+    2160,
+    72
+   ],
+   "through_touches_both": true,
+   "n": 186
+  },
+  {
+   "a": [
+    821,
+    1554
+   ],
+   "b": [
+    821,
+    1560
+   ],
+   "through": [
+    821,
+    1555
+   ],
+   "gap": 6.0,
+   "kind": "link",
+   "name": "Anglost 47 - Peatiktist 6",
+   "owners": [
+    "AGL",
+    "PTK"
+   ],
+   "landmass_px": [
+    72,
+    37587
+   ],
+   "through_touches_both": true,
+   "n": 187
+  },
+  {
+   "a": [
+    885,
+    1594
+   ],
+   "b": [
+    887,
+    1595
+   ],
+   "through": [
+    886,
+    1594
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Peatiktist 9 - Peatiktist 9",
+   "owners": [
+    "PTK",
+    "PTK"
+   ],
+   "landmass_px": [
+    37587,
+    32
+   ],
+   "through_touches_both": true,
+   "n": 188
+  },
+  {
+   "a": [
+    922,
+    1394
+   ],
+   "b": [
+    923,
+    1392
+   ],
+   "through": [
+    922,
+    1393
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Garfield Republics 1 - Garfield Republics 1",
+   "owners": [
+    "GFR",
+    "GFR"
+   ],
+   "landmass_px": [
+    4350,
+    17
+   ],
+   "through_touches_both": true,
+   "n": 189
+  },
+  {
+   "a": [
+    930,
+    1447
+   ],
+   "b": [
+    930,
+    1452
+   ],
+   "through": [
+    930,
+    1448
+   ],
+   "gap": 5.0,
+   "kind": "link",
+   "name": "Garfield Republics 4 - Garfield Republics 6",
+   "owners": [
+    "GFR",
+    "GFR"
+   ],
+   "landmass_px": [
+    230,
+    192
+   ],
+   "through_touches_both": true,
+   "n": 190
+  },
+  {
+   "a": [
+    931,
+    1493
+   ],
+   "b": [
+    930,
+    1491
+   ],
+   "through": [
+    931,
+    1492
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Garfield Republics 9 - Garfield Republics 7",
+   "owners": [
+    "GFR",
+    "GFR"
+   ],
+   "landmass_px": [
+    507955,
+    4350
+   ],
+   "through_touches_both": true,
+   "n": 191
+  },
+  {
+   "a": [
+    931,
+    1468
+   ],
+   "b": [
+    933,
+    1464
+   ],
+   "through": [
+    931,
+    1467
+   ],
+   "gap": 4.5,
+   "kind": "link",
+   "name": "Garfield Republics 7 - Garfield Republics 6",
+   "owners": [
+    "GFR",
+    "GFR"
+   ],
+   "landmass_px": [
+    4350,
+    192
+   ],
+   "through_touches_both": true,
+   "n": 192
+  },
+  {
+   "a": [
+    933,
+    1514
+   ],
+   "b": [
+    940,
+    1517
+   ],
+   "through": [
+    934,
+    1514
+   ],
+   "gap": 7.6,
+   "kind": "link",
+   "name": "Garfield Republics 9 - Garfield Republics 10",
+   "owners": [
+    "GFR",
+    "GFR"
+   ],
+   "landmass_px": [
+    507955,
+    4410
+   ],
+   "through_touches_both": true,
+   "n": 193
+  },
+  {
+   "a": [
+    954,
+    1469
+   ],
+   "b": [
+    947,
+    1466
+   ],
+   "through": [
+    953,
+    1469
+   ],
+   "gap": 7.6,
+   "kind": "link",
+   "name": "Garfield Republics 5 - Garfield Republics 6",
+   "owners": [
+    "GFR",
+    "GFR"
+   ],
+   "landmass_px": [
+    657,
+    192
+   ],
+   "through_touches_both": true,
+   "n": 194
+  },
+  {
+   "a": [
+    1008,
+    1332
+   ],
+   "b": [
+    1008,
+    1328
+   ],
+   "through": [
+    1008,
+    1331
+   ],
+   "gap": 4.0,
+   "kind": "link",
+   "name": "Malvekia 3 - North Pollana 1",
+   "owners": [
+    "GRD",
+    "NPL"
+   ],
+   "landmass_px": [
+    507955,
+    814
+   ],
+   "through_touches_both": true,
+   "n": 195
+  },
+  {
+   "a": [
+    1012,
+    1317
+   ],
+   "b": [
+    1009,
+    1320
+   ],
+   "through": [
+    1011,
+    1318
+   ],
+   "gap": 4.2,
+   "kind": "link",
+   "name": "San Sierra 15 - North Pollana 1",
+   "owners": [
+    "SSA",
+    "NPL"
+   ],
+   "landmass_px": [
+    398,
+    814
+   ],
+   "through_touches_both": true,
+   "n": 196
+  },
+  {
+   "a": [
+    1019,
+    1360
+   ],
+   "b": [
+    1019,
+    1362
+   ],
+   "through": [
+    1019,
+    1361
+   ],
+   "gap": 2.0,
+   "kind": "link",
+   "name": "Malvekia 3 - Malvekia 9",
+   "owners": [
+    "GRD",
+    "GRD"
+   ],
+   "landmass_px": [
+    507955,
+    20
+   ],
+   "through_touches_both": true,
+   "n": 197
+  },
+  {
+   "a": [
+    1029,
+    1304
+   ],
+   "b": [
+    1031,
+    1307
+   ],
+   "through": [
+    1030,
+    1305
+   ],
+   "gap": 3.6,
+   "kind": "link",
+   "name": "San Sierra 15 - San Sierra 18",
+   "owners": [
+    "SSA",
+    "SSA"
+   ],
+   "landmass_px": [
+    398,
+    254
+   ],
+   "through_touches_both": true,
+   "n": 198
+  },
+  {
+   "a": [
+    1035,
+    1280
+   ],
+   "b": [
+    1035,
+    1282
+   ],
+   "through": [
+    1035,
+    1281
+   ],
+   "gap": 2.0,
+   "kind": "link",
+   "name": "San Sierra 10 - San Sierra 15",
+   "owners": [
+    "SSA",
+    "SSA"
+   ],
+   "landmass_px": [
+    241,
+    398
+   ],
+   "through_touches_both": true,
+   "n": 199
+  },
+  {
+   "a": [
+    1060,
+    1287
+   ],
+   "b": [
+    1062,
+    1289
+   ],
+   "through": [
+    1061,
+    1288
+   ],
+   "gap": 2.8,
+   "kind": "link",
+   "name": "San Sierra 5 - San Sierra 14",
+   "owners": [
+    "SSA",
+    "SSA"
+   ],
+   "landmass_px": [
+    318,
+    233
+   ],
+   "through_touches_both": true,
+   "n": 200
+  },
+  {
+   "a": [
+    1071,
+    1296
+   ],
+   "b": [
+    1074,
+    1299
+   ],
+   "through": [
+    1072,
+    1297
+   ],
+   "gap": 4.2,
+   "kind": "link",
+   "name": "San Sierra 14 - San Sierra 17",
+   "owners": [
+    "SSA",
+    "SSA"
+   ],
+   "landmass_px": [
+    233,
+    356
+   ],
+   "through_touches_both": true,
+   "n": 201
+  },
+  {
+   "a": [
+    2094,
+    1320
+   ],
+   "b": [
+    2094,
+    1329
+   ],
+   "through": [
+    2094,
+    1321
+   ],
+   "gap": 9.0,
+   "kind": "link",
+   "name": "Morena - Morena",
+   "owners": [
+    "AIS",
+    "AIS"
+   ],
+   "landmass_px": [
+    296,
+    25
+   ],
+   "through_touches_both": true,
+   "n": 202
+  },
+  {
+   "a": [
+    2118,
+    1292
+   ],
+   "b": [
+    2104,
+    1306
+   ],
+   "through": [
+    2117,
+    1293
+   ],
+   "gap": 19.8,
+   "kind": "link",
+   "name": "Morena - Morena",
+   "owners": [
+    "AIS",
+    "AIS"
+   ],
+   "landmass_px": [
+    17,
+    296
+   ],
+   "through_touches_both": true,
+   "n": 203
+  },
+  {
+   "a": [
+    2171,
+    1555
+   ],
+   "b": [
+    2172,
+    1557
+   ],
+   "through": [
+    2171,
+    1556
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Hoalepa 3 - Hoalepa 3",
+   "owners": [
+    "HOA",
+    "HOA"
+   ],
+   "landmass_px": [
+    2551,
+    42
+   ],
+   "through_touches_both": true,
+   "n": 204
+  },
+  {
+   "a": [
+    2276,
+    1555
+   ],
+   "b": [
+    2269,
+    1555
+   ],
+   "through": [
+    2275,
+    1555
+   ],
+   "gap": 7.0,
+   "kind": "link",
+   "name": "Gran Yucanoa 1 - Gran Yucanoa 1",
+   "owners": [
+    "GYC",
+    "GYC"
+   ],
+   "landmass_px": [
+    423,
+    113
+   ],
+   "through_touches_both": true,
+   "n": 205
+  },
+  {
+   "a": [
+    2297,
+    1558
+   ],
+   "b": [
+    2306,
+    1562
+   ],
+   "through": [
+    2298,
+    1558
+   ],
+   "gap": 9.8,
+   "kind": "link",
+   "name": "Gran Yucanoa 1 - Gran Yucanoa 1",
+   "owners": [
+    "GYC",
+    "GYC"
+   ],
+   "landmass_px": [
+    423,
+    27
+   ],
+   "through_touches_both": true,
+   "n": 206
+  },
+  {
+   "a": [
+    2413,
+    1324
+   ],
+   "b": [
+    2415,
+    1325
+   ],
+   "through": [
+    2414,
+    1324
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Cultists 5 - Cultists 5",
+   "owners": [
+    "CUL",
+    "CUL"
+   ],
+   "landmass_px": [
+    43,
+    33
+   ],
+   "through_touches_both": true,
+   "n": 207
+  },
+  {
+   "a": [
+    2519,
+    1280
+   ],
+   "b": [
+    2522,
+    1280
+   ],
+   "through": [
+    2520,
+    1280
+   ],
+   "gap": 3.0,
+   "kind": "link",
+   "name": "Cultists 5 - Cultists 7",
+   "owners": [
+    "CUL",
+    "CUL"
+   ],
+   "landmass_px": [
+    964,
+    710
+   ],
+   "through_touches_both": true,
+   "n": 208
+  },
+  {
+   "a": [
+    2525,
+    1292
+   ],
+   "b": [
+    2524,
+    1296
+   ],
+   "through": [
+    2525,
+    1293
+   ],
+   "gap": 4.1,
+   "kind": "link",
+   "name": "Cultists 7 - Cultists 9",
+   "owners": [
+    "CUL",
+    "CUL"
+   ],
+   "landmass_px": [
+    710,
+    570
+   ],
+   "through_touches_both": true,
+   "n": 209
+  },
+  {
+   "a": [
+    2561,
+    1300
+   ],
+   "b": [
+    2564,
+    1303
+   ],
+   "through": [
+    2562,
+    1301
+   ],
+   "gap": 4.2,
+   "kind": "link",
+   "name": "Cultists 9 - Cultists 10",
+   "owners": [
+    "CUL",
+    "CUL"
+   ],
+   "landmass_px": [
+    570,
+    402
+   ],
+   "through_touches_both": true,
+   "n": 210
+  },
+  {
+   "a": [
+    2563,
+    1352
+   ],
+   "b": [
+    2563,
+    1354
+   ],
+   "through": [
+    2563,
+    1353
+   ],
+   "gap": 2.0,
+   "kind": "link",
+   "name": "Cultists 17 - Cultists 17",
+   "owners": [
+    "CUL",
+    "CUL"
+   ],
+   "landmass_px": [
+    771,
+    20
+   ],
+   "through_touches_both": true,
+   "n": 211
+  },
+  {
+   "a": [
+    2565,
+    1359
+   ],
+   "b": [
+    2566,
+    1362
+   ],
+   "through": [
+    2565,
+    1360
+   ],
+   "gap": 3.2,
+   "kind": "link",
+   "name": "Cultists 17 - Arcadia 1",
+   "owners": [
+    "CUL",
+    "ARC"
+   ],
+   "landmass_px": [
+    20,
+    1168
+   ],
+   "through_touches_both": true,
+   "n": 212
+  },
+  {
+   "a": [
+    2568,
+    1336
+   ],
+   "b": [
+    2571,
+    1338
+   ],
+   "through": [
+    2569,
+    1336
+   ],
+   "gap": 3.6,
+   "kind": "link",
+   "name": "Cultists 13 - Cultists 17",
+   "owners": [
+    "CUL",
+    "CUL"
+   ],
+   "landmass_px": [
+    860,
+    771
+   ],
+   "through_touches_both": true,
+   "n": 213
+  },
+  {
+   "a": [
+    2573,
+    1315
+   ],
+   "b": [
+    2573,
+    1318
+   ],
+   "through": [
+    2573,
+    1316
+   ],
+   "gap": 3.0,
+   "kind": "link",
+   "name": "Cultists 10 - Cultists 13",
+   "owners": [
+    "CUL",
+    "CUL"
+   ],
+   "landmass_px": [
+    402,
+    860
+   ],
+   "through_touches_both": true,
+   "n": 214
+  },
+  {
+   "a": [
+    2586,
+    1311
+   ],
+   "b": [
+    2586,
+    1315
+   ],
+   "through": [
+    2586,
+    1312
+   ],
+   "gap": 4.0,
+   "kind": "link",
+   "name": "Cultists 10 - Cultists 11",
+   "owners": [
+    "CUL",
+    "CUL"
+   ],
+   "landmass_px": [
+    402,
+    562
+   ],
+   "through_touches_both": true,
+   "n": 215
+  },
+  {
+   "a": [
+    2590,
+    1296
+   ],
+   "b": [
+    2587,
+    1298
+   ],
+   "through": [
+    2589,
+    1296
+   ],
+   "gap": 3.6,
+   "kind": "link",
+   "name": "Cultists 6 - Cultists 10",
+   "owners": [
+    "CUL",
+    "CUL"
+   ],
+   "landmass_px": [
+    757,
+    402
+   ],
+   "through_touches_both": true,
+   "n": 216
+  },
+  {
+   "a": [
+    2595,
+    1407
+   ],
+   "b": [
+    2590,
+    1404
+   ],
+   "through": [
+    2594,
+    1406
+   ],
+   "gap": 5.8,
+   "kind": "link",
+   "name": "Arcadia 4 - Arcadia 1",
+   "owners": [
+    "ARC",
+    "ARC"
+   ],
+   "landmass_px": [
+    449380,
+    1168
+   ],
+   "through_touches_both": true,
+   "n": 217
+  },
+  {
+   "a": [
+    2617,
+    1333
+   ],
+   "b": [
+    2613,
+    1332
+   ],
+   "through": [
+    2616,
+    1333
+   ],
+   "gap": 4.1,
+   "kind": "link",
+   "name": "Cultists 8 - Cultists 11",
+   "owners": [
+    "CUL",
+    "CUL"
+   ],
+   "landmass_px": [
+    1244,
+    562
+   ],
+   "through_touches_both": true,
+   "n": 218
+  },
+  {
+   "a": [
+    2635,
+    1344
+   ],
+   "b": [
+    2638,
+    1347
+   ],
+   "through": [
+    2636,
+    1345
+   ],
+   "gap": 4.2,
+   "kind": "link",
+   "name": "Cultists 8 - Cultists 18",
+   "owners": [
+    "CUL",
+    "CUL"
+   ],
+   "landmass_px": [
+    1244,
+    10091
+   ],
+   "through_touches_both": true,
+   "n": 219
+  },
+  {
+   "a": [
+    2667,
+    1419
+   ],
+   "b": [
+    2667,
+    1416
+   ],
+   "through": [
+    2667,
+    1418
+   ],
+   "gap": 3.0,
+   "kind": "link",
+   "name": "Arcadia 7 - Arcadia 2",
+   "owners": [
+    "ARC",
+    "ARC"
+   ],
+   "landmass_px": [
+    449380,
+    764
+   ],
+   "through_touches_both": true,
+   "n": 220
+  },
+  {
+   "a": [
+    2708,
+    1389
+   ],
+   "b": [
+    2707,
+    1391
+   ],
+   "through": [
+    2708,
+    1390
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Cultists 20 - Cultists 20",
+   "owners": [
+    "CUL",
+    "CUL"
+   ],
+   "landmass_px": [
+    17,
+    47
+   ],
+   "through_touches_both": true,
+   "n": 221
+  },
+  {
+   "a": [
+    2708,
+    1387
+   ],
+   "b": [
+    2708,
+    1389
+   ],
+   "through": [
+    2708,
+    1388
+   ],
+   "gap": 2.0,
+   "kind": "link",
+   "name": "Cultists 19 - Cultists 20",
+   "owners": [
+    "CUL",
+    "CUL"
+   ],
+   "landmass_px": [
+    10091,
+    17
+   ],
+   "through_touches_both": true,
+   "n": 222
+  },
+  {
+   "a": [
+    2948,
+    1303
+   ],
+   "b": [
+    2959,
+    1303
+   ],
+   "through": [
+    2949,
+    1303
+   ],
+   "gap": 11.0,
+   "kind": "link",
+   "name": "Sarza 1 - Sarza 2",
+   "owners": [
+    "SRZ",
+    "SRZ"
+   ],
+   "landmass_px": [
+    456,
+    3868
+   ],
+   "through_touches_both": true,
+   "n": 223
+  },
+  {
+   "a": [
+    2982,
+    1353
+   ],
+   "b": [
+    2980,
+    1360
+   ],
+   "through": [
+    2982,
+    1354
+   ],
+   "gap": 7.3,
+   "kind": "link",
+   "name": "Sarza 3 - Sarza 8",
+   "owners": [
+    "SRZ",
+    "SRZ"
+   ],
+   "landmass_px": [
+    3868,
+    449380
+   ],
+   "through_touches_both": true,
+   "n": 224
+  },
+  {
+   "a": [
+    3005,
+    1437
+   ],
+   "b": [
+    3008,
+    1436
+   ],
+   "through": [
+    3006,
+    1437
+   ],
+   "gap": 3.2,
+   "kind": "link",
+   "name": "Sarza 17 - Sarza 21",
+   "owners": [
+    "SRZ",
+    "SRZ"
+   ],
+   "landmass_px": [
+    449380,
+    517
+   ],
+   "through_touches_both": true,
+   "n": 225
+  },
+  {
+   "a": [
+    3052,
+    1394
+   ],
+   "b": [
+    3052,
+    1399
+   ],
+   "through": [
+    3052,
+    1395
+   ],
+   "gap": 5.0,
+   "kind": "link",
+   "name": "Sarza 10 - Sarza 15",
+   "owners": [
+    "SRZ",
+    "SRZ"
+   ],
+   "landmass_px": [
+    636,
+    1153
+   ],
+   "through_touches_both": true,
+   "n": 226
+  },
+  {
+   "a": [
+    3060,
+    1437
+   ],
+   "b": [
+    3060,
+    1433
+   ],
+   "through": [
+    3060,
+    1436
+   ],
+   "gap": 4.0,
+   "kind": "link",
+   "name": "Lafari 1 - Sarza 15",
+   "owners": [
+    "LFR",
+    "SRZ"
+   ],
+   "landmass_px": [
+    449380,
+    1153
+   ],
+   "through_touches_both": true,
+   "n": 227
+  },
+  {
+   "a": [
+    3072,
+    1362
+   ],
+   "b": [
+    3062,
+    1373
+   ],
+   "through": [
+    3071,
+    1363
+   ],
+   "gap": 14.9,
+   "kind": "link",
+   "name": "Leviathan 1 - Sarza 10",
+   "owners": [
+    "LEV",
+    "SRZ"
+   ],
+   "landmass_px": [
+    1204,
+    636
+   ],
+   "through_touches_both": true,
+   "n": 228
+  },
+  {
+   "a": [
+    3129,
+    1442
+   ],
+   "b": [
+    3143,
+    1438
+   ],
+   "through": [
+    3130,
+    1442
+   ],
+   "gap": 14.6,
+   "kind": "link",
+   "name": "Kyras 6 - Kyras 4",
+   "owners": [
+    "KYS",
+    "KYS"
+   ],
+   "landmass_px": [
+    449380,
+    3909
+   ],
+   "through_touches_both": true,
+   "n": 229
+  },
+  {
+   "a": [
+    3175,
+    1370
+   ],
+   "b": [
+    3177,
+    1371
+   ],
+   "through": [
+    3176,
+    1370
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Kyras 1 - Kyras 1",
+   "owners": [
+    "KYS",
+    "KYS"
+   ],
+   "landmass_px": [
+    3909,
+    31
+   ],
+   "through_touches_both": true,
+   "n": 230
+  },
+  {
+   "a": [
+    3399,
+    1578
+   ],
+   "b": [
+    3399,
+    1566
+   ],
+   "through": [
+    3399,
+    1577
+   ],
+   "gap": 12.0,
+   "kind": "link",
+   "name": "Mustawi 1 - Kyras 19",
+   "owners": [
+    "MST",
+    "KYS"
+   ],
+   "landmass_px": [
+    449380,
+    20
+   ],
+   "through_touches_both": true,
+   "n": 231
+  },
+  {
+   "a": [
+    3421,
+    1389
+   ],
+   "b": [
+    3423,
+    1391
+   ],
+   "through": [
+    3422,
+    1390
+   ],
+   "gap": 2.8,
+   "kind": "link",
+   "name": "Kyras 3 - Kyras 3",
+   "owners": [
+    "KYS",
+    "KYS"
+   ],
+   "landmass_px": [
+    138,
+    18
+   ],
+   "through_touches_both": true,
+   "n": 232
+  },
+  {
+   "a": [
+    3673,
+    1494
+   ],
+   "b": [
+    3671,
+    1495
+   ],
+   "through": [
+    3672,
+    1494
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Chineasia 2 - Chineasia 2",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    133,
+    19
+   ],
+   "through_touches_both": true,
+   "n": 233
+  },
+  {
+   "a": [
+    3673,
+    1506
+   ],
+   "b": [
+    3676,
+    1510
+   ],
+   "through": [
+    3674,
+    1507
+   ],
+   "gap": 5.0,
+   "kind": "link",
+   "name": "Chineasia 2 - Chineasia 2",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    133,
+    23
+   ],
+   "through_touches_both": true,
+   "n": 234
+  },
+  {
+   "a": [
+    3675,
+    1504
+   ],
+   "b": [
+    3677,
+    1504
+   ],
+   "through": [
+    3676,
+    1504
+   ],
+   "gap": 2.0,
+   "kind": "link",
+   "name": "Chineasia 2 - Chineasia 2",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    133,
+    19
+   ],
+   "through_touches_both": true,
+   "n": 235
+  },
+  {
+   "a": [
+    3685,
+    1479
+   ],
+   "b": [
+    3676,
+    1489
+   ],
+   "through": [
+    3684,
+    1480
+   ],
+   "gap": 13.5,
+   "kind": "link",
+   "name": "Chineasia 2 - Chineasia 2",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    55,
+    133
+   ],
+   "through_touches_both": true,
+   "n": 236
+  },
+  {
+   "a": [
+    3791,
+    1546
+   ],
+   "b": [
+    3791,
+    1553
+   ],
+   "through": [
+    3791,
+    1547
+   ],
+   "gap": 7.0,
+   "kind": "link",
+   "name": "Chineasia 2 - Chineasia 2",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    22,
+    43
+   ],
+   "through_touches_both": true,
+   "n": 237
+  },
+  {
+   "a": [
+    3791,
+    1562
+   ],
+   "b": [
+    3792,
+    1578
+   ],
+   "through": [
+    3791,
+    1563
+   ],
+   "gap": 16.0,
+   "kind": "link",
+   "name": "Chineasia 2 - Chineasia 2",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    43,
+    65
+   ],
+   "through_touches_both": true,
+   "n": 238
+  },
+  {
+   "a": [
+    3810,
+    1411
+   ],
+   "b": [
+    3815,
+    1417
+   ],
+   "through": [
+    3811,
+    1412
+   ],
+   "gap": 7.8,
+   "kind": "link",
+   "name": "Daihai 1 - Daihai 1",
+   "owners": [
+    "DHI",
+    "DHI"
+   ],
+   "landmass_px": [
+    48,
+    28
+   ],
+   "through_touches_both": true,
+   "n": 239
+  },
+  {
+   "a": [
+    3934,
+    1447
+   ],
+   "b": [
+    3920,
+    1446
+   ],
+   "through": [
+    3933,
+    1447
+   ],
+   "gap": 14.0,
+   "kind": "link",
+   "name": "Estande 67 - Estande 67",
+   "owners": [
+    "ESD",
+    "ESD"
+   ],
+   "landmass_px": [
+    7895,
+    68
+   ],
+   "through_touches_both": true,
+   "n": 240
+  },
+  {
+   "a": [
+    3949,
+    1558
+   ],
+   "b": [
+    3948,
+    1564
+   ],
+   "through": [
+    3949,
+    1559
+   ],
+   "gap": 6.1,
+   "kind": "link",
+   "name": "Daihai 1 - Daihai 1",
+   "owners": [
+    "DHI",
+    "DHI"
+   ],
+   "landmass_px": [
+    161,
+    33
+   ],
+   "through_touches_both": true,
+   "n": 241
+  },
+  {
+   "a": [
+    3965,
+    1536
+   ],
+   "b": [
+    3957,
+    1544
+   ],
+   "through": [
+    3964,
+    1537
+   ],
+   "gap": 11.3,
+   "kind": "link",
+   "name": "Daihai 1 - Daihai 1",
+   "owners": [
+    "DHI",
+    "DHI"
+   ],
+   "landmass_px": [
+    20,
+    161
+   ],
+   "through_touches_both": true,
+   "n": 242
+  },
+  {
+   "a": [
+    3967,
+    1536
+   ],
+   "b": [
+    3974,
+    1542
+   ],
+   "through": [
+    3968,
+    1537
+   ],
+   "gap": 9.2,
+   "kind": "link",
+   "name": "Daihai 1 - Daihai 1",
+   "owners": [
+    "DHI",
+    "DHI"
+   ],
+   "landmass_px": [
+    20,
+    31
+   ],
+   "through_touches_both": true,
+   "n": 243
+  },
+  {
+   "a": [
+    3974,
+    1547
+   ],
+   "b": [
+    3971,
+    1552
+   ],
+   "through": [
+    3974,
+    1548
+   ],
+   "gap": 5.8,
+   "kind": "link",
+   "name": "Daihai 1 - Daihai 1",
+   "owners": [
+    "DHI",
+    "DHI"
+   ],
+   "landmass_px": [
+    31,
+    28
+   ],
+   "through_touches_both": true,
+   "n": 244
+  },
+  {
+   "a": [
+    3981,
+    1570
+   ],
+   "b": [
+    3971,
+    1560
+   ],
+   "through": [
+    3980,
+    1569
+   ],
+   "gap": 14.1,
+   "kind": "link",
+   "name": "Krionik 153 - Daihai 1",
+   "owners": [
+    "KRI",
+    "DHI"
+   ],
+   "landmass_px": [
+    22670,
+    28
+   ],
+   "through_touches_both": true,
+   "n": 245
+  },
+  {
+   "a": [
+    3993,
+    1482
+   ],
+   "b": [
+    3990,
+    1488
+   ],
+   "through": [
+    3993,
+    1483
+   ],
+   "gap": 6.7,
+   "kind": "link",
+   "name": "Estande 69 - Estande 69",
+   "owners": [
+    "ESD",
+    "ESD"
+   ],
+   "landmass_px": [
+    7895,
+    20
+   ],
+   "through_touches_both": true,
+   "n": 246
+  },
+  {
+   "a": [
+    4046,
+    1471
+   ],
+   "b": [
+    4048,
+    1473
+   ],
+   "through": [
+    4047,
+    1472
+   ],
+   "gap": 2.8,
+   "kind": "link",
+   "name": "Estande 66 - Estande 66",
+   "owners": [
+    "ESD",
+    "ESD"
+   ],
+   "landmass_px": [
+    7895,
+    53
+   ],
+   "through_touches_both": true,
+   "n": 247
+  },
+  {
+   "a": [
+    4064,
+    1456
+   ],
+   "b": [
+    4072,
+    1467
+   ],
+   "through": [
+    4065,
+    1457
+   ],
+   "gap": 13.6,
+   "kind": "link",
+   "name": "Estande 66 - Estande 66",
+   "owners": [
+    "ESD",
+    "ESD"
+   ],
+   "landmass_px": [
+    7895,
+    16
+   ],
+   "through_touches_both": true,
+   "n": 248
+  },
+  {
+   "a": [
+    4126,
+    1447
+   ],
+   "b": [
+    4116,
+    1451
+   ],
+   "through": [
+    4125,
+    1447
+   ],
+   "gap": 10.8,
+   "kind": "link",
+   "name": "Charity 54 - Charity 54",
+   "owners": [
+    "CRT",
+    "CRT"
+   ],
+   "landmass_px": [
+    20,
+    20
+   ],
+   "through_touches_both": true,
+   "n": 249
+  },
+  {
+   "a": [
+    4132,
+    1447
+   ],
+   "b": [
+    4130,
+    1445
+   ],
+   "through": [
+    4131,
+    1446
+   ],
+   "gap": 2.8,
+   "kind": "link",
+   "name": "Charity 54 - Charity 54",
+   "owners": [
+    "CRT",
+    "CRT"
+   ],
+   "landmass_px": [
+    22670,
+    20
+   ],
+   "through_touches_both": true,
+   "n": 250
+  },
+  {
+   "a": [
+    4169,
+    1443
+   ],
+   "b": [
+    4169,
+    1445
+   ],
+   "through": [
+    4169,
+    1444
+   ],
+   "gap": 2.0,
+   "kind": "link",
+   "name": "Charity 54 - Charity 54",
+   "owners": [
+    "CRT",
+    "CRT"
+   ],
+   "landmass_px": [
+    22670,
+    21
+   ],
+   "through_touches_both": true,
+   "n": 251
+  },
+  {
+   "a": [
+    4172,
+    1452
+   ],
+   "b": [
+    4172,
+    1454
+   ],
+   "through": [
+    4172,
+    1453
+   ],
+   "gap": 2.0,
+   "kind": "link",
+   "name": "Charity 54 - Charity 54",
+   "owners": [
+    "CRT",
+    "CRT"
+   ],
+   "landmass_px": [
+    21,
+    24
+   ],
+   "through_touches_both": true,
+   "n": 252
+  },
+  {
+   "a": [
+    4179,
+    1447
+   ],
+   "b": [
+    4172,
+    1447
+   ],
+   "through": [
+    4178,
+    1447
+   ],
+   "gap": 7.0,
+   "kind": "link",
+   "name": "Tenkyoku 1 - Charity 54",
+   "owners": [
+    "TKY",
+    "CRT"
+   ],
+   "landmass_px": [
+    1124,
+    21
+   ],
+   "through_touches_both": true,
+   "n": 253
+  },
+  {
+   "a": [
+    4185,
+    1535
+   ],
+   "b": [
+    4193,
+    1538
+   ],
+   "through": [
+    4186,
+    1535
+   ],
+   "gap": 8.5,
+   "kind": "link",
+   "name": "Krionik 149 - Tsuruma 2",
+   "owners": [
+    "KRI",
+    "TSU"
+   ],
+   "landmass_px": [
+    22670,
+    17
+   ],
+   "through_touches_both": true,
+   "n": 254
+  },
+  {
+   "a": [
+    4201,
+    1534
+   ],
+   "b": [
+    4199,
+    1535
+   ],
+   "through": [
+    4200,
+    1534
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Tsuruma 2 - Tsuruma 2",
+   "owners": [
+    "TSU",
+    "TSU"
+   ],
+   "landmass_px": [
+    42,
+    17
+   ],
+   "through_touches_both": true,
+   "n": 255
+  },
+  {
+   "a": [
+    4228,
+    1458
+   ],
+   "b": [
+    4218,
+    1448
+   ],
+   "through": [
+    4227,
+    1457
+   ],
+   "gap": 14.1,
+   "kind": "link",
+   "name": "Tsuruma 2 - Tenkyoku 1",
+   "owners": [
+    "TSU",
+    "TKY"
+   ],
+   "landmass_px": [
+    1714,
+    1124
+   ],
+   "through_touches_both": true,
+   "n": 256
+  },
+  {
+   "a": [
+    4236,
+    1409
+   ],
+   "b": [
+    4234,
+    1412
+   ],
+   "through": [
+    4236,
+    1410
+   ],
+   "gap": 3.6,
+   "kind": "link",
+   "name": "Charity 47 - Charity 47",
+   "owners": [
+    "CRT",
+    "CRT"
+   ],
+   "landmass_px": [
+    2496,
+    22
+   ],
+   "through_touches_both": true,
+   "n": 257
+  },
+  {
+   "a": [
+    4251,
+    1479
+   ],
+   "b": [
+    4247,
+    1477
+   ],
+   "through": [
+    4250,
+    1479
+   ],
+   "gap": 4.5,
+   "kind": "link",
+   "name": "Tsuruma 3 - Tsuruma 2",
+   "owners": [
+    "TSU",
+    "TSU"
+   ],
+   "landmass_px": [
+    783842,
+    1714
+   ],
+   "through_touches_both": true,
+   "n": 258
+  },
+  {
+   "a": [
+    4255,
+    1411
+   ],
+   "b": [
+    4255,
+    1418
+   ],
+   "through": [
+    4255,
+    1414
+   ],
+   "gap": 7.0,
+   "kind": "link",
+   "name": "Charity 47 - Charity 55",
+   "owners": [
+    "CRT",
+    "CRT"
+   ],
+   "landmass_px": [
+    2496,
+    1714
+   ],
+   "through_touches_both": true,
+   "n": 259
+  },
+  {
+   "a": [
+    4263,
+    1343
+   ],
+   "b": [
+    4265,
+    1355
+   ],
+   "through": [
+    4263,
+    1344
+   ],
+   "gap": 12.2,
+   "kind": "link",
+   "name": "Charity 36 - Charity 36",
+   "owners": [
+    "CRT",
+    "CRT"
+   ],
+   "landmass_px": [
+    2736,
+    18
+   ],
+   "through_touches_both": true,
+   "n": 260
+  },
+  {
+   "a": [
+    4281,
+    1491
+   ],
+   "b": [
+    4285,
+    1488
+   ],
+   "through": [
+    4282,
+    1490
+   ],
+   "gap": 5.0,
+   "kind": "link",
+   "name": "Tsuruma 3 - Tsuruma 1",
+   "owners": [
+    "TSU",
+    "TSU"
+   ],
+   "landmass_px": [
+    783842,
+    852
+   ],
+   "through_touches_both": true,
+   "n": 261
+  },
+  {
+   "a": [
+    4314,
+    1362
+   ],
+   "b": [
+    4326,
+    1362
+   ],
+   "through": [
+    4315,
+    1362
+   ],
+   "gap": 12.0,
+   "kind": "link",
+   "name": "Charity 45 - Charity 48",
+   "owners": [
+    "CRT",
+    "CRT"
+   ],
+   "landmass_px": [
+    915,
+    2064
+   ],
+   "through_touches_both": true,
+   "n": 262
+  },
+  {
+   "a": [
+    4338,
+    1292
+   ],
+   "b": [
+    4338,
+    1294
+   ],
+   "through": [
+    4338,
+    1293
+   ],
+   "gap": 2.0,
+   "kind": "link",
+   "name": "Charity 23 - Charity 24",
+   "owners": [
+    "CRT",
+    "CRT"
+   ],
+   "landmass_px": [
+    783842,
+    26
+   ],
+   "through_touches_both": true,
+   "n": 263
+  },
+  {
+   "a": [
+    4351,
+    1437
+   ],
+   "b": [
+    4347,
+    1434
+   ],
+   "through": [
+    4350,
+    1436
+   ],
+   "gap": 5.0,
+   "kind": "link",
+   "name": "Uyizar 8 - Charity 53",
+   "owners": [
+    "UYZ",
+    "CRT"
+   ],
+   "landmass_px": [
+    783842,
+    2064
+   ],
+   "through_touches_both": true,
+   "n": 264
+  },
+  {
+   "a": [
+    4704,
+    1568
+   ],
+   "b": [
+    4704,
+    1570
+   ],
+   "through": [
+    4704,
+    1569
+   ],
+   "gap": 2.0,
+   "kind": "link",
+   "name": "Myehn 25 - Myehn 25",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    783842,
+    23
+   ],
+   "through_touches_both": true,
+   "n": 265
+  },
+  {
+   "a": [
+    4752,
+    1532
+   ],
+   "b": [
+    4752,
+    1536
+   ],
+   "through": [
+    4752,
+    1533
+   ],
+   "gap": 4.0,
+   "kind": "link",
+   "name": "Myehn 20 - Myehn 20",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    783842,
+    40
+   ],
+   "through_touches_both": true,
+   "n": 266
+  },
+  {
+   "a": [
+    4796,
+    1532
+   ],
+   "b": [
+    4803,
+    1536
+   ],
+   "through": [
+    4797,
+    1532
+   ],
+   "gap": 8.1,
+   "kind": "link",
+   "name": "Myehn 22 - Myehn 26",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    783842,
+    975
+   ],
+   "through_touches_both": true,
+   "n": 267
+  },
+  {
+   "a": [
+    4799,
+    1583
+   ],
+   "b": [
+    4805,
+    1589
+   ],
+   "through": [
+    4800,
+    1584
+   ],
+   "gap": 8.5,
+   "kind": "link",
+   "name": "Myehn 26 - Myehn 32",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    975,
+    9819
+   ],
+   "through_touches_both": true,
+   "n": 268
+  },
+  {
+   "a": [
+    4799,
+    1498
+   ],
+   "b": [
+    4807,
+    1498
+   ],
+   "through": [
+    4800,
+    1498
+   ],
+   "gap": 8.0,
+   "kind": "link",
+   "name": "Myehn 17 - Myehn 17",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    783842,
+    17
+   ],
+   "through_touches_both": true,
+   "n": 269
+  },
+  {
+   "a": [
+    4849,
+    1575
+   ],
+   "b": [
+    4849,
+    1579
+   ],
+   "through": [
+    4849,
+    1576
+   ],
+   "gap": 4.0,
+   "kind": "link",
+   "name": "Myehn 23 - Myehn 33",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    2839,
+    9819
+   ],
+   "through_touches_both": true,
+   "n": 270
+  },
+  {
+   "a": [
+    4854,
+    1407
+   ],
+   "b": [
+    4856,
+    1406
+   ],
+   "through": [
+    4855,
+    1407
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Myehn 8 - Myehn 8",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    783842,
+    38
+   ],
+   "through_touches_both": true,
+   "n": 271
+  },
+  {
+   "a": [
+    4865,
+    1594
+   ],
+   "b": [
+    4863,
+    1595
+   ],
+   "through": [
+    4864,
+    1594
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Myehn 29 - Myehn 33",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    1582,
+    9819
+   ],
+   "through_touches_both": true,
+   "n": 272
+  },
+  {
+   "a": [
+    4872,
+    1564
+   ],
+   "b": [
+    4872,
+    1569
+   ],
+   "through": [
+    4872,
+    1565
+   ],
+   "gap": 5.0,
+   "kind": "link",
+   "name": "Myehn 28 - Myehn 29",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    298,
+    1582
+   ],
+   "through_touches_both": true,
+   "n": 273
+  },
+  {
+   "a": [
+    4879,
+    1479
+   ],
+   "b": [
+    4879,
+    1490
+   ],
+   "through": [
+    4879,
+    1480
+   ],
+   "gap": 11.0,
+   "kind": "link",
+   "name": "Myehn 18 - Myehn 18",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    149,
+    2839
+   ],
+   "through_touches_both": true,
+   "n": 274
+  },
+  {
+   "a": [
+    4879,
+    1519
+   ],
+   "b": [
+    4883,
+    1523
+   ],
+   "through": [
+    4880,
+    1520
+   ],
+   "gap": 5.7,
+   "kind": "link",
+   "name": "Myehn 23 - Myehn 24",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    2839,
+    177
+   ],
+   "through_touches_both": true,
+   "n": 275
+  },
+  {
+   "a": [
+    4896,
+    1511
+   ],
+   "b": [
+    4895,
+    1516
+   ],
+   "through": [
+    4896,
+    1512
+   ],
+   "gap": 5.1,
+   "kind": "link",
+   "name": "Myehn 18 - Myehn 24",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    145,
+    177
+   ],
+   "through_touches_both": true,
+   "n": 276
+  },
+  {
+   "a": [
+    4903,
+    1509
+   ],
+   "b": [
+    4913,
+    1511
+   ],
+   "through": [
+    4904,
+    1509
+   ],
+   "gap": 10.2,
+   "kind": "link",
+   "name": "Myehn 18 - Myehn 21",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    145,
+    1634
+   ],
+   "through_touches_both": true,
+   "n": 277
+  },
+  {
+   "a": [
+    4925,
+    1302
+   ],
+   "b": [
+    4923,
+    1300
+   ],
+   "through": [
+    4924,
+    1301
+   ],
+   "gap": 2.8,
+   "kind": "link",
+   "name": "Kianhua 46 - Kianhua 46",
+   "owners": [
+    "KNH",
+    "KNH"
+   ],
+   "landmass_px": [
+    783842,
+    38
+   ],
+   "through_touches_both": true,
+   "n": 278
+  },
+  {
+   "a": [
+    4928,
+    1424
+   ],
+   "b": [
+    4931,
+    1428
+   ],
+   "through": [
+    4929,
+    1425
+   ],
+   "gap": 5.0,
+   "kind": "link",
+   "name": "Myehn 6 - Myehn 6",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    17,
+    895
+   ],
+   "through_touches_both": true,
+   "n": 279
+  },
+  {
+   "a": [
+    4932,
+    1497
+   ],
+   "b": [
+    4927,
+    1502
+   ],
+   "through": [
+    4931,
+    1498
+   ],
+   "gap": 7.1,
+   "kind": "link",
+   "name": "Myehn 14 - Myehn 21",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    1019,
+    1634
+   ],
+   "through_touches_both": true,
+   "n": 280
+  },
+  {
+   "a": [
+    4933,
+    1556
+   ],
+   "b": [
+    4932,
+    1560
+   ],
+   "through": [
+    4933,
+    1557
+   ],
+   "gap": 4.1,
+   "kind": "link",
+   "name": "Myehn 21 - Myehn 30",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    1634,
+    192
+   ],
+   "through_touches_both": true,
+   "n": 281
+  },
+  {
+   "a": [
+    4932,
+    1473
+   ],
+   "b": [
+    4935,
+    1477
+   ],
+   "through": [
+    4933,
+    1474
+   ],
+   "gap": 5.0,
+   "kind": "link",
+   "name": "Myehn 6 - Myehn 14",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    895,
+    1019
+   ],
+   "through_touches_both": true,
+   "n": 282
+  },
+  {
+   "a": [
+    4975,
+    1450
+   ],
+   "b": [
+    4976,
+    1456
+   ],
+   "through": [
+    4975,
+    1451
+   ],
+   "gap": 6.1,
+   "kind": "link",
+   "name": "Myehn 14 - Myehn 14",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    26,
+    1019
+   ],
+   "through_touches_both": true,
+   "n": 283
+  },
+  {
+   "a": [
+    125,
+    1642
+   ],
+   "b": [
+    129,
+    1644
+   ],
+   "through": [
+    126,
+    1642
+   ],
+   "gap": 4.5,
+   "kind": "link",
+   "name": "Krionik 160 - Krionik 160",
+   "owners": [
+    "KRI",
+    "KRI"
+   ],
+   "landmass_px": [
+    218,
+    26
+   ],
+   "through_touches_both": true,
+   "n": 284
+  },
+  {
+   "a": [
+    627,
+    1674
+   ],
+   "b": [
+    631,
+    1671
+   ],
+   "through": [
+    628,
+    1673
+   ],
+   "gap": 5.0,
+   "kind": "link",
+   "name": "Terreich und Preußen 3 - Terreich und Preußen 3",
+   "owners": [
+    "TUP",
+    "TUP"
+   ],
+   "landmass_px": [
+    462868,
+    16
+   ],
+   "through_touches_both": true,
+   "n": 285
+  },
+  {
+   "a": [
+    653,
+    1614
+   ],
+   "b": [
+    653,
+    1620
+   ],
+   "through": [
+    653,
+    1615
+   ],
+   "gap": 6.0,
+   "kind": "link",
+   "name": "Peatiktist 11 - Peatiktist 17",
+   "owners": [
+    "PTK",
+    "PTK"
+   ],
+   "landmass_px": [
+    257,
+    3335
+   ],
+   "through_touches_both": true,
+   "n": 286
+  },
+  {
+   "a": [
+    685,
+    1775
+   ],
+   "b": [
+    680,
+    1776
+   ],
+   "through": [
+    684,
+    1775
+   ],
+   "gap": 5.1,
+   "kind": "link",
+   "name": "Terreich und Preußen 22 - Terreich und Preußen 28",
+   "owners": [
+    "TUP",
+    "TUP"
+   ],
+   "landmass_px": [
+    991,
+    721
+   ],
+   "through_touches_both": true,
+   "n": 287
+  },
+  {
+   "a": [
+    695,
+    1608
+   ],
+   "b": [
+    690,
+    1611
+   ],
+   "through": [
+    694,
+    1608
+   ],
+   "gap": 5.8,
+   "kind": "link",
+   "name": "Peatiktist 8 - Peatiktist 15",
+   "owners": [
+    "PTK",
+    "PTK"
+   ],
+   "landmass_px": [
+    1357,
+    3335
+   ],
+   "through_touches_both": true,
+   "n": 288
+  },
+  {
+   "a": [
+    719,
+    1606
+   ],
+   "b": [
+    715,
+    1607
+   ],
+   "through": [
+    718,
+    1606
+   ],
+   "gap": 4.1,
+   "kind": "link",
+   "name": "Peatiktist 7 - Peatiktist 8",
+   "owners": [
+    "PTK",
+    "PTK"
+   ],
+   "landmass_px": [
+    37587,
+    1357
+   ],
+   "through_touches_both": true,
+   "n": 289
+  },
+  {
+   "a": [
+    718,
+    1767
+   ],
+   "b": [
+    721,
+    1771
+   ],
+   "through": [
+    719,
+    1768
+   ],
+   "gap": 5.0,
+   "kind": "link",
+   "name": "Terreich und Preußen 22 - Terreich und Preußen 30",
+   "owners": [
+    "TUP",
+    "TUP"
+   ],
+   "landmass_px": [
+    991,
+    580
+   ],
+   "through_touches_both": true,
+   "n": 290
+  },
+  {
+   "a": [
+    722,
+    1812
+   ],
+   "b": [
+    723,
+    1810
+   ],
+   "through": [
+    722,
+    1811
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Terreich und Preußen 40 - Terreich und Preußen 30",
+   "owners": [
+    "TUP",
+    "TUP"
+   ],
+   "landmass_px": [
+    462868,
+    580
+   ],
+   "through_touches_both": true,
+   "n": 291
+  },
+  {
+   "a": [
+    746,
+    1827
+   ],
+   "b": [
+    748,
+    1823
+   ],
+   "through": [
+    746,
+    1826
+   ],
+   "gap": 4.5,
+   "kind": "link",
+   "name": "Terreich und Preußen 40 - Terreich und Preußen 36",
+   "owners": [
+    "TUP",
+    "TUP"
+   ],
+   "landmass_px": [
+    462868,
+    1391
+   ],
+   "through_touches_both": true,
+   "n": 292
+  },
+  {
+   "a": [
+    755,
+    1916
+   ],
+   "b": [
+    759,
+    1915
+   ],
+   "through": [
+    756,
+    1916
+   ],
+   "gap": 4.1,
+   "kind": "link",
+   "name": "Terreich und Preußen 51 - Terreich und Preußen 62",
+   "owners": [
+    "TUP",
+    "TUP"
+   ],
+   "landmass_px": [
+    462868,
+    639
+   ],
+   "through_touches_both": true,
+   "n": 293
+  },
+  {
+   "a": [
+    760,
+    1863
+   ],
+   "b": [
+    760,
+    1861
+   ],
+   "through": [
+    760,
+    1862
+   ],
+   "gap": 2.0,
+   "kind": "link",
+   "name": "Terreich und Preußen 51 - Terreich und Preußen 51",
+   "owners": [
+    "TUP",
+    "TUP"
+   ],
+   "landmass_px": [
+    462868,
+    18
+   ],
+   "through_touches_both": true,
+   "n": 294
+  },
+  {
+   "a": [
+    766,
+    1882
+   ],
+   "b": [
+    772,
+    1878
+   ],
+   "through": [
+    767,
+    1881
+   ],
+   "gap": 7.2,
+   "kind": "link",
+   "name": "Terreich und Preußen 51 - Terreich und Preußen 53",
+   "owners": [
+    "TUP",
+    "TUP"
+   ],
+   "landmass_px": [
+    462868,
+    352
+   ],
+   "through_touches_both": true,
+   "n": 295
+  },
+  {
+   "a": [
+    796,
+    1881
+   ],
+   "b": [
+    788,
+    1880
+   ],
+   "through": [
+    795,
+    1881
+   ],
+   "gap": 8.1,
+   "kind": "link",
+   "name": "Terreich und Preußen 47 - Terreich und Preußen 53",
+   "owners": [
+    "TUP",
+    "TUP"
+   ],
+   "landmass_px": [
+    6576,
+    352
+   ],
+   "through_touches_both": true,
+   "n": 296
+  },
+  {
+   "a": [
+    902,
+    1654
+   ],
+   "b": [
+    903,
+    1652
+   ],
+   "through": [
+    902,
+    1653
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Peatiktist 21 - Anglost 50",
+   "owners": [
+    "PTK",
+    "AGL"
+   ],
+   "landmass_px": [
+    37587,
+    2445
+   ],
+   "through_touches_both": true,
+   "n": 297
+  },
+  {
+   "a": [
+    918,
+    1685
+   ],
+   "b": [
+    922,
+    1684
+   ],
+   "through": [
+    919,
+    1685
+   ],
+   "gap": 4.1,
+   "kind": "link",
+   "name": "Peatiktist 25 - Peatiktist 27",
+   "owners": [
+    "PTK",
+    "PTK"
+   ],
+   "landmass_px": [
+    37587,
+    666
+   ],
+   "through_touches_both": true,
+   "n": 298
+  },
+  {
+   "a": [
+    939,
+    1864
+   ],
+   "b": [
+    939,
+    1862
+   ],
+   "through": [
+    939,
+    1863
+   ],
+   "gap": 2.0,
+   "kind": "link",
+   "name": "Terreich und Preußen 46 - Terreich und Preußen 46",
+   "owners": [
+    "TUP",
+    "TUP"
+   ],
+   "landmass_px": [
+    462868,
+    19
+   ],
+   "through_touches_both": true,
+   "n": 299
+  },
+  {
+   "a": [
+    941,
+    1657
+   ],
+   "b": [
+    945,
+    1657
+   ],
+   "through": [
+    942,
+    1657
+   ],
+   "gap": 4.0,
+   "kind": "link",
+   "name": "Anglost 55 - Anglost 54",
+   "owners": [
+    "AGL",
+    "AGL"
+   ],
+   "landmass_px": [
+    2445,
+    2983
+   ],
+   "through_touches_both": true,
+   "n": 300
+  },
+  {
+   "a": [
+    944,
+    1705
+   ],
+   "b": [
+    949,
+    1708
+   ],
+   "through": [
+    945,
+    1706
+   ],
+   "gap": 5.8,
+   "kind": "link",
+   "name": "Peatiktist 27 - Terreich und Preußen 11",
+   "owners": [
+    "PTK",
+    "TUP"
+   ],
+   "landmass_px": [
+    666,
+    8542
+   ],
+   "through_touches_both": true,
+   "n": 301
+  },
+  {
+   "a": [
+    1043,
+    1765
+   ],
+   "b": [
+    1038,
+    1768
+   ],
+   "through": [
+    1042,
+    1766
+   ],
+   "gap": 5.8,
+   "kind": "link",
+   "name": "Terreich und Preußen 23 - Terreich und Preußen 24",
+   "owners": [
+    "TUP",
+    "TUP"
+   ],
+   "landmass_px": [
+    5606,
+    8542
+   ],
+   "through_touches_both": true,
+   "n": 302
+  },
+  {
+   "a": [
+    1064,
+    1658
+   ],
+   "b": [
+    1068,
+    1658
+   ],
+   "through": [
+    1065,
+    1658
+   ],
+   "gap": 4.0,
+   "kind": "link",
+   "name": "Terreich und Preußen 2 - Estande 70",
+   "owners": [
+    "TUP",
+    "ESD"
+   ],
+   "landmass_px": [
+    5606,
+    1421
+   ],
+   "through_touches_both": true,
+   "n": 303
+  },
+  {
+   "a": [
+    1080,
+    1725
+   ],
+   "b": [
+    1083,
+    1731
+   ],
+   "through": [
+    1080,
+    1726
+   ],
+   "gap": 6.7,
+   "kind": "link",
+   "name": "Estande 70 - Estande 72",
+   "owners": [
+    "ESD",
+    "ESD"
+   ],
+   "landmass_px": [
+    1421,
+    4033
+   ],
+   "through_touches_both": true,
+   "n": 304
+  },
+  {
+   "a": [
+    1156,
+    1784
+   ],
+   "b": [
+    1166,
+    1791
+   ],
+   "through": [
+    1157,
+    1785
+   ],
+   "gap": 12.2,
+   "kind": "link",
+   "name": "Estande 73 - Estande 76",
+   "owners": [
+    "ESD",
+    "ESD"
+   ],
+   "landmass_px": [
+    4033,
+    3376
+   ],
+   "through_touches_both": true,
+   "n": 305
+  },
+  {
+   "a": [
+    1288,
+    1752
+   ],
+   "b": [
+    1289,
+    1755
+   ],
+   "through": [
+    1288,
+    1753
+   ],
+   "gap": 3.2,
+   "kind": "link",
+   "name": "Estande 71 - Estande 74",
+   "owners": [
+    "ESD",
+    "ESD"
+   ],
+   "landmass_px": [
+    315,
+    493
+   ],
+   "through_touches_both": true,
+   "n": 306
+  },
+  {
+   "a": [
+    1307,
+    1807
+   ],
+   "b": [
+    1305,
+    1788
+   ],
+   "through": [
+    1307,
+    1806
+   ],
+   "gap": 19.1,
+   "kind": "link",
+   "name": "Dumas 1 - Estande 74",
+   "owners": [
+    "DUM",
+    "ESD"
+   ],
+   "landmass_px": [
+    462868,
+    493
+   ],
+   "through_touches_both": true,
+   "n": 307
+  },
+  {
+   "a": [
+    1452,
+    1827
+   ],
+   "b": [
+    1444,
+    1830
+   ],
+   "through": [
+    1451,
+    1827
+   ],
+   "gap": 8.5,
+   "kind": "link",
+   "name": "Recaxa 4 - Recaxa 4",
+   "owners": [
+    "REC",
+    "REC"
+   ],
+   "landmass_px": [
+    60475,
+    16
+   ],
+   "through_touches_both": true,
+   "n": 308
+  },
+  {
+   "a": [
+    1642,
+    1911
+   ],
+   "b": [
+    1646,
+    1914
+   ],
+   "through": [
+    1643,
+    1912
+   ],
+   "gap": 5.0,
+   "kind": "link",
+   "name": "Recaxa 13 - Surredia 18",
+   "owners": [
+    "REC",
+    "SRD"
+   ],
+   "landmass_px": [
+    60475,
+    403
+   ],
+   "through_touches_both": true,
+   "n": 309
+  },
+  {
+   "a": [
+    1649,
+    1670
+   ],
+   "b": [
+    1646,
+    1671
+   ],
+   "through": [
+    1648,
+    1670
+   ],
+   "gap": 3.2,
+   "kind": "link",
+   "name": "Concorde et Volonté - Concorde et Volonté",
+   "owners": [
+    "ROU",
+    "ROU"
+   ],
+   "landmass_px": [
+    27,
+    45
+   ],
+   "through_touches_both": true,
+   "n": 310
+  },
+  {
+   "a": [
+    1654,
+    1685
+   ],
+   "b": [
+    1646,
+    1675
+   ],
+   "through": [
+    1653,
+    1684
+   ],
+   "gap": 12.8,
+   "kind": "link",
+   "name": "Arovannea 6 - Concorde et Volonté",
+   "owners": [
+    "AVN",
+    "ROU"
+   ],
+   "landmass_px": [
+    60475,
+    45
+   ],
+   "through_touches_both": true,
+   "n": 311
+  },
+  {
+   "a": [
+    1653,
+    1894
+   ],
+   "b": [
+    1656,
+    1892
+   ],
+   "through": [
+    1654,
+    1894
+   ],
+   "gap": 3.6,
+   "kind": "link",
+   "name": "Recaxa 13 - Surredia 16",
+   "owners": [
+    "REC",
+    "SRD"
+   ],
+   "landmass_px": [
+    60475,
+    3066
+   ],
+   "through_touches_both": true,
+   "n": 312
+  },
+  {
+   "a": [
+    1676,
+    1915
+   ],
+   "b": [
+    1678,
+    1916
+   ],
+   "through": [
+    1677,
+    1915
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Surredia 18 - Surredia 19",
+   "owners": [
+    "SRD",
+    "SRD"
+   ],
+   "landmass_px": [
+    403,
+    207
+   ],
+   "through_touches_both": true,
+   "n": 313
+  },
+  {
+   "a": [
+    1705,
+    1637
+   ],
+   "b": [
+    1700,
+    1618
+   ],
+   "through": [
+    1705,
+    1636
+   ],
+   "gap": 19.6,
+   "kind": "link",
+   "name": "Ponchomagnifico 4 - Ponchomagnifico 2",
+   "owners": [
+    "PNC",
+    "PNC"
+   ],
+   "landmass_px": [
+    60475,
+    54
+   ],
+   "through_touches_both": true,
+   "n": 314
+  },
+  {
+   "a": [
+    1733,
+    1887
+   ],
+   "b": [
+    1735,
+    1886
+   ],
+   "through": [
+    1734,
+    1887
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Surredia 15 - Surredia 17",
+   "owners": [
+    "SRD",
+    "SRD"
+   ],
+   "landmass_px": [
+    3066,
+    6810
+   ],
+   "through_touches_both": true,
+   "n": 315
+  },
+  {
+   "a": [
+    1799,
+    1646
+   ],
+   "b": [
+    1804,
+    1646
+   ],
+   "through": [
+    1800,
+    1646
+   ],
+   "gap": 5.0,
+   "kind": "link",
+   "name": "Ponchomagnifico 3 - Avesária 5",
+   "owners": [
+    "PNC",
+    "AVE"
+   ],
+   "landmass_px": [
+    60475,
+    156
+   ],
+   "through_touches_both": true,
+   "n": 316
+  },
+  {
+   "a": [
+    1817,
+    1639
+   ],
+   "b": [
+    1815,
+    1641
+   ],
+   "through": [
+    1816,
+    1640
+   ],
+   "gap": 2.8,
+   "kind": "link",
+   "name": "Avesária 4 - Avesária 5",
+   "owners": [
+    "AVE",
+    "AVE"
+   ],
+   "landmass_px": [
+    37677,
+    156
+   ],
+   "through_touches_both": true,
+   "n": 317
+  },
+  {
+   "a": [
+    1821,
+    1840
+   ],
+   "b": [
+    1825,
+    1844
+   ],
+   "through": [
+    1822,
+    1841
+   ],
+   "gap": 5.7,
+   "kind": "link",
+   "name": "Surredia 12 - Atrocha 1",
+   "owners": [
+    "SRD",
+    "ATR"
+   ],
+   "landmass_px": [
+    10362,
+    3370
+   ],
+   "through_touches_both": true,
+   "n": 318
+  },
+  {
+   "a": [
+    1891,
+    1859
+   ],
+   "b": [
+    1888,
+    1862
+   ],
+   "through": [
+    1890,
+    1860
+   ],
+   "gap": 4.2,
+   "kind": "link",
+   "name": "Arvorenia 46 - Atrocha 3",
+   "owners": [
+    "ARV",
+    "ATR"
+   ],
+   "landmass_px": [
+    37990,
+    3370
+   ],
+   "through_touches_both": true,
+   "n": 319
+  },
+  {
+   "a": [
+    1891,
+    1900
+   ],
+   "b": [
+    1891,
+    1903
+   ],
+   "through": [
+    1891,
+    1901
+   ],
+   "gap": 3.0,
+   "kind": "link",
+   "name": "Atrocha 3 - Atrocha 12",
+   "owners": [
+    "ATR",
+    "ATR"
+   ],
+   "landmass_px": [
+    3370,
+    1559
+   ],
+   "through_touches_both": true,
+   "n": 320
+  },
+  {
+   "a": [
+    1919,
+    1903
+   ],
+   "b": [
+    1920,
+    1905
+   ],
+   "through": [
+    1919,
+    1904
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Arvorenia 55 - Atrocha 14",
+   "owners": [
+    "ARV",
+    "ATR"
+   ],
+   "landmass_px": [
+    37990,
+    1963
+   ],
+   "through_touches_both": true,
+   "n": 321
+  },
+  {
+   "a": [
+    1946,
+    1695
+   ],
+   "b": [
+    1944,
+    1697
+   ],
+   "through": [
+    1945,
+    1696
+   ],
+   "gap": 2.8,
+   "kind": "link",
+   "name": "Arovannea 4 - Arovannea 8",
+   "owners": [
+    "AVN",
+    "AVN"
+   ],
+   "landmass_px": [
+    2369,
+    1461
+   ],
+   "through_touches_both": true,
+   "n": 322
+  },
+  {
+   "a": [
+    1962,
+    1657
+   ],
+   "b": [
+    1962,
+    1661
+   ],
+   "through": [
+    1962,
+    1659
+   ],
+   "gap": 4.0,
+   "kind": "link",
+   "name": "Texaria 4 - Arovannea 2",
+   "owners": [
+    "TEX",
+    "AVN"
+   ],
+   "landmass_px": [
+    37677,
+    2369
+   ],
+   "through_touches_both": true,
+   "n": 323
+  },
+  {
+   "a": [
+    2046,
+    1738
+   ],
+   "b": [
+    2046,
+    1742
+   ],
+   "through": [
+    2046,
+    1739
+   ],
+   "gap": 4.0,
+   "kind": "link",
+   "name": "Arovannea 9 - Arvorenia 14",
+   "owners": [
+    "AVN",
+    "ARV"
+   ],
+   "landmass_px": [
+    37677,
+    37990
+   ],
+   "through_touches_both": true,
+   "n": 324
+  },
+  {
+   "a": [
+    2064,
+    1890
+   ],
+   "b": [
+    2062,
+    1892
+   ],
+   "through": [
+    2063,
+    1891
+   ],
+   "gap": 2.8,
+   "kind": "link",
+   "name": "Arvorenia 52 - Atrocha 8",
+   "owners": [
+    "ARV",
+    "ATR"
+   ],
+   "landmass_px": [
+    37990,
+    4512
+   ],
+   "through_touches_both": true,
+   "n": 325
+  },
+  {
+   "a": [
+    2183,
+    1880
+   ],
+   "b": [
+    2181,
+    1885
+   ],
+   "through": [
+    2183,
+    1881
+   ],
+   "gap": 5.4,
+   "kind": "link",
+   "name": "Arvorenia 53 - Arvorenia 56",
+   "owners": [
+    "ARV",
+    "ARV"
+   ],
+   "landmass_px": [
+    47374,
+    1011
+   ],
+   "through_touches_both": true,
+   "n": 326
+  },
+  {
+   "a": [
+    2190,
+    1782
+   ],
+   "b": [
+    2186,
+    1785
+   ],
+   "through": [
+    2189,
+    1783
+   ],
+   "gap": 5.0,
+   "kind": "link",
+   "name": "Arvorenia 17 - Arvorenia 28",
+   "owners": [
+    "ARV",
+    "ARV"
+   ],
+   "landmass_px": [
+    47374,
+    37990
+   ],
+   "through_touches_both": true,
+   "n": 327
+  },
+  {
+   "a": [
+    2195,
+    1752
+   ],
+   "b": [
+    2195,
+    1754
+   ],
+   "through": [
+    2195,
+    1753
+   ],
+   "gap": 2.0,
+   "kind": "link",
+   "name": "Arvorenia 6 - Arvorenia 19",
+   "owners": [
+    "ARV",
+    "ARV"
+   ],
+   "landmass_px": [
+    47374,
+    21
+   ],
+   "through_touches_both": true,
+   "n": 328
+  },
+  {
+   "a": [
+    2439,
+    1839
+   ],
+   "b": [
+    2449,
+    1833
+   ],
+   "through": [
+    2440,
+    1838
+   ],
+   "gap": 11.7,
+   "kind": "link",
+   "name": "Silvamar 4 - Silvamar 5",
+   "owners": [
+    "SVM",
+    "SVM"
+   ],
+   "landmass_px": [
+    47374,
+    68
+   ],
+   "through_touches_both": true,
+   "n": 329
+  },
+  {
+   "a": [
+    2537,
+    1793
+   ],
+   "b": [
+    2539,
+    1796
+   ],
+   "through": [
+    2538,
+    1794
+   ],
+   "gap": 3.6,
+   "kind": "link",
+   "name": "Las Anod 3 - Las Anod 3",
+   "owners": [
+    "LAN",
+    "LAN"
+   ],
+   "landmass_px": [
+    7106,
+    46
+   ],
+   "through_touches_both": true,
+   "n": 330
+  },
+  {
+   "a": [
+    2711,
+    1698
+   ],
+   "b": [
+    2716,
+    1703
+   ],
+   "through": [
+    2712,
+    1699
+   ],
+   "gap": 7.1,
+   "kind": "link",
+   "name": "Hohenzburg 1 - Hohenzburg 1",
+   "owners": [
+    "HZB",
+    "HZB"
+   ],
+   "landmass_px": [
+    54,
+    45
+   ],
+   "through_touches_both": true,
+   "n": 331
+  },
+  {
+   "a": [
+    2753,
+    1840
+   ],
+   "b": [
+    2752,
+    1842
+   ],
+   "through": [
+    2753,
+    1841
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Utopian Republic 23 - Utopian Republic 23",
+   "owners": [
+    "UTP",
+    "UTP"
+   ],
+   "landmass_px": [
+    449380,
+    17
+   ],
+   "through_touches_both": true,
+   "n": 332
+  },
+  {
+   "a": [
+    2763,
+    1914
+   ],
+   "b": [
+    2776,
+    1918
+   ],
+   "through": [
+    2764,
+    1914
+   ],
+   "gap": 13.6,
+   "kind": "link",
+   "name": "Utopian Republic 40 - Arklen 1",
+   "owners": [
+    "UTP",
+    "ARK"
+   ],
+   "landmass_px": [
+    477,
+    1984
+   ],
+   "through_touches_both": true,
+   "n": 333
+  },
+  {
+   "a": [
+    2773,
+    1888
+   ],
+   "b": [
+    2768,
+    1891
+   ],
+   "through": [
+    2772,
+    1888
+   ],
+   "gap": 5.8,
+   "kind": "link",
+   "name": "Utopian Republic 32 - Utopian Republic 40",
+   "owners": [
+    "UTP",
+    "UTP"
+   ],
+   "landmass_px": [
+    449380,
+    477
+   ],
+   "through_touches_both": true,
+   "n": 334
+  },
+  {
+   "a": [
+    3714,
+    1883
+   ],
+   "b": [
+    3700,
+    1889
+   ],
+   "through": [
+    3713,
+    1883
+   ],
+   "gap": 15.2,
+   "kind": "link",
+   "name": "Chineasia 36 - Chineasia 36",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    67752,
+    19
+   ],
+   "through_touches_both": true,
+   "n": 335
+  },
+  {
+   "a": [
+    3714,
+    1837
+   ],
+   "b": [
+    3708,
+    1839
+   ],
+   "through": [
+    3713,
+    1837
+   ],
+   "gap": 6.3,
+   "kind": "link",
+   "name": "Chineasia 34 - Chineasia 34",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    67752,
+    56
+   ],
+   "through_touches_both": true,
+   "n": 336
+  },
+  {
+   "a": [
+    3793,
+    1729
+   ],
+   "b": [
+    3794,
+    1725
+   ],
+   "through": [
+    3793,
+    1728
+   ],
+   "gap": 4.1,
+   "kind": "link",
+   "name": "Chineasia 17 - Chineasia 17",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    67752,
+    27
+   ],
+   "through_touches_both": true,
+   "n": 337
+  },
+  {
+   "a": [
+    3792,
+    1697
+   ],
+   "b": [
+    3800,
+    1713
+   ],
+   "through": [
+    3792,
+    1698
+   ],
+   "gap": 17.9,
+   "kind": "link",
+   "name": "Chineasia 2 - Chineasia 17",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    93,
+    36
+   ],
+   "through_touches_both": true,
+   "n": 338
+  },
+  {
+   "a": [
+    3810,
+    1716
+   ],
+   "b": [
+    3806,
+    1716
+   ],
+   "through": [
+    3809,
+    1716
+   ],
+   "gap": 4.0,
+   "kind": "link",
+   "name": "Chineasia 2 - Chineasia 17",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    67752,
+    36
+   ],
+   "through_touches_both": true,
+   "n": 339
+  },
+  {
+   "a": [
+    3908,
+    1699
+   ],
+   "b": [
+    3913,
+    1699
+   ],
+   "through": [
+    3909,
+    1699
+   ],
+   "gap": 5.0,
+   "kind": "link",
+   "name": "Chineasia 14 - Chineasia 14",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    67752,
+    20
+   ],
+   "through_touches_both": true,
+   "n": 340
+  },
+  {
+   "a": [
+    3922,
+    1688
+   ],
+   "b": [
+    3915,
+    1696
+   ],
+   "through": [
+    3921,
+    1689
+   ],
+   "gap": 10.6,
+   "kind": "link",
+   "name": "Chineasia 14 - Chineasia 14",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    72,
+    20
+   ],
+   "through_touches_both": true,
+   "n": 341
+  },
+  {
+   "a": [
+    3922,
+    1645
+   ],
+   "b": [
+    3918,
+    1647
+   ],
+   "through": [
+    3921,
+    1645
+   ],
+   "gap": 4.5,
+   "kind": "link",
+   "name": "Chineasia 6 - Chineasia 6",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    50,
+    64
+   ],
+   "through_touches_both": true,
+   "n": 342
+  },
+  {
+   "a": [
+    3927,
+    1620
+   ],
+   "b": [
+    3926,
+    1631
+   ],
+   "through": [
+    3927,
+    1621
+   ],
+   "gap": 11.0,
+   "kind": "link",
+   "name": "Krionik 159 - Chineasia 6",
+   "owners": [
+    "KRI",
+    "CNA"
+   ],
+   "landmass_px": [
+    20,
+    50
+   ],
+   "through_touches_both": true,
+   "n": 343
+  },
+  {
+   "a": [
+    3935,
+    1632
+   ],
+   "b": [
+    3927,
+    1632
+   ],
+   "through": [
+    3934,
+    1632
+   ],
+   "gap": 8.0,
+   "kind": "link",
+   "name": "Chineasia 6 - Chineasia 6",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    18,
+    50
+   ],
+   "through_touches_both": true,
+   "n": 344
+  },
+  {
+   "a": [
+    3946,
+    1609
+   ],
+   "b": [
+    3929,
+    1619
+   ],
+   "through": [
+    3945,
+    1610
+   ],
+   "gap": 19.7,
+   "kind": "link",
+   "name": "Krionik 155 - Krionik 159",
+   "owners": [
+    "KRI",
+    "KRI"
+   ],
+   "landmass_px": [
+    22670,
+    20
+   ],
+   "through_touches_both": true,
+   "n": 345
+  },
+  {
+   "a": [
+    3967,
+    1625
+   ],
+   "b": [
+    3966,
+    1632
+   ],
+   "through": [
+    3967,
+    1626
+   ],
+   "gap": 7.1,
+   "kind": "link",
+   "name": "Krionik 155 - Krionik 159",
+   "owners": [
+    "KRI",
+    "KRI"
+   ],
+   "landmass_px": [
+    22670,
+    24
+   ],
+   "through_touches_both": true,
+   "n": 346
+  },
+  {
+   "a": [
+    3982,
+    1677
+   ],
+   "b": [
+    3984,
+    1681
+   ],
+   "through": [
+    3982,
+    1678
+   ],
+   "gap": 4.5,
+   "kind": "link",
+   "name": "Chineasia 6 - Chineasia 6",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    158,
+    16
+   ],
+   "through_touches_both": true,
+   "n": 347
+  },
+  {
+   "a": [
+    3987,
+    1653
+   ],
+   "b": [
+    3988,
+    1669
+   ],
+   "through": [
+    3987,
+    1654
+   ],
+   "gap": 16.0,
+   "kind": "link",
+   "name": "Chineasia 6 - Chineasia 6",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    41,
+    158
+   ],
+   "through_touches_both": true,
+   "n": 348
+  },
+  {
+   "a": [
+    3989,
+    1634
+   ],
+   "b": [
+    3987,
+    1646
+   ],
+   "through": [
+    3989,
+    1635
+   ],
+   "gap": 12.2,
+   "kind": "link",
+   "name": "Krionik 159 - Chineasia 6",
+   "owners": [
+    "KRI",
+    "CNA"
+   ],
+   "landmass_px": [
+    24,
+    41
+   ],
+   "through_touches_both": true,
+   "n": 349
+  },
+  {
+   "a": [
+    3997,
+    1625
+   ],
+   "b": [
+    3990,
+    1630
+   ],
+   "through": [
+    3996,
+    1626
+   ],
+   "gap": 8.6,
+   "kind": "link",
+   "name": "Krionik 157 - Krionik 159",
+   "owners": [
+    "KRI",
+    "KRI"
+   ],
+   "landmass_px": [
+    22670,
+    24
+   ],
+   "through_touches_both": true,
+   "n": 350
+  },
+  {
+   "a": [
+    4028,
+    1638
+   ],
+   "b": [
+    4028,
+    1650
+   ],
+   "through": [
+    4028,
+    1645
+   ],
+   "gap": 12.0,
+   "kind": "link",
+   "name": "Krionik 157 - Chineasia 6",
+   "owners": [
+    "KRI",
+    "CNA"
+   ],
+   "landmass_px": [
+    22670,
+    16
+   ],
+   "through_touches_both": true,
+   "n": 351
+  },
+  {
+   "a": [
+    4032,
+    1652
+   ],
+   "b": [
+    4033,
+    1655
+   ],
+   "through": [
+    4032,
+    1653
+   ],
+   "gap": 3.2,
+   "kind": "link",
+   "name": "Chineasia 6 - Chineasia 6",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    16,
+    19
+   ],
+   "through_touches_both": true,
+   "n": 352
+  },
+  {
+   "a": [
+    4044,
+    1632
+   ],
+   "b": [
+    4043,
+    1634
+   ],
+   "through": [
+    4044,
+    1633
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Krionik 158 - Chineasia 6",
+   "owners": [
+    "KRI",
+    "CNA"
+   ],
+   "landmass_px": [
+    22670,
+    45
+   ],
+   "through_touches_both": true,
+   "n": 353
+  },
+  {
+   "a": [
+    4052,
+    1696
+   ],
+   "b": [
+    4045,
+    1708
+   ],
+   "through": [
+    4051,
+    1697
+   ],
+   "gap": 13.9,
+   "kind": "link",
+   "name": "Chineasia 6 - Chineasia 6",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    16,
+    25
+   ],
+   "through_touches_both": true,
+   "n": 354
+  },
+  {
+   "a": [
+    4047,
+    1644
+   ],
+   "b": [
+    4053,
+    1651
+   ],
+   "through": [
+    4048,
+    1645
+   ],
+   "gap": 9.2,
+   "kind": "link",
+   "name": "Chineasia 6 - Chineasia 6",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    45,
+    76
+   ],
+   "through_touches_both": true,
+   "n": 355
+  },
+  {
+   "a": [
+    4052,
+    1661
+   ],
+   "b": [
+    4050,
+    1668
+   ],
+   "through": [
+    4052,
+    1662
+   ],
+   "gap": 7.3,
+   "kind": "link",
+   "name": "Chineasia 6 - Chineasia 6",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    76,
+    47
+   ],
+   "through_touches_both": true,
+   "n": 356
+  },
+  {
+   "a": [
+    4053,
+    1679
+   ],
+   "b": [
+    4054,
+    1681
+   ],
+   "through": [
+    4053,
+    1680
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Chineasia 6 - Chineasia 6",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    47,
+    42
+   ],
+   "through_touches_both": true,
+   "n": 357
+  },
+  {
+   "a": [
+    4054,
+    1688
+   ],
+   "b": [
+    4054,
+    1693
+   ],
+   "through": [
+    4054,
+    1689
+   ],
+   "gap": 5.0,
+   "kind": "link",
+   "name": "Chineasia 6 - Chineasia 6",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    42,
+    16
+   ],
+   "through_touches_both": true,
+   "n": 358
+  },
+  {
+   "a": [
+    4062,
+    1878
+   ],
+   "b": [
+    4062,
+    1885
+   ],
+   "through": [
+    4062,
+    1879
+   ],
+   "gap": 7.0,
+   "kind": "link",
+   "name": "Felter 1 - Felter 3",
+   "owners": [
+    "FLT",
+    "FLT"
+   ],
+   "landmass_px": [
+    548,
+    4830
+   ],
+   "through_touches_both": true,
+   "n": 359
+  },
+  {
+   "a": [
+    4068,
+    1724
+   ],
+   "b": [
+    4070,
+    1732
+   ],
+   "through": [
+    4068,
+    1725
+   ],
+   "gap": 8.2,
+   "kind": "link",
+   "name": "Chineasia 6 - Chineasia 6",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    28,
+    32
+   ],
+   "through_touches_both": true,
+   "n": 360
+  },
+  {
+   "a": [
+    4073,
+    1722
+   ],
+   "b": [
+    4078,
+    1724
+   ],
+   "through": [
+    4074,
+    1722
+   ],
+   "gap": 5.4,
+   "kind": "link",
+   "name": "Chineasia 6 - Chineasia 6",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    28,
+    71
+   ],
+   "through_touches_both": true,
+   "n": 361
+  },
+  {
+   "a": [
+    4098,
+    1896
+   ],
+   "b": [
+    4102,
+    1899
+   ],
+   "through": [
+    4099,
+    1897
+   ],
+   "gap": 5.0,
+   "kind": "link",
+   "name": "Felter 2 - Felter 4",
+   "owners": [
+    "FLT",
+    "FLT"
+   ],
+   "landmass_px": [
+    4830,
+    20
+   ],
+   "through_touches_both": true,
+   "n": 362
+  },
+  {
+   "a": [
+    4106,
+    1663
+   ],
+   "b": [
+    4110,
+    1664
+   ],
+   "through": [
+    4107,
+    1663
+   ],
+   "gap": 4.1,
+   "kind": "link",
+   "name": "Chineasia 8 - Chineasia 8",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    110,
+    227
+   ],
+   "through_touches_both": true,
+   "n": 363
+  },
+  {
+   "a": [
+    4111,
+    1654
+   ],
+   "b": [
+    4108,
+    1657
+   ],
+   "through": [
+    4110,
+    1655
+   ],
+   "gap": 4.2,
+   "kind": "link",
+   "name": "Chineasia 8 - Chineasia 8",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    120,
+    110
+   ],
+   "through_touches_both": true,
+   "n": 364
+  },
+  {
+   "a": [
+    4125,
+    1678
+   ],
+   "b": [
+    4120,
+    1672
+   ],
+   "through": [
+    4124,
+    1677
+   ],
+   "gap": 7.8,
+   "kind": "link",
+   "name": "Chineasia 12 - Chineasia 8",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    5748,
+    227
+   ],
+   "through_touches_both": true,
+   "n": 365
+  },
+  {
+   "a": [
+    4131,
+    1757
+   ],
+   "b": [
+    4128,
+    1763
+   ],
+   "through": [
+    4131,
+    1758
+   ],
+   "gap": 6.7,
+   "kind": "link",
+   "name": "Chineasia 18 - Chineasia 18",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    903,
+    27
+   ],
+   "through_touches_both": true,
+   "n": 366
+  },
+  {
+   "a": [
+    4165,
+    1814
+   ],
+   "b": [
+    4162,
+    1811
+   ],
+   "through": [
+    4164,
+    1813
+   ],
+   "gap": 4.2,
+   "kind": "link",
+   "name": "Arpino 8 - Chineasia 20",
+   "owners": [
+    "ARP",
+    "CNA"
+   ],
+   "landmass_px": [
+    783842,
+    38
+   ],
+   "through_touches_both": true,
+   "n": 367
+  },
+  {
+   "a": [
+    4161,
+    1717
+   ],
+   "b": [
+    4166,
+    1726
+   ],
+   "through": [
+    4162,
+    1718
+   ],
+   "gap": 10.3,
+   "kind": "link",
+   "name": "Chineasia 12 - Chineasia 18",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    5748,
+    903
+   ],
+   "through_touches_both": true,
+   "n": 368
+  },
+  {
+   "a": [
+    4176,
+    1739
+   ],
+   "b": [
+    4182,
+    1742
+   ],
+   "through": [
+    4177,
+    1739
+   ],
+   "gap": 6.7,
+   "kind": "link",
+   "name": "Chineasia 18 - Chineasia 20",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    903,
+    1199
+   ],
+   "through_touches_both": true,
+   "n": 369
+  },
+  {
+   "a": [
+    4252,
+    1647
+   ],
+   "b": [
+    4255,
+    1648
+   ],
+   "through": [
+    4253,
+    1647
+   ],
+   "gap": 3.2,
+   "kind": "link",
+   "name": "Chineasia 3 - Chineasia 4",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    5748,
+    6653
+   ],
+   "through_touches_both": true,
+   "n": 370
+  },
+  {
+   "a": [
+    4314,
+    1607
+   ],
+   "b": [
+    4303,
+    1607
+   ],
+   "through": [
+    4313,
+    1607
+   ],
+   "gap": 11.0,
+   "kind": "link",
+   "name": "Myehn 34 - Chineasia 4",
+   "owners": [
+    "MYH",
+    "CNA"
+   ],
+   "landmass_px": [
+    783842,
+    118
+   ],
+   "through_touches_both": true,
+   "n": 371
+  },
+  {
+   "a": [
+    4314,
+    1680
+   ],
+   "b": [
+    4317,
+    1685
+   ],
+   "through": [
+    4314,
+    1681
+   ],
+   "gap": 5.8,
+   "kind": "link",
+   "name": "Chineasia 10 - Chineasia 10",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    6653,
+    21
+   ],
+   "through_touches_both": true,
+   "n": 372
+  },
+  {
+   "a": [
+    4335,
+    1613
+   ],
+   "b": [
+    4338,
+    1620
+   ],
+   "through": [
+    4335,
+    1614
+   ],
+   "gap": 7.6,
+   "kind": "link",
+   "name": "Myehn 34 - Chineasia 5",
+   "owners": [
+    "MYH",
+    "CNA"
+   ],
+   "landmass_px": [
+    783842,
+    18
+   ],
+   "through_touches_both": true,
+   "n": 373
+  },
+  {
+   "a": [
+    4342,
+    1626
+   ],
+   "b": [
+    4341,
+    1629
+   ],
+   "through": [
+    4342,
+    1627
+   ],
+   "gap": 3.2,
+   "kind": "link",
+   "name": "Chineasia 5 - Chineasia 5",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    18,
+    6653
+   ],
+   "through_touches_both": true,
+   "n": 374
+  },
+  {
+   "a": [
+    4723,
+    1716
+   ],
+   "b": [
+    4721,
+    1716
+   ],
+   "through": [
+    4722,
+    1716
+   ],
+   "gap": 2.0,
+   "kind": "link",
+   "name": "Myehn 41 - Myehn 43",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    9819,
+    703
+   ],
+   "through_touches_both": true,
+   "n": 375
+  },
+  {
+   "a": [
+    4726,
+    1735
+   ],
+   "b": [
+    4724,
+    1737
+   ],
+   "through": [
+    4725,
+    1736
+   ],
+   "gap": 2.8,
+   "kind": "link",
+   "name": "Myehn 41 - Myehn 46",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    9819,
+    333
+   ],
+   "through_touches_both": true,
+   "n": 376
+  },
+  {
+   "a": [
+    4728,
+    1668
+   ],
+   "b": [
+    4727,
+    1666
+   ],
+   "through": [
+    4728,
+    1667
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Myehn 41 - Myehn 39",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    9819,
+    396
+   ],
+   "through_touches_both": true,
+   "n": 377
+  },
+  {
+   "a": [
+    4727,
+    1754
+   ],
+   "b": [
+    4731,
+    1755
+   ],
+   "through": [
+    4728,
+    1754
+   ],
+   "gap": 4.1,
+   "kind": "link",
+   "name": "Myehn 46 - Myehn 47",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    333,
+    342
+   ],
+   "through_touches_both": true,
+   "n": 378
+  },
+  {
+   "a": [
+    4736,
+    1808
+   ],
+   "b": [
+    4736,
+    1810
+   ],
+   "through": [
+    4736,
+    1809
+   ],
+   "gap": 2.0,
+   "kind": "link",
+   "name": "Myehn 47 - Myehn 53",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    135,
+    174
+   ],
+   "through_touches_both": true,
+   "n": 379
+  },
+  {
+   "a": [
+    4744,
+    1751
+   ],
+   "b": [
+    4744,
+    1753
+   ],
+   "through": [
+    4744,
+    1752
+   ],
+   "gap": 2.0,
+   "kind": "link",
+   "name": "Myehn 44 - Myehn 44",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    9819,
+    18
+   ],
+   "through_touches_both": true,
+   "n": 380
+  },
+  {
+   "a": [
+    4745,
+    1790
+   ],
+   "b": [
+    4744,
+    1792
+   ],
+   "through": [
+    4745,
+    1791
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Myehn 47 - Myehn 47",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    17,
+    135
+   ],
+   "through_touches_both": true,
+   "n": 381
+  },
+  {
+   "a": [
+    4745,
+    1783
+   ],
+   "b": [
+    4745,
+    1786
+   ],
+   "through": [
+    4745,
+    1784
+   ],
+   "gap": 3.0,
+   "kind": "link",
+   "name": "Myehn 47 - Myehn 47",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    342,
+    17
+   ],
+   "through_touches_both": true,
+   "n": 382
+  },
+  {
+   "a": [
+    4758,
+    1814
+   ],
+   "b": [
+    4747,
+    1814
+   ],
+   "through": [
+    4757,
+    1814
+   ],
+   "gap": 11.0,
+   "kind": "link",
+   "name": "Myehn 51 - Myehn 53",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    948,
+    174
+   ],
+   "through_touches_both": true,
+   "n": 383
+  },
+  {
+   "a": [
+    4760,
+    1753
+   ],
+   "b": [
+    4762,
+    1755
+   ],
+   "through": [
+    4761,
+    1754
+   ],
+   "gap": 2.8,
+   "kind": "link",
+   "name": "Myehn 44 - Myehn 48",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    9819,
+    184
+   ],
+   "through_touches_both": true,
+   "n": 384
+  },
+  {
+   "a": [
+    4762,
+    1768
+   ],
+   "b": [
+    4765,
+    1780
+   ],
+   "through": [
+    4762,
+    1769
+   ],
+   "gap": 12.4,
+   "kind": "link",
+   "name": "Myehn 48 - Myehn 48",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    184,
+    35
+   ],
+   "through_touches_both": true,
+   "n": 385
+  },
+  {
+   "a": [
+    4785,
+    1828
+   ],
+   "b": [
+    4782,
+    1835
+   ],
+   "through": [
+    4785,
+    1829
+   ],
+   "gap": 7.6,
+   "kind": "link",
+   "name": "Myehn 51 - Myehn 54",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    948,
+    409
+   ],
+   "through_touches_both": true,
+   "n": 386
+  },
+  {
+   "a": [
+    4786,
+    1616
+   ],
+   "b": [
+    4788,
+    1618
+   ],
+   "through": [
+    4787,
+    1617
+   ],
+   "gap": 2.8,
+   "kind": "link",
+   "name": "Myehn 35 - Myehn 32",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    1463,
+    25
+   ],
+   "through_touches_both": true,
+   "n": 387
+  },
+  {
+   "a": [
+    4787,
+    1856
+   ],
+   "b": [
+    4787,
+    1860
+   ],
+   "through": [
+    4787,
+    1857
+   ],
+   "gap": 4.0,
+   "kind": "link",
+   "name": "Myehn 54 - Myehn 57",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    409,
+    1555
+   ],
+   "through_touches_both": true,
+   "n": 388
+  },
+  {
+   "a": [
+    4791,
+    1615
+   ],
+   "b": [
+    4790,
+    1617
+   ],
+   "through": [
+    4791,
+    1616
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Myehn 32 - Myehn 32",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    9819,
+    25
+   ],
+   "through_touches_both": true,
+   "n": 389
+  },
+  {
+   "a": [
+    4791,
+    1725
+   ],
+   "b": [
+    4794,
+    1732
+   ],
+   "through": [
+    4791,
+    1726
+   ],
+   "gap": 7.6,
+   "kind": "link",
+   "name": "Myehn 42 - Myehn 42",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    9819,
+    16
+   ],
+   "through_touches_both": true,
+   "n": 390
+  },
+  {
+   "a": [
+    4795,
+    1737
+   ],
+   "b": [
+    4802,
+    1750
+   ],
+   "through": [
+    4796,
+    1738
+   ],
+   "gap": 14.8,
+   "kind": "link",
+   "name": "Myehn 42 - Myehn 42",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    16,
+    135
+   ],
+   "through_touches_both": true,
+   "n": 391
+  },
+  {
+   "a": [
+    4801,
+    1913
+   ],
+   "b": [
+    4803,
+    1917
+   ],
+   "through": [
+    4801,
+    1914
+   ],
+   "gap": 4.5,
+   "kind": "link",
+   "name": "Myehn 57 - Myehn 57",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    1555,
+    31
+   ],
+   "through_touches_both": true,
+   "n": 392
+  },
+  {
+   "a": [
+    4815,
+    1810
+   ],
+   "b": [
+    4819,
+    1812
+   ],
+   "through": [
+    4816,
+    1810
+   ],
+   "gap": 4.5,
+   "kind": "link",
+   "name": "Myehn 51 - Myehn 52",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    948,
+    7229
+   ],
+   "through_touches_both": true,
+   "n": 393
+  },
+  {
+   "a": [
+    4824,
+    1645
+   ],
+   "b": [
+    4825,
+    1647
+   ],
+   "through": [
+    4824,
+    1646
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Myehn 36 - Myehn 38",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    9819,
+    463
+   ],
+   "through_touches_both": true,
+   "n": 394
+  },
+  {
+   "a": [
+    4820,
+    1709
+   ],
+   "b": [
+    4832,
+    1717
+   ],
+   "through": [
+    4821,
+    1710
+   ],
+   "gap": 14.4,
+   "kind": "link",
+   "name": "Myehn 42 - Myehn 45",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    9819,
+    168
+   ],
+   "through_touches_both": true,
+   "n": 395
+  },
+  {
+   "a": [
+    4831,
+    1686
+   ],
+   "b": [
+    4831,
+    1689
+   ],
+   "through": [
+    4831,
+    1687
+   ],
+   "gap": 3.0,
+   "kind": "link",
+   "name": "Myehn 38 - Myehn 38",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    463,
+    16
+   ],
+   "through_touches_both": true,
+   "n": 396
+  },
+  {
+   "a": [
+    4839,
+    1822
+   ],
+   "b": [
+    4839,
+    1825
+   ],
+   "through": [
+    4839,
+    1823
+   ],
+   "gap": 3.0,
+   "kind": "link",
+   "name": "Myehn 49 - Myehn 52",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    718,
+    7229
+   ],
+   "through_touches_both": true,
+   "n": 397
+  },
+  {
+   "a": [
+    4840,
+    1674
+   ],
+   "b": [
+    4845,
+    1676
+   ],
+   "through": [
+    4841,
+    1674
+   ],
+   "gap": 5.4,
+   "kind": "link",
+   "name": "Myehn 38 - Myehn 38",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    463,
+    126
+   ],
+   "through_touches_both": true,
+   "n": 398
+  },
+  {
+   "a": [
+    4853,
+    1666
+   ],
+   "b": [
+    4852,
+    1668
+   ],
+   "through": [
+    4853,
+    1667
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Myehn 38 - Myehn 38",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    31,
+    126
+   ],
+   "through_touches_both": true,
+   "n": 399
+  },
+  {
+   "a": [
+    4884,
+    1915
+   ],
+   "b": [
+    4884,
+    1918
+   ],
+   "through": [
+    4884,
+    1916
+   ],
+   "gap": 3.0,
+   "kind": "link",
+   "name": "Myehn 59 - Myehn 61",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    7229,
+    1331
+   ],
+   "through_touches_both": true,
+   "n": 400
+  },
+  {
+   "a": [
+    4898,
+    1850
+   ],
+   "b": [
+    4899,
+    1852
+   ],
+   "through": [
+    4898,
+    1851
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Myehn 50 - Myehn 56",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    1811,
+    7229
+   ],
+   "through_touches_both": true,
+   "n": 401
+  },
+  {
+   "a": [
+    5011,
+    1665
+   ],
+   "b": [
+    5015,
+    1669
+   ],
+   "through": [
+    5012,
+    1666
+   ],
+   "gap": 5.7,
+   "kind": "link",
+   "name": "Shinnokawa 1 - Shinnokawa 1",
+   "owners": [
+    "SHN",
+    "SHN"
+   ],
+   "landmass_px": [
+    58,
+    20
+   ],
+   "through_touches_both": true,
+   "n": 402
+  },
+  {
+   "a": [
+    5018,
+    1674
+   ],
+   "b": [
+    5025,
+    1675
+   ],
+   "through": [
+    5019,
+    1674
+   ],
+   "gap": 7.1,
+   "kind": "link",
+   "name": "Shinnokawa 1 - Shinnokawa 1",
+   "owners": [
+    "SHN",
+    "SHN"
+   ],
+   "landmass_px": [
+    20,
+    16
+   ],
+   "through_touches_both": true,
+   "n": 403
+  },
+  {
+   "a": [
+    5031,
+    1676
+   ],
+   "b": [
+    5034,
+    1677
+   ],
+   "through": [
+    5032,
+    1676
+   ],
+   "gap": 3.2,
+   "kind": "link",
+   "name": "Shinnokawa 1 - Shinnokawa 1",
+   "owners": [
+    "SHN",
+    "SHN"
+   ],
+   "landmass_px": [
+    16,
+    33
+   ],
+   "through_touches_both": true,
+   "n": 404
+  },
+  {
+   "a": [
+    5041,
+    1681
+   ],
+   "b": [
+    5046,
+    1683
+   ],
+   "through": [
+    5043,
+    1682
+   ],
+   "gap": 5.4,
+   "kind": "link",
+   "name": "Shinnokawa 1 - Shinnokawa 1",
+   "owners": [
+    "SHN",
+    "SHN"
+   ],
+   "landmass_px": [
+    33,
+    16
+   ],
+   "through_touches_both": true,
+   "n": 405
+  },
+  {
+   "a": [
+    5051,
+    1683
+   ],
+   "b": [
+    5054,
+    1687
+   ],
+   "through": [
+    5052,
+    1684
+   ],
+   "gap": 5.0,
+   "kind": "link",
+   "name": "Shinnokawa 1 - Shinnokawa 1",
+   "owners": [
+    "SHN",
+    "SHN"
+   ],
+   "landmass_px": [
+    16,
+    46
+   ],
+   "through_touches_both": true,
+   "n": 406
+  },
+  {
+   "a": [
+    133,
+    2225
+   ],
+   "b": [
+    133,
+    2227
+   ],
+   "through": [
+    133,
+    2226
+   ],
+   "gap": 2.0,
+   "kind": "link",
+   "name": "Ostercoirasreich 2 - Ostercoirasreich 2",
+   "owners": [
+    "OCR",
+    "OCR"
+   ],
+   "landmass_px": [
+    22,
+    205
+   ],
+   "through_touches_both": true,
+   "n": 407
+  },
+  {
+   "a": [
+    214,
+    1998
+   ],
+   "b": [
+    214,
+    2010
+   ],
+   "through": [
+    214,
+    1999
+   ],
+   "gap": 12.0,
+   "kind": "link",
+   "name": "Terrabis-Seran 42 - Terrabis-Seran 42",
+   "owners": [
+    "TBS",
+    "TBS"
+   ],
+   "landmass_px": [
+    18,
+    24
+   ],
+   "through_touches_both": true,
+   "n": 408
+  },
+  {
+   "a": [
+    237,
+    2013
+   ],
+   "b": [
+    218,
+    2013
+   ],
+   "through": [
+    236,
+    2013
+   ],
+   "gap": 19.0,
+   "kind": "link",
+   "name": "Terrabis-Seran 42 - Terrabis-Seran 42",
+   "owners": [
+    "TBS",
+    "TBS"
+   ],
+   "landmass_px": [
+    462868,
+    24
+   ],
+   "through_touches_both": true,
+   "n": 409
+  },
+  {
+   "a": [
+    248,
+    2029
+   ],
+   "b": [
+    246,
+    2031
+   ],
+   "through": [
+    247,
+    2030
+   ],
+   "gap": 2.8,
+   "kind": "link",
+   "name": "Terrabis-Seran 51 - Terrabis-Seran 42",
+   "owners": [
+    "TBS",
+    "TBS"
+   ],
+   "landmass_px": [
+    462868,
+    72
+   ],
+   "through_touches_both": true,
+   "n": 410
+  },
+  {
+   "a": [
+    257,
+    2175
+   ],
+   "b": [
+    257,
+    2177
+   ],
+   "through": [
+    257,
+    2176
+   ],
+   "gap": 2.0,
+   "kind": "link",
+   "name": "Vineta 6 - Vineta 6",
+   "owners": [
+    "VNT",
+    "VNT"
+   ],
+   "landmass_px": [
+    230,
+    19
+   ],
+   "through_touches_both": true,
+   "n": 411
+  },
+  {
+   "a": [
+    258,
+    2152
+   ],
+   "b": [
+    257,
+    2154
+   ],
+   "through": [
+    258,
+    2153
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Vineta 6 - Vineta 6",
+   "owners": [
+    "VNT",
+    "VNT"
+   ],
+   "landmass_px": [
+    16,
+    230
+   ],
+   "through_touches_both": true,
+   "n": 412
+  },
+  {
+   "a": [
+    272,
+    2147
+   ],
+   "b": [
+    261,
+    2148
+   ],
+   "through": [
+    271,
+    2147
+   ],
+   "gap": 11.0,
+   "kind": "link",
+   "name": "Vineta 5 - Vineta 6",
+   "owners": [
+    "VNT",
+    "VNT"
+   ],
+   "landmass_px": [
+    426,
+    16
+   ],
+   "through_touches_both": true,
+   "n": 413
+  },
+  {
+   "a": [
+    272,
+    2109
+   ],
+   "b": [
+    266,
+    2112
+   ],
+   "through": [
+    271,
+    2109
+   ],
+   "gap": 6.7,
+   "kind": "link",
+   "name": "Vineta 2 - Vineta 3",
+   "owners": [
+    "VNT",
+    "VNT"
+   ],
+   "landmass_px": [
+    102,
+    1036
+   ],
+   "through_touches_both": true,
+   "n": 414
+  },
+  {
+   "a": [
+    278,
+    2155
+   ],
+   "b": [
+    276,
+    2156
+   ],
+   "through": [
+    277,
+    2155
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Vineta 5 - Vineta 5",
+   "owners": [
+    "VNT",
+    "VNT"
+   ],
+   "landmass_px": [
+    426,
+    27
+   ],
+   "through_touches_both": true,
+   "n": 415
+  },
+  {
+   "a": [
+    282,
+    2107
+   ],
+   "b": [
+    284,
+    2113
+   ],
+   "through": [
+    283,
+    2110
+   ],
+   "gap": 6.3,
+   "kind": "link",
+   "name": "Vineta 2 - Vineta 2",
+   "owners": [
+    "VNT",
+    "VNT"
+   ],
+   "landmass_px": [
+    102,
+    27
+   ],
+   "through_touches_both": true,
+   "n": 416
+  },
+  {
+   "a": [
+    282,
+    2161
+   ],
+   "b": [
+    284,
+    2171
+   ],
+   "through": [
+    282,
+    2162
+   ],
+   "gap": 10.2,
+   "kind": "link",
+   "name": "Vineta 5 - Vineta 7",
+   "owners": [
+    "VNT",
+    "VNT"
+   ],
+   "landmass_px": [
+    27,
+    613
+   ],
+   "through_touches_both": true,
+   "n": 417
+  },
+  {
+   "a": [
+    294,
+    2128
+   ],
+   "b": [
+    287,
+    2132
+   ],
+   "through": [
+    293,
+    2128
+   ],
+   "gap": 8.1,
+   "kind": "link",
+   "name": "Vineta 2 - Vineta 5",
+   "owners": [
+    "VNT",
+    "VNT"
+   ],
+   "landmass_px": [
+    2354,
+    426
+   ],
+   "through_touches_both": true,
+   "n": 418
+  },
+  {
+   "a": [
+    295,
+    2113
+   ],
+   "b": [
+    287,
+    2114
+   ],
+   "through": [
+    294,
+    2113
+   ],
+   "gap": 8.1,
+   "kind": "link",
+   "name": "Vineta 2 - Vineta 2",
+   "owners": [
+    "VNT",
+    "VNT"
+   ],
+   "landmass_px": [
+    2354,
+    27
+   ],
+   "through_touches_both": true,
+   "n": 419
+  },
+  {
+   "a": [
+    308,
+    2039
+   ],
+   "b": [
+    304,
+    2044
+   ],
+   "through": [
+    307,
+    2040
+   ],
+   "gap": 6.4,
+   "kind": "link",
+   "name": "Terrabis-Seran 50 - Terrabis-Seran 50",
+   "owners": [
+    "TBS",
+    "TBS"
+   ],
+   "landmass_px": [
+    25,
+    27
+   ],
+   "through_touches_both": true,
+   "n": 420
+  },
+  {
+   "a": [
+    308,
+    2033
+   ],
+   "b": [
+    309,
+    2035
+   ],
+   "through": [
+    308,
+    2034
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Terrabis-Seran 50 - Terrabis-Seran 50",
+   "owners": [
+    "TBS",
+    "TBS"
+   ],
+   "landmass_px": [
+    462868,
+    25
+   ],
+   "through_touches_both": true,
+   "n": 421
+  },
+  {
+   "a": [
+    310,
+    2127
+   ],
+   "b": [
+    311,
+    2129
+   ],
+   "through": [
+    310,
+    2128
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Vineta 2 - Vineta 4",
+   "owners": [
+    "VNT",
+    "VNT"
+   ],
+   "landmass_px": [
+    2354,
+    1001
+   ],
+   "through_touches_both": true,
+   "n": 422
+  },
+  {
+   "a": [
+    324,
+    2124
+   ],
+   "b": [
+    324,
+    2127
+   ],
+   "through": [
+    324,
+    2125
+   ],
+   "gap": 3.0,
+   "kind": "link",
+   "name": "Vineta 1 - Vineta 1",
+   "owners": [
+    "VNT",
+    "VNT"
+   ],
+   "landmass_px": [
+    2354,
+    21
+   ],
+   "through_touches_both": true,
+   "n": 423
+  },
+  {
+   "a": [
+    342,
+    2042
+   ],
+   "b": [
+    339,
+    2048
+   ],
+   "through": [
+    342,
+    2043
+   ],
+   "gap": 6.7,
+   "kind": "link",
+   "name": "Terrabis-Seran 48 - Terrabis-Seran 50",
+   "owners": [
+    "TBS",
+    "TBS"
+   ],
+   "landmass_px": [
+    462868,
+    26
+   ],
+   "through_touches_both": true,
+   "n": 424
+  },
+  {
+   "a": [
+    337,
+    2054
+   ],
+   "b": [
+    344,
+    2058
+   ],
+   "through": [
+    338,
+    2054
+   ],
+   "gap": 8.1,
+   "kind": "link",
+   "name": "Terrabis-Seran 50 - Vineta 1",
+   "owners": [
+    "TBS",
+    "VNT"
+   ],
+   "landmass_px": [
+    26,
+    22
+   ],
+   "through_touches_both": true,
+   "n": 425
+  },
+  {
+   "a": [
+    347,
+    2061
+   ],
+   "b": [
+    352,
+    2070
+   ],
+   "through": [
+    348,
+    2062
+   ],
+   "gap": 10.3,
+   "kind": "link",
+   "name": "Vineta 1 - Vineta 1",
+   "owners": [
+    "VNT",
+    "VNT"
+   ],
+   "landmass_px": [
+    22,
+    2354
+   ],
+   "through_touches_both": true,
+   "n": 426
+  },
+  {
+   "a": [
+    1295,
+    2015
+   ],
+   "b": [
+    1297,
+    2014
+   ],
+   "through": [
+    1296,
+    2015
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Kampfian Empire 22 - Kampfian Empire 34",
+   "owners": [
+    "KPF",
+    "KPF"
+   ],
+   "landmass_px": [
+    462868,
+    19
+   ],
+   "through_touches_both": true,
+   "n": 427
+  },
+  {
+   "a": [
+    1299,
+    2016
+   ],
+   "b": [
+    1311,
+    2029
+   ],
+   "through": [
+    1300,
+    2017
+   ],
+   "gap": 17.7,
+   "kind": "link",
+   "name": "Kampfian Empire 34 - Kampfian Empire 34",
+   "owners": [
+    "KPF",
+    "KPF"
+   ],
+   "landmass_px": [
+    19,
+    45
+   ],
+   "through_touches_both": true,
+   "n": 428
+  },
+  {
+   "a": [
+    1317,
+    1986
+   ],
+   "b": [
+    1319,
+    1988
+   ],
+   "through": [
+    1318,
+    1987
+   ],
+   "gap": 2.8,
+   "kind": "link",
+   "name": "Dumas 7 - Dumas 8",
+   "owners": [
+    "DUM",
+    "DUM"
+   ],
+   "landmass_px": [
+    462868,
+    35
+   ],
+   "through_touches_both": true,
+   "n": 429
+  },
+  {
+   "a": [
+    1720,
+    2014
+   ],
+   "b": [
+    1722,
+    2016
+   ],
+   "through": [
+    1721,
+    2015
+   ],
+   "gap": 2.8,
+   "kind": "link",
+   "name": "Atrocha 4 - Atrocha 4",
+   "owners": [
+    "ATR",
+    "ATR"
+   ],
+   "landmass_px": [
+    53,
+    37
+   ],
+   "through_touches_both": true,
+   "n": 430
+  },
+  {
+   "a": [
+    1809,
+    1941
+   ],
+   "b": [
+    1809,
+    1946
+   ],
+   "through": [
+    1809,
+    1942
+   ],
+   "gap": 5.0,
+   "kind": "link",
+   "name": "Atrocha 17 - Atrocha 22",
+   "owners": [
+    "ATR",
+    "ATR"
+   ],
+   "landmass_px": [
+    6810,
+    23
+   ],
+   "through_touches_both": true,
+   "n": 431
+  },
+  {
+   "a": [
+    1811,
+    1949
+   ],
+   "b": [
+    1811,
+    1954
+   ],
+   "through": [
+    1811,
+    1950
+   ],
+   "gap": 5.0,
+   "kind": "link",
+   "name": "Atrocha 22 - Atrocha 24",
+   "owners": [
+    "ATR",
+    "ATR"
+   ],
+   "landmass_px": [
+    23,
+    16
+   ],
+   "through_touches_both": true,
+   "n": 432
+  },
+  {
+   "a": [
+    2003,
+    1948
+   ],
+   "b": [
+    2000,
+    1953
+   ],
+   "through": [
+    2002,
+    1949
+   ],
+   "gap": 5.8,
+   "kind": "link",
+   "name": "Atrocha 13 - Atrocha 23",
+   "owners": [
+    "ATR",
+    "ATR"
+   ],
+   "landmass_px": [
+    4512,
+    1726
+   ],
+   "through_touches_both": true,
+   "n": 433
+  },
+  {
+   "a": [
+    2029,
+    1993
+   ],
+   "b": [
+    2025,
+    1991
+   ],
+   "through": [
+    2028,
+    1993
+   ],
+   "gap": 4.5,
+   "kind": "link",
+   "name": "Atrocha 26 - Atrocha 23",
+   "owners": [
+    "ATR",
+    "ATR"
+   ],
+   "landmass_px": [
+    9758,
+    1726
+   ],
+   "through_touches_both": true,
+   "n": 434
+  },
+  {
+   "a": [
+    2267,
+    1931
+   ],
+   "b": [
+    2271,
+    1945
+   ],
+   "through": [
+    2267,
+    1932
+   ],
+   "gap": 14.6,
+   "kind": "link",
+   "name": "Santa Fe 5 - Atrocha 21",
+   "owners": [
+    "SFE",
+    "ATR"
+   ],
+   "landmass_px": [
+    47374,
+    795
+   ],
+   "through_touches_both": true,
+   "n": 435
+  },
+  {
+   "a": [
+    3003,
+    2158
+   ],
+   "b": [
+    3008,
+    2160
+   ],
+   "through": [
+    3004,
+    2158
+   ],
+   "gap": 5.4,
+   "kind": "link",
+   "name": "Utopian Republic 68 - Utopian Republic 68",
+   "owners": [
+    "UTP",
+    "UTP"
+   ],
+   "landmass_px": [
+    20,
+    18
+   ],
+   "through_touches_both": true,
+   "n": 436
+  },
+  {
+   "a": [
+    3243,
+    2167
+   ],
+   "b": [
+    3247,
+    2182
+   ],
+   "through": [
+    3243,
+    2168
+   ],
+   "gap": 15.5,
+   "kind": "link",
+   "name": "Royabad 28 - Royabad 28",
+   "owners": [
+    "RYB",
+    "RYB"
+   ],
+   "landmass_px": [
+    19,
+    25
+   ],
+   "through_touches_both": true,
+   "n": 437
+  },
+  {
+   "a": [
+    3251,
+    2188
+   ],
+   "b": [
+    3251,
+    2198
+   ],
+   "through": [
+    3251,
+    2189
+   ],
+   "gap": 10.0,
+   "kind": "link",
+   "name": "Royabad 28 - Royabad 28",
+   "owners": [
+    "RYB",
+    "RYB"
+   ],
+   "landmass_px": [
+    25,
+    21
+   ],
+   "through_touches_both": true,
+   "n": 438
+  },
+  {
+   "a": [
+    3251,
+    2202
+   ],
+   "b": [
+    3253,
+    2203
+   ],
+   "through": [
+    3252,
+    2202
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Royabad 28 - Royabad 28",
+   "owners": [
+    "RYB",
+    "RYB"
+   ],
+   "landmass_px": [
+    21,
+    23
+   ],
+   "through_touches_both": true,
+   "n": 439
+  },
+  {
+   "a": [
+    3426,
+    1994
+   ],
+   "b": [
+    3426,
+    1998
+   ],
+   "through": [
+    3426,
+    1995
+   ],
+   "gap": 4.0,
+   "kind": "link",
+   "name": "South Usnistan 4 - South Usnistan 13",
+   "owners": [
+    "SUS",
+    "SUS"
+   ],
+   "landmass_px": [
+    449380,
+    650
+   ],
+   "through_touches_both": true,
+   "n": 440
+  },
+  {
+   "a": [
+    3803,
+    2142
+   ],
+   "b": [
+    3809,
+    2142
+   ],
+   "through": [
+    3804,
+    2142
+   ],
+   "gap": 6.0,
+   "kind": "link",
+   "name": "Chineasia 71 - Chineasia 70",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    67752,
+    754
+   ],
+   "through_touches_both": true,
+   "n": 441
+  },
+  {
+   "a": [
+    3825,
+    2163
+   ],
+   "b": [
+    3825,
+    2171
+   ],
+   "through": [
+    3825,
+    2164
+   ],
+   "gap": 8.0,
+   "kind": "link",
+   "name": "Chineasia 70 - Chineasia 73",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    754,
+    509
+   ],
+   "through_touches_both": true,
+   "n": 442
+  },
+  {
+   "a": [
+    3847,
+    2171
+   ],
+   "b": [
+    3837,
+    2176
+   ],
+   "through": [
+    3846,
+    2171
+   ],
+   "gap": 11.2,
+   "kind": "link",
+   "name": "Chineasia 72 - Chineasia 73",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    749,
+    509
+   ],
+   "through_touches_both": true,
+   "n": 443
+  },
+  {
+   "a": [
+    3852,
+    2145
+   ],
+   "b": [
+    3852,
+    2151
+   ],
+   "through": [
+    3852,
+    2146
+   ],
+   "gap": 6.0,
+   "kind": "link",
+   "name": "Chineasia 72 - Chineasia 72",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    26,
+    749
+   ],
+   "through_touches_both": true,
+   "n": 444
+  },
+  {
+   "a": [
+    3863,
+    2197
+   ],
+   "b": [
+    3861,
+    2198
+   ],
+   "through": [
+    3862,
+    2197
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Chineasia 72 - Chineasia 72",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    24,
+    16
+   ],
+   "through_touches_both": true,
+   "n": 445
+  },
+  {
+   "a": [
+    3863,
+    2189
+   ],
+   "b": [
+    3863,
+    2195
+   ],
+   "through": [
+    3863,
+    2190
+   ],
+   "gap": 6.0,
+   "kind": "link",
+   "name": "Chineasia 72 - Chineasia 72",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    749,
+    24
+   ],
+   "through_touches_both": true,
+   "n": 446
+  },
+  {
+   "a": [
+    3864,
+    2125
+   ],
+   "b": [
+    3864,
+    2127
+   ],
+   "through": [
+    3864,
+    2126
+   ],
+   "gap": 2.0,
+   "kind": "link",
+   "name": "Chineasia 66 - Chineasia 66",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    67752,
+    28
+   ],
+   "through_touches_both": true,
+   "n": 447
+  },
+  {
+   "a": [
+    3895,
+    1956
+   ],
+   "b": [
+    3896,
+    1958
+   ],
+   "through": [
+    3895,
+    1957
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Chineasia 47 - Chineasia 47",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    67752,
+    26
+   ],
+   "through_touches_both": true,
+   "n": 448
+  },
+  {
+   "a": [
+    3895,
+    2010
+   ],
+   "b": [
+    3897,
+    2011
+   ],
+   "through": [
+    3896,
+    2010
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Chineasia 51 - Chineasia 56",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    67752,
+    17
+   ],
+   "through_touches_both": true,
+   "n": 449
+  },
+  {
+   "a": [
+    3902,
+    2083
+   ],
+   "b": [
+    3900,
+    2083
+   ],
+   "through": [
+    3901,
+    2083
+   ],
+   "gap": 2.0,
+   "kind": "link",
+   "name": "Chineasia 60 - Chineasia 64",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    67752,
+    297
+   ],
+   "through_touches_both": true,
+   "n": 450
+  },
+  {
+   "a": [
+    3903,
+    2084
+   ],
+   "b": [
+    3902,
+    2086
+   ],
+   "through": [
+    3903,
+    2085
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Chineasia 60 - Chineasia 68",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    67752,
+    332
+   ],
+   "through_touches_both": true,
+   "n": 451
+  },
+  {
+   "a": [
+    3907,
+    2112
+   ],
+   "b": [
+    3906,
+    2114
+   ],
+   "through": [
+    3907,
+    2113
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Chineasia 68 - Chineasia 69",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    332,
+    616
+   ],
+   "through_touches_both": true,
+   "n": 452
+  },
+  {
+   "a": [
+    3911,
+    2046
+   ],
+   "b": [
+    3928,
+    2038
+   ],
+   "through": [
+    3912,
+    2046
+   ],
+   "gap": 18.8,
+   "kind": "link",
+   "name": "Chineasia 56 - Chineasia 56",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    67752,
+    21
+   ],
+   "through_touches_both": true,
+   "n": 453
+  },
+  {
+   "a": [
+    3938,
+    2126
+   ],
+   "b": [
+    3936,
+    2126
+   ],
+   "through": [
+    3937,
+    2126
+   ],
+   "gap": 2.0,
+   "kind": "link",
+   "name": "Chineasia 67 - Chineasia 69",
+   "owners": [
+    "CNA",
+    "CNA"
+   ],
+   "landmass_px": [
+    578,
+    616
+   ],
+   "through_touches_both": true,
+   "n": 454
+  },
+  {
+   "a": [
+    4028,
+    1953
+   ],
+   "b": [
+    4033,
+    1956
+   ],
+   "through": [
+    4029,
+    1954
+   ],
+   "gap": 5.8,
+   "kind": "link",
+   "name": "Felter 3 - Felter 6",
+   "owners": [
+    "FLT",
+    "FLT"
+   ],
+   "landmass_px": [
+    4830,
+    30883
+   ],
+   "through_touches_both": true,
+   "n": 455
+  },
+  {
+   "a": [
+    4096,
+    1961
+   ],
+   "b": [
+    4097,
+    1959
+   ],
+   "through": [
+    4096,
+    1960
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Felter 7 - Felter 7",
+   "owners": [
+    "FLT",
+    "FLT"
+   ],
+   "landmass_px": [
+    30883,
+    21
+   ],
+   "through_touches_both": true,
+   "n": 456
+  },
+  {
+   "a": [
+    4138,
+    2003
+   ],
+   "b": [
+    4143,
+    2000
+   ],
+   "through": [
+    4139,
+    2002
+   ],
+   "gap": 5.8,
+   "kind": "link",
+   "name": "Felter 11 - Felter 11",
+   "owners": [
+    "FLT",
+    "FLT"
+   ],
+   "landmass_px": [
+    30883,
+    41
+   ],
+   "through_touches_both": true,
+   "n": 457
+  },
+  {
+   "a": [
+    4155,
+    1993
+   ],
+   "b": [
+    4149,
+    1998
+   ],
+   "through": [
+    4154,
+    1994
+   ],
+   "gap": 7.8,
+   "kind": "link",
+   "name": "Felter 11 - Felter 11",
+   "owners": [
+    "FLT",
+    "FLT"
+   ],
+   "landmass_px": [
+    17,
+    41
+   ],
+   "through_touches_both": true,
+   "n": 458
+  },
+  {
+   "a": [
+    4267,
+    2202
+   ],
+   "b": [
+    4254,
+    2202
+   ],
+   "through": [
+    4266,
+    2202
+   ],
+   "gap": 13.0,
+   "kind": "link",
+   "name": "Arpino 106 - Felter 26",
+   "owners": [
+    "ARP",
+    "FLT"
+   ],
+   "landmass_px": [
+    783842,
+    30883
+   ],
+   "through_touches_both": true,
+   "n": 459
+  },
+  {
+   "a": [
+    4497,
+    2068
+   ],
+   "b": [
+    4489,
+    2071
+   ],
+   "through": [
+    4496,
+    2068
+   ],
+   "gap": 8.5,
+   "kind": "link",
+   "name": "Arpino 83 - Arpino 83",
+   "owners": [
+    "ARP",
+    "ARP"
+   ],
+   "landmass_px": [
+    1142,
+    29
+   ],
+   "through_touches_both": true,
+   "n": 460
+  },
+  {
+   "a": [
+    4499,
+    2061
+   ],
+   "b": [
+    4495,
+    2057
+   ],
+   "through": [
+    4498,
+    2060
+   ],
+   "gap": 5.7,
+   "kind": "link",
+   "name": "Arpino 83 - Arpino 83",
+   "owners": [
+    "ARP",
+    "ARP"
+   ],
+   "landmass_px": [
+    1142,
+    22
+   ],
+   "through_touches_both": true,
+   "n": 461
+  },
+  {
+   "a": [
+    4503,
+    2074
+   ],
+   "b": [
+    4497,
+    2080
+   ],
+   "through": [
+    4502,
+    2075
+   ],
+   "gap": 8.5,
+   "kind": "link",
+   "name": "Arpino 83 - Arpino 83",
+   "owners": [
+    "ARP",
+    "ARP"
+   ],
+   "landmass_px": [
+    1142,
+    20
+   ],
+   "through_touches_both": true,
+   "n": 462
+  },
+  {
+   "a": [
+    4514,
+    2026
+   ],
+   "b": [
+    4516,
+    2033
+   ],
+   "through": [
+    4514,
+    2027
+   ],
+   "gap": 7.3,
+   "kind": "link",
+   "name": "Arpino 83 - Arpino 83",
+   "owners": [
+    "ARP",
+    "ARP"
+   ],
+   "landmass_px": [
+    22,
+    1142
+   ],
+   "through_touches_both": true,
+   "n": 463
+  },
+  {
+   "a": [
+    4802,
+    1920
+   ],
+   "b": [
+    4791,
+    1932
+   ],
+   "through": [
+    4801,
+    1921
+   ],
+   "gap": 16.3,
+   "kind": "link",
+   "name": "Myehn 57 - Myehn 57",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    31,
+    20
+   ],
+   "through_touches_both": true,
+   "n": 464
+  },
+  {
+   "a": [
+    4849,
+    1940
+   ],
+   "b": [
+    4850,
+    1942
+   ],
+   "through": [
+    4849,
+    1941
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Myehn 61 - Myehn 62",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    1331,
+    245
+   ],
+   "through_touches_both": true,
+   "n": 465
+  },
+  {
+   "a": [
+    4871,
+    1947
+   ],
+   "b": [
+    4871,
+    1950
+   ],
+   "through": [
+    4871,
+    1948
+   ],
+   "gap": 3.0,
+   "kind": "link",
+   "name": "Myehn 61 - Myehn 63",
+   "owners": [
+    "MYH",
+    "MYH"
+   ],
+   "landmass_px": [
+    1331,
+    266
+   ],
+   "through_touches_both": true,
+   "n": 466
+  },
+  {
+   "a": [
+    4954,
+    2150
+   ],
+   "b": [
+    4957,
+    2152
+   ],
+   "through": [
+    4955,
+    2150
+   ],
+   "gap": 3.6,
+   "kind": "link",
+   "name": "Ostercoirasreich 1 - Ostercoirasreich 1",
+   "owners": [
+    "OCR",
+    "OCR"
+   ],
+   "landmass_px": [
+    18,
+    136
+   ],
+   "through_touches_both": true,
+   "n": 467
+  },
+  {
+   "a": [
+    959,
+    2291
+   ],
+   "b": [
+    963,
+    2294
+   ],
+   "through": [
+    960,
+    2292
+   ],
+   "gap": 5.0,
+   "kind": "link",
+   "name": "Someriania 5 - Someriania 5",
+   "owners": [
+    "SMR",
+    "SMR"
+   ],
+   "landmass_px": [
+    43,
+    2158
+   ],
+   "through_touches_both": true,
+   "n": 468
+  },
+  {
+   "a": [
+    983,
+    2327
+   ],
+   "b": [
+    982,
+    2330
+   ],
+   "through": [
+    983,
+    2328
+   ],
+   "gap": 3.2,
+   "kind": "link",
+   "name": "Someriania 5 - Someriania 8",
+   "owners": [
+    "SMR",
+    "SMR"
+   ],
+   "landmass_px": [
+    2158,
+    175
+   ],
+   "through_touches_both": true,
+   "n": 469
+  },
+  {
+   "a": [
+    984,
+    2347
+   ],
+   "b": [
+    988,
+    2347
+   ],
+   "through": [
+    985,
+    2347
+   ],
+   "gap": 4.0,
+   "kind": "link",
+   "name": "Someriania 8 - Someriania 10",
+   "owners": [
+    "SMR",
+    "SMR"
+   ],
+   "landmass_px": [
+    175,
+    235
+   ],
+   "through_touches_both": true,
+   "n": 470
+  },
+  {
+   "a": [
+    992,
+    2351
+   ],
+   "b": [
+    990,
+    2353
+   ],
+   "through": [
+    991,
+    2352
+   ],
+   "gap": 2.8,
+   "kind": "link",
+   "name": "Someriania 10 - Someriania 10",
+   "owners": [
+    "SMR",
+    "SMR"
+   ],
+   "landmass_px": [
+    235,
+    89
+   ],
+   "through_touches_both": true,
+   "n": 471
+  },
+  {
+   "a": [
+    994,
+    2303
+   ],
+   "b": [
+    998,
+    2302
+   ],
+   "through": [
+    995,
+    2303
+   ],
+   "gap": 4.1,
+   "kind": "link",
+   "name": "Someriania 5 - Someriania 6",
+   "owners": [
+    "SMR",
+    "SMR"
+   ],
+   "landmass_px": [
+    2158,
+    348
+   ],
+   "through_touches_both": true,
+   "n": 472
+  },
+  {
+   "a": [
+    1005,
+    2331
+   ],
+   "b": [
+    1009,
+    2333
+   ],
+   "through": [
+    1006,
+    2331
+   ],
+   "gap": 4.5,
+   "kind": "link",
+   "name": "Someriania 5 - Someriania 9",
+   "owners": [
+    "SMR",
+    "SMR"
+   ],
+   "landmass_px": [
+    2158,
+    182
+   ],
+   "through_touches_both": true,
+   "n": 473
+  },
+  {
+   "a": [
+    1008,
+    2355
+   ],
+   "b": [
+    1012,
+    2357
+   ],
+   "through": [
+    1009,
+    2355
+   ],
+   "gap": 4.5,
+   "kind": "link",
+   "name": "Someriania 10 - Someriania 12",
+   "owners": [
+    "SMR",
+    "SMR"
+   ],
+   "landmass_px": [
+    235,
+    182
+   ],
+   "through_touches_both": true,
+   "n": 474
+  },
+  {
+   "a": [
+    1020,
+    2328
+   ],
+   "b": [
+    1020,
+    2331
+   ],
+   "through": [
+    1020,
+    2329
+   ],
+   "gap": 3.0,
+   "kind": "link",
+   "name": "Someriania 7 - Someriania 9",
+   "owners": [
+    "SMR",
+    "SMR"
+   ],
+   "landmass_px": [
+    690,
+    182
+   ],
+   "through_touches_both": true,
+   "n": 475
+  },
+  {
+   "a": [
+    1038,
+    2354
+   ],
+   "b": [
+    1036,
+    2353
+   ],
+   "through": [
+    1037,
+    2354
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Someriania 11 - Someriania 11",
+   "owners": [
+    "SMR",
+    "SMR"
+   ],
+   "landmass_px": [
+    178,
+    27
+   ],
+   "through_touches_both": true,
+   "n": 476
+  },
+  {
+   "a": [
+    1045,
+    2338
+   ],
+   "b": [
+    1045,
+    2347
+   ],
+   "through": [
+    1045,
+    2339
+   ],
+   "gap": 9.0,
+   "kind": "link",
+   "name": "Someriania 7 - Someriania 11",
+   "owners": [
+    "SMR",
+    "SMR"
+   ],
+   "landmass_px": [
+    690,
+    178
+   ],
+   "through_touches_both": true,
+   "n": 477
+  },
+  {
+   "a": [
+    1197,
+    2377
+   ],
+   "b": [
+    1188,
+    2381
+   ],
+   "through": [
+    1196,
+    2377
+   ],
+   "gap": 9.8,
+   "kind": "link",
+   "name": "Kampfian Empire 95 - Ostercoirasreich 4",
+   "owners": [
+    "KPF",
+    "OCR"
+   ],
+   "landmass_px": [
+    54,
+    30
+   ],
+   "through_touches_both": true,
+   "n": 478
+  },
+  {
+   "a": [
+    1457,
+    2376
+   ],
+   "b": [
+    1462,
+    2380
+   ],
+   "through": [
+    1458,
+    2377
+   ],
+   "gap": 6.4,
+   "kind": "link",
+   "name": "Mahina 1 - Mahina 1",
+   "owners": [
+    "MAH",
+    "MAH"
+   ],
+   "landmass_px": [
+    26,
+    19
+   ],
+   "through_touches_both": true,
+   "n": 479
+  },
+  {
+   "a": [
+    1472,
+    2382
+   ],
+   "b": [
+    1466,
+    2382
+   ],
+   "through": [
+    1471,
+    2382
+   ],
+   "gap": 6.0,
+   "kind": "link",
+   "name": "Mahina 1 - Mahina 1",
+   "owners": [
+    "MAH",
+    "MAH"
+   ],
+   "landmass_px": [
+    65,
+    19
+   ],
+   "through_touches_both": true,
+   "n": 480
+  },
+  {
+   "a": [
+    1477,
+    2384
+   ],
+   "b": [
+    1477,
+    2387
+   ],
+   "through": [
+    1477,
+    2385
+   ],
+   "gap": 3.0,
+   "kind": "link",
+   "name": "Mahina 1 - Mahina 1",
+   "owners": [
+    "MAH",
+    "MAH"
+   ],
+   "landmass_px": [
+    65,
+    66
+   ],
+   "through_touches_both": true,
+   "n": 481
+  },
+  {
+   "a": [
+    1493,
+    2387
+   ],
+   "b": [
+    1488,
+    2387
+   ],
+   "through": [
+    1492,
+    2387
+   ],
+   "gap": 5.0,
+   "kind": "link",
+   "name": "Mahina 1 - Mahina 1",
+   "owners": [
+    "MAH",
+    "MAH"
+   ],
+   "landmass_px": [
+    61,
+    66
+   ],
+   "through_touches_both": true,
+   "n": 482
+  },
+  {
+   "a": [
+    1578,
+    2400
+   ],
+   "b": [
+    1568,
+    2400
+   ],
+   "through": [
+    1577,
+    2400
+   ],
+   "gap": 10.0,
+   "kind": "link",
+   "name": "Mahina 1 - Mahina 1",
+   "owners": [
+    "MAH",
+    "MAH"
+   ],
+   "landmass_px": [
+    18,
+    16
+   ],
+   "through_touches_both": true,
+   "n": 483
+  },
+  {
+   "a": [
+    1590,
+    2396
+   ],
+   "b": [
+    1581,
+    2396
+   ],
+   "through": [
+    1589,
+    2396
+   ],
+   "gap": 9.0,
+   "kind": "link",
+   "name": "Mahina 1 - Mahina 1",
+   "owners": [
+    "MAH",
+    "MAH"
+   ],
+   "landmass_px": [
+    16,
+    18
+   ],
+   "through_touches_both": true,
+   "n": 484
+  },
+  {
+   "a": [
+    1603,
+    2393
+   ],
+   "b": [
+    1593,
+    2393
+   ],
+   "through": [
+    1602,
+    2393
+   ],
+   "gap": 10.0,
+   "kind": "link",
+   "name": "Mahina 1 - Mahina 1",
+   "owners": [
+    "MAH",
+    "MAH"
+   ],
+   "landmass_px": [
+    17,
+    16
+   ],
+   "through_touches_both": true,
+   "n": 485
+  },
+  {
+   "a": [
+    1660,
+    2414
+   ],
+   "b": [
+    1662,
+    2415
+   ],
+   "through": [
+    1661,
+    2414
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Mahina 1 - Mahina 1",
+   "owners": [
+    "MAH",
+    "MAH"
+   ],
+   "landmass_px": [
+    44,
+    61
+   ],
+   "through_touches_both": true,
+   "n": 486
+  },
+  {
+   "a": [
+    3220,
+    2385
+   ],
+   "b": [
+    3222,
+    2389
+   ],
+   "through": [
+    3220,
+    2386
+   ],
+   "gap": 4.5,
+   "kind": "link",
+   "name": "Royabad 33 - Royabad 33",
+   "owners": [
+    "RYB",
+    "RYB"
+   ],
+   "landmass_px": [
+    339,
+    553
+   ],
+   "through_touches_both": true,
+   "n": 487
+  },
+  {
+   "a": [
+    3225,
+    2366
+   ],
+   "b": [
+    3219,
+    2377
+   ],
+   "through": [
+    3224,
+    2367
+   ],
+   "gap": 12.5,
+   "kind": "link",
+   "name": "Royabad 33 - Royabad 33",
+   "owners": [
+    "RYB",
+    "RYB"
+   ],
+   "landmass_px": [
+    424,
+    339
+   ],
+   "through_touches_both": true,
+   "n": 488
+  },
+  {
+   "a": [
+    3314,
+    2294
+   ],
+   "b": [
+    3313,
+    2296
+   ],
+   "through": [
+    3314,
+    2295
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Royabad 32 - Royabad 33",
+   "owners": [
+    "RYB",
+    "RYB"
+   ],
+   "landmass_px": [
+    16,
+    116
+   ],
+   "through_touches_both": true,
+   "n": 489
+  },
+  {
+   "a": [
+    3322,
+    2292
+   ],
+   "b": [
+    3321,
+    2294
+   ],
+   "through": [
+    3322,
+    2293
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Royabad 32 - Royabad 33",
+   "owners": [
+    "RYB",
+    "RYB"
+   ],
+   "landmass_px": [
+    41,
+    116
+   ],
+   "through_touches_both": true,
+   "n": 490
+  },
+  {
+   "a": [
+    3332,
+    2283
+   ],
+   "b": [
+    3330,
+    2284
+   ],
+   "through": [
+    3331,
+    2283
+   ],
+   "gap": 2.2,
+   "kind": "link",
+   "name": "Royabad 32 - Royabad 32",
+   "owners": [
+    "RYB",
+    "RYB"
+   ],
+   "landmass_px": [
+    36,
+    41
+   ],
+   "through_touches_both": true,
+   "n": 491
+  },
+  {
+   "a": [
+    3339,
+    2275
+   ],
+   "b": [
+    3336,
+    2275
+   ],
+   "through": [
+    3338,
+    2275
+   ],
+   "gap": 3.0,
+   "kind": "link",
+   "name": "Royabad 32 - Royabad 32",
+   "owners": [
+    "RYB",
+    "RYB"
+   ],
+   "landmass_px": [
+    121,
+    36
+   ],
+   "through_touches_both": true,
+   "n": 492
+  }
+ ]
+}

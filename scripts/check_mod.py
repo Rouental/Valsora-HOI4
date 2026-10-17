@@ -507,6 +507,24 @@ def main(mod):
     adj = (mod / "map/adjacencies.csv").read_bytes()
     if not adj.rstrip().endswith(b"-1;-1;;-1;-1;-1;-1;-1;-1") or b"\r\n" not in adj:
         err("adjacencies.csv needs CRLF and the -1 end line")
+    # strait crossings (2026-10-17, scripts/straits.py): land to other land through a sea province, each pair once
+    seen_adj = set()
+    for ln in adj.decode("utf-8", "replace").splitlines()[1:]:
+        f = ln.split(";")
+        if f[:2] == ["-1", "-1"]:
+            break
+        if len(f) != 10 or not all(v.lstrip("-").isdigit() for v in f[:2] + f[3:8]):
+            err(f"adjacencies.csv: {ln[:60]!r} needs 10 fields, From;To;Type;Through;four coordinates;rule;comment")
+            continue
+        a, b, t = int(f[0]), int(f[1]), int(f[3])
+        if f[2] not in ("sea", "impassable", "") or not (1 <= a <= n and 1 <= b <= n) or a == b:
+            err(f"adjacencies.csv: {ln[:60]!r}: type must be sea, impassable or empty, between two provinces")
+            continue
+        if f[2] == "sea" and (kind[a - 1] != 1 or kind[b - 1] != 1 or not 1 <= t <= n or kind[t - 1] != 0):
+            err(f"adjacencies.csv: the sea crossing {a} - {b} must join two land provinces through a sea one ({t})")
+        if (min(a, b), max(a, b)) in seen_adj:
+            err(f"adjacencies.csv: provinces {a} and {b} are joined twice")
+        seen_adj.add((min(a, b), max(a, b)))
     if not (mod / "map/buildings.txt").read_text().strip():
         err("buildings.txt must not be empty")
 

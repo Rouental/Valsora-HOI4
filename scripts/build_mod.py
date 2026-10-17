@@ -768,9 +768,13 @@ def main():
         "# Define which indices in trees.bmp palette which should count as trees for "
         "automatic terrain assignment", "tree = { 3 4 7 10 }", ""]))
     write("map/continent.txt", "continents = {\n" + "".join(f"\t{c}\n" for c in CONTINENTS) + "}\n")
-    write("map/adjacencies.csv", "From;To;Type;Through;start_x;start_y;stop_x;stop_y;"
-          "adjacency_rule_name;Comment\n-1;-1;;-1;-1;-1;-1;-1;-1\n", crlf=True)
-    write("map/adjacency_rules.txt", "# No straits or canals on the placeholder map.\n")
+    # strait crossings the author approved (source/straits.json, scripts/straits.py: none until then)
+    import straits
+    crossings = straits.rows(lab, kind, pid)
+    write("map/adjacencies.csv", "From;To;Type;Through;start_x;start_y;stop_x;stop_y;adjacency_rule_name;Comment\n"
+          + "".join(r + "\n" for r in crossings) + "-1;-1;;-1;-1;-1;-1;-1;-1\n", crlf=True)
+    write("map/adjacency_rules.txt", "# No canals on the map (the strait crossings are in adjacencies.csv).\n"
+          if crossings else "# No straits or canals on the placeholder map.\n")
     # ambient objects: vanilla's wind and frame, water ambience moved to our open seas
     water_far = d_sea  # the distance from land of every water pixel
     spots = []

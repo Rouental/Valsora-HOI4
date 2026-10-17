@@ -105,6 +105,15 @@ def m_adjacency_end(mod):
     return "adjacencies.csv needs CRLF and the -1 end line"
 
 
+def m_strait_through_land(mod):
+    # a strait crossing through a land province (the first land province of definition.csv, twice over)
+    land = [ln.split(";")[0] for ln in (mod / "map/definition.csv").read_text().splitlines()[1:] if ";land;" in ln]
+    row = f"{land[0]};{land[1]};sea;{land[2]};-1;-1;-1;-1;;Test"
+    # after the header (m_adjacency_end takes the end line away in the same batch)
+    edit_bytes(mod, "map/adjacencies.csv", lambda b: b.replace(b";Comment\r\n", b";Comment\r\n" + row.encode() + b"\r\n", 1))
+    return f"the sea crossing {land[0]} - {land[1]} must join two land provinces through a sea one"
+
+
 def m_building_row(mod):
     def drop(t):
         lines = t.splitlines(keepends=True)
@@ -419,7 +428,7 @@ def m_song(mod):
 
 
 BATCHES = {
-    "map": [m_crlf, m_adjacency_end, m_building_row, m_ships_in_port, m_earth_map_file, m_weather_big, m_supply_node_sea,
+    "map": [m_crlf, m_adjacency_end, m_strait_through_land, m_building_row, m_ships_in_port, m_earth_map_file, m_weather_big, m_supply_node_sea,
             m_railway_apart, m_x_crossing, m_land_low, m_terrain_ocean],
     "history": [m_technology, m_module, m_equipment, m_idea, m_battalion, m_define, m_earth_history, m_popularities,
                 m_ruling_party, m_recruit_unknown, m_faction_template, m_bookmark, m_descriptor],
