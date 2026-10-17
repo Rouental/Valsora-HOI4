@@ -256,6 +256,11 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   characters with their stats; Rouental's 13 releasables, its civil war's 7 risers and Belekria's Tethia), commanders'
   skill and stats, and cities' size apart from their victory points (now labelled by importance). The test version with 1.5 times larger flags is built beside the mod by
   `sh scripts/build_flags15.sh` and sent as its own zip (`docs/HD_FLAGS_TEST.md`), not put into the mod.
+- **Tonight's tools and pages** (2026-10-17, the second night; `docs/WORKFLOW.md`): a map update is now `pdn_check.py`,
+  `pdn_diff.py`, `pdn_tools.py owners`, `regroup_states.py --recut`; the Gazetteer has a province size guide; the
+  Valsora Atlas (the build in a browser, a private Artifact: `docs/ATLAS.md`). Proposals made the same night, not in
+  the mod: the tech tree's full mockup (`docs/tech_tree_mockup/`), a world map poster (`dist/posters/`), the Deco UI's
+  next screens (`deco_ui/art/proposals/next_screens/`).
 - **Seen in game last** (2026-10-17): the Deco UI v0.10 (the author's screenshots): the logistics "as part of the main
   bar" and the commanders' card's look liked; the loading screen showed the game's own picture, corner brackets stuck
   out of the loading boxes and the battle plan bar, its icons off centre, "Other countries" off the edge of game

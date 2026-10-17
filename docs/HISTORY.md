@@ -10,6 +10,20 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-17, the second night (the author: Belekria's cores, a province size guide, the password search, "three or
+  four big things to surprise me ... DO NOT ADD THEM TO THE MOD YET!", one a full mockup of the tech tree, and "ways to
+  make the modding process more efficient both for you, and for me"): Belekria owns Tethia's and Kalnsfereta's states
+  without its core (`nations.NO_OWNER_CORE`); the Gazetteer's password search keeps the cursor (the sections were
+  rebuilt closed before the field took the focus back) and has a **province size guide** (Cardonia's ~160 px as the
+  usual size, from the build: the guide's third step, a section on the Map tab, a Sizes ruler at the map's zoom, each
+  suggested area's size in provinces); the corrupted flag file checked: every copy we wrote reads cleanly
+  (`pdn_check.py`, now run on every file `writepdn.py` writes), and `pdn_recover.py` saves the layers of a damaged one.
+  **The modding process** (`docs/WORKFLOW.md`): `pdn_diff.py` (every change between two `.pdn` copies, where, with
+  pictures, and the borders to act on: the 2026-10-17 upload's three border moves found by itself), `pdn_tools.py
+  owners` (settles them), `regroup_states.py --recut` (both checked against that night's hand-made result), and
+  `CLAUDE.md` a quarter of its size (117 KB to 30 KB, the detail moved word for word into `docs/MAP_PIPELINE.md`,
+  `docs/DECISIONS.md`, `docs/CONTENT.md` and `deco_ui/docs/VERSIONS.md`). **The Valsora Atlas** (not in the mod): the
+  build's world in a browser, published as a private Artifact (`docs/ATLAS.md`).
 - 2026-10-17, the night (the author's map, "Another thing to work on overnight: significant changes to the map", with
   three flags): **Yastreovakia redrawn**. Belekria south over Sminishia's north and West Sminishia's old land, West
   Sminishia over Sminishia's west end, Pakitsk into Belka (still releasable), Krionik's north-east to Belka and Kieska
