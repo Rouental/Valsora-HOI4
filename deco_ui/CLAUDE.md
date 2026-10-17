@@ -227,7 +227,8 @@ tools/
 source_fonts/               TTFs + OFL licences (Josefin Sans, Federo, Limelight, Bodoni Moda)
 art/                        menu_world.jpg (main menu map), map_rouental.jpg + flag_ROU.png (preview backdrops),
                             mockups/*.jpg (renders) and mockups/source/ (the boards' HTML + assets)
-docs/                       plans for the next screens
+docs/                       plans for the next screens; SCREEN_INVENTORY.md (2026-10-17): every game screen by how far
+                            the Deco UI changes it, and what to restyle next (thumbnails: build/screen_inventory.png)
 reference/                  vanilla/ and valsora/ inputs (not shipped, not committed)
 build/                      intermediates and previews (safe to delete)
 ```
@@ -971,6 +972,11 @@ The user asked (2026-10-14) for one install, keeping the option of going back to
   the playset it loads after Valsora and puts its older files back.
 
 ## 12. Next steps (in order)
+
+`docs/SCREEN_INVENTORY.md` (2026-10-17) lists every game screen (95, from the game's 453 .gui files) as restyled
+(34), re-skinned (26) or the game's own (35), and suggests the most-seen ones still in the game's style: the loading
+screen, the scroll bars and sliders, the selected armies' badges, the battle plan toolbar, the land battle, the
+diplomatic action windows, game setup, and the window frames the core skin misses. The author picks from it.
 
 1. Process the user's screenshots and `error.log` of v0.5.2 to v0.8 (section 10 and the README's checklist): the
    side panels, the focus tree, the army bar, the events, the fonts.

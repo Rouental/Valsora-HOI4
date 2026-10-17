@@ -10,6 +10,17 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-17 (the author: "Sure, do 1, 3, and 7", of a list of things to do until they got home):
+  - **Strait crossings, proposed** (1): `scripts/straits.py find` links every landmass once across its narrowest strait
+    (a minimum spanning tree over open sea): 492 crossings for 606 landmasses, `dist/straits_map.png` (each ringed by
+    width and numbered) and `dist/straits_proposed.json`; 72 islets lie over 20 px from any land. The base game's 151
+    span 2 to 30 px (median 4). Nothing is in the mod until the author approves (`straits.py approve`, default up to
+    10 px: 414); `build_mod.py` writes them from `source/straits.json`, `check_mod.py` checks every row (a new mutation
+    break: 56). A test build with the 414 passed every check; without the file the zip is byte-identical.
+  - **Draft names for the 137 land regions** (3): `region_map.py --draft`, `dist/region_names_draft.md` (nations'
+    names, compass names round a nation's centre, its isles, the coasts of groups, the Vale of Reibonne); nothing applied.
+  - **Every game screen against the Deco UI** (7): `deco_ui/docs/SCREEN_INVENTORY.md`, 95 screens: 34 restyled, 26
+    re-skinned, 35 the game's own, and what to restyle next; thumbnails in the git-ignored `deco_ui/build/` (sent).
 - 2026-10-16, later (the author's screenshots and `error.log` of the Deco UI v0.9, and: "could you please regenerate
   [the strategic regions] taking into account the nations now on the map?"):
   - **Land strategic regions from the nations** (`scripts/land_regions.py`): 137 land regions (80 before, buckets of a

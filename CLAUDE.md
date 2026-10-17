@@ -1136,7 +1136,8 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   `deco_ui/valsora_deco_ui/README.txt` (Things to check) and `deco_ui/CLAUDE.md` (section 10).
 - **Waiting on the author:** names for the 137 land strategic regions (`dist/region_names.md`, renumbered for the
   new regions; a first draft of every name, Claude's, is `dist/region_names_draft.md`, 2026-10-17); the strait crossings
-  (`dist/straits_map.png`: how wide a strait to cross, and any to drop or add; `straits.py approve`, then a rebuild); whether fuel, supply and convoys stay in the top bar's strip (an experiment, the author's); the loading screen
+  (`dist/straits_map.png`: how wide a strait to cross, and any to drop or add; `straits.py approve`, then a rebuild);
+  which screen the Deco UI restyles next (`deco_ui/docs/SCREEN_INVENTORY.md`, 2026-10-17: every game screen and its state); whether fuel, supply and convoys stay in the top bar's strip (an experiment, the author's); the loading screen
   proposal (`deco_ui/art/proposals/loading_screens/`); whether v0.9's restyled screens stay; the larger flags' test version (`docs/HD_FLAGS_TEST.md`); the panel picture proposals (on
   hold, the author: "I don't want to move ahead with the panel pictures just yet"); the tech tree (its eight questions
   answered on 2026-10-16 and recorded in `docs/TECH_TREE_2036.md`: a realistic 2036, the tree beginning where the base
