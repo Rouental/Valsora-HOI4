@@ -1,4 +1,4 @@
-# Valsora Deco UI (make_mapviews.py): the game's file, naviesview_window moved down under the flag medallion (y 82 -> 173, with home_base_selection_window, ship_refit_equipment_view); every element and name kept
+# Valsora Deco UI (make_mapviews.py): the game's file, naviesview_window moved down under the flag medallion (y 82 -> 173, with home_base_selection_window, ship_refit_equipment_view; the fleet's names in their room (ship_type, leader_desc, leader_name, home_base_name)); every element and name kept
 guiTypes = {
 
 	# Target bar
@@ -1034,8 +1034,8 @@ guiTypes = {
 
             instantTextboxType = {
                 name = "home_base_name"
-                position = { x = 60 y = 0 }
-                font = "hoi_18b"
+                position = { x = 60 y = 1 }
+                font = "hoi_16mbs"
                 borderSize = {x = 0 y = 0}
                 text = "Home base"
                 maxWidth = 90
@@ -1123,7 +1123,7 @@ guiTypes = {
 
 		instantTextboxType = {
 			name = "leader_desc"
-			position = {x=81 y=50}
+			position = { x = 81 y = 47 }
 			font = "hoi_16mbs"
 			maxWidth = 75
 			maxHeight = 23
@@ -1133,12 +1133,13 @@ guiTypes = {
 
 		instantTextboxType = {
 			name = "leader_name"
-			position = {x=81 y=66}
-			font = "hoi_16mbs"
-			maxWidth = 140
-			maxHeight = 23
+			position = { x = 81 y = 61 }
+			font = "garamond_14_bold"
+			maxWidth = 112
+			maxHeight = 28
 			fixedsize = yes
 			format = left
+			vertical_alignment = center
 		}
 
 		iconType = {
@@ -1671,8 +1672,8 @@ guiTypes = {
 		#       also, maxWidth is shrinked in code when necessary (e.g. buttons are shown)
 		instantTextboxType = {
 			name = "ship_type"
-			position = {x=210 y=20}
-			font = "hoi_18"
+			position = { x = 210 y = 23 }
+			font = "garamond_14_bold"
 			text = "test"
 			maxWidth = 272
 			maxHeight = 23

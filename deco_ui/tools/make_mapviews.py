@@ -13,6 +13,18 @@ v0.8.4: the navy too (naviesview.gui's naviesview_window, the selected fleets, s
 2026-10-16: "like the army, the navy is covered by the flag tab"). It is 86 % of the screen tall, so it is made 77 %
 to end where it did (y 1005 at 1080 rows; the game's ended at 1011); the two windows that open beside it (home base,
 refits; x 490 and 510, clear of the medallion) move down as far, so their tops stay level with it.
+
+v0.10.2: the fleet's names in the room they have (the user's screenshot, 2026-10-17: "Names run off screen"). A ship's
+row cut its type short, "Advanced Destroyer (Advanced Destroy...": the game shrinks the type's box at runtime to end
+where the row's insignia begins (x 450; the refit and repair buttons further left when they show), 240 px from x 210,
+and "Advanced Destroyer (Advanced Destroyer I)" is 254 px in the redrawn hoi_18 (262 in the game's own font, so the
+game cuts it too). The type is set in the Federo of the game's garamond_14_bold (12.5 px: 222 px, and the longest of
+the game's hull names twice over, "Coastal Defense Ship (Coastal Defense Ship I)", 230), on the game's baseline. The
+admiral's name ran past the fleet picture's recess (mapview_art.fleet_bg: x 77-195) under the skill badge (the game's
+box is 140 wide from x 81): it keeps to the recess (112 px) on up to two lines of the same Federo (most names fit one,
+centred where the game's line sat; "Napoléon de Montebrise" takes two), the rank 3 px higher to make the room. The home
+base's name was the panel's one text in the game's own font (hoi_18b, not redrawn: 3 of Valsora's 63 city names cut at
+its 90 px): the redrawn hoi_16mbs, which fits them all. preview_navy.py draws the panel and checks every text's room.
 """
 import os
 import re
@@ -28,6 +40,19 @@ VIEWS = {"unitview.gui": "armies_view", "airselectionview.gui": "air_selection_v
          "hotjoin.gui": "hotjoin_window"}             # multiplayer: the host's list of join requests (medallion_check)
 SIZE = {"naviesview_window": (500, "77%%")}                   # the game's: 500 x 86%%
 BESIDE = {"naviesview.gui": ["home_base_selection_window", "ship_refit_equipment_view"]}
+# v0.10.2: the fleet panel's texts (see above): element -> (font, dy to keep the game's baseline, other attributes).
+# hoi_18 and hoi_18b put their baseline 14 px into the box, hoi_16mbs 13 and garamond_14_bold 11 (the game's own
+# metrics, which game_fonts.py keeps).
+NAME_FONT = "garamond_14_bold"          # Federo 12.5 px on a 14 px line
+NAME_W, NAME_LINES = 112, 2             # the admiral's recess: x 81 (the name's x) to 193; two lines
+TEXTS = {"naviesview.gui": {
+    "ship_entry_detailed>ship_type": (NAME_FONT, 14 - 11, {}),
+    "fleet_view_header>leader_desc": (None, -3, {}),
+    # one line centred where the game's sat (baseline y 79), two lines filling the recess under the rank (to y 89)
+    "fleet_view_header>leader_name": (NAME_FONT, -5, dict(maxWidth=NAME_W, maxHeight=14 * NAME_LINES,
+                                                          vertical_alignment="center")),
+    "home_base_view>home_base_name": ("hoi_16mbs", 14 - 13, {}),
+}}
 
 
 def shown(t, path):
@@ -58,8 +83,13 @@ for f, win in VIEWS.items():
         t = GP.set_attrs(t, win, size=SIZE[win])
     for other in BESIDE.get(f, []):
         t = move_down(t, other, dy)
+    for path, (font, ty, more) in TEXTS.get(f, {}).items():
+        tx, y0 = GP.get_pos(t, path)
+        t = GP.set_attrs(t, path, position=(tx, y0 + ty), **(dict(font=font) if font else {}), **more)
     t = (f"# Valsora Deco UI (make_mapviews.py): the game's file, {win} moved down under the flag medallion "
          f"(y {y} -> {L.BELOW_MEDALLION}"
-         + (f", with {', '.join(BESIDE[f])}" if f in BESIDE else "") + "); every element and name kept\n" + t)
+         + (f", with {', '.join(BESIDE[f])}" if f in BESIDE else "")
+         + (f"; the fleet's names in their room ({', '.join(p.split('>')[-1] for p in TEXTS[f])})" if f in TEXTS else "")
+         + "); every element and name kept\n" + t)
     GP.write_gui(MOD + "interface/" + f, t)
     print(f"{f}: {win} y {y} -> {L.BELOW_MEDALLION}" + (f", {len(BESIDE[f])} beside it" if f in BESIDE else ""))

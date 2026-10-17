@@ -19,10 +19,15 @@ import sys
 import numpy as np
 from PIL import Image
 
+import contextlib
+import io
+
 import layout as L
-import preview_panels as PP
-import validate_preview as V
 from paths import BUILD, MOD
+
+with contextlib.redirect_stdout(io.StringIO()):          # validate_preview reports its checks when imported
+    import preview_panels as PP
+    import validate_preview as V
 
 GUI = sys.argv[1] if len(sys.argv) > 1 else MOD + "interface/naviesview.gui"
 OUT = BUILD + ("preview_navy.png" if len(sys.argv) < 2 else
@@ -88,19 +93,25 @@ class Fleet(PP.Panel):
         a = self.attrs.get(name, {})
         font = (font or "").strip('"')
         if font in V.FONTS and name in self.samples:
+            text, f = self.samples[name], V.FONTS[font]
             room = self.room.get(name, w)
-            lh = int(V.FONTS[font]["common"]["lineHeight"])
+            lh = int(f["common"]["lineHeight"])
             one_line = not (h and h >= 2 * lh)
             shown, was_cut = text, False
             if room and one_line and (a.get("fixedsize") == "yes" or name in self.room):
                 shown, was_cut = cut(font, text, room)
-            width = V.text_width(V.FONTS[font], V._runs(shown, None)) if one_line else 0
+            # a box of several lines: the game's word wrap; lines past its height are dropped (cut)
+            lines = V.wrap(V._runs(shown, None), None if one_line else room, lambda rs: V.text_width(f, rs))
+            if not one_line and len(lines) * lh > h + 2:
+                was_cut, shown = True, " / ".join("".join(c for c, _ in ln) for ln in lines[:int((h + 2) // lh)]) + " ..."
+            width = max(V.text_width(f, ln) for ln in lines)
             over = name in self.recess and x + width > self.ox + self.recess[name]
-            self.fits.append((name, font, text, shown, room, was_cut, over))
+            self.fits.append((name, font, text, shown if one_line or was_cut else
+                              " / ".join("".join(c for c, _ in ln) for ln in lines), room, was_cut, over))
             if was_cut or over:
                 V.problems.append(f"navy {name}: {text!r} " + ("cut to " + repr(shown) if was_cut else
                                                                f"past its recess ({x + width - self.ox:.0f} > {self.recess[name]})"))
-            text, w = shown, (None if one_line and was_cut else w)
+            text, w = (shown, None) if one_line and was_cut else (text, w)
         super().text(cv, text, font, x, y, w, h, fmt, name, valign)
 
 
