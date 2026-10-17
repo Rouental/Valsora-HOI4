@@ -432,16 +432,22 @@ def write_music(write, out):
 def localisation(deco):
     loc = [' VAL_SE_CLOSE:0 "History Marches On"', f' {STATION}_TITLE:0 "Valsora Radio"']
     loc += [f' {name}:0 "{title}"' for name, title in SONG_TITLES.items()]
+    texts = {}  # what the Deco UI's window shows, measured against its boxes
     for se in SUPEREVENTS:
         key = f"VAL_SE_{se['id'].upper()}"
         song = SONG_TITLES[se["song"]].replace(" - ", " \u2014 ")
         loc.append(f' {key}_SONG:0 "Valsora Radio \u00b7 {song}"')
         if deco:
             # the Deco UI's fonts are light already; its quote font has curly quotes
-            loc += [f' {key}_TITLE:0 "{se["title"]}"', f' {key}_QUOTE:0 "\u201c{se["quote"]}\u201d"',
-                    f' {key}_AUTHOR:0 "\u2014 {se["author"]}"']
+            quote, author = f"\u201c{se['quote']}\u201d", f"\u2014 {se['author']}"
+            loc += [f' {key}_TITLE:0 "{se["title"]}"', f' {key}_QUOTE:0 "{quote}"', f' {key}_AUTHOR:0 "{author}"']
+            texts.update({(se["id"], "QUOTE"): quote, (se["id"], "AUTHOR"): author,
+                          (se["id"], "SONG"): f"Valsora Radio \u00b7 {song}"})
         else:
             # §W ... §! = white: the typewriter fonts draw dark on the dark panel
             loc += [f' {key}_TITLE:0 "§W{se["title"]}§!"', f' {key}_QUOTE:0 "§W\\"{se["quote"]}\\"§!"',
                     f' {key}_AUTHOR:0 "- {se["author"]}"']
+    if deco:
+        import superevents_deco
+        superevents_deco.check_texts(texts)
     return loc

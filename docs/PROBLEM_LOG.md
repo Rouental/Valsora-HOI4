@@ -714,6 +714,14 @@ screenshot and `error.log`)
 
 ## Map problems found while building
 
+**The superevent text check never ran** (2026-10-17, found while looking for unused code)
+- `superevents_deco.check_texts`, written with the Deco UI's superevent window (v0.6, 2026-10-15) to stop the build
+  when a quote, an attribution or a song would not fit its box (a box too short drops lines silently), was never
+  called: the manual said the build measured them, but nothing did. Every text fitted anyway.
+- Fix: `superevents.localisation` collects the texts the window shows and calls it whenever the Deco UI is on; tested
+  with a quote six times too long (stopped: "rou_polite quote: 12 lines of 23 px in a 780x70 box"). The built mod is
+  byte for byte the same.
+
 **New state lines cut 1,468 provinces into pieces down to 16 px** (2026-10-17, the author's states for Belekria,
 Krionik, Terreich and others)
 - Cause: `regroup_states.py` keeps the provinces and splits one only where a line crosses it; the provinces had been
