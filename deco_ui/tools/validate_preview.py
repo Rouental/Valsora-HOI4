@@ -322,7 +322,10 @@ for rel, size in VANILLA_TILES.items():
         problems.append(f"{rel} size mismatch")
 # replaced at vanilla's size on purpose: the icon whose sprite the game swaps, the tooltip's frame
 import designer_art as _DA  # noqa: E402
-SAME_SIZE = [r for _k, r, _w, _h, _f in _DA.ADDS] + [
+# the art modules (v0.9, v0.10) redraw the game's pictures at its sizes: every one is held to them
+import importlib as _il  # noqa: E402
+from art_util import ART_MODULES as _ART  # noqa: E402
+SAME_SIZE = [r for _m in _ART for _k, r, _w, _h, _f in _il.import_module(_m).ADDS] + [
              "gfx/interface/pol_view_bg.dds", "gfx/interface/pol_view_bg_no_dlc.dds", "gfx/interface/tiles/tiles_dialog.dds",
              # the panels' shared pieces (v0.5): the game lays them out at vanilla's sizes
              "gfx/interface/closebutton.dds", "gfx/interface/header_bg.dds", "gfx/interface/category_header.dds",

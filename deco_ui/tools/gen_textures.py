@@ -117,6 +117,18 @@ add("win_small_small", "gfx/interface/tiles/tiled_window_small_small.dds", 48, 4
 add("win_header_1", "gfx/interface/tiles/tiled_header_1.dds", 77, 38,
     f'<div style="position:absolute;inset:1px;background:rgba(201,165,90,.55);clip-path:{chamfer(3)}"></div>'
     f'<div style="position:absolute;inset:2px;background:{STRIPES},{DIM_FILL};clip-path:{chamfer(2.6)}"></div>')
+# the parchment lists (countrytechtreeview.gfx GFX_tiled_paper_w_frame_one_border, border 64, the game's texture
+# 190 x 190): the diplomatic windows' war goal lists and the music player's radio panel; the game writes dark text on
+# them, so the designers' ivory sheet, in a gilt rim (v0.10)
+add("win_paper_frame", "gfx/interface/tiles/tiled_paper_w_frame_one_border.dds", 190, 190,
+    '<div style="position:absolute;inset:1px;background:#9C7A36"></div>'
+    '<div style="position:absolute;inset:2px;background:#EAE0C4"></div>'   # flat: the game repeats the tile's middle
+    '<div style="position:absolute;inset:5px;border:1px solid rgba(156,122,54,.45)"></div>')
+# the dark paper (countrytechtreeview.gfx GFX_tiled_paper_bg2, border 64): recessed panels in the diplomatic windows,
+# the designers, the focus details, the combat and garrison logs, achievements: a flat lacquer well (v0.10)
+add("win_paper_dark", "gfx/interface/tiles/tiled_paper_bg2.dds", 192, 192,
+    '<div style="position:absolute;inset:0;background:#0A1013;box-shadow:inset 0 0 0 1px rgba(201,165,90,.35),'
+    'inset 0 3px 5px rgba(0,0,0,.65)"></div>')
 add("mini_dialog", "gfx/interface/tiles/tiled_mini_dialog.dds", 32, 32,
     '<div class="lac" style="position:absolute;inset:0"></div><div class="frame" style="inset:0;border:1px solid #9C7A36"></div>')
 # tooltip background (vanilla ToolTip textBoxType: tiles_dialog.tga, borderSize 18). The game loads a .dds of
@@ -153,6 +165,13 @@ SHARED = {   # vanilla path: (w, h, html)
         'background:#0B1014;box-sizing:border-box"></div>'
         '<svg width="32" height="33" viewBox="0 0 32 33" style="position:absolute;left:0;top:0"><path d="M11.5 12l9 9M20.5 12l-9 9" '
         'stroke="#E3C77E" stroke-width="1.6"/></svg>'),
+    # the small close button (general_stuff.gfx GFX_closebutton_small, 11 screens: the land battle, the tactics list,
+    # ...): the same diamond at its size (v0.10)
+    "gfx/interface/closebutton_small.dds": (26, 26,
+        '<div style="position:absolute;left:4.5px;top:4.5px;width:17px;height:17px;transform:rotate(45deg);border:1px solid #E3C77E;'
+        'background:#0B1014;box-sizing:border-box"></div>'
+        '<svg width="26" height="26" viewBox="0 0 26 26" style="position:absolute;left:0;top:0"><path d="M9.5 9.5l7 7M16.5 9.5l-7 7" '
+        'stroke="#E3C77E" stroke-width="1.4"/></svg>'),
     "gfx/interface/tiles/tiled_bg.dds": (192, 192, window(192, 192, dict(rule="single", corners="small"))),
     "gfx/interface/header_bg.dds": (543, 41, bar(c=7)),
     "gfx/interface/category_header.dds": (511, 44, bar("linear-gradient(180deg,#1E2A30,#111A1F)", c=7)),
@@ -187,7 +206,7 @@ for rel, (w, h, html) in SHARED.items():
 # pictures drawn in modules of their own, each an ADDS list of (key, path, w, h, function): the designers' and the
 # commander pickers' (v0.9, designer_art.py), and the screens docs/SCREEN_INVENTORY.md suggested (2026-10-17)
 import importlib as _il  # noqa: E402
-ART_MODULES = ["designer_art", "battleplan_art", "mapview_art", "combat_art", "diplo_art", "setup_art", "window_art", "popup_art"]
+from art_util import ART_MODULES  # noqa: E402
 for _m in ART_MODULES:
     for _key, _rel, _w, _h, _fn in _il.import_module(_m).ADDS:
         add(_key, _rel, _w, _h, _fn())

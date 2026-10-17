@@ -98,6 +98,20 @@
   "sig": "b972ef8385e4c8a5ef629e971b91a254e5be9ff5ee20573d05fb8674e466032a"
  },
  {
+  "key": "win_paper_frame",
+  "path": "gfx/interface/tiles/tiled_paper_w_frame_one_border.dds",
+  "w": 190,
+  "h": 190,
+  "sig": "40d8393feac2c12f82c9d4e75cc17d64a37e1e66d1a08bfc9032f50c59855a3f"
+ },
+ {
+  "key": "win_paper_dark",
+  "path": "gfx/interface/tiles/tiled_paper_bg2.dds",
+  "w": 192,
+  "h": 192,
+  "sig": "a41e0d9570f9945fb7e65ae080c23a2f45e5d15d00f4ca27afb0b9501eb88972"
+ },
+ {
   "key": "mini_dialog",
   "path": "gfx/interface/tiles/tiled_mini_dialog.dds",
   "w": 32,
@@ -194,6 +208,13 @@
   "w": 32,
   "h": 33,
   "sig": "55d0f5be331cb830e2ce62cbb922ae12fd4168be838c591287153f1f022af47e"
+ },
+ {
+  "key": "shared_closebutton_small",
+  "path": "gfx/interface/closebutton_small.dds",
+  "w": 26,
+  "h": 26,
+  "sig": "b387b33d08a359c7a7e819ee11e8fa61285fdab2f421f0311588f5e09145824c"
  },
  {
   "key": "shared_tiled_bg",
@@ -838,6 +859,538 @@
   "w": 1096,
   "h": 48,
   "sig": "5363db7e78d2cce9a9279c28d2fe72ac07eed9660cd870445f1cf956a127b686"
+ },
+ {
+  "key": "cb_land_bg",
+  "path": "gfx/interface/land_battle_bg.dds",
+  "w": 567,
+  "h": 617,
+  "sig": "b103ee8d9711e2d55e60a792ee72678807411a751fa5f362cf0e587b27439379"
+ },
+ {
+  "key": "cb_leader_frame",
+  "path": "gfx/interface/land_battle_leader_frame.dds",
+  "w": 84,
+  "h": 111,
+  "sig": "4888d5a29f0f07a9e04573eda5aae7447ac88e3e1fa1b96ddbad04dde4a7ac13"
+ },
+ {
+  "key": "cb_initiative_glow",
+  "path": "gfx/interface/leader_initiative_overlay_glow.dds",
+  "w": 174,
+  "h": 118,
+  "sig": "251e9aa535b275f6c662d86bf0a23a1ae803e226e505f1eb262ca574c35933ae"
+ },
+ {
+  "key": "cb_progress_frame",
+  "path": "gfx/interface/land_battle_progress_frame.dds",
+  "w": 185,
+  "h": 20,
+  "sig": "b3c6df897f128a1b077754522b97f4db5c30625b7b517928dfb52ea9ff861ef6"
+ },
+ {
+  "key": "cb_progress_attacker",
+  "path": "gfx/interface/landcombat_attacker_progress.dds",
+  "w": 179,
+  "h": 14,
+  "sig": "e0f398431ca6a97925ff3e6e24943a65d2554f23add68f49508804c8934200b7"
+ },
+ {
+  "key": "cb_progress_defender",
+  "path": "gfx/interface/landcombat_defender_progress.dds",
+  "w": 179,
+  "h": 14,
+  "sig": "8eab1f1ca6671f7c559f168fd2b460622aeff4c5dc1f550853413b46b38f6f2f"
+ },
+ {
+  "key": "cb_heading",
+  "path": "gfx/interface/land_battle_heading_indicator_strip.dds",
+  "w": 60,
+  "h": 16,
+  "sig": "fcc4bedb7d4bbb78daf1a9513bf74f33f9a5a0f3faa5faf9adaa5029f4af9252"
+ },
+ {
+  "key": "cb_army_width",
+  "path": "gfx/interface/army_width.dds",
+  "w": 40,
+  "h": 19,
+  "sig": "6a3169bc21f2f2c792a169e21ba0ea6790415f470caceb181bcabfbdc1191fd5"
+ },
+ {
+  "key": "cb_skill_badge",
+  "path": "gfx/interface/land_battle_leader_skill_bg.dds",
+  "w": 35,
+  "h": 50,
+  "sig": "b192ea2d2f3b904a22a6b59c7b7721cef66a09978e270c89146844537048bd0e"
+ },
+ {
+  "key": "cb_unit_card",
+  "path": "gfx/interface/land_battle_unit_bg.dds",
+  "w": 244,
+  "h": 43,
+  "sig": "73928acebb9ee00c83c689facfceb2a2f6a9a2eeebb9c3e126399a141c1b67bc"
+ },
+ {
+  "key": "cb_reserve_card",
+  "path": "gfx/interface/land_battle_reserve_bg.dds",
+  "w": 119,
+  "h": 29,
+  "sig": "e46d9267c709c2b50305e97c251468157ee7668c4a1fa002816270858fbc0f2b"
+ },
+ {
+  "key": "cb_tactics_button",
+  "path": "gfx/interface/tactics_icon.dds",
+  "w": 46,
+  "h": 46,
+  "sig": "266fb0488e4846e4d9974f8fe75dd8d01bf6d02d987995b4942f65856404db70"
+ },
+ {
+  "key": "cb_no_tactic",
+  "path": "gfx/interface/landcombat/tactics/no_tactic.dds",
+  "w": 89,
+  "h": 47,
+  "sig": "446063782d77cbac0cde49e1eb572a135c4f47475eb6b9fae34186aa34d173f4"
+ },
+ {
+  "key": "cb_countered",
+  "path": "gfx/interface/landcombat/tactics/countered_tactic_overlay.dds",
+  "w": 85,
+  "h": 43,
+  "sig": "b1c05fc92f4b607cd30b20cf4b3f5d12d1c1440d8f5c4a45a7a4e60222ac81d2"
+ },
+ {
+  "key": "cb_tactic_entry",
+  "path": "gfx/interface/tactics_list_entry_bg.dds",
+  "w": 1770,
+  "h": 94,
+  "sig": "d81a26b7ba84635641bfd59bd1177b5409f6bdb9c7504862bcdbc6415675f28c"
+ },
+ {
+  "key": "cb_naval_bg",
+  "path": "gfx/interface/navalcombat/naval_battle_bg2.dds",
+  "w": 1056,
+  "h": 736,
+  "sig": "b17a027d94984e993c6ee03a15041ddaeb887bb8bfd345207e14362d6b5218ad"
+ },
+ {
+  "key": "cb_naval_leader_frame",
+  "path": "gfx/interface/navalcombat/naval_battle_leader_frame.dds",
+  "w": 81,
+  "h": 107,
+  "sig": "382a6f10fb2725d6cc3fc72f08a87b3de7cc2c6c88c5999837d483cf37cc5a67"
+ },
+ {
+  "key": "cb_naval_bar_win",
+  "path": "gfx/interface/navalcombat/bar_progress_win.dds",
+  "w": 351,
+  "h": 14,
+  "sig": "3e8e158f5ee82451a758baf9eb3a52ba2ed9e6d1cc153d8764be31227f2bacf1"
+ },
+ {
+  "key": "cb_naval_bar_lose",
+  "path": "gfx/interface/navalcombat/bar_progress_loose.dds",
+  "w": 351,
+  "h": 14,
+  "sig": "59f43f45662ee5293de37d7b491a1272412195e011e161a95d0d3e95d8747aae"
+ },
+ {
+  "key": "cb_naval_screening",
+  "path": "gfx/interface/navalcombat/screening_bg.dds",
+  "w": 248,
+  "h": 27,
+  "sig": "fb343d06df66599c4574b56ee45ec9de02b0d1dc322bbd2c78ef79d7b32d8731"
+ },
+ {
+  "key": "cb_naval_compass",
+  "path": "gfx/interface/navalcombat/naval_battlemap_overlay1.dds",
+  "w": 438,
+  "h": 61,
+  "sig": "e739f150b32fa5bd8a45bbf557126af98e4985c393e069f0c412484287ede5f6"
+ },
+ {
+  "key": "cb_naval_stats",
+  "path": "gfx/interface/navalcombat/combat_stat_icons.dds",
+  "w": 156,
+  "h": 26,
+  "sig": "25bf0e92dc5946129d895155ed870716516a9357cf1d5fec46a7d72683aa1776"
+ },
+ {
+  "key": "dp_generic",
+  "path": "gfx/interface/generic_diplo_action_bg.dds",
+  "w": 527,
+  "h": 315,
+  "sig": "de524c4aa552129f7016b16fe96f8e9bc89c31c19e084e0f913d5c58c0f63f4f"
+ },
+ {
+  "key": "dp_dissolve_faction",
+  "path": "gfx/interface/diplo_action_dissolve_faction_bg.dds",
+  "w": 527,
+  "h": 315,
+  "sig": "08ae07e700a11d6992d4a85d72f443d77c9154975051ebc6751d175a61e0fea6"
+ },
+ {
+  "key": "dp_imp_relations",
+  "path": "gfx/interface/diplo_action_imp_relations_bg.dds",
+  "w": 527,
+  "h": 315,
+  "sig": "0d85ed9a26b2c90d31eaad097c891654bd96a4ba601e6a43e308c93683aa909c"
+ },
+ {
+  "key": "dp_mil_access",
+  "path": "gfx/interface/diplo_action_mil_acess_bg.dds",
+  "w": 527,
+  "h": 315,
+  "sig": "e37a157b7c59334bd37e48a8cdd6ea60cd24fbc5c385d64008263b6095347232"
+ },
+ {
+  "key": "dp_offer_peace",
+  "path": "gfx/interface/diplo_action_offer_peace_bg.dds",
+  "w": 527,
+  "h": 315,
+  "sig": "5aa048e5c236f453029c73ce1f4effc6dfc965b03993708587f1a35eb0f26574"
+ },
+ {
+  "key": "dp_request_forces",
+  "path": "gfx/interface/diplo_action_request_forces_bg.dds",
+  "w": 527,
+  "h": 315,
+  "sig": "116d2deb9a657a0197b660381de868b287829405f90d2c3b608114e28d837aea"
+ },
+ {
+  "key": "dp_embargo",
+  "path": "gfx/interface/diplo_action_embargo.dds",
+  "w": 526,
+  "h": 313,
+  "sig": "854c750e03d2b96cbe85a5e7f14f71e48f75eb3ed8578b9413d86f543843b964"
+ },
+ {
+  "key": "dp_foreign_garrison",
+  "path": "gfx/interface/diplo_action_foreign_garrison_bg.dds",
+  "w": 526,
+  "h": 313,
+  "sig": "6d4eb39151d39bd38faf6b581cd1cdbd2f0a219497f65533f8ecb0fa9f4539dc"
+ },
+ {
+  "key": "dp_spymaster",
+  "path": "gfx/interface/diplo_action_spymaster_bg.dds",
+  "w": 526,
+  "h": 313,
+  "sig": "aa3b08d1fb6a16699af974bb9927cf293ad652ee0ccac2bb2d6dc3f15a7d770f"
+ },
+ {
+  "key": "dp_boost_party",
+  "path": "gfx/interface/diplo_action_boost_party_bg.dds",
+  "w": 527,
+  "h": 360,
+  "sig": "5289d5c71dff6df66834d6901a06234b24b2bcd672b53b8b0c15a10f089100ed"
+ },
+ {
+  "key": "dp_call_allies",
+  "path": "gfx/interface/diplo_action_call_allies_bg.dds",
+  "w": 527,
+  "h": 360,
+  "sig": "1772b2636a10bf9c3a332e6977a5017eadf42e33a1f86fc2fd9ec0e5cb1910fa"
+ },
+ {
+  "key": "dp_guarantee",
+  "path": "gfx/interface/diplo_action_guarantee_independence_bg.dds",
+  "w": 527,
+  "h": 360,
+  "sig": "37701ebd265ed7cfc839f1f7e009e54eb97f75bd51c61d796c7501002b461dc8"
+ },
+ {
+  "key": "dp_join_allies",
+  "path": "gfx/interface/diplo_action_join_allies_bg.dds",
+  "w": 527,
+  "h": 360,
+  "sig": "bd6faf87f529bc645d5297fae923601329807c726f2f0feeea766da569e2588e"
+ },
+ {
+  "key": "dp_invite_to_faction",
+  "path": "gfx/interface/diplo_action_invite_to_faction_bg.dds",
+  "w": 527,
+  "h": 410,
+  "sig": "142426ee5555a0c09560da2a76ee17853ace235aacfccd998365258de5c0088e"
+ },
+ {
+  "key": "dp_send_attache",
+  "path": "gfx/interface/diplo_action_send_attache_bg.dds",
+  "w": 527,
+  "h": 430,
+  "sig": "1b37e52386a231d88c7ab2464957c93e59f0da84e6211cf4cd96769e88c908e5"
+ },
+ {
+  "key": "dp_declare_war",
+  "path": "gfx/interface/diplo_action_declare_war_bg.dds",
+  "w": 527,
+  "h": 532,
+  "sig": "e3d7fa13a03f5862acabe095351fdd895b4743f674f5403c9f5d72142c68a935"
+ },
+ {
+  "key": "dp_justify",
+  "path": "gfx/interface/diplo_action_justify_wargoals_bg.dds",
+  "w": 527,
+  "h": 532,
+  "sig": "5b207371354674ba7ca3fb8da2b3f625d9e351d5bc7383f9d0d3effc40aa45b0"
+ },
+ {
+  "key": "dp_stage_coup",
+  "path": "gfx/interface/diplo_action_stage_coup_bg.dds",
+  "w": 527,
+  "h": 532,
+  "sig": "2b91e580487440b19f887e22d5ca9d09fff8592e56ec314a7d11510a0ae210e1"
+ },
+ {
+  "key": "dp_expeditionary",
+  "path": "gfx/interface/diplo_action_expeditionary_force_bg.dds",
+  "w": 527,
+  "h": 612,
+  "sig": "2f9dd458e3d2d8c0f1fac325873c50761a1ccd6ac8519621e8deb749b600e5e8"
+ },
+ {
+  "key": "dp_lend_lease",
+  "path": "gfx/interface/diplo_action_lend_lease_bg.dds",
+  "w": 527,
+  "h": 612,
+  "sig": "0dd35f54fe9853dacc3864a6db2127bada601161cef0997dd1ed127397aed57d"
+ },
+ {
+  "key": "dp_volunteers",
+  "path": "gfx/interface/diplo_action_volunteers_bg.dds",
+  "w": 527,
+  "h": 612,
+  "sig": "c62b38f01f9e19f791a1d2abb8c8a2a6191508556a8070ff4bc1807d787ce30e"
+ },
+ {
+  "key": "dp_license",
+  "path": "gfx/interface/diplo_action_license_production_bg.dds",
+  "w": 496,
+  "h": 664,
+  "sig": "6699b41bfff3c0c4bc671cdb76f1023511c10588a9d88d908b3d01c06cbadf2b"
+ },
+ {
+  "key": "dp_justify_top",
+  "path": "gfx/interface/diplo_action_justify_wargoals_top_bg.dds",
+  "w": 500,
+  "h": 150,
+  "sig": "9118cc896a7bd8d0fdb9a62b46a01e456998c35f677b04ab9a63b467e2e11695"
+ },
+ {
+  "key": "dp_header2",
+  "path": "gfx/interface/header2.dds",
+  "w": 525,
+  "h": 42,
+  "sig": "0e8fb05c2c4565e5cb314f7c7e85536bf524f78f856ea896ecf85651cb6bbd5e"
+ },
+ {
+  "key": "dp_cancel",
+  "path": "gfx/interface/diplo_action_cancel_bg.dds",
+  "w": 503,
+  "h": 48,
+  "sig": "dc375ffc0dcdebb3feb8cfc702e8b71cad56d9dc32bd13efa6a1cffd524639bd"
+ },
+ {
+  "key": "dp_response",
+  "path": "gfx/interface/diplo_response_bg.dds",
+  "w": 449,
+  "h": 40,
+  "sig": "6c4eba138c76766615d1526c197baf448bf9123cad93f8a2cdc3cd124c0b17b7"
+ },
+ {
+  "key": "gs_country_bg",
+  "path": "gfx/interface/country_selection_bg.dds",
+  "w": 1225,
+  "h": 728,
+  "sig": "9ef8820ad4e0decc187580cf01517ae6b200a13999330811f9e7eb931256dd70"
+ },
+ {
+  "key": "gs_date_bg",
+  "path": "gfx/interface/select_date_bg.dds",
+  "w": 579,
+  "h": 512,
+  "sig": "3492e90461b75aece043d09bba59ada45a611466662dd65c63208dac83971b3e"
+ },
+ {
+  "key": "gs_details_bg",
+  "path": "gfx/interface/lobby_right_sidepanel_bg.dds",
+  "w": 492,
+  "h": 301,
+  "sig": "88653f3ddb78d73087e5c5071454c252bc4eb660685f08e6f96eb9d2dd036ba5"
+ },
+ {
+  "key": "gs_card",
+  "path": "gfx/interface/country_selection_entry.dds",
+  "w": 300,
+  "h": 274,
+  "sig": "83dba1979f66d2c5a4a199626e1bacd1d8321e2205c57ab8bedf9aed9b7bdfc1"
+ },
+ {
+  "key": "gs_card_minor",
+  "path": "gfx/interface/country_selection_minor_entry.dds",
+  "w": 276,
+  "h": 97,
+  "sig": "1ca4dc253f1588a0377afe44ad389e3bb811de289dd802dd20171c44ef340ded"
+ },
+ {
+  "key": "gs_card_mini",
+  "path": "gfx/interface/diplo_countrylist_flag_frame_mini.dds",
+  "w": 118,
+  "h": 44,
+  "sig": "e0c7538d87ba68077e4dcea48c486ad9fde5a9c3df53455a77c4100fdf802be7"
+ },
+ {
+  "key": "gs_filter",
+  "path": "gfx/interface/country_filter_entry.dds",
+  "w": 298,
+  "h": 34,
+  "sig": "a5a733a163fe697a3f1c073d4b40bcff474e019cbf9520736872b6777b76010c"
+ },
+ {
+  "key": "gs_start_card",
+  "path": "gfx/interface/bookmark_entry_bg.dds",
+  "w": 464,
+  "h": 211,
+  "sig": "6e01974d5c3bc5affce939db5e958f6399d72ff7c2abfc5657ae4e75fe74d848"
+ },
+ {
+  "key": "gs_portrait_corners",
+  "path": "gfx/interface/minor_portrait_overlay.dds",
+  "w": 126,
+  "h": 166,
+  "sig": "00153f76571662a89b18aa125d06c55a00eb9d2435f62bc04b3b0ea17b661eaa"
+ },
+ {
+  "key": "gs_pie_frame",
+  "path": "gfx/interface/small_pol_piechart_frame.dds",
+  "w": 67,
+  "h": 68,
+  "sig": "ec9ec4b54eecb918c7bcb278fe78e022a2b9f730112def85c839e0e8a23c5361"
+ },
+ {
+  "key": "gs_pie_glass",
+  "path": "gfx/interface/small_pol_piechart_overlay.dds",
+  "w": 54,
+  "h": 54,
+  "sig": "c089654c23e77379b4d86715916ba4f8f8334aca45eef3c3b5ac59fe70b93159"
+ },
+ {
+  "key": "gs_upper_bar",
+  "path": "gfx/interface/tiles/tiled_frontend_upper_bar.dds",
+  "w": 484,
+  "h": 128,
+  "sig": "d6384f8bf2cf811997b7234bf3d946b5d364c7fb86ac34f4e410276ed97ffa9f"
+ },
+ {
+  "key": "gs_lower_bar",
+  "path": "gfx/interface/tiles/tiled_frontend_lower_bar.dds",
+  "w": 484,
+  "h": 128,
+  "sig": "ea2f2166ac21c43ebfff05f6c6c3e6544a1a1a395bb0fe2f94c97013fa97e40b"
+ },
+ {
+  "key": "gs_scenario_plate",
+  "path": "gfx/interface/menu_top_bg.dds",
+  "w": 394,
+  "h": 104,
+  "sig": "8cd81e861af474a204b9e20d8cce9648b7250bd59d46cb38750878c640d11a61"
+ },
+ {
+  "key": "gs_difficulty_bg",
+  "path": "gfx/interface/lobby_lower_right_sidepanel_bg.dds",
+  "w": 598,
+  "h": 250,
+  "sig": "1c88a3d12d47fd599d1d35e1891f1d986c5eaa35091e04db39886c4570426e14"
+ },
+ {
+  "key": "gs_mp_settings_bg",
+  "path": "gfx/interface/game_settings_bg.dds",
+  "w": 484,
+  "h": 97,
+  "sig": "8c1ef73891102038ef8f37dc2de69d62b51815fa4b78b6f69ce7038ea793bb07"
+ },
+ {
+  "key": "gs_play",
+  "path": "gfx/interface/play_button.dds",
+  "w": 723,
+  "h": 60,
+  "sig": "03a11931735e6b66656727e3ea4b91bc51dec04bc83354beced6ec367b8bd8f4"
+ },
+ {
+  "key": "gs_play_ready",
+  "path": "gfx/interface/play_button_ready.dds",
+  "w": 241,
+  "h": 60,
+  "sig": "1e1ea5c55dab474b03e71ee28e8db7a181b0f3c0cca247b3b0eb08fa936e10cd"
+ },
+ {
+  "key": "gs_details_toggle",
+  "path": "gfx/interface/extended_country_button.dds",
+  "w": 82,
+  "h": 57,
+  "sig": "c72ef8cbf813a1293ffbb1cdbde8702354fcdc0a285f7b9d60deb20cb676bc0a"
+ },
+ {
+  "key": "gs_difficulty_civilian",
+  "path": "gfx/interface/difficulty_button_civilian.dds",
+  "w": 232,
+  "h": 35,
+  "sig": "454ce3fd82f32aa9d979c80174cdec6684b5c9dc6676b0e8b47657da47109f9f"
+ },
+ {
+  "key": "gs_difficulty_recruit",
+  "path": "gfx/interface/difficulty_button_recruit.dds",
+  "w": 232,
+  "h": 35,
+  "sig": "536077e675b098c4efe20d04ae2a1c7125f8b2bc60e4431764e69fd0a57ca7e6"
+ },
+ {
+  "key": "gs_difficulty_regular",
+  "path": "gfx/interface/difficulty_button_regular.dds",
+  "w": 232,
+  "h": 35,
+  "sig": "f2f32876955b6b9f0032dd49e9c1006f8efda164952ffe959d3fec682d38ba07"
+ },
+ {
+  "key": "gs_difficulty_veteran",
+  "path": "gfx/interface/difficulty_button_veteran.dds",
+  "w": 232,
+  "h": 35,
+  "sig": "59d0fbd25c44b67dc795022b74aec71186c4688f6474cf12768cc3c04057fad2"
+ },
+ {
+  "key": "gs_difficulty_elite",
+  "path": "gfx/interface/difficulty_button_elite.dds",
+  "w": 232,
+  "h": 35,
+  "sig": "94ca58dffefa0b8c8808757654f33a5f04ac528a65abd9b748fc109912a5adf2"
+ },
+ {
+  "key": "gs_custom_rules",
+  "path": "gfx/interface/custom_set_button_2.dds",
+  "w": 464,
+  "h": 35,
+  "sig": "16bc52a5f5049e4d3e8f869ece598938e5661ee38eacd78e20761e67a450f100"
+ },
+ {
+  "key": "gs_ready_check",
+  "path": "gfx/interface/generic_checkbox2.dds",
+  "w": 68,
+  "h": 30,
+  "sig": "4c32d3a92d0250c20c6833f2db786950f575b6a6606ca3b824867faec68f48e9"
+ },
+ {
+  "key": "gs_mapmode",
+  "path": "gfx/interface/lobby_country_mapmode_strip.dds",
+  "w": 100,
+  "h": 50,
+  "sig": "000cdaa1e878dc1bd29856fd6899c3d10d8ddcf85c637e3cd530cfda48ffe3ab"
+ },
+ {
+  "key": "gs_mapmode_selected",
+  "path": "gfx/interface/lobby_country_mapmode_strip_selected.dds",
+  "w": 100,
+  "h": 50,
+  "sig": "0c27258f63481a9ac566ae9fe34ce54cb0f2b9a5122d7a900030b850a78a7e05"
  },
  {
   "key": "wf_w_close",
