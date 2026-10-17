@@ -10,6 +10,16 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-17, later (the author's screenshots of v0.10, ending "That's all for now I think"): **the Deco UI v0.10.1**.
+  The loading pictures from Valsora's map out of the mod until the map is final (kept by `make_loading.py`; the loading
+  screen had shown the game's own picture, game setup the last of ours); corner brackets off the loading boxes and the
+  battle plan bar, its icons centred; game setup's country selection a card wider for "Other countries"
+  (`deco_ui/tools/make_setup.py`), its details on one line and the ideology wheel as on the politics screen; the top
+  bar's logistics in an 11 px font; the decision counts in the medallion's shoulders beside the seal; the division
+  designer's combat width and the commanders' skill centred on where the game draws them (two helpers measured the
+  screenshots: the game rounds a centred line's start up), the skill on a dark diamond; the fleet panel's long names
+  in fonts that fit; the news story a size smaller, ending above the page's rule, and the events' text boxes taller.
+  Rebuilt, all checks passed; the zip 24 MB (27 before: the loading pictures out).
 - 2026-10-17, evening (the author: "Please start applying the proposed changes to all the UI screens"): **the Deco UI
   v0.10**. All eight suggestions of `deco_ui/docs/SCREEN_INVENTORY.md` and more, as pictures at the game's paths and
   sizes with its layouts kept: the four loading screens from Valsora's map (the proposal of 2026-10-16, now in the

@@ -27,6 +27,35 @@ NEWS_TITLE_X = NEWS_CX - NEWS_TITLE_W // 2                 # 19
 NEWS_TEXT_X = NEWS_CX - NEWS_TEXT_W // 2                   # 34
 
 
+# the news story (v0.10.2, the user's screenshot of 2026-10-17, "Text on event runs over": Cardonia's capitulation, 13
+# lines of the body font from y 291, ran over the rule and diamond the page draws above its option). The page is a
+# fixed picture, so the story has the room between the headline and that ornament: from y 291 (the midsection's 121
+# and the box's 170) to 485, where the diamond's top point is (gen_textures.EV_NEWS: the rule at 492.5, the diamond a
+# 10 px square turned on its centre). It is set in the 13 px body font on a 14 px line: 13 lines fit, the most any news
+# event Valsora ships needs with the longest names in it (country_capitulated.0, nuke_dropped.2), and all but one of
+# the game's 324 news stories (14 lines); in the 15 px font, 12 lines fit and 11 of Valsora's 27 stories need 13 or 14
+# (counted with "The Sacred Principality of Rouental" for every country's name).
+NEWS_TEXT_FONT = "valsora_deco_body_13"
+NEWS_STORY_Y, NEWS_STORY_END = 291, 485
+# where the game puts the news option (inferred from the screenshot: its plate's top edge at y 507, so the entry at
+# 505, under a story ending at 499): the bottom window under the midsection, which is the game's 385 tall unless the
+# story is taller (as the country event's middle grows with its text), the options grid 1 px above its top
+NEWS_MID_Y, NEWS_MID_H, NEWS_TEXT_DY = 121, 385, 170
+
+
+def news_option_y(story_h):
+    """the news option's top on the page for a story story_h tall"""
+    return NEWS_MID_Y + max(NEWS_MID_H, NEWS_TEXT_DY + story_h) - 1
+
+
+# the text boxes' height in lines of the body font (16 px), where the game's typewriter font (16 px too) had 14 (a
+# country event) and 21 (a leader event): a box too short drops the lines past it, and the body font needs up to two
+# more lines than the game's for the game's longest texts (stability.32: 16 lines where the game's 14 fit; 21 of the
+# game's 5,736 texts lost lines at a country event's 14, among them two La Resistance events Valsora ships). The game
+# stretches those events' middle to the text, so a taller box only matters for the texts that need it.
+TEXT_LINES = {"EventWindow": 16, "EventWindow_leader": 24}
+
+
 def grid_x(window):
     """options_grid's x: the plate centred on the window's centre line (to the nearest pixel)"""
     return int(CENTRES[window] - OPTION_W / 2)

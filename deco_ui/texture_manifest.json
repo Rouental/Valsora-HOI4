@@ -2195,14 +2195,14 @@
   "path": "gfx/interface/pol_view_bg.dds",
   "w": 550,
   "h": 344,
-  "sig": "43f3d50d703cbe15f2baa4796f2b6a1724e0525734e148caf78587c97addca86"
+  "sig": "7f597a152b6a53bb19c86d02ae35f35964d9492375466b6f90e60bdae64d551e"
  },
  {
   "key": "pol_head_pol_view_bg_no_dlc",
   "path": "gfx/interface/pol_view_bg_no_dlc.dds",
   "w": 550,
   "h": 344,
-  "sig": "b1e22f3a5a488eacdfb4c19beeb3b722bf296cd32e95e7c2bfc755733ea290c9"
+  "sig": "8f06666ee335cd91a6e34ac7ae7502b39421da561737fe5b09f02f58e41014cb"
  },
  {
   "key": "pol_body",
@@ -2216,35 +2216,35 @@
   "path": "gfx/interface/valsora_deco/panels/head_500_0.dds",
   "w": 500,
   "h": 114,
-  "sig": "6dc5b051532f2c003ddf3a6c45c5c1266ce0043d2e5eeabfed10b0b7b5fba307"
+  "sig": "3b62eddef0dc8c2fb7c0092a30bf1c8f4a78ee417d7862713d72e9bbe42ebc42"
  },
  {
   "key": "panel_head_550_m6",
   "path": "gfx/interface/valsora_deco/panels/head_550_m6.dds",
   "w": 550,
   "h": 114,
-  "sig": "d312419f3988ba4bf3e3d3ceb3f60ef0e9602be45ca087294728e89d2fa773aa"
+  "sig": "0bf1a429e3726474cea65fb438dfd9e133c7c6ff1721c7993325029988cddf01"
  },
  {
   "key": "panel_head_689_m6",
   "path": "gfx/interface/valsora_deco/panels/head_689_m6.dds",
   "w": 689,
   "h": 114,
-  "sig": "99836c21283b5dbaba9ea518eb18e3fb2d49d6f4d0cfb2ceafadab6383a8de18"
+  "sig": "df483e9665c55be9612905030620095e098160617068002508c2718653167429"
  },
  {
   "key": "panel_head_700_m9",
   "path": "gfx/interface/valsora_deco/panels/head_700_m9.dds",
   "w": 700,
   "h": 114,
-  "sig": "2974f6fe0f8f6f92a638f5e7c27e540df2651a5d2ae9f8f567924d8b1918b4d4"
+  "sig": "b425317fe38c33e13760575db7063285a7fa311fa0af11e728c18c67a4402ee6"
  },
  {
   "key": "pol_sections",
   "path": "gfx/interface/valsora_deco/politics/pol_sections.dds",
   "w": 550,
   "h": 666,
-  "sig": "2d978889c4426a7ff4cd12a4468721c74e7afea6a335f1ac6b2424e474af6997"
+  "sig": "e28c3ef19b8078ac0a6013ea2a226f941d6e63e77ff34687057b788ba149dab1"
  },
  {
   "key": "pol_frame",
@@ -2454,7 +2454,7 @@
   "path": "gfx/interface/valsora_deco/focus/header.dds",
   "w": 616,
   "h": 114,
-  "sig": "fc5b55cf9e7b8af01560004ed2a36023fc7d5a039515e67913a248548b1dbddd"
+  "sig": "8954be27400f5c2cf8142332c88740f27c0fba2dcf9ffb38022907fbbd102147"
  },
  {
   "key": "nf_tree_bg",

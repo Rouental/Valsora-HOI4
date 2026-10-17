@@ -18,13 +18,14 @@ v0.10.2: the fleet's names in the room they have (the user's screenshot, 2026-10
 row cut its type short, "Advanced Destroyer (Advanced Destroy...": the game shrinks the type's box at runtime to end
 where the row's insignia begins (x 450; the refit and repair buttons further left when they show), 240 px from x 210,
 and "Advanced Destroyer (Advanced Destroyer I)" is 254 px in the redrawn hoi_18 (262 in the game's own font, so the
-game cuts it too). The type is set in the Federo of the game's garamond_14_bold (12.5 px: 222 px, and the longest of
-the game's hull names twice over, "Coastal Defense Ship (Coastal Defense Ship I)", 230), on the game's baseline. The
-admiral's name ran past the fleet picture's recess (mapview_art.fleet_bg: x 77-195) under the skill badge (the game's
-box is 140 wide from x 81): it keeps to the recess (112 px) on up to two lines of the same Federo (most names fit one,
-centred where the game's line sat; "Napoléon de Montebrise" takes two), the rank 3 px higher to make the room. The home
-base's name was the panel's one text in the game's own font (hoi_18b, not redrawn: 3 of Valsora's 63 city names cut at
-its 90 px): the redrawn hoi_16mbs, which fits them all. preview_navy.py draws the panel and checks every text's room.
+game cuts it too). The type is set in the game's font Main_14_bold, whose file garamond_14_bold game_fonts.py redraws
+in Federo at 12.5 px (222 px, and the longest of the game's hull names twice over, "Coastal Defense Ship (Coastal
+Defense Ship I)", 230), on the game's baseline. The admiral's name ran past the fleet picture's recess
+(mapview_art.fleet_bg: x 77-195) under the skill badge (the game's box is 140 wide from x 81): it keeps to the recess
+(112 px) on up to two lines of the same Federo (most names fit one, centred where the game's line sat; "Napoléon de
+Montebrise" takes two), the rank 3 px higher to make the room. The home base's name was the panel's one text in the
+game's own font (hoi_18b, not redrawn: 3 of Valsora's 63 city names cut at its 90 px): the redrawn hoi_16mbs, which
+fits them all. preview_navy.py draws the panel and checks every text's room.
 """
 import os
 import re
@@ -43,7 +44,7 @@ BESIDE = {"naviesview.gui": ["home_base_selection_window", "ship_refit_equipment
 # v0.10.2: the fleet panel's texts (see above): element -> (font, dy to keep the game's baseline, other attributes).
 # hoi_18 and hoi_18b put their baseline 14 px into the box, hoi_16mbs 13 and garamond_14_bold 11 (the game's own
 # metrics, which game_fonts.py keeps).
-NAME_FONT = "garamond_14_bold"          # Federo 12.5 px on a 14 px line
+NAME_FONT = "Main_14_bold"              # the game's font of its garamond_14_bold file, white: Federo 12.5 px, 14 px line
 NAME_W, NAME_LINES = 112, 2             # the admiral's recess: x 81 (the name's x) to 193; two lines
 TEXTS = {"naviesview.gui": {
     "ship_entry_detailed>ship_type": (NAME_FONT, 14 - 11, {}),

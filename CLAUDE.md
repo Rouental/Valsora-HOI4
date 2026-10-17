@@ -1086,7 +1086,7 @@ it before touching the UI. In short:
   are one commit, `8dece16`: `git revert 8dece16` and a rebuild of both take them out. The focus in progress in the
   focus tree's header, a bar under a focus and a one-spirit card have no hook in the game (`deco_ui/CLAUDE.md` section
   12). **Four loading screens** from Valsora's map were drawn as a proposal (`deco_ui/art/proposals/loading_screens/`:
-  "don't add them yet"); they are in the mod since v0.10.
+  "don't add them yet"); they were in the mod in v0.10 only (out again in v0.10.1, kept for later).
 - **v0.10** (2026-10-17, not yet seen in game; the author: "Please start applying the proposed changes to all the UI
   screens"): every suggestion of `deco_ui/docs/SCREEN_INVENTORY.md` and more, as pictures at the game's paths and sizes
   with its layouts kept: the loading screens (`deco_ui/tools/make_loading.py`, in the background list after the menu's
@@ -1095,6 +1095,15 @@ it before touching the UI. In short:
   setup; the window frames and popup headers the core skin had missed; the settings, the trade offer and other windows
   seen now and then. One art module per screen (`deco_ui/tools/*_art.py`, `ART_MODULES`), each with a preview beside
   the game's (only sent: the game's art).
+- **v0.10.1** (2026-10-17, later, not yet seen in game; from the author's screenshots of v0.10): the loading pictures
+  out of the mod again until the map is final (the author: "The globe map should be kept for later ... the map's not
+  finalized quite yet"; the loading screen showed the game's own pictures anyway, and game setup had taken the last of
+  ours as its background), kept by `make_loading.py` (into `deco_ui/build/`, `--into-mod` to put them back); no corner
+  brackets on the loading boxes and the battle plan bar, its icons centred; game setup a card wider for "Other
+  countries", its details tidied and the ideology wheel as on the politics screen (`make_setup.py`); the logistics
+  values a size smaller; the decision counts beside the seal; the division designer's combat width and the commanders'
+  skill centred (the game rounds centred text up, measured on the screenshots); the fleet panel's long names fit; the
+  news story a size smaller so it ends above the page's rule.
 - **Proposals for the side panels' own pictures** (research, production, the market, the overview strip, the
   intelligence agency, the spirit banners) are in `deco_ui/art/proposals/panel_pictures/`, **not in the mod**
   (author, 2026-10-15: "don't put them in the mod yet. I'd like to see and approve them first").
@@ -1107,8 +1116,10 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   draws 65,536: `docs/BORDER_LIMIT.md`), 3,149 states, 179 strategic regions (137 land, made from the nations on 2026-10-16: `land_regions.py`; 42 sea);
   182 countries in the mod,
   161 of them on the map, 95 of those with a flag of their own (66 fly a stripe in their map colour); the states of
-  39 are the author's own lines (`gazetteer.finals`). Two starts, both on 1 January 2036. The Deco UI is v0.10 (the
-  loading screens from Valsora's map, the scroll bars, the selected units' badges, the battle plan toolbar, the battles,
+  39 are the author's own lines (`gazetteer.finals`). Two starts, both on 1 January 2036. The Deco UI is v0.10.1 (the
+  author's findings on v0.10: loading pictures out until the map is final, game setup's ninth card, the battle plan
+  bar, the decision counts beside the seal, the combat width and commanders' skill centred, the fleet's names, the news
+  story), after v0.10 (the scroll bars, the selected units' badges, the battle plan toolbar, the battles,
   the diplomatic actions, game setup and the popups in the deco style: `deco_ui/docs/SCREEN_INVENTORY.md` counts 34
   screens restyled, 45 re-skinned, 16 still the game's), after v0.9.1 (the map's names back, the
   designers' statistics dark, the doctrine tabs clear of the name, fuel, supply and convoys in the top bar's strip and
@@ -1129,7 +1140,12 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   characters with their stats; Rouental's 13 releasables, its civil war's 7 risers and Belekria's Tethia), commanders'
   skill and stats, and cities' size apart from their victory points (now labelled by importance). The test version with 1.5 times larger flags is built beside the mod by
   `sh scripts/build_flags15.sh` and sent as its own zip (`docs/HD_FLAGS_TEST.md`), not put into the mod.
-- **Seen in game last** (2026-10-16, later): the Deco UI v0.9 (the author's screenshots and `error.log`): the
+- **Seen in game last** (2026-10-17): the Deco UI v0.10 (the author's screenshots): the logistics "as part of the main
+  bar" and the commanders' card's look liked; the loading screen showed the game's own picture, corner brackets stuck
+  out of the loading boxes and the battle plan bar, its icons off centre, "Other countries" off the edge of game
+  setup, its details disorganised, the combat width and the commanders' skill off centre (white on tan), the fleet's
+  names running over, a news story over its rule: all fixed in v0.10.1, not yet seen. Before that (2026-10-16, later):
+  the Deco UI v0.9 (the author's screenshots and `error.log`): the
   research and doctrine screens "mostly look good" and the faction's flags "look amazing"; no names on the map (the
   map font's texture too large for the game), the designers' statistics white on the ivory sheet, the doctrine tabs
   into the name under the flag, a long faction name cut off, the LEADER tag off centre, the seal's badges unequally

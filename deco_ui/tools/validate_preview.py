@@ -502,14 +502,16 @@ def draw_text(canvas, font, text, x, y, max_w=None, fmt="left", color=None, chec
         # may as well
         if check and max_w and width > max_w and (not as_game or width > max(max_w, as_game(line) * 1.05)):
             problems.append(f"text overflow in {check}: {text!r} {width}px > {max_w}px")
-        lx = x
+        lx = math.floor(x)
         if max_w and fmt in ("center", "centre"):
-            lx = x + (max_w - width) / 2
+            # the game rounds a centred line's start up (v0.10.1, measured on the author's screenshots: the combat
+            # width, the commanders' skill and stats); rounding down drew it a pixel left whenever the room was odd
+            lx = math.ceil(x + (max_w - width) / 2)
         elif max_w and fmt == "right":
-            lx = x + max_w - width
+            lx = math.floor(x + max_w - width)
         # a line starts on a whole pixel, as the game draws text: rounding each glyph's half-pixel position on its own
         # (round() takes .5 to the even number) moved every other letter of centred text a pixel ("Postpon e")
-        pen, ly, prev = math.floor(lx), math.floor(y0) + li * lh, None
+        pen, ly, prev = lx, math.floor(y0) + li * lh, None
         for ch, code in line:
             cp = ord(ch)
             if cp not in chars:

@@ -187,3 +187,22 @@ war goal lists' parchment became an ivory sheet (the game writes dark text there
 seams where the game repeats the tile's middle, so flat; the dark paper a lacquer well; the small close button the
 diamond; the request popups' header strips and their war medallion. The helpers shared `art_util.py` (moved out of
 `gen_textures.py`, unchanged) and `ART_MODULES`; `validate_preview.py` holds every module's textures to the game's sizes.
+
+**v0.10.1 (2026-10-17, later, not yet seen in game)**, from the user's screenshots of v0.10 ("The globe map should be
+kept for later, and I might return to the others but the map's not finalized quite yet"; "Other countries sticks off
+the edge"; "The country info is a little disorganized. Also the style of the ideology wheel should be same as on the
+politics screen"; "Combat width isn't centered"; "I like having the logistics stuff as part of the main bar, but maybe
+shrink the text on it just a little"; "Skill is not centered, and the white won't show on the tan. I like the aesthetic
+though"; "The corners are odd and sticking out on this bar too. Also, icons aren't all centered"; "Names run off
+screen"; "Maybe move the notifications on this screen to something like this"; "Text on event runs over"). The
+loading screen had shown the game's own picture, and game setup the last of our list: the four loading pictures are
+out of the mod, kept for later (`make_loading.py` into `build/`, `--into-mod`). Corner brackets went from the loading
+boxes and the battle plan bar, which have chamfered corners; the battle plan's glyphs are centred by their ink. Game
+setup is patched for the first time (`make_setup.py`): the country selection 150 px wider for a ninth card, the
+details on one line, the wheel in the politics screen's style. The logistics cell's values are `value_11`; the
+decisions' badges sit in the medallion plate's shoulders (its second step 4 px lower, the panels' notch with it). Two
+helpers measured the rest on the screenshots: the game rounds a centred line's start up (the previews rounded down),
+so the combat width's ring and a commander's skill diamond moved onto the numbers; the fleet panel's long texts got
+fonts that fit (`make_mapviews.TEXTS`, `preview_navy.py` copying the game's cutting); the news story `body_13`, ending
+above the page's rule, and the country and leader events' boxes taller.
+

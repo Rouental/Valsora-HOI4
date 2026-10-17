@@ -2,7 +2,7 @@
 force (the reserve fleet of the user's screenshot, 2026-10-17) and its ships' rows, drawn from the mod's .gui with the
 mod's textures and fonts, as the game stacks them below the flag medallion; the texts are the screenshot's.
 
-    python preview_navy.py [naviesview.gui]   -> build/preview_navy.png (at 2x; another .gui: build/preview_navy_<name>.png)
+    python preview_navy.py [naviesview.gui]   -> build/preview_navy.png at 2x (another .gui: preview_navy_<name>.png)
 
 What the game does at runtime and the preview copies (inferred from the screenshot, where it cut "Advanced Destroyer
 (Advanced Destroyer I)" after 235-241 px): a ship's name and type are cut short ("...") to end where the first of the
@@ -10,8 +10,11 @@ row's right-hand pieces begins (the task force's insignia at x 450; the refit an
 further left when they show: the game's file says "maxWidth is shrinked in code when necessary (e.g. buttons are
 shown)"), and a fixed-size box cuts its text the same way at its maxWidth. Every text is checked against the room it
 has: cut short, or past the recess the mod's fleet picture draws round it (the admiral's rank and name), is a problem.
+Lines wrap 1 px short of their box, as the game's do (preview_events.STRICT).
 The game's own art is drawn, so the picture stays in the git-ignored build/ folder.
 """
+import contextlib
+import io
 import os
 import re
 import sys
@@ -19,11 +22,8 @@ import sys
 import numpy as np
 from PIL import Image
 
-import contextlib
-import io
-
 import layout as L
-from paths import BUILD, MOD
+from paths import BUILD, MOD, VANILLA
 
 with contextlib.redirect_stdout(io.StringIO()):          # validate_preview reports its checks when imported
     import preview_panels as PP
@@ -59,6 +59,18 @@ ROW_HIDE = {"highlight", "plane_icon", "bar_planes", "pride", "history_report_bu
 RIGHT = ("task_force_insignia", "btn_refit", "btn_repair_now", "damaged_part_report")
 
 
+def game_font_names():
+    """the game's names (core.gfx) for the font files the mod redraws, which a .gui may use (Main_14_bold is the
+    garamond_14_bold file in white)"""
+    t = open(VANILLA + "interface/core.gfx", encoding="utf-8-sig", errors="ignore").read()
+    for m in re.finditer(r'bitmapfont\s*=\s*\{\s*name\s*=\s*"([^"]+)"\s*path\s*=\s*"gfx/fonts/([^"]+)"\s*'
+                         r'color\s*=\s*0x([0-9a-fA-F]{8})', t):
+        name, base, c = m.groups()
+        if name not in V.FONTS and base in V.FONTS:
+            c = int(c, 16)
+            V.FONTS[name] = dict(V.FONTS[base], color=((c >> 16) & 255, (c >> 8) & 255, c & 255))
+
+
 def boxes(body):
     """name -> the text box's attributes, for every text box in a window"""
     out = {}
@@ -85,9 +97,9 @@ def cut(font, text, max_w):
 class Fleet(PP.Panel):
     """the panel with the game's runtime cuts, and a record of every text's fit"""
 
-    def __init__(self, body, room=None, recess=None, **kw):
+    def __init__(self, body, room=None, recess=None, ox=0, **kw):
         super().__init__(**kw)
-        self.attrs, self.room, self.recess, self.fits = boxes(body), room or {}, recess or {}, []
+        self.attrs, self.room, self.recess, self.ox, self.fits = boxes(body), room or {}, recess or {}, ox, []
 
     def text(self, cv, text, font, x, y, w, h, fmt, name, valign=False):
         a = self.attrs.get(name, {})
@@ -101,7 +113,7 @@ class Fleet(PP.Panel):
             if room and one_line and (a.get("fixedsize") == "yes" or name in self.room):
                 shown, was_cut = cut(font, text, room)
             # a box of several lines: the game's word wrap; lines past its height are dropped (cut)
-            lines = V.wrap(V._runs(shown, None), None if one_line else room, lambda rs: V.text_width(f, rs))
+            lines = V.wrap(V._runs(shown, None), None if one_line else room - 1, lambda rs: V.text_width(f, rs))
             if not one_line and len(lines) * lh > h + 2:
                 was_cut, shown = True, " / ".join("".join(c for c, _ in ln) for ln in lines[:int((h + 2) // lh)]) + " ..."
             width = max(V.text_width(f, ln) for ln in lines)
@@ -115,8 +127,8 @@ class Fleet(PP.Panel):
         super().text(cv, text, font, x, y, w, h, fmt, name, valign)
 
 
-def window(elems, name, pos, **kw):
-    """(the window's body at pos, a Fleet panel for it)"""
+def window(elems, name, pos):
+    """(the window placed at pos, as a list to draw; its body as the file has it)"""
     w = PP.find_window(elems, name)
     assert w is not None, name
     body = [(k, v) for k, v in w if not (k and k.lower() in ("position", "show_position"))]
@@ -124,6 +136,7 @@ def window(elems, name, pos, **kw):
 
 
 def main():
+    game_font_names()
     elems = V.load(GUI)
     vars_ = PP.gui_vars(GUI)
     cv = PP.backdrop(True)
@@ -131,16 +144,14 @@ def main():
     fits = []
     # the fleet's header (the game's list slot is 165 tall), the tool bar under it, the task force under that
     body, w = window(elems, "fleet_view_header", (x0, y0))
-    p = Fleet(w, recess=RECESS, hide=HEADER_HIDE, samples=HEADER, vars_=vars_)
-    p.ox = x0
+    p = Fleet(w, recess=RECESS, ox=x0, hide=HEADER_HIDE, samples=HEADER, vars_=vars_)
     p.draw(cv, body, 0, 0, 1920, 1080)
     fits += p.fits
     body, w = window(elems, "tool_bar_window", (x0, y0 + 167))
     PP.Panel(vars_=vars_).draw(cv, body, 0, 0, 1920, 1080)
     ty = y0 + 213
     body, w = window(elems, "taskforce_view_entry", (x0, ty))
-    p = Fleet(w, hide=TF_HIDE, samples=TASK_FORCE, vars_=vars_, frames={"insigna": 5})
-    p.ox = x0
+    p = Fleet(w, ox=x0, hide=TF_HIDE, samples=TASK_FORCE, vars_=vars_, frames={"insigna": 5})
     p.draw(cv, body, 0, 0, 1920, 1080)
     fits += p.fits
     # the ships' rows, 41 px apart, from the task force's ships_detailed (y 122)
@@ -161,10 +172,9 @@ def main():
             a = boxes(row)[n]
             room[n] = min(int(a["maxwidth"]), edge - PP.Panel().posval(V.xy(V.sub(
                 next(v for k, v in row if isinstance(v, list) and V.attrs(v).get("name") == n), "position"))[0]))
-        p = Fleet(row, room=room, hide=ROW_HIDE - set() | ({"btn_refit"} if not refit else set()),
+        p = Fleet(row, room=room, ox=x0, hide=ROW_HIDE | (set() if refit else {"btn_refit"}),
                   samples={"ship_name": name, "ship_type": kind}, vars_=vars_,
                   frames={"task_force_insignia": 5, "ship_level": 3})
-        p.ox = x0
         p.draw(cv, body, 0, 0, 1920, 1080)
         fits += p.fits
     y1 = ty + 122 + len(SHIPS) * 41 + 8

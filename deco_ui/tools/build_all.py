@@ -24,7 +24,8 @@ STAGES = [
      "preview_game_fonts.py", "preview_research.py", "preview_designers.py",
      # v0.10's screens: the battle plan, the frames and popups, the badges, the battles, diplomacy, game setup
      "preview_battleplan.py", "preview_windows.py", "preview_popups.py", "preview_mapviews.py", "preview_combat.py",
-     "preview_diplo.py", "preview_setup.py"],
+     "preview_diplo.py", "preview_setup.py",
+     "preview_navy.py"],                                     # v0.10.1: the selected fleet's panel
 ]
 # the generators write files the next ones read (make_topbar writes the fonts' .gfx, make_politics reads Valsora's
 # screen ...), so they stay one after another

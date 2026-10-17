@@ -103,7 +103,7 @@ guiTypes = {
 		containerWindowType = {
 			name = "valsora_deco_panel_block_2"
 			position = { x = 0 y = 59 }
-			size = { width = 33 height = 13 }
+			size = { width = 33 height = 17 }
 			background = {
 				name = "valsora_deco_panel_block_2_bg"
 				quadTextureSprite = "GFX_valsora_deco_clear"
@@ -112,7 +112,7 @@ guiTypes = {
 		containerWindowType = {
 			name = "valsora_deco_panel_block_3"
 			position = { x = 151 y = 59 }
-			size = { width = 349 height = 13 }
+			size = { width = 349 height = 17 }
 			background = {
 				name = "valsora_deco_panel_block_3_bg"
 				quadTextureSprite = "GFX_valsora_deco_clear"
@@ -120,8 +120,8 @@ guiTypes = {
 		}
 		containerWindowType = {
 			name = "valsora_deco_panel_block_4"
-			position = { x = 0 y = 72 }
-			size = { width = 55 height = 13 }
+			position = { x = 0 y = 76 }
+			size = { width = 55 height = 9 }
 			background = {
 				name = "valsora_deco_panel_block_4_bg"
 				quadTextureSprite = "GFX_valsora_deco_clear"
@@ -129,8 +129,8 @@ guiTypes = {
 		}
 		containerWindowType = {
 			name = "valsora_deco_panel_block_5"
-			position = { x = 129 y = 72 }
-			size = { width = 371 height = 13 }
+			position = { x = 129 y = 76 }
+			size = { width = 371 height = 9 }
 			background = {
 				name = "valsora_deco_panel_block_5_bg"
 				quadTextureSprite = "GFX_valsora_deco_clear"

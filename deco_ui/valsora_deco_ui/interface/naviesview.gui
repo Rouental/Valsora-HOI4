@@ -1134,7 +1134,7 @@ guiTypes = {
 		instantTextboxType = {
 			name = "leader_name"
 			position = { x = 81 y = 61 }
-			font = "garamond_14_bold"
+			font = "Main_14_bold"
 			maxWidth = 112
 			maxHeight = 28
 			fixedsize = yes
@@ -1673,7 +1673,7 @@ guiTypes = {
 		instantTextboxType = {
 			name = "ship_type"
 			position = { x = 210 y = 23 }
-			font = "garamond_14_bold"
+			font = "Main_14_bold"
 			text = "test"
 			maxWidth = 272
 			maxHeight = 23

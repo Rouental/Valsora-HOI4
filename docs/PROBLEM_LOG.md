@@ -6,6 +6,24 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**The fleet panel's names ran off** (2026-10-17, the author: "Names run off screen")
+- Cause: a ship row's type line ("Advanced Destroyer (Advanced Destroyer I)", 254 px in our `hoi_18`) is cut ("...")
+  where the row's insignia begins, 240 px from its start (the game shrinks the box in code; inferred from the
+  screenshot); the admiral's name ran past the name frame the fleet picture draws, under the skill badge; the home
+  base was still in the game's own font, too wide for 3 of Valsora's 63 city names.
+- Fix (Deco UI v0.10.1): the ship type and the admiral's name in `Main_14_bold` (the Deco UI's Federo 12.5 px), the
+  name up to two lines inside its frame, the home base in `hoi_16mbs` (`make_mapviews.TEXTS`); `preview_navy.py`
+  copies the game's cutting and checks every text against its room. The longest type ("Advanced Heavy Ship (Advanced
+  Heavy Ship II)") is still cut by 2 px, as the base game cuts it.
+
+**A news event's text ran over the page's rule** (2026-10-17, the author: "Text on event runs over")
+- Cause: Cardonia's capitulation story starts with a blank line, so in `body_15` it took 13 lines, from y 291 to 499,
+  over the rule and diamond the news page draws at y 485-500; the option stays at y 505. 11 of Valsora's 27 news
+  stories would run over.
+- Fix (Deco UI v0.10.1): the story in `valsora_deco_body_13`; every news story Valsora ships ends by y 473 with the
+  longest country names filled in. The country and leader events' text boxes, which drop lines past their height
+  silently, were made 16 and 24 lines tall (two La Résistance events needed 15-16).
+
 **The division designer's combat width wasn't centred in its ring** (2026-10-17, the author: "Combat width isn't
 centered")
 - Cause: the ring was drawn round (309, 249), but the game draws the number in `combat_width_view`'s 40 x 20 box at

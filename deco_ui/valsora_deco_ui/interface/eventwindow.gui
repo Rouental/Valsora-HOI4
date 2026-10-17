@@ -73,7 +73,7 @@ guiTypes = {
 				borderSize = {x = 0 y = 0}
 				text = "Long text here!"	
 				maxWidth = 512
-				maxHeight = 230
+				maxHeight = 256
 				format = left
 			}	
 		}			
@@ -417,7 +417,7 @@ guiTypes = {
 				borderSize = {x = 0 y = 0}
 				text = "Long text here!"	
 				maxWidth = 350
-				maxHeight = 350
+				maxHeight = 384
 				format = left
 			}	
 		}			
@@ -531,7 +531,7 @@ guiTypes = {
 			instantTextBoxType = {
 				name = "Description"
 				position = { x = 34 y = 170 }
-				font = "valsora_deco_body_15"
+				font = "valsora_deco_body_13"
 				borderSize = {x = 0 y = 0}
 				text = "Long text here!"	
 				maxWidth = 460

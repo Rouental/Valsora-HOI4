@@ -1,7 +1,9 @@
 """A preview of the events (v0.7): a country event, a news event and a leader event over the map, drawn as the game stacks them
 (eventwindow.gui: the top, the middle stretched to the text, the bottom with the picture and the options; the news
 on its broadsheet), with the mod's textures and fonts. The pictures are stand-ins (a Valsora superevent photo, the
-world map art), since the game's event pictures are not in this repository's reference copy.
+world map art), since the game's event pictures are not in this repository's reference copy. The news is the story of
+the user's screenshot of 2026-10-17 (Cardonia's capitulation, which ran over the ornament above its option): it must end
+above that ornament (layout_events.NEWS_STORY_END), and its option goes where the game puts it (news_option_y).
 
     python preview_events.py          -> build/preview_events.png
 """
@@ -31,10 +33,16 @@ SAMPLE = dict(
     # four options, one long (the long test event's: the user's screenshot showed its third line spilling over the plate)
     options=["The people have spoken.", "A second option, a good deal longer than the others, to see how it wraps onto "
              "a second line.", "Postpone the count.", "And a fourth."],
-    news_title="The Association Stands Together",
-    news_text=("Envoys of the eight Reibonnaise states met in Rêverie today and renewed the Association's charter for "
-               "another decade. Observers across Nonscio call it the strongest bond in the Vale since the old wars."),
-    news_options=["A union of the Vale."],
+    # the game's country_capitulated.0.d_positive_collab_diff_ideology as the screenshot showed it (a blank first line)
+    news_title="Cardonia Has Capitulated",
+    news_text=("\nthe Cardonian Kingdom has announced its total surrender to The Sacred Principality of Rouental. The "
+               "Rouentaise forces along with a number of independent Cardonian monarchist supporters have forced Arthur "
+               "Campbell and his government into exile as a new government has been established to rule the Cardonian "
+               "Kingdom in cooperation with The Sacred Principality of Rouental. Roland II Cahun has remarked that this "
+               "mutual agreement will bring a new age of prosperity and cooperation to the Cardonian Kingdom.\nArthur "
+               "Campbell responded by stating that even in exile, he shall continue to fight for the Cardonian Kingdom "
+               "and support all resistance efforts in his homeland."),
+    news_options=["Great news!"],
     leader_title="The Prince Speaks",
     leader_text=("Roland II Cahun has addressed the assembled vassals of the Crown from the steps of the palace in "
                  "Rêverie. The Prince promised that the levies would be called only in the realm's defence, and that "
@@ -70,17 +78,21 @@ def tile(texture, height, border=16):
     return out
 
 
+# the game breaks a line as wide as its box (the screenshot's story broke "... Rouental. Roland" before "II", which made
+# the line exactly 460 px in its 460 px box), so the preview wraps its event texts 1 px short of the box
+STRICT = 1
+
+
 def text_height(font, text, w):
+    """the text's height in a box w wide: the game's word wrap, its newlines kept"""
     f = V.FONTS[font]
-    lh = int(f["common"]["lineHeight"])
-    lines, cur = 1, ""
-    for word in text.split():
-        trial = (cur + " " + word).strip()
-        if cur and V.text_width(f, V._runs(trial, None)) > w:
-            lines, cur = lines + 1, word
-        else:
-            cur = trial
-    return lines * lh
+    return len(V.wrap(V._runs(text, None), w - STRICT, lambda rs: V.text_width(f, rs))) * int(f["common"]["lineHeight"])
+
+
+def box(path):
+    """(maxWidth, maxHeight) of a text box in the mod's eventwindow.gui"""
+    s, e = GP.find_block(GUI, path)
+    return tuple(int(re.search(r"\b%s\s*=\s*(\d+)" % k, GUI[s:e]).group(1)) for k in ("maxWidth", "maxHeight"))
 
 
 def main():
@@ -114,11 +126,17 @@ def main():
     hx, hy = GP.get_pos(GUI, "EventWindow_News>top_Window>Title")
     sx, sy = GP.get_pos(GUI, "EventWindow_News>midsection>Description")
     cv.alpha_composite(img(EV + "event_button_minimize.dds"), (nx + 10, ny + 10))
+    sw, sh = box("EventWindow_News>midsection>Description")
+    story_h = text_height(LE.NEWS_TEXT_FONT, SAMPLE["news_text"], sw)
     texts += [(TITLE, SAMPLE["news_title"], nx + hx, ny + hy, 490, 32, "centre", True),
-              (TEXT, SAMPLE["news_text"], nx + sx, ny + 121 + sy, 460, 190, "left", False)]
+              (LE.NEWS_TEXT_FONT, SAMPLE["news_text"], nx + sx, ny + 121 + sy, sw - STRICT, sh, "left", False)]
+    if 121 + sy + story_h > LE.NEWS_STORY_END:
+        V.problems.append(f"news story ends at y {121 + sy + story_h}, over the ornament (from y {LE.NEWS_STORY_END})")
+    print(f"news story: {story_h // int(V.FONTS[LE.NEWS_TEXT_FONT]['common']['lineHeight'])} lines, y {121 + sy}-"
+          f"{121 + sy + story_h} (room to {LE.NEWS_STORY_END}); option at y {LE.news_option_y(story_h)}")
     gx, _ = GP.get_pos(GUI, "EventWindow_News/options_grid")
     for i, o in enumerate(SAMPLE["news_options"]):
-        ox, oy = nx + gx, ny + 520 + i * 47       # the game stacks the options under the story
+        ox, oy = nx + gx, ny + LE.news_option_y(story_h) + i * 47       # the game stacks the options under the story
         cv.alpha_composite(img(EV + "event_option_entry.dds"), (ox, oy))
         texts.append((OPTION, o, ox + NAME_X, oy + OY, NAME_W, OH, "centre", True))
     # a leader event: the top, the middle (235 px: the portrait at 0.85 in its arched frame, the text beside it), the

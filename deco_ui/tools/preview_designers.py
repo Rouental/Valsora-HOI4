@@ -2,8 +2,8 @@
 the game's .gui (its elements in place, the lists the game fills left empty) over the map, centred as the game shows
 it, and beside it the game's own look. The commander picker's list holds an army, a navy and a captured commander's
 card, and the numbers the game writes on these pictures (the combat width, the skills, the stats) are sample values,
-placed as the game places them: centred text starts at its box's x + (width - text) / 2 rounded up (measured in game,
-2026-10-17), one pixel right of validate_preview.draw_text's for an odd difference.
+placed as the game places them (validate_preview.draw_text rounds a centred line's start up, as the game does,
+measured in game on 2026-10-17).
 
     python preview_designers.py   -> build/preview_designers.png (+ _vanilla.png), and build/preview_designers_zoom.png
                                      (the combat width's ring and the cards' skill diamonds, 4x)
@@ -34,17 +34,6 @@ HIDE = {"hq_overlay_images", "designerregimentswindow", "division_equipment_view
         "div_template_select_model", "niche_icon_selector"}
 
 
-class GamePanel(PP.Panel):
-    """the game's placement of centred text: the start rounded up, not down"""
-
-    def text(self, cv, text, font, x, y, w, h, fmt, name, valign=False):
-        f = (font or "").strip('"')
-        if fmt in ("center", "centre") and w and f in V.FONTS and "\n" not in str(text):
-            if (int(w) - V.text_width(V.FONTS[f], V._runs(str(text), None))) % 2:
-                x += 1
-        super().text(cv, text, font, x, y, w, h, fmt, name, valign)
-
-
 def draw(vanilla):
     cvs, boxes = [], {}
     for f, name, (dx, dy) in WINDOWS:
@@ -52,7 +41,7 @@ def draw(vanilla):
         elems = V.load(path)
         win = PP.find_window(elems, name)
         cv = PP.backdrop(False)
-        p = GamePanel(vanilla_only=vanilla, outline_lists=True, vars_=PP.gui_vars(path), samples=SAMPLES, hide=HIDE)
+        p = PP.Panel(vanilla_only=vanilla, outline_lists=True, vars_=PP.gui_vars(path), samples=SAMPLES, hide=HIDE)
         p.draw(cv, [("containerWindowType", win)], dx, dy, 1920, 1080)
         if name == "armyleaderwindow":
             gx, gy = next((b[1], b[2]) for b in p.boxes if b[0] == "leaders_grid")

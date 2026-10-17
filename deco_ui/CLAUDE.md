@@ -14,16 +14,27 @@ Treat assumed items as hypotheses.
 
 ---------------------------------------------------------------------------------------------------
 
-## 1. Status (v0.10)
+## 1. Status (v0.10.1)
 
-**v0.10 (2026-10-17)** is the current version, from the user's "Please start applying the proposed changes to all the
+**v0.10.1 (2026-10-17, later)** is the current version, from the user's look at v0.10 in game (screenshots, section
+10): the loading pictures out of the mod again, kept for later (the loading screen draws the game's own; section 6,
+Main menu), and the loading bar and tip, the battle plan bar and its pop-ups without corner brackets; game setup one
+card wider for "Other countries", its details on one line, the ideology wheel as on the politics screen
+(`make_setup.py`, the first `.gui` of v0.10's screens); the battle plan's glyphs centred by their ink; the top bar's
+logistics in an 11 px value font; the decisions' count badges in the plate's shoulders beside the seal; the division
+designer's combat width ring and the commanders' skill diamond centred on where the game draws them (measured on the
+screenshots: the game rounds a centred line's start up, which the previews now do too); the fleet panel's ship types,
+admiral's name and home base in fonts that fit (`make_mapviews.TEXTS`); the news story in `body_13` so it ends above
+the page's rule, and the country and leader events' text boxes two lines taller. **Not yet seen in game.**
+
+**v0.10 (2026-10-17)** came before it, from the user's "Please start applying the proposed changes to all the
 UI screens" (`docs/SCREEN_INVENTORY.md` had suggested eight): pictures at the game's paths, sizes and frame counts, the
 game's layouts kept (no `.gui` changed). The four loading screens from Valsora's map (`make_loading.py`, the proposal of
 v0.9) with a gilt loading bar and tip; the scroll bars and sliders; the selected armies', fleets' and operatives'
 badges; the battle plan toolbar; the land and naval battles; the diplomatic action windows, an emblem per action; game
 setup; the window frames and popup headers the core skin had missed; the settings, the trade offer and other windows
-seen now and then. Each screen is an art module (`*_art.py`, section 4) with a preview beside the game's. **Not yet
-seen in game** (section 10).
+seen now and then. Each screen is an art module (`*_art.py`, section 4) with a preview beside the game's. **Seen in
+game** (2026-10-17): the user liked the logistics in the main bar and the commanders' card; what they found is v0.10.1.
 
 **v0.9.1 (2026-10-16, later)** came before it, from the user's screenshots and `error.log` of v0.9 (section 10,
 the README): the map's names back (the map font's texture had grown to 2048 x 2048 with the Vietnamese letters, past
@@ -71,13 +82,13 @@ lessons that still hold are in section 6 (engine facts) and section 9 (pitfalls)
 | Main menu (`interface/frontendmainview.gui` + background) | v0.3; v0.4.5 fixed the invisible button row (a quoted `Orientation`). Background and social links **(in game)**. |
 | Army bar (bottom: `leadergroups.gui`) | v0.7: textures at the game's paths and sizes (`gen_textures.py`, `lg_*`; numbers in `layout_armybar.py`): arched gilt frames over the portraits (jade when selected; an army group's with gilt fans), the plate behind a run of cards, play/stop chips, the battle plan's chevrons, the empty card; `make_leadergroups.py` moves the division counts onto the plaques (centred, `valsora_deco_value_17`); v0.8: the play / stop row on the card's centre line. Preview `build/preview_armybar.png`. |
 | Map modes and minimap (bottom right: `mapmodes_interface.gui`, `minimap.gui`) | v0.5: textures only (layouts are the game's and Valsora's): lacquer column, line-icon medallions for land/air/naval/intel, the game's small icons and toggles recoloured in gilt, deco handle and ping buttons; the minimap's picture and frame in gilt by the Valsora mod (`scripts/minimap.py`, deco style). |
-| Events (`eventwindow.gui`) | v0.7: the report and newspaper textures replaced at the game's paths (`ev_*`): lacquer card with a crest, gilt rails and a picture frame; a WORLD NEWS broadsheet; options as gilt-rimmed plates; `make_events.py` sets the mod's fonts (titles `title_18`, text and options `body_15`). v0.8: the options centred in the room beside the picture (`layout_events.py`), a Valsoran globe on the masthead. v0.8.1: the masthead VALSORAN (globe) STANDARD, the news page centred. v0.8.2: the card's crest a keystone (`crests.py`), options in `option_14` (three lines to a plate), the globe lit. Preview `build/preview_events.png` (a country, a news and a leader event). |
+| Events (`eventwindow.gui`) | v0.7: the report and newspaper textures replaced at the game's paths (`ev_*`): lacquer card with a crest, gilt rails and a picture frame; a WORLD NEWS broadsheet; options as gilt-rimmed plates; `make_events.py` sets the mod's fonts (titles `title_18`, text and options `body_15`). v0.8: the options centred in the room beside the picture (`layout_events.py`), a Valsoran globe on the masthead. v0.8.1: the masthead VALSORAN (globe) STANDARD, the news page centred. v0.8.2: the card's crest a keystone (`crests.py`), options in `option_14` (three lines to a plate), the globe lit. v0.10.1: the news story in `body_13` (`layout_events.NEWS_TEXT_FONT`), ending above the page's rule (`NEWS_STORY_END`); the country and leader events' text boxes 16 and 24 lines. Preview `build/preview_events.png` (a country, a news and a leader event), `preview_events_news_before_after.png`. |
 | Research trees, doctrine screen (`countrytechtreeview.gui`, `doctrines/doctrines_view.gui`) | v0.9 (`make_research.py`): flush under the band at the focus tree's x, the focus tree's notched header picture (`GFX_valsora_deco_nf_header`), a gilt title right of the notch, the game's folder tabs in the header hanging over the tree as the game's do, the close diamond; the trees, their pictures and every technology and doctrine are the game's. The research trees' file is Valsora's (2036's year labels): the Valsora build makes it again from its own copy (`scripts/deco_ui.py` REPLACES), as the politics screen. Preview `build/preview_research.png`, `preview_doctrines.png`. |
-| Designers, commander pickers | v0.9 (`designer_art.py`, through `gen_textures.py`): the four designers' popup pictures (division, tank, plane, ship) and the commander and advisor pickers' window and cards (army, navy, captured) redrawn at the game's paths and sizes, their panels where the game's are (measured from its pictures): lacquer plates, recessed panels, an ivory ruled sheet under the statistics (dark text), parchment cards with a lacquer portrait well. Textures only. Preview `build/preview_designers.png`. |
+| Designers, commander pickers | v0.9 (`designer_art.py`, through `gen_textures.py`): the four designers' popup pictures (division, tank, plane, ship) and the commander and advisor pickers' window and cards (army, navy, captured) redrawn at the game's paths and sizes, their panels where the game's are (measured from its pictures): lacquer plates, recessed panels, an ivory ruled sheet under the statistics (dark text), parchment cards with a lacquer portrait well. Textures only. v0.10.1: the combat width's ring centred on the number (`designer_art.COMBAT_WIDTH`), the cards' skill on a dark diamond in a gilt rim centred on it (`skill_diamond`; the white number had stood on the tan). Preview `build/preview_designers.png` (+ `_zoom`). |
 | Fonts | The mod's own (`gen_fonts.py`) on its own screens; v0.8: the game's 28 fonts redrawn in the deco faces at their paths (`game_fonts.py`), for everything else. Preview `build/preview_game_fonts.png` (needs the game's font textures: section 7). |
 | Loading screens (`load_screen.gui`) | v0.10: four pictures from Valsora's map (`make_loading.py`, by hand), listed after the menu's; the loading bar, tip and progress bar in gilt (`ld_`). v0.10.1: the pictures out again (the loading screen draws the game's own, not our list: section 6), kept for later; the bar and tip without corner brackets. Preview `build/preview_loading.png`. |
 | Scroll bars and sliders (`core.gui`) | v0.10: arrows, a diamond thumb, tracks, backdrops and the value slider (`sc_`); the settings' sliders (`popup_art.py`). |
-| Selected armies, fleets, operatives, air wings (`unitview.gui`, `naviesview.gui`, `operativeleader.gui`, `airselectionview.gui`) | v0.8.2: moved below the medallion (`make_mapviews.py`); v0.10: their badges, plaques, frames and buttons redrawn (`mapview_art.py`, `mv_`). Preview `build/preview_mapviews.png`. |
+| Selected armies, fleets, operatives, air wings (`unitview.gui`, `naviesview.gui`, `operativeleader.gui`, `airselectionview.gui`) | v0.8.2: moved below the medallion (`make_mapviews.py`); v0.10: their badges, plaques, frames and buttons redrawn (`mapview_art.py`, `mv_`); v0.10.1: the fleet panel's ship type and admiral's name in `Main_14_bold` (the name in two lines inside its frame), the home base in `hoi_16mbs` (`make_mapviews.TEXTS`). Previews `build/preview_mapviews.png`, `preview_navy.png`. |
 | Battle plan toolbar (`battleplantools.gui`) | v0.10 (`battleplan_art.py`, `bp_`): the bar's wells, the pop-ups with legs to their button, the order and setting buttons with the game's glyphs in gilt. v0.10.1: no corner brackets (they stuck out past the chamfers), every glyph centred in its well by its own ink (`battleplan_art.centred`), a setting's lit frame its plate alone. Preview `build/preview_battleplan.png`. |
 | Land and naval battles (`landcombat.gui`, `navalcombat.gui`) | v0.10 (`combat_art.py`, `cb_`): the battle window, frames, bars, cards, the tactics list; the naval battle's picture with an ivory plotting sheet. Previews `build/preview_landcombat.png`, `preview_navalcombat.png`. |
 | Diplomatic action windows (`countrydiplomacyview.gui`, `factions/faction_popup.gui`, `operative.gui`) | v0.10 (`diplo_art.py`, `dp_`): 22 pictures and their pieces, a header with a gilt line emblem per action at both ends. Preview `build/preview_diplo.png`. |
@@ -241,6 +252,8 @@ tools/
   layout_events.py          the events' option plate and each window's options centre (v0.8)
   make_events.py            eventwindow.gui: fonts, option entries, each window's options grid
   preview_events.py         build/preview_events.png: a country, a news and a leader event
+  preview_navy.py           build/preview_navy.png (v0.10.1): the selected fleet's panel from naviesview.gui, the
+                            game's cutting of texts copied, every text checked against its room
   globe_art.py              art/valsora_land.png (Valsora's land from the built map), the masthead's globe (v0.8, lit
                             again in v0.8.2, the ringed newsreel globe since v0.8.3: layout_events.NEWS_GLOBE_STYLE)
                             and the other globes proposals_globes.py shows; the Valsora mod's superevent crest too
@@ -506,6 +519,8 @@ Build order matters. `gen_fonts` runs first because `layout.py` measures strings
   (Josefin Sans) or "Valsora Deco Italic" (Bodoni Moda), not the families' own: Federo and Josefin Sans are Reserved
   Font Names under their OFL, which a modified version (a bitmap font, letters of our own among them) may not use.
   The licences ship beside the fonts (`gfx/fonts/OFL_*.txt`).
+- `Main_14_bold` is the game's font name (`core.gfx`) for the `garamond_14_bold` file, which the Deco UI redraws in
+  Federo (12.5 px); no font is called "garamond_14_bold" in a `.gui`.
 - `vanilla "tahoma_60"` (the map's country names) is replaced by overwriting
   `gfx/fonts/hoi_mapfont4.fnt/.dds`, without touching its definition.
 - `line_extra` in `gen_fonts.build` adjusts the line height (Bodoni Moda's is very loose: the italic
@@ -578,6 +593,15 @@ Build order matters. `gen_fonts` runs first because `layout.py` measures strings
 - The world tension globe is about 50x50 at `threat_button`'s position, with its glow 15px up and
   to the left.
 - Army bar portrait frames are about 74x98. `leader_groups_portrait_window` is 68x97 in the .gui.
+- **Centred text** starts at the box's x + (width - text width) / 2 **rounded up** (v0.10.1: five numbers in the
+  user's screenshots, matched pixel by pixel: the combat width, a commander's skill and stats, a division count);
+  vertically the previews already matched. `validate_preview.draw_text` rounded down until v0.10.1, a pixel left
+  whenever the room was odd.
+- The engine **breaks a line that is exactly as wide as its box** (the news story, v0.10.1; `preview_events.STRICT`).
+- **(inferred, one screenshot)** a fleet's ship rows cut the ship type ("...") where the row's insignia begins (x 450,
+  240 px from the text's x 210; the game's file: "maxWidth is shrinked in code when necessary"); with a refit button
+  showing, 200 px. The news event's option sits at y 505 unless the story is taller than the page's 385 px middle
+  allows (`layout_events.news_option_y`).
 
 ## 7. What each generator does (and why)
 
@@ -745,6 +769,13 @@ v0.8.1: the news page's picture and overlay (x 64), headline (x 19) and story (x
 (`layout_events.NEWS_*`; the game's picture and headline sat 5-7 px left of its middle, the story's box 5 px right),
 under the masthead
 (`layout_events.news_masthead`: `NEWS_WORDS`, `NEWS_VIEW`, sizes).
+v0.10.1 (the user: "Text on event runs over"): a story that starts with a blank line (the game's capitulation news) took
+13 lines of `body_15`, down to y 499, over the rule and diamond the page draws at y 485-500, while the option stays at
+y 505. The story is `valsora_deco_body_13` now (`NEWS_TEXT_FONT`, 14 px lines; the script asserts it still starts at y
+291): every news story Valsora ships fits by y 473 with the longest country names, as do all but one of the game's
+324 (11 of Valsora's 27 ran over in `body_15`). Country and leader events stretch to their text, but their boxes drop
+lines past their height silently: they are 16 lines (256 px) and 24 (384) now; two La Résistance country events
+needed 15-16.
 
 **game_fonts.py (v0.8).** The game's 28 fonts redrawn at their paths (`gfx/fonts/<name>.fnt/.dds`), so the screens the
 mod hasn't re-laid read in the deco faces: Josefin Sans for Ubuntu, Century Gothic and the typewriter, Federo for
@@ -895,6 +926,15 @@ GP.write_gui(MOD + "interface/x.gui", t)    # braces checked, engine_safe applie
 
 ## 10. Open items and things to check in game
 
+- **v0.10.1**: the loading screen on the game's picture with the gilt bar and tip, no brackets past their corners, and
+  game setup on the menu's picture; the Vale start's nine cards inside the country selection, the more-countries
+  button at its right end, the details (portrait, emblem, wheel, spirits) on one line, the wheel's gilt ring; the
+  battle plan bar and pop-ups without brackets, each glyph centred in its well; the top bar's logistics values;
+  the decisions' count badges beside the seal (both at once: a decision with a time limit and one to take), the side
+  panels' notch 4 px deeper beside the seal; the division designer's combat width in its ring; the commander picker's
+  skill on its diamond (army, navy, captured); a fleet with long ship types and an admiral with a long name (two
+  lines, **(assumed)**: `vertical_alignment = center` on a fixed box); a news event with a long story (it ends above
+  the rule), a country event with a long text.
 - **v0.10**: the loading screen (**(assumed)**: that it shows a picture of the background list, and which one; the
   gilt bar and tip, the game's texts on them) and the main menu still on its own picture, with five in Change
   background; the scroll bars and sliders (lists, the settings' volume, the trade slider); the selected army, army

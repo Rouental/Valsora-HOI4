@@ -7,7 +7,10 @@ replaced at the game's paths by gen_textures.py (the 'ev_' keys: lacquer, gilt r
 style), so the text needs the mod's light fonts: titles in gilt capitals, the text and the options in cream.
 Positions and every element of the game's file are kept: the game sizes the middle to the text and stacks the
 pieces itself. v0.8: each window's options are centred in the room they have (layout_events). v0.8.1: the news
-page's picture, headline and story are centred on the page, as its masthead is.
+page's picture, headline and story are centred on the page, as its masthead is. v0.10.2: the news story in the 13 px
+body font, so a long one ends above the ornament over its option (the user's screenshot: "Text on event runs over");
+the country and leader events' text boxes two and three lines taller, so the body font's longest texts keep their last
+lines (layout_events).
 """
 import os
 import sys
@@ -30,7 +33,7 @@ FONTS = {
     "EventWindow_leader>top_Window>Title": TITLE,
     "EventWindow_leader>midsection>Description": TEXT,
     "EventWindow_News>top_Window>Title": TITLE,
-    "EventWindow_News>midsection>Description": TEXT,
+    "EventWindow_News>midsection>Description": LE.NEWS_TEXT_FONT,
     "event_option_entry>Name": OPTION,
 }
 
@@ -54,6 +57,10 @@ for el in ("event_picture", "event_picture_overlay"):
 x, y = GP.get_pos(t, "EventWindow_News>top_Window>Title")
 t = GP.set_attrs(t, "EventWindow_News>top_Window>Title", position=(LE.NEWS_TITLE_X, y), maxWidth=LE.NEWS_TITLE_W)
 x, y = GP.get_pos(t, "EventWindow_News>midsection>Description")
+assert LE.NEWS_MID_Y + y == LE.NEWS_STORY_Y, ("the news story moved", y)
 t = GP.set_attrs(t, "EventWindow_News>midsection>Description", position=(LE.NEWS_TEXT_X, y), maxWidth=LE.NEWS_TEXT_W)
+# the text boxes' height (layout_events.TEXT_LINES, lines of the body font)
+for win, n in LE.TEXT_LINES.items():
+    t = GP.set_attrs(t, f"{win}>midsection>Description", maxHeight=n * 16)
 GP.write_gui(MOD + "interface/eventwindow.gui", t)
 print("eventwindow.gui written")

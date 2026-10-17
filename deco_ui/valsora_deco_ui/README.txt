@@ -1,11 +1,11 @@
-VALSORA DECO UI - v0.10 (for HOI4 1.19)
-=======================================
+VALSORA DECO UI - v0.10.1 (for HOI4 1.19)
+=========================================
 
 An art deco interface for the Valsora total conversion: core skin and fonts,
 a rebuilt top bar, the politics screen, every side panel, the province panel,
 the focus tree, the army bar, the events, the map modes and minimap, and the
 main menu, laid out like the Valsora mockups; and, in the game's own layouts,
-the loading screens, the battles, the battle plan toolbar, the diplomatic
+the loading bar, the battles, the battle plan toolbar, the diplomatic
 actions, game setup, the selected units' badges and most popups.
 
 
@@ -29,6 +29,42 @@ Valsora repository's scripts/common.py and rebuild (sh scripts/run_all.sh).
 
 The layout is built for 1920 px of UI width: 1920x1080 at 100% UI scale, or
 2560x1440 at up to 133%.
+
+
+NEW IN v0.10.1
+--------------
+From your look at v0.10 in game:
+  - The loading pictures from Valsora's map are out again, kept for when
+    the map is final (the loading screen showed the game's own pictures
+    anyway, and game setup had taken one as its background). The loading
+    bar and tip lose the corner marks that stuck out.
+  - Game setup: the country selection is a card wider, so "Other
+    countries" fits; the country's details sit on one line, and the
+    ideology wheel is the politics screen's.
+  - The battle plan bar and its pop-ups lose their corner marks, and every
+    icon is centred in its slot.
+  - The top bar's fuel, supply and convoys in a slightly smaller font.
+  - The decision counts sit in the medallion's shoulders, either side of
+    the seal.
+  - The division designer's combat width is centred in its ring; the
+    commanders' skill is a white number on a dark diamond, centred.
+  - The fleet panel: long ship types and admirals' names fit (a long name
+    takes two lines inside its frame).
+  - The news page's story is a size smaller, so it ends above the rule;
+    the other events' text boxes are taller, so long texts aren't cut.
+
+Things to check in game (v0.10.1):
+  - the loading screen's bar and tip, and game setup's background (the
+    menu's picture);
+  - New game, the Vale of Reibonne start: all nine cards inside the frame,
+    the country's details;
+  - draw a battle plan: the bar's corners and icons;
+  - the fuel, supply and convoy numbers;
+  - the decision counts beside the seal (one with a time limit, one to
+    take);
+  - the division designer's combat width; the commander picker's skill;
+  - a fleet with long ship names and an admiral with a long name;
+  - a news event with a long story (a capitulation), a long country event.
 
 
 NEW IN v0.10
