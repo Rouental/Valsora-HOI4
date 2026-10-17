@@ -270,10 +270,10 @@ P("strategic", "Nuclear weapons", "sp_nuclear_bomb", "Fission Warheads", 1965, "
   "The bomb itself. Only the superpowers have it at the start; anyone else needs years of very hard work.",
   ["nuclear weapons (the game's nukes technology)"], req=["sp_nuclear_reactor"], start="super", icon="nuke",
   tags=["sp_tag_nuclear_warfare"])
-P("strategic", "Nuclear weapons", "sp_thermo_nuclear_bomb", "Thermonuclear Warheads", 1985, "insane",
+P("strategic", "Nuclear weapons", "sp_thermo_nuclear_bomb", "Thermonuclear Warheads", 1965, "insane",
   "Hydrogen bombs: a hundred times the power of the first.", ["the game's thermonuclear bombs"],
   req=["sp_nuclear_bomb"], start="super", icon="nuke", tags=["sp_tag_nuclear_warfare"])
-P("strategic", "Nuclear weapons", "sp_nuclear_warheads", "Missile Warheads", 2005, "large",
+P("strategic", "Nuclear weapons", "sp_nuclear_warheads", "Missile Warheads", 1985, "large",
   "Warheads small enough for missiles, several to a missile.", ["the game's nuclear missile warheads"],
   req=["sp_thermo_nuclear_bomb"], start="super", icon="nuke", tags=["sp_tag_nuclear_warfare"])
 P("strategic", "Space", "val_sp_orbital_launch", "Orbital Launch Capability", 2025, "large",

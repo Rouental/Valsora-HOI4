@@ -154,7 +154,7 @@ T(F, "advanced_equipment_conversion", "Software-Defined Production", 2039, 1, ic
 
 F.section("Industrial policy", 2)
 T(F, "concentrated_industry", "National Champions I", 2036, 2, icon="factory", req=["basic_machine_tools"],
-  excl=["dispersed_industry"],
+  excl=["dispersed_industry"], start=None,
   desc="A few giant firms build most of the arms: efficient, and vulnerable to strikes on them.")
 T(F, "concentrated_industry2", "National Champions II", 2037, 2, icon="factory",
   desc="State orders and finance concentrated on the champions.")
@@ -165,7 +165,8 @@ T(F, "concentrated_industry4", "National Champions IV", 2041, 2, icon="factory",
 T(F, "concentrated_industry5", "National Champions V", 2043, 2, icon="factory",
   desc="The arsenal of the nation: a handful of plants that out-produce everyone.")
 T(F, "dispersed_industry", "Distributed Manufacturing I", 2036, 3, icon="factory", req=["basic_machine_tools"],
-  excl=["concentrated_industry"],
+  excl=["concentrated_industry"], start=None,
+  note="Exclusive with National Champions: every nation picks one in play, the superpowers too.",
   desc="Many small firms and workshops build to shared designs: harder to hit, slower to start.")
 T(F, "dispersed_industry2", "Distributed Manufacturing II", 2037, 3, icon="factory",
   desc="Open designs and printers in every town.")

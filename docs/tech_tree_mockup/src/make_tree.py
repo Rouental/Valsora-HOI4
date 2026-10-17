@@ -303,11 +303,14 @@ def main():
     lanes = defaultdict(list)
     for t in common.TECHS:
         lanes[(t["folder"], t["lane"])].append(t)
+    gated = lambda t: "special project" in (t.get("dlc") or "")
     for key, ts in lanes.items():
         ts.sort(key=lambda t: t["year"])
         for i, t in enumerate(ts):
             if t["req"] is None:
-                t["req"] = [ts[i - 1]["id"]] if i else []
+                # the previous technology in the lane, passing over a project-gated side step
+                prev = [p for p in ts[:i] if not gated(p) or gated(t)]
+                t["req"] = [prev[-1]["id"]] if prev else []
     # places
     seen = {}
     for t in common.TECHS:
@@ -320,6 +323,8 @@ def main():
         for r in t["req"] + t["excl"]:
             if r not in by_id:
                 problems.append(f"{t['id']}: prerequisite {r} unknown")
+            elif r in t["req"] and by_id[r]["year"] > t["year"]:
+                problems.append(f"{t['id']} ({t['year']}) needs {r} ({by_id[r]['year']}), which comes later")
         rep = t["replaces"]
         t["era"] = era_of(t["year"])
         if t["start"] == "auto":
@@ -450,7 +455,8 @@ def main():
             "made": "2026-10-17",
             "status": "A mockup for the author to react to. Not in the mod.",
             "anchor": "The base game's 1936 is Valsora's 2036.",
-            "eras": [{"key": k, "name": n, "from": a, "to": b, "desc": d} for k, n, a, b, d in ERAS],
+            "eras": [{"key": k, "name": n, "short": {"next": "Next gen."}.get(k, n), "from": a, "to": b, "desc": d}
+                     for k, n, a, b, d in ERAS],
             "tiers": [{"key": k, "name": n, "rank": r, "desc": d} for k, n, r, d in TIERS],
             "superpowers": [{"tag": "KRI", "name": "Krionik", "ideology": "Monarchist"},
                             {"tag": "KPF", "name": "Kampfian Empire", "ideology": "Authoritarian"},

@@ -81,12 +81,12 @@ T(F, "val_mot_hybrid", "Hybrid-Electric Trucks", 2040, 4, icon="truck",
   unl=["motorised and mechanised: fuel use lower, speed higher (a new upgrade)"])
 T(F, "mechanised_infantry", "Infantry Fighting Vehicles", 1985, 5, icon="ifv", req=["tech_trucks"],
   desc="Tracked vehicles with a cannon and a missile launcher that fight beside the tanks, the squad inside.")
-T(F, "mechanised_infantry2", "Modern Infantry Fighting Vehicle", 2025, 5, icon="ifv",
+T(F, "mechanised_infantry2", "Heavy Infantry Fighting Vehicle", 2025, 5, icon="ifv",
   desc="A heavier hull, an unmanned turret and a sensor suite that sees as far as the tank's.")
 T(F, "val_mech_aps", "Active Protection for IFVs", 2036, 5, icon="shield", req=["mechanised_infantry2"],
   desc="Radar-cued launchers shoot down incoming missiles and drones before they reach the hull.",
   unl=["mechanised: defence and hardness higher (a new upgrade; with No Step Back an IFV module instead)"])
-T(F, "mechanised_infantry3", "Optionally Crewed Fighting Vehicle", 2039, 5, icon="ifv", req=["mechanised_infantry2"],
+T(F, "mechanised_infantry3", "Optionally Crewed IFV", 2039, 5, icon="ifv", req=["mechanised_infantry2"],
   desc="It fights with a crew or without one: the vehicle drops its squad and goes forward under remote control.")
 T(F, "armored_car1", "Armoured Cars", 1965, 6, icon="armcar", req=[],
   desc="Light four-wheeled armour for scouting and for police work behind the front.", dlc="La Resistance")
@@ -188,7 +188,7 @@ T(F, "val_fpv_fibre", "Fibre-Optic Guidance", 2036, 3, icon="fpv",
 T(F, "val_fpv_loiter", "Loitering Munitions", 2039, 3, icon="fpv",
   desc="Larger strike drones that circle for an hour and dive on whatever the operator picks.",
   unl=["FPV teams: hard attack and piercing higher"])
-T(F, "val_fpv_autonomy", "Autonomous Terminal Guidance", 2042, 3, icon="fpv",
+T(F, "val_fpv_autonomy", "Autonomous Homing", 2042, 3, icon="fpv",
   desc="The drone finishes the attack by itself once the target is picked, even through jamming.",
   unl=["FPV teams: attack higher; enemy jamming has little effect"])
 T(F, "val_fpv_swarm", "Strike Swarms", 2045, 3, icon="fpv",

@@ -240,5 +240,6 @@ S(tr, "rangers_1", "Jaeger Traditions", "Hunters of the forest who live off the 
 S(tr, "rangers_2", "Jungle Rangers", "Rangers for jungle and swamp.", dlc="No Compromise, No Surrender")
 S(tr, "val_sof_drones", "Drone-Enabled Raids", "Small teams with their own drones for scouting and strikes.",
   unl=["special forces: recon and attack higher"])
+SF.extra["tracks_in_game"] = 2
 SF.extra["note"] = ("In the game every special forces subdoctrine can go in either of the two tracks (each one only "
                     "once), so they are listed once here.")

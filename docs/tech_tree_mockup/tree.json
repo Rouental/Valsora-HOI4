@@ -8,6 +8,7 @@
    {
     "key": "cw",
     "name": "Cold War",
+    "short": "Cold War",
     "from": 1960,
     "to": 1989,
     "desc": "Cold War I (1965) and Cold War II (1985): the floor of the tree, kit of the 1960s to the 1980s. Feudal and levy states start with Cold War I, developing nations with Cold War II."
@@ -15,6 +16,7 @@
    {
     "key": "modern",
     "name": "Modern",
+    "short": "Modern",
     "from": 1990,
     "to": 2030,
     "desc": "Modern I (2005) and Modern II (2025): today's kit, what most nations field. Modern II is what the base game gives its minor nations at the start."
@@ -22,6 +24,7 @@
    {
     "key": "y2036",
     "name": "2036",
+    "short": "2036",
     "from": 2031,
     "to": 2039,
     "desc": "The game's first years: the superpowers start with part of it (the base game's majors start with its 1936 technologies), everyone else researches it first."
@@ -29,6 +32,7 @@
    {
     "key": "next",
     "name": "Next generation",
+    "short": "Next gen.",
     "from": 2040,
     "to": 2050,
     "desc": "Ahead of everyone: late, costly, and penalised as ahead of its time until its year. The base game's three-year rhythm: big steps in 2039, 2042, 2045, upgrades between."
@@ -242,8 +246,8 @@
       "feudal": 1,
       "developing": 1,
       "modern": 2,
-      "super": 8,
-      "none": 37
+      "super": 6,
+      "none": 39
      }
     },
     "projects": {
@@ -253,8 +257,8 @@
      "eras": {
       "y2036": 25,
       "next": 13,
-      "modern": 12,
-      "cw": 11
+      "modern": 11,
+      "cw": 12
      },
      "start": {
       "none": 45,
@@ -768,7 +772,6 @@
    "years": [
     1965,
     1985,
-    2005,
     2025,
     2036,
     2039,
@@ -2067,6 +2070,7 @@
       "vanilla_name": ""
      }
     ],
+    "tracks_in_game": 2,
     "note": "In the game every special forces subdoctrine can go in either of the two tracks (each one only once), so they are listed once here."
    }
   },
@@ -3143,7 +3147,7 @@
   },
   {
    "id": "mechanised_infantry2",
-   "name": "Modern Infantry Fighting Vehicle",
+   "name": "Heavy Infantry Fighting Vehicle",
    "year": 2025,
    "era": "modern",
    "folder": "infantry",
@@ -3206,7 +3210,7 @@
   },
   {
    "id": "mechanised_infantry3",
-   "name": "Optionally Crewed Fighting Vehicle",
+   "name": "Optionally Crewed IFV",
    "year": 2039,
    "era": "y2036",
    "folder": "infantry",
@@ -4400,7 +4404,7 @@
    "size": "small",
    "icon": "engineer",
    "req": [
-    "sp_armored_engineer_tech"
+    "tech_engineers2"
    ],
    "replaces": "tech_engineers3",
    "desc": "Automated bridges span a river in minutes; the crossing no longer waits for night.",
@@ -4615,7 +4619,7 @@
    "size": "small",
    "icon": "drone",
    "req": [
-    "sp_helicopter_artillery_observers_tech"
+    "tech_recon2"
    ],
    "replaces": "tech_recon3",
    "desc": "Relays, long-endurance drones and ground sensors stitched into one live picture of the front.",
@@ -4753,7 +4757,7 @@
   },
   {
    "id": "val_fpv_autonomy",
-   "name": "Autonomous Terminal Guidance",
+   "name": "Autonomous Homing",
    "year": 2042,
    "era": "next",
    "folder": "support",
@@ -4931,7 +4935,7 @@
    "size": "small",
    "icon": "police",
    "req": [
-    "sp_armored_motorized_military_police_tech"
+    "tech_military_police2"
    ],
    "replaces": "tech_military_police3",
    "desc": "Informants, surveillance and patrols tied together: resistance is found before it organises.",
@@ -5142,7 +5146,7 @@
    "size": "small",
    "icon": "wrench",
    "req": [
-    "sp_armored_maintenance_tech"
+    "tech_maintenance_company2"
    ],
    "replaces": "tech_maintenance_company3",
    "desc": "Printers in a container make spare parts at the front, from a file sent from the factory.",
@@ -5351,7 +5355,7 @@
    "size": "small",
    "icon": "medic",
    "req": [
-    "sp_helicopter_med_evac_tech"
+    "tech_field_hospital2"
    ],
    "replaces": "tech_field_hospital3",
    "desc": "Drones bring blood, drugs and splints to the wounded, and fly the urgent ones out.",
@@ -5562,7 +5566,7 @@
    "size": "small",
    "icon": "truck",
    "req": [
-    "sp_helicopter_transport_pods_tech"
+    "tech_logistics_company2"
    ],
    "replaces": "tech_logistics_company3",
    "desc": "Driverless supply trucks follow a lead vehicle night and day.",
@@ -5776,7 +5780,7 @@
    "size": "small",
    "icon": "jam",
    "req": [
-    "sp_armored_signal_tech"
+    "tech_signal_company2"
    ],
    "replaces": "tech_signal_company3",
    "desc": "Jammers that learn the enemy's waveforms and change their attack as he changes his.",
@@ -16304,7 +16308,6 @@
     "dispersed_industry"
    ],
    "replaces": "concentrated_industry",
-   "start": "super",
    "desc": "A few giant firms build most of the arms: efficient, and vulnerable to strikes on them.",
    "unlocks": [
     "industrial capacity factory +15%",
@@ -16337,7 +16340,8 @@
      "global building slots factor +20%",
      "ai research weights: offensive -1"
     ]
-   }
+   },
+   "start": null
   },
   {
    "id": "concentrated_industry2",
@@ -16542,7 +16546,6 @@
     "concentrated_industry"
    ],
    "replaces": "dispersed_industry",
-   "start": "super",
    "desc": "Many small firms and workshops build to shared designs: harder to hit, slower to start.",
    "unlocks": [
     "industrial capacity factory +10%",
@@ -16550,6 +16553,7 @@
     "line change production efficiency factor +10%",
     "production factory start efficiency factor +5%"
    ],
+   "note": "Exclusive with National Champions: every nation picks one in play, the superpowers too.",
    "vanilla": {
     "id": "dispersed_industry",
     "name": "Dispersed Industry I",
@@ -16575,7 +16579,8 @@
      "line change production efficiency factor +10%",
      "production factory start efficiency factor +5%"
     ]
-   }
+   },
+   "start": null
   },
   {
    "id": "dispersed_industry2",
@@ -19620,7 +19625,7 @@
   {
    "id": "sp_thermo_nuclear_bomb",
    "name": "Thermonuclear Warheads",
-   "year": 1985,
+   "year": 1965,
    "era": "cw",
    "folder": "projects",
    "lane": 3,
@@ -19653,8 +19658,8 @@
   {
    "id": "sp_nuclear_warheads",
    "name": "Missile Warheads",
-   "year": 2005,
-   "era": "modern",
+   "year": 1985,
+   "era": "cw",
    "folder": "projects",
    "lane": 3,
    "size": "big",
