@@ -170,3 +170,20 @@ the labels in a cut tracked 1 px less (`valsora_deco_label_tb`); the tray under 
 on to the right-hand tray (26 a row); that tray's edge is 12 px further out; the "green bar" was the production alert
 (the game shows it on the Production button), drawn as a halo behind the crown that showed only in the 6 px gaps:
 it is a gilt ring over the crown now.
+
+**v0.10 (2026-10-17, not yet seen in game)**, from the user ("Please start applying the proposed changes to all the UI
+screens", after `docs/SCREEN_INVENTORY.md` listed every screen and suggested eight): all eight and more, as pictures at
+the game's paths, sizes and frame counts with the game's layouts kept (no `.gui` changed). The loading screens drawn as
+a proposal the night before are in the mod (`make_loading.py`, listed after the menu's picture in the background list,
+which the loading screen draws from: assumed) with a gilt loading bar and tip; the scroll bars and sliders; the battle
+plan toolbar (`battleplan_art.py`); the window frames the core skin had missed and the popups' headers and footers
+(`window_art.py`). The rest was drawn by five helpers side by side, one art module each with its own key prefix, a
+scratch manifest (`VALSORA_TEXTURE_MANIFEST`) and a preview beside the game's, then reviewed and drawn into the
+project's manifest: the selected armies', fleets' and operatives' badges (`mapview_art.py`), the land and naval battles
+(`combat_art.py`), the diplomatic action windows with a gilt line emblem per action (`diplo_art.py`), game setup
+(`setup_art.py`) and the windows seen now and then (`popup_art.py`: settings, trade offer, the variant designer, the
+agency's upgrades, the insignia and colour pickers, air missions, the naval region, the tutorial). Reviewing them: the
+war goal lists' parchment became an ivory sheet (the game writes dark text there), first with a gradient that showed
+seams where the game repeats the tile's middle, so flat; the dark paper a lacquer well; the small close button the
+diamond; the request popups' header strips and their war medallion. The helpers shared `art_util.py` (moved out of
+`gen_textures.py`, unchanged) and `ART_MODULES`; `validate_preview.py` holds every module's textures to the game's sizes.

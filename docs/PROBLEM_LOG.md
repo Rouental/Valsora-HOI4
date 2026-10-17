@@ -615,6 +615,23 @@ screenshot and `error.log`)
 
 ## Map problems found while building
 
+**The ivory war goal lists showed a cross of seams** (2026-10-17, the Deco UI v0.10's diplomacy preview)
+- Cause: the parchment tile they replace (`tiled_paper_w_frame_one_border`) is a cornered tile: the game repeats its
+  middle and stretches its edges, so the first ivory sheet's gradients broke at every 64 px border.
+- Fix: a flat ivory fill with the rim along the edges only. A cornered tile's middle must be flat (or repeat cleanly), as
+  `gen_textures.py` says where it draws this one.
+
+**`validate_preview.py` stopped on the settings' tab arrows, then called the loading screens stale** (2026-10-17, v0.10)
+- Cause: its size check read every `gfx/interface/button_*.dds` as `button_<w>x<h>`, and `button_left.dds` has no size
+  in its name; and its stale check knew only `gen_textures.py`'s textures, not those `make_loading.py` draws by hand.
+- Fix: names without a size are skipped by the size check; the eight loading pictures are listed in the stale check
+  (named there: importing `make_loading.py` would put the Valsora scripts, with their own `layout.py`, first on the
+  path).
+
+**A circular import between two art modules** (2026-10-17, v0.10)
+- Cause: `window_art.py` took `popup_art.py`'s footer plate while `popup_art.py` imports `window_art.py`'s helpers.
+- Fix: `window_art.py` imports it inside the one function that draws the plate.
+
 **Enter in the password box skipped the Gazetteer guide's first step** (2026-10-16, `tests/gazetteer/guide.py`, the
 night's quick-start guide)
 - Cause: the guide opens as the nation unlocks, and it gave its Next button the focus; the Enter that unlocked the

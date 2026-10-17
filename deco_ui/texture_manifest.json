@@ -1428,6 +1428,195 @@
   "sig": "5f30f43a77897e09c33badec8ac6aec4a304da3f1c50ef4107bcf359c4368dc4"
  },
  {
+  "key": "wf_popup_header",
+  "path": "gfx/interface/diplo_popup_header_bg.dds",
+  "w": 494,
+  "h": 86,
+  "sig": "299cbff50697907dea5ea9f74d5de3162df6f574f72895154a488f38f07e0228"
+ },
+ {
+  "key": "wf_popup_header_large",
+  "path": "gfx/interface/diplo_popup_header_bg_large.dds",
+  "w": 584,
+  "h": 87,
+  "sig": "15b6f065c8a8f391159300f3ba93d3e6df51f7c21da86292011af7e322eada83"
+ },
+ {
+  "key": "wf_popup_bottom_large",
+  "path": "gfx/interface/diplo_popup_bottom_large.dds",
+  "w": 584,
+  "h": 72,
+  "sig": "8654e9e92b189df47b772903d8304052d48bcb09de697be638abba569f834ba0"
+ },
+ {
+  "key": "wf_war_icon",
+  "path": "gfx/interface/diplo_war_large_icon.dds",
+  "w": 57,
+  "h": 76,
+  "sig": "a6d0f65de2f32ddc80c32ccedc1cc7a4c3427f243e5eda8c9ec2b1da21b7c886"
+ },
+ {
+  "key": "pp_trade_offer",
+  "path": "gfx/interface/tradeview/trade_offer_popup_win.dds",
+  "w": 527,
+  "h": 437,
+  "sig": "666f79f101f87a8080c50d2db2d2a10c6f8ae0813f226316ec250ee0f84202e3"
+ },
+ {
+  "key": "pp_trade_offer_foot",
+  "path": "gfx/interface/diplo_action_bottom.dds",
+  "w": 521,
+  "h": 72,
+  "sig": "c46b07a4dc9fd8ae4680cd12233f7c26eda293bd465e8cacc5905c5986f19ce3"
+ },
+ {
+  "key": "pp_variant_designer",
+  "path": "gfx/interface/equipment_upgrade_designer_bg.dds",
+  "w": 545,
+  "h": 416,
+  "sig": "60e4e2b6e782e16d53b5cfcc576b9d83618dba36b35b04ad0e378f3da3c38e26"
+ },
+ {
+  "key": "pp_agency_upgrades",
+  "path": "gfx/interface/operatives/agency_upgrades_popup_bg.dds",
+  "w": 1092,
+  "h": 91,
+  "sig": "33c1b46c9f88f0e607034f877ef182f7f114cc9fc773a9f668ce7247ad414a81"
+ },
+ {
+  "key": "pp_insignia",
+  "path": "gfx/interface/army_insignia_selection_bg.dds",
+  "w": 317,
+  "h": 444,
+  "sig": "4af4322c6f51eab935940db0b41d3544a95e523642c3d98378dfa68af807ddba"
+ },
+ {
+  "key": "pp_strategic_air",
+  "path": "gfx/interface/strategicair/strategic_air_bg.dds",
+  "w": 552,
+  "h": 436,
+  "sig": "34cc2aa034844d0e0edc315e3a3a112d31763cbb25cee5045e1b53ca5d33ac1f"
+ },
+ {
+  "key": "pp_naval_region",
+  "path": "gfx/interface/strategicnavy/naval_region_bg.dds",
+  "w": 433,
+  "h": 300,
+  "sig": "07a6c36bbeaf5f0a7e5644c2828ab40364d340fc03d2c8a6fdc8e5a2f05e1e38"
+ },
+ {
+  "key": "pp_naval_header",
+  "path": "gfx/interface/strategicnavy/naval_region_header.dds",
+  "w": 435,
+  "h": 62,
+  "sig": "6b2b9d84310826c00fcecf090640a41931adc97f2300075be394bfcd1aed59d1"
+ },
+ {
+  "key": "pp_naval_dominance",
+  "path": "gfx/interface/strategicnavy/naval_region_dominance_header_bg.dds",
+  "w": 414,
+  "h": 37,
+  "sig": "ead27480679e56437f69ad468120aa43baaf8c0f9617422806d7d24095bd4509"
+ },
+ {
+  "key": "pp_tutorial",
+  "path": "gfx/interface/tutorial/tutorial_bg.dds",
+  "w": 613,
+  "h": 576,
+  "sig": "091786e61ae4e0b86f83123259d6a61fb0e0b2ca80d7a2e9100ff56fecab2c46"
+ },
+ {
+  "key": "pp_settings",
+  "path": "gfx/interface/settings_popup_bg.dds",
+  "w": 480,
+  "h": 527,
+  "sig": "ba14c7db8e08a62c1c2a131838ecc4173be9137b0cd2cf60f484055e66868bbd"
+ },
+ {
+  "key": "pp_popup_bottom",
+  "path": "gfx/interface/diplo_popup_bottom.dds",
+  "w": 494,
+  "h": 72,
+  "sig": "16c152651f9c676161c787bb39e060d938831c814bd6776f8554108024ffc0bf"
+ },
+ {
+  "key": "pp_settings_frame",
+  "path": "gfx/interface/fullborder_tiled.dds",
+  "w": 190,
+  "h": 190,
+  "sig": "3b5ab6ce5768ccb1857af02fa267273b29669cd7d0233816098a551eb942f25e"
+ },
+ {
+  "key": "pp_settings_tab",
+  "path": "gfx/interface/tab_small_110.dds",
+  "w": 210,
+  "h": 37,
+  "sig": "40ccd86554853da8ec8892cdc017b1484a428b3dcd2a45567be5cd1df86768b1"
+ },
+ {
+  "key": "pp_settings_row",
+  "path": "gfx/interface/generic_bg_417.dds",
+  "w": 417,
+  "h": 29,
+  "sig": "fa61eb9efafffe93019f7e72efdc8a3d3807fc9a2b7390ddac18ac72c53004d6"
+ },
+ {
+  "key": "pp_settings_box",
+  "path": "gfx/interface/generic_box_96.dds",
+  "w": 96,
+  "h": 26,
+  "sig": "553b6a01b24597489d614473b1a3ef0aad7e226acab37e52068c2c538fa26506"
+ },
+ {
+  "key": "pp_year_thumb",
+  "path": "gfx/interface/scrollbar_slider_2.dds",
+  "w": 64,
+  "h": 16,
+  "sig": "12ad2a9216236c46aa37e9616ebd0b840f64315d27b6a1e1a42822335237195d"
+ },
+ {
+  "key": "pp_year_track",
+  "path": "gfx/interface/scrollbar_sliderbackground.dds",
+  "w": 16,
+  "h": 16,
+  "sig": "b61050db85f781e91277b10b348b858324602c1712028369925b66b3e7f6cd27"
+ },
+ {
+  "key": "pp_year_left",
+  "path": "gfx/interface/scrollbar_leftbutton.dds",
+  "w": 92,
+  "h": 21,
+  "sig": "2846b515451525f5bd7686f3b97faa05ac6a16c9034b6fe512c3bfca6015bdbf"
+ },
+ {
+  "key": "pp_year_right",
+  "path": "gfx/interface/scrollbar_rightbutton.dds",
+  "w": 92,
+  "h": 21,
+  "sig": "4c1a34bcd5f67e35f7f99203b99014d927da5bbf0827ed79b379745b5e1ab2e9"
+ },
+ {
+  "key": "pp_settings_left",
+  "path": "gfx/interface/button_left.dds",
+  "w": 23,
+  "h": 21,
+  "sig": "5491da17d7a35578d5dbfe591a2226f8b85d0f4ac904c6828827163d6e268722"
+ },
+ {
+  "key": "pp_settings_right",
+  "path": "gfx/interface/button_right.dds",
+  "w": 23,
+  "h": 21,
+  "sig": "690c814e1a7c40107bdb41d66c7664ef8e3398c069db5481a50fda13a4dd1ee1"
+ },
+ {
+  "key": "pp_gold_checkbox",
+  "path": "gfx/interface/checkbox_gold_32.dds",
+  "w": 64,
+  "h": 32,
+  "sig": "0909f521465c852e25df5909821deec31b76370a56d23ab5e3036d9bcecf0423"
+ },
+ {
   "key": "mm_column",
   "path": "gfx/interface/mapmode/mapmode_main_bg.dds",
   "w": 87,

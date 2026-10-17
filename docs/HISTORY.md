@@ -10,6 +10,17 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-17, evening (the author: "Please start applying the proposed changes to all the UI screens"): **the Deco UI
+  v0.10**. All eight suggestions of `deco_ui/docs/SCREEN_INVENTORY.md` and more, as pictures at the game's paths and
+  sizes with its layouts kept: the four loading screens from Valsora's map (the proposal of 2026-10-16, now in the
+  background list) and a gilt loading bar; scroll bars and sliders; the selected armies', fleets' and operatives'
+  badges; the battle plan toolbar; the land and naval battles; the diplomatic action windows (a gilt line emblem per
+  action); game setup (country and start selection); the window frames and popup headers the skin had missed; the
+  settings, trade offer, variant designer, agency, insignia pickers, air missions, naval region and tutorial windows.
+  Five helpers drew the screens side by side, one art module each (`deco_ui/tools/*_art.py`), reviewed against the
+  game's layouts in previews (sent: they show the game's art beside ours). The inventory now counts 34 restyled, 45
+  re-skinned (28 with their own pictures), 16 the game's own. `validate_preview.py`: PROBLEMS none; all Valsora checks
+  passed; the zip is 26 MB (the loading screens add about 3 MB). Not yet seen in game.
 - 2026-10-17, later (the author: "Apply all the green and yellow strait crossings, I'll judge the others later"): the
   414 strait crossings up to 10 px of sea are in the mod (`source/straits.json`, `straits.py approve --max-gap 10`);
   every landmass within 10 px of another is reachable on foot. All checks passed.

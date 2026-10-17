@@ -1,10 +1,12 @@
-VALSORA DECO UI - v0.9.1 (for HOI4 1.19)
-========================================
+VALSORA DECO UI - v0.10 (for HOI4 1.19)
+=======================================
 
 An art deco interface for the Valsora total conversion: core skin and fonts,
 a rebuilt top bar, the politics screen, every side panel, the province panel,
 the focus tree, the army bar, the events, the map modes and minimap, and the
-main menu, laid out like the Valsora mockups.
+main menu, laid out like the Valsora mockups; and, in the game's own layouts,
+the loading screens, the battles, the battle plan toolbar, the diplomatic
+actions, game setup, the selected units' badges and most popups.
 
 
 INSTALL
@@ -27,6 +29,55 @@ Valsora repository's scripts/common.py and rebuild (sh scripts/run_all.sh).
 
 The layout is built for 1920 px of UI width: 1920x1080 at 100% UI scale, or
 2560x1440 at up to 133%.
+
+
+NEW IN v0.10
+------------
+"Please start applying the proposed changes to all the UI screens": the
+screen inventory's suggestions, all of them, and more. These are new
+pictures at the game's own paths and sizes; the game's layouts are kept.
+  - Loading screens: the four drawn from Valsora's map (the world in gilt,
+    Valsora rising, the Vale of Reibonne, the nations) are in the mod, in
+    the menu's background list after the menu's own picture, and the
+    loading bar and tip are gilt.
+  - Scroll bars and sliders everywhere: gilt arrows, a diamond thumb,
+    slim grooves.
+  - The selected army, army group, fleet and operative badges, and the
+    selected air wings' rows.
+  - The battle plan toolbar and its pop-ups (planning speed, cohesion, the
+    HQ's distance, area defence); the order buttons keep the game's
+    symbols, in gilt.
+  - The land battle window (terrain slot, medallions for both sides, the
+    tactics, the divisions' cards, the tactics list) and the naval battle
+    (the plotting sheet under the ships).
+  - The diplomatic action windows (declare war, justify, lend-lease,
+    volunteers, guarantee, licences and the rest): one frame each, with a
+    gilt line emblem for the action; the war goal lists on ivory.
+  - Game setup: the country selection, the start's window, the country's
+    details, the difficulty buttons, the Start button.
+  - The windows the skin had missed: the confirmations and other popups
+    (their headers and footers too), the peace summary, world tension, the
+    aces and air wing windows, the tutorial and its hints.
+  - Now and then: the settings (Options), the trade offer, the variant
+    designer and market stockpile, the agency's upgrades and logo, the
+    insignia and colour pickers, air missions over a region, the naval
+    region view.
+  - Small shared pieces: the small close button, the dark recessed panels,
+    the strength bars' chip.
+
+Things to check in game (v0.10):
+  - the loading screen: which picture shows, and the bar and tip;
+  - the main menu still opens on its own picture (Change background
+    should now offer five);
+  - a scroll bar and a slider (the settings' volume, a trade);
+  - select an army, an army group, a fleet: the badge's texts and buttons
+    on their panels;
+  - draw a battle plan: the toolbar and a pop-up;
+  - a land battle, and its tactics list;
+  - declare war or justify a war goal; send an offer that gets an answer
+    (the request popup's header);
+  - New game: the country selection and the start's window;
+  - Options (settings), the world tension window, a trade offer.
 
 
 NEW IN v0.9.1

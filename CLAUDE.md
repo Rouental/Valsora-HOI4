@@ -1085,8 +1085,16 @@ it before touching the UI. In short:
   medallion, and `medallion_check.py` (a window under the medallion fails the Deco UI's build). The restyled screens
   are one commit, `8dece16`: `git revert 8dece16` and a rebuild of both take them out. The focus in progress in the
   focus tree's header, a bar under a focus and a one-spirit card have no hook in the game (`deco_ui/CLAUDE.md` section
-  12). **Four loading screens** from Valsora's map are a proposal, not in the mod (`deco_ui/art/proposals/loading_screens/`:
-  "don't add them yet").
+  12). **Four loading screens** from Valsora's map were drawn as a proposal (`deco_ui/art/proposals/loading_screens/`:
+  "don't add them yet"); they are in the mod since v0.10.
+- **v0.10** (2026-10-17, not yet seen in game; the author: "Please start applying the proposed changes to all the UI
+  screens"): every suggestion of `deco_ui/docs/SCREEN_INVENTORY.md` and more, as pictures at the game's paths and sizes
+  with its layouts kept: the loading screens (`deco_ui/tools/make_loading.py`, in the background list after the menu's
+  picture) and a gilt loading bar; scroll bars and sliders; the selected armies', fleets' and operatives' badges; the
+  battle plan toolbar; the land and naval battles; the diplomatic action windows, a gilt line emblem per action; game
+  setup; the window frames and popup headers the core skin had missed; the settings, the trade offer and other windows
+  seen now and then. One art module per screen (`deco_ui/tools/*_art.py`, `ART_MODULES`), each with a preview beside
+  the game's (only sent: the game's art).
 - **Proposals for the side panels' own pictures** (research, production, the market, the overview strip, the
   intelligence agency, the spirit banners) are in `deco_ui/art/proposals/panel_pictures/`, **not in the mod**
   (author, 2026-10-15: "don't put them in the mod yet. I'd like to see and approve them first").
@@ -1099,7 +1107,10 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   draws 65,536: `docs/BORDER_LIMIT.md`), 3,149 states, 179 strategic regions (137 land, made from the nations on 2026-10-16: `land_regions.py`; 42 sea);
   182 countries in the mod,
   161 of them on the map, 95 of those with a flag of their own (66 fly a stripe in their map colour); the states of
-  39 are the author's own lines (`gazetteer.finals`). Two starts, both on 1 January 2036. The Deco UI is v0.9.1 (the map's names back, the
+  39 are the author's own lines (`gazetteer.finals`). Two starts, both on 1 January 2036. The Deco UI is v0.10 (the
+  loading screens from Valsora's map, the scroll bars, the selected units' badges, the battle plan toolbar, the battles,
+  the diplomatic actions, game setup and the popups in the deco style: `deco_ui/docs/SCREEN_INVENTORY.md` counts 34
+  screens restyled, 45 re-skinned, 16 still the game's), after v0.9.1 (the map's names back, the
   designers' statistics dark, the doctrine tabs clear of the name, fuel, supply and convoys in the top bar's strip and
   the alerts across to the right-hand tray, the production alert a ring round its crown), after v0.9 (the research
   trees and doctrines under a notched header, the designers' and commander pickers' pictures, the faction's members'
@@ -1138,8 +1149,8 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   new regions; a first draft of every name, Claude's, is `dist/region_names_draft.md`, 2026-10-17); the wider strait crossings
   (`dist/straits_map.png`: the orange and red ones, 10-20 px; the 414 green and yellow ones are in the mod since 2026-10-17;
   `straits.py approve --max-gap 10 --add N,...`, then a rebuild);
-  which screen the Deco UI restyles next (`deco_ui/docs/SCREEN_INVENTORY.md`, 2026-10-17: every game screen and its state); whether fuel, supply and convoys stay in the top bar's strip (an experiment, the author's); the loading screen
-  proposal (`deco_ui/art/proposals/loading_screens/`); whether v0.9's restyled screens stay; the larger flags' test version (`docs/HD_FLAGS_TEST.md`); the panel picture proposals (on
+  what the Deco UI restyles after v0.10 (`deco_ui/docs/SCREEN_INVENTORY.md`'s suggestions: the unit counters, the division
+  and ship details, the trait trees ...); whether fuel, supply and convoys stay in the top bar's strip (an experiment, the author's); whether v0.9's restyled screens stay; the larger flags' test version (`docs/HD_FLAGS_TEST.md`); the panel picture proposals (on
   hold, the author: "I don't want to move ahead with the panel pictures just yet"); the tech tree (its eight questions
   answered on 2026-10-16 and recorded in `docs/TECH_TREE_2036.md`: a realistic 2036, the tree beginning where the base
   game's ends, nuclear weapons for the superpowers only, Krionik, Kampf and Fraxhemark or Sarkis as the superpowers;

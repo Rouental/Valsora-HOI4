@@ -1,6 +1,7 @@
 # Screen inventory
 
-2026-10-17, Deco UI v0.9.1. Every screen of the game, grouped by how far the Valsora Deco UI has changed it, so the next
+2026-10-17, Deco UI v0.9.1, brought up to date for v0.10 the same day (the rows it changed say v0.10; their pictures are
+the screens' previews in `deco_ui/build/`). Every screen of the game, grouped by how far the Valsora Deco UI has changed it, so the next
 screen to restyle can be picked. The pictures are on a contact sheet, `deco_ui/build/screen_inventory.png` (the game's
 look on the left, the Deco UI's on the right; one sheet per level in `deco_ui/build/inventory/`). They show the game's
 art, so they stay in the git-ignored `build/` folder.
@@ -42,8 +43,10 @@ pictures are in `deco_ui/build/inventory/` (`<screen>_game.png`, `<screen>_deco.
 95 screens, from the game's 453 `.gui` files (253 of them the tank designer's blueprints), plus two global rows (the fonts, the shared templates) that are not screens:
 
 - Restyled: 34 (27 re-laid out, 7 moved only)
-- Re-skinned: 26 (9 with their own pictures redrawn, 17 framed by the core skin)
-- Game's own: 35 (of which 2 never seen in Valsora: Earth's scripted windows, the developer tools)
+- Re-skinned: 45 (28 with their own pictures redrawn, 19 of them in v0.10; 17 framed by the core skin)
+- Game's own: 16 (of which 2 never seen in Valsora: Earth's scripted windows, the developer tools)
+
+(v0.9.1: 34 restyled, 26 re-skinned, 35 the game's own.)
 
 The sheet has thumbnails for 79 rows; the rest say why in the last column.
 
@@ -94,10 +97,10 @@ Each row says what inside the panel is still the game's.
 | Screen | Files (`interface/`) | How often | What the Deco UI does, and what is still the game's | Picture |
 |---|---|---|---|---|
 | Advisor and law picker, subjects, exiles (beside politics) | `countrypoliticsview.gui` | often | Moved flush under the band beside the politics screen (make_politics.py). The game's layout on the core skin's tile (tiled_plain_bg); the subject and collaboration rows are the game's pictures. | sheet |
-| Selected armies (army badges, division list) | `unitview.gui` | every session | armies_view moved below the medallion (v0.8.2, make_mapviews.py). The badges' parchment, the expeditionary forces and the colour picker are the game's; the division list's frame is the core skin's. Not yet seen after the move. | sheet |
+| Selected armies (army badges, division list) | `unitview.gui` | every session | armies_view moved below the medallion (v0.8.2, make_mapviews.py); v0.10: the badges, plaques, frames and buttons redrawn (mapview_art.py). Before that, the badges' parchment, the expeditionary forces and the colour picker are the game's; the division list's frame is the core skin's. Not yet seen after the move. | sheet |
 | Selected fleets | `naviesview.gui`, `navyleaderview.gui` | often | Moved below the medallion and made 77 % tall (v0.8.4), with the home base and refit windows beside it. The fleet headers, task force rows and admirals' cards are the game's; the cards' strips are the army bar's recoloured pieces. Not yet seen. | sheet |
 | Selected air wings | `airselectionview.gui`, `airgroupview.gui`, `airwingdetails.gui`, `airwingreorganization.gui`, `carrierairwingcompositionwindow.gui` | sometimes | air_selection_view moved below the medallion (v0.8.2). The rest is the game's: the air wing reorganisation window sits on the core skin's tile, the quick deployment and carrier windows on the game's tiled_window_w_close. | not rendered: the game fills its lists in |
-| Selected operatives | `operativeleader.gui` | sometimes | operative_view moved below the medallion (v0.8.2). The operative badges and mission bar are the game's. | sheet |
+| Selected operatives | `operativeleader.gui` | sometimes | operative_view moved below the medallion (v0.8.2); v0.10: the badge and its bar redrawn (mapview_art.py). The mission bar is the game's. | sheet |
 | Ships and planes in the field, equipment overview, character list | `detailedwindows.gui`, `equipmentoverview.gui`, `command_character_view.gui` | sometimes | Moved flush under the band where they open beside a side panel (v0.5, layout_panels.BESIDE). The game's layout on the core skin's tiles. | sheet |
 | Hot-join requests (multiplayer host) | `hotjoin.gui` | rarely | Moved below the medallion (v0.9); otherwise the game's. | not rendered: an empty list until someone asks to join |
 
@@ -117,6 +120,26 @@ Each row says what inside the panel is still the game's.
 | Ship designer | `equipmentdesignerview.gui`, `equipmentdesigner/ships/` (6 hulls) | sometimes | v0.9: the popup picture redrawn. The hull drawings and modules are the game's. | sheet |
 | Commander pickers (army, navy, captured) | `unitleaderwindow.gui` | sometimes | v0.9: the window and the cards redrawn: parchment cards with a lacquer portrait well. The traits and lists are the game's. | sheet |
 | Advisor role picker | `advisorroleselectionview.gui` | rarely | Shares the commander picker's window picture and card (leader_selection_bg, v0.9). | sheet |
+| Loading screen | `load_screen.gui` | every session | v0.10: four pictures from Valsora's map in the background list (make_loading.py), which the loading screen draws from (assumed); the loading bar, tip and progress bar in gilt (ld_). | build/preview_loading.png |
+| Game setup: country selection | `frontendgamesetupview.gui` | every new game | v0.10 (setup_art.py): the country selection picture, the country cards with a flag opening, the filter buttons, the facts and history on ivory (the game's typewriter text is black), the details panel, the difficulty and Start buttons, the map screen's bars. The faction emblems and the top bar's flag frame are the game's. | build/preview_setup.png |
+| Game setup: start (scenario) selection | `frontendgamesetupview.gui` | every new game | v0.10: the start's window (select_date_bg) and the start cards redrawn; the start's picture is the Valsora build's. | build/preview_setup.png |
+| Battle plan toolbar | `battleplantools.gui` | often | v0.10 (battleplan_art.py): the bar's wells, the pop-ups (planning speed, cohesion, HQ distance, area defence), the order and setting buttons with the game's glyphs in gilt, the execution and exercise strips. | build/preview_battleplan.png |
+| Diplomatic action windows | `countrydiplomacyview.gui` (its action windows), `factions/faction_popup.gui`, `operative.gui` | often | v0.10 (diplo_art.py): 22 pictures and their pieces, a deco frame with a gilt line emblem per action at both ends of the title plate; the war goal lists on ivory and the dark panels as lacquer wells (core skin). The licence window's filter buttons and the threat box are the game's. | build/preview_diplo.png |
+| Land battle | `landcombat.gui` | often | v0.10 (combat_art.py): the battle window (terrain slot, a medallion per side, tactic slots, width readouts, division fields), the leader and progress frames, bars, cards, the skill badge, the tactics list. The terrain and tactic pictures are the game's. | build/preview_landcombat.png |
+| Naval battle and results | `navalcombat.gui`, `navalcombatresultswindow.gui` | sometimes | v0.10: the naval battle's picture (an ivory plotting sheet under the ships), its leader frame, bars, screening chips and stat icons (combat_art.py). The results window's report pictures are the game's. | build/preview_navalcombat.png |
+| Air missions over a region | `strategicairview.gui` | sometimes | v0.10 (popup_art.py): the window's picture (name band, wing cells, weather well, missions field); the mission icons are the game's. | build/preview_popups.png |
+| Naval region view | `naval_strategic_region_view.gui` | sometimes | v0.10 (popup_art.py): the picture, its header and the dominance bar; the terrain picture is the game's. | build/preview_popups.png |
+| Trade offer (beside trade) | `countrytradeview.gui` (tradeoffer_window) | sometimes | v0.10 (popup_art.py): the offer's picture and its footer plate; the partners box is a core skin tile. | build/preview_popups.png |
+| Agency upgrades, name and logo | `countryintelligenceagencyview.gui` (its upgrade and logo windows), `countryintelledger.gui` | sometimes | v0.10 (popup_art.py): the upgrades popup's head and the logo window (army_insignia_selection_bg). The intelligence ledger's pieces are the game's. | build/preview_popups.png |
+| World tension history | `worldtensionwindowpopup.gui` | rarely | v0.10 (window_art.py): world_tension_bg with roundels, a title plate and a band for the sort buttons; the list on a core skin tile. | build/preview_windows.png |
+| Equipment variant designer | `equipmentupgradedesignerwindow.gui` | sometimes | v0.10 (popup_art.py): the picture, the statistics on an ivory sheet (dark typewriter ink); the market's stockpile window shares it. | build/preview_popups.png |
+| Design save, load and folder popups | `equipmentdesigner/persistent_design_popups.gui` | sometimes | v0.10 (window_art.py): pol_goal_popup_bg as a deco frame with a header band. | build/preview_windows.png |
+| Settings (options) | `settings.gui`, `messagesettings.gui`, `msg_filters.gui`, `playeraiprefs.gui` | rarely | v0.10 (popup_art.py): the window, its frame, tabs and tab arrows, option rows, the volume sliders, the gold checkbox. | build/preview_popups.png |
+| Aces | `acesview.gui` | rarely | v0.10 (window_art.py): tiled_window_w_close with a socket for the close button (also the doctrine picker, the faction list, the market's access and automation windows, three air windows). | build/preview_windows.png |
+| Insignia, faction logo and colours | `insigniaselection.gui`, `factions/faction_customization.gui` | rarely | v0.10 (popup_art.py): the pickers' window (army_insignia_selection_bg); the paper backgrounds are the game's. | build/preview_popups.png |
+| Faction research facility | `factions/faction_research.gui` | rarely | v0.10: its frame is tiled_window_pol_goal (window_art.py). | not attempted: rarely seen |
+| Tutorial and hints | `tutorialscreen.gui` | rarely (Valsora's tutorial is cut to one step) | v0.10: hint_bg (window_art.py) and tutorial_bg (popup_art.py): roundels, a title plate, an objectives band. | build/preview_windows.png, preview_popups.png |
+| Shared templates (scroll bars, sliders, widgets) (global) | `core.gui`, `widgets/` (3 files), `divisions_summary.gui` | every session | v0.10: the scroll bars and sliders (sc_ in gen_textures.py: arrows, thumb, tracks, backdrops, the value slider). | not a window of its own |
 
 ### Re-skinned: framed by the core skin
 
@@ -124,7 +147,7 @@ Each row says what inside the panel is still the game's.
 |---|---|---|---|---|
 | Pause menu | `ingamemenu.gui` | every session | Its frame is the core skin's window tile and its buttons the core skin's, so the whole menu reads as deco; the social icons are the game's. The layout is the game's. | sheet |
 | Save and load games, saved game rules | `ingamemenu.gui`, `savedgamerules.gui` | every session | The core skin's tiles and buttons; the game's layout. | sheet |
-| Diplomatic requests and other popups | `popupwindow.gui` | often | The standard request popups (accept or decline, foreign manpower, lend-lease requests) sit on the core skin's tile; the confirmation and peace summary popups on the game's tiled_window_pol_goal, the lend-lease rows on the game's pictures. | sheet |
+| Diplomatic requests and other popups | `popupwindow.gui` | often | The standard request popups (accept or decline, foreign manpower, lend-lease requests) sit on the core skin's tile; since v0.10 their header strips, footer plates and the confirmation's war medallions are deco too, and the confirmation and peace summary popups' tiled_window_pol_goal (window_art.py); the lend-lease rows are the game's pictures. | sheet; build/preview_popups.png |
 | Notifications | `notifications/notification.gui`, `notifications/legacy_message_popup_window.gui`, `notifications/idea_expired_notification.gui`, `notifications/externally_completed_focus.gui` | often | The notification cards on the core skin's tile; the message popup and the idea-expired and focus-completed notices draw no frame of their own (inferred). | sheet |
 | Find (province and unit search) | `findview.gui` | sometimes | The core skin's window tile and buttons; the header's icons are the game's. | sheet |
 | Military-industrial organisations | `military_industrial_organization/` (5 files) | sometimes | The list, policy and detail windows on the core skin's tile; the organisation tree's background (MIO_details_background) and the save and load popups are the game's. The tree's links share the focus tree's gilt link textures. | sheet |
@@ -145,80 +168,39 @@ Each row says what inside the panel is still the game's.
 | Screen | Files (`interface/`) | How often | What the Deco UI does, and what is still the game's | Picture |
 |---|---|---|---|---|
 | Unit counters and map icons | `mapicons.gui` | every session | Unit counters, map icons, the naval mission panels: the game's (the HQ badge is the army bar's recoloured one). | not rendered: drawn on the map by the game |
-| Loading screen | `load_screen.gui` | every session | The game's loading pictures and status bar. Four loading screens from Valsora's map are a proposal (art/proposals/loading_screens/), not in the mod. | not rendered: the picture is chosen at run time |
-| Game setup: country selection | `frontendgamesetupview.gui` | every new game | The game's country selection picture and details panel; only the buttons and fonts change. | sheet |
-| Game setup: start (scenario) selection | `frontendgamesetupview.gui` | every new game | The game's window (select_date_bg) and parchment; the start's picture is Valsora's (the Valsora build draws it in the deco style), the buttons and fonts the Deco UI's. | sheet |
-| Battle plan toolbar | `battleplantools.gui` | often | The game's pictures and icons. | sheet |
 | Right-click menu | `rightclickmenu.gui` | often | Names no pictures; only the redrawn game fonts touch it. | not attempted: it names no pictures |
-| Diplomatic action windows | `countrydiplomacyview.gui` (its action windows), `factions/faction_popup.gui`, `operative.gui` | often | Declare war, justify, volunteers, lend-lease, guarantee and the rest keep the game's pictures (generic_diplo_action_bg and the diplo_action_* set); only buttons and fonts change. They sit in a file the Deco UI ships, but only the diplomacy panel itself was changed. | sheet |
-| Land battle | `landcombat.gui` | often | The battle window's own picture (land_battle_bg) and the tactics cards are the game's; only the title font and the close button change. | sheet |
 | Division and ship details | `unitview.gui` (army_division_stats_view, ship_stats_window) | sometimes | In a file the Deco UI ships (for the armies view's move), but these windows are unchanged: the game's parchment and frame, the deco fonts. | sheet |
-| Naval battle and results | `navalcombat.gui`, `navalcombatresultswindow.gui` | sometimes | The game's battle map and report pictures. | sheet |
-| Air missions over a region | `strategicairview.gui` | sometimes | The game's picture (strategic_air_bg) and mission icons. | sheet |
-| Naval region view | `naval_strategic_region_view.gui` | sometimes | The game's picture (naval_region_window_bg). | sheet |
 | Theatres and army groups | `theatreselector.gui` | sometimes | The game's (a transparent window over its own entry pictures). | not rendered: the game fills it in |
 | Commander trait trees | `armytraittreewindow.gui`, `navytraittreewindow.gui`, `traittreewindow_common.gui` | sometimes | The game's parchment and tree pieces; the core skin's tabs. | sheet |
 | Commander abilities | `abilitylist.gui` | sometimes | The game's. | not attempted: a small list of the game's icons |
-| Trade offer (beside trade) | `countrytradeview.gui` (tradeoffer_window) | sometimes | The game's picture (trade_offer_popup_win); its trade partners box picks up a core skin tile, so the window mixes the two looks. | sheet |
-| Agency upgrades, name and logo | `countryintelligenceagencyview.gui` (its upgrade and logo windows), `countryintelledger.gui` | sometimes | The game's pictures (agency_branch_upgrades_popup_bg, tiled_window_insigna). | sheet |
 | Operations (La Résistance) | `operationoverview.gui` | sometimes | The game's paper and frame. | sheet |
 | War overview | `waroverview.gui` | sometimes | The game's. | not rendered: the game fills it in |
-| Peace conference | `peaceconferencewindow.gui`, `ingameclock.gui` | sometimes | The game's; only its chat and waiting windows use the core skin's tiles, and the biddings popup the game's world tension picture. The clock window (ingameclock.gui) shows during it (inferred from its offsets). | not rendered: the game fills it in |
-| World tension history | `worldtensionwindowpopup.gui` | rarely | The game's picture (world_tension_bg); the body picks up a core skin tile. | sheet |
-| Equipment variant designer | `equipmentupgradedesignerwindow.gui` | sometimes | The game's picture (equipment_upgrade_designer_bg). | sheet |
-| Design save, load and folder popups | `equipmentdesigner/persistent_design_popups.gui` | sometimes | The game's popup picture (pol_goal_popup_bg). | sheet |
+| Peace conference | `peaceconferencewindow.gui`, `ingameclock.gui` | sometimes | The game's; only its chat and waiting windows use the core skin's tiles, and the biddings popup the world tension picture (deco since v0.10). The clock window (ingameclock.gui) shows during it (inferred from its offsets). | not rendered: the game fills it in |
 | Message log, message icons, end of game | `menubar.gui` | rarely | The game's. | not rendered: the game fills it in |
-| Settings (options) | `settings.gui`, `messagesettings.gui`, `msg_filters.gui`, `playeraiprefs.gui` | rarely | The game's picture (settings_popup_bg); the core skin's buttons and checkboxes. | sheet |
 | Multiplayer: host, join, server browser | `frontendmultiplayerview.gui`, `matchmaking.gui`, `matchmaking_chat.gui`, `ingamelobby.gui` | rarely | The game's pictures (hosting_bg ...); the join window is on a core skin tile. | sheet |
 | Career profile | `career_profile/` (10 files) | rarely | The game's. | sheet |
 | Friends and social | `frontend_friends_view.gui`, `social_view.gui` | rarely | The game's. | not attempted: rarely seen |
-| Aces | `acesview.gui` | rarely | The game's tiled_window_w_close. | sheet |
-| Insignia, faction logo and colours | `insigniaselection.gui`, `factions/faction_customization.gui` | rarely | The game's pictures. | sheet |
-| Faction research facility | `factions/faction_research.gui` | rarely | The game's tiled_window_pol_goal. | not attempted: rarely seen |
 | Raids | `military_raids/` (2 files) | rarely | The game's pictures (raids_launch_bg ...); the setup view is on a core skin tile. | sheet |
-| Tutorial and hints | `tutorialscreen.gui` | rarely (Valsora's tutorial is cut to one step) | The game's pictures (tutorial_bg, hint_bg). | sheet |
-| Shared templates (scroll bars, sliders, widgets) (global) | `core.gui`, `widgets/` (3 files), `divisions_summary.gui` | every session | Pieces other screens draw. The scroll bars and sliders are the game's: the core skin has no texture for them. | not a window of its own |
 | Developer tools (console, AI trace, nudge) | `core.gui` (console), `ai_trace.gui`, `backend.gui`, `nudge.gui`, `integrity/file_integrity_watermark.gui` | never (developer) | The game's (the AI trace window happens to be on a core skin tile). | not attempted: developer tools |
 | Earth countries' scripted windows (24 files) | `AST_*`, `CZE_*`, `GER_*`, `JAP_*`, `RAJ_*`, `SIA_*`, `ast_*`, `aus_*`, `bul_*`, `ger_*`, `gre_*`, `raj_*`, `sia_*`, `sov_*`, `swe_*`, `usa_*`, `war_escalation_*`, `insrevolutionwindow.gui` | never (Earth content) | Vanilla's country-specific decision windows; no Valsora country uses them. | not attempted: never seen in Valsora |
 
 ## Suggested next
 
-The screens a player meets most that are still in the game's style, most often seen first, with what restyling each
-would involve. "Small" is a few textures in `gen_textures.py`; "medium" is a set of pictures drawn at the game's sizes
-(as the army bar's were), perhaps with a `make_*.py` for a few positions; "large" needs a mockup and a re-laid `.gui`.
+All eight suggestions of v0.9.1 (the loading screen, the scroll bars and sliders, the selected armies' badges, the
+battle plan toolbar, the land battle, the diplomatic action windows, game setup, the window frames the core skin missed)
+were done in v0.10, with the naval battle, the popups' headers and footers and the windows of one picture seen now and
+then (settings, trade offer, the variant designer, the agency, the insignia pickers, air missions, the naval region,
+the tutorial). Still the game's, most often seen first:
 
-1. **Loading screen** (every session; `load_screen.gui`). Four loading screens from Valsora's map are already drawn
-   and waiting for the author's approval (`art/proposals/loading_screens/`); adding them means writing them at the
-   game's paths (`gfx/loadingscreens/load_<n>.dds`, 1920 x 1440, with their `_small` twins), and the status bar
-   (`Loadingscreen_loadingstatus.dds`, 1400 x 92) and progress bar could be redrawn in gilt. Small.
-2. **Scroll bars and sliders** (every screen with a list; `core.gui`'s `standardlistbox_slider` and its kin). No core
-   skin texture covers them: `scroll_drager`, `scroll_up`, `scroll_down` (16 x 16), the track and the slider bars
-   (`slider_bg`, 404 x 42 ...). About ten small textures at the game's paths and sizes. Small, and seen everywhere.
-3. **Selected armies, fleets and operatives** (every session and often; `unitview.gui`, `naviesview.gui`,
-   `operativeleader.gui`, which `make_mapviews.py` already ships). The army badge (`army_group_bg`, 437 x 109, and the
-   army group's), the division count plates, the fleet header (`fleet_bg`, 493 x 166, and its highlight) and the
-   operative badge (437 x 109) redrawn at the game's sizes as the army bar's cards were, their buttons recoloured with
-   `gilt()`. Medium: about a dozen pictures whose bars and buttons sit at fixed places.
-4. **Battle plan toolbar** (often; `battleplantools.gui`). The toolbar picture (`battleplantools_bg`, 641 x 79), the
-   area defence and planning panels, and about 25 order and setting buttons (70 x 34 and 80 x 36, several frames
-   each) that `gilt()` could recolour as it did the small map mode icons. Small to medium.
-5. **Land battle** (often in a war; `landcombat.gui`). One large picture (`land_battle_bg`, 567 x 617) with the leader
-   frames, progress frames and tactic cards, redrawn at the game's sizes with the terrain picture's slot kept (the
-   terrain pictures stay the game's). Medium; re-laying it to a mockup would be a `make_landcombat.py` and large.
-6. **Diplomatic action windows** (often; the action windows in `countrydiplomacyview.gui`, `factions/faction_popup.gui`,
-   `operative.gui`). Twenty-three pictures (`generic_diplo_action_bg` and 22 `diplo_action_*_bg`, 527 px wide, 315 to
-   664 tall), each the same frame with its own header picture. One frame per height with a gilt line-art header per
-   action would cover them. Medium to large: it needs a decision on the header pictures first.
-7. **Game setup: country and start selection** (every new game; `frontendgamesetupview.gui`). The country selection
-   picture (`country_selection_bg`, 1225 x 728), the start's window (`select_date_bg`, 579 x 512) and the details panel
-   (`lobby_right_sidepanel_bg`, 492 x 301) with their parchment panels. Medium as textures; large as a re-laid screen.
-   It is the first screen after the main menu.
-8. **The window frames the core skin misses** (sometimes, but across many windows). `tiled_window_w_close` (8 windows:
-   aces, the doctrine picker, the faction list, the market's access and automation windows, three air windows),
-   `tiled_window_pol_goal` and `pol_goal_popup_bg` (14: the confirmation and peace summary popups, the design and MIO
-   save popups), `hint_bg` (26 tutorial and hint windows) and `world_tension_bg` (3). Four or five textures in the core
-   skin section of `gen_textures.py`; each one restyles several windows at once. Small.
+1. **Unit counters and map icons** (`mapicons.gui`, every session): 148 sprites the engine draws in many frames and
+   sizes on the map. Large.
+2. **Division and ship details** (`unitview.gui`'s army_division_stats_view and ship_stats_window, sometimes): the
+   game's parchment and frame. Medium, as the designers' were.
+3. **Commander trait trees** (`armytraittreewindow.gui`, `navytraittreewindow.gui`, sometimes): the parchment and
+   tree pieces. Medium.
+4. **Operations, the war overview, the peace conference** (sometimes): the game's papers and frames; the peace
+   conference fills itself in. Medium to large.
+5. **Multiplayer, career profile, raids, achievements' header** (rarely). Medium each.
 
-Left out on purpose: the unit counters and map icons (`mapicons.gui`, every session, but 148 sprites the engine draws in
-many frames and sizes on the map: large), and the side panels' own pictures, whose proposals wait for the author
+Left out on purpose: the side panels' own pictures, whose proposals wait for the author
 (`art/proposals/panel_pictures/`: "I don't want to move ahead with the panel pictures just yet").

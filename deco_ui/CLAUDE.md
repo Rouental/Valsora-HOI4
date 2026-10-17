@@ -14,9 +14,18 @@ Treat assumed items as hypotheses.
 
 ---------------------------------------------------------------------------------------------------
 
-## 1. Status (v0.9.1)
+## 1. Status (v0.10)
 
-**v0.9.1 (2026-10-16, later)** is the current version, from the user's screenshots and `error.log` of v0.9 (section 10,
+**v0.10 (2026-10-17)** is the current version, from the user's "Please start applying the proposed changes to all the
+UI screens" (`docs/SCREEN_INVENTORY.md` had suggested eight): pictures at the game's paths, sizes and frame counts, the
+game's layouts kept (no `.gui` changed). The four loading screens from Valsora's map (`make_loading.py`, the proposal of
+v0.9) with a gilt loading bar and tip; the scroll bars and sliders; the selected armies', fleets' and operatives'
+badges; the battle plan toolbar; the land and naval battles; the diplomatic action windows, an emblem per action; game
+setup; the window frames and popup headers the core skin had missed; the settings, the trade offer and other windows
+seen now and then. Each screen is an art module (`*_art.py`, section 4) with a preview beside the game's. **Not yet
+seen in game** (section 10).
+
+**v0.9.1 (2026-10-16, later)** came before it, from the user's screenshots and `error.log` of v0.9 (section 10,
 the README): the map's names back (the map font's texture had grown to 2048 x 2048 with the Vietnamese letters, past
 what the game loads: section 6), dark ink in the typewriter fonts on the designers' ivory sheet (the game's `_inverted`
 fonts are dark, not white), the doctrine tabs at the header's x (`format = "UPPER_LEFT"`, assumed), the faction
@@ -66,7 +75,15 @@ lessons that still hold are in section 6 (engine facts) and section 9 (pitfalls)
 | Research trees, doctrine screen (`countrytechtreeview.gui`, `doctrines/doctrines_view.gui`) | v0.9 (`make_research.py`): flush under the band at the focus tree's x, the focus tree's notched header picture (`GFX_valsora_deco_nf_header`), a gilt title right of the notch, the game's folder tabs in the header hanging over the tree as the game's do, the close diamond; the trees, their pictures and every technology and doctrine are the game's. The research trees' file is Valsora's (2036's year labels): the Valsora build makes it again from its own copy (`scripts/deco_ui.py` REPLACES), as the politics screen. Preview `build/preview_research.png`, `preview_doctrines.png`. |
 | Designers, commander pickers | v0.9 (`designer_art.py`, through `gen_textures.py`): the four designers' popup pictures (division, tank, plane, ship) and the commander and advisor pickers' window and cards (army, navy, captured) redrawn at the game's paths and sizes, their panels where the game's are (measured from its pictures): lacquer plates, recessed panels, an ivory ruled sheet under the statistics (dark text), parchment cards with a lacquer portrait well. Textures only. Preview `build/preview_designers.png`. |
 | Fonts | The mod's own (`gen_fonts.py`) on its own screens; v0.8: the game's 28 fonts redrawn in the deco faces at their paths (`game_fonts.py`), for everything else. Preview `build/preview_game_fonts.png` (needs the game's font textures: section 7). |
-| Everything else (the panels' own pictures ...) | Only the core skin so far. Proposals for the panels' pictures (not in the mod) in `art/proposals/`. |
+| Loading screens (the background list, `load_screen.gui`) | v0.10: four pictures from Valsora's map (`make_loading.py`, by hand), listed after the menu's; the loading bar, tip and progress bar in gilt (`ld_`). Preview `build/preview_loading.png`. |
+| Scroll bars and sliders (`core.gui`) | v0.10: arrows, a diamond thumb, tracks, backdrops and the value slider (`sc_`); the settings' sliders (`popup_art.py`). |
+| Selected armies, fleets, operatives, air wings (`unitview.gui`, `naviesview.gui`, `operativeleader.gui`, `airselectionview.gui`) | v0.8.2: moved below the medallion (`make_mapviews.py`); v0.10: their badges, plaques, frames and buttons redrawn (`mapview_art.py`, `mv_`). Preview `build/preview_mapviews.png`. |
+| Battle plan toolbar (`battleplantools.gui`) | v0.10 (`battleplan_art.py`, `bp_`): the bar's wells, the pop-ups with legs to their button, the order and setting buttons with the game's glyphs in gilt. Preview `build/preview_battleplan.png`. |
+| Land and naval battles (`landcombat.gui`, `navalcombat.gui`) | v0.10 (`combat_art.py`, `cb_`): the battle window, frames, bars, cards, the tactics list; the naval battle's picture with an ivory plotting sheet. Previews `build/preview_landcombat.png`, `preview_navalcombat.png`. |
+| Diplomatic action windows (`countrydiplomacyview.gui`, `factions/faction_popup.gui`, `operative.gui`) | v0.10 (`diplo_art.py`, `dp_`): 22 pictures and their pieces, a header with a gilt line emblem per action at both ends. Preview `build/preview_diplo.png`. |
+| Game setup (`frontendgamesetupview.gui`) | v0.10 (`setup_art.py`, `gs_`): the country selection, the start's window, the details panel, the cards, the difficulty and Start buttons, the map screen's bars. Preview `build/preview_setup.png`. |
+| Popups and windows of one picture (`popupwindow.gui`, `worldtensionwindowpopup.gui`, `tutorialscreen.gui`, `settings.gui`, the trade offer, the variant designer, the agency, insignia, air missions, the naval region) | v0.10 (`window_art.py`, `wf_`; `popup_art.py`, `pp_`): frames with a header band and title plate, roundels, footer plates; the popups' header strips and the war medallion. Previews `build/preview_windows.png`, `preview_popups.png`. |
+| Everything else (the panels' own pictures ...) | The core skin. Proposals for the panels' pictures (not in the mod) in `art/proposals/`; what is left is in `docs/SCREEN_INVENTORY.md`. |
 
 **HOI4 has no outliner.** The mockup's "Outliner" panel was a design idea. The closest things in the
 game are the army/navy/air overview lists (opened from the top bar's army/navy/air buttons); restyle
@@ -745,7 +762,7 @@ textures it draws then read as stale to `validate_preview` until they are drawn 
 
 **The art modules (v0.10).** A screen whose look is a set of the game's pictures, redrawn at its paths and sizes, has a
 module of its own (`battleplan_art.py`, `window_art.py`, `mapview_art.py` ...: the project map) with
-`ADDS = [(key, path, w, h, function)]`; `gen_textures.py` imports each in `ART_MODULES` and draws the function's HTML
+`ADDS = [(key, path, w, h, function)]`; `gen_textures.py` imports each in `ART_MODULES` (`art_util.py`) and draws the function's HTML
 (designer_art.py, v0.9, was the first). Every module has a key prefix of its own and a preview beside the game's (the
 `_vanilla` one shows the game's art: only sent, never committed). The loading bar and tip (`ld_`) and the scroll bars
 and sliders (`sc_`) are in `gen_textures.py` itself.
@@ -856,6 +873,19 @@ GP.write_gui(MOD + "interface/x.gui", t)    # braces checked, engine_safe applie
 
 ## 10. Open items and things to check in game
 
+- **v0.10**: the loading screen (**(assumed)**: that it shows a picture of the background list, and which one; the
+  gilt bar and tip, the game's texts on them) and the main menu still on its own picture, with five in Change
+  background; the scroll bars and sliders (lists, the settings' volume, the trade slider); the selected army, army
+  group, fleet and operative badges and the selected air wings' rows (texts, counts and buttons on their panels;
+  **(assumed)**: the armies/divisions toggle's lit frame, the air wing row's red frame as a warning); the battle plan
+  toolbar and its pop-ups (which frame is lit, the glyphs readable); a land battle (the terrain picture, portraits,
+  tactics and the width readouts in their slots; the tactics list's frames) and a naval battle (the ships on the
+  plotting sheet); the diplomatic action windows (the title on its plate, the emblems, the war goal lists on ivory;
+  **(assumed)**: that the game draws each window's picture at its own size), a request popup's header and footer and
+  the confirmation's crossed-blades medallions; game setup (the cards' lit frame, the flag whole in its opening, the
+  facts and history on ivory, the Start button's three frames); the settings window and its tab arrows, the world
+  tension window, the trade offer, the variant designer, the agency's upgrades and logo, the insignia picker, air
+  missions over a region, the naval region view, a tutorial hint.
 - **v0.9.1**: the names on the map back; the designers' statistics dark on the ivory sheet; the doctrine tabs right of
   the notch, clear of the name (**(assumed)**: a `gridBoxType` without `format` seemed to centre its items on x, so
   the tabs' grid is `UPPER_LEFT` now); the faction screen's long name whole; the politics screen's LEADER tag centred
@@ -1006,10 +1036,10 @@ The user asked (2026-10-14) for one install, keeping the option of going back to
 
 ## 12. Next steps (in order)
 
-`docs/SCREEN_INVENTORY.md` (2026-10-17) lists every game screen (95, from the game's 453 .gui files) as restyled
-(34), re-skinned (26) or the game's own (35), and suggests the most-seen ones still in the game's style: the loading
-screen, the scroll bars and sliders, the selected armies' badges, the battle plan toolbar, the land battle, the
-diplomatic action windows, game setup, and the window frames the core skin misses. The author picks from it.
+`docs/SCREEN_INVENTORY.md` (2026-10-17) lists every game screen (95, from the game's 453 .gui files) by how far the
+Deco UI changes it. Its eight suggestions were all done in v0.10, and more; what is still the game's is listed there
+(the unit counters on the map, the right-click menu, commander trait trees, operations, the war overview, the peace
+conference, the multiplayer and career screens, achievements ...).
 
 1. Process the user's screenshots and `error.log` of v0.5.2 to v0.8 (section 10 and the README's checklist): the
    side panels, the focus tree, the army bar, the events, the fonts.

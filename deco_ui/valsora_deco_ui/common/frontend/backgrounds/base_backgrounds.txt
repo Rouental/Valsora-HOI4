@@ -1,5 +1,11 @@
-# Valsora Deco UI - main menu background.
-# This file replaces the game's list, so the Valsora background is the default (and only) choice.
+# Valsora Deco UI - the backgrounds: the main menu's, and (since v0.10) the four loading screens drawn from
+# Valsora's map (tools/make_loading.py). The game shows these backgrounds on the main menu (the "Change background"
+# picker chooses which, and cycles through several) and on the loading screen, which has no picture of its own.
+# This file replaces the game's list, so only Valsora's are offered; the menu's is first, as the default.
 # Format (from the game's own file): name_of_dds_file = { } with the .dds in gfx/loadingscreens,
 # plus a GFX_<name>_small sprite (192x144) for the background picker.
 valsora_menu = { }
+valsora_load_1 = { }
+valsora_load_2 = { }
+valsora_load_3 = { }
+valsora_load_4 = { }

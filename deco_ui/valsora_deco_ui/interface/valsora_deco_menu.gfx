@@ -28,4 +28,20 @@ spriteTypes = {
 		name = "GFX_valsora_menu_small"
 		texturefile = "gfx/interface/valsora_deco/menu/valsora_menu_small.dds"
 	}
+	spriteType = {
+		name = "GFX_valsora_load_1_small"
+		texturefile = "gfx/interface/valsora_deco/menu/valsora_load_1_small.dds"
+	}
+	spriteType = {
+		name = "GFX_valsora_load_2_small"
+		texturefile = "gfx/interface/valsora_deco/menu/valsora_load_2_small.dds"
+	}
+	spriteType = {
+		name = "GFX_valsora_load_3_small"
+		texturefile = "gfx/interface/valsora_deco/menu/valsora_load_3_small.dds"
+	}
+	spriteType = {
+		name = "GFX_valsora_load_4_small"
+		texturefile = "gfx/interface/valsora_deco/menu/valsora_load_4_small.dds"
+	}
 }

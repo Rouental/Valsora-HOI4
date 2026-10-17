@@ -383,7 +383,10 @@ if os.path.isdir(VG):
 else:
     problems.append(f"no vanilla gfx at {VG}: replaced textures were not checked (section 3 of CLAUDE.md)")
 for p in glob.glob(M + "gfx/interface/button_*.dds"):
-    w, h = map(int, re.search(r"button_(\d+)x(\d+)", p).groups())
+    m = re.search(r"button_(\d+)x(\d+)", p)
+    if not m:          # button_left, button_right (v0.10): no size in the name
+        continue
+    w, h = map(int, m.groups())
     if read_dds(p).size != (w, h):
         problems.append(f"{p} size mismatch")
 
@@ -391,6 +394,10 @@ for p in glob.glob(M + "gfx/interface/button_*.dds"):
 import json  # noqa: E402
 from paths import MANIFEST  # noqa: E402
 _man = {m["path"] for m in json.load(open(MANIFEST))}
+# the loading screens (v0.10) are make_loading.py's, drawn by hand from the Valsora build's map (make_menu.py lists them;
+# make_loading.py is not imported: it puts the Valsora scripts, with their own layout.py, first on the path)
+_man |= {p for i in range(1, 5) for p in (f"gfx/loadingscreens/valsora_load_{i}.dds",
+                                           f"gfx/interface/valsora_deco/menu/valsora_load_{i}_small.dds")}
 for f in glob.glob(M + "gfx/**/*", recursive=True):
     rel = f[len(M):].replace(os.sep, "/")
     if os.path.isfile(f) and not rel.startswith("gfx/fonts/") and rel not in _man:
