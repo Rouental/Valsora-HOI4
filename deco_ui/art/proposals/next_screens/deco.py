@@ -246,7 +246,7 @@ def corners(x, y, w, h, small=False):
 
 
 # ---------------------------------------------------------------- the core skin's pieces
-def window(x, y, w, h, rule_="double", corner="big", raised=False, shadow=True, alpha=.97):
+def window(x, y, w, h, rule_="double", corner="big", raised=False, shadow=True, alpha=1):
     fill = LAC2 if raised else LAC
     out = box(x, y, w, h, f"background:{STRIPES},linear-gradient(180deg,#141E24,#0D1418);opacity:{alpha};"
                           + ("box-shadow:0 16px 36px rgba(0,0,0,.55);" if shadow else ""))
@@ -452,7 +452,7 @@ def tooltip(x, y, w, h, s_title, rows=(), body=None):
     out += title(x + 14, y + 14, s_title, 15, track=.14)
     yy = y + 38
     for k, v, col in rows:
-        out += text(x + 14, yy, k, 13, CREAM2, w - 100) + text(x + w - 94, yy, v, 13, col, 80, "right", weight=700)
+        out += text(x + 14, yy, k, 13, CREAM2, w - 100) + text(x + w * .45, yy, v, 13, col, w * .55 - 14, "right", weight=700)
         yy += 19
     if body:
         out += text(x + 14, yy + 6, body, 13, "#D9CFB6", w - 28, font="bod", weight=400, lh=1.35)

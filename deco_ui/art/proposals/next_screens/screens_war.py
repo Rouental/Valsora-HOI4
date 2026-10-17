@@ -17,9 +17,9 @@ def head_icon(cx, cy, glyph, col=D.GILT):
 G_WARGOAL = '<path d="M5 20V4M5 5h12l-3 4 3 4H5"/>'
 G_SURRENDER = '<path d="M6 20V4M6 5h11v8H6"/><path d="M9 8h5" opacity=".6"/>'
 G_SCORE = '<path d="M12 3l2.6 5.3 5.8.8-4.2 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8L3.6 9.1l5.8-.8z"/>'
-G_DIV = '<path d="M3.5 7h17v11h-17z"/><path d="M3.5 7l17 11M20.5 7l-17 11"/>'
+G_DIV = D.ICONS["deploy"]
 G_IC = D.ICONS["factory"]
-G_CAS = '<path d="M7 20h10M12 20V9M8 9h8M12 4v5"/><path d="M9 4h6"/>'
+G_CAS = '<path d="M12 3v18M7 8h10"/>'
 G_PEOPLE = D.ICONS["manpower"]
 
 
@@ -35,6 +35,7 @@ def war_row(x, y, tag, name, ws, div, ic, cas, surrender=0.0, major=False, wargo
     o += D.box(x + 58, y + 25, 140 * surrender, 4, "background:linear-gradient(90deg,#A9493A,#E8877A)")
     if callable_:
         o += D.button(x + 220, y + 6, 72, 26, "Call", size=10)
+        ws = ""
     if wargoal:
         o += D.svg(x + 242, y + 10, 18, 18, f'<g stroke="#E7B75A" stroke-width="1.7">{G_WARGOAL}</g>', "0 0 24 24")
     o += D.value(x + 269, y + 13, ws, 13, D.CREAM, 50, "center")
@@ -111,8 +112,8 @@ def war_overview():
 def peace_conference():
     o = D.backdrop(top=False)
     # Cardonia's states on the map: those Rouental demands hatched in its colours, the cost over each (peace_cost_mapicon)
-    for (x, y, cost, taker) in ((640, 250, "42", "ROU"), (820, 230, "38", "ROU"), (980, 300, "26", "HLR"), (560, 160, "31", None),
-                               (760, 140, "57", None), (1040, 190, "22", None)):
+    for (x, y, cost, taker) in ((640, 250, "42", "ROU"), (820, 268, "38", "ROU"), (990, 316, "26", "HLR"), (560, 160, "31", None),
+                               (480, 300, "57", "ROU"), (1140, 250, "22", None), (1228, 176, "24", None)):
         o += D.box(x - 60, y - 40, 120, 80, "border-radius:46%;background:repeating-linear-gradient(135deg,rgba(54,106,64,.55) 0 4px,rgba(54,106,64,0) 4px 9px)" if taker == "ROU"
                    else ("border-radius:46%;background:repeating-linear-gradient(135deg,rgba(185,53,52,.5) 0 4px,rgba(185,53,52,0) 4px 9px)" if taker else ""))
         if taker:
@@ -128,7 +129,8 @@ def peace_conference():
     o += D.layer([(676, 0), (1252, 0), (1213, 94), (715, 94)], f"{D.STRIPES},linear-gradient(180deg,#1E2B33,#0E1519)")
     o += D.sunburst(964, 96, 90, .2)
     o += D.speed_lines(730, 870, 48, False) + D.speed_lines(1058, 1198, 48, True)
-    o += D.flag("ROU", 923, 22, 82, 52) + D.title(674, 79, "Victors' Conference", 11, w=580, align="center", track=.3)
+    o += D.medallion(964, 44, 30, "officer", icon_size=30)
+    o += D.title(674, 80, "Victors' Conference", 11, w=580, align="center", track=.3)
     o += D.button(1638, 37, 261, 34, "Confirm and Exit", "gold", 12)
     # the current turn (515 x 65, centre-up at 85) and the bid phase (400 x 40 under it)
     o += D.window(702, 100, 515, 60, "single", "small")
@@ -234,7 +236,7 @@ def operations():
         o += D.box(605, y, 250, 35, f"background:{D.STRIPES},linear-gradient(180deg,#18232A,#10181D);box-shadow:inset 0 0 0 1px rgba(201,165,90,.3)")
         o += D.label(615, y + 13, lab, 10, D.LABEL, 90, track=.14)
         o += D.progress(708, y + 9, 134, 16, frac)
-        o += D.value(708, y + 11, txt, 11, "#1B140A" if frac > .5 else D.CREAM, 134, "center")
+        o += D.value(708, y + 11, txt, 11, D.CREAM, 134, "center", style="text-shadow:0 0 3px #000,0 0 2px #000")
         y += 39
     for lab, have, need, g in (("Civilian Factories", 1, 1, D.ICONS["factory"]), ("Infantry Equipment", 400, 400, G_DIV), ("Recon Drones", 20, 40, D.ICONS["air"])):
         o += D.box(605, y, 250, 40, f"background:{D.STRIPES},linear-gradient(180deg,#18232A,#10181D);box-shadow:inset 0 0 0 1px rgba(201,165,90,.3)")
@@ -278,7 +280,8 @@ def operations():
     o += D.band(603, 794, 752, 40) + D.rule(603, 794, 1355)
     o += D.text(638, 806, "Commence when ready", 12, D.CREAM2, 178, "right") + D.checkbox(826, 802, True, 20)
     o += D.button(858, 796, 221, 36, "Start Operation", "gold", 12)
-    o += D.button(1092, 798, 31, 31, "", icon="chevron_left")
+    o += D.button(1092, 798, 31, 31, "")
+    o += D.svg(1098, 804, 19, 19, '<path d="M15 6.5A6.5 6.5 0 1 0 16 12"/><path d="M15.5 2.5v4h-4"/>'.replace('<path', '<path stroke="#E3C77E" stroke-width="1.6"'))
     o += D.checkbox(1136, 802, False, 20) + D.text(1168, 806, "Automatically repeat", 12, D.CREAM2, 180)
     return o
 
@@ -309,7 +312,8 @@ def raids():
           '-webkit-mask:radial-gradient(circle,transparent 58px,#000 59px,#000 64px,transparent 65px);clip-path:inset(0 0 50% 0)"></div>')
     o += D.value(705, 432, "62%", 24, D.CREAM, 200, "center")
     o += D.text(705, 459, "Favourable", 12, D.LABEL, 200, "center", weight=600)
-    o += D.svg(889, 478, 14, 14, '<path d="M7 1l6 12H1z" stroke="#E8877A" stroke-width="1.4"/>') + D.value(900, 480, "8%", 11, "#E8877A", 40)
+    o += D.box(884, 476, 44, 18, f"background:#0B1014;clip-path:{D.chamfer(3)};box-shadow:inset 0 0 0 1px rgba(232,135,122,.7)")
+    o += D.svg(888, 478, 14, 14, '<path d="M7 1.5l5.5 10.5h-11z" stroke="#E8877A" stroke-width="1.4"/>') + D.value(904, 480, "8%", 11, "#E8877A", 24)
     o += D.value(967, 357, "Additional Equipment", 15, D.GILT, 287, "center", weight=600)
     o += D.ivory(967, 380, 290, 120)
     o += D.text(976, 389, "Equipment", 12, D.INK, 130, weight=700) + D.text(1100, 389, "Have", 12, D.INK, 76, "right", weight=700)
@@ -342,7 +346,7 @@ def raids():
     o += D.svg(968, 670, 94, 56, '<g stroke="#E3C77E" stroke-width="1.5"><circle cx="24" cy="28" r="9"/><path d="M33 28h16l3 4 3-4 3 4"/>'
                                  '<circle cx="70" cy="28" r="9" opacity=".55"/><path d="M61 28h-6" opacity=".55"/></g>')
     o += D.layer(D.octagon_pts(1086, 699, 24), D.GOLD) + D.layer(D.octagon_pts(1086, 699, 22.5), "radial-gradient(circle at 50% 35%,#A9493A,#4A1E19 80%)")
-    o += D.text(1062, 693, "Launch", 10, "#FBEAB4", 48, "center", weight=700, track=.1, caps=True)
+    o += D.svg(1077, 689, 20, 20, '<path d="M6 3l11 7-11 7z" fill="#FBEAB4" stroke="#FBEAB4" stroke-width="1"/>')
     o += D.button(1125, 681, 123, 34, "Cancel", size=11)
     return o
 
@@ -360,19 +364,16 @@ def end_of_game():
     o += D.box(513, 206, 136, 181, f"background:{D.GOLD};clip-path:polygon(0 18px,18px 0,118px 0,136px 18px,136px 181px,0 181px)")
     o += D.box(515, 208, 132, 177, "clip-path:polygon(0 17px,17px 0,115px 0,132px 17px,132px 177px,0 177px);overflow:hidden",
                D.portrait("roland_cahun", 0, 0, 132, 177))
-    o += D.box(513, 374, 136, 24, f"background:{D.GOLD};clip-path:polygon(8px 0,128px 0,136px 12px,128px 24px,8px 24px,0 12px)")
-    o += D.text(513, 380, "Sovereign", 11, "#1B140A", 136, "center", weight=700, track=.18, caps=True)
     # the country's facts (670, 210 ...), its name (1059, 196)
     for i, (k, v) in enumerate((("Leader", "Roland II Cahun"), ("Ideology", "Monarchist"), ("Government", "Absolute Monarchy"),
                                 ("Ruling party", "Maison Cahun"))):
         o += D.label(670, 214 + i * 46, k, 10, D.LABEL, 300, track=.2) + D.text(670, 230 + i * 46, v, 16, D.CREAM, 340, font="fed", track=.03)
-    o += D.title(1059, 202, "The Sacred Principality", 22, w=460)
-    o += D.text(1059, 232, "of Rouental · 1 January 2049", 14, D.LABEL, 460, font="bod", weight=400)
-    o += D.rule(1059, 258, 1520, "rgba(201,165,90,.6)")
+    o += D.title(1059, 204, "The Sacred Principality of Rouental", 18, w=470, track=.12)
+    o += D.rule(1059, 240, 1520, "rgba(201,165,90,.6)")
     # factions (1062, 242: faction, strength, members; the list 475 x 136, rows of 25)
     o += D.label(1062, 272, "Faction", 10, D.GILT, 160, track=.18) + D.label(1200, 272, "Strength", 10, D.GILT, 100, "center", track=.18)
     o += D.label(1320, 272, "Members", 10, D.GILT, 100, "center", track=.18)
-    for i, (f, s, m) in enumerate((("The Association of Reibonnaise States", "412", "8"), ("The Fraxhemark Accord", "388", "6"),
+    for i, (f, s, m) in enumerate((("The Association", "412", "8"), ("The Fraxhemark Accord", "388", "6"),
                                    ("The Kampfian Compact", "301", "5"), ("The Sarkisian Front", "277", "7"))):
         yy = 292 + i * 25
         o += D.box(1062, yy, 460, 23, f"background:{'rgba(46,110,96,.35)' if i == 0 else 'rgba(255,255,255,.02)'};box-shadow:inset 0 -1px 0 rgba(201,165,90,.15)")

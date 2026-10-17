@@ -233,6 +233,8 @@ def lay(kind, body, px, py, pw, ph, depth=0, path=""):
             w, h = sx * mx, sy * my
     ax, ay = _anchor(a.get("orientation"), px, py, pw, ph)
     ox, oy = _origo(a.get("origo"), w, h)
+    if str(a.get("centerposition", "")).lower() == "yes":
+        ox, oy = ox + w / 2, oy + h / 2
     el = El(k, body, ax + x - ox, ay + y - oy, w, h, depth, path + ">" + a.get("name", "?"))
     for ck, cb in body:
         if ck and isinstance(cb, list) and ck.lower() in ELEMENT:

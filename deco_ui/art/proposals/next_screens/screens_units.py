@@ -298,9 +298,8 @@ def counter(kind="motorized", n=2, tag="ROU", ideo="neutrality", frame=0, select
           f'<div class="a" style="left:34px;top:5px;width:22px;font:700 14px/18px \'Josefin Sans\';text-align:center;color:#F4ECD9">{n}</div>')
     # the icon well (3, 3; 30 x 20), the type icon, the small flag (10 x 7 at 5, 15)
     o += '<div class="a" style="left:3px;top:3px;width:30px;height:20px;background:linear-gradient(180deg,#0E161B,#080C0F);box-shadow:inset 0 0 0 1px rgba(201,165,90,.3)"></div>'
-    o += f'<div class="a" style="left:6px;top:5.5px">{D.unit_glyph(kind, 24, glyph_color, 1.25)}</div>'
-    o += D.flag(tag, 5, 15, 10, 7, frame=False).replace('class="a"', 'class="a" ') if False else ""
-    o += D.img(os.path.join(D.REPO, "source", "flags", f"{tag}.png"), 22, 16, 10, 7, "cover", "box-shadow:0 0 0 1px rgba(0,0,0,.7)")
+    o += f'<div class="a" style="left:8px;top:4px">{D.unit_glyph(kind, 22, glyph_color, 1.3)}</div>'
+    o += D.flag(tag, 5, 16, 10, 7, frame=False, style="box-shadow:0 0 0 1px rgba(0,0,0,.7)")
     # organisation (jade) and strength (amber) under the well (assumed placement: the game places them itself)
     o += (f'<div class="a" style="left:4px;top:23.5px;width:28px;height:1.5px;background:#0A0F12"></div>'
           f'<div class="a" style="left:4px;top:23.5px;width:{28 * org:.1f}px;height:1.5px;background:#5FC9A2"></div>'
@@ -356,13 +355,13 @@ def naval_counter(capitals=1, screens=4, tag="ROU", ideo="neutrality", mission="
     o += ('<div class="a" style="left:3px;top:3px;width:30px;height:14px;background:#0A0F12;box-shadow:inset 0 0 0 1px rgba(201,165,90,.3)"></div>'
           '<div class="a" style="left:3px;top:18px;width:30px;height:14px;background:#0A0F12;box-shadow:inset 0 0 0 1px rgba(201,165,90,.3)"></div>')
     o += f'<div class="a" style="left:6px;top:4px">{D.unit_glyph("carrier", 24, "#EBD397", 1.2)}</div>'
-    o += f'<div class="a" style="left:6px;top:19px">{D.unit_glyph("ship", 24, "#EBD397", 1.2)}</div>'
+    o += f'<div class="a" style="left:9px;top:18.5px">{D.unit_glyph("ship", 21, "#EBD397", 1.2)}</div>'
     for yy, nn in ((3, capitals), (18, screens)):
         o += f'<div class="a" style="left:33px;top:{yy}px;width:22px;height:14px;background:#070B0E;box-shadow:inset 0 0 0 1px rgba(201,165,90,.3)"></div>'
         o += f'<div class="a" style="left:33px;top:{yy + 1}px;width:22px;font:700 12.5px/13px \'Josefin Sans\';text-align:center;color:#F4ECD9">{nn}</div>'
     o += '<div class="a" style="left:57px;top:7px;width:5px;height:5px;transform:rotate(45deg);background:#F1DC9C"></div>'
     o += f'<div class="a" style="left:57px;top:15px;width:6px;height:18px;background:{IDEO[ideo]};box-shadow:0 0 0 1px rgba(227,199,126,.6)"></div>'
-    o += D.img(os.path.join(D.REPO, "source", "flags", f"{tag}.png"), 22, 25, 10, 7, "cover", "box-shadow:0 0 0 1px rgba(0,0,0,.7)")
+    o += D.flag(tag, 5, 25, 10, 7, frame=False, style="box-shadow:0 0 0 1px rgba(0,0,0,.7)")
     # the mission medallion (63, 5) and the spotting bar (65, 3 -> drawn just right of the chip)
     o += D.medallion(81, 18, 12.5, "intel" if mission == "patrol" else "swords", icon_size=13, lit=True)
     o += ('<div class="a" style="left:67px;top:3px;width:4px;height:29px;background:#0A0F12;box-shadow:0 0 0 1px rgba(201,165,90,.5)"></div>'
@@ -464,7 +463,7 @@ def unit_counters():
         (604, 446, dict(kind="armor", n=2, selected=True), ("hq",)),
         (692, 410, dict(kind="motorized", n=2), ("move",)),
         (790, 420, dict(kind="mechanized", n=1, org=.46, strength=.82), ("attack",)),
-        (876, 446, dict(kind="motorized", n=2), ("digin",)),
+        (860, 446, dict(kind="motorized", n=2), ("digin",)),
         (650, 556, dict(kind="levy", n=1, org=.7), ("noorders", "lowsupply")),
         (760, 592, dict(kind="infantry", n=2), ("areadef",)),
         (470, 548, dict(kind="levy", n=3, org=.35), ("training",)),
@@ -473,11 +472,11 @@ def unit_counters():
     for x, y, kw, ex in own:
         o += place(x, y, counter(extras=ex, **kw))
     # Cardonia's (the enemy's rim; hatched: the game's second frame)
-    for x, y, kw in ((790, 336, dict(kind="infantry", n=3, org=.58)), (676, 338, dict(kind="infantry", n=2)),
-                     (1000, 350, dict(kind="armor", n=1, org=.8)), (560, 352, dict(kind="motorized", n=1, frame=1))):
+    for x, y, kw in ((790, 328, dict(kind="infantry", n=3, org=.58)), (676, 338, dict(kind="infantry", n=2)),
+                     (1000, 342, dict(kind="armor", n=1, org=.8)), (560, 352, dict(kind="motorized", n=1, frame=1))):
         o += place(x, y, counter(tag="CRD", ideo="neutrality", side="enemy", **kw))
     # battles between the attackers and the defenders north of them
-    o += battle_arrow(817.5, 383, 0) + place(800, 366, land_battle_icon(62, True, bombard=True), 35, 34)
+    o += battle_arrow(817.5, 385, 0) + place(800, 368, land_battle_icon(62, True, bombard=True), 35, 34)
     o += battle_arrow(1032.5, 399, 0, col="#9FC0DA") + place(1015, 382, land_battle_icon(38, False), 35, 34)
     # the navy at sea south of Guedelon, the port, a naval mission over the sea region
     o += place(904, 772, naval_counter(), 96, 36)
@@ -606,7 +605,7 @@ def abilities():
           ("supplies", "ready", 0), ("probe", "ready", 0)]
     n = len(ab)
     wbar = 99 * 2 + 36 * (n - 2)
-    x0 = 955 - (wbar - 165) // 2
+    x0 = 955      # the window's left edge (centre-down, x -5); the game grows the list to the right
     y0 = 981
     o += D.box(x0, y0, wbar, 45, f"background:{D.GILT};clip-path:polygon(14px 0,calc(100% - 14px) 0,100% 14px,100% 100%,0 100%,0 14px);opacity:.75")
     o += D.box(x0 + 1, y0 + 1, wbar - 2, 44, f"background:{D.STRIPES},linear-gradient(180deg,#1C2830,#0E1519);clip-path:polygon(13.6px 0,calc(100% - 13.6px) 0,100% 13.6px,100% 100%,0 100%,0 13.6px)")
