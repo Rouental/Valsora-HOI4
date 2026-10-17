@@ -474,6 +474,9 @@ CORES = {
     "SMN": [(2003, 414), (2034, 409), (2100, 401), (2131, 397), (2167, 408),
             (1943, 450), (1978, 437), (1978, 467), (2007, 455), (2031, 462), (2054, 427)],
 }
+# Nations on whose land the owner holds no core (author, 2026-10-17: "Tethia and Kalnsfereta shouldn't be core
+# provinces of Belekria"): owner -> the releasables whose states (SUBREGIONS, RELEASABLE) it owns without a core
+NO_OWNER_CORE = {"BLK": ["TTH", "KLF"]}
 
 # Characters who are another one at the head of a civil war faction (author, 2026-10-02: "the same two women"): one
 # person, so what the Gazetteer changes on the original (name, titles, portrait, traits, skills) goes to the copy too

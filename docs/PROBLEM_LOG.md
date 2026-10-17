@@ -6,6 +6,26 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**The flag file "is corrupted"** (2026-10-17, the author: "my most recent version of the flag pdn is corrupted. I'm not
+sure yet whether it was a fault on your end or mine")
+- Checked: every copy of `New_Mod_Flags.pdn` we wrote (2026-10-13 twice, 10-14, 10-15) and the author's own uploads
+  read cleanly from end to end with the new `scripts/pdn_check.py` (the header, the whole object graph, every layer's
+  objects, every pixel chunk), and the layers we added are byte for byte the shape of the layers paint.net writes
+  itself. paint.net rewrites the whole file when it saves, so a copy the author opened and saved no longer holds our
+  bytes. The cause is not known yet; a save interrupted, or a cloud folder (OneDrive) syncing a file mid-save, are the
+  usual ones.
+- Fix: `writepdn.py` reads every file it writes back with `pdn_check.py` and refuses to leave a bad one;
+  `scripts/pdn_recover.py` pulls every layer still whole out of a damaged `.pdn` into PNGs (tested on copies with a
+  broken graph, a zeroed and truncated end, and a lost header), for when the author sends the broken file.
+
+**The Gazetteer's password search lost the cursor at every letter** (2026-10-17, the author: "it kicks me out of the
+bar, making me reclick it after every letter")
+- Cause: each letter redraws Owner tools; the search box was focused again while its section, rebuilt closed, was
+  still shut (its open state was put back afterwards), and a field in a closed section can't take the focus. The tests
+  filled the box in one go, so they never saw it.
+- Fix: the sections open as they were before the field is focused again (`renderOwner`), for the map tools' search
+  too; `tests/gazetteer/run.py` now types letter by letter and checks the cursor stays (it failed before the fix).
+
 **The fleet panel's names ran off** (2026-10-17, the author: "Names run off screen")
 - Cause: a ship row's type line ("Advanced Destroyer (Advanced Destroyer I)", 254 px in our `hoi_18`) is cut ("...")
   where the row's insignia begins, 240 px from its start (the game shrinks the box in code; inferred from the

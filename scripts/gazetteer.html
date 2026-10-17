@@ -1188,8 +1188,14 @@ function renderOwner() {
     h("div", { class: "chips" }, h("button", { class: "btn small primary", type: "button", onclick: saveAllFile }, "Save every nation as a file"), h("span", { class: "meta", text: app.ownerOut || "" })),
     h("div", { id: "own-out" }),
   ];
-  keepFocus(el, () => build);
-  [...el.querySelectorAll("details")].forEach((d, i) => { d.open = !!open[i]; });
+  // the sections open as they were before the field is focused again: a field in a closed section can't take the
+  // focus, so the password search lost it at every letter (the author, 2026-10-17)
+  keepFocus(el, () => {
+    const frag = document.createDocumentFragment();
+    frag.append(...build.filter(x => x != null && x !== false));
+    [...frag.querySelectorAll("details")].forEach((d, i) => { d.open = !!open[i]; });
+    return [...frag.childNodes];
+  });
 }
 // "Start over" (the author, 2026-10-16: "is there a way you could reset any edits made thus far? I'd like a blank slate"):
 // every nation's facts, pictures, requests, status and notes are deleted; its password, the admins, the nations not on

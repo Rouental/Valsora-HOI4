@@ -596,7 +596,8 @@ Krionik's own green is close), **Mylostrva** MYL (43, capital Sedišta, flag blu
 colour its gold: its navy would merge with Sennheiser's blue), each "the Principality of …", Absolute Monarchy,
 Serbian like Krionik; 4 of Krionik's states are in none yet. Their rulers are generated from the base game's name
 lists (Drakonogolovnik's drew Dzhugashvili, Skobelev, Brezhnev and Nikulin before Makary Pustobriko, and
-Sredneestvo's Aleksandr Ostrovsky: those surnames are drawn again, `cultures.DRAW_AGAIN`). The flags came wider than 82:52: Crvenognjište's stripes
+Sredneestvo's Aleksandr Ostrovsky: those surnames are drawn again, `cultures.DRAW_AGAIN`). **Later that night** (the author: "Tethia and Kalnsfereta shouldn't be core provinces of Belekria"): Belekria owns
+Tethia's 8 states and Kalnsfereta's 6 without a core of its own (`nations.NO_OWNER_CORE`). The flags came wider than 82:52: Crvenognjište's stripes
 made taller, Zastava's and Mylostrva's plain ends shortened (Mylostrva's 1 px frame, an export edge, cut off;
 `fit_flag.py` refused it, its mantle reaching the top, so by hand). And **Pakitsk** PKT, Belka's.
 `dist/preview_yastreovakia_20261017.png` shows the countries and the releasables.

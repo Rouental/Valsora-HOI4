@@ -186,3 +186,9 @@ def write_pdn(template, out, layers, names=None, visible=None, opacity=None):
                 z = gzip.compress(data[k:k + CHUNK], compresslevel=6, mtime=0)  # same bytes each time
                 f.write(struct.pack(">II", k // CHUNK, len(z)))
                 f.write(z)
+    # read back from end to end as paint.net would (2026-10-17: the author's flag file came back corrupted; every
+    # copy we had written passed this, so it was not ours, but no file of ours leaves without it)
+    from pdn_check import check
+    problems = check(out)
+    if problems:
+        raise ValueError(f"{out} does not read back: " + "; ".join(problems))

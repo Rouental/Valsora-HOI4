@@ -474,6 +474,14 @@ def main():
     for r in grel:  # the Gazetteer's, by state
         for s in r["states"]:
             extra_cores[s].append(r["tag"])
+    # states whose owner holds no core on them (nations.NO_OWNER_CORE: Belekria on Tethia and Kalnsfereta)
+    no_owner_core = set()
+    for owner, tags in nations.NO_OWNER_CORE.items():
+        for t in tags:
+            for nm in (nations.CIVIL_WAR | nations.RELEASABLE).get(t, []):
+                s = state_by_name[nm]
+                if rj["owners"][s] == owner:
+                    no_owner_core.add(s)
     grel_capital = {r["tag"]: r["states"][0] for r in grel}
     state_capital = [max(g, key=lambda i: (size[i], -i)) for g in states]
     # the author's cities (Cities layer): the first in a state becomes its victory point,
@@ -582,7 +590,7 @@ def main():
             f"\tstate_category = {cat}",
             "\thistory = {",
             f"\t\towner = {tag}",
-            f"\t\tadd_core_of = {tag}",
+            *([] if s in no_owner_core else [f"\t\tadd_core_of = {tag}"]),
             *[f"\t\tadd_core_of = {t}" for t in extra_cores[s]],
             f"\t\tvictory_points = {{ {pid[cap]} {city_vp.get(cap, 10 if is_cap else CITY_VP if cap in city_of else 1)} }}",
             *[f"\t\tvictory_points = {{ {pid[e]} {city_vp.get(e, CITY_VP)} }}" for e in extra_vps[s]],

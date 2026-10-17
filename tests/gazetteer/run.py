@@ -413,6 +413,15 @@ def owner(b, theme, size, name, full=True):
     check(set(allf["nations"]) == {"ROU", "SGN"} and "QZX" in allf["planned"] and allf["nations"]["SGN"]["facts"]["people"]["ruler"]["name"] == "Jeanne Testeuse",
           f"{name}: every-nation file wrong: {list(allf['nations'])}")
     unfold(page, "Passwords")
+    # typed letter by letter, as a person types: the search keeps the cursor (the author, 2026-10-17: it "kicks me
+    # out of the bar, making me reclick it after every letter")
+    page.fill("#own-filter", "")
+    page.click("#own-filter")
+    page.keyboard.type("Seig", delay=60)
+    time.sleep(0.2)
+    got = page.evaluate("[document.activeElement && document.activeElement.id, document.getElementById('own-filter').value,"
+                        " [...document.querySelectorAll('#own-filter ~ .pwlist .pwrow .nm')].map(e => e.textContent)]")
+    check(got[0] == "own-filter" and got[1] == "Seig" and got[2] == ["Seigne"], f"{name}: typing in the password search: {got}")
     page.fill("#own-filter", "Seigne")
     time.sleep(0.2)
     page.click(".pwrow:has-text('Seigne') button:has-text('New password')")
