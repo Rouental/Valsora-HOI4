@@ -267,8 +267,7 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   setup, its details disorganised, the combat width and the commanders' skill off centre (white on tan), the fleet's
   names running over, a news story over its rule: all fixed in v0.10.1, not yet seen. Older findings, all fixed since: `deco_ui/docs/VERSIONS.md`. Not seen yet besides: the two starts, Vilna and Placeholdgrad. The Deco UI's checklist for the author is in `deco_ui/valsora_deco_ui/README.txt` (Things to check) and `deco_ui/CLAUDE.md` (section 10).
 - **Waiting on the author:** whose the motto flag is ("a safe haven amid the storm", Arabic on indigo, four hands in white
-  and gold: `dist/flag_proposals/safe_haven/`) and which version; whether to add the ~25 flags not in the flag file as
-  layers (`docs/MAP_VERSIONS.md`); from the 2026-10-17 map: names for the new states (`dist/state_numbers_belekria.png`,
+  and gold: `dist/flag_proposals/safe_haven/`) and which version; from the 2026-10-17 map: names for the new states (`dist/state_numbers_belekria.png`,
   `_krionik`, `_terreich`, `_kurikia`, `_san_sierra`, `_sennheiser`, `_gorbastan_zukchiva`, and Cardonia's 5 and
   Hollier's 1 new ones), flags for Belekria's eight new republics, and the bump of Kieska's new land by Sombor that is
   painted as Crvenognjište (Kieska's, with a Crvenognjište core: `docs/NATIONS.md`); names for the 137 land strategic regions (`dist/region_names.md`, renumbered for the

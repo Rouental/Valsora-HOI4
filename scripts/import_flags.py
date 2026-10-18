@@ -50,6 +50,8 @@ ALIASES = {
     "rouental (democratic)": "ROU_democratic",
     # 2026-10-08
     "kampf empire": "KPF",
+    # 2026-10-18: the flag file's layer for Rouental's Reibonne flag (nations.COSMETICS, flown as the People's Republic)
+    "rouental (reibonne)": "ROU_REIBONNE",
 }
 
 
@@ -84,6 +86,11 @@ def changed(path, a):
     if old.shape == a.shape:
         seen = (old[..., 3] > 0) | (a[..., 3] > 0)  # fully transparent pixels don't count
         return bool(np.any((old != a).any(axis=2) & seen))
+    # a layer that is the old picture enlarged pixel for pixel (2026-10-18: the flags only ever had at the game's
+    # 82 x 52, put into the flag file at its size) shrinks back to it by taking every block's middle
+    back = np.asarray(Image.fromarray(a.astype(np.uint8), "RGBA").resize(old.shape[1::-1], Image.NEAREST), int)
+    if old.shape[0] < a.shape[0] and (np.abs(back - old).max(axis=2) > 8).mean() < 0.01:
+        return False
     small = [np.asarray(Image.fromarray(x.astype(np.uint8), "RGBA").resize((164, 104), Image.LANCZOS), int)
              for x in (old, a)]
     return (np.abs(small[0] - small[1]).max(axis=2) > 40).mean() > 0.005
