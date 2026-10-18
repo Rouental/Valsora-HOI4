@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
+    <NoWarn>SYSLIB5005;SYSLIB0011</NoWarn>
+    <BaseOutputPath>../../work/pdn_dotnet/bin/</BaseOutputPath>
+    <BaseIntermediateOutputPath>../../work/pdn_dotnet/obj/</BaseIntermediateOutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Formats.Nrbf" Version="9.0.10" />
+  </ItemGroup>
+</Project>

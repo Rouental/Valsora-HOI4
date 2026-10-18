@@ -38,7 +38,8 @@ new lines cut into pieces: on the 2026-10-17 map exactly that night's result (20
   `docs/DECISIONS.md`, `docs/CONTENT.md` and `deco_ui/docs/VERSIONS.md` (checked: every line of the old file is in one
   of them). Sessions start faster, cost less of the weekly limit, and run longer before their context fills.
 - **The steps above** (`pdn_diff.py`, `pdn_tools.py owners`, `regroup_states.py --recut`).
-- **Every `.pdn` we write is read back** end to end before it leaves (`writepdn.py` runs `pdn_check.py`).
+- **Every `.pdn` we write is read back** end to end before it leaves (`writepdn.py` runs `pdn_check.py`, and
+  `pdn_dotnet/run.sh`, paint.net's own reader, where .NET is installed: `apt-get install dotnet-sdk-8.0`, a minute).
 - **A damaged `.pdn` can be saved**: `pdn_recover.py` pulls every layer still whole out of it as PNGs;
   `import_flags.py` now reads a folder of PNGs as well as a flag file.
 

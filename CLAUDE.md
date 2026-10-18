@@ -75,7 +75,7 @@ New detail goes into those files; this one gets a line.
   `build_mod`, `deco_ui`, `check_mod`, `export_canvas`, `package`, with `nations`, `cultures`, `ideologies`,
   `superevents`, `superevents_deco`, `test_events`, `minimap`, `globe`, `vanilla_parts`, `straits`, `borders`);
   by hand on the `.pdn` (`pdn_tools`, `apply_outlines`, `regroup_states`, `sea_provinces`, `river_provinces`,
-  `merge_provinces`, `land_regions`, `pdn_diff`, `pdn_check`, `pdn_recover`, `writepdn`, `nrbf`, `organic`, `rivers`);
+  `merge_provinces`, `land_regions`, `pdn_diff`, `pdn_check`, `pdn_dotnet` (paint.net's own reader, .NET), `pdn_recover`, `writepdn`, `nrbf`, `organic`, `rivers`);
   flags (`import_flags`, `fit_flag`); after a build, reports and maps (`country_list`, `nation_sheet`, `collages`,
   `state_map`, `region_map`, `border_report`, `superevent_preview`, and the Valsora Atlas `atlas_export` +
   `atlas.html`, the build in a browser, not in the mod: `docs/ATLAS.md`); the Gazetteer (`facts_export`, `gazetteer`,

@@ -15,8 +15,10 @@ fingerprint below). Run `python3 scripts/pdn_check.py` on the copy before sendin
 
 ## The flag file (`source/New_Mod_Flags.pdn`)
 
-Named the same way: `New_Mod_Flags 10-15.pdn`, the day it last changed.
+Named the same way: `New_Mod_Flags 10-18.pdn`, the day it last changed. The author's own copy, sent 2026-10-18 (90
+layers, fingerprint 9f6d720d5d56), is the file we were first given: the copies we had sent never opened for them.
 
 | sent as | fingerprint (sha256, first 12) | made | what changed |
 |---|---|---|---|
-| New_Mod_Flags 10-15.pdn | 9343637ae354 | 2026-10-15 | 101 layers, Vilna's new flag the last added. Sent 2026-10-18. Not in it: the flags that came another way since (Côtefer's, Entroterra's and Mezzogiorno's, fitted 2026-10-15; Zastava's, Crvenognjište's and Mylostrva's, 2026-10-17), and older ones that never were in the file (the Reibonnaise states' from the flag sheet, Belekria's, the civil war's ...): about 25 of the flags in `source/flags/` |
+| New_Mod_Flags 10-18.pdn | 7c72127ebd68 | 2026-10-18 | The first copy of ours paint.net opens: the 101 layers of 10-15 (the same pixels, names and visibility) written again on the author's own 90-layer copy with the fixed writer (`docs/PROBLEM_LOG.md`, "The flag file is corrupted"). Every copy we sent from 2026-10-13 to 10-15 was refused by paint.net. Not in it, as in 10-15: about 25 of the flags in `source/flags/` |
+| New_Mod_Flags 10-15.pdn | 9343637ae354 | 2026-10-15 | 101 layers, Vilna's new flag the last added. Sent 2026-10-18; paint.net refused it (our writer's id clash). Not in it: the flags that came another way since (Côtefer's, Entroterra's and Mezzogiorno's, fitted 2026-10-15; Zastava's, Crvenognjište's and Mylostrva's, 2026-10-17), and older ones that never were in the file (the Reibonnaise states' from the flag sheet, Belekria's, the civil war's ...): about 25 of the flags in `source/flags/` |

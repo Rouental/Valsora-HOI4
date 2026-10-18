@@ -7,16 +7,27 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 ## In-game problems (reported by the author)
 
 **The flag file "is corrupted"** (2026-10-17, the author: "my most recent version of the flag pdn is corrupted. I'm not
-sure yet whether it was a fault on your end or mine")
-- Checked: every copy of `New_Mod_Flags.pdn` we wrote (2026-10-13 twice, 10-14, 10-15) and the author's own uploads
-  read cleanly from end to end with the new `scripts/pdn_check.py` (the header, the whole object graph, every layer's
-  objects, every pixel chunk), and the layers we added are byte for byte the shape of the layers paint.net writes
-  itself. paint.net rewrites the whole file when it saves, so a copy the author opened and saved no longer holds our
-  bytes. The cause is not known yet; a save interrupted, or a cloud folder (OneDrive) syncing a file mid-save, are the
-  usual ones.
-- Fix: `writepdn.py` reads every file it writes back with `pdn_check.py` and refuses to leave a bad one;
-  `scripts/pdn_recover.py` pulls every layer still whole out of a damaged `.pdn` into PNGs (tested on copies with a
-  broken graph, a zeroed and truncated end, and a lost header), for when the author sends the broken file.
+sure yet whether it was a fault on your end or mine"; 2026-10-18, sending their own copy: "If it's not corrupted,
+maybe it's being generated for a different update of PDN?")
+- Cause (found 2026-10-18): ours. Every flag file we wrote since 2026-10-13 (94, 99, 100 and 101 layers) was refused
+  by paint.net, so the author kept working in their own 90-layer copy (the one they sent, identical to the file we
+  were first given). `writepdn._add_layers` numbered the new layers' blend modes (a value type, written with a
+  negative id) from the lowest id down (-831, -832 ...) and their other objects from the highest up (829, 830, 831
+  ...). .NET's BinaryFormatter, which paint.net reads `.pdn` files with, takes a value type's -n as n, so -831 and
+  831 were one object "registered twice" and the whole file was refused. .NET's own writer keeps one counter for
+  both, so paint.net's files never have the clash. `pdn_check.py` and the 2026-10-17 tests compared ids as written
+  and passed; the map `.pdn` was never touched by it (we never add layers to it) and opens.
+- Found by reading the files with .NET itself: BinaryFormatter (the .NET 8 SDK, `apt-get install dotnet-sdk-8.0`)
+  read the author's copy and the map and refused all four of ours with "An object cannot be registered twice".
+- Fix: `_add_layers` gives every new object, the blend modes too, the next number from one counter (a blend mode its
+  number negated); `pdn_check.py` compares ids by absolute value (it now fails our four old files);
+  `scripts/pdn_dotnet/` reads a `.pdn` with BinaryFormatter and NrbfDecoder, and `writepdn.py` runs it on every file
+  it writes where .NET is installed. The flag file was written again on the author's own copy, with our 101 layers
+  (the same pixels, names and visibility): BinaryFormatter reads it, and adding 1, 3 and 50 layers (the layer list
+  growing) reads too. Sent as `New_Mod_Flags 10-18.pdn`.
+- Earlier (2026-10-17), before the cause was known: `writepdn.py` reads every file it writes back with
+  `pdn_check.py` and refuses to leave a bad one; `scripts/pdn_recover.py` pulls every layer still whole out of a
+  damaged `.pdn` into PNGs.
 
 **The Gazetteer's password search lost the cursor at every letter** (2026-10-17, the author: "it kicks me out of the
 bar, making me reclick it after every letter")

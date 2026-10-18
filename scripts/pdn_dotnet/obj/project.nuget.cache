@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "nj7MNKE/C7tXc/KrUHugZ9c0yp/ul8+xyJAaFtVU7Wp1BgeuJYi8iVPhsTy0dhslZbpugNV+gOdNAkU6rqUaIQ==",
+  "success": true,
+  "projectFilePath": "/home/user/Valsora-HOI4/scripts/pdn_dotnet/pdn_dotnet.csproj",
+  "expectedPackageFiles": [
+    "/root/.nuget/packages/system.collections.immutable/9.0.10/system.collections.immutable.9.0.10.nupkg.sha512",
+    "/root/.nuget/packages/system.formats.nrbf/9.0.10/system.formats.nrbf.9.0.10.nupkg.sha512",
+    "/root/.nuget/packages/system.reflection.metadata/9.0.10/system.reflection.metadata.9.0.10.nupkg.sha512"
+  ],
+  "logs": []
+}

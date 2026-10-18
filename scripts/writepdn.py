@@ -15,6 +15,7 @@ import gzip
 import io
 import re
 import struct
+from pathlib import Path
 
 import numpy as np
 from PIL import Image
@@ -96,15 +97,18 @@ def _add_layers(graph, new_names, w, h):
     meta_ref = R[tprops["userMetadataItems"][1]]
     if meta_ref[0] != "ref":
         raise ValueError("the top layer's metadata is not a shared reference")
+    # One counter for every id, as .NET's writer keeps it: a value type's object (the blend mode) gets the next
+    # number negated, and BinaryFormatter, which paint.net reads with, takes -n back as n (2026-10-18: new ids
+    # -831.. beside new 831.. made "An object cannot be registered twice", and paint.net refused the file)
     ids = [o for o in g.objects] + [r[3] for r in R if r[0] == "ref"] + \
         [r[3][0] for r in R if r[0] == "library"]  # libraries share the id counter
-    nxt, neg = max(ids) + 1, min(min(ids), 0) - 1
+    nxt = max(abs(i) for i in ids) + 1
     mid = g.meta_id
     k, out_layers, out_parts, out_blocks, new_refs = len(new_names), b"", b"", b"", b""
     for name in new_names:
-        lay, props, surf, lprops, op, mem, sid = range(nxt, nxt + 7)
-        nxt += 7
-        mode, neg = neg, neg - 1
+        lay, props, surf, lprops, op, mem, sid, mode = range(nxt, nxt + 8)
+        nxt += 8
+        mode = -mode
         out_layers += (b"\x01" + i32(lay) + i32(mid("PaintDotNet.BitmapLayer")) + ref(props) + ref(surf)
                        + b"\x00" + i32(w) + i32(h) + ref(lprops))
         out_parts += (b"\x01" + i32(props) + i32(mid("PaintDotNet.BitmapLayer+BitmapLayerProperties"))
@@ -192,3 +196,12 @@ def write_pdn(template, out, layers, names=None, visible=None, opacity=None):
     problems = check(out)
     if problems:
         raise ValueError(f"{out} does not read back: " + "; ".join(problems))
+    # and with .NET's BinaryFormatter, paint.net's own reader, where .NET is installed (2026-10-18: pdn_check passed
+    # flag files that paint.net refused; scripts/pdn_dotnet/)
+    import shutil
+    import subprocess
+    if shutil.which("dotnet"):
+        run = subprocess.run(["sh", str(Path(__file__).parent / "pdn_dotnet" / "run.sh"), str(out)],
+                             capture_output=True, text=True)
+        if run.returncode:
+            raise ValueError(f"{out}: paint.net's reader refuses it: {run.stdout.strip()} {run.stderr.strip()}")

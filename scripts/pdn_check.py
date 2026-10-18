@@ -6,7 +6,8 @@ upload that will not open (2026-10-17: the author's flag file "is corrupted").
 
 What it checks:
   - "PDN3", the XML header (width, height, layers) and paint.net's two-byte marker before the graph;
-  - the graph (nrbf.py) to its end record: every object id used once, every reference pointing at an object;
+  - the graph (nrbf.py) to its end record: every object id used once (a value type's -n counting as n, as
+    BinaryFormatter reads it), every reference pointing at an object;
   - the layer list: its size, its item array, one BitmapLayer per item, each with its properties, surface, layer
     properties (name, metadata, visibility, opacity, blend mode) and memory block, of the document's size;
   - the layers' memory blocks in the graph's order, as many as the header's layers;
@@ -45,10 +46,13 @@ def check(path):
     except Exception as e:  # noqa: BLE001 - any parse failure is the finding
         return out + [f"the object graph does not parse: {e}"]
     R = g.records
-    ids = Counter(r[3][0] for r in R if r[0] in ("class", "classid", "string", "objarray", "binarray", "primarray"))
+    # by absolute value: BinaryFormatter, which paint.net reads with, takes a value type's id -n as n (2026-10-18:
+    # our flag files had -831 beside 831, "An object cannot be registered twice")
+    ids = Counter(abs(r[3][0]) for r in R if r[0] in ("class", "classid", "string", "objarray", "binarray",
+                                                      "primarray"))
     dup = [o for o, c in ids.items() if c > 1]
     if dup:
-        out.append(f"object ids used twice: {dup[:10]}")
+        out.append(f"object ids used twice (a value type's -n counts as n): {dup[:10]}")
     bad = sorted({r[3] for r in R if r[0] == "ref" and r[3] not in g.objects})
     if bad:
         out.append(f"references to no object: {bad[:10]}")
