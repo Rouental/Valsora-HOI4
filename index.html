@@ -139,7 +139,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .seg button { padding: 6px 10px 4px; border: 0; background: var(--sheet); cursor: pointer; font-size: 13px; border-left: 1px solid var(--rule); }
 .seg button:first-child { border-left: 0; }
 .seg button[aria-pressed="true"] { background: var(--jade); color: var(--sheet); }
-.viewctl { display: flex; gap: 6px; align-items: center; margin-left: auto; }
+.viewctl { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; align-items: center; margin-left: auto; }
 .subtools { display: flex; gap: 6px 10px; align-items: center; flex-wrap: wrap; min-height: 32px; font-size: 14px; color: var(--ink-2); }
 .subtools .hinttext { white-space: normal; flex: 1 1 auto; min-width: 0; line-height: 1.3; }
 .subtools .chiprow { display: contents; }
@@ -150,6 +150,16 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .tchip[aria-pressed="true"] { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); font-weight: 700; }
 .tchip .x { border: 0; background: none; padding: 0 0 0 2px; font: inherit; line-height: 1; cursor: pointer; color: var(--ink-3); }
 .tchip .x:hover { color: var(--ink); }
+/* what a leader's traits do (2026-10-18): under the chips, and every trait of the list in a fold */
+.teff { margin: 2px 0 2px 16px; padding: 0; font-size: 12px; color: var(--ink-2); line-height: 1.35; }
+.teff b { color: var(--ink); font-weight: 600; }
+.traitbook { font-size: 12.5px; }
+.traitbook summary { cursor: pointer; color: var(--ink-2); font-size: 12px; padding: 2px 0; }
+.traitbook[open] { max-height: 340px; overflow: auto; border: 1px solid var(--rule); border-radius: 3px; padding: 0 8px 6px; }
+.traitbook[open] summary { position: sticky; top: 0; background: var(--sheet); padding: 6px 0 4px; }
+.traitbook .tbg { margin: 8px 0 2px; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }
+.traitbook .tbrow { display: flex; gap: 8px; align-items: flex-start; justify-content: space-between; padding: 4px 0; border-top: 1px solid var(--rule); }
+.traitbook .tbrow .meta { margin-top: 1px; }
 .sheetwrap { position: relative; flex: 1; min-height: 0; border: 1px solid var(--rule-2); background: var(--paper); overflow: hidden; touch-action: none; }
 #map { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .loading { position: absolute; inset: 0; display: grid; place-items: center; font: 400 20px var(--font-display); color: var(--ink-2); background: var(--paper); text-align: center; padding: 20px; }
@@ -167,10 +177,14 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .legend i { width: 11px; height: 11px; border: 1px solid rgba(0,0,0,.25); }
 .has-insets .legend { top: 10px; bottom: auto; max-width: calc(100% - 70px); }
 /* the province size ruler (2026-10-17): the guide's three sizes as squares at the map's zoom, left of the zoom buttons */
-.sizes { position: absolute; right: 54px; top: 10px; display: flex; gap: 10px; align-items: flex-end; max-width: calc(100% - 74px);
+.sizes { position: absolute; right: 54px; top: 10px; display: flex; flex-direction: column; gap: 6px; align-items: flex-end; max-width: calc(100% - 74px);
   padding: 6px 9px 5px; background: var(--sheet); border: 1px solid var(--rule); font-size: 11.5px; color: var(--ink-2); pointer-events: none; }
+/* 2026-10-18: a row for the states (what players draw) above the provinces' */
+.sizes .szrow { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; align-items: flex-end; }
+.sizes .szt { align-self: center; font-weight: 700; color: var(--ink); min-width: 62px; }
 .sizes[hidden] { display: none; }
 #sizebtn[aria-pressed="true"] { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); font-weight: 700; }
+#sugbtn[aria-pressed="false"] { text-decoration: line-through; color: var(--ink-2); }
 .sizes figure { margin: 0; display: grid; justify-items: center; gap: 3px; min-width: 46px; }
 .sizes .sq { border: 1.5px solid var(--ink); background: rgba(255, 255, 255, .25); }
 .sizes figcaption { white-space: nowrap; text-align: center; line-height: 1.2; }
@@ -183,6 +197,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .sizepics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 2px 0 8px; }
 .sizepics figure { margin: 0; }
 .sizepics img { display: block; width: 100%; height: auto; image-rendering: pixelated; border: 1px solid var(--rule); border-radius: 3px; }
+.sizepics.statepics img { image-rendering: auto; }  /* drawn larger than shown: smoothed, so the province lines don't drop out */
 .sizepics figcaption { font-size: 11.5px; color: var(--ink-2); margin-top: 3px; line-height: 1.25; }
 .sizepics figcaption b { color: var(--ink); font-weight: 600; }
 .status { font: 400 12.5px var(--font-data); color: var(--ink-2); min-height: 18px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -404,7 +419,8 @@ optgroup { font-style: normal; }
             <button data-mode="terrain" aria-pressed="false">Terrain</button>
             <button data-mode="pop" aria-pressed="false">Population</button>
           </div>
-          <button class="btn small" id="sizebtn" type="button" title="Show how big a province should be, at the map's zoom" aria-pressed="false">Sizes</button>
+          <button class="btn small" id="sugbtn" type="button" title="Show or hide the suggestions drawn on the map, to see the provinces under them" aria-pressed="true" hidden>Suggestions</button>
+          <button class="btn small" id="sizebtn" type="button" title="Show how big a state and a province should be, at the map's zoom" aria-pressed="false">Sizes</button>
           <button class="btn small" id="undo" type="button" title="Undo (Ctrl+Z)" disabled>Undo</button>
         </div>
       </div>
@@ -1437,7 +1453,7 @@ function goHome() {
   try { history.replaceState(null, "", location.pathname + location.search); } catch (e) { /* as above */ }
   renderList(); drawWorld(null); renderOwner(); refreshSave();
 }
-// ======================================================================= province sizes
+// ======================================================================= state and province sizes
 // The author, 2026-10-17: "maybe there should be a guide for province size? I think the ideal province size is something
 // along the lines of what I've done for Cardonia? Its okay to go smaller for more granular detail like Rouental, or larger
 // for barren provinces like northern Yastreo or the deserts of Usnistan will be, but there should be a rough idea."
@@ -1455,7 +1471,7 @@ function sizeGuideBody(short) {
       pic(z.pics.dense, "Rouental", `about ${z.rouental} px each`),
       pic(z.pics.usual, "Cardonia", `about ${z.usual} px: the usual size`),
       pic(z.pics.sparse, "Sparse land", `about ${z.sparse} px (northern Yastreovakia, cut larger)`)),
-    h("p", null, "Most provinces should be about the size of ", B("Cardonia's"), `: around ${z.usual} map pixels each (about ${Math.round(Math.sqrt(z.usual))} by ${Math.round(Math.sqrt(z.usual))}), most of them between ${z.usual_lo} and ${z.usual_hi}. A Cardonian state holds about ${Math.round(z.crd_provinces / Math.max(1, z.crd_states))} of them. The three pictures are at the same scale.`),
+    h("p", null, "We cut the states you draw into provinces. Most should be about the size of ", B("Cardonia's"), `: around ${z.usual} map pixels each (about ${Math.round(Math.sqrt(z.usual))} by ${Math.round(Math.sqrt(z.usual))}), most of them between ${z.usual_lo} and ${z.usual_hi}. A Cardonian state holds about ${Math.round(z.crd_provinces / Math.max(1, z.crd_states))} of them. The three pictures are at the same scale.`),
     h("p", null, B("Smaller"), ` (down to about ${z.dense}) for crowded heartlands, big cities, river valleys and borders that will be fought over. Rouental's provinces are about ${z.rouental}; what makes it feel detailed is its many small states, two or three provinces each.`),
     h("p", null, B("Larger"), " (300 to 800) for land few people live in or fight over: tundra like northern Yastreovakia, deserts like Usnistan's, ice, high mountains, deep jungle."),
   ];
@@ -1464,19 +1480,54 @@ function sizeGuideBody(short) {
     h("p", null, "Never smaller than 16 pixels, or thinner than 3. ", B("Sizes"), ", above the map, shows these sizes on your map at its zoom."));
   return out;
 }
-function renderSizes() {  // the ruler: squares of the guide's sizes at the map's zoom
+// The states (the author, 2026-10-18: "More important than the guide for provinces is the guide for states. I think I
+// might've misspoken earlier and told you to include a guide for provinces, but I meant states. Cardonia's states are
+// about the ideal size. The province guide is still useful, but people are drawing states, not provinces, which are
+// generated by us."): index.json `sizes.states`, Cardonia's, Rouental's and Zukchiva's, drawn as states.
+function stateGuideBody(short) {
+  const z = sizeFacts(), t = z && z.states, B = s => h("b", { text: s });
+  if (!t) return [];
+  const pic = (src, title, sub) => h("figure", null, h("img", { src, alt: title + ": " + sub, width: t.win[0] * t.scale, height: t.win[1] * t.scale }),
+    h("figcaption", null, B(title), h("br"), sub));
+  const out = [
+    h("div", { class: "sizepics statepics" },
+      pic(t.pics.dense, "Rouental", `about ${fmt(t.rouental)} px, ${t.rou_provinces} provinces`),
+      pic(t.pics.usual, "Cardonia", `about ${fmt(t.usual)} px, ${t.provinces} provinces: the usual size`),
+      pic(t.pics.large, t.large_name, `about ${fmt(t.large)} px, ${t.large_provinces} provinces`)),
+    h("p", null, "You draw the states; we cut them into provinces. Most states should be about the size of ", B("Cardonia's"),
+      `: around ${fmt(t.usual)} map pixels each (about ${Math.round(Math.sqrt(t.usual))} by ${Math.round(Math.sqrt(t.usual))}), most of them between ${fmt(t.lo)} and ${fmt(t.hi)}, each cut into about ${t.provinces} provinces. The dark lines are states, the faint ones the provinces in them; the three pictures are at the same scale.`),
+    h("p", null, B("Smaller"), ` for crowded heartlands and land that will be fought over: Rouental's states are about ${fmt(t.rouental)}, ${t.rou_provinces} provinces each, which is what makes it feel detailed.`),
+    h("p", null, B("Larger"), ` for land few people live in: ${t.large_name}'s, in Yastreovakia's north, are about ${fmt(t.large)}, ${t.large_provinces} provinces each. Tundra, deserts and ice can go larger still.`),
+  ];
+  if (short) out.push(h("p", null, `We cut each state into provinces of about ${z.usual} px; the Map tab says more about both.`));
+  else out.push(
+    h("p", null, "Each state you draw becomes one of the game's states, with its own name, buildings and resources. With ", B("Suggest"), ", ", B("State"),
+      ` draws one and keeps only your land inside your line; each suggestion says how big it is. A state smaller than about ${z.usual} px is a single province.`),
+    h("p", null, B("Sizes"), ", above the map, shows these sizes on your map at its zoom."));
+  return out;
+}
+function renderSizes() {  // the ruler: squares of the guide's state and province sizes at the map's zoom
   const el = $("#sizes"), z = sizeFacts(), on = !!(app.ui.sizes && z && app.N && !curPart().world);
   $("#sizebtn").setAttribute("aria-pressed", String(!!app.ui.sizes));
   el.hidden = !on;
   if (!on) return;
-  const s = app.view.s, side = a => Math.sqrt(a) * s, mine = app.N.prov.map(p => p.area).filter(a => a > 0).sort((a, b) => a - b);
-  const yours = mine.length ? Math.round(mine[mine.length >> 1] / 10) * 10 : 0;
-  if (side(z.usual) < 5) { el.replaceChildren(h("span", { class: "hint", text: "Zoom in to see the province sizes." })); return; }
-  if (side(z.sparse) > 150) { el.replaceChildren(h("span", { class: "hint", text: "Zoom out to see the province sizes." })); return; }
+  const s = app.view.s, side = a => Math.sqrt(a) * s;
+  const med = list => { const v = list.filter(a => a > 0).sort((a, b) => a - b); return v.length ? Math.round(v[v.length >> 1] / 10) * 10 : 0; };
   const sq = (a, title, sub) => h("figure", null, h("div", { class: "sq", style: `width:${side(a).toFixed(1)}px;height:${side(a).toFixed(1)}px` }),
     h("figcaption", null, h("b", { text: title }), h("br"), sub));
-  el.replaceChildren(sq(z.dense, "Dense", `${z.dense} px`), sq(z.usual, "Usual", `${z.usual} px`), sq(z.sparse, "Sparse", `${z.sparse} px`),
-    yours ? h("span", { class: "hint", text: `Yours now: about ${yours} px each` }) : null);
+  const row = (cls, title, what, items, yours) => {
+    const sides = items.map(([a]) => side(a));
+    if (Math.min(...sides) < 5) return h("div", { class: "szrow " + cls }, h("span", { class: "hint", text: `Zoom in to see the ${what} sizes.` }));
+    if (Math.max(...sides) > 150) return h("div", { class: "szrow " + cls }, h("span", { class: "hint", text: `Zoom out to see the ${what} sizes.` }));
+    return h("div", { class: "szrow " + cls }, h("span", { class: "szt", text: title }), ...items.map(([a, t, sub]) => sq(a, t, sub)),
+      yours ? h("span", { class: "hint", text: `Yours now: about ${fmt(yours)} px each` }) : null);
+  };
+  const t = z.states;
+  el.replaceChildren(
+    t ? row("szstates", "States", "state", [[t.rouental, "Rouental", `${fmt(t.rouental)} px`], [t.usual, "Cardonia", `${fmt(t.usual)} px`], [t.large, t.large_name, `${fmt(t.large)} px`]],
+      med(app.N.states.map(st => st.area))) : null,
+    row("szprov", "Provinces", "province", [[z.dense, "Dense", `${z.dense} px`], [z.usual, "Usual", `${z.usual} px`], [z.sparse, "Sparse", `${z.sparse} px`]],
+      med(app.N.prov.map(p => p.area))));
 }
 function sugArea(it) {  // map pixels inside a suggested area (a state: only the land it keeps)
   if (it.type === "state") {
@@ -1489,11 +1540,17 @@ function sugArea(it) {  // map pixels inside a suggested area (a state: only the
   it.pts.forEach(([x, y], i) => { const [x2, y2] = it.pts[(i + 1) % it.pts.length]; a += x * y2 - x2 * y; });
   return Math.round(Math.abs(a) / 2);
 }
-function sugSizeNote(it) {
-  const z = sizeFacts(), a = sugArea(it);
+function sugSizeNote(it) {  // a suggested state's or area's size against Cardonia's states, and in provinces
+  const z = sizeFacts(), a = sugArea(it), t = z && z.states;
   if (!z || a < 16) return null;
   const n = v => Math.max(1, Math.round(a / v));
-  return h("div", { class: "meta", text: `About ${fmt(a)} map pixels: ${n(z.usual)} province${n(z.usual) === 1 ? "" : "s"} of Cardonia's size (${n(z.sparse)} if sparse, ${n(z.dense)} if dense).` });
+  const prov = `${n(z.usual)} province${n(z.usual) === 1 ? "" : "s"} of Cardonia's size (${n(z.sparse)} if sparse, ${n(z.dense)} if dense)`;
+  if (!t) return h("div", { class: "meta", text: `About ${fmt(a)} map pixels: ${prov}.` });
+  const r = a / t.usual, x = r >= 1.5 ? `${(Math.round(r * 10) / 10).toLocaleString("en")} times` : null;
+  const st = a < t.lo ? `smaller than most of Cardonia's states (${fmt(t.lo)} to ${fmt(t.hi)})`
+    : a > t.hi ? `larger than most of Cardonia's states (${fmt(t.lo)} to ${fmt(t.hi)})${x ? `, ${x} the usual one` : ""}`
+    : `about the size of Cardonia's states (${fmt(t.lo)} to ${fmt(t.hi)})`;
+  return h("div", { class: "meta", text: `About ${fmt(a)} map pixels: ${st}; ${prov}.` });
 }
 
 // ======================================================================= the quick-start guide
@@ -1581,7 +1638,7 @@ function guideSteps(N) {
       h("p", null, "This is ", nm, "'s page in Valsora's atlas: the map on the left, its facts on the right."),
       h("p", null, "Whatever you enter is saved as you go (the chip at the top right says ", B("Saved"), "), and the author builds it into the mod.")] },
     map,
-    ...(sizeFacts() ? [{ node: h("div"), title: "How big is a province?", body: sizeGuideBody(true) }] : []),
+    ...(sizeFacts() && sizeFacts().states ? [{ node: h("div"), title: "How big is a state?", body: stateGuideBody(true) }] : []),
     { pic: "ledger", title: "The facts", body: [
       h("p", null, "The tabs on the right hold the rest: ", B("Politics"), " (your names under each government, the ruling sub-ideology, the ruler and party leaders), ", B("People"), " (generals, admirals, advisors, companies), ", B("Releasables"), " (nations that can break away from yours) and ", B("Nation"), " (flag, map colour, culture, motto, anthem, and your name)."),
       N && N.open ? h("p", null, B("State"), " and ", B("Cities"), " show what you select on the map.") : null] },
@@ -1596,7 +1653,7 @@ function showGuide(step = 0) {
   const steps = guideSteps(app.N), s = steps[step], last = step === steps.length - 1;
   const pic = h("div");
   if (s.pic) pic.innerHTML = GPIC[s.pic];   // the page's own drawings, no outside text
-  else pic.append(s.node);                  // a step whose pictures are in its body (province sizes)
+  else pic.append(s.node);                  // a step whose pictures are in its body (the state sizes)
   const next = h("button", { class: "btn primary", type: "button", onclick: () => last ? closeGuide() : showGuide(step + 1) }, last ? "Start" : "Next");
   $("#guide-card").replaceChildren(
     h("div", { class: "gtop" }, h("p", { class: "eyebrow", text: `Quick start · ${step + 1} of ${steps.length}` }),
@@ -1988,8 +2045,8 @@ function renderPart(N, P, active, pal) {
     if (rv[i] && v >= 2 && !(erased && erased[i])) c = rv[i] >= 8 ? riverW : riverP;
     u[i] = c;
   }
-  const sm = sugFill(P);  // states drawn with Suggest › State, over the land
-  if (sm) {
+  const sm = sugFill(P);  // states drawn with Suggest › State, over the land (unless hidden: the Suggestions button)
+  if (sm && !app.ui.hideSug) {
     const cols = SUG_STATE.map(rgb), selK = (P.sugInfo || []).findIndex(x => x.id === app.ui.sel.sug) + 1;
     for (let i = 0; i < n; i++) {
       const k = sm[i];
@@ -2047,7 +2104,7 @@ function sugFill(P) {  // per pixel of a part: 1 + the drawn state holding it, o
 }
 function sugStateAtScreen(sx, sy) {  // the drawn state under a point of the screen, or null
   const P = curPart();
-  if (P.world || !P.sugMask) return null;
+  if (P.world || !P.sugMask || app.ui.hideSug) return null;
   const [lx, ly] = toLocal(sx, sy), x = Math.floor(lx), y = Math.floor(ly);
   if (x < 0 || y < 0 || x >= P.w || y >= P.h) return null;
   const k = P.sugMask[y * P.w + x];
@@ -2163,7 +2220,7 @@ function draw() {
   drawQueued = false;
   const N = app.N;
   if (!N || $("#desk").hidden) return;
-  renderSizes();
+  renderSizes(); renderSugBtn();
   const cv = map.cv, [sw, sh] = sheetSize(), dpr = window.devicePixelRatio || 1;
   if (cv.width !== Math.round(sw * dpr) || cv.height !== Math.round(sh * dpr)) { cv.width = Math.round(sw * dpr); cv.height = Math.round(sh * dpr); }
   const ctx = map.ctx, P = curPart(), v = app.view;
@@ -2270,8 +2327,9 @@ function draw() {
     drawSuggestion(ctx, { type: "area", pts, label: r.name || "(unnamed)" }, ([x, y]) => gToScreen(x, y), r.id === app.ui.rel && relView(), null, relColour(r.id), place);
   }
   // suggestions, on every map; drawn states are filled in the land's picture: their names here,
-  // and the line drawn for the selected one
-  for (const it of N.sugList) {
+  // and the line drawn for the selected one. The Suggestions button hides them all (the author, 2026-10-18: "There
+  // should be an option to hide suggestions when viewing the map, as I wasn't able to see the provinces beneath them")
+  for (const it of app.ui.hideSug ? [] : N.sugList) {
     if (it.type !== "state") { drawSuggestion(ctx, it, ([x, y]) => gToScreen(x, y), app.ui.sel.sug === it.id, null, null, place); continue; }
     if (P.world) { drawSuggestion(ctx, { ...it, type: "area" }, ([x, y]) => gToScreen(x, y), app.ui.sel.sug === it.id, null, null, place); continue; }
     if (app.ui.sel.sug === it.id) {
@@ -2402,6 +2460,7 @@ function cityAtScreen(sx, sy) {
   return best;
 }
 function sugAtScreen(sx, sy) {
+  if (app.ui.hideSug) return null;
   let best = null, bd = 12;
   for (const it of app.N.sugList) for (const p of it.pts) { const q = gToScreen(p[0], p[1]); if (!q) continue; const d = Math.hypot(q[0] - sx, q[1] - sy); if (d < bd) { bd = d; best = it; } }
   return best;
@@ -2653,6 +2712,7 @@ function setTool(t) {
   if (app.ui.draft && t !== app.ui.tool) finishDraft();
   const was = relView();
   app.ui.tool = t;
+  if (t === "suggest" && app.ui.hideSug) showSuggestions(true);  // drawing them, you see them
   if (t === "release" && app.N && !relCurrent() && app.N.relList.length) { app.ui.rel = app.N.relList[0].id; relIndex(); }
   if (app.N && was !== relView()) renderBase();
   if (t === "terrain" && app.ui.mode !== "terrain" && app.N) setMapMode("terrain");
@@ -2765,7 +2825,19 @@ function selectCity(id, focus) {
   requestDraw();
   if (focus) { showTab("cities"); setTimeout(() => { const el = document.getElementById("city-name-" + id); if (el) { el.focus(); el.select(); } }, 30); }
 }
+function showSuggestions(on) {  // the Suggestions button: the map's suggestions shown or hidden
+  app.ui.hideSug = !on;
+  renderSugBtn();
+  if (app.N) renderBase();
+}
+function renderSugBtn() {
+  const b = $("#sugbtn"), n = app.N ? app.N.sugList.length : 0;
+  b.hidden = !n || !app.N || !!curPart().world;
+  b.setAttribute("aria-pressed", String(!app.ui.hideSug));
+  b.title = app.ui.hideSug ? `Show the ${n} suggestion${n === 1 ? "" : "s"} drawn on the map` : "Hide the suggestions drawn on the map, to see the provinces under them";
+}
 function selectSug(id, focus) {
+  if (app.ui.hideSug) showSuggestions(true);
   app.ui.sel.sug = id;
   renderMapPane(true);
   showTab("map");
@@ -2980,7 +3052,10 @@ function renderMapPane(force) {
           textArea("sug-note-" + it.id, it.note, "More about it (optional)", v => edit("suggest", { [it.id]: { note: v || "" } }), 1000));
       })) : h("div", { class: "empty", text: "None yet." })));
     // folded until opened; it stays as the player left it when the pane is drawn again
-    if (sizeFacts()) out.push(h("details", { class: "sec sizesec", open: !!app.ui.sizesOpen, ontoggle: e => { app.ui.sizesOpen = e.currentTarget.open; } },
+    if (sizeFacts() && sizeFacts().states) out.push(h("details", { class: "sec sizesec statesec", open: !!app.ui.stateSizesOpen, ontoggle: e => { app.ui.stateSizesOpen = e.currentTarget.open; } },
+      h("summary", null, h("h4", null, "How big is a state?")),
+      ...stateGuideBody(false)));
+    if (sizeFacts()) out.push(h("details", { class: "sec sizesec provsec", open: !!app.ui.sizesOpen, ontoggle: e => { app.ui.sizesOpen = e.currentTarget.open; } },
       h("summary", null, h("h4", null, "How big is a province?")),
       ...sizeGuideBody(false)));
     if (mapOpen()) {
@@ -3319,28 +3394,51 @@ function portraitBox(im, onPick, onClear, label, logo, game) {
   return h("div", { style: "display:grid;gap:4px" }, box, im ? h("button", { class: "btn small", type: "button", onclick: onClear }, game ? "Back to the game's" : "Remove") : null);
 }
 // a leader's traits: the base game's (index.traits, from scripts/vanilla_sync.py), as chips with a list to add more
-function traitList(role, slot) {
-  const T = app.index.traits || {};
-  if (role === "ruler") return T.ruler || [];
-  if (role === "general" || role === "admiral") return T[role] || [];
-  if (role === "advisor") return (T.advisor || {})[slot] || [];
+function traitList(role, slot) {  // the list, with .fx: what each of its traits does (index.traits.effects)
+  const T = app.index.traits || {}, E = T.effects || {};
+  const tag = (list, kind) => Object.assign(list.slice(), { fx: E[kind] || {} });
+  if (role === "ruler") return tag(T.ruler || [], "country");
+  if (role === "general" || role === "admiral") return tag(T[role] || [], "unit");
+  if (role === "advisor") return tag((T.advisor || {})[slot] || [], "country");
   return [];
+}
+// what a trait does (the author, 2026-10-18: "When looking at the traits for leaders and such, you should be able to
+// see the effects of the traits"), as the game's tooltips say it: vanilla_sync.py reads each trait's modifiers
+function traitFx(list, k) {
+  const fx = (list.fx || {})[k];
+  return fx && fx.length ? fx : ["No effect in the game's files"];
 }
 function traitPicker(id, list, chosen, onval, keepEmpty) {  // keepEmpty: no traits left is kept as [] (a game character's)
   const names = Object.fromEntries(list.map(t => [t[0], t[1]]));
   const have = (Array.isArray(chosen) ? chosen : []).filter(k => names[k]);
-  const chips = h("div", { class: "chips" }, have.map(k => h("span", { class: "tchip", "aria-pressed": "true" }, names[k],
+  const add = k => onval([...have, k]);
+  const chips = h("div", { class: "chips" }, have.map(k => h("span", { class: "tchip", "aria-pressed": "true", title: traitFx(list, k).join("\n") }, names[k],
     h("button", { class: "x", type: "button", title: "Remove " + names[k], "aria-label": "Remove " + names[k],
       onclick: () => { const v = have.filter(x => x !== k); onval(v.length || keepEmpty ? v : null); } }, "×"))));
-  if (have.length >= MAX_TRAITS) return h("div", { class: "field" }, h("label", { text: `Traits (at most ${MAX_TRAITS})` }), chips);
-  const sel = h("select", { id, onchange: e => { const k = e.target.value; if (k) onval([...have, k]); } }, h("option", { value: "", text: have.length ? "Add another trait…" : "Add a trait…" }));
+  // what the chosen traits do, under their chips
+  const does = have.length ? h("ul", { class: "teff" }, have.map(k => h("li", null, h("b", { text: names[k] }), " ", traitFx(list, k).join("; ")))) : null;
+  const full = have.length >= MAX_TRAITS;
+  // every trait of the list with what it does, folded; it stays open as the player left it
+  const book = h("details", { class: "traitbook", open: !!(app.ui.traitBook || {})[id],
+    ontoggle: e => { app.ui.traitBook = { ...(app.ui.traitBook || {}), [id]: e.currentTarget.open }; } },
+    h("summary", { text: "What each trait does" }));
+  let group = null;
+  for (const [k, nm, g] of list) {
+    if (g && g !== group) { group = g; book.append(h("div", { class: "tbg", text: g })); }
+    const mine = have.includes(k);
+    book.append(h("div", { class: "tbrow" }, h("div", null, h("b", { text: nm }), h("div", { class: "meta", text: traitFx(list, k).join("; ") })),
+      mine ? h("span", { class: "meta", text: "chosen" })
+        : h("button", { class: "btn small", type: "button", disabled: full || null, title: full ? `At most ${MAX_TRAITS} traits` : "Add " + nm, onclick: () => add(k) }, "Add")));
+  }
+  if (full) return h("div", { class: "field set" }, h("label", { text: `Traits (at most ${MAX_TRAITS})` }), chips, does, book);
+  const sel = h("select", { id, onchange: e => { const k = e.target.value; if (k) add(k); } }, h("option", { value: "", text: have.length ? "Add another trait…" : "Add a trait…" }));
   const groups = {};
   for (const [k, nm, g] of list) {
     if (have.includes(k)) continue;
     const parent = g ? (groups[g] = groups[g] || sel.appendChild(h("optgroup", { label: g }))) : sel;
-    parent.append(h("option", { value: k, text: nm }));
+    parent.append(h("option", { value: k, text: nm, title: traitFx(list, k).join("; ") }));
   }
-  return h("div", { class: "field" + (have.length ? " set" : "") }, h("label", { for: id, text: "Traits, from the base game" }), chips, sel);
+  return h("div", { class: "field" + (have.length ? " set" : "") }, h("label", { for: id, text: "Traits, from the base game" }), chips, does, sel, book);
 }
 function askAuthor(id, o) {  // ask the author for something the base game doesn't have: a trait, a kind of company
   const box = h("div", { class: "reqform", hidden: true });
@@ -3834,6 +3932,7 @@ function wireStatic() {
   $("#keybtn").onclick = () => { app.ui.legend = !app.ui.legend; $("#keybtn").setAttribute("aria-pressed", String(app.ui.legend)); $("#legend").hidden = !app.ui.legend; };
   $("#keybtn").setAttribute("aria-pressed", String(app.ui.legend));
   $("#sizebtn").onclick = () => { app.ui.sizes = !app.ui.sizes; renderSizes(); };
+  $("#sugbtn").onclick = () => showSuggestions(!!app.ui.hideSug);
   document.addEventListener("keydown", e => {
     if (!app.N || $("#desk").hidden || !$("#guide").hidden) return;
     const typing = /INPUT|TEXTAREA|SELECT/.test((document.activeElement || {}).tagName || "");
