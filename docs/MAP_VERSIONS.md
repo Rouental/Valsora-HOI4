@@ -19,4 +19,4 @@ Named the same way: `New_Mod_Flags 10-15.pdn`, the day it last changed.
 
 | sent as | fingerprint (sha256, first 12) | made | what changed |
 |---|---|---|---|
-| New_Mod_Flags 10-15.pdn | 9343637ae354 | 2026-10-15 | 101 layers, Vilna's new flag the last added. Sent 2026-10-18. Not in it: the flags that came another way since (Côtefer's, Entroterra's and Mezzogiorno's, fitted 2026-10-15; Zastava's, Crvenognjište's and Mylostrva's, 2026-10-17), and older ones that never were in the file (the Reibonnaise states' from the flag sheet, Belekria's, the civil war's ...): 30 flags of `source/flags/` in all |
+| New_Mod_Flags 10-15.pdn | 9343637ae354 | 2026-10-15 | 101 layers, Vilna's new flag the last added. Sent 2026-10-18. Not in it: the flags that came another way since (Côtefer's, Entroterra's and Mezzogiorno's, fitted 2026-10-15; Zastava's, Crvenognjište's and Mylostrva's, 2026-10-17), and older ones that never were in the file (the Reibonnaise states' from the flag sheet, Belekria's, the civil war's ...): about 25 of the flags in `source/flags/` |
