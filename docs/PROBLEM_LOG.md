@@ -6,6 +6,15 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**The decision counts were still round dots** (2026-10-18, the author's screenshot of v0.10.2: "The notification is
+still a dot, rather than the shape I specified")
+- Cause: their picture of 2026-10-17 outlined each shoulder of the medallion in red ("Maybe move the notifications on
+  this screen to something like this"), the outline being the shape they wanted; v0.10.1 read it as a place and only
+  moved the game's round badge (`topbar_alert_bg`, shared by every count in the top bar) into the shoulders.
+- Fix (v0.10.3): each decision count has a plate of its own the shape of its shoulder, the corner by the seal cut off
+  (`layout.DEC_PLATE`, `GFX_valsora_deco_dec_count_left` / `_right`), the number centred on it. A drawn outline is
+  read as the shape asked for unless the author says otherwise.
+
 **The flag file "is corrupted"** (2026-10-17, the author: "my most recent version of the flag pdn is corrupted. I'm not
 sure yet whether it was a fault on your end or mine"; 2026-10-18, sending their own copy: "If it's not corrupted,
 maybe it's being generated for a different update of PDN?")

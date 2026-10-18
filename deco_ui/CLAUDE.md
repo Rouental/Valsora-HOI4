@@ -14,9 +14,14 @@ Treat assumed items as hypotheses.
 
 ---------------------------------------------------------------------------------------------------
 
-## 1. Status (v0.10.2)
+## 1. Status (v0.10.3)
 
-**v0.10.2 (2026-10-18)** is the current version, from the user's screenshots of v0.10.1 and their mockup of the flag
+**v0.10.3 (2026-10-18, later)** is the current version: the decision counts on plates shaped like the medallion's
+shoulders, the corner by the seal cut off (the author: "The notification is still a dot, rather than the shape I
+specified"; their outline of 2026-10-17 was the shoulder's shape, which v0.10.1 had read as a place for the game's
+round badge): `layout.DEC_PLATE`, `DEC_CUT`, `GFX_valsora_deco_dec_count_left` / `_right`. **Not yet seen in game.**
+
+**v0.10.2 (2026-10-18)** came before it, from the user's screenshots of v0.10.1 and their mockup of the flag
 medallion: the medallion's frame stepped at the corners as the mockup draws it, the name centred on its ink (the game
 centres the last letter's tracking too: `layout.NAME_SHIFT`); the experience badges centred at the buttons' feet, the
 digits' y from the screenshot (`layout.XP_BADGE`); the factories military, naval, civilian; the faction card eleven
@@ -946,6 +951,8 @@ GP.write_gui(MOD + "interface/x.gui", t)    # braces checked, engine_safe applie
 
 ## 10. Open items and things to check in game
 
+- **v0.10.3**: both decision counts at once (a decision with a time limit and one to take): each plate in its
+  shoulder, its number centred.
 - **v0.10.1**: the loading screen on the game's picture with the gilt bar and tip, no brackets past their corners, and
   game setup on the menu's picture; the Vale start's nine cards inside the country selection, the more-countries
   button at its right end, the details (portrait, emblem, wheel, spirits) on one line, the wheel's gilt ring; the

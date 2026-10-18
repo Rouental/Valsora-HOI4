@@ -105,10 +105,16 @@ BELOW_MEDALLION = SEAL["y"] + SEAL["h"] + 4
 # this screen to something like this"): each badge centred in a shoulder of the plate, between its two steps (12 % to
 # 26 % of the medallion's width, and 74 % to 88 %), its top on the first step. The badge's picture is drawn 2 px right
 # of the position the game's number is given (as the game's own are), so the position is 2 px left of the picture.
-_shoulder = lambda f0, f1: MED["x"] + MED["w"] * (f0 + f1) / 2
-DEC_BADGE = 17                                       # the game's topbar_alert_bg (the Deco UI's count badge)
-DEC_BADGES = dict(timeout=(round(_shoulder(.12, .26) - DEC_BADGE / 2) - 2, MED_STEPS[0]),
-                  to_take=(round(_shoulder(.74, .88) - DEC_BADGE / 2) - 2, MED_STEPS[0]))
+# v0.10.3 (the author: "The notification is still a dot, rather than the shape I specified"): their outline was the
+# shoulder itself, its corner by the seal cut off, so each count is a plate of its own the size of the shoulder
+# (DEC_PLATE: from the plate's edge at 12 % to the step at 26 %, from the first step to the second, the cut DEC_CUT px),
+# its rim on the medallion's rim, in the game's four colours (sprites of our own, not the game's shared round badge:
+# GFX_valsora_deco_dec_count_left / _right); the number is centred on it. DEC_BADGES is each plate's top left.
+_edge = lambda f: MED["x"] + round(MED["w"] * f)
+DEC_PLATE = dict(w=_edge(.26) - _edge(.12), h=MED_STEPS[1] - MED_STEPS[0])
+DEC_CUT = 6
+DEC_BADGES = dict(timeout=(_edge(.12), MED_STEPS[0]), to_take=(_edge(.74), MED_STEPS[0]))
+DEC_TEXT_W = 20                                      # the game's box for the number
 FACTION_LOGO = dict(dx=8, dy=11, scale=0.85)      # faction logo (32 px miniature) centred in the crown's ring
 FACTION_INIT = dict(dx=24, dy=33, w=24, h=14)     # faction initiative: bottom-right corner of the crown
 

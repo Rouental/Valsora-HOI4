@@ -2674,6 +2674,20 @@
   "sig": "5b97b34eef80fa048f4ca1dfa8a995879641a2cffd788c05e2930d02a7dc5e95"
  },
  {
+  "key": "tb_dec_count_left",
+  "path": "gfx/interface/valsora_deco/dec_count_left.dds",
+  "w": 88,
+  "h": 17,
+  "sig": "6d1cfe3911105cbe8ff95dc54366edd0312d0d8a4a5bf035ca48f633dbbeb397"
+ },
+ {
+  "key": "tb_dec_count_right",
+  "path": "gfx/interface/valsora_deco/dec_count_right.dds",
+  "w": 88,
+  "h": 17,
+  "sig": "2765a4c22414450660b653ea2c2048dd68d86634366b11343844af13c1d6a2ad"
+ },
+ {
   "key": "shared_production_line_arrow_left",
   "path": "gfx/interface/production_line_arrow_left.dds",
   "w": 32,

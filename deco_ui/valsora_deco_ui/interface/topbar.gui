@@ -823,8 +823,8 @@ guiTypes = {
 
 				iconType = {
 					name = "decisionview_amount_timeout_bg"
-					spriteType = "GFX_topbar_alert_bg"
-					position = { x = -149 y = 116 }
+					spriteType = "GFX_valsora_deco_dec_count_left"
+					position = { x = -151 y = 116 }
 					alwaystransparent = yes
 					frame = 2
 
@@ -832,7 +832,7 @@ guiTypes = {
 
 				instantTextBoxType = {
 					name ="decisionview_amount_timeout_items"
-					position = { x = -151 y = 116 }
+					position = { x = -150 y = 116 }
 					font = "hoi_16mbs"
 					text = "999"
 					format = center
@@ -843,8 +843,8 @@ guiTypes = {
 
 				iconType = {
 					name = "decisionview_amount_to_take_bg"
-					spriteType = "GFX_topbar_alert_bg"
-					position = { x = -52 y = 116 }
+					spriteType = "GFX_valsora_deco_dec_count_right"
+					position = { x = -55 y = 116 }
 					alwaystransparent = yes
 					frame = 1
 				}

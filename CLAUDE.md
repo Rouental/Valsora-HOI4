@@ -80,7 +80,7 @@ New detail goes into those files; this one gets a line.
   `state_map`, `region_map`, `border_report`, `superevent_preview`, and the Valsora Atlas `atlas_export` +
   `atlas.html`, the build in a browser, not in the mod: `docs/ATLAS.md`); the Gazetteer (`facts_export`, `gazetteer`,
   `gazetteer_site`, `publish_site.sh`, `tests/gazetteer/`); vanilla (`vanilla_sync`, `pdxscript`); tests not in the
-  game (`terrain_test`, `usnistan_prototype`); `build_flags15.sh` (the larger flags' test version).
+  game (`terrain_test`, `usnistan_prototype`, `coarse_preview`); `build_flags15.sh` (the larger flags' test version).
 - **HOI4's hard rules** (all checked by `check_mod.py`): the map is 5120×2560 (the largest size under the game's cap);
   **at most 65,536 province borders** (about 3,800 left; new land is cut at ~190 px; `borders.py` counts); provinces
   one 4-connected blob of 16+ px, no 2×2 window of four provinces; `definition.csv` CRLF; localisation UTF-8 with BOM;
@@ -230,7 +230,7 @@ the page, its rules or its import.
   (2026-10-16: Plaija's Vietnamese names; the fonts have Vietnamese since, composed where a face lacks it; the factory
   diamond, U+25C6, only in the value fonts that draw it; mutation-tested).
 - Its `reference/` (the game's files, git-ignored) must never be committed: it is Paradox's content.
-- **Now v0.10.2** (2026-10-18, not yet seen in game; v0.10.1 seen 2026-10-18). v0.9's restyled screens are one commit, `8dece16`: `git revert 8dece16` and a rebuild of both take them out. Previews that show the game's own art stay in the git-ignored `deco_ui/build/` and are only sent to the author. Proposals not in the mod, waiting for the author: `deco_ui/art/proposals/` (panel pictures: "I'd like to see and approve them first"; the larger flags: "don't add anything to do with it into the mod yet").
+- **Now v0.10.3** (2026-10-18, later, not yet seen in game; v0.10.2 seen 2026-10-18). v0.9's restyled screens are one commit, `8dece16`: `git revert 8dece16` and a rebuild of both take them out. Previews that show the game's own art stay in the git-ignored `deco_ui/build/` and are only sent to the author. Proposals not in the mod, waiting for the author: `deco_ui/art/proposals/` (panel pictures: "I'd like to see and approve them first"; the larger flags: "don't add anything to do with it into the mod yet").
 
 ## Current state
 
@@ -246,7 +246,7 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   Gorbastan, Zukchiva, Sennheiser, Sminishia, West Sminishia and Hollier joined; Ungar's six from the Gazetteer on
   2026-10-18). The four great powers, one per
   ideology but Theocratic (author, 2026-10-17): Krionik (Monarchist), Kampf (Authoritarian), Sarkis (Communist),
-  Fraxhemark (Democratic); great in name for now (their industry is as drawn). Two starts, both on 1 January 2036. The Deco UI is v0.10.2 (`deco_ui/docs/VERSIONS.md`). The Gazetteer shows players a quick-start guide the first time they unlock a nation, a state size guide (Cardonia's states the usual size, author 2026-10-18) before the province one, a button to hide suggestions, and what each base-game trait does.
+  Fraxhemark (Democratic); great in name for now (their industry is as drawn). Two starts, both on 1 January 2036. The Deco UI is v0.10.3 (`deco_ui/docs/VERSIONS.md`). The Gazetteer shows players a quick-start guide the first time they unlock a nation, a state size guide (Cardonia's states the usual size, author 2026-10-18) before the province one, a button to hide suggestions, and what each base-game trait does.
   Rouental has test decisions for every kind of event and a test superevent (`test_events.py`).
   **The Gazetteer's facts are in the mod again** (2026-10-18: the author's export of that morning, 17 nations with
   something entered, `source/gazetteer/`; its 15 suggestions put on the map by `apply_suggestions.py`), after the
@@ -262,12 +262,17 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   Valsora Atlas (the build in a browser, a private Artifact: `docs/ATLAS.md`). Proposals made the same night, not in
   the mod: the tech tree's full mockup (`docs/tech_tree_mockup/`), a world map poster (`dist/posters/`), the Deco UI's
   next screens (`deco_ui/art/proposals/next_screens/`).
-- **Seen in game last** (2026-10-18): the Deco UI v0.10.1 (the author's screenshots and a mockup of the medallion):
+- **Seen in game last** (2026-10-18, later): the Deco UI v0.10.2: the decision counts still round dots in the
+  shoulders, not the shoulder-shaped plates the author had outlined: plates in v0.10.3, not yet seen. Before that
+  (2026-10-18) v0.10.1 (the author's screenshots and a mockup of the medallion):
   the Release Nation window's list over its checkboxes, eight faction flags a row with room for more, the events'
   corner brackets ("you have a lot of trouble with this particular decorative element"), the factories' order, the
   state panel's corner under the flag, the experience badges off centre, the medallion's name 1 px left: all changed
   in v0.10.2, not yet seen. Before that (2026-10-17) v0.10's findings, fixed in v0.10.1. Older findings, all fixed since: `deco_ui/docs/VERSIONS.md`. Not seen yet besides: the two starts, Vilna and Placeholdgrad. The Deco UI's checklist for the author is in `deco_ui/valsora_deco_ui/README.txt` (Things to check) and `deco_ui/CLAUDE.md` (section 10).
-- **Waiting on the author:** (2026-10-18) a read-only service account for the Gazetteer (its key as the environment's
+- **Waiting on the author:** (2026-10-18, later) which province size for the areas they marked tundra, extreme
+  desert and jungle (the layer "Desert" of their upload: `scripts/coarse_preview.py`, a preview only, not in the mod:
+  `docs/BORDER_LIMIT.md`), and whether the new state and province lines they drew in Rouental (the same upload) go
+  into the mod; a read-only service account for the Gazetteer (its key as the environment's
   secret `GAZETTEER_SERVICE_ACCOUNT`: `docs/GAZETTEER_INTERNALS.md`); from the Gazetteer's suggestions, Claude's
   readings to confirm: Riverraine's and Kové's capitals (Callentroix, Kové), the two Triftsund-Inseln states sharing
   their name, Ungar's city-states of 31 and 63 px (Tópart, Erődítmény); whose the motto flag is ("a safe haven amid the storm", Arabic on indigo, four hands in white

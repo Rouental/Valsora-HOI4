@@ -103,6 +103,13 @@ it before touching the UI. In short:
   `popupwindow.gui` with one change: "This screen overflows"); the state panel's resistance and compliance in two rows
   inside the claims band, their bars the panel's gilt wells, amber to coral and jade ("Compliance and resistance look
   out of place": the second row ran over the State Modifiers rule, the bars the game's).
+- **v0.10.3** (2026-10-18, later, not yet seen in game; the author's screenshot of v0.10.2: "The notification is still
+  a dot, rather than the shape I specified"): the decision counts on plates of their own, each the shape of its
+  shoulder of the medallion (the author's red outline of 2026-10-17: the shoulder from the plate's edge to the step,
+  its corner by the seal cut off), in the game's four colours, the number centred on it (`layout.DEC_PLATE`,
+  `DEC_CUT`; sprites `GFX_valsora_deco_dec_count_left` / `_right`; v0.10.1 had only moved the game's round badge into
+  the shoulder). The game's shared `topbar_alert_bg` stays the round badge for the intelligence agency's, the
+  prototypes', the trade contracts' and the officer corps' counts.
 - **Proposals for the side panels' own pictures** (research, production, the market, the overview strip, the
   intelligence agency, the spirit banners) are in `deco_ui/art/proposals/panel_pictures/`, **not in the mod**
   (author, 2026-10-15: "don't put them in the mod yet. I'd like to see and approve them first").

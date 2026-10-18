@@ -47,6 +47,16 @@ spriteTypes = {
 		tilingCenter = yes
 	}
 	spriteType = {
+		name = "GFX_valsora_deco_dec_count_left"
+		texturefile = "gfx/interface/valsora_deco/dec_count_left.dds"
+		noOfFrames = 4
+	}
+	spriteType = {
+		name = "GFX_valsora_deco_dec_count_right"
+		texturefile = "gfx/interface/valsora_deco/dec_count_right.dds"
+		noOfFrames = 4
+	}
+	spriteType = {
 		name = "GFX_valsora_deco_none"
 		texturefile = "gfx/interface/valsora_deco/none.dds"
 	}

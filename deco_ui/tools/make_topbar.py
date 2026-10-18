@@ -283,11 +283,13 @@ t = set_attrs(t, "after_faction_button", position=(0, 0), clipping="no")
 sx, sy = L.SEAL["x"] - CMX, L.SEAL["y"] - CMY
 t = set_attrs(t, "decision_view_alert_glow", position=(sx - L.SEAL_GLOW, sy - L.SEAL_GLOW))
 t = set_attrs(t, "decisionview_button", sprite="GFX_valsora_deco_decisions_seal", position=(sx, sy))
-(tx_, ty_), (bx_, by_) = L.DEC_BADGES["timeout"], L.DEC_BADGES["to_take"]
-t = set_attrs(t, "decisionview_amount_timeout_bg", position=(tx_ - CMX + 2, ty_ - CMY))
-t = set_attrs(t, "decisionview_amount_timeout_items", position=(tx_ - CMX, ty_ - CMY))
-t = set_attrs(t, "decisionview_amount_to_take_bg", position=(bx_ - CMX + 2, by_ - CMY))
-t = set_attrs(t, "decisionview_amount_to_take_items", position=(bx_ - CMX, by_ - CMY))
+# (v0.10.3: each count on a plate shaped like its shoulder, the corner by the seal cut off: layout.DEC_PLATE)
+for key, side in (("timeout", "left"), ("to_take", "right")):
+    px_, py_ = L.DEC_BADGES[key]
+    t = set_attrs(t, f"decisionview_amount_{key}_bg", sprite=f"GFX_valsora_deco_dec_count_{side}",
+                  position=(px_ - CMX, py_ - CMY))
+    t = set_attrs(t, f"decisionview_amount_{key}_items",
+                  position=(px_ + (L.DEC_PLATE["w"] - L.DEC_TEXT_W) // 2 - CMX, py_ - CMY))
 n = rel("intelligence")
 t = set_attrs(t, "intel_agency_button", sprite="GFX_valsora_deco_tb_intelligence", position=(n, 0))
 t = set_attrs(t, "intelview_ops_prepared_or_completed_bg", position=(n + 3, 3))
@@ -494,6 +496,8 @@ sprite("GFX_valsora_deco_topbar_right", "topbar_right.dds", extra="\t\ttranspare
 sprite("GFX_valsora_deco_divider", "divider.dds")
 cornered("GFX_valsora_deco_clear", "clear.dds", 8, 8, 2, 2)
 cornered("GFX_valsora_deco_badge", "badge.dds", 16, 15, 4, 4)
+sprite("GFX_valsora_deco_dec_count_left", "dec_count_left.dds", frames=4)
+sprite("GFX_valsora_deco_dec_count_right", "dec_count_right.dds", frames=4)
 sprite("GFX_valsora_deco_none", "none.dds")
 comment("player flag at the game's native 82x52 (an own mask so the frame can differ from vanilla's)")
 SP.append('\tmaskedShieldType = {\n\t\tname = "GFX_valsora_deco_player_flag"\n'

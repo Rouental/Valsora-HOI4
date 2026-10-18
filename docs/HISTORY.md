@@ -10,6 +10,13 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-18, later still (the author's upload, "I tried marking out areas which I know will be either tundra or
+  extreme desert or jungle like base game africa. Maybe try generating provinces in those area with this in mind? Just
+  a snapshot / preview, not for the full mod"; "The notification is still a dot, rather than the shape I specified"):
+  **a preview of coarse provinces** in the marked areas (`scripts/coarse_preview.py`, not in the mod: 702 provinces to
+  273, 195 or 154 at 500, 800 or 1,500 px, freeing 1,282 to 1,639 borders: `docs/BORDER_LIMIT.md`); the map in the
+  repository unchanged (the upload's layer "Desert" and its new lines in Rouental wait for the author's word). **Deco UI
+  v0.10.3**: the decision counts on plates shaped like the medallion's shoulders.
 - 2026-10-18, later (the author: "a number of changes have been made on the Gazetteer. Please add them to the mod, I
   want to see how you handle a significant number of changes at once"; "I'd like a general increase of the province
   count"; "In the future you need a way to read the website directly"; screenshots of v0.10.1 and a mockup of the

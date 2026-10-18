@@ -1,4 +1,4 @@
-VALSORA DECO UI - v0.10.2 (for HOI4 1.19)
+VALSORA DECO UI - v0.10.3 (for HOI4 1.19)
 =========================================
 
 An art deco interface for the Valsora total conversion: core skin and fonts,
@@ -29,6 +29,18 @@ Valsora repository's scripts/common.py and rebuild (sh scripts/run_all.sh).
 
 The layout is built for 1920 px of UI width: 1920x1080 at 100% UI scale, or
 2560x1440 at up to 133%.
+
+
+NEW IN v0.10.3
+--------------
+  - The decision counts beside the seal are no longer round dots: each is
+    a plate the shape of its shoulder of the medallion, as you outlined it,
+    its corner by the seal cut off (red for decisions running out of time
+    on the left, the ones to take on the right), the number in the middle.
+
+Things to check in game (v0.10.3):
+  - both counts at once (a decision with a time limit and one to take):
+    the plates in the shoulders, the numbers centred on them.
 
 
 NEW IN v0.10.2

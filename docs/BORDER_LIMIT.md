@@ -113,3 +113,23 @@ compared with the same re-cut of today's states:
   of `pdn_tools.py recut --keep-states` (sizes from the Terrain layer).
 - If the Vale of Reibonne, where most of the play is, should stay dense, the room can come from the rest of the
   world, as in the base game (Europe dense, elsewhere sparse).
+
+## The author's marked areas (2026-10-18, a preview)
+
+The author marked the land they know will be tundra, extreme desert or jungle "like base game africa" on a layer
+"Desert" of their upload (red outlines: four deserts round North Kornista and Al-Khabid and one by Koronista; green:
+two jungles; white lines: Sanada's north coast as tundra): 124,000 px of land, 702 provinces.
+`scripts/coarse_preview.py` cut each state's share of them again (a preview only, not in the mod):
+
+| provinces of about | provinces in the areas | borders on the layer | freed | room elsewhere |
+|---|---|---|---|---|
+| as now (about 175 px) | 702 | 63,189 | | |
+| 500 px (the base game's deserts) | 273 | 61,907 | 1,282 | about 427 provinces |
+| 800 px (the size guide's emptiest) | 195 | 61,673 | 1,516 | about 505 |
+| 1,500 px (the base game's impassable land) | 154 | 61,550 | 1,639 | about 546 |
+
+- Past 800 px it barely matters: a province can't be larger than its state, and the states there are Claude's, about
+  1,300 px each, so most become one province. Coarser still would mean fewer, larger states there too.
+- The areas are small next to the map (3 % of its land), so they free about 1,500 borders, a quarter of what sizing
+  the whole map by terrain would.
+- The dense middle of North Kornista and the Mustawi strip lie between the outlines and stay as they are.

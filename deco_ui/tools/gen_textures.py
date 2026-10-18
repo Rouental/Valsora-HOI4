@@ -1216,6 +1216,30 @@ add("shared_topbar_alert_bg", "gfx/interface/topbar/toolbar/topbar_alert_bg.dds"
     count_badge("linear-gradient(180deg,#2E6E60,#153730)", "linear-gradient(180deg,#F1DC9C,#B8954F)")))
 
 
+# the decision counts (v0.10.3, the author's outline of 2026-10-17, "The notification is still a dot, rather than the
+# shape I specified"): a plate filling each shoulder of the medallion beside the seal, its corner by the seal cut off,
+# in the game's four colours (the frames of topbar_alert_bg: grey, red, yellow, green); its rim lies on the medallion's
+DW, DH, DC = L.DEC_PLATE["w"], L.DEC_PLATE["h"], L.DEC_CUT
+
+
+def dec_count(fill, rim, cut_right):
+    if cut_right:
+        pts = [(0, 0), (DW - DC, 0), (DW, DC), (DW, DH), (0, DH)]
+    else:
+        pts = [(DC, 0), (DW, 0), (DW, DH), (0, DH), (0, DC)]
+    return plate(pts, fill, rim) + (f'<div style="position:absolute;left:{3 if cut_right else DC + 1}px;top:2px;'
+                                    f'width:{DW - DC - 4}px;height:1px;background:rgba(255,255,255,.12)"></div>')
+
+
+DEC_FILLS = (("linear-gradient(180deg,#1E2A30,#0B1014)", GOLD_V),
+             ("linear-gradient(180deg,#9A2E26,#5A1512)", "linear-gradient(180deg,#F1DC9C,#B8954F)"),
+             ("linear-gradient(180deg,#A07A2A,#5E4415)", "linear-gradient(180deg,#FFF3C8,#C9A55A)"),
+             ("linear-gradient(180deg,#2E6E60,#153730)", "linear-gradient(180deg,#F1DC9C,#B8954F)"))
+for side, cut_right in (("left", True), ("right", False)):
+    add(f"tb_dec_count_{side}", D + f"dec_count_{side}.dds", DW * 4, DH,
+        frames(DW * 4, DH, *(dec_count(f, r, cut_right) for f, r in DEC_FILLS)))
+
+
 # the fold arrows (v0.8.4; the user saw the game's copper arrow at the focus tree's lower left, its shortcuts' toggle):
 # the game's production_line_arrow_left / _right, 32 x 28, which the construction screen's fold and the peace
 # conference use too, replaced at their paths: a chamfered lacquer chip, gilt rim, a gilt chevron
