@@ -7,3 +7,6 @@ scikit-image==0.26.0
 # Only for the Deco UI's textures (deco_ui/tools/gen_textures.py) and the Gazetteer's tests (tests/gazetteer/):
 # with a Chromium of your own, set CHROMIUM_PATH instead of running "playwright install chromium"
 playwright==1.64.0
+# Only for importing the Gazetteer's portraits (scripts/gazetteer.py: the faces, kept in source/gazetteer/faces.json,
+# so a build needs none of it):
+opencv-python-headless==4.10.0.84

@@ -230,7 +230,7 @@ the page, its rules or its import.
   (2026-10-16: Plaija's Vietnamese names; the fonts have Vietnamese since, composed where a face lacks it; the factory
   diamond, U+25C6, only in the value fonts that draw it; mutation-tested).
 - Its `reference/` (the game's files, git-ignored) must never be committed: it is Paradox's content.
-- **Now v0.10.3** (2026-10-18, later, not yet seen in game; v0.10.2 seen 2026-10-18). v0.9's restyled screens are one commit, `8dece16`: `git revert 8dece16` and a rebuild of both take them out. Previews that show the game's own art stay in the git-ignored `deco_ui/build/` and are only sent to the author. Proposals not in the mod, waiting for the author: `deco_ui/art/proposals/` (panel pictures: "I'd like to see and approve them first"; the larger flags: "don't add anything to do with it into the mod yet").
+- **Now v0.10.4** (2026-10-18, evening: the diplomacy panel's pictures; not yet seen in game; v0.10.2 seen 2026-10-18). v0.9's restyled screens are one commit, `8dece16`: `git revert 8dece16` and a rebuild of both take them out. Previews that show the game's own art stay in the git-ignored `deco_ui/build/` and are only sent to the author. Proposals not in the mod, waiting for the author: `deco_ui/art/proposals/` (panel pictures: "I'd like to see and approve them first"; the larger flags: "don't add anything to do with it into the mod yet").
 
 ## Current state
 
@@ -246,7 +246,7 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   Gorbastan, Zukchiva, Sennheiser, Sminishia, West Sminishia and Hollier joined; Ungar's six from the Gazetteer on
   2026-10-18). The four great powers, one per
   ideology but Theocratic (author, 2026-10-17): Krionik (Monarchist), Kampf (Authoritarian), Sarkis (Communist),
-  Fraxhemark (Democratic); great in name for now (their industry is as drawn). Two starts, both on 1 January 2036. The Deco UI is v0.10.3 (`deco_ui/docs/VERSIONS.md`). The Gazetteer shows players a quick-start guide the first time they unlock a nation, a state size guide (Cardonia's states the usual size, author 2026-10-18) before the province one, a button to hide suggestions, and what each base-game trait does.
+  Fraxhemark (Democratic); great in name for now (their industry is as drawn). Two starts, both on 1 January 2036. The Deco UI is v0.10.4 (`deco_ui/docs/VERSIONS.md`). The Gazetteer shows players a quick-start guide the first time they unlock a nation, a state size guide (Cardonia's states the usual size, author 2026-10-18) before the province one, a button to hide suggestions, and what each base-game trait does.
   Rouental has test decisions for every kind of event and a test superevent (`test_events.py`).
   **The Gazetteer's facts are in the mod again** (2026-10-18: the author's export of that morning, 17 nations with
   something entered, `source/gazetteer/`; its 15 suggestions put on the map by `apply_suggestions.py`), after the

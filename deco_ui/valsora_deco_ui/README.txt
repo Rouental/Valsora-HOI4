@@ -1,4 +1,4 @@
-VALSORA DECO UI - v0.10.3 (for HOI4 1.19)
+VALSORA DECO UI - v0.10.4 (for HOI4 1.19)
 =========================================
 
 An art deco interface for the Valsora total conversion: core skin and fonts,
@@ -29,6 +29,20 @@ Valsora repository's scripts/common.py and rebuild (sh scripts/run_all.sh).
 
 The layout is built for 1920 px of UI width: 1920x1080 at 100% UI scale, or
 2560x1440 at up to 133%.
+
+
+NEW IN v0.10.4
+--------------
+  - The diplomacy panel's own pictures: the leader's portrait in an arched
+    gilt frame like the events' and the army bar's, the flag in a frame
+    like the medallion's, the politics block with a gilt ring round the
+    pie, the national focus button, the spirits band and the wells. The
+    filter strip and the opinion box keep the game's pictures (they have
+    the game's icons painted in).
+
+Things to check in game (v0.10.4):
+  - another country's diplomacy panel: the portrait in its arch, the flag,
+    the pie, the focus button (hover it), the national spirits.
 
 
 NEW IN v0.10.3

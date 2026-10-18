@@ -17,6 +17,10 @@ into the build.
         What source/gazetteer/ holds, against the last build: how much each nation has
         filled in, facts that no longer land on their nation (borders changed), open
         requests, characters and anything else for the author to do by hand.
+    python3 scripts/gazetteer.py faces
+        Find the faces in the imported pictures (source/gazetteer/faces.json, which the
+        import fills in itself), so a portrait is cut round its character's face; needs
+        OpenCV (pip install opencv-python-headless==4.10.0.84) only when it finds new ones.
     python3 scripts/gazetteer.py suggestions
         Everyone's suggestions (areas, lines and points drawn on the page) as
         dist/gazetteer_suggestions.png, a transparent 5120x2560 layer to import into the
@@ -281,13 +285,60 @@ def with_pictures(v, images, missing):
     return {k: with_pictures(x, images, missing) for k, x in v.items()}
 
 
-def portrait_box(w, h):
-    """HOI4's 156:210 from the top of a picture, centred across it when it is wider:
-    (left, top, width) for nations.PORTRAITS"""
-    if w * 210 > h * 156:
-        cw = round(h * 156 / 210)
+# where the face is in each portrait (2026-10-18, the author: "when importing pictures of characters from the Gazetteer,
+# try to center the image around the character"; Port Almohavid's ruler stood at the left of his photo, and the middle
+# of it was cut out): {file: [x, y, w, h] or null}, found when a picture is imported (OpenCV's face detector,
+# `faces()`), kept beside the pictures so the build needs no detector and stays the same from one machine to the next
+FACES = DIR / "faces.json"
+FACE_ZOOM = 3.2  # a portrait at most this many times as wide as the face in it
+FACE_Y = 0.36   # a face's middle this far down the portrait, as in the base game's (when the picture is tall enough)
+
+
+def find_face(path):
+    """the face most surely a face in a picture, [x, y, w, h], or None (none found, or no OpenCV)"""
+    try:
+        import cv2
+    except ImportError:
+        return None
+    g = cv2.imread(str(path), cv2.IMREAD_GRAYSCALE)
+    if g is None:
+        return None
+    casc = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+    found, _, weights = casc.detectMultiScale3(g, 1.1, 5, minSize=(max(20, g.shape[1] // 12),) * 2,
+                                               outputRejectLevels=True)
+    if len(found) == 0:
+        return None
+    best = max(range(len(found)), key=lambda i: float(weights[i]))
+    return [int(v) for v in found[best]]
+
+
+def faces(files=None):
+    """find the faces of the pictures under DIR/assets not looked at yet (or `files`) into FACES"""
+    known = json.loads(FACES.read_text(encoding="utf-8")) if FACES.exists() else {}
+    todo = files or [f"assets/{f.name}" for f in sorted((DIR / "assets").glob("*")) if f.suffix in (".png", ".jpg")]
+    new = [f for f in todo if f not in known]
+    for f in new:
+        known[f] = find_face(DIR / f)
+    if new or not FACES.exists():
+        FACES.write_text(json.dumps(known, indent=1, sort_keys=True) + "\n", encoding="utf-8")
+    return known
+
+
+def portrait_box(pic):
+    """HOI4's 156:210 cut from a picture ({"file", "w", "h"}): (left, top, width) for nations.PORTRAITS. Around the
+    face when one was found (FACES): head and shoulders (at most FACE_ZOOM times the face's width, as the base game's
+    portraits are, so a full-length photo is cut in close), the face's middle across it and FACE_Y of the way down;
+    else the middle of a wide picture, the top of a tall one."""
+    w, h = pic["w"], pic["h"]
+    face = (json.loads(FACES.read_text(encoding="utf-8")) if FACES.exists() else {}).get(pic.get("file"))
+    cw = min(w, round(h * 156 / 210))                  # the largest cut that fits
+    if not face:
         return (w - cw) // 2, 0, cw
-    return 0, 0, w
+    cw = min(cw, max(156, round(face[2] * FACE_ZOOM)))
+    ch = round(cw * 210 / 156)
+    left = min(max(round(face[0] + face[2] / 2 - cw / 2), 0), w - cw)
+    top = min(max(round(face[1] + face[3] / 2 - FACE_Y * ch), 0), h - ch)
+    return left, top, cw
 
 
 # ------------------------------------------------------------------ import
@@ -741,6 +792,7 @@ def import_nations(nations, planned=None, sources=(), unlock=None):
         elif f.exists():
             f.unlink()
     install_flags(load())
+    faces()
     if todo:
         print(f"{len(todo)} pictures to download first (Artifact read with path = the asset id, into "
               f"assets/ beside the pulled atlas or the file), then run this again:")
@@ -1208,7 +1260,7 @@ def leaders(tag, subs, facts, handmade, named, portraits):
         pic = v.get("portrait") or {}
         if pic.get("file") and (DIR / pic["file"]).is_file() and pic.get("w") and pic.get("h"):
             pname = f"{tag}_gazetteer_{role}"
-            portraits[pname] = (str(DIR / pic["file"]), *portrait_box(pic["w"], pic["h"]), None)
+            portraits[pname] = (str(DIR / pic["file"]), *portrait_box(pic), None)
             sprite = f"GFX_portrait_{pname}"
         traits = tuple(t for t in v.get("traits") or [] if t in trait_index()["ruler"])
         if v.get("name") or v.get("desc") or sprite or traits:
@@ -1246,7 +1298,7 @@ def characters(tag, facts, portraits, small=None, generic=None):
         cid = f"{tag}_gazetteer_{role_}_{n[role_]}"
         pic, sprite = c.get("portrait") or {}, None
         if pic.get("file") and (DIR / pic["file"]).is_file() and pic.get("w") and pic.get("h"):
-            portraits[cid] = (str(DIR / pic["file"]), *portrait_box(pic["w"], pic["h"]), None)
+            portraits[cid] = (str(DIR / pic["file"]), *portrait_box(pic), None)
             sprite = f"GFX_portrait_{cid}"
         notes = " / ".join(ln.strip() for ln in (c.get("notes") or "").splitlines() if ln.strip())
         traits = c.get("traits") or []
@@ -1341,7 +1393,7 @@ def patch_characters(text, changes, loc, portraits, notes):
         pic = g.get("portrait") or {}
         sprite = re.search(r"large = GFX_portrait_(\w+)", block)
         if sprite and pic.get("file") and (DIR / pic["file"]).is_file() and pic.get("w") and pic.get("h"):
-            portraits[sprite.group(1)] = (str(DIR / pic["file"]), *portrait_box(pic["w"], pic["h"]), None)
+            portraits[sprite.group(1)] = (str(DIR / pic["file"]), *portrait_box(pic), None)
         cl = _span(block, r"^\t\tcountry_leader = \{$")
         if cl:
             c0, c1 = cl
@@ -1400,7 +1452,7 @@ def game_character_names(changes, named, portraits, handmade):
         traits = rest[1] if len(rest) > 1 else ()
         pic = g.get("portrait") or {}
         if pic.get("file") and (DIR / pic["file"]).is_file() and pic.get("w") and pic.get("h"):
-            portraits[cid] = (str(DIR / pic["file"]), *portrait_box(pic["w"], pic["h"]), None)
+            portraits[cid] = (str(DIR / pic["file"]), *portrait_box(pic), None)
             sprite = f"GFX_portrait_{cid}"
         named[cid] = (g.get("name") or name, sprite, g.get("desc") or desc,
                       tuple(g["traits"]) if "traits" in g else traits)
@@ -1806,5 +1858,7 @@ if __name__ == "__main__":
         status()
     elif len(sys.argv) == 2 and sys.argv[1] == "suggestions":
         suggestions()
+    elif len(sys.argv) == 2 and sys.argv[1] == "faces":
+        print(f"{sum(v is not None for v in faces().values())} faces in {FACES}")
     else:
         sys.exit(__doc__)

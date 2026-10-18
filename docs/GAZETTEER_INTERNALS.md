@@ -119,6 +119,14 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   communist, whose ids its focus tree names) their names, titles, portraits and traits through `NAMED_LEADERS`.
   Unchanged characters stay byte for byte, and without facts the build is byte-identical. `check_mod.py` checks every
   commander's skill (1–9) and stats (0–9), and that they are its role's (mutation-tested, 2 of 2).
+- **Portraits are cut round the face** (2026-10-18, the author: "when importing pictures of characters from the
+  Gazetteer, try to center the image around the character"; Port Almohavid's ruler stood at the left of his photo, and
+  the middle of the picture was cut out): the import finds each picture's face (OpenCV's frontal-face detector, the
+  surest hit) into `source/gazetteer/faces.json` (`gazetteer.faces()`, also `python3 scripts/gazetteer.py faces`), and
+  `portrait_box` cuts HOI4's 156:210 round it, head and shoulders (at most `FACE_ZOOM` 3.2 times the face's width), the
+  face's middle across it and `FACE_Y` 36 % down; a picture without a face found keeps the old cut (the middle of a
+  wide picture, the top of a tall one). The faces are kept so the build needs no OpenCV and stays byte for byte the
+  same on any machine; only an import with new pictures needs it (`requirements.txt`).
 - **Start over** (author, 2026-10-16: "is there a way you could reset any edits made thus far? I'd like a blank
   slate"): Owner tools › Start over (`startOverSec`, `clearEveryNation`) deletes every document but `key` in each
   folder of `owner/keys`' nations (the rules let admins delete) and writes `planned/reset` `{at}` (everyone reads it).

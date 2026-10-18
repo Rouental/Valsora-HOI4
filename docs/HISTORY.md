@@ -10,6 +10,13 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-18, evening (the author: "continuing to stylized the other screens in Deco style. One specific one is the
+  diplomacy screen ... I'd definitely like ... the leader portrait stylized the same way others are"; "when importing
+  pictures of characters from the Gazetteer, try to center the image around the character"): **Deco UI v0.10.4**, the
+  diplomacy panel's own pictures (`deco_ui/tools/diplomacy_art.py`: the leader's arched frame, the flag's frame, the
+  politics block and its pie ring, the national focus button, the spirits band and the wells); **the Gazetteer's
+  portraits cut round their faces** (`source/gazetteer/faces.json`: Port Almohavid's Usamah Lakhdar was cut in half,
+  the full-length photos are head and shoulders now).
 - 2026-10-18, later still (the author's upload, "I tried marking out areas which I know will be either tundra or
   extreme desert or jungle like base game africa. Maybe try generating provinces in those area with this in mind? Just
   a snapshot / preview, not for the full mod"; "The notification is still a dot, rather than the shape I specified"):

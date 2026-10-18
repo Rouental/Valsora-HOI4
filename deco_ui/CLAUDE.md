@@ -14,9 +14,18 @@ Treat assumed items as hypotheses.
 
 ---------------------------------------------------------------------------------------------------
 
-## 1. Status (v0.10.3)
+## 1. Status (v0.10.4)
 
-**v0.10.3 (2026-10-18, later)** is the current version: the decision counts on plates shaped like the medallion's
+**v0.10.4 (2026-10-18, evening)** is the current version: the diplomacy panel's own pictures (`diplomacy_art.py`,
+`dv_`; the author: "continuing to stylized the other screens in Deco style. One specific one is the diplomacy screen
+... redraw the pictures ... the leader portrait stylized the same way others are"): the leader's frame an arched
+opening in a chamfered gilt plate, as the leader events' and the army bar's; the flag's frame as the medallion's; the
+politics block behind the pie and the ruling party, the pie's gilt ring, the national focus button (3 frames), its
+progress frame, the national spirits band, the header strip, the country list's binding, the wells, the short window
+header. The filter strip and the opinion box stay the game's (its icons are painted into them). Preview
+`build/preview_diplomacy.png` (+ `_vanilla`). **Not yet seen in game.**
+
+**v0.10.3 (2026-10-18, later)** came before it: the decision counts on plates shaped like the medallion's
 shoulders, the corner by the seal cut off (the author: "The notification is still a dot, rather than the shape I
 specified"; their outline of 2026-10-17 was the shoulder's shape, which v0.10.1 had read as a place for the game's
 round badge): `layout.DEC_PLATE`, `DEC_CUT`, `GFX_valsora_deco_dec_count_left` / `_right`. **Not yet seen in game.**
@@ -105,6 +114,7 @@ lessons that still hold are in section 6 (engine facts) and section 9 (pitfalls)
 | Selected armies, fleets, operatives, air wings (`unitview.gui`, `naviesview.gui`, `operativeleader.gui`, `airselectionview.gui`) | v0.8.2: moved below the medallion (`make_mapviews.py`); v0.10: their badges, plaques, frames and buttons redrawn (`mapview_art.py`, `mv_`); v0.10.1: the fleet panel's ship type and admiral's name in `Main_14_bold` (the name in two lines inside its frame), the home base in `hoi_16mbs` (`make_mapviews.TEXTS`). Previews `build/preview_mapviews.png`, `preview_navy.png`. |
 | Battle plan toolbar (`battleplantools.gui`) | v0.10 (`battleplan_art.py`, `bp_`): the bar's wells, the pop-ups with legs to their button, the order and setting buttons with the game's glyphs in gilt. v0.10.1: no corner brackets (they stuck out past the chamfers), every glyph centred in its well by its own ink (`battleplan_art.centred`), a setting's lit frame its plate alone. Preview `build/preview_battleplan.png`. |
 | Land and naval battles (`landcombat.gui`, `navalcombat.gui`) | v0.10 (`combat_art.py`, `cb_`): the battle window, frames, bars, cards, the tactics list; the naval battle's picture with an ivory plotting sheet. Previews `build/preview_landcombat.png`, `preview_navalcombat.png`. |
+| Diplomacy panel's own pictures (`countrydiplomacyview.gui`) | v0.10.4 (`diplomacy_art.py`, `dv_`): the leader's arched frame, the flag's frame, the politics block and the pie's ring (`pol_piechart_overlay`, also the game's elsewhere), the national focus button and its progress frame, the spirits band, the header strip, the list binding, the unity well, the 203 px text well, the short window header. The filter strip and the opinion box stay the game's (icons painted in). Preview `build/preview_diplomacy.png`. |
 | Diplomatic action windows (`countrydiplomacyview.gui`, `factions/faction_popup.gui`, `operative.gui`) | v0.10 (`diplo_art.py`, `dp_`): 22 pictures and their pieces, a header with a gilt line emblem per action at both ends. Preview `build/preview_diplo.png`. |
 | Game setup (`frontendgamesetupview.gui`) | v0.10 (`setup_art.py`, `gs_`): the country selection, the start's window, the details panel, the cards, the difficulty and Start buttons, the map screen's bars. v0.10.1 (`make_setup.py`, the first `.gui` of v0.10's screens): the country selection 150 px wider for a ninth card, the details' emblem, wheel and spirits spaced on one line and the wheel in the politics screen's style. Preview `build/preview_setup.png`. |
 | Popups and windows of one picture (`popupwindow.gui`, `worldtensionwindowpopup.gui`, `tutorialscreen.gui`, `settings.gui`, the trade offer, the variant designer, the agency, insignia, air missions, the naval region) | v0.10 (`window_art.py`, `wf_`; `popup_art.py`, `pp_`): frames with a header band and title plate, roundels, footer plates; the popups' header strips and the war medallion. Previews `build/preview_windows.png`, `preview_popups.png`. |
@@ -254,7 +264,8 @@ tools/
                             window_art.py (the window frames the core skin missed, wf_), mapview_art.py (the selected
                             armies', fleets' and operatives' badges, mv_), combat_art.py (the land battle, cb_),
                             diplo_art.py (the diplomatic action windows, dp_), setup_art.py (game setup, gs_),
-                            popup_art.py (the sometimes-seen windows of one picture each, pp_)
+                            popup_art.py (the sometimes-seen windows of one picture each, pp_), diplomacy_art.py
+                            (the diplomacy panel's own pictures, dv_; preview_diplomacy.py)
   make_loading.py           the four loading screens (v0.10, out of the mod again in v0.10.1, kept for later): run by
                             hand into build/loading_screens/ (--into-mod: where the mod would ship them); needs the
                             Valsora build's work/
@@ -951,6 +962,8 @@ GP.write_gui(MOD + "interface/x.gui", t)    # braces checked, engine_safe applie
 
 ## 10. Open items and things to check in game
 
+- **v0.10.4**: the diplomacy panel on another country (its leader in the arched frame, the flag in its frame, the
+  pie in its ring, the national focus button lit on hover, the spirits band's label on its tab).
 - **v0.10.3**: both decision counts at once (a decision with a time limit and one to take): each plate in its
   shoulder, its number centred.
 - **v0.10.1**: the loading screen on the game's picture with the gilt bar and tip, no brackets past their corners, and

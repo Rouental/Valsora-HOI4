@@ -1617,6 +1617,90 @@
   "sig": "0909f521465c852e25df5909821deec31b76370a56d23ab5e3036d9bcecf0423"
  },
  {
+  "key": "dv_leader_frame",
+  "path": "gfx/interface/diplo_leader_frame.dds",
+  "w": 134,
+  "h": 175,
+  "sig": "e113d7ae2a75407003b667c35632415209c05d2f2fb4dd4a208f916a6239899f"
+ },
+ {
+  "key": "dv_flag_frame",
+  "path": "gfx/interface/diplo_flag_frame.dds",
+  "w": 134,
+  "h": 80,
+  "sig": "211a17057cb1296ecf942d71adc681a696a1cab4f916769d532d724d2dd940f9"
+ },
+ {
+  "key": "dv_top",
+  "path": "gfx/interface/diplo_top_bg_diplo_tab.dds",
+  "w": 399,
+  "h": 167,
+  "sig": "1b69d4d667de6760d81213059096704715bbdf23490e7aa0e4f980931d0f2468"
+ },
+ {
+  "key": "dv_pie_overlay",
+  "path": "gfx/interface/pol_piechart_overlay.dds",
+  "w": 71,
+  "h": 71,
+  "sig": "fedb5974d8a520003189eecc2b102885e653fe96e41e239cb06f3c88e3461dd4"
+ },
+ {
+  "key": "dv_upper",
+  "path": "gfx/interface/diplo_upper_win_bg.dds",
+  "w": 399,
+  "h": 71,
+  "sig": "847d4c6a275de265ce1a8823a3fbfd48ede74fa02d49b457ffb0a14d5bba14c9"
+ },
+ {
+  "key": "dv_binding",
+  "path": "gfx/interface/diplo_countrylist_binding.dds",
+  "w": 533,
+  "h": 35,
+  "sig": "26614184233e5212b846ab7a9bc2f7051d8439fe1067b57f9d9341a583f518f7"
+ },
+ {
+  "key": "dv_goal",
+  "path": "gfx/interface/diplo_goal_button.dds",
+  "w": 855,
+  "h": 64,
+  "sig": "efa58eb979540eed08a74b897a24236d37bea9abd415b1d318ac30879774c2c3"
+ },
+ {
+  "key": "dv_goal_progress",
+  "path": "gfx/interface/pol_goal_progress_frame.dds",
+  "w": 239,
+  "h": 8,
+  "sig": "d6c38a1909c26ccd8517682850c8c9a29ebf8478280b5574659d0746843d83a0"
+ },
+ {
+  "key": "dv_spirits",
+  "path": "gfx/interface/diplo_nat_spirits_bg.dds",
+  "w": 520,
+  "h": 92,
+  "sig": "3e0081ea28c4736b2f671b4213b2dc93e3478280cac3f2f6c01300564636881e"
+ },
+ {
+  "key": "dv_unity",
+  "path": "gfx/interface/diplo_unity_bg.dds",
+  "w": 42,
+  "h": 62,
+  "sig": "5c89da440bd819d172aedba8066a1d3033b355833c08a1c9398d607a5da92ef6"
+ },
+ {
+  "key": "dv_text_203",
+  "path": "gfx/interface/generic_text_bg_203.dds",
+  "w": 203,
+  "h": 27,
+  "sig": "5a28b0379e0db581d7f5c7cd6f9087f55f78a13d972bce6a05a375c8dda0e07c"
+ },
+ {
+  "key": "dv_header_short",
+  "path": "gfx/interface/win_header_short.dds",
+  "w": 233,
+  "h": 112,
+  "sig": "2943ee6f27d62ed8e582dddcdee20f4bcb1b156e411881c90c555ad6ff60d569"
+ },
+ {
   "key": "mm_column",
   "path": "gfx/interface/mapmode/mapmode_main_bg.dds",
   "w": 87,

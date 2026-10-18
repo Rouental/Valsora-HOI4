@@ -110,6 +110,15 @@ it before touching the UI. In short:
   `DEC_CUT`; sprites `GFX_valsora_deco_dec_count_left` / `_right`; v0.10.1 had only moved the game's round badge into
   the shoulder). The game's shared `topbar_alert_bg` stays the round badge for the intelligence agency's, the
   prototypes', the trade contracts' and the officer corps' counts.
+- **v0.10.4** (2026-10-18, evening, not yet seen in game; the author: "continuing to stylized the other screens in Deco
+  style. One specific one is the diplomacy screen ... Yep, redraw the pictures. One thing I'd definitely like in
+  particular is to have the leader portrait stylized the same way others are"): the diplomacy panel's own pictures at
+  the game's paths and sizes (`diplomacy_art.py`, `dv_`): the leader's frame an arched opening in a chamfered gilt
+  plate (as the leader events' and the army bar's; the plate ends where the politics block covers the game's frame),
+  the flag's frame as the medallion's, the politics block (a gilt socket for the pie, wells for the texts, a fan where
+  the game had its laurel and flags), the pie's ring, the national focus button's three frames, its progress frame, the
+  national spirits band with its label's tab, the header strip, the country list's binding, the unity and text wells,
+  the short window header. The filter strip and the opinion box stay the game's: its icons are painted into them.
 - **Proposals for the side panels' own pictures** (research, production, the market, the overview strip, the
   intelligence agency, the spirit banners) are in `deco_ui/art/proposals/panel_pictures/`, **not in the mod**
   (author, 2026-10-15: "don't put them in the mod yet. I'd like to see and approve them first").

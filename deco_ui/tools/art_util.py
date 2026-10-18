@@ -13,7 +13,7 @@ from paths import VANILLA as _VANILLA
 # the art modules gen_textures.py draws (each an ADDS list of (key, path, w, h, function)); validate_preview.py holds
 # every one of their textures to the game's size
 ART_MODULES = ["designer_art", "battleplan_art", "mapview_art", "combat_art", "diplo_art", "setup_art", "window_art",
-               "popup_art"]
+               "popup_art", "diplomacy_art"]
 
 def chamfer(c):
     return f"polygon({c}px 0,calc(100% - {c}px) 0,100% {c}px,100% calc(100% - {c}px),calc(100% - {c}px) 100%,{c}px 100%,0 calc(100% - {c}px),0 {c}px)"

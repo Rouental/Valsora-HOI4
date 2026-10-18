@@ -6,6 +6,14 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**A Gazetteer portrait off centre** (2026-10-18, the author: "earlier one of the portraits was off center. I think it
+was Port Almohavid?")
+- Cause: `gazetteer.portrait_box` cut HOI4's 156:210 from the middle of a wide picture (the top of a tall one), wherever
+  the person stood: Usamah Lakhdar stands at the left of his 640 x 414 photo, so the cut took his right shoulder and
+  the wall; the full-length photos (Szalai Diána seated, László Vilmos at a lectern) came out as small figures.
+- Fix: the import finds each picture's face (OpenCV, kept in `source/gazetteer/faces.json`) and the cut is head and
+  shoulders round it (`docs/GAZETTEER_INTERNALS.md`); all 14 portraits checked on a sheet, before and after.
+
 **The decision counts were still round dots** (2026-10-18, the author's screenshot of v0.10.2: "The notification is
 still a dot, rather than the shape I specified")
 - Cause: their picture of 2026-10-17 outlined each shoulder of the medallion in red ("Maybe move the notifications on
