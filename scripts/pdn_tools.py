@@ -68,7 +68,7 @@
         prints the necks and draws work/pdn_tools/necks.png, and saves nothing.
     python3 scripts/pdn_tools.py areas
         The states mostly inside the author's marked areas (the "Impassible / Desert / Jungle / Tundra" layer,
-        areas.py) cut again into fewer, larger provinces (areas.PROVINCE_PX: impassable 1500 px, desert 600, jungle
+        areas.py) cut again into fewer, larger provinces (areas.PROVINCE_PX: impassable one province a state, desert 600 px, jungle
         400), the rivers of the last build kept on province borders. Run river_provinces.py first after new rivers.
     python3 scripts/pdn_tools.py refine [--apply] [--borders N]
         More provinces, where they are fewest (the author, 2026-10-18: "I'd like a general increase of the province
@@ -813,13 +813,13 @@ def areas_cut(names, L):
         m[ys - y0, xs - x0] = True
         old = len(np.unique(P[y0:y1, x0:x1][m]))
         size = areas.PROVINCE_PX[kind]
-        rv = river[y0:y1, x0:x1] & m
+        rv = river[y0:y1, x0:x1] & m if size else np.zeros(m.shape, bool)   # impassable: one province, rivers or not
         banks = sklabel(m & ~rv, connectivity=1)
         plan = []
         for b in range(1, banks.max() + 1):
             by, bx = np.nonzero(banks == b)
             if len(by) >= MIN_PROVINCE:
-                plan.append((by, bx, max(1, round(len(by) / size))))
+                plan.append((by, bx, max(1, round(len(by) / size)) if size else 1))
         if not plan or sum(k for *_, k in plan) >= old:
             continue  # no fewer provinces to be had
         out = np.zeros(m.shape, np.int64)

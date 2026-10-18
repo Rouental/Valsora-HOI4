@@ -82,7 +82,7 @@ New detail goes into those files; this one gets a line.
   `gazetteer_site`, `publish_site.sh`, `tests/gazetteer/`); vanilla (`vanilla_sync`, `pdxscript`); tests not in the
   game (`terrain_test`, `usnistan_prototype`, `coarse_preview`); `build_flags15.sh` (the larger flags' test version).
 - **HOI4's hard rules** (all checked by `check_mod.py`): the map is 5120×2560 (the largest size under the game's cap);
-  **at most 65,536 province borders** (3,343 left on 2026-10-18, night; new land is cut at ~190 px; `borders.py` counts); provinces
+  **at most 65,536 province borders** (3,370 left on 2026-10-18, night; new land is cut at ~190 px; `borders.py` counts); provinces
   one 4-connected blob of 16+ px, no 2×2 window of four provinces; `definition.csv` CRLF; localisation UTF-8 with BOM;
   every province in one strategic region, a state's provinces in one, naval regions contiguous; the map files exactly
   map-sized. Map errors crash on launch unless the game runs with `-debug`: always test with it.
@@ -106,6 +106,9 @@ New detail goes into those files; this one gets a line.
 - **Read the `.pdn` directly** (its format: `docs/DECISIONS.md`); the placeholder mode's layout of the continents
   (rigid blocks, scale 0.375, straits traced, islets dropped, Antarctica removed) is history now that the author draws
   at game size.
+- **The areas layer** (author, 2026-10-18): red is impassable desert, "like the big African deserts that are one
+  massive province" (one province a state, `impassable = yes`); yellow desert; the lines round them on Necessary
+  States are states too (`scripts/areas.py`, `pdn_tools.py areas`).
 - **No bricks are left** (2026-10-15): every lake is one province and all land is cut like an outlined patch.
 - **Enclosed water becomes lakes**; the two inland seas with islands are navigable sea.
 - **Sea provinces and sea regions are Merlo's** (2026-10-12, the author's friend; `sea_provinces.py`), seamless across
@@ -236,9 +239,9 @@ the page, its rules or its import.
 
 Where things stand; the history, date by date, is `docs/HISTORY.md` (add each day's entry at its top).
 
-- **The build** (2026-10-18, night): 21,093 provinces (20,705 land, 363 sea, 25 lakes), 62,193 province borders
-  (HOI4 draws 65,536: 3,343 free, `docs/BORDER_LIMIT.md`), 3,179 states (22 impassable: Usnistan's deserts, the
-  author's areas layer, `scripts/areas.py`; their land and the yellow areas desert terrain, cut coarse), 179 strategic
+- **The build** (2026-10-18, night): 21,084 provinces (20,696 land, 363 sea, 25 lakes), 62,166 province borders
+  (HOI4 draws 65,536: 3,370 free, `docs/BORDER_LIMIT.md`), 3,179 states (22 impassable: Usnistan's deserts, the
+  author's areas layer, `scripts/areas.py`; one province each, as the base game's great deserts; their land and the yellow areas desert terrain, cut coarse), 179 strategic
   regions (137 land, made from the nations on 2026-10-16: `land_regions.py`, not redone for the borders since; 42 sea);
   419 strait crossings (none between the Illiriciums or to North Pollana); Belekria 1, 4, 5, 6 and 15 coarse as
   tundra; Sminishia's claims on West Sminishia's land (`nations.CLAIMS`); 194 countries
@@ -273,8 +276,8 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   in v0.10.2, not yet seen. Before that (2026-10-17) v0.10's findings, fixed in v0.10.1. Older findings, all fixed since: `deco_ui/docs/VERSIONS.md`. Not seen yet besides: the two starts, Vilna and Placeholdgrad. The Deco UI's checklist for the author is in `deco_ui/valsora_deco_ui/README.txt` (Things to check) and `deco_ui/CLAUDE.md` (section 10).
 - **Waiting on the author:** (2026-10-18, night) names for Usnistan's 60 new states
   (`dist/state_numbers_usnistan_deserts.png`) and Rouental's and Terreich's new ones; whether the nine desert nations'
-  map tools open on the Gazetteer now their states are drawn (`gazetteer.finals`); the coarse sizes Claude chose
-  (impassable 1,500 px, desert 600: `areas.PROVINCE_PX`) and what tundra should be; Rouental's elite divisions
+  map tools open on the Gazetteer now their states are drawn (`gazetteer.finals`); the desert size Claude chose
+  (600 px: `areas.PROVINCE_PX`) and what tundra should be; Rouental's elite divisions
   refilled with new men (how to keep them full: the reply of 2026-10-18, night); the icon proposals
   (`deco_ui/art/proposals/icons/`); the jungle and tundra marks of the earlier upload (the layer "Desert", not in the
   latest one); a read-only service account for the Gazetteer (its key as the environment's
@@ -316,8 +319,8 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
 4. **What still reads as the 1940s**: the tech tree's names, descriptions and pictures (its dates are 2036's;
    `docs/TECH_TREE_2036.md` is a proposal), the 3D models, and the game's own pictures inside the side panels (the
    Deco UI's proposals wait for approval).
-5. **Province borders**: 3,343 left under HOI4's limit (62,193 of 65,536, 2026-10-18, night: the coarse deserts gave
-   back 1,341), for the states still to be drawn (`docs/BORDER_LIMIT.md`).
+5. **Province borders**: 3,370 left under HOI4's limit (62,166 of 65,536, 2026-10-18, night: the coarse deserts gave
+   back 1,368), for the states still to be drawn (`docs/BORDER_LIMIT.md`).
 
 ## Working with the author
 

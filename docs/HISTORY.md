@@ -10,6 +10,9 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-18, night, later (the author: "By impassible I mean like the big African deserts that are one massive
+  province. And yes, the new lines on necessary states are also states"): each of the 22 impassable states one
+  province (`areas.PROVINCE_PX`): 21,084 provinces, 62,166 borders (3,370 under the limit).
 - 2026-10-18, night (the author's upload "HOI4_Mod_Map_10-18_1", their in-game findings in v0.10.2 to v0.10.4 and
   "Alright, get started"): **the map**: Usnistan's desert areas (`scripts/areas.py`: red impassable, yellow desert),
   the nine desert nations' states from their lines (60, 22 of them impassable as the base game's Sahara), the marked

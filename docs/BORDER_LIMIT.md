@@ -5,8 +5,8 @@ provinces once terrain starts being applied in earnest" will free some ("areas t
 provinces"). Numbers from the build of 2026-10-15; rerun them with `python3 scripts/border_report.py` (add
 `--terrain map` once the Terrain layer is painted, `--preview` for the picture).
 
-**Now** (2026-10-18, night): 62,193 borders built, 3,343 under the limit: Usnistan's marked deserts cut coarse
-(`pdn_tools.py areas`: 486 provinces to 119, impassable land about 1,500 px a province, desert 600) gave back 1,341;
+**Now** (2026-10-18, night): 62,166 borders built, 3,370 under the limit: Usnistan's marked deserts cut coarse
+(`pdn_tools.py areas`: 486 provinces to 110, an impassable state one province, desert 600 px) gave back 1,368;
 before that 63,531 (2,005 under, the buffer `pdn_tools.py refine` keeps). The numbers below are the 2026-10-15 ones
 the report was written with.
 

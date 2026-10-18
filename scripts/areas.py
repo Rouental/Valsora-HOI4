@@ -18,9 +18,10 @@ LAYER_NAMES = ("Impassible", "Impassable", "Desert")
 KINDS = ("impassable", "desert", "jungle")
 # terrain.bmp palette index each kind paints (source/palettes/terrain.bmp.header.bin: 3 is desert, 22 jungle)
 TERRAIN = {"impassable": 3, "desert": 3, "jungle": 22}
-# province size there, px (docs/EDITING.md's empty land, 300 to 800 px; impassable land larger, as the base game's
-# Sahara): Claude's choice, 2026-10-18, the author asked for no number
-PROVINCE_PX = {"impassable": 1500, "desert": 600, "jungle": 400}
+# province size there, px (docs/EDITING.md's empty land, 300 to 800 px: Claude's choice, 2026-10-18). Impassable land is
+# one province a state, whatever its size (None; the author, 2026-10-18: "By impassible I mean like the big African
+# deserts that are one massive province"), the rivers through it scenery
+PROVINCE_PX = {"impassable": None, "desert": 600, "jungle": 400}
 
 
 def layer_name(names):
