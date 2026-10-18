@@ -64,6 +64,29 @@ def blockers(width, panel_x):
 # content's offset (child_shift: per element); height: a fixed-height window's, which grows by the shift;
 # attrs: other attributes to set (path -> dict; the path's first element counts as the header's and stays put)
 # inner_attrs: attributes of elements inside the content, which moves down as usual
+# the diplomacy panel's header and leader block (v0.11, the author, 2026-10-18: "the bar with ideology, stability, names,
+# etc. should be level with the flag ... the leader's name can run off the screen if too long ... Diplomacy tab isn't
+# great. Like the intel, the box isn't aligned with the flag. Focus icon isn't centered ... diplomacy should look as
+# much like politics as possible ... larger portraits like Krionik's start to get cut off"). The flag's frame is the
+# bar's 71 px tall (diplomacy_art.FLAG's mat) and moves to the bar's top (y -4) and the tabs' left edge (x 15); the
+# names stop 4 px before the opinion box (the game's x 341 + 33), so a long one is cut with "..." where it would have
+# run under it; the portrait is the game's at diplomacy_art.PORTRAIT_SCALE inside the flatter arch of its frame
+# (diplomacy_art.LEADER["portrait"], the frame at the block's (13, 0))
+DIPLO_NAME_W = 341 + 33 - 4 - 245
+DIPLO = {"country_info>diplo_flag_frame": dict(position=(15 - 8, -4 - 1)),
+         "country_info>diplo_country_flag": dict(position=(15 - 8 + 26, -4 - 1 + 11)),
+         "country_info>country_name": dict(maxWidth=DIPLO_NAME_W),
+         "country_info>faction>faction_name": dict(maxWidth=DIPLO_NAME_W),
+         "country_info>leader_name": dict(maxWidth=DIPLO_NAME_W),
+         "country_info>diplomacy_tab_top>leader_portrait": dict(position=(13 + 12, 28), scale="0.66")}
+
+# the decisions tab's events box and rows (v0.11, decisions_art.py): the game wrote their texts in its typewriter faces,
+# dark ink for the paper it drew them on; on the Deco UI's lacquer they take its light faces (elements of the file's
+# own top-level windows, not of the panel)
+DECISION_FONTS = {"event_header>name_text": dict(font="valsora_deco_heading_22"),
+                  "event_item>name_text": dict(font="valsora_deco_body_15"),
+                  "event_item>timer_text": dict(font="valsora_deco_body_15")}
+
 PANELS = {
     "army": dict(file="countryarmyview.gui", window="countryarmyview", title="army_title", header_bg=["army_header_bg"],
                  controls={"naval_hq_open": (-171, CONTROLS_Y), "destroyed_ships_open": (-131, CONTROLS_Y),
@@ -75,12 +98,12 @@ PANELS = {
                          close=(98, 14), shift=74, child_shift={"possible_constructions": NB - 40},
                          preview_hide=["tutorial_glow", "expand"]),
     "decisions": dict(file="countrydecisionview.gui", window="countrydecisionview", title="decisionview_title",
-                      header_bg=["production_header_bg"]),
+                      header_bg=["production_header_bg"], toplevel_attrs=DECISION_FONTS),
     "deployment": dict(file="countrydeploymentview.gui", window="countrydeploymentview", title="deployment_title",
                        header_bg=["production_header_bg"]),
     "diplomacy": dict(file="countrydiplomacyview.gui", window="countrydiplomacyview", title="diplomacy_title",
                       header_bg=["production_header_bg"], controls={"player_info_box": (270, 62)},
-                      preview_hide=["country_list", "intel_ledger_container"]),
+                      preview_hide=["country_list", "intel_ledger_container"], inner_attrs=DIPLO),
     "intelligence": dict(file="countryintelligenceagencyview.gui", window="countryintelligenceagencyview",
                          title="intelligenceagencyview_title", header_bg=["production_header_bg"],
                          preview_hide=["before_creation_panel", "agency_crypto"]),

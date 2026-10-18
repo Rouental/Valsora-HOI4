@@ -326,7 +326,8 @@ import designer_art as _DA  # noqa: E402
 import importlib as _il  # noqa: E402
 from art_util import ART_MODULES as _ART  # noqa: E402
 _RESIZED = {r for _m in _ART for r in getattr(_il.import_module(_m), "RESIZED", ())}   # laid out by a patched .gui
-SAME_SIZE = [r for _m in _ART for _k, r, _w, _h, _f in _il.import_module(_m).ADDS if r not in _RESIZED] + [
+import make_panel_pictures as _MPP  # noqa: E402
+SAME_SIZE = [r for _m in _ART for _k, r, _w, _h, _f in _il.import_module(_m).ADDS if r not in _RESIZED] + _MPP.PATHS + [
              "gfx/interface/pol_view_bg.dds", "gfx/interface/pol_view_bg_no_dlc.dds", "gfx/interface/tiles/tiles_dialog.dds",
              # the panels' shared pieces (v0.5): the game lays them out at vanilla's sizes
              "gfx/interface/closebutton.dds", "gfx/interface/header_bg.dds", "gfx/interface/category_header.dds",
@@ -394,7 +395,7 @@ for p in glob.glob(M + "gfx/interface/button_*.dds"):
 # every texture in the mod comes from the current build (stale files from older versions are reported)
 import json  # noqa: E402
 from paths import MANIFEST  # noqa: E402
-_man = {m["path"] for m in json.load(open(MANIFEST))}
+_man = {m["path"] for m in json.load(open(MANIFEST))} | set(_MPP.PATHS)   # and make_panel_pictures.py's (v0.11)
 for f in glob.glob(M + "gfx/**/*", recursive=True):
     rel = f[len(M):].replace(os.sep, "/")
     if os.path.isfile(f) and not rel.startswith("gfx/fonts/") and rel not in _man:
@@ -585,14 +586,14 @@ SKIP = {"reopen_ingame_lobby", "reopen_ingame_lobby_label", "toggle_music_comman
         "prototype_rewards_aquired_bg", "prototype_rewards_aquired", "non_delivering_contracts", "delivering_contracts",
         "faction_icon", "industrial_ratio_bar", "pause_window"}
 SAMPLE = {"valsora_deco_pp_daily": "\u00a7G+1.80\u00a7!",
-          "valsora_deco_factory_counts": "\u00a7O\u25c6\u00a7!2 \u00a7C\u25c6\u00a7!0 \u00a7W\u25c6\u00a7!3",
+          "valsora_deco_factory_counts": "\u00a7G\u25c6\u00a7!2 \u00a7C\u25c6\u00a7!0 \u00a7O\u25c6\u00a7!3",
           "valsora_deco_country_name_small": "Terrabis-Seran", "pol_power": "47", "stability": "60%", "war_support": "30%", "manpower": "151.2K",
           "industrial_capacity": "3/2/0", "fuel_value": "4.1K", "supply_value": "92%", "convoys_count": "20",
           "command_power_value": "18", "experience_value": "12", "navy_experience_value": "8",
           "air_experience_value": "5", "nukes_value": "2", "initiative_text": "0", "industrial_capacity": "5", "threat_value": "4%", "DateText": "12:00, 1 March, 2036",
           "valsora_deco_country_name": "Rouental"}
 WORST = {"valsora_deco_pp_daily": "\u00a7G+12.50\u00a7!",
-         "valsora_deco_factory_counts": "\u00a7O\u25c6\u00a7!30 \u00a7C\u25c6\u00a7!8 \u00a7W\u25c6\u00a7!45",
+         "valsora_deco_factory_counts": "\u00a7G\u25c6\u00a7!30 \u00a7C\u25c6\u00a7!8 \u00a7O\u25c6\u00a7!45",
          "valsora_deco_country_name_small": "Ponchomagnifico", "pol_power": "999", "stability": "100%", "war_support": "100%", "manpower": "12.34M",
          "industrial_capacity": "120/80/12", "fuel_value": "99.9K", "supply_value": "100%", "convoys_count": "999",
          "command_power_value": "200", "experience_value": "999", "navy_experience_value": "999",

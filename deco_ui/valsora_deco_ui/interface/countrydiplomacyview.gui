@@ -143,13 +143,13 @@ guiTypes = {
 			iconType = {
 				name = "diplo_country_flag"
 				quadTextureSprite ="GFX_shield_medium"
-				position = { x= 40 y = 1 }
+				position = { x = 33 y = 6 }
 				Orientation = UPPER_LEFT
 			}
 
 			iconType = {
 				name = "diplo_flag_frame"
-				position = { x = 14 y = -10 }
+				position = { x = 7 y = -5 }
 				spriteType = "GFX_diplo_flag_frame"
 				alwaystransparent = yes
 			}
@@ -167,7 +167,7 @@ guiTypes = {
 				position = { x = 245 y = 3 }
 				font = "hoi_18mbs"
 				text = "Germanian"
-				maxWidth = 195
+				maxWidth = 125
 				fixedsize = yes
 				maxHeight = 20
 				format = left
@@ -184,7 +184,7 @@ guiTypes = {
 					position = { x = 0 y = 0 }
 					font = "hoi_18mbs"
 					text = "faction"
-					maxWidth = 173
+					maxWidth = 125
 					maxHeight = 20
 					fixedsize = yes
 					format = left
@@ -196,7 +196,7 @@ guiTypes = {
 				position = { x = 245 y = 43 }
 				font = "hoi_16mbs"
 				text = "Rudolf Kittler"
-				maxWidth = 173
+				maxWidth = 125
 				maxHeight = 20
 				format = left
 				fixedsize = yes
@@ -334,9 +334,9 @@ guiTypes = {
 
 				iconType = {
 					name = "leader_portrait"
-					position = { x = 20 y = 10 }
+					position = { x = 25 y = 28 }
 					spriteType = "GFX_leader_unknown"
-					scale = 0.74
+					scale = 0.66
 				}
 
 				iconType = {

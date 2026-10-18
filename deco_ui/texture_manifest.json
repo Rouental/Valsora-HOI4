@@ -1621,28 +1621,28 @@
   "path": "gfx/interface/diplo_leader_frame.dds",
   "w": 134,
   "h": 175,
-  "sig": "e113d7ae2a75407003b667c35632415209c05d2f2fb4dd4a208f916a6239899f"
+  "sig": "dc4adf7d44459791a94249f6fea9e379989ab7ba093a24f351fe909cd45f86c0"
  },
  {
   "key": "dv_flag_frame",
   "path": "gfx/interface/diplo_flag_frame.dds",
   "w": 134,
   "h": 80,
-  "sig": "211a17057cb1296ecf942d71adc681a696a1cab4f916769d532d724d2dd940f9"
+  "sig": "cc6b67dc34d19408750b98afb7f1b70ab6fd46289bcabb1c3aeb50259cb57e53"
  },
  {
   "key": "dv_top",
   "path": "gfx/interface/diplo_top_bg_diplo_tab.dds",
   "w": 399,
   "h": 167,
-  "sig": "1b69d4d667de6760d81213059096704715bbdf23490e7aa0e4f980931d0f2468"
+  "sig": "e9a469ad821fa4ceafc0d0c2576c957ca68a74cf539eedb263ee4f8001f90e7d"
  },
  {
   "key": "dv_pie_overlay",
   "path": "gfx/interface/pol_piechart_overlay.dds",
   "w": 71,
   "h": 71,
-  "sig": "fedb5974d8a520003189eecc2b102885e653fe96e41e239cb06f3c88e3461dd4"
+  "sig": "9ed6330e5c3756aef85aac6fb80c2103136621e2d1fadf2cf9987f81309e9cec"
  },
  {
   "key": "dv_upper",
@@ -1663,7 +1663,7 @@
   "path": "gfx/interface/diplo_goal_button.dds",
   "w": 855,
   "h": 64,
-  "sig": "efa58eb979540eed08a74b897a24236d37bea9abd415b1d318ac30879774c2c3"
+  "sig": "c7d02cb45348eaccf31b005b6733a9c7b040b408e6555a994d6f48cdda7dd7a1"
  },
  {
   "key": "dv_goal_progress",
@@ -1699,6 +1699,69 @@
   "w": 233,
   "h": 112,
   "sig": "2943ee6f27d62ed8e582dddcdee20f4bcb1b156e411881c90c555ad6ff60d569"
+ },
+ {
+  "key": "dc_category_header",
+  "path": "gfx/interface/decisionview/category_header_bg.dds",
+  "w": 516,
+  "h": 53,
+  "sig": "2d44d80d26925dc1a144388dafc65c902f9f2a3ee126d498c5b6053c97f4ffd1"
+ },
+ {
+  "key": "dc_event_header",
+  "path": "gfx/interface/decisionview/event_header_bg.dds",
+  "w": 515,
+  "h": 83,
+  "sig": "753be769401ccbf89f857f35e1cafc4a53d4102a906d6e9549ddc049a5ceb083"
+ },
+ {
+  "key": "dc_decision_item",
+  "path": "gfx/interface/decisionview/decision_item_bg.dds",
+  "w": 1536,
+  "h": 40,
+  "sig": "3ee8ef1775c0e2491921e2d990a61d42503648b5e21acd2034fca2bf0f9660de"
+ },
+ {
+  "key": "dc_event_item",
+  "path": "gfx/interface/decisionview/event_item_bg.dds",
+  "w": 512,
+  "h": 33,
+  "sig": "164acb589110ea69cb3cce0a9c3bee3cb036bfc2b1dc19e94f4e2087e664db17"
+ },
+ {
+  "key": "dc_light2",
+  "path": "gfx/interface/decisionview/checkbox_small4.dds",
+  "w": 46,
+  "h": 23,
+  "sig": "9d8e9e02f5ed82a16e089c676b57bb9618f653d71d2e3317d0ab6e82f4edfc42"
+ },
+ {
+  "key": "dc_light3",
+  "path": "gfx/interface/decisionview/checkbox_small5.dds",
+  "w": 69,
+  "h": 23,
+  "sig": "cbb53814583e1e6bd4635d21cf06274605957229c438d53448a02157d7d28f03"
+ },
+ {
+  "key": "dc_checkbox",
+  "path": "gfx/interface/generic_checkbox3.dds",
+  "w": 56,
+  "h": 23,
+  "sig": "a16bfe6f0f8772d37a530fdafe57fe92e4a85287bd70b2d5e6a6cc8afb91f511"
+ },
+ {
+  "key": "dc_fold",
+  "path": "gfx/interface/collapse_conveyor_btn.dds",
+  "w": 48,
+  "h": 25,
+  "sig": "b0fc95d47ae5e37530685268b18d1b5552d7db50dd6e09a3778bce0d8fcccba6"
+ },
+ {
+  "key": "dc_tile",
+  "path": "gfx/interface/tiles/tiled_decisions_bg_small.dds",
+  "w": 48,
+  "h": 48,
+  "sig": "df6651cf143d3e03359296cb2a3814fd2ed9054bbdae435b4abbd93aec69aac8"
  },
  {
   "key": "mm_column",
@@ -2251,7 +2314,7 @@
   "path": "gfx/interface/valsora_deco/topbar_right.dds",
   "w": 532,
   "h": 112,
-  "sig": "3055bbceb9a9c5bc612943decff4599528f12b35438ff4fabecc14ef93cb63a2"
+  "sig": "1f8ab933fb3d13ff789a80c29fbeeeaa6a54ac5566aa64c6a9325d5d82b7807b"
  },
  {
   "key": "btn_menu",
@@ -2270,9 +2333,9 @@
  {
   "key": "btn_playlist",
   "path": "gfx/interface/valsora_deco/playlist_button.dds",
-  "w": 26,
-  "h": 26,
-  "sig": "171e40408692f2ca543117a3804d67f3038cc4c7a9afa53b1cdd9fb3cb50b5bc"
+  "w": 57,
+  "h": 47,
+  "sig": "fd6b7d3f20a7d18f05c74da4a4e11ae239e8aeba96d3b236bcea87ec6c7957ce"
  },
  {
   "key": "pol_head_pol_view_bg",
@@ -2761,15 +2824,15 @@
   "key": "tb_dec_count_left",
   "path": "gfx/interface/valsora_deco/dec_count_left.dds",
   "w": 88,
-  "h": 17,
-  "sig": "6d1cfe3911105cbe8ff95dc54366edd0312d0d8a4a5bf035ca48f633dbbeb397"
+  "h": 19,
+  "sig": "f030786562d26a749faec42aaa1679fc550f5c9f710992773a0e6f556e876d17"
  },
  {
   "key": "tb_dec_count_right",
   "path": "gfx/interface/valsora_deco/dec_count_right.dds",
   "w": 88,
-  "h": 17,
-  "sig": "2765a4c22414450660b653ea2c2048dd68d86634366b11343844af13c1d6a2ad"
+  "h": 19,
+  "sig": "e408eeb2a00685030e442597f7b9e265407c8de742a590e35a3215f99e5507e1"
  },
  {
   "key": "shared_production_line_arrow_left",

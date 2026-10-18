@@ -44,6 +44,7 @@ TREE_TILE = 192                        # the tree's pattern tile (64 x 32 scales
 SEARCH = dict(w=232, h=40)
 ZOOM_D = 30
 FILTER = 36                            # filter chip (2 frames: off / on)
+FILTER_ICON = (FILTER // 2 - 13, FILTER // 2 - 14)   # the game's 27 px filter icon centred in it (v0.11)
 LEGEND = dict(w=560, h=30, x=-592, y=-66)   # LOWER_RIGHT, above the horizontal scrollbar
 HEAD_TILE_B = 260                      # the header is a cornered tile: 260 px kept at each end (the notch is
 HEAD_TILE_W = 2 * HEAD_TILE_B + 96     # in the left one), a 96 px middle repeated to the window's width

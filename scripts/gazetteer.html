@@ -180,6 +180,9 @@ button, input, select, textarea { font: inherit; color: inherit; }
   padding: 6px 9px 4px; background: var(--sheet); border: 1px solid var(--rule); font-size: 12px; color: var(--ink-2); }
 .legend span { display: inline-flex; align-items: center; gap: 5px; }
 .legend i { width: 11px; height: 11px; border: 1px solid rgba(0,0,0,.25); }
+.legend .nbterr { pointer-events: auto; font: inherit; padding: 1px 8px; border: 1px solid var(--rule-2); border-radius: 3px;
+  background: var(--sheet); color: var(--ink); cursor: pointer; }
+.legend .nbterr[aria-pressed="true"] { background: var(--jade-2); border-color: var(--jade); }
 .has-insets .legend { top: 10px; bottom: auto; max-width: calc(100% - 70px); }
 /* the province size ruler (2026-10-17): the guide's three sizes as squares at the map's zoom, left of the zoom buttons */
 .sizes { position: absolute; right: 54px; top: 10px; display: flex; flex-direction: column; gap: 6px; align-items: flex-end; max-width: calc(100% - 74px);
@@ -2031,8 +2034,11 @@ function renderPart(N, P, active, pal) {
       const r = rel && N.relOf.get(s);
       if (r) c = mix(c, rgb(relColour(r)), r === app.ui.rel ? 0.66 : 0.4);
     } else {
-      const o = N.others[v - own], nb = o >= 0 ? N.nb[o] : null;
-      c = nb ? mix(pal.other, rgb(nb.colour), 0.16) : pal.other;
+      const o = N.others[v - own], nb = o >= 0 ? N.nb[o] : null, ot = N.otherT && N.otherT[v - own];
+      // the neighbours' terrain, as the mod has it, paler than one's own (the author, 2026-10-18: "there should be an
+      // option to be able to see the terrain of your neighbors"; the Neighbours' terrain switch under the map)
+      if (mode === "terrain" && app.ui.nbTerrain && ot && pal.t[ot]) c = mix(pal.t[ot], pal.other, 0.4);
+      else c = nb ? mix(pal.other, rgb(nb.colour), 0.16) : pal.other;
     }
     fill[v] = c;
     e1[v] = pack(mix(c, pal.ink, 0.18)); e2[v] = pack(mix(c, pal.ink, 0.5)); e4[v] = pack(mix(c, pal.ink, 0.42));
@@ -2174,6 +2180,9 @@ function renderLegend(pal) {
   else if (mode === "terrain") {
     for (const [k, nm] of TERRAINS) items.push(sw(pal.t[k], nm));
     items.push(sw(mix(pal.t.plains, pal.paper, 0.45), "Not set (plains)"));
+    if (app.N.otherT) items.push(h("button", { class: "nbterr", type: "button", "aria-pressed": String(!!app.ui.nbTerrain),
+      title: "Show the neighbours' terrain too (as the mod has it; only their own players can change it)",
+      onclick: () => { app.ui.nbTerrain = !app.ui.nbTerrain; renderBase(); } }, "Neighbours' terrain"));
   } else if (mode === "pop") {
     const b = app.N.popBreaks || [];
     pal.pop.forEach((c, i) => items.push(sw(c, i === 0 ? "under " + fmt(b[0]) : `${fmt(b[i - 1])}+`)));

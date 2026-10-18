@@ -339,6 +339,25 @@ def m_claim_tag(mod):
     return "add_claim_by QQX is not a defined tag"
 
 
+def _impassable(mod):
+    return next(f for f in sorted((mod / "history/states").glob("*.txt")) if "impassable = yes" in f.read_text())
+
+
+def m_impassable_unlinked(mod):
+    f = _impassable(mod)
+    edit(mod, f"history/states/{f.name}", lambda t: re.sub(r"\tforce_link_ownership_to = \d+\n", "", t, count=1))
+    return "is impassable and not linked to a passable state"
+
+
+def m_impassable_capital(mod):
+    f = _impassable(mod)
+    sid = re.search(r"\bid = (\d+)", f.read_text()).group(1)
+    own = re.search(r"\bowner = (\w+)", f.read_text()).group(1)
+    h = next(g for g in sorted((mod / "history/countries").glob(f"{own} - *.txt")))
+    edit(mod, f"history/countries/{h.name}", lambda t: re.sub(r"\bcapital = \d+", f"capital = {sid}", t, count=1))
+    return f"{own}'s capital state {sid} is impassable"
+
+
 def m_state_loc(mod):
     edit(mod, "localisation/english/valsora_l_english.yml", lambda t: re.sub(r"\n VAL_STATE_1:0 \"[^\"]*\"", "", t, count=1))
     return "state name VAL_STATE_1 has no localisation"
@@ -443,7 +462,8 @@ BATCHES = {
     "map": [m_crlf, m_adjacency_end, m_strait_through_land, m_building_row, m_ships_in_port, m_earth_map_file, m_weather_big, m_supply_node_sea,
             m_railway_apart, m_x_crossing, m_land_low, m_terrain_ocean],
     "history": [m_technology, m_module, m_equipment, m_idea, m_battalion, m_define, m_earth_history, m_popularities,
-                m_ruling_party, m_recruit_unknown, m_faction_template, m_bookmark, m_descriptor, m_autonomy, m_claim_tag],
+                m_ruling_party, m_recruit_unknown, m_faction_template, m_bookmark, m_descriptor, m_autonomy, m_claim_tag,
+                m_impassable_unlinked, m_impassable_capital],
     "content": [m_decision_stand_in, m_event_stand_in, m_old_date, m_tree_label, m_start_year, m_trait, m_advisor_slot,
                 m_prerequisite, m_state_loc, m_decision_loc, m_trigger_for, m_scripted_effect, m_war_goal, m_song,
                 m_company_include, m_company_tag, m_company_loc, m_concern_trait, m_idea_loc, m_skill_range, m_skill_kind],

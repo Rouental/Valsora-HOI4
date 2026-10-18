@@ -62,6 +62,14 @@
         place of the ones cut for it (pieces under MIN_PROVINCE px join the neighbour they
         share most border with, line pixels the nearest piece). A state the lines don't
         divide is left as it is, with a note. States, countries and regions don't change.
+    python3 scripts/pdn_tools.py necks TAG [--radius 5] [--min-lobe 250] [--apply]
+        Islands stuck together: in the land masses holding TAG's land, the lobes the necks narrower than about
+        2 x radius + 1 px join (lobes of min-lobe px or more) are cut apart by 2 px channels of sea. Without --apply it
+        prints the necks and draws work/pdn_tools/necks.png, and saves nothing.
+    python3 scripts/pdn_tools.py areas
+        The states mostly inside the author's marked areas (the "Impassible / Desert / Jungle / Tundra" layer,
+        areas.py) cut again into fewer, larger provinces (areas.PROVINCE_PX: impassable 1500 px, desert 600, jungle
+        400), the rivers of the last build kept on province borders. Run river_provinces.py first after new rivers.
     python3 scripts/pdn_tools.py refine [--apply] [--borders N]
         More provinces, where they are fewest (the author, 2026-10-18: "I'd like a general increase of the province
         count. For example, Evriches should have at least 3 or 4 provinces ... still leave a buffer"): every nation
@@ -753,6 +761,98 @@ def tundra(L, P, St, land, locked):
     return out
 
 
+def marked_states(names, L, St, land):
+    """state -> (kind, share) for the states mostly inside one kind of the author's marked areas (areas.py)"""
+    import areas
+    nm = areas.layer_name(names)
+    if nm is None:
+        return {}
+    M = areas.masks(L[nm], land)
+    out = {}
+    sv = np.where(land, St, -1)
+    u, inv = np.unique(sv, return_inverse=True)
+    tot = np.bincount(inv.ravel())
+    for k, m in M.items():
+        share = np.bincount(inv.ravel(), weights=m.ravel(), minlength=len(u)) / tot
+        for i in np.nonzero(share > 0.5)[0]:
+            if u[i] >= 0:
+                out[int(u[i])] = (k, float(share[i]))
+    return out
+
+
+def areas_cut(names, L):
+    """The states mostly inside the author's marked areas (areas.py: impassable, desert, jungle) cut again into
+    provinces of about areas.PROVINCE_PX of their kind, fewer and larger, the rivers the last build drew kept on
+    province borders (each bank cut on its own, the river pixels joining the province beside them, as
+    river_provinces.py does). States with the author's own province lines are left as they are; states, countries and
+    regions don't change. Refine leaves these states as sparse as they are."""
+    import areas
+    from apply_outlines import organic_split
+    from skimage.measure import label as sklabel
+    t = L["Terrain"][..., :3]
+    land = ~((t == OCEAN).all(-1) | (t == LAKES).all(-1))
+    P = code(L["Provinces"][..., :3])
+    St = np.where(L["States"][..., 3] > 0, code(L["States"][..., :3]), -1)
+    world = np.load("work/world.npz")
+    river = world["rivers"] < 254
+    if river.shape != land.shape or (river & ~land).any():
+        raise SystemExit("work/world.npz does not match the .pdn: run scripts/run_all.sh first")
+    locked = set(np.unique(St[(L["Necessary Provinces"][..., 3] > 0) & land]).tolist()) - {-1}
+    fresh = iter(palette(20000, False, 20261019, set(np.unique(P).tolist())))
+    before = after = 0
+    kinds = Counter()
+    for sc, (kind, share) in sorted(marked_states(names, L, St, land).items()):
+        if sc in locked:
+            print(f"state {sc:06x}: the author's province lines are there; left as it is")
+            continue
+        ys, xs = np.nonzero((St == sc) & land)
+        if xs.min() == 0 and xs.max() == W - 1:
+            continue  # across the map's wrap
+        y0, y1, x0, x1 = ys.min(), ys.max() + 1, xs.min(), xs.max() + 1
+        m = np.zeros((y1 - y0, x1 - x0), bool)
+        m[ys - y0, xs - x0] = True
+        old = len(np.unique(P[y0:y1, x0:x1][m]))
+        size = areas.PROVINCE_PX[kind]
+        rv = river[y0:y1, x0:x1] & m
+        banks = sklabel(m & ~rv, connectivity=1)
+        plan = []
+        for b in range(1, banks.max() + 1):
+            by, bx = np.nonzero(banks == b)
+            if len(by) >= MIN_PROVINCE:
+                plan.append((by, bx, max(1, round(len(by) / size))))
+        if not plan or sum(k for *_, k in plan) >= old:
+            continue  # no fewer provinces to be had
+        out = np.zeros(m.shape, np.int64)
+        for by, bx, k in plan:
+            parts = organic_split(by + y0, bx + x0, k, seed=int(sc) % 100003 + len(by))
+            for q in np.unique(parts):
+                out[by[parts == q], bx[parts == q]] = next(fresh)
+        miss = m & (out == 0)  # river pixels and scraps: the province beside them
+        idx = ndi.distance_transform_edt(out == 0, return_distances=False, return_indices=True)
+        out[miss] = out[idx[0][miss], idx[1][miss]]
+        for c in np.unique(out[m]):  # the nearest province may be across a diagonal: one piece each
+            comp = sklabel(out == c, connectivity=1)
+            if comp.max() > 1:
+                keep = np.bincount(comp.ravel())[1:].argmax() + 1
+                for j in range(1, comp.max() + 1):
+                    if j != keep:
+                        pm = comp == j
+                        ring = ndi.binary_dilation(pm, CROSS) & ~pm & m & (out != c)
+                        if ring.any():
+                            v, cnt = np.unique(out[ring], return_counts=True)
+                            out[pm] = v[cnt.argmax()]
+        win = P[y0:y1, x0:x1]
+        win[m] = out[m]
+        new = len(np.unique(out[m]))
+        before += old
+        after += new
+        kinds[kind] += 1
+        print(f"state {sc:06x} at ({xs[0]}, {ys[0]}), {kind} ({share:.0%}): {old} provinces -> {new}")
+    put(L["Provinces"], P, land)
+    print(f"{sum(kinds.values())} marked states ({', '.join(f'{k} {v}' for k, v in kinds.items())}): "
+          f"{before} provinces became {after}")
+
+
 def refine(names, L, apply, target=None):
     import heapq
     import borders
@@ -783,6 +883,7 @@ def refine(names, L, apply, target=None):
     inv = inv.reshape(P.shape)
     boxes = ndi.find_objects(inv + 1)
     locked_states |= {int(St[y, x]) for x, y in REFINE_SPARSE + REFINE_TUNDRA}
+    locked_states |= set(marked_states(names, L, St, land))  # the author's marked areas stay sparse (areas_cut)
     prov = {}
     for i, c in enumerate(u):
         if c < 0:
@@ -1028,6 +1129,65 @@ def channel(names, L, pairs):
               f"landmasses nearby {before} -> {after}")
 
 
+def necks(names, L, tag, radius, min_lobe, apply):
+    """Islands stuck together (the author, 2026-10-18, of Myehn: "I noticed multiple instances of Myehnese islands being
+    stuck together"): in each land mass holding the nation's land, the lobes an opening of RADIUS px leaves (the land
+    the necks narrower than about 2 x RADIUS + 1 px join), the ones of MIN_LOBE px or more, are cut apart: the land
+    goes to the nearest lobe, and where two lobes meet a channel 2 px wide becomes sea (to_sea: the nearest sea province
+    and region). Prints each neck and writes work/pdn_tools/necks.png (before, the lobes, the cuts in red); --apply
+    saves."""
+    from PIL import Image
+    from common import COUNTRIES
+    terr = code(L["Terrain"][..., :3])
+    sea = terr == code(np.array(OCEAN))
+    land = ~sea & (terr != code(np.array(LAKES)))
+    r, g, b = next(v[3] for v in COUNTRIES.values() if v[0] == tag)
+    mine = (code(L["Countries"][..., :3]) == ((r << 16) | (g << 8) | b)) & land
+    ys, xs = np.nonzero(mine)
+    y0, y1, x0, x1 = max(ys.min() - 30, 0), min(ys.max() + 31, H), max(xs.min() - 30, 0), min(xs.max() + 31, W)
+    ld, md = land[y0:y1, x0:x1], mine[y0:y1, x0:x1]
+    comp, _ = ndi.label(ld, CROSS)
+    yy, xx = np.mgrid[-radius:radius + 1, -radius:radius + 1]
+    disk = yy ** 2 + xx ** 2 <= radius * radius + 0.5
+    cut = np.zeros(ld.shape, bool)
+    found = []
+    for c in sorted(set(np.unique(comp[md]).tolist()) - {0}):
+        m = comp == c
+        lobes, n = ndi.label(ndi.binary_opening(m, disk) & m, CROSS)
+        sizes = np.bincount(lobes.ravel())
+        big = [i for i in range(1, n + 1) if sizes[i] >= min_lobe]
+        if len(big) < 2:
+            continue
+        lobes = np.where(np.isin(lobes, big), lobes, 0)
+        idx = ndi.distance_transform_edt(lobes == 0, return_distances=False, return_indices=True)
+        near = np.where(m, lobes[idx[0], idx[1]], 0)
+        line = np.zeros(m.shape, bool)
+        for dy, dx in ((0, 1), (1, 0)):
+            a, bb = near[:m.shape[0] - dy, :m.shape[1] - dx], near[dy:, dx:]
+            line[:m.shape[0] - dy, :m.shape[1] - dx] |= (a != bb) & (a > 0) & (bb > 0)
+        line = ndi.binary_dilation(line, CROSS) & m
+        cl, k = ndi.label(line, np.ones((3, 3)))
+        for i, sl in enumerate(ndi.find_objects(cl), 1):
+            q = cl[sl] == i
+            qy, qx = np.nonzero(q)
+            found.append((int(qx.mean() + sl[1].start + x0), int(qy.mean() + sl[0].start + y0), int(q.sum())))
+        cut |= line
+    for x, y, n in found:
+        print(f"neck at ({x}, {y}): {n} px of land become sea")
+    print(f"{len(found)} necks, {int(cut.sum())} px")
+    img = np.where(ld[..., None], np.array([200, 190, 150]), np.array([20, 30, 60])).astype(np.uint8)
+    img[md & ~cut] = (215, 120, 100)
+    img[cut] = (255, 0, 0)
+    Image.fromarray(img).resize((img.shape[1] * 2, img.shape[0] * 2), Image.NEAREST).save(WORK / "necks.png")
+    if not apply:
+        print(f"a plan only (written {WORK / 'necks.png'}): --apply cuts them")
+        return False
+    full = np.zeros(land.shape, bool)
+    full[y0:y1, x0:x1] = cut
+    to_sea(L, full, sea, land, (y0 + 20, y1 - 20, x0 + 20, x1 - 20), 20261018)
+    return True
+
+
 def to_sea(L, cut, sea, land, box, seed):
     """Make the land pixels `cut` sea (sea and land, the masks, are updated): the nearest sea province and region,
     ocean terrain, below sea level; land provinces cut apart become provinces of 16+ px, scraps join a neighbour.
@@ -1053,6 +1213,7 @@ def to_sea(L, cut, sea, land, box, seed):
     P = code(L["Provinces"][..., :3])
     used = set(np.unique(P).tolist())
     rng = np.random.default_rng(seed)
+    lone = np.zeros(cut.shape, bool)
     for pc in set(np.unique(P[ndi.binary_dilation(cut, CROSS) & land]).tolist()):
         comp = sklabel((P == pc) & land, connectivity=1)
         sizes = np.bincount(comp.ravel())[1:]
@@ -1066,12 +1227,15 @@ def to_sea(L, cut, sea, land, box, seed):
                         break
             else:
                 ring = ndi.binary_dilation(piece, CROSS) & land & ~piece
-                if not ring.any():  # a scrap alone in the water: left as it is
-                    print(f"to_sea: a scrap of {sizes[j - 1]} px alone in the water left as it is")
+                if not ring.any():  # a scrap alone in the water, too small for a province: sea too (2026-10-18)
+                    print(f"to_sea: a scrap of {sizes[j - 1]} px alone in the water becomes sea")
+                    lone |= piece
                     continue
                 nc = Counter(P[ring].tolist()).most_common(1)[0][0]
             L["Provinces"][piece, :3] = [nc >> 16, (nc >> 8) & 255, nc & 255]
             P[piece] = nc
+    if lone.any():
+        to_sea(L, lone, sea, land, box, seed + 1)
 
 
 def main():
@@ -1113,6 +1277,12 @@ def main():
         blue_seas(names, L)
     elif cmd == "provinces":
         provinces(names, L)
+    elif cmd == "necks":
+        opt = lambda k, d: next((int(sys.argv[i + 1]) for i, a in enumerate(sys.argv) if a == k), d)  # noqa: E731
+        if not necks(names, L, sys.argv[2], opt("--radius", 5), opt("--min-lobe", 250), "--apply" in sys.argv):
+            return
+    elif cmd == "areas":
+        areas_cut(names, L)
     elif cmd == "tidy":
         tidy(names, L)
     elif cmd == "refine":

@@ -32,6 +32,7 @@ from common import (MAP_W, MAP_H, CONT_COLOURS, COUNTRIES, TERRAIN_TYPES,
                     TERRAIN_OCEAN, TERRAIN_LAKE, MAX_BOX)
 from imgio import palette_from_header
 from provinces import adjacency, crossings, repair
+import areas as area_layer
 import gazetteer
 import rivers as river_lines
 from regions import anchors
@@ -72,6 +73,9 @@ def load():
             if nm in names:
                 out[opt] = np.load(SRC / f"layer{names.index(nm)}.npy")
                 break
+    an = area_layer.layer_name(names)  # the author's impassable / desert / jungle areas (areas.py)
+    if an:
+        out["Areas"] = np.load(SRC / f"layer{names.index(an)}.npy")
     if out["Provinces"].shape[:2] != (H, W):
         sys.exit(f"The .pdn must be {W}x{H} pixels.")
     return out
@@ -216,6 +220,12 @@ def main():
                       f"e.g. at {where(ys, xs)}")
         terr[terr < 0] = TERRAIN_OCEAN
     pix_kind = np.where(terr == TERRAIN_OCEAN, 0, np.where(terr == TERRAIN_LAKE, 2, 1))
+    # the author's marked areas paint their terrain over the Terrain layer's (land only; the Gazetteer still wins)
+    marked = area_layer.masks(L.get("Areas"), pix_kind == 1)
+    for k, m in marked.items():
+        terr[m] = area_layer.TERRAIN[k]
+    if marked:
+        notes.append("Areas: " + ", ".join(f"{k} {int(m.sum()):,} px" for k, m in marked.items() if m.any()))
 
     # ---------------------------------------------------------------- provinces
     P = L["Provinces"]
@@ -348,6 +358,13 @@ def main():
         else:
             owners.append(tagcol[c])
 
+    # a state mostly marked impassable is impassable (areas.py)
+    impassable = []
+    if marked.get("impassable") is not None and marked["impassable"].any():
+        red = np.bincount(lab.ravel(), weights=marked["impassable"].ravel(), minlength=n)
+        size_px = np.bincount(lab.ravel(), minlength=n)
+        impassable = [s for s, g in enumerate(states) if red[g].sum() > 0.5 * size_px[g].sum()]
+
     # ---------------------------------------------------------------- strategic regions
     rcode = np.where(L["Strategic Regions"][..., 3] > 0, rgb_code(L["Strategic Regions"][..., :3]), -1)
     # a colour is a sea region if most of its pixels are sea; land provinces ignore sea
@@ -479,6 +496,7 @@ def main():
     if subregions:
         print(f"note: {len(subregions)} painted patches on the Subregions layer")
     json.dump(dict(states=states, regions=regions, owners=owners, cities=cities, subregions=subregions,
+                   impassable=impassable,
                    adjacency=[[int(x), int(y), int(c)] for x, y, c in zip(a, b, cnt)]),
               open("work/regions.json", "w"))
     print(f"read {n} provinces ({(kind == 1).sum()} land, {(kind == 0).sum()} sea, "

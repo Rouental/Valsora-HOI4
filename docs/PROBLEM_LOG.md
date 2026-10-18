@@ -6,6 +6,29 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**The diplomacy tab didn't match the politics screen** (2026-10-18, the author's screenshots of v0.10.4: "the box isn't
+aligned with the flag. Focus icon isn't centered ... larger portraits like Krionik's start to get cut off")
+- Causes: the flag's frame was 68 px tall and 3 px under the 71 px bar beside it; the left wells were drawn 5.5 px off
+  the column the game centres its pie and focus icon on; the arch's opening was narrower than the portrait and cut the
+  top corners of a square one (Krionik's seal); the names' boxes ran under the opinion box.
+- Fix (v0.11): the frame the bar's height and level with it; the wells on the game's column; the portrait at 0.66 under
+  a flatter arch; the names cut at the opinion box. When a picture sits beside or around one the game places, take its
+  edges from the game's numbers, not from the picture.
+
+**The logistics numbers ran into each other** (2026-10-18)
+- Cause: in game the values' capitals sat 2 px lower than `layout.py` modelled, 1 px under the bar of the row above.
+- Fix (v0.11): the values 2 px higher, the bars 3 (`layout._strip`).
+
+**The decision plates sat a pixel or two low** (2026-10-18)
+- Cause: their tops were on the step, under the gilt rule the step draws.
+- Fix (v0.11): 2 px taller upwards (`layout.DEC_RAISE`), the bottoms where they were.
+
+**Myehn's islands stuck together** (2026-10-18, the author's screenshots)
+- Cause: islands the author drew apart touch by necks of land a few px wide (from the earlier scaled-up drawing), so the
+  game took them for one landmass.
+- Fix: `pdn_tools.py necks MYH` (7 necks) and two channels by hand (Myehn 23's narrow southern island, Shukumei's
+  island off Myehn 36): 5 strait crossings link them as before (`straits.py`, up to 10 px as approved).
+
 **A Gazetteer portrait off centre** (2026-10-18, the author: "earlier one of the portraits was off center. I think it
 was Port Almohavid?")
 - Cause: `gazetteer.portrait_box` cut HOI4's 156:210 from the middle of a wide picture (the top of a tall one), wherever
@@ -741,6 +764,24 @@ screenshot and `error.log`)
 - Fix: no trailing newline.
 
 ## Map problems found while building
+
+**`regroup_states.py --recut` redid states it shouldn't have** (2026-10-18, night, the upload "HOI4_Mod_Map_10-18_1")
+- What happened: the new state lines were in Usnistan, Rouental and Terreich, but the script makes every country with
+  lines of its own its drawn areas again, map-wide: Ungar's Tópart (31 px, a Gazetteer suggestion) joined
+  Megkoronázott, Terreich's states changed far from the author's two new lines (the suggestions of the same morning,
+  its isles in pairs), and the Humanist State became 2 states (from 23), because one corner of the desert lines ran
+  into it.
+- Fix: its result kept only where the new lines are: the whole of the nine desert nations (North Koronista, Levantinin,
+  Mustawi, Almohavid, Al-Khabid, Al-Radiyaa, Koronista, Kalaistan, Solaria), and in Rouental and Terreich the states,
+  old and new, the changed lines touch (grown until they close on whole states and provinces); everywhere else the map
+  as it was. The Humanist State is in `regroup_states.NOT_DRAWN` until the author draws its states.
+- Next time: compare the regroup's states with the map's before (`work/` script of the night: country by country) and
+  keep it where the lines changed. A `--only` for the script would be the lasting fix.
+
+**Cutting Myehn's necks left scraps of land as broken provinces** (2026-10-18, night)
+- Cause: `to_sea` left a scrap under 16 px, cut off from its province alone in the water, with its province's colour:
+  three provinces were in two pieces and the build stopped.
+- Fix: such scraps become sea too (`to_sea`, by itself).
 
 **The suggestions closed Rouental's and Terreich's map tools on the Gazetteer** (2026-10-18; found by the Gazetteer's
 tests, which open Rouental's state panel and Cities tab)

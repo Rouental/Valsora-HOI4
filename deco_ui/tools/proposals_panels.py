@@ -67,9 +67,16 @@ def fade_right(x0, x1):
 
 # ------------------------------------------------------------------ research: an atom in a sunburst, circuit lines
 def research():
-    w, h = 548, 138
-    pic = (sunburst(92, 57, 80, .32)
-           + svg(w, h, '<g fill="none" stroke="#E3C77E" stroke-width="1.3" opacity=".9">'
+    """v0.11 (the author: "I like the art for the science bar mockup, but it should be better centered and aligned to
+    the box it's in"): the game shows the picture's first VIS px (the panel's edge hides the rest), so the box and the
+    strip under it have M px of margin each side of that; the atom and its circuits are centred in the box"""
+    w, h, VIS, M = 548, 138, 538, 12
+    bw = VIS - 2 * M
+    cx, cy = M + bw / 2 - 118, 45            # the atom: the composition (the atom's 40 px, the circuits to +236) centred
+    ox = cx - 92                             # the drawing below was made for an atom at x 92
+    pic = (sunburst(cx - M, cy, 80, .32)
+           + svg(bw, 90, f'<g transform="translate({ox - M},{cy - 57})">'
+                 '<g fill="none" stroke="#E3C77E" stroke-width="1.3" opacity=".9">'
                  '<ellipse cx="92" cy="57" rx="40" ry="13"/>'
                  '<ellipse cx="92" cy="57" rx="40" ry="13" transform="rotate(60 92 57)"/>'
                  '<ellipse cx="92" cy="57" rx="40" ry="13" transform="rotate(-60 92 57)"/></g>'
@@ -79,13 +86,12 @@ def research():
                            f'<circle cx="{330 + k * 12}" cy="{y + s * 8}" r="2" fill="rgba(227,199,126,.7)" stroke="none"/>'
                            for k, (y, s) in enumerate(((30, 1), (44, -1), (70, 1), (84, -1))))
                  + '</g><g fill="none" stroke="rgba(227,199,126,.35)" stroke-width="1">'
-                 + "".join(f'<path d="M{170 + i * 26},16V100"/>' for i in range(5)) + "</g>")
-           + fade_right(250, 524))
+                 + "".join(f'<path d="M{170 + i * 26},16V100"/>' for i in range(5)) + "</g></g>"))
     return (frame(w, h)
-            + f'<div style="position:absolute;left:12px;top:12px;width:512px;height:90px;overflow:hidden;'
-              f'background:radial-gradient(ellipse at 18% 50%,#1C2B30,#0D1418 60%)">{pic}</div>'
-            + '<div style="position:absolute;left:12px;top:12px;width:512px;height:90px;box-shadow:inset 0 0 0 1px #C9A55A"></div>'
-            + '<div style="position:absolute;left:12px;top:104px;width:512px;height:30px;background:linear-gradient(180deg,#1A252C,#0E1519);'
+            + f'<div style="position:absolute;left:{M}px;top:12px;width:{bw}px;height:90px;overflow:hidden;'
+              f'background:radial-gradient(ellipse at 50% 50%,#1C2B30,#0D1418 65%)">{pic}</div>'
+            + f'<div style="position:absolute;left:{M}px;top:12px;width:{bw}px;height:90px;box-shadow:inset 0 0 0 1px #C9A55A"></div>'
+            + f'<div style="position:absolute;left:{M}px;top:104px;width:{bw}px;height:30px;background:linear-gradient(180deg,#1A252C,#0E1519);'
               'box-shadow:inset 0 1px 0 #C9A55A"></div>'
             + '<div style="position:absolute;left:30px;top:106px;width:1px;height:26px;background:rgba(201,165,90,.5)"></div>'
             + '<div style="position:absolute;left:404px;top:106px;width:1px;height:26px;background:rgba(201,165,90,.5)"></div>')

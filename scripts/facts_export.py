@@ -446,7 +446,7 @@ def main():
         boxes = parts_of(small == t, PART_GAP // 4)
         own = [i for s in mine for i in states[s]]
         local = {i: k for k, i in enumerate(own)}
-        others, nb = [], {}
+        others, other_t, nb = [], [], {}
         parts = []
         for (y0, y1, x0, x1) in sorted(boxes, key=lambda b: -(b[1] - b[0]) * (b[3] - b[2])):
             Y0 = max(0, y0 * 4 - MARGIN)
@@ -467,6 +467,7 @@ def main():
                     if o and o not in nb:
                         nb[o] = len(nb)
                     others.append(nb[o] if o else -1)
+                    other_t.append(terrain[i])  # the neighbours' terrain, as the mod has it (2026-10-18)
             lut = np.zeros(n, np.uint16)
             for i, k in local.items():
                 lut[i] = k + 2
@@ -534,7 +535,7 @@ def main():
                              states=[key(max(states[s_], key=lambda i: (size[i], -i))) for s_ in v["states"]]))
         nation = dict(tag=tag, name=c[1], adj=c[2], colour=colour(tag), flag=flag(tag), flags=gov_flags(tag),
                       continent=CONT_NAME.get(cont, cont), final=final[tag], states=st_list, provs=provs,
-                      others=others, nb=[dict(tag=o, name=COUNTRIES[by_tag[o]][1], colour=colour(o))
+                      others=others, otherT=other_t, nb=[dict(tag=o, name=COUNTRIES[by_tag[o]][1], colour=colour(o))
                                          for o in sorted(nb, key=nb.get)],
                       cities=cities, politics=politics(tag, loc), characters=people, gameReleasables=rels, parts=parts)
         text = json.dumps(nation, ensure_ascii=False, separators=(",", ":"))

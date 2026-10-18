@@ -14,9 +14,20 @@ Treat assumed items as hypotheses.
 
 ---------------------------------------------------------------------------------------------------
 
-## 1. Status (v0.10.4)
+## 1. Status (v0.11)
 
-**v0.10.4 (2026-10-18, evening)** is the current version: the diplomacy panel's own pictures (`diplomacy_art.py`,
+**v0.11 (2026-10-18, night)** is the current version (`docs/VERSIONS.md` has it in full): the top bar's factory
+colours (military green, civilian orange), the decision plates 2 px taller (`layout.DEC_RAISE`), the logistics values
+and bars higher, the music button the tray's framed left end (the author's mockup); the diplomacy and intel tabs' header
+level with the flag and the names cut before the opinion box, the diplomacy tab's portrait in the politics screen's
+arch, whole (`diplomacy_art.PORTRAIT_SCALE`), its pie a donut, its wells centred on the pie and the focus icon, the
+focus button's corners (`layout_panels.DIPLO`); the side panels' own pictures in the mod but the army overview's and
+the agency's (`make_panel_pictures.py`); the decisions tab (`decisions_art.py`, `dc_`; its events box and rows in the
+light faces: `layout_panels.DECISION_FONTS`); the focus tree's filter icons centred (`layout_focus.FILTER_ICON`).
+Proposals (not in the mod): the game's icons in the Deco style (`proposals_icons.py`, `art/proposals/icons/`).
+**Not yet seen in game.**
+
+**v0.10.4 (2026-10-18, evening)** came before it: the diplomacy panel's own pictures (`diplomacy_art.py`,
 `dv_`; the author: "continuing to stylized the other screens in Deco style. One specific one is the diplomacy screen
 ... redraw the pictures ... the leader portrait stylized the same way others are"): the leader's frame an arched
 opening in a chamfered gilt plate, as the leader events' and the army bar's; the flag's frame as the medallion's; the
@@ -265,7 +276,13 @@ tools/
                             armies', fleets' and operatives' badges, mv_), combat_art.py (the land battle, cb_),
                             diplo_art.py (the diplomatic action windows, dp_), setup_art.py (game setup, gs_),
                             popup_art.py (the sometimes-seen windows of one picture each, pp_), diplomacy_art.py
-                            (the diplomacy panel's own pictures, dv_; preview_diplomacy.py)
+                            (the diplomacy panel's own pictures, dv_; preview_diplomacy.py), decisions_art.py (the
+                            decisions tab, dc_; v0.11)
+  make_panel_pictures.py    the side panels' own pictures, the approved drafts (v0.11): proposals_panel_mockups.py's
+                            translate() and photo_plate() and v0.7's hand-drawn proposals, at the game's paths, less
+                            the army overview's and the agency's (KEEP_GAME) and those an art module draws (DRAWN)
+  proposals_icons.py        proposals (v0.11): the game's icons redrawn in the Deco style -> art/proposals/icons/,
+                            build/proposals_icons.png (beside the game's)
   make_loading.py           the four loading screens (v0.10, out of the mod again in v0.10.1, kept for later): run by
                             hand into build/loading_screens/ (--into-mod: where the mod would ship them); needs the
                             Valsora build's work/
@@ -969,6 +986,12 @@ GP.write_gui(MOD + "interface/x.gui", t)    # braces checked, engine_safe applie
 
 ## 10. Open items and things to check in game
 
+- **v0.11**: the factory diamonds' colours; the decision plates' tops on the bar's rule; the logistics values clear of
+  the bars; the music button (click it: the radio still opens); the diplomacy tab on Krionik (the seal whole in the
+  arch), a long leader name cut with "..." before the opinion box, the bar level with the flag on both tabs, the focus
+  icon in its octagon; the decisions tab (the events box's title in cream, the rows, the lights, the fold button); the
+  panels' new pictures (research, production, construction, logistics, trade, market, occupation, officer corps,
+  faction, deployment); the focus tree's filter icons; Rouental's "Test: Many Alerts at Once".
 - **v0.10.4**: the diplomacy panel on another country (its leader in the arched frame, the flag in its frame, the
   pie in its ring, the national focus button lit on hover, the spirits band's label on its tab).
 - **v0.10.3**: both decision counts at once (a decision with a time limit and one to take): each plate in its

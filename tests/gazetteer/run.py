@@ -184,6 +184,22 @@ def owner(b, theme, size, name, full=True):
     page.click("[data-mode=terrain]")
     time.sleep(0.3)
     page.screenshot(path=str(OUT / f"{name}_terrain.png"))
+    # the neighbours' terrain (2026-10-18): the switch under the map colours their land by its terrain
+    nb = page.evaluate("() => !!(app.N.otherT && app.N.otherT.length === app.N.others.length)")
+    check(nb, f"{name}: the nation's map data has no terrain for its neighbours' provinces")
+    if page.query_selector(".legend .nbterr"):
+        hidden = not page.is_visible("#legend")
+        if hidden:                                   # phones start with the map's key folded away
+            page.click("#keybtn")
+        page.click(".legend .nbterr")
+        time.sleep(0.3)
+        check(page.evaluate("() => app.ui.nbTerrain === true"), f"{name}: the neighbours' terrain switch did nothing")
+        page.screenshot(path=str(OUT / f"{name}_terrain_neighbours.png"))
+        page.click(".legend .nbterr")
+        if hidden:
+            page.click("#keybtn")
+    else:
+        check(False, f"{name}: no neighbours' terrain switch in the terrain mode's legend")
     page.click("[data-mode=states]")
     # a city, made the capital
     page.click("[data-tool=city]")

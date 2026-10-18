@@ -74,6 +74,14 @@ layer whose name it doesn't know.
 - **"Should be an island!"**: ring a piece of land that the drawing joined to its neighbour
   by a thin neck, and I cut the neck so it is an island again (done by hand, not by the
   build).
+- **"Impassible / Desert / Jungle / Tundra"** (from 18 October 2026; any layer whose name starts
+  with Impassible, Impassable or Desert): paint areas solid, **red** for impassable desert,
+  **yellow** for desert, **green** for jungle. The build gives that land the terrain, and a state
+  mostly red is impassable (no army can enter it; it changes hands with the passable state of
+  its nation beside it, as the base game's Sahara does). I also cut those states into fewer,
+  larger provinces (impassable about 1,500 px, desert 600, jungle 400), which frees borders
+  for the rest of the map. Draw the areas' edges on Necessary States if they should be states
+  of their own, as in Usnistan. White (tundra) isn't read yet: say what tundra should be.
 
 On the **Provinces** layer the sea provinces are blues, so sea is easy to tell from land.
 They are made from the **Ocean Province Lines** layer (see "Sea provinces" below), so

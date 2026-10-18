@@ -58,26 +58,52 @@ def fan(cx, cy, r, n=9, spread=70, colour="rgba(201,165,90,.16)"):
     return out
 
 
-# the leader's frame: the portrait at (7, 10), 115 x 155 (the game's 156 x 210 at 0.74); the arch's opening inside it.
-# The game's picture runs 7 px under the politics block beside it (at the panel's x 138, the frame's 125), so the plate
-# ends there (`right`) and the rest is clear
-LEADER = dict(w=134, h=175, right=124.5, hole=(9, 118, 12, 44, 163))
+# the leader's frame (v0.11, the author: "the leader portrait [should be stylized] like the [one] in the politics screen
+# ... as things are the leader portrait in the diplomacy tab, larger portraits like Krionik's start to get cut off"):
+# the politics screen's arch (a thin rim, a thick gilt one, the diamond on top, a sunburst in the arch), flatter here,
+# so that the whole portrait fits under it: the game's 156 x 210 at PORTRAIT_SCALE (103 x 139) at `portrait`, the arch's
+# opening `hole` (x0, x1, its top, the springline, the bottom); the arch clears the portrait's top corners. The plate
+# ends at `right`, under the politics block beside it (at the panel's x 138, the frame's 125)
+PORTRAIT_SCALE = 0.66
+LEADER = dict(w=134, h=175, right=124.5, hole=(9, 118, 10, 36, 168), portrait=(12, 28, 103, 139))
+
+
+def arch_path(x0, x1, top, sh, bottom, d=0.0):
+    """the arch's outline grown by d px (an elliptical top: half-width (x1 - x0) / 2, height sh - top)"""
+    a, b = (x1 - x0) / 2 + d, sh - top + d
+    return f"M{x0 - d},{bottom + d}L{x0 - d},{sh}A{a},{b} 0 0 1 {x1 + d},{sh}L{x1 + d},{bottom + d}Z"
 
 
 def leader_frame():
+    import math
     W, H, R = LEADER["w"], LEADER["h"], LEADER["right"]
-    hole = arch(*LEADER["hole"])
-    body = cham(1.5, 1.5, R, H - 1.5, 7)
-    mid = (1.5 + R) / 2
-    return svg(W, H, f'<path d="{body}{hole}" fill="url(#pin)" fill-rule="evenodd"/>'
-                     f'<path d="{body}" fill="none" stroke="url(#g)" stroke-width="1.4"/>'
-                     f'<path d="{cham(4.5, 4.5, R - 3, H - 4.5, 5)}" fill="none" stroke="{LINE}"/>'
-                     f'<path d="{hole}" fill="none" stroke="url(#g)" stroke-width="1.6"/>'
-                     f'<path d="M{mid - 4} 6l4 -3 4 3 -4 3z" fill="#E3C77E"/>')
+    x0, x1, top, sh, bottom = LEADER["hole"]
+    px, py, pw, ph = LEADER["portrait"]
+    cx = (x0 + x1) / 2
+    hole = arch_path(x0, x1, top, sh, bottom)
+    outer = arch_path(x0, x1, top, sh, bottom, 5.5)
+    # the sunburst behind the portrait: rays from under its middle, seen in the arch above it and at its sides
+    rays = "".join(f'<path d="M{cx},{py + ph * .55}L{cx + 160 * math.cos(math.radians(a - 2.2)):.1f},'
+                   f'{py + ph * .55 + 160 * math.sin(math.radians(a - 2.2)):.1f}L{cx + 160 * math.cos(math.radians(a + 2.2)):.1f},'
+                   f'{py + ph * .55 + 160 * math.sin(math.radians(a + 2.2)):.1f}Z" fill="rgba(227,199,126,.16)"/>'
+                   for a in range(-180, 1, 12))
+    # the arch less the portrait's rectangle (the game draws this frame over the portrait)
+    well_path = hole + f"M{px},{py}h{pw}v{ph}h{-pw}Z"
+    return svg(W, H, f'<clipPath id="arch"><path d="{well_path}" clip-rule="evenodd"/></clipPath>'
+                     # the lacquer round the arch, out to the thin rim
+                     f'<path d="{outer}{hole}" fill="url(#pin)" fill-rule="evenodd"/>'
+                     # inside the arch: a dark well and the sunburst (the portrait covers its lower part)
+                     f'<g clip-path="url(#arch)"><rect width="{W}" height="{H}" fill="#0B1014"/>{rays}</g>'
+                     f'<path d="{outer}" fill="none" stroke="#B8954F" stroke-width="1"/>'
+                     f'<path d="{arch_path(x0, x1, top, sh, bottom, 1.5)}" fill="none" stroke="url(#g)" stroke-width="3"/>'
+                     f'<path d="M{cx - 5},{top - 1.5}l5 -3.5 5 3.5 -5 3.5z" fill="#E3C77E"/>')
 
 
 # the flag's frame: the flag (82 x 52) at (26, 11)
-FLAG = dict(w=134, h=80, x=26, y=11, fw=82, fh=52)
+# v0.11 (the author: "the bar with ideology, stability, names, etc. should be level with the flag"): the mat runs MX px
+# beside the flag and MY above / MY_B below it, so the frame is the bar's 71 px tall and starts at the tabs' left edge;
+# make_panels moves frame and flag to where the bar's top and the tabs' edge are (layout_panels.DIPLO_FLAG)
+FLAG = dict(w=134, h=80, x=26, y=11, fw=82, fh=52, mx=18, my=10, my_b=9)
 
 
 def corner_steps(x, y, w, h, arm, colour):
@@ -92,8 +118,7 @@ def corner_steps(x, y, w, h, arm, colour):
 
 def flag_frame():
     W, H, x, y, fw, fh = FLAG["w"], FLAG["h"], FLAG["x"], FLAG["y"], FLAG["fw"], FLAG["fh"]
-    m = 8                                            # the mat round the flag
-    ox, oy, ow, oh = x - m, y - m, fw + 2 * m, fh + 2 * m
+    ox, oy, ow, oh = x - FLAG["mx"], y - FLAG["my"], fw + 2 * FLAG["mx"], fh + FLAG["my"] + FLAG["my_b"]
     hole = f"M{x},{y}h{fw}v{fh}h{-fw}Z"
     mat = f"M{ox},{oy}h{ow}v{oh}h{-ow}Z"
     return (svg(W, H, f'<path d="{mat}{hole}" fill="url(#pin)" fill-rule="evenodd"/>'
@@ -102,8 +127,11 @@ def flag_frame():
             + corner_steps(ox, oy, ow, oh, 7, "rgba(201,165,90,.45)") + corner_steps(ox + 2, oy + 2, ow - 4, oh - 4, 12, "#C9A55A"))
 
 
-# the politics block (399 x 167): the pie's socket left (the overlay at (19, 9), 71 x 71), the party's texts right
-TOP = dict(w=399, h=167, split=97, mid=86, pie=(54.5, 44.5, 35.5))
+# the politics block (399 x 167): the pie's socket left (the overlay at (19, 9), 71 x 71), the party's texts right.
+# v0.11 (the author: "Focus icon isn't centered"): the left column's wells are centred on the pie and on the focus icon
+# the game centres at the block's x 54 (its 192 - 138), y 127: the column 3 to 106, the wells' split at y `mid`; the
+# focus icon sits in an octagon, as the politics screen's
+TOP = dict(w=399, h=167, split=109, mid=88, pie=(54.5, 44.5, 35.5), focus=(54.5, 127, 34))
 
 
 def top_block():
@@ -116,16 +144,28 @@ def top_block():
                   + fan((sx + W) / 2, my - 6, 58)
                   + f'<circle cx="{cx}" cy="{cy}" r="{r + 4}" fill="#0A0F12" stroke="url(#g)" stroke-width="1.6"/>'
                   + f'<circle cx="{cx}" cy="{cy}" r="{r + 1}" fill="none" stroke="{LINE}"/>'
-                  + "".join(f'<path d="M{cx + dx * (r + 4)},{cy}l{dx * 4},-3v6z" fill="#C9A55A"/>' for dx in (-1, 1))))
+                  + "".join(f'<path d="M{cx + dx * (r + 4)},{cy}l{dx * 4},-3v6z" fill="#C9A55A"/>' for dx in (-1, 1))
+                  + octagon(*TOP["focus"])))
+
+
+def octagon(cx, cy, r):
+    """the focus icon's socket, the politics screen's: an octagon in a gilt rim with a fainter line inside"""
+    import math
+    def pts(rr):
+        return " ".join(f"{cx + rr * math.cos(math.radians(22.5 + 45 * k)):.1f},{cy + rr * math.sin(math.radians(22.5 + 45 * k)):.1f}"
+                        for k in range(8))
+    return (f'<polygon points="{pts(r)}" fill="#0A0F12" stroke="url(#g)" stroke-width="1.4"/>'
+            f'<polygon points="{pts(r - 4)}" fill="none" stroke="{LINE}"/>')
 
 
 def pie_overlay():
-    """over the game's pie: a gilt ring at its edge, a soft glint, the middle clear"""
-    c, r = 35.5, 34.5
-    return svg(71, 71, f'<circle cx="{c}" cy="{c}" r="{r}" fill="none" stroke="url(#g)" stroke-width="2"/>'
-                       f'<circle cx="{c}" cy="{c}" r="{r - 2.5}" fill="none" stroke="rgba(11,16,20,.6)" stroke-width="1"/>'
-                       f'<path d="M{c - 22},{c - 18} A28,28 0 0 1 {c + 12},{c - 27}" fill="none" '
-                       'stroke="rgba(255,243,200,.28)" stroke-width="3" stroke-linecap="round"/>')
+    """over the game's pie (radius 30, its middle at the overlay's (35.5, 35)), as the politics screen's (v0.11, the
+    author: "the ideology wheel should be stylized like the wheel in the politics screen"): a gilt ring at its edge with
+    a dark line inside it, and a dark hole in the middle, two thirds of the radius, in a gilt line"""
+    c, cy, r = 35.5, 35, 30
+    return svg(71, 71, f'<circle cx="{c}" cy="{cy}" r="{r + 1}" fill="none" stroke="#0B1014" stroke-width="2"/>'
+                       f'<circle cx="{c}" cy="{cy}" r="{r + 3}" fill="none" stroke="#D2B064" stroke-width="2"/>'
+                       f'<circle cx="{c}" cy="{cy}" r="{r * .33:.1f}" fill="#11191E" stroke="#D2B064" stroke-width="1.5"/>')
 
 
 def goal_button(state):
@@ -134,7 +174,11 @@ def goal_button(state):
             "pressed": DIM_FILL}[state]
     rim = "linear-gradient(180deg,#F1DC9C,#8B6A2C)" if state != "pressed" else "rgba(201,165,90,.6)"
     return (bar(fill, rim, 8, .25 if state == "lit" else .18)
-            + svg(285, 64, fan(190, 60, 46, 7, 64) + f'<path d="{cham(5.5, 5.5, 279.5, 58.5, 5)}" fill="none" stroke="{LINE}"/>'))
+            # v0.11 (the author: "the decoration on the focus button being a repeat of the election box is boring"):
+            # an inner line with the flag frame's stepped corner brackets and a gilt diamond at each end, no fan
+            + svg(285, 64, f'<path d="{cham(5.5, 5.5, 279.5, 58.5, 5)}" fill="none" stroke="{LINE}"/>'
+                  + "".join(f'<path d="M{x},32l4 -4 4 4 -4 4z" fill="#C9A55A"/>' for x in (9, 268)))
+            + corner_steps(9, 9, 267, 46, 10, "rgba(227,199,126,.7)"))
 
 
 def spirits_band():

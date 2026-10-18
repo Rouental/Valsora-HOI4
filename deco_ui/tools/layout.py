@@ -110,10 +110,14 @@ BELOW_MEDALLION = SEAL["y"] + SEAL["h"] + 4
 # (DEC_PLATE: from the plate's edge at 12 % to the step at 26 %, from the first step to the second, the cut DEC_CUT px),
 # its rim on the medallion's rim, in the game's four colours (sprites of our own, not the game's shared round badge:
 # GFX_valsora_deco_dec_count_left / _right); the number is centred on it. DEC_BADGES is each plate's top left.
+# v0.11 (the author, of v0.10.3 in game: "Their tops should be level with the rest of the bar, currently it looks like
+# they're just a pixel or two low. Their bottoms should remain anchored to the bottom"): the plates reach DEC_RAISE px
+# above the first step, over the gilt rule the step draws, their bottoms on the second step as before.
 _edge = lambda f: MED["x"] + round(MED["w"] * f)
-DEC_PLATE = dict(w=_edge(.26) - _edge(.12), h=MED_STEPS[1] - MED_STEPS[0])
+DEC_RAISE = 2
+DEC_PLATE = dict(w=_edge(.26) - _edge(.12), h=MED_STEPS[1] - MED_STEPS[0] + DEC_RAISE)
 DEC_CUT = 6
-DEC_BADGES = dict(timeout=(_edge(.12), MED_STEPS[0]), to_take=(_edge(.74), MED_STEPS[0]))
+DEC_BADGES = dict(timeout=(_edge(.12), MED_STEPS[0] - DEC_RAISE), to_take=(_edge(.74), MED_STEPS[0] - DEC_RAISE))
 DEC_TEXT_W = 20                                      # the game's box for the number
 FACTION_LOGO = dict(dx=8, dy=11, scale=0.85)      # faction logo (32 px miniature) centred in the crown's ring
 FACTION_INIT = dict(dx=24, dy=33, w=24, h=14)     # faction initiative: bottom-right corner of the crown
@@ -185,9 +189,11 @@ def _strip():
         y = LOG_Y0 + i * LOG_ROW_H
         vx = cell["x"] + 2 + LOG_ICON + 4
         # the value's capitals from y to y + 9 (the font draws them 1 px under box_y_for_caps), its bar 2 px under them,
-        # the icon level with both
+        # the icon level with both. v0.11 (the author: "Logistics numbers are running into each other"; their screenshot:
+        # in game each value's capitals sit 2 px lower than planned, 3 px over its own bar and 1 px under the bar of the
+        # row above): the values 2 px higher, the bars 3, so each bar is 2 px under its value and 4 px over the next
         rows.append(dict(key=k, x=cell["x"], w=LOG_W, y=y, h=LOG_ROW_H, icon_x=cell["x"] + 2, icon_y=y,
-                         value_x=vx, value_w=LOG_VALUE_W, value_y=box_y_for_caps(LOG_FONT, y - 1), bar_y=y + 12))
+                         value_x=vx, value_w=LOG_VALUE_W, value_y=box_y_for_caps(LOG_FONT, y - 1) - 2, bar_y=y + 9))
     return out, dividers, gap, rows
 
 
@@ -225,11 +231,17 @@ OVERVIEW_Y = 65
 # has it), so the ink is centred at 7.5 in game
 XP_BADGE = dict(dx=(OVERVIEW_W - 26) // 2, dy=OVERVIEW_H - 15, w=26, h=15, text_y=3)
 XP_KEYS = {"army": "land", "navy": "navy", "air": "air"}
-PLAYLIST = dict(x=1492, y=72, w=26, h=26)
+# v0.11, the author's mockup of 2026-10-18 ("Tried to make a rough mockup of how I'd like the music button to be
+# stylized"): the music button is the tray's left end, its full height, from the tray's edge to the first divider, in
+# a double gilt frame whose lower left corner is cut and hatched (the tray's step is gone: RTRAY_CUT); its right side
+# is the divider (RTRAY_SEPS starts after it)
+RTRAY_CUT = 12
+PLAYLIST = dict(x=RTRAY["x"], y=RTRAY["y"] - 1, w=1522 - RTRAY["x"] + 1, h=RTRAY["h"] + 1)
+PLAYLIST_ICON = 24
 CP = dict(x=1526, y=66, w=50, h=32)                  # command power: icon + value
 NUKES = dict(x=1732, y=66, w=44, h=32)
 ACHIEVEMENTS = (1782, 70)
-RTRAY_SEPS = [1522, 1579, 1728]
+RTRAY_SEPS = [1579, 1728]
 DISMISSED = (1882, 70)
 MENU_BTN = dict(x=1882, y=6, w=30, h=24)
 HELP_BTN = dict(x=1882, y=32, w=30, h=22)

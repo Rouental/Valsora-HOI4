@@ -17,6 +17,8 @@ the game has, free and repeatable, each firing a placeholder event at once:
 The texts are Claude's placeholders; no option does anything. Take the category out (`write_files`' call in
 build_mod.py and its LOCALISATION) when the testing is done, like Devlon's test spirits.
 """
+import nations
+
 CATEGORY = "ROU_test_events"
 NS = "valsora_test"
 
@@ -142,6 +144,44 @@ EVENTS = [
                     "the window with the agent's dossier.",
                   a="Back to work.")),
 ]
+# many alerts at once (the author, 2026-10-18: "Add a test decision to give maybe 20 alerts to test how it looks when
+# there's a lot on the screen"): the game's alerts are its own and have no effect of their own, so the decision sets up
+# what each one warns of, in Rouental: idle civilian and military factories and dockyards, a free research slot,
+# doctrines to unlock (experience), political power for an advisor, command power for the officer corps, almost no
+# manpower or fuel, two divisions without equipment in no army, a war goal on a neighbour, a mission running out
+# (ROU_test_alert_mission) and the decisions' own "new decision". Unlike the others, it changes things in the game
+ALERT_TEMPLATE = next(iter(nations.ROU_TEMPLATES))
+ALERTS = dict(decision="ROU_test_many_alerts", name="Test: Many Alerts at Once", icon="GFX_decision_generic_break_treaty",
+              fire=f"""add_offsite_building = {{ type = industrial_complex level = 3 }}
+			add_offsite_building = {{ type = arms_factory level = 3 }}
+			add_offsite_building = {{ type = dockyard level = 2 }}
+			add_research_slot = 1
+			army_experience = 300
+			navy_experience = 300
+			air_experience = 300
+			add_political_power = 500
+			add_command_power = 100
+			add_manpower = -10000000
+			add_fuel = -100000000
+			capital_scope = {{
+				create_unit = {{
+					division = "division_template = \\"{ALERT_TEMPLATE}\\" start_experience_factor = 0 start_equipment_factor = 0"
+					owner = ROU
+					count = 2
+				}}
+			}}
+			random_neighbor_country = {{ ROOT = {{ create_wargoal = {{ type = annex_everything target = PREV }} }} }}
+			activate_mission = ROU_test_alert_mission""")
+ALERT_MISSION = """	ROU_test_alert_mission = {
+		icon = GFX_decision_generic_operation
+		allowed = { original_tag = ROU }
+		available = { always = no }
+		activation = { always = no }
+		is_good = no
+		days_mission_timeout = 20
+		fire_only_once = no
+		ai_will_do = { base = 0 }
+	}"""
 # the superevent's decision: superevents.py's "rou_test"
 SUPEREVENT = dict(decision="ROU_test_superevent", name="Test: the Superevent", icon="GFX_decision_generic_prepare_civil_war",
                   fire="valsora_superevent_rou_test = yes")
@@ -167,14 +207,19 @@ def write_files(write):
         "\tpriority = 200",
         "}", ""]))
     body = [f"{CATEGORY} = {{"]
-    for d in EVENTS + [SUPEREVENT]:
+    for d in EVENTS + [SUPEREVENT, ALERTS]:
         body += decision(d)
-    write("common/decisions/valsora_test_events.txt", "\n".join(body + ["}", ""]))
+    write("common/decisions/valsora_test_events.txt", "\n".join(body + [ALERT_MISSION, "}", ""]))
     write(f"events/{NS}.txt", "\n\n".join([f"add_namespace = {NS}"] + [e["event"] for e in EVENTS]) + "\n")
 
 
 LOCALISATION = (
     [f' {CATEGORY}:0 "Test Events"',
      f' {CATEGORY}_desc:0 "One of each kind of event, to see how its window looks. They do nothing."']
-    + [f' {d["decision"]}:0 "{d["name"]}"' for d in EVENTS + [SUPEREVENT]]
+    + [f' {d["decision"]}:0 "{d["name"]}"' for d in EVENTS + [SUPEREVENT, ALERTS]]
+    + [' ROU_test_many_alerts_desc:0 "Sets off as many of the game\'s alerts as it can, to see a crowded top bar: idle '
+       'factories, a free research slot, doctrines, an advisor, the officer corps, no manpower or fuel, divisions '
+       'without equipment, a war goal and a mission running out. Unlike the other tests, this one changes things."',
+       ' ROU_test_alert_mission:0 "Test: a Mission Running Out"',
+       ' ROU_test_alert_mission_desc:0 "Does nothing when it runs out; it is here for its alert."']
     + [f' {NS}.{e["n"]}.{k}:0 "{v}"' for e in EVENTS for k, v in e["loc"].items()])

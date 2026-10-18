@@ -289,7 +289,7 @@ for key, side in (("timeout", "left"), ("to_take", "right")):
     t = set_attrs(t, f"decisionview_amount_{key}_bg", sprite=f"GFX_valsora_deco_dec_count_{side}",
                   position=(px_ - CMX, py_ - CMY))
     t = set_attrs(t, f"decisionview_amount_{key}_items",
-                  position=(px_ + (L.DEC_PLATE["w"] - L.DEC_TEXT_W) // 2 - CMX, py_ - CMY))
+                  position=(px_ + (L.DEC_PLATE["w"] - L.DEC_TEXT_W) // 2 - CMX, py_ + L.DEC_RAISE // 2 - CMY))
 n = rel("intelligence")
 t = set_attrs(t, "intel_agency_button", sprite="GFX_valsora_deco_tb_intelligence", position=(n, 0))
 t = set_attrs(t, "intelview_ops_prepared_or_completed_bg", position=(n + 3, 3))
@@ -455,9 +455,11 @@ if os.path.isfile(ALERTS):
 LOC = {"VAL_DECO_TB_COUNTRY_NAME": "[ROOT.GetName]",
        "VAL_DECO_TB_PP_DAILY": "[?political_power_daily|+=2]",
        # military, naval, civilian: the order of the game's list under it (v0.10.2, the user: "The factories should go
-       # military - naval - civilian, to match the order in the list"; civilian came first until then)
-       "VAL_DECO_TB_FACTORY_COUNTS": "§O◆§![?num_of_military_factories|0] §C◆§![?num_of_naval_factories|0]"
-                                     " §W◆§![?num_of_civilian_factories|0]"}
+       # military - naval - civilian, to match the order in the list"; civilian came first until then); military green,
+       # civilian orange (v0.11, the user: "military factories should be green, civilians should be orange. Naval can
+       # stay blue"; military was orange and civilian cream until then)
+       "VAL_DECO_TB_FACTORY_COUNTS": "§G◆§![?num_of_military_factories|0] §C◆§![?num_of_naval_factories|0]"
+                                     " §O◆§![?num_of_civilian_factories|0]"}
 LOC.update({it["loc"]: it["label"] for it in L.STRIP})
 for lang in ["english", "french", "german", "spanish", "braz_por", "polish", "russian", "japanese", "simp_chinese"]:
     d = MOD + f"localisation/{lang}/"

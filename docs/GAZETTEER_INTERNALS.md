@@ -257,6 +257,11 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   left out; `facts_export.py` puts them in `index.json`), and **Ask for a new trait** is a request of kind `trait`.
   `check_mod.py` checks every trait of ours against the game's own (country leader traits for rulers and advisors,
   unit leader traits for commanders), each advisor's slot and its own `idea_token` (mutation-tested, 6 of 6).
+  **The neighbours' terrain** (2026-10-18, the author: "there should be an option to be able to see the terrain of your
+  neighbors"): each nation's file has `otherT`, the build's terrain of each neighbouring province in its parts (in the
+  order of `others`, as the mod has it, the imported Gazetteer terrain included: public map data, as in the mod); the
+  terrain mode's legend has a **Neighbours' terrain** switch (`app.ui.nbTerrain`), which colours their land by it,
+  paler than one's own. Only their own players change it. Tested in `run.py` (desktop and phone).
   **Province sizes** (2026-10-17): `index.json` `sizes` (`facts_export.size_guide`): Cardonia's median and 10th / 90th
   percentiles, Rouental's median, the dense size (their 10th percentile), the sparse example's size (420), the map's
   median, its border count, limit and borders per province (`borders.count`), and three pictures as data URIs (a

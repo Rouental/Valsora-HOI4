@@ -98,8 +98,12 @@ at(f"{R}>filter_container", position=LF.FILTERS)
 s_, e_ = GP.find_block(t, f"{R}>filter_grid_main_container")
 x_ = int(re.search(r"position\s*=\s*\{\s*x\s*=\s*(-?\d+)", GP.own_region(t[s_:e_])[0]).group(1))
 at(f"{R}>filter_grid_main_container", position=(x_, LF.FILTER_DROPDOWN_Y))
+# the filter's icon centred in the chip (v0.11, the author: "Icons aren't centered in the bubbles on the focus tree"):
+# the game's 27 px icons at its (8, 7) were placed for its own chip; in ours (LF.FILTER, 36 px) their ink, centred at
+# (13, 14) in the picture (the author's screenshot), was 3 px right of the octagon's middle and 3 px under it
 for c in ("focus_tree_filter_icon_container", "focus_tree_alternate_icon_button_container"):
     at(f"{c}>checkbox", sprite=D + "filter")
+    at(f"{c}>icon", position=LF.FILTER_ICON)
 at("focus_tree_shortcut_item>name", font=BODY13)
 
 # ---------------------------------------------------------------- the tree: below the header, scales in a frame

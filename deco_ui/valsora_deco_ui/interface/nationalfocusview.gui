@@ -1163,7 +1163,7 @@ guiTypes = {
 
 		iconType = {
 			name = "icon"
-			position = { x = 8 y = 7 }
+			position = { x = 5 y = 4 }
 			quadTextureSprite ="GFX_FOCUS_FILTER_POLITICAL"
 			Orientation = UPPER_LEFT
 			alwaystransparent = yes
@@ -1186,7 +1186,7 @@ guiTypes = {
 
 		iconType = {
 			name = "icon"
-			position = { x = 7 y = 6 }
+			position = { x = 5 y = 4 }
 			Orientation = UPPER_LEFT
 			alwaystransparent = yes
 		}

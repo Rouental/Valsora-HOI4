@@ -476,7 +476,7 @@ guiTypes = {
 		
 		instantTextBoxType = {
 			name ="convoys_count"
-			position = { x = 1355 y = 37 }
+			position = { x = 1355 y = 35 }
 			font = "valsora_deco_value_11"
 			text = "0"
 			format = left
@@ -489,7 +489,7 @@ guiTypes = {
 		iconType = {
 			name ="convoys_ratio_bar"
 			spriteType = "GFX_valsora_deco_ratio_bar"
-			position = { x = 1355 y = 50 }
+			position = { x = 1355 y = 47 }
 			frame = 50
 			alwaystransparent = yes
 		}
@@ -512,7 +512,7 @@ guiTypes = {
 		
 		instantTextBoxType = {
 			name ="fuel_value"
-			position = { x = 1355 y = 7 }
+			position = { x = 1355 y = 5 }
 			font = "valsora_deco_value_11"
 			text = "999d"
 			format = left
@@ -524,7 +524,7 @@ guiTypes = {
 		iconType = {
 			name ="fuel_ratio_bar"
 			spriteType = "GFX_valsora_deco_ratio_bar"
-			position = { x = 1355 y = 20 }
+			position = { x = 1355 y = 17 }
 			frame = 50
 			alwaystransparent = yes
 		}
@@ -547,7 +547,7 @@ guiTypes = {
 		
 		instantTextBoxType = {
 			name ="supply_value"
-			position = { x = 1355 y = 22 }
+			position = { x = 1355 y = 20 }
 			font = "valsora_deco_value_11"
 			text = "999d"
 			format = left
@@ -559,7 +559,7 @@ guiTypes = {
 		iconType = {
 			name ="supply_ratio_bar"
 			spriteType = "GFX_valsora_deco_ratio_bar"
-			position = { x = 1355 y = 35 }
+			position = { x = 1355 y = 32 }
 			frame = 50
 			alwaystransparent = yes
 		}
@@ -737,7 +737,7 @@ guiTypes = {
 		
 		buttonType = {
 			name = "playlist_button"
-			position = { x = -428 y = 73 }
+			position = { x = -454 y = 62 }
 			quadTextureSprite = "GFX_valsora_deco_playlist_button"
 			buttonText = ""
 			buttonFont = "Main_14_black"
@@ -824,7 +824,7 @@ guiTypes = {
 				iconType = {
 					name = "decisionview_amount_timeout_bg"
 					spriteType = "GFX_valsora_deco_dec_count_left"
-					position = { x = -151 y = 116 }
+					position = { x = -151 y = 114 }
 					alwaystransparent = yes
 					frame = 2
 
@@ -832,7 +832,7 @@ guiTypes = {
 
 				instantTextBoxType = {
 					name ="decisionview_amount_timeout_items"
-					position = { x = -150 y = 116 }
+					position = { x = -150 y = 115 }
 					font = "hoi_16mbs"
 					text = "999"
 					format = center
@@ -844,14 +844,14 @@ guiTypes = {
 				iconType = {
 					name = "decisionview_amount_to_take_bg"
 					spriteType = "GFX_valsora_deco_dec_count_right"
-					position = { x = -55 y = 116 }
+					position = { x = -55 y = 114 }
 					alwaystransparent = yes
 					frame = 1
 				}
 
 				instantTextBoxType = {
 					name ="decisionview_amount_to_take_items"
-					position = { x = -54 y = 116 }
+					position = { x = -54 y = 115 }
 					font = "hoi_16mbs"
 					text = "999"
 					format = center

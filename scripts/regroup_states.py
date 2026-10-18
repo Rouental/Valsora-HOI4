@@ -55,7 +55,7 @@ DRAWN_PLACEHOLDERS = {"AIS"}
 # the lines inside it are Pakitsk's, which it took whole; its own states aren't drawn yet, so
 # taking it as drawn would make its land outside Pakitsk one state. Take it out when the
 # author draws Belka's states.
-NOT_DRAWN = {"BKA"}
+NOT_DRAWN = {"BKA", "HMN"}   # HMN (2026-10-18): only a corner of Usnistan's desert lines runs into it
 MIN_LINE, MIN_AREA = 8, 150  # a state line: at least this long, between areas this big
 CROSS = np.array([[0, 1, 0], [1, 1, 1], [0, 1, 0]])
 

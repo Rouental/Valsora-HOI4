@@ -119,9 +119,42 @@ it before touching the UI. In short:
   the game had its laurel and flags), the pie's ring, the national focus button's three frames, its progress frame, the
   national spirits band with its label's tab, the header strip, the country list's binding, the unity and text wells,
   the short window header. The filter strip and the opinion box stay the game's: its icons are painted into them.
+- **v0.11** (2026-10-18, night, not yet seen in game; the author's findings in v0.10.2 to v0.10.4 and their go-ahead):
+  - the top bar: military factories green, civilian orange, naval still blue ("military factories should be green,
+    civilians should be orange"); the decision plates 2 px taller, their tops on the gilt rule of the step ("Their tops
+    should be level with the rest of the bar ... Their bottoms should remain anchored": `layout.DEC_RAISE`); the
+    logistics cell's values 2 px higher and their bars 3 ("Logistics numbers are running into each other": in game the
+    values sat 2 px lower than planned, 1 px under the bar above); the music button the tray's left end, its full
+    height, in a double gilt frame with its lower left corner cut and hatched (the author's mockup; the tray's step is
+    gone: `layout.PLAYLIST`, `RTRAY_CUT`, `gen_textures.music_button`);
+  - the diplomacy and intel tabs (their shared header and the diplomacy tab's leader block, `diplomacy_art.py`,
+    `layout_panels.DIPLO`): the flag's frame the bar's 71 px tall and level with it, from the tabs' left edge ("the bar
+    with ideology, stability, names, etc. should be level with the flag"); the names stop at the opinion box, a long one
+    cut with "..." ("the leader's name can run off the screen"); the portrait as the politics screen's (its arch, rims,
+    diamond and sunburst), flatter, the portrait at 0.66 so a square one fits whole ("larger portraits like Krionik's
+    start to get cut off"); the pie a donut in a gilt ring as the politics screen's (`pol_piechart_overlay`, also the
+    faction and setup screens'); the left column's wells centred on the pie and the focus icon, the icon in an octagon
+    ("Focus icon isn't centered"); the focus button's fan gone for stepped corners and gilt diamonds ("a repeat of the
+    election box is boring");
+  - the side panels' own pictures, the drafts of 2026-10-18 (`make_panel_pictures.py`: the translated ones and v0.7's
+    hand-drawn ones; "All the other stylization looks good, I'd like you to add them to the mod"), less the army, navy
+    and air overview's and the intelligence agency's ("Keep the art for navy, army, air, and intelligence tabs, at least
+    for this pass"); the research picture's box with equal margins in what the panel shows (538 of its 548 px) and the
+    atom and circuits centred in it ("better centered and aligned to the box it's in");
+  - the decisions tab (`decisions_art.py`, `dc_`: "Stylize the decisions tab as well"): the events box a lacquer plate
+    with the title's tab, the category header with a round socket for its medallion and a well for its name, the
+    decision rows (grey, jade, steel), the event rows, the status lights as diamonds, the checkboxes, the fold button,
+    the description's tile; the events box's title and rows in the Deco UI's light faces (they were typewriter ink on
+    paper: `layout_panels.DECISION_FONTS`, `make_panels` `toplevel_attrs`). The envelopes, timer and event-type strips
+    stay the game's (icons);
+  - the focus tree's filter icons centred in their octagons (the game's 27 px icons at its (8, 7) sat 3 px right and
+    3 px low in ours: `layout_focus.FILTER_ICON`).
+  Proposals, not in the mod: the game's icons redrawn in the Deco style (`proposals_icons.py`, `art/proposals/icons/`:
+  the resources, the focus filters, the production screen's icons and add-a-line buttons, the decisions' envelopes;
+  the author: "make an attempt at recreating them as close as possible, but in the Deco aesthetic").
 - **Proposals for the side panels' own pictures** (research, production, the market, the overview strip, the
-  intelligence agency, the spirit banners) are in `deco_ui/art/proposals/panel_pictures/`, **not in the mod**
-  (author, 2026-10-15: "don't put them in the mod yet. I'd like to see and approve them first").
+  intelligence agency, the spirit banners) were in `deco_ui/art/proposals/panel_pictures/`; all but the overview strip
+  and the agency's went in with v0.11.
 
 ## From the root manual's "Current state" (2026-10-17)
 

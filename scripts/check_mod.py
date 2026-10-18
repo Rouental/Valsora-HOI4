@@ -332,12 +332,14 @@ def main(mod):
             f"file\"), e.g. {sorted(earth - stubbed)[:5]}")
 
     # ------------------------------------------------------------ states
-    state_provs, owner = {}, {}
+    state_provs, owner, impassable = {}, {}, {}
     for f in (mod / "history/states").glob("*.txt"):
         body = blocks(strip(f.read_text()), "state")[0]
         sid = int(field(body, "id"))
         state_provs[sid] = id_list(body, "provinces")
         owner[sid] = field(body, "owner")
+        if field(body, "impassable") == "yes":
+            impassable[sid] = field(body, "force_link_ownership_to")
         if field(body, "state_category") not in VANILLA_STATE_CATEGORIES:
             err(f"state {sid}: unknown state_category")
         if owner[sid] not in tags:
@@ -372,6 +374,12 @@ def main(mod):
             err(f"state {sid}: manpower must be above 0")
     if sorted(state_provs) != list(range(1, len(state_provs) + 1)):
         err("state ids are not contiguous from 1")
+    # impassable states (the author's red areas, scripts/areas.py): no unit can enter one, so it must change hands with
+    # a passable state of its owner, as the base game's Sahara does with force_link_ownership_to
+    for sid, link in impassable.items():
+        if link is None or int(link) not in owner or int(link) in impassable or owner[int(link)] != owner[sid]:
+            err(f"state {sid} is impassable and not linked to a passable state of {owner[sid]} "
+                f"(force_link_ownership_to {link}): nobody could ever take it")
     state_of = {}
     for sid, ps in state_provs.items():
         for p in ps:
@@ -388,6 +396,8 @@ def main(mod):
             continue  # released later (civil war factions): it owns nothing yet
         if owner.get(cap) != tag:
             err(f"{tag}'s capital state {cap} is not owned by it")
+        if cap in impassable:
+            err(f"{tag}'s capital state {cap} is impassable")
 
     # ------------------------------------------------------------ strategic regions
     region_of, region_provs = {}, {}

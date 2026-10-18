@@ -11,6 +11,7 @@ import math
 import numpy as np
 from PIL import Image, ImageDraw
 
+import diplomacy_art as DA
 from ddsutil import read_dds
 from paths import BUILD, MOD, VALSORA, VANILLA
 
@@ -45,13 +46,14 @@ def draw(vanilla):
     oy = 16
     put(pic(GI + "diplo_upper_win_bg.dds", vanilla), 139, oy - 4)
     flag = Image.open(VALSORA + "gfx/flags/ROU.tga").convert("RGBA")
-    put(flag, 40, oy + 1)
-    put(pic(GI + "diplo_flag_frame.dds", vanilla), 14, oy - 10)
+    put(flag, *((40, oy + 1) if vanilla else (33, oy + 6)))
+    put(pic(GI + "diplo_flag_frame.dds", vanilla), *((14, oy - 10) if vanilla else (7, oy - 5)))
     # diplomacy_tab_top
     oy = 110
     face = read_dds(VALSORA + "gfx/leaders/VAL/ROU_roland_cahun.dds")
-    face = face.resize((round(face.width * .74), round(face.height * .74)), Image.LANCZOS)
-    put(face, 20, oy + 10)
+    sc = .74 if vanilla else DA.PORTRAIT_SCALE
+    face = face.resize((round(face.width * sc), round(face.height * sc)), Image.LANCZOS)
+    put(face, *((20, oy + 10) if vanilla else (25, oy + 28)))
     put(pic(GI + "diplo_leader_frame.dds", vanilla), 13, oy)
     put(pic(GI + "diplo_top_bg_diplo_tab.dds", vanilla), 138, oy)
     put(fake_pie(33), 157 + 35.5 - 33, oy + 9 + 35.5 - 33)

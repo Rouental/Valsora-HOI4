@@ -641,3 +641,16 @@ Evriches should have at least 3 or 4 provinces"): every nation at least four whe
 Pollana and Haidao 2 → 4, the Holy See 2 → 3, Bromé, Khaleeya and Sombor 3 → 4), every state of 240 px at least two, then
 the largest provinces cut, up to 2,000 borders short of HOI4's limit; what the author drew (Royalist Illiricium's and
 Seigne's provinces), Terreich's sparse isles and Merlovich are as they were.
+
+## 2026-10-18, night: Usnistan's deserts and states
+
+**2026-10-18, night** (the author's upload "HOI4_Mod_Map_10-18_1": "I've tried to mark out the regions that are desert /
+impassible desert in Usnistan. Red is impassible desert, yellow is regular desert. I also adjusted some state and
+province borders in Rouental and in Terreich, and added some rivers"). The lines that bound the desert areas are on
+Necessary States, so they are the states of the nine nations they divide: **North Koronista** 9 states, **Levantinin**
+8, **Mustawi** 12, **Almohavid** 10, **Al-Khabid** 5, **Al-Radiyaa** 4, **Koronista** 6, **Kalaistan** 2, **Solaria** 4
+(`dist/state_numbers_usnistan_deserts.png`, numbered 1 to 60 for naming; until then "Country N"). 22 of them, mostly red,
+are impassable, each tied to a passable state of its nation; the marked land is desert terrain. The **Humanist State**,
+which a corner of the lines runs into, keeps its 23 states. Their map tools on the Gazetteer stay closed until the
+author says (`gazetteer.finals`). **Rouental** and **Terreich**: their new state and province lines (Rouental 57
+states, `dist/state_names_rouental.png`; Terreich 68, `dist/state_names_terreich.png`).

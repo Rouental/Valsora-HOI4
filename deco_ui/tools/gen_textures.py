@@ -593,7 +593,7 @@ for k, glyph in [("speed_down", '<path d="M7 7.5h8"/>'), ("speed_up", '<path d="
 RW, RH = L.RPLATE["w"], L.RPLATE["h"]
 tx0 = L.RTRAY["x"] - L.RPLATE["x"]
 ty0, ty1 = L.RTRAY["y"], L.RTRAY["y"] + L.RTRAY["h"]
-rtray = [(tx0, ty0 - 1), (RW + 2, ty0 - 1), (RW + 2, ty1), (tx0 + 12, ty1), (tx0 + 12, ty0 + 24), (tx0, ty0 + 24)]
+rtray = [(tx0, ty0 - 1), (RW + 2, ty0 - 1), (RW + 2, ty1), (tx0 + L.RTRAY_CUT, ty1), (tx0, ty1 - L.RTRAY_CUT)]
 cx, cy, r = L.WT_C[0] - L.RPLATE["x"], L.WT_C[1] - L.RPLATE["y"], L.WT_R
 ring = (f'<div style="position:absolute;left:{cx - r - 4}px;top:{cy - r - 4}px;width:{2 * r + 8}px;height:{2 * r + 8}px;border-radius:50%;'
         'background:repeating-conic-gradient(from 0deg,rgba(227,199,126,.5) 0deg 2deg,transparent 2deg 15deg);'
@@ -617,7 +617,24 @@ def chip_button(w, h, icon, size):
 
 add("btn_menu", D + "menu_button.dds", L.MENU_BTN["w"], L.MENU_BTN["h"], chip_button(L.MENU_BTN["w"], L.MENU_BTN["h"], "menu", 18))
 add("btn_help", D + "help_button.dds", L.HELP_BTN["w"], L.HELP_BTN["h"], chip_button(L.HELP_BTN["w"], L.HELP_BTN["h"], "help", 18))
-add("btn_playlist", D + "playlist_button.dds", L.PLAYLIST["w"], L.PLAYLIST["h"], chip_button(L.PLAYLIST["w"], L.PLAYLIST["h"], "music", 16))
+def music_button(w, h, c):
+    """the tray's left end (v0.11, the author's mockup): the tray's lacquer and rim, an inner gilt line 3 px in (the
+    double frame), the lower left corner cut c px and hatched with three short rules across the cut, the note large in
+    the middle"""
+    ring = f"M3.5,3.5 H{w - 3.5} V{h - 3.5} H{c + 1.7} L3.5,{h - c - 1.7} Z"
+    marks = ""
+    for f in (.32, .5, .68):                      # points along the cut, from (0, h - c) to (c, h)
+        px, py = c * f, h - c * (1 - f)
+        marks += (f'<line x1="{px + .7:.1f}" y1="{py - .7:.1f}" x2="{px + 3.6:.1f}" y2="{py - 3.6:.1f}" '
+                  f'stroke="#E3C77E" stroke-width="1"/>')
+    body = plate([(0, 0), (w, 0), (w, h), (c, h), (0, h - c)], "linear-gradient(180deg,#141E24,#0B1115)")
+    return (body + f'<svg width="{w}" height="{h}" style="position:absolute;left:0;top:0" fill="none">'
+            f'<path d="{ring}" stroke="#C9A55A" stroke-width="1"/>{marks}</svg>'
+            f'<div class="ico" style="position:absolute;inset:0">{svg("music", L.PLAYLIST_ICON, "#E3C77E", 1.6)}</div>')
+
+
+add("btn_playlist", D + "playlist_button.dds", L.PLAYLIST["w"], L.PLAYLIST["h"],
+    music_button(L.PLAYLIST["w"], L.PLAYLIST["h"], L.RTRAY_CUT))
 
 # ---------------------------------------------------------------- politics screen (v0.4: the Government mockup)
 import layout_politics as LP

@@ -10,6 +10,16 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-18, night (the author's upload "HOI4_Mod_Map_10-18_1", their in-game findings in v0.10.2 to v0.10.4 and
+  "Alright, get started"): **the map**: Usnistan's desert areas (`scripts/areas.py`: red impassable, yellow desert),
+  the nine desert nations' states from their lines (60, 22 of them impassable as the base game's Sahara), the marked
+  states cut coarse (`pdn_tools.py areas`: 486 provinces to 119), Rouental's and Terreich's new lines, provinces along
+  the new rivers, Myehn's stuck islands cut apart (`pdn_tools.py necks`, 9 channels, 5 new strait crossings and Vilna
+  2's): 21,093 provinces (20,705 land), 62,193 borders (3,343 under the limit), 3,179 states; **Deco UI v0.11**
+  (`deco_ui/docs/VERSIONS.md`: the top bar's factory colours, decision plates, logistics and music button; the
+  diplomacy and intel tabs like the politics screen; the panels' own pictures and the decisions tab in the mod; the
+  focus filters centred; the game's icons redrawn as proposals); **a test decision for many alerts**; **the Gazetteer**
+  shows the neighbours' terrain (republished).
 - 2026-10-18, night (the author: "Do mockups of the panels and your replacements, but dont replace them just yet. Also do
   a tidy-up pass"): **mockups of the 16 side panels** with their own pictures drafted (`deco_ui/tools/
   proposals_panel_mockups.py`: v0.7's eight hand-drawn proposals and 47 more, in `deco_ui/build/`, not in the mod);

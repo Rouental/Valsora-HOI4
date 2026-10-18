@@ -522,9 +522,25 @@ def main():
                         weights=[size[i] for s in members for i in states[s]])
         cx = np.average([reg["centre"][i][1] for s in members for i in states[s]],
                         weights=[size[i] for s in members for i in states[s]])
+        members = [s for s in members if s not in impassable] or members  # never a capital in impassable land
         big = [s for s in members if len(states[s]) >= 4] or members
         return min(big, key=lambda s: np.hypot(*(np.mean(
             [reg["centre"][i] for i in states[s]], axis=0) - (cy, cx))))
+    # impassable states (the author's red areas, areas.py): each linked, as the base game's Sahara, to the passable state
+    # of its owner it shares most border with, so it changes hands with it
+    impassable = set(rj.get("impassable", []))
+    link_to = {}
+    if impassable:
+        shared = Counter()
+        for x, y, k in rj["adjacency"]:
+            sx, sy = int(state_of[x]), int(state_of[y])
+            if sx >= 0 and sy >= 0 and sx != sy and owners[sx] == owners[sy]:
+                shared[sx, sy] += k
+                shared[sy, sx] += k
+        for s in impassable:
+            nb = [(k, t) for (f, t), k in shared.items() if f == s and t not in impassable]
+            if nb:
+                link_to[s] = max(nb)[1]
     capital_state = {}
     for c in present:
         members = [s for s in range(len(states)) if owners[s] == c]
@@ -562,12 +578,12 @@ def main():
         is_cap = capital_state[c] == s
         px = sum(int(size[i]) for i in g)
         f = gfacts.get(s, {})
-        cat = f.get("cat") or ("city" if is_cap else ("small_island" if len(g) <= 2 else
-                                                      "town" if len(g) >= 16 else "rural"))
+        cat = f.get("cat") or ("city" if is_cap else "wasteland" if s in impassable else
+                               ("small_island" if len(g) <= 2 else "town" if len(g) >= 16 else "rural"))
         cap = state_capital[s]
         # buildings: a capital gets some industry; the Gazetteer's numbers win, within what the
         # state takes (factories share its building slots; islands cap air and naval bases)
-        build = {"infrastructure": 3 if is_cap else 2}
+        build = {"infrastructure": 3 if is_cap else 0 if s in impassable and not is_cap else 2}
         if is_cap:
             build.update(industrial_complex=3, arms_factory=2, air_base=2)
             if state_coastal[s]:
@@ -589,7 +605,7 @@ def main():
                     gnotes.append(f"Gazetteer: state {s + 1} ({state_name[s]}) has {slots} building slots; "
                                   f"{min(over, build[b])} {b} left out")
                 build[b] -= min(over, build[b])
-        bl = [f"\t\t\t{b} = {v}" for b, v in build.items() if b != "naval_base" and v]
+        bl = [f"\t\t\t{b} = {v}" for b, v in build.items() if b != "naval_base" and (v or b == "infrastructure")]
         if build.get("naval_base"):
             port_prov = max((i for i in g if coastal[i] and i in port), key=lambda i: size[i])
             bl.append(f"\t\t\t{pid[port_prov]} = {{ naval_base = {build['naval_base']} }}")
@@ -599,17 +615,21 @@ def main():
             f"\tid = {s + 1}",
             f'\tname = "VAL_STATE_{s + 1}"',
             # 300 people per map pixel (20 until 2026-10-04: the world held 75 million and
-            # no country could man its starting army), or the Gazetteer's population
-            f"\tmanpower = {max(100, int(f['pop'])) if f.get('pop') is not None else max(15000, px * POP_PER_PX)}",
+            # no country could man its starting army), a twentieth of that in impassable desert (the base game's
+            # Tombouctou, 79,243), or the Gazetteer's population
+            f"\tmanpower = {max(100, int(f['pop'])) if f.get('pop') is not None else max(15000, px * POP_PER_PX // (20 if s in impassable else 1))}",
             *(["\tresources = {", *[f"\t\t{r} = {v}" for r, v in res.items()], "\t}"] if res else []),
             f"\tstate_category = {cat}",
+            *(["\timpassable = yes"] if s in impassable and not is_cap else []),
+            *([f"\tforce_link_ownership_to = {link_to[s] + 1}"] if s in link_to and not is_cap else []),
             "\thistory = {",
             f"\t\towner = {tag}",
             *([] if s in no_owner_core else [f"\t\tadd_core_of = {tag}"]),
             *[f"\t\tadd_core_of = {t}" for t in extra_cores[s]],
             *[f"\t\tadd_claim_by = {t}" for t in claims[s]],
-            f"\t\tvictory_points = {{ {pid[cap]} {city_vp.get(cap, 10 if is_cap else CITY_VP if cap in city_of else 1)} }}",
-            *[f"\t\tvictory_points = {{ {pid[e]} {city_vp.get(e, CITY_VP)} }}" for e in extra_vps[s]],
+            *([] if s in impassable and not is_cap else
+              [f"\t\tvictory_points = {{ {pid[cap]} {city_vp.get(cap, 10 if is_cap else CITY_VP if cap in city_of else 1)} }}",
+               *[f"\t\tvictory_points = {{ {pid[e]} {city_vp.get(e, CITY_VP)} }}" for e in extra_vps[s]]]),
             "\t\tbuildings = {",
             *bl,
             "\t\t}",

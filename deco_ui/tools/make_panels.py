@@ -241,6 +241,9 @@ def panel(t, key, spec):
     # elements inside the content (moved down with it), changed where they are
     for p, kv in spec.get("inner_attrs", {}).items():
         t = GP.set_attrs(t, f"{R}>{p}", **kv)
+    # elements of the file's other top-level windows (the decisions tab's rows, v0.11)
+    for p, kv in spec.get("toplevel_attrs", {}).items():
+        t = GP.set_attrs(t, p, **kv)
 
     # 4. the panel's own layers, drawn under everything else: body, click-catchers, header picture
     body_h = f"{spec['height'] + D - LPN.NB}" if spec.get("height") else "100%%"

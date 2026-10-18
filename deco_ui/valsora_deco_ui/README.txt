@@ -31,6 +31,27 @@ The layout is built for 1920 px of UI width: 1920x1080 at 100% UI scale, or
 2560x1440 at up to 133%.
 
 
+NEW IN v0.11
+------------
+  - Top bar: military factories green, civilian orange; the decision
+    plates' tops level with the bar; the logistics numbers spaced; the
+    music button the tray's framed left end, after the author's mockup.
+  - Diplomacy and intel: the bar level with the flag; long names cut
+    with "..." before the opinion box; the portrait in the politics
+    screen's arch, whole; the pie as the politics screen's; the focus
+    icon centred in an octagon; a new focus button.
+  - The side panels' own pictures (all but the army, navy and air
+    overview's and the intelligence agency's); the research picture
+    centred.
+  - The decisions tab restyled; the focus tree's filter icons centred.
+
+Things to check in game (v0.11):
+  - the top bar (factories, decision plates, logistics, music button);
+  - Krionik's diplomacy panel (the seal whole), a long leader name;
+  - the decisions tab; the panels' new pictures; the focus filters;
+  - Rouental's decision "Test: Many Alerts at Once".
+
+
 NEW IN v0.10.4
 --------------
   - The diplomacy panel's own pictures: the leader's portrait in an arched
