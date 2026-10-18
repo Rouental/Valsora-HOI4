@@ -70,7 +70,7 @@ New detail goes into those files; this one gets a line.
   then as needed `pdn_tools.py owners` (settle the moved borders; plan first, `--apply`), `apply_outlines.py` (new
   outlines), `regroup_states.py --recut` (their state lines; the provinces the lines cut are cut again),
   `pdn_tools.py provinces` (their province lines), `pdn_tools.py channel` (islands to cut free), `river_provinces.py`
-  (after new rivers); rebuild; `state_map.py` for the newly drawn states to name; send the `.pdn` back.
+  (after new rivers); rebuild; `state_map.py` for the newly drawn states to name; send the `.pdn` back, dated (`docs/MAP_VERSIONS.md`).
 - **The scripts** (each one's detail in `docs/MAP_PIPELINE.md`'s table): the build (`readpdn`, `read_layers`,
   `build_mod`, `deco_ui`, `check_mod`, `export_canvas`, `package`, with `nations`, `cultures`, `ideologies`,
   `superevents`, `superevents_deco`, `test_events`, `minimap`, `globe`, `vanilla_parts`, `straits`, `borders`);
@@ -314,6 +314,12 @@ its cause and its fix, newest first.
 older version (the 2026-09-30 one predated the sea zones and recolours): diff its game
 layers against `source/` first, and merge, keeping the current game layers and taking
 their own layers (outlines, rivers, names, references) from the upload.
+
+**Send the map dated** (author, 2026-10-18: "start dating the map as you send it. If the map changes multiple times in
+a day, do something like 10/17-2, 10/17-3"; they keep the copies as backups): a copy named for the day the map last
+changed, `HOI4 Mod Map 10-17.pdn`, then `10-17-2`, `10-17-3` for later versions that day; the repository's file keeps
+its plain name. `docs/MAP_VERSIONS.md` lists every name sent with its fingerprint, so an unchanged map keeps its name
+and the next number is known.
 
 **Vanilla reference files** (2026-10-14): the author's private repo `Rouental/HOI4-Files`
 holds a copy of their 1.19.3 install under `HOI4 Files/`: common, events, history,

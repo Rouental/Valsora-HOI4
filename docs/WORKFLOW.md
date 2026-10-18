@@ -15,7 +15,7 @@ now, what changed on Claude's side, and what the author could do differently (al
 | 5. New outlines, state lines | `apply_outlines.py`; `regroup_states.py --recut` | 4 min | regroup, then a script of its own to cut the split provinces again, then `tidy` |
 | 6. Province lines, islands, rivers | `pdn_tools.py provinces`, `channel`, `river_provinces.py` | minutes | the same |
 | 7. Build and check | `sh scripts/run_all.sh` | 2 min | the same |
-| 8. For the author | `state_map.py` for the new states; the `.pdn`, the zip and the pictures sent back | minutes | the same |
+| 8. For the author | `state_map.py` for the new states; the `.pdn` (dated: `docs/MAP_VERSIONS.md`), the zip and the pictures sent back | minutes | the same |
 
 `pdn_diff.py` prints every change by layer and place (with a box and a centre pixel), which nations gained or lost land
 on Countries, the lines drawn and erased, and **the areas the new country lines enclose that hold two nations** (a
