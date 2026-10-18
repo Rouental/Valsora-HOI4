@@ -171,8 +171,9 @@ Moved out of `CLAUDE.md` word for word on 2026-10-17 (`CLAUDE.md` keeps one line
     white and navy, came on 2026-10-14). Guedelon's blue and Hollier's red are their flags' main colours. `pdn_tools.py recolour Countries OLD=NEW` keeps
     the `.pdn` in step.
   - **Every nation's record**, who drew, named and decided what and when, is `docs/NATIONS.md` (moved out of this
-    file on 2026-10-15). As built: 193 countries in the mod, the 160 on the map and 33 that own nothing at the start
-    (Rouental's 13 releasables, Belekria's 9 republics, Krionik's 3 principalities, Pakitsk, the civil war's 7);
+    file on 2026-10-15). As built: 194 countries in the mod, the 160 on the map and 34 that own nothing at the start
+    (Rouental's 13 releasables, Belekria's 9 republics, Krionik's 3 principalities and Formosa, Pakitsk, the civil
+    war's 7);
     `dist/countries.md` lists every country's names, government, culture, ruler and states. Off the map but kept in
     `COUNTRIES`, and so left out of the mod: the United States of Solitas (to come back as a formable) and
     Russovichia (author, 2026-10-15).

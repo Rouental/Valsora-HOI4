@@ -120,8 +120,8 @@ guide shows it first, since your friends draw states and the build cuts the prov
 | usual | about **1,310 px** (36 × 36), most between 820 and 1,840, about 7 provinces | Cardonia's states |
 | dense | down to about 330 px, 2 provinces | Rouental's states |
 | empty | about 1,860 px, 10 provinces, or larger | Zukchiva's states (Yastreovakia's north) | Each new province costs about 3 of the
-65,536 borders, and about 3,800 are left (October 2026), room for about 1,250 more
-provinces on the whole map: where you go smaller, go bigger somewhere empty. Never under
+65,536 borders, and about 2,000 are left (18 October 2026, kept for the states still to be
+drawn), room for about 650 more provinces on the whole map: where you go smaller, go bigger somewhere empty. Never under
 16 px, or thinner than 3.
 
 A province is land, sea or lake depending on what the **Terrain** layer says under most

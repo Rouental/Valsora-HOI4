@@ -298,6 +298,12 @@ tools/
   changes_sheets.py         build/changes/: every picture the mod replaces at the game's paths beside the game's, by
                             screen and date added, the icon-sized ones on sheets of their own, and the elements a .gui
                             of ours points at a new picture ("swaps"); index.json lists them (2026-10-17, for review)
+  proposals_panel_mockups.py  the side panels with their own pictures drafted (2026-10-18: "Do mockups of the panels
+                            and your replacements, but dont replace them just yet"): v0.7's eight hand-drawn proposals
+                            and 47 more translated from the game's pictures (rebuilt from rectangles in the Deco palette)
+                            or drawn (the agency's two photographs), into build/panel_proposals/ at the game's paths;
+                            build/panel_mockups/<panel>.png (now | with the drafts, preview_panels.py reading
+                            VALSORA_DECO_PROPOSALS first) and pictures.png. All in build/: not in the mod, not committed
   proposals_*.py            the proposals in art/proposals/ (panel pictures, larger flags, masthead names, the news
                             globe, the crests): not in the mod
   validate_preview.py       static checks + a preview renderer that reads the generated .gui/.gfx
@@ -678,8 +684,9 @@ button is the first crown of the row, keeping its vanilla sprite names (see the 
 faction logo is drawn over the crown at scale .7 and the initiative number sits at its lower right.
 Since v0.10.1 the count badges sit in the medallion plate's shoulders either side of the seal (the author's red
 outlines: "Maybe move the notifications on this screen to something like this"), each centred in its shoulder
-(`layout.DEC_BADGES`, 17 px, the time-limited one left, the ones to take right); the plate's second step moved from
-y 135 to 139 (`MED_STEPS`) to give them room, and the side panels' notch follows it.
+(the time-limited one left, the ones to take right); the plate's second step moved from y 135 to 139 (`MED_STEPS`)
+to give them room, and the side panels' notch follows it. Since v0.10.3 each is a plate of its own the shape of its
+shoulder, the corner by the seal cut off (`layout.DEC_PLATE`, `DEC_BADGES` its top left, `GFX_valsora_deco_dec_count_*`).
 
 **make_politics.py (v0.4).** It starts from **Valsora's `interface/countrypoliticsview.gui`** and falls
 back to vanilla's. It re-lays the screen as the Government mockup (`layout_politics.py` has the map):

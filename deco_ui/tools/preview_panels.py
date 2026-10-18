@@ -65,6 +65,8 @@ for _f in sorted(glob.glob(M + "interface/**/*.gfx", recursive=True)):
     _read_gfx(_f, MOD_SPRITES)
 
 _TEX = {}
+PROPOSALS = os.environ.get("VALSORA_DECO_PROPOSALS")       # a folder of drafts at the game's paths, read first
+SUFFIX = os.environ.get("VALSORA_PREVIEW_SUFFIX", "")      # written as preview_panel_<key><SUFFIX>.png
 
 
 def texture(rel, vanilla_only=False):
@@ -78,6 +80,8 @@ def texture(rel, vanilla_only=False):
         cands.insert(0, rel[:-4] + ".dds")
     img = None
     roots = [VANILLA] if vanilla_only else [M, VALSORA, VANILLA]
+    if PROPOSALS and not vanilla_only:   # drafts not in the mod, drawn over it (proposals_panel_mockups.py)
+        roots.insert(0, PROPOSALS)
     for c in cands:
         for root in roots:
             p = root + c
@@ -340,6 +344,8 @@ def render_panel(spec, vanilla=False, cv=None):
 
 def save(cv, name, x1):
     out = Image.fromarray((np.clip(cv, 0, 1) * 255).astype(np.uint8))
+    if SUFFIX and name.endswith(".png") and not name.endswith("_vanilla.png"):
+        name = name[:-4] + SUFFIX + ".png"
     out.crop((0, 0, min(1920, x1), 1080)).save(BUILD + name)
 
 

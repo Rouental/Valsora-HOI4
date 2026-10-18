@@ -14,6 +14,12 @@ dark side its text sits on), so it can go in later as a texture at the game's pa
 | `create_agency_bg.png` | `gfx/interface/operatives/create agency_bg.dds` (508 x 99) | the intelligence agency's plate |
 | `spirit_banner_decoration_{army,navy,air}.png` | `gfx/interface/officer_corp/spirit_banner_decoration_*.dds` (460 x 66) | the officer corps' ornaments: tanks, ships, planes |
 
+**Mockups of every side panel with these and 47 more drafts** (2026-10-18, the author: "Do mockups of the panels and
+your replacements, but dont replace them just yet"): `python3 tools/proposals_panel_mockups.py` writes
+`build/panel_mockups/<panel>.png` (each panel now, and with the drafts) and `pictures.png` (each picture, the game's
+and the draft). The 47 are translated from the game's own pictures, so they stay in `build/` (git-ignored) and are only
+sent: a liked one is then drawn properly in an art module before it goes in.
+
 To put an approved one in: move its drawing from `tools/proposals_panels.py` into `tools/gen_textures.py` at the game's
 path, and add the path to `validate_preview.SAME_SIZE`. The comparison with the game's pictures is written to
 `build/proposals_panel_pictures.png` (git-ignored: it holds the game's art).

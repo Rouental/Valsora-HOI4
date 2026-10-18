@@ -10,6 +10,12 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-18, night (the author: "Do mockups of the panels and your replacements, but dont replace them just yet. Also do
+  a tidy-up pass"): **mockups of the 16 side panels** with their own pictures drafted (`deco_ui/tools/
+  proposals_panel_mockups.py`: v0.7's eight hand-drawn proposals and 47 more, in `deco_ui/build/`, not in the mod);
+  **a tidy-up pass**: the stale border counts in `CLAUDE.md`, `docs/EDITING.md` and `docs/BORDER_LIMIT.md`, the
+  country count in `docs/DECISIONS.md`, the decision badges' note in `deco_ui/CLAUDE.md`; every script compiled, the
+  mutation test and the Gazetteer's tests run again.
 - 2026-10-18, evening (the author: "continuing to stylized the other screens in Deco style. One specific one is the
   diplomacy screen ... I'd definitely like ... the leader portrait stylized the same way others are"; "when importing
   pictures of characters from the Gazetteer, try to center the image around the character"): **Deco UI v0.10.4**, the

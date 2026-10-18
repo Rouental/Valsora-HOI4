@@ -82,7 +82,7 @@ New detail goes into those files; this one gets a line.
   `gazetteer_site`, `publish_site.sh`, `tests/gazetteer/`); vanilla (`vanilla_sync`, `pdxscript`); tests not in the
   game (`terrain_test`, `usnistan_prototype`, `coarse_preview`); `build_flags15.sh` (the larger flags' test version).
 - **HOI4's hard rules** (all checked by `check_mod.py`): the map is 5120×2560 (the largest size under the game's cap);
-  **at most 65,536 province borders** (about 3,800 left; new land is cut at ~190 px; `borders.py` counts); provinces
+  **at most 65,536 province borders** (2,005 left on 2026-10-18, the 2,000 `pdn_tools.py refine` keeps for the states still to be drawn; new land is cut at ~190 px; `borders.py` counts); provinces
   one 4-connected blob of 16+ px, no 2×2 window of four provinces; `definition.csv` CRLF; localisation UTF-8 with BOM;
   every province in one strategic region, a state's provinces in one, naval regions contiguous; the map files exactly
   map-sized. Map errors crash on launch unless the game runs with `-debug`: always test with it.

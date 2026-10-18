@@ -5,6 +5,9 @@ provinces once terrain starts being applied in earnest" will free some ("areas t
 provinces"). Numbers from the build of 2026-10-15; rerun them with `python3 scripts/border_report.py` (add
 `--terrain map` once the Terrain layer is painted, `--preview` for the picture).
 
+**Now** (2026-10-18): 63,531 borders built, 2,005 under the limit, the buffer `pdn_tools.py refine` keeps (it spent
+the rest on more provinces map-wide); the numbers below are the 2026-10-15 ones the report was written with.
+
 ## Where we are
 
 HOI4 draws at most **65,536 province borders**: past that, province and state lines stop being drawn from some row
