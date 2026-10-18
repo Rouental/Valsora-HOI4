@@ -458,6 +458,21 @@ def main():
             if s < 0:
                 raise SystemExit(f"nations.CORES: ({x}, {y}) for {tag} is not in a state")
             extra_cores[s].append(tag)
+    # claims (nations.CLAIMS: a country's every state, or a pixel inside one)
+    claims = defaultdict(list)
+    for tag, where in nations.CLAIMS.items():
+        for w in where:
+            if isinstance(w, str):
+                land = [s for s in range(len(rj["owners"])) if rj["owners"][s] == w]
+                if not land:
+                    raise SystemExit(f"nations.CLAIMS: {w} owns no state for {tag} to claim")
+            else:
+                land = [int(state_of[lab[w[1], w[0]]])]
+                if land[0] < 0:
+                    raise SystemExit(f"nations.CLAIMS: {w} for {tag} is not in a state")
+            for s in land:
+                if tag not in claims[s] and rj["owners"][s] != tag:
+                    claims[s].append(tag)
     for tag, names in (*nations.CIVIL_WAR.items(), *nations.RELEASABLE.items()):
         for nm in names:
             if nm not in state_by_name:
@@ -592,6 +607,7 @@ def main():
             f"\t\towner = {tag}",
             *([] if s in no_owner_core else [f"\t\tadd_core_of = {tag}"]),
             *[f"\t\tadd_core_of = {t}" for t in extra_cores[s]],
+            *[f"\t\tadd_claim_by = {t}" for t in claims[s]],
             f"\t\tvictory_points = {{ {pid[cap]} {city_vp.get(cap, 10 if is_cap else CITY_VP if cap in city_of else 1)} }}",
             *[f"\t\tvictory_points = {{ {pid[e]} {city_vp.get(e, CITY_VP)} }}" for e in extra_vps[s]],
             "\t\tbuildings = {",

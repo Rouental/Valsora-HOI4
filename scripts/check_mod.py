@@ -342,6 +342,10 @@ def main(mod):
             err(f"state {sid}: unknown state_category")
         if owner[sid] not in tags:
             err(f"state {sid}: owner {owner[sid]} is not a defined tag")
+        # cores and claims (nations.CORES, CLAIMS, the releasables'): a tag the game doesn't know is dropped silently
+        for verb, who in re.findall(r"\b(add_core_of|add_claim_by)\s*=\s*(\w+)", body):
+            if who not in tags:
+                err(f"state {sid}: {verb} {who} is not a defined tag")
         vp = blocks(body, "victory_points")
         if vp and int(vp[0].split()[0]) not in state_provs[sid]:
             err(f"state {sid}: victory point outside the state")

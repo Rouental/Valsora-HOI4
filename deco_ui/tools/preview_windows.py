@@ -56,10 +56,23 @@ def draw(vanilla):
                "Its people will remember who set them free.", x + 24, y + 90, 430, 215, "centre", False)]
     button(GI + "button_148x34.dds", x + 90, y + 310, "Decline")
     button(GI + "button_148x34.dds", x + 260, y + 310, "Accept")
-    # the release dialog's picture (pol_goal_popup_bg, 480 x 382), plain
+    # the release dialog (pol_goal_popup_bg, 480 x 382) with a long list of states: the text scrolls above the
+    # checkboxes (v0.10.2, make_popups.py; the game's box ran to y 218, over the first at y 198)
     x, y = 40, 470
     put(GI + "pol_goal_popup_bg.dds", x, y)
-    texts += [("hoi_24header", "Peace Conference Summary", x + 10, y + 16, 450, 40, "centre", True)]
+    texts += [("hoi_24header", "Release Nation", x + 10, y + 16, 450, 40, "centre", True)]
+    if vanilla:
+        ty, th = 90, 128
+    else:
+        from window_art import RELEASE_TEXT_END, RELEASE_TEXT_Y
+        ty, th = RELEASE_TEXT_Y, RELEASE_TEXT_END - RELEASE_TEXT_Y
+    texts.append(("hoi_18mbs", "Do you want to liberate Crvenognjište in " + ", ".join(f"Krionik {n}" for n in range(1, 60))
+                  + "?", x + 23, y + ty, 430, th, "centre", False))
+    for i, s in enumerate(("Release as puppet", "Play as", "Retain States With Our Core")):
+        put(GI + "generic_checkbox.dds", x + 50, y + 198 + 36 * i, 2, int(i == 0))
+        texts.append(("hoi_18mbs", s, x + 100, y + 202 + 36 * i, 200, 18, "left", False))
+    button(GI + "button_148x34.dds", x + 90, y + 323, "Cancel")
+    button(GI + "button_148x34.dds", x + 260, y + 323, "Release Nation")
     # the world tension window, 527 x 534
     x, y = 580, 40
     put(GI + "world_tension_bg.dds", x, y)

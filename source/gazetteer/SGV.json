@@ -1,0 +1,39 @@
+{
+ "cities": [
+  {
+   "capital": true,
+   "name": "Villerose",
+   "vp": 10,
+   "x": 854,
+   "y": 758
+  },
+  {
+   "name": "Poppie",
+   "size": "village",
+   "vp": 5,
+   "x": 850,
+   "y": 773
+  }
+ ],
+ "provinces": {
+  "850,772": {
+   "t": "forest"
+  },
+  "854,758": {
+   "t": "hills"
+  },
+  "861,767": {
+   "t": "mountain"
+  },
+  "868,759": {
+   "t": "mountain"
+  }
+ },
+ "states": {
+  "854,758": {
+   "pop": 2642000
+  }
+ },
+ "status": "draft",
+ "tag": "SGV"
+}

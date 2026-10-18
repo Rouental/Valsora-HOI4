@@ -7,7 +7,7 @@ under OneDrive — keep that segment in any absolute path). Valsora takes place 
 the game starts on 1 January 2036 (see "2036" under Decisions worth keeping).
 
 The map is the author's drawing at game size, 5120×2560: its land, rivers and the countries and states they
-outline region by region (160 nations on the map, 193 countries with the releasables and the civil war's), and the
+outline region by region (160 nations on the map, 194 countries with the releasables and the civil war's), and the
 sea provinces their friend Merlo drew. Rouental is the built-out nation (leaders, focus tree, civil war, army); the
 rest have set rulers and the game's generic content, moved to 2036. The interface is the author's art deco design,
 the Valsora Deco UI (`deco_ui/`). The Gazetteer, a web site, lets the author's friends fill in their own nations.
@@ -117,9 +117,9 @@ New detail goes into those files; this one gets a line.
   - Two starts on 1 January 2036: Valsora (Rouental, Merlovich) and the Vale of Reibonne (the Association's eight);
     two, because with one the game skips its scenario screen and Back loops.
   - Colours follow the flags (author); `pdn_tools.py recolour Countries OLD=NEW` keeps the `.pdn` in step.
-  - **Every nation's record**, who drew, named and decided what and when, is `docs/NATIONS.md`. As built: 193
-    countries in the mod, the 160 on the map and 33 that own nothing at the start (Rouental's 13 releasables,
-    Belekria's 9 republics, Krionik's 3 principalities, Pakitsk, the civil war's 7); `dist/countries.md` lists them.
+  - **Every nation's record**, who drew, named and decided what and when, is `docs/NATIONS.md`. As built: 194
+    countries in the mod, the 160 on the map and 34 that own nothing at the start (Rouental's 13 releasables,
+    Belekria's 9 republics, Krionik's 3 principalities and Formosa (the Gazetteer's), Pakitsk, the civil war's 7); `dist/countries.md` lists them.
     Off the map but kept in `COUNTRIES`: the United States of Solitas and Russovichia.
   - **A new or changed nation** (the rules the record kept to):
     - The author's are the names, governments, formal names and rulers, and whatever else they name. Claude picks
@@ -236,21 +236,22 @@ the page, its rules or its import.
 
 Where things stand; the history, date by date, is `docs/HISTORY.md` (add each day's entry at its top).
 
-- **The build** (2026-10-17, the night): 20,940 provinces (20,552 land, 363 sea, 25 lakes), 61,767 province borders
-  (HOI4 draws 65,536: `docs/BORDER_LIMIT.md`), 3,190 states, 179 strategic regions (137 land, made from the nations on
-  2026-10-16: `land_regions.py`, not redone for the 2026-10-17 borders; 42 sea); 416 strait crossings; 193 countries
-  in the mod, 160 of them on the map, 94 of those with a flag of their own (66 fly a stripe in their map colour); the
-  states of 48 are the author's own lines (`gazetteer.finals`; 39 until 2026-10-17's map: Belekria, Krionik, Terreich,
-  Gorbastan, Zukchiva, Sennheiser, Sminishia, West Sminishia and Hollier joined). The four great powers, one per
+- **The build** (2026-10-18, later): 21,535 provinces (21,147 land, 363 sea, 25 lakes), 63,530 province borders
+  (HOI4 draws 65,536; 2,000 kept free by `pdn_tools.py refine`: `docs/BORDER_LIMIT.md`), 3,192 states, 179 strategic
+  regions (137 land, made from the nations on 2026-10-16: `land_regions.py`, not redone for the borders since; 42 sea);
+  413 strait crossings (none between the Illiriciums or to North Pollana); Belekria 1, 4, 5, 6 and 15 coarse as
+  tundra; Sminishia's claims on West Sminishia's land (`nations.CLAIMS`); 194 countries
+  in the mod, 160 of them on the map, 95 of those with a flag of their own (65 fly a stripe in their map colour); the
+  states of 49 are drawn lines (`gazetteer.finals`; 39 until 2026-10-17's map: Belekria, Krionik, Terreich,
+  Gorbastan, Zukchiva, Sennheiser, Sminishia, West Sminishia and Hollier joined; Ungar's six from the Gazetteer on
+  2026-10-18). The four great powers, one per
   ideology but Theocratic (author, 2026-10-17): Krionik (Monarchist), Kampf (Authoritarian), Sarkis (Communist),
-  Fraxhemark (Democratic); great in name for now (their industry is as drawn). Two starts, both on 1 January 2036. The Deco UI is v0.10.1 (`deco_ui/docs/VERSIONS.md`). The Gazetteer shows players a quick-start guide the first time they unlock a nation, a state size guide (Cardonia's states the usual size, author 2026-10-18) before the province one, a button to hide suggestions, and what each base-game trait does.
+  Fraxhemark (Democratic); great in name for now (their industry is as drawn). Two starts, both on 1 January 2036. The Deco UI is v0.10.2 (`deco_ui/docs/VERSIONS.md`). The Gazetteer shows players a quick-start guide the first time they unlock a nation, a state size guide (Cardonia's states the usual size, author 2026-10-18) before the province one, a button to hide suggestions, and what each base-game trait does.
   Rouental has test decisions for every kind of event and a test superevent (`test_events.py`).
-  **A blank slate** (author, 2026-10-16: "is there a way you could reset any edits made thus far? I'd like a blank
-  slate. The same goes for the mod. I'd like it just as it was on the last pdn, no extra rivers or internal borders"):
-  the mod is built from the `.pdn` alone, with no Gazetteer facts (`source/gazetteer/` removed: Rouental's page, its
-  river, railway, terrain, cities, admiral and "Test" releasable with its flag), and Owner tools › **Start over**
-  would clear the site's atlas (the author's alone, asked twice; they decided not to, 2026-10-16: "I think I'll
-  actually not reset it"). The Gazetteer offers the base game's traits for every leader and takes requests for new ones,
+  **The Gazetteer's facts are in the mod again** (2026-10-18: the author's export of that morning, 17 nations with
+  something entered, `source/gazetteer/`; its 15 suggestions put on the map by `apply_suggestions.py`), after the
+  blank slate of 2026-10-16. `gazetteer_fetch.py` reads the site directly once the author adds a read-only service
+  account's key as the secret `GAZETTEER_SERVICE_ACCOUNT` (`docs/GAZETTEER_INTERNALS.md`); until then their saved file. The Gazetteer offers the base game's traits for every leader and takes requests for new ones,
   and has political advisors and companies (arms makers and industrial concerns of the base game's kinds, with logos;
   requests for new kinds); since 2026-10-15 (later) it shows what the game already has, editable (the author's own
   characters with their stats; Rouental's 13 releasables, its civil war's 7 risers and Belekria's Tethia), commanders'
@@ -261,12 +262,15 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   Valsora Atlas (the build in a browser, a private Artifact: `docs/ATLAS.md`). Proposals made the same night, not in
   the mod: the tech tree's full mockup (`docs/tech_tree_mockup/`), a world map poster (`dist/posters/`), the Deco UI's
   next screens (`deco_ui/art/proposals/next_screens/`).
-- **Seen in game last** (2026-10-17): the Deco UI v0.10 (the author's screenshots): the logistics "as part of the main
-  bar" and the commanders' card's look liked; the loading screen showed the game's own picture, corner brackets stuck
-  out of the loading boxes and the battle plan bar, its icons off centre, "Other countries" off the edge of game
-  setup, its details disorganised, the combat width and the commanders' skill off centre (white on tan), the fleet's
-  names running over, a news story over its rule: all fixed in v0.10.1, not yet seen. Older findings, all fixed since: `deco_ui/docs/VERSIONS.md`. Not seen yet besides: the two starts, Vilna and Placeholdgrad. The Deco UI's checklist for the author is in `deco_ui/valsora_deco_ui/README.txt` (Things to check) and `deco_ui/CLAUDE.md` (section 10).
-- **Waiting on the author:** whose the motto flag is ("a safe haven amid the storm", Arabic on indigo, four hands in white
+- **Seen in game last** (2026-10-18): the Deco UI v0.10.1 (the author's screenshots and a mockup of the medallion):
+  the Release Nation window's list over its checkboxes, eight faction flags a row with room for more, the events'
+  corner brackets ("you have a lot of trouble with this particular decorative element"), the factories' order, the
+  state panel's corner under the flag, the experience badges off centre, the medallion's name 1 px left: all changed
+  in v0.10.2, not yet seen. Before that (2026-10-17) v0.10's findings, fixed in v0.10.1. Older findings, all fixed since: `deco_ui/docs/VERSIONS.md`. Not seen yet besides: the two starts, Vilna and Placeholdgrad. The Deco UI's checklist for the author is in `deco_ui/valsora_deco_ui/README.txt` (Things to check) and `deco_ui/CLAUDE.md` (section 10).
+- **Waiting on the author:** (2026-10-18) a read-only service account for the Gazetteer (its key as the environment's
+  secret `GAZETTEER_SERVICE_ACCOUNT`: `docs/GAZETTEER_INTERNALS.md`); from the Gazetteer's suggestions, Claude's
+  readings to confirm: Riverraine's and Kové's capitals (Callentroix, Kové), the two Triftsund-Inseln states sharing
+  their name, Ungar's city-states of 31 and 63 px (Tópart, Erődítmény); whose the motto flag is ("a safe haven amid the storm", Arabic on indigo, four hands in white
   and gold: `dist/flag_proposals/safe_haven/`) and which version; from the 2026-10-17 map: names for the new states (`dist/state_numbers_belekria.png`,
   `_krionik`, `_terreich`, `_kurikia`, `_san_sierra`, `_sennheiser`, `_gorbastan_zukchiva`, and Cardonia's 5 and
   Hollier's 1 new ones), flags for Belekria's eight new republics, and the bump of Kieska's new land by Sombor that is

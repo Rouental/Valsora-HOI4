@@ -149,4 +149,7 @@ def ev_top(design):
             'background:linear-gradient(90deg,transparent,#C9A55A 18%,#C9A55A 82%,transparent)"></div>'
             + '<div class="frame" style="left:46px;right:46px;top:107px;height:1px;'
             'background:linear-gradient(90deg,transparent,rgba(201,165,90,.6) 18%,rgba(201,165,90,.6) 82%,transparent)"></div>'
-            + f'<i class="ck tr" style="top:{EVT + 6}px;right:8px"></i>' + crest)
+            # no corner bracket (v0.10.2, the user on the leader event: "The corners of this look weird"): a square
+            # bracket sat in one chamfered corner of four, larger than the foot's two; the double chamfered rails are
+            # the corners now, the same at all four
+            + crest)

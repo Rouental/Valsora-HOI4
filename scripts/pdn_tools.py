@@ -62,6 +62,15 @@
         place of the ones cut for it (pieces under MIN_PROVINCE px join the neighbour they
         share most border with, line pixels the nearest piece). A state the lines don't
         divide is left as it is, with a note. States, countries and regions don't change.
+    python3 scripts/pdn_tools.py refine [--apply] [--borders N]
+        More provinces, where they are fewest (the author, 2026-10-18: "I'd like a general increase of the province
+        count. For example, Evriches should have at least 3 or 4 provinces ... still leave a buffer"): every nation
+        gets at least REFINE_NATION provinces where its land allows pieces of REFINE_NATION_PX, every state of
+        REFINE_STATE_PX or more at least two, then the land provinces are cut again largest piece first (a province
+        in two, then three ...) until the map's province borders reach N (default: borders.LIMIT less REFINE_BUFFER,
+        counted as the build counts them). Provinces only: states, countries and regions stay. Left alone: the
+        author's drawn provinces (the states the "Necessary Provinces" lines cross), Merlovich (Merlo's land),
+        states asked to stay sparse (REFINE_SPARSE), lakes, the sea and provinces across the map's wrap. Without --apply it prints the plan and saves nothing.
     python3 scripts/pdn_tools.py tidy
         Merge every land province under MIN_PROVINCE px into the neighbouring province it
         shares most border with, one of its own state first; a scrap that only touches
@@ -107,6 +116,19 @@ WORK = Path("work/pdn_tools")
 OCEAN, LAKES = (8, 31, 130), (55, 90, 220)
 CROSS = np.array([[0, 1, 0], [1, 1, 1], [0, 1, 0]])
 CEDED_STATE = 600  # cede: a split state's ceded part this big is a state, not a sliver
+# refine (2026-10-18): more provinces within the border limit
+REFINE_BUFFER = 2000     # province borders kept free under HOI4's 65,536 for the edits still to come
+REFINE_NATION = 4        # every nation at least this many provinces ...
+REFINE_NATION_PX = 90    # ... where its land allows pieces this big
+REFINE_STATE_PX = 240    # a state this big has two provinces or more
+REFINE_KEEP = ("aislada",)  # Merlo's land (Merlovich), his to cut
+# states left as sparse as they are, by a pixel inside: Terreich's isles, "very sparse" (the Gazetteer, 2026-10-18)
+REFINE_SPARSE = ((764, 1815), (695, 1766), (774, 1911))
+# tundra: states cut again into fewer, larger provinces (TUNDRA_PX each, the size guide's empty land: 300 to 800 px),
+# then left as they are; the borders this frees go to the rest. By a pixel inside: Belekria 1, 4, 5, 6 and 15 (the
+# author, 2026-10-18: "Belekria 1, 5, 4, 6, and 15 will be tundra, and thus don't need high counts")
+REFINE_TUNDRA = ((2091, 278), (1902, 280), (1964, 282), (1813, 280), (2044, 309))
+TUNDRA_PX = 600
 
 
 def code(rgb):
@@ -660,6 +682,226 @@ def provinces(names, L):
               f"({', '.join(str(int((cells == q).sum())) for q in big)} px)")
 
 
+def four_corners(w):
+    """(rows, columns) of the 2 x 2 windows of w holding four different provinces (HOI4 forbids them)"""
+    a, b, c, d = w[:-1, :-1], w[:-1, 1:], w[1:, :-1], w[1:, 1:]
+    return np.nonzero((a != b) & (a != c) & (a != d) & (b != c) & (b != d) & (c != d))
+
+
+def unfour(w, mine):
+    """Resolve the four-province corners a cut made inside one province (two of the four are its pieces): one of its
+    pixels there joins the piece beside it. Returns how many are left (the build fixes those, each a border more)."""
+    left = 0
+    for y, x in zip(*four_corners(w)):
+        done = False
+        for yy, xx in ((y, x), (y, x + 1), (y + 1, x), (y + 1, x + 1)):
+            if w[yy, xx] not in mine:
+                continue
+            for ny, nx in ((yy, x + (x + 1 - xx)), (y + (y + 1 - yy), xx)):  # its two neighbours in the window
+                if w[ny, nx] in mine and w[ny, nx] != w[yy, xx]:
+                    w[yy, xx] = w[ny, nx]
+                    done = True
+                    break
+            if done:
+                break
+        left += not done
+    return left
+
+
+def tundra(L, P, St, land, locked):
+    """REFINE_TUNDRA's states cut again into pieces of about TUNDRA_PX: a state's land is its provinces', each going
+    whole to the state covering most of it, as the build has it; each connected part of it keeps its own provinces'
+    colours, fewer of them. P and St change in place, the States and Strategic Regions layers with them (all its land
+    in the state and in the region covering most of it)."""
+    from apply_outlines import organic_split
+    out = []
+    lp = np.where(land, P, -1)
+    R = L["Strategic Regions"]
+    rc = code(R[..., :3])
+    for x, y in REFINE_TUNDRA:
+        s = int(St[y, x])
+        if s in locked:
+            print(f"tundra at ({x}, {y}): the author's province lines are there; left as it is")
+            continue
+        box = ndi.find_objects((St == s).astype(int))[0]
+        y0, y1 = max(box[0].start - 40, 0), min(box[0].stop + 40, H)
+        x0, x1 = max(box[1].start - 40, 0), min(box[1].stop + 40, W)
+        win = np.s_[y0:y1, x0:x1]
+        mine = []
+        for c in np.unique(lp[win][St[win] == s]):
+            if c >= 0 and Counter(St[win][lp[win] == c].tolist()).most_common(1)[0][0] == s:
+                mine.append(int(c))
+        m = np.isin(lp[win], mine)
+        lab, n = ndi.label(m, CROSS)
+        pieces = 0
+        for i in range(1, n + 1):
+            ys, xs = np.nonzero(lab == i)
+            cols = sorted(set(P[win][ys, xs].tolist()))
+            k = min(len(cols), max(1, int(round(len(ys) / TUNDRA_PX))))
+            parts = organic_split(ys, xs, k, seed=s % 100003)
+            ks = np.unique(parts)
+            P[win][ys, xs] = np.array(cols[:len(ks)])[np.searchsorted(ks, parts)]
+            pieces += len(ks)
+        St[win][m] = s
+        lay = L["States"][win]
+        lay[m, 0], lay[m, 1], lay[m, 2], lay[m, 3] = s >> 16, (s >> 8) & 255, s & 255, 255
+        lit = m & (R[win][..., 3] > 0)
+        major = Counter(rc[win][lit].tolist()).most_common(1)[0][0]
+        reg = R[win]
+        reg[m, 0], reg[m, 1], reg[m, 2], reg[m, 3] = major >> 16, (major >> 8) & 255, major & 255, 255
+        out.append(((x, y), len(mine), pieces))
+    return out
+
+
+def refine(names, L, apply, target=None):
+    import heapq
+    import borders
+    from apply_outlines import organic_split
+    from common import COUNTRIES
+    t = L["Terrain"][..., :3]
+    land = ~((t == OCEAN).all(-1) | (t == LAKES).all(-1))
+    P = code(L["Provinces"][..., :3])
+    St = np.where(L["States"][..., 3] > 0, code(L["States"][..., :3]), -1)
+    K = code(L["Countries"][..., :3])
+    key_of = {(r << 16) | (g << 8) | b: k for k, (_, _, _, (r, g, b)) in COUNTRIES.items()}
+    locked_states = set(np.unique(St[(L["Necessary Provinces"][..., 3] > 0) & land]).tolist()) - {-1}
+    # the borders as the build counts them: the layer's count plus what the build's own fixes add (the last build, of
+    # the layer as it is before the tundra is cut again)
+    layer_before = borders.count(P)[1]
+    built = borders.count(np.load("work/provinces.npz")["prov"])[1] if Path("work/provinces.npz").exists() \
+        else layer_before
+    coarsened = tundra(L, P, St, land, locked_states)
+    base = borders.count(P)[1]
+    if target is None:
+        target = borders.LIMIT - REFINE_BUFFER
+    goal = target - max(0, built - layer_before)
+    print(f"borders: {layer_before} on the layer, {built} in the last build, {base} with the tundra cut again; "
+          f"aiming at {goal} on the layer ({target} built)")
+    # the land provinces: pixels, state, nation
+    lp = np.where(land, P, -1)
+    u, inv = np.unique(lp, return_inverse=True)
+    inv = inv.reshape(P.shape)
+    boxes = ndi.find_objects(inv + 1)
+    locked_states |= {int(St[y, x]) for x, y in REFINE_SPARSE + REFINE_TUNDRA}
+    prov = {}
+    for i, c in enumerate(u):
+        if c < 0:
+            continue
+        sl = boxes[i]
+        m = inv[sl] == i
+        ys, xs = np.nonzero(m)
+        ys, xs = ys + sl[0].start, xs + sl[1].start
+        st = int(Counter(St[ys, xs].tolist()).most_common(1)[0][0])
+        nat = key_of.get(int(Counter(K[ys, xs].tolist()).most_common(1)[0][0]))
+        wraps = xs.min() == 0 and xs.max() == W - 1
+        prov[int(c)] = dict(ys=ys, xs=xs, n=len(ys), state=st, nation=nat, k=1,
+                            fixed=wraps or st in locked_states or nat in REFINE_KEEP)
+    fresh = iter(palette(60000, False, 20261018, set(np.unique(P).tolist())))
+    total, splits = base, Counter()
+
+    def window(pr):
+        y0, y1 = max(pr["ys"].min() - 2, 0), min(pr["ys"].max() + 3, H)
+        x0, x1 = max(pr["xs"].min() - 2, 0), min(pr["xs"].max() + 3, W)
+        return np.s_[y0:y1, x0:x1]
+
+    def cut(c, k, why):
+        """cut province c into k pieces (from its pixels as they were); False if that would pass the goal"""
+        nonlocal total
+        pr = prov[c]
+        parts = organic_split(pr["ys"], pr["xs"], k, seed=int(c) % 100003)
+        if len(np.unique(parts)) < k or np.bincount(parts).min() < MIN_PROVINCE:
+            return False
+        sl = window(pr)
+        before = borders.count(P[sl])[1]
+        old = P[pr["ys"], pr["xs"]].copy()
+        cols = pr.get("cols", [c])
+        cols = cols + [next(fresh) for _ in range(k - len(cols))]
+        P[pr["ys"], pr["xs"]] = np.array(cols)[parts]
+        left = unfour(P[sl], set(cols))  # corners where four provinces would meet: the build moves a pixel, a border
+        delta = borders.count(P[sl])[1] - before + left
+        if total + delta > goal:
+            P[pr["ys"], pr["xs"]] = old
+            return False
+        total += delta
+        pr["k"], pr["cols"] = k, cols
+        splits[why] += 1
+        return True
+
+    free = {c: pr for c, pr in prov.items() if not pr["fixed"]}
+    # every nation at least REFINE_NATION provinces where its land allows
+    by_nation = defaultdict(list)
+    for c, pr in prov.items():
+        by_nation[pr["nation"]].append(c)
+    raised = []
+    for nat, cs in sorted(by_nation.items(), key=lambda x: str(x[0])):
+        area = sum(prov[c]["n"] for c in cs)
+        want = min(REFINE_NATION, area // REFINE_NATION_PX)
+        have = len(cs)
+        mine = [c for c in cs if c in free]
+        if have >= want or not mine:
+            continue
+        while have < want:
+            c = max(mine, key=lambda c: prov[c]["n"] / prov[c]["k"])
+            if not cut(c, prov[c]["k"] + 1, "nation"):
+                break
+            have += 1
+        raised.append((nat, len(cs), have))
+    # every state of REFINE_STATE_PX or more at least two provinces
+    by_state = defaultdict(list)
+    for c, pr in prov.items():
+        by_state[pr["state"]].append(c)
+    for st, cs in by_state.items():
+        if len(cs) == 1 and cs[0] in free and prov[cs[0]]["k"] == 1 and prov[cs[0]]["n"] >= REFINE_STATE_PX:
+            cut(cs[0], 2, "state")
+    # then the largest pieces, until the goal
+    heap = [(-pr["n"] / pr["k"], c) for c, pr in free.items()]
+    heapq.heapify(heap)
+    misses = 0
+    while heap and misses < 50:
+        size, c = heapq.heappop(heap)
+        pr = prov[c]
+        if -size != pr["n"] / pr["k"]:
+            heapq.heappush(heap, (-pr["n"] / pr["k"], c))
+            continue
+        if pr["n"] / (pr["k"] + 1) < 2 * MIN_PROVINCE:
+            continue
+        if cut(c, pr["k"] + 1, "largest"):
+            heapq.heappush(heap, (-pr["n"] / pr["k"], c))
+            misses = 0
+        else:
+            misses += 1
+            if total >= goal - 2:
+                break
+    n_before = len(prov)
+    n_after = sum(pr["k"] for pr in prov.values())
+    sizes = np.array([pr["n"] / pr["k"] for pr in prov.values() for _ in range(pr["k"])])
+    print(f"land provinces {n_before} -> {n_after} (+{n_after - n_before}): {splits['nation']} cuts for the nations' "
+          f"minimum, {splits['state']} for the states', {splits['largest']} of the largest; borders {base} -> {total} "
+          f"on the layer; median province {np.median([pr['n'] for pr in prov.values()]):.0f} px -> {np.median(sizes):.0f}, "
+          f"largest piece now {sizes.max():.0f} px")
+    for nat, was, now in raised:
+        print(f"  {nat}: {was} -> {now} provinces")
+    for (x, y), was, now in coarsened:
+        print(f"  tundra at ({x}, {y}): {was} -> {now} provinces")
+    if apply:
+        put(L["Provinces"], P, land)
+        # a piece keeps the state and region its province had: the build gives each province the state and region
+        # covering most of it, and a province the States layer's lines cross would otherwise leave a piece in the
+        # neighbour's state, in another region (2026-10-18, at (1029, 843)). The build read it so already: no change.
+        for nm in ("States", "Strategic Regions"):
+            lay = L[nm]
+            lc = code(lay[..., :3])
+            for pr in prov.values():
+                if pr["k"] > 1:
+                    ys, xs = pr["ys"], pr["xs"]
+                    lit = lay[ys, xs, 3] > 0
+                    if lit.any():
+                        major = Counter(lc[ys[lit], xs[lit]].tolist()).most_common(1)[0][0]
+                        lay[ys, xs, 0], lay[ys, xs, 1], lay[ys, xs, 2] = major >> 16, (major >> 8) & 255, major & 255
+                        lay[ys, xs, 3] = 255
+    return apply
+
+
 def tidy(names, L):
     t = L["Terrain"][..., :3]
     land = ~((t == OCEAN).all(-1) | (t == LAKES).all(-1))
@@ -780,44 +1022,56 @@ def channel(names, L, pairs):
             if land[py + by0, px + bx0]:
                 cut[py + by0, px + bx0] = True
         before = sklabel(land[by0:by1, bx0:bx1], connectivity=1).max()
-        # the carved pixels join the nearest sea province and region
-        P = code(L["Provinces"][..., :3])
-        R = code(L["Strategic Regions"][..., :3])
-        sl = np.s_[by0 - 20:by1 + 20, bx0 - 20:bx1 + 20]
-        idx = ndi.distance_transform_edt(~sea[sl], return_distances=False, return_indices=True)
-        c = cut[sl]
-        for nm, val in (("Provinces", P[sl][idx[0], idx[1]]), ("Strategic Regions", R[sl][idx[0], idx[1]])):
-            arr = L[nm][sl]
-            arr[c, 0], arr[c, 1], arr[c, 2] = val[c] >> 16, (val[c] >> 8) & 255, val[c] & 255
-        L["Terrain"][cut, :3] = OCEAN
-        L["Heightmap"][cut, :3] = 93
-        for nm in ("Continents", "States", "Countries", "Rivers"):
-            L[nm][cut, 3] = 0
-        sea |= cut
-        land &= ~cut
-        # land provinces cut apart: pieces of 16+ px become provinces, scraps join a neighbour
-        P = code(L["Provinces"][..., :3])
-        used = set(np.unique(P).tolist())
-        rng = np.random.default_rng(x1 * 7 + y1)
-        for pc in set(np.unique(P[ndi.binary_dilation(cut, CROSS) & land]).tolist()):
-            comp = sklabel((P == pc) & land, connectivity=1)
-            sizes = np.bincount(comp.ravel())[1:]
-            for j in np.argsort(-sizes)[1:] + 1:
-                piece = comp == j
-                if sizes[j - 1] >= 16:
-                    while True:
-                        nc = int(rng.integers(1 << 20, 1 << 24))
-                        if nc not in used:
-                            used.add(nc)
-                            break
-                else:
-                    ring = ndi.binary_dilation(piece, CROSS) & land & ~piece
-                    nc = Counter(P[ring].tolist()).most_common(1)[0][0]
-                L["Provinces"][piece, :3] = [nc >> 16, (nc >> 8) & 255, nc & 255]
-                P[piece] = nc
+        to_sea(L, cut, sea, land, (by0, by1, bx0, bx1), x1 * 7 + y1)
         after = sklabel(land[by0:by1, bx0:bx1], connectivity=1).max()
         print(f"channel {x1},{y1} -> {x2},{y2}: {cut.sum()} land px became sea; "
               f"landmasses nearby {before} -> {after}")
+
+
+def to_sea(L, cut, sea, land, box, seed):
+    """Make the land pixels `cut` sea (sea and land, the masks, are updated): the nearest sea province and region,
+    ocean terrain, below sea level; land provinces cut apart become provinces of 16+ px, scraps join a neighbour.
+    box = (y0, y1, x0, x1) holds the cut."""
+    from skimage.measure import label as sklabel
+    by0, by1, bx0, bx1 = box
+    # the carved pixels join the nearest sea province and region
+    P = code(L["Provinces"][..., :3])
+    R = code(L["Strategic Regions"][..., :3])
+    sl = np.s_[by0 - 20:by1 + 20, bx0 - 20:bx1 + 20]
+    idx = ndi.distance_transform_edt(~sea[sl], return_distances=False, return_indices=True)
+    c = cut[sl]
+    for nm, val in (("Provinces", P[sl][idx[0], idx[1]]), ("Strategic Regions", R[sl][idx[0], idx[1]])):
+        arr = L[nm][sl]
+        arr[c, 0], arr[c, 1], arr[c, 2] = val[c] >> 16, (val[c] >> 8) & 255, val[c] & 255
+    L["Terrain"][cut, :3] = OCEAN
+    L["Heightmap"][cut, :3] = 93
+    for nm in ("Continents", "States", "Countries", "Rivers"):
+        L[nm][cut, 3] = 0
+    sea |= cut
+    land &= ~cut
+    # land provinces cut apart: pieces of 16+ px become provinces, scraps join a neighbour
+    P = code(L["Provinces"][..., :3])
+    used = set(np.unique(P).tolist())
+    rng = np.random.default_rng(seed)
+    for pc in set(np.unique(P[ndi.binary_dilation(cut, CROSS) & land]).tolist()):
+        comp = sklabel((P == pc) & land, connectivity=1)
+        sizes = np.bincount(comp.ravel())[1:]
+        for j in np.argsort(-sizes)[1:] + 1:
+            piece = comp == j
+            if sizes[j - 1] >= 16:
+                while True:
+                    nc = int(rng.integers(1 << 20, 1 << 24))
+                    if nc not in used:
+                        used.add(nc)
+                        break
+            else:
+                ring = ndi.binary_dilation(piece, CROSS) & land & ~piece
+                if not ring.any():  # a scrap alone in the water: left as it is
+                    print(f"to_sea: a scrap of {sizes[j - 1]} px alone in the water left as it is")
+                    continue
+                nc = Counter(P[ring].tolist()).most_common(1)[0][0]
+            L["Provinces"][piece, :3] = [nc >> 16, (nc >> 8) & 255, nc & 255]
+            P[piece] = nc
 
 
 def main():
@@ -861,6 +1115,10 @@ def main():
         provinces(names, L)
     elif cmd == "tidy":
         tidy(names, L)
+    elif cmd == "refine":
+        n = next((int(sys.argv[i + 1]) for i, a in enumerate(sys.argv) if a == "--borders"), None)
+        if not refine(names, L, "--apply" in sys.argv, n):
+            return
     elif cmd == "channel":
         channel(names, L, [tuple(int(v) for v in a.split(",")) for a in sys.argv[2:]])
     elif cmd == "sea_zones":

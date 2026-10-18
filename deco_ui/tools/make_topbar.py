@@ -232,7 +232,7 @@ for k, cont in L.XP_KEYS.items():
                   Orientation="UPPER_RIGHT")
     t = set_background(t, cont, "GFX_valsora_deco_badge")
     t = set_attrs(t, ic, sprite="GFX_valsora_deco_none", position=(0, 0))
-    t = set_attrs(t, txt, position=(0, L.box_y_for_caps(L.SMALL_FONT, 3)), font=L.SMALL_FONT, maxWidth=B["w"],
+    t = set_attrs(t, txt, position=(0, B["text_y"]), font=L.SMALL_FONT, maxWidth=B["w"],
                   maxHeight=B["h"], format="centre")
 
 # ---------------------------------------------------------------- 5. world tension value under its ring
@@ -384,14 +384,14 @@ extras = ("# Valsora Deco UI - extra top bar windows driven by scripted GUIs\n"
           "# (common/scripted_guis/valsora_deco_topbar.txt). Positions are relative to the top bar.\n"
           "guiTypes = {"
           # country name: large tracked capitals, or a smaller cut for names with very long words
-          + window("valsora_deco_country_name", N["x"], N["y"] - L.NAME_SLACK, N["w"], N["h"] + 2 * L.NAME_SLACK,
-                   L.NAME_FONTS[0], "VAL_DECO_TB_COUNTRY_NAME", "centre", True)
-          + window("valsora_deco_country_name_small", N["x"], N["y"] - L.NAME_SLACK, N["w"], N["h"] + 2 * L.NAME_SLACK,
-                   L.NAME_FONTS[1], "VAL_DECO_TB_COUNTRY_NAME", "centre", True)
+          + window("valsora_deco_country_name", N["x"] + L.NAME_SHIFT[L.NAME_FONTS[0]], N["y"] - L.NAME_SLACK, N["w"],
+                   N["h"] + 2 * L.NAME_SLACK, L.NAME_FONTS[0], "VAL_DECO_TB_COUNTRY_NAME", "centre", True)
+          + window("valsora_deco_country_name_small", N["x"] + L.NAME_SHIFT[L.NAME_FONTS[1]], N["y"] - L.NAME_SLACK,
+                   N["w"], N["h"] + 2 * L.NAME_SLACK, L.NAME_FONTS[1], "VAL_DECO_TB_COUNTRY_NAME", "centre", True)
           # political power: daily gain, right-aligned under the label (the game's own number stays left)
           + window("valsora_deco_pp_daily", pp["text_x"], L.box_y_for_caps(L.SEC_FONT, 32), pp["text_w"], 18,
                    L.SEC_FONT, "VAL_DECO_TB_PP_DAILY", "right")
-          # factories: civilian / military / naval counts with coloured diamonds
+          # factories: military / naval / civilian counts with coloured diamonds
           + window("valsora_deco_factory_counts", fac["text_x"], L.VALUE_Y, fac["value_w"], 20, L.VALUE_FONT,
                    "VAL_DECO_TB_FACTORY_COUNTS")
           + "}\n")
@@ -452,8 +452,10 @@ if os.path.isfile(ALERTS):
 
 LOC = {"VAL_DECO_TB_COUNTRY_NAME": "[ROOT.GetName]",
        "VAL_DECO_TB_PP_DAILY": "[?political_power_daily|+=2]",
-       "VAL_DECO_TB_FACTORY_COUNTS": "§W◆§![?num_of_civilian_factories|0] §O◆§![?num_of_military_factories|0]"
-                                     " §C◆§![?num_of_naval_factories|0]"}
+       # military, naval, civilian: the order of the game's list under it (v0.10.2, the user: "The factories should go
+       # military - naval - civilian, to match the order in the list"; civilian came first until then)
+       "VAL_DECO_TB_FACTORY_COUNTS": "§O◆§![?num_of_military_factories|0] §C◆§![?num_of_naval_factories|0]"
+                                     " §W◆§![?num_of_civilian_factories|0]"}
 LOC.update({it["loc"]: it["label"] for it in L.STRIP})
 for lang in ["english", "french", "german", "spanish", "braz_por", "polish", "russian", "japanese", "simp_chinese"]:
     d = MOD + f"localisation/{lang}/"

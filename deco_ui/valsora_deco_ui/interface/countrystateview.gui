@@ -48,11 +48,11 @@ guiTypes = {
 						
 			instantTextboxType = {
 				name = "state_name"
-				position = { x = 78 y = 12 }
+				position = { x = 88 y = 12 }
 				textureFile = ""
 				font = "valsora_deco_title_18"
 				text = "STATE_NAME_TEST"
-				maxWidth = 276
+				maxWidth = 266
 				maxHeight = 24
 				format = left
 			}
@@ -196,11 +196,11 @@ guiTypes = {
 			
 			instantTextboxType = {
 				name = "owner"
-				position = { x = 78 y = 36 }
+				position = { x = 88 y = 36 }
 				textureFile = ""
 				font = "valsora_deco_body_13"
 				text = ""
-				maxWidth = 276
+				maxWidth = 266
 				maxHeight = 16
 				fixedsize = yes
 				format = left
@@ -208,7 +208,7 @@ guiTypes = {
 			
 			OverlappingElementsBoxType = {
 				name = "state_owners"
-				position = { x = 20 y = 16 }
+				position = { x = 30 y = 16 }
 				size = { x = 60 y = 40 }
 				format = left
 				spacing = 1.0

@@ -1,0 +1,571 @@
+{
+ "about": {
+  "colour": "#035920",
+  "culture": "Hungarian"
+ },
+ "flags": {
+  "communism": {
+   "file": "assets/16ff3be9bd29cf9cee36b235.png",
+   "h": 311,
+   "name": "flag temp.png",
+   "w": 490
+  },
+  "democratic": {
+   "file": "assets/fd70c870be94317130b0b74b.png",
+   "h": 311,
+   "name": "flag temp.png",
+   "w": 490
+  },
+  "fascism": {
+   "file": "assets/8de4d45ff8a3943997b0a9d1.png",
+   "h": 311,
+   "name": "flag temp.png",
+   "w": 490
+  },
+  "theocracy": {
+   "file": "assets/efc3562ce1c92a0152f4b336.png",
+   "h": 311,
+   "name": "flag temp.png",
+   "w": 490
+  }
+ },
+ "people": {
+  "parties": {
+   "communism": {
+    "name": "László Vilmos",
+    "portrait": {
+     "file": "assets/59dbd78601f95f48efb63637.jpg",
+     "h": 427,
+     "name": "D_PRG20250114013-1536x1024.jpg",
+     "w": 640
+    }
+   },
+   "democratic": {
+    "name": "Szalai Diána",
+    "portrait": {
+     "file": "assets/ad0b78ce7f7bdc0ccf577f2c.jpg",
+     "h": 640,
+     "name": "NovakKatalin_portraits_197A2127.jpg",
+     "w": 457
+    }
+   },
+   "fascism": {
+    "name": "Orbán Géza",
+    "portrait": {
+     "file": "assets/ac281c33960fb119f0a7c8fc.jpg",
+     "h": 427,
+     "name": "-1x-1.webp",
+     "w": 640
+    }
+   },
+   "theocracy": {
+    "name": "Sulyok James",
+    "portrait": {
+     "file": "assets/5977ee47dd9ec2c714ef87b3.png",
+     "h": 637,
+     "name": "b02e1799bfc5c8bcdde5953f56a03617.jpg",
+     "w": 400
+    }
+   }
+  },
+  "ruler": {
+   "name": "Vászoly Ármin II",
+   "portrait": {
+    "file": "assets/b33fe71b7440283a22d80180.jpg",
+    "h": 640,
+    "name": "Sulyok_Tamás_hivatalos_portréja.jpg",
+    "w": 637
+   }
+  }
+ },
+ "politics": {
+  "names": {
+   "communism": {
+    "def": "the Peasant's Republic of Ungar"
+   },
+   "democratic": {
+    "def": "the Republic of the Ungarians"
+   },
+   "fascism": {
+    "def": "the Ungar Free State",
+    "name": "Ungar"
+   },
+   "neutrality": {
+    "adj": "Ungarian",
+    "def": "the Grand Duchy of Ungar",
+    "name": "Ungar"
+   },
+   "theocracy": {
+    "def": "the Ungarian Synod"
+   }
+  },
+  "parties": {
+   "communism": "agrarian_socialism",
+   "democratic": "conservatism",
+   "fascism": "humanism",
+   "theocracy": "synodal_rule"
+  }
+ },
+ "status": "draft",
+ "suggest": [
+  {
+   "label": "Tópart",
+   "note": "Ungar's capital",
+   "pts": [
+    [
+     551,
+     1859
+    ],
+    [
+     554,
+     1856
+    ],
+    [
+     557,
+     1856
+    ],
+    [
+     558,
+     1860
+    ],
+    [
+     556,
+     1862
+    ],
+    [
+     553,
+     1862
+    ],
+    [
+     552,
+     1859
+    ]
+   ],
+   "type": "state"
+  },
+  {
+   "label": "Erődítmény",
+   "note": "Ungar's largest city.",
+   "pts": [
+    [
+     596,
+     1809
+    ],
+    [
+     593,
+     1810
+    ],
+    [
+     591,
+     1813
+    ],
+    [
+     593,
+     1818
+    ],
+    [
+     599,
+     1818
+    ],
+    [
+     602,
+     1815
+    ],
+    [
+     600,
+     1809
+    ],
+    [
+     595,
+     1809
+    ]
+   ],
+   "type": "state"
+  },
+  {
+   "label": "Megkoronázott",
+   "note": "",
+   "pts": [
+    [
+     554,
+     1856
+    ],
+    [
+     554,
+     1846
+    ],
+    [
+     555,
+     1843
+    ],
+    [
+     558,
+     1841
+    ],
+    [
+     559,
+     1836
+    ],
+    [
+     563,
+     1833
+    ],
+    [
+     563,
+     1830
+    ],
+    [
+     566,
+     1830
+    ],
+    [
+     569,
+     1833
+    ],
+    [
+     571,
+     1833
+    ],
+    [
+     570,
+     1827
+    ],
+    [
+     575,
+     1823
+    ],
+    [
+     579,
+     1825
+    ],
+    [
+     579,
+     1829
+    ],
+    [
+     581,
+     1831
+    ],
+    [
+     598,
+     1835
+    ],
+    [
+     594,
+     1843
+    ],
+    [
+     587,
+     1848
+    ],
+    [
+     576,
+     1860
+    ],
+    [
+     568,
+     1860
+    ],
+    [
+     558,
+     1864
+    ],
+    [
+     554,
+     1864
+    ]
+   ],
+   "type": "state"
+  },
+  {
+   "label": "Menedék",
+   "note": "",
+   "pts": [
+    [
+     521,
+     1804
+    ],
+    [
+     522,
+     1806
+    ],
+    [
+     533,
+     1808
+    ],
+    [
+     540,
+     1807
+    ],
+    [
+     543,
+     1803
+    ],
+    [
+     560,
+     1802
+    ],
+    [
+     562,
+     1804
+    ],
+    [
+     561,
+     1813
+    ],
+    [
+     564,
+     1816
+    ],
+    [
+     564,
+     1824
+    ],
+    [
+     567,
+     1829
+    ],
+    [
+     567,
+     1834
+    ],
+    [
+     560,
+     1836
+    ],
+    [
+     560,
+     1844
+    ],
+    [
+     556,
+     1849
+    ],
+    [
+     556,
+     1860
+    ],
+    [
+     551,
+     1865
+    ],
+    [
+     542,
+     1864
+    ],
+    [
+     531,
+     1859
+    ],
+    [
+     521,
+     1858
+    ],
+    [
+     511,
+     1849
+    ],
+    [
+     510,
+     1839
+    ]
+   ],
+   "type": "state"
+  },
+  {
+   "label": "Aranylómezők",
+   "note": "",
+   "pts": [
+    [
+     560,
+     1803
+    ],
+    [
+     560,
+     1805
+    ],
+    [
+     561,
+     1804
+    ],
+    [
+     561,
+     1798
+    ],
+    [
+     563,
+     1794
+    ],
+    [
+     567,
+     1791
+    ],
+    [
+     569,
+     1786
+    ],
+    [
+     579,
+     1784
+    ],
+    [
+     579,
+     1776
+    ],
+    [
+     575,
+     1772
+    ],
+    [
+     563,
+     1768
+    ],
+    [
+     558,
+     1768
+    ],
+    [
+     553,
+     1763
+    ],
+    [
+     548,
+     1761
+    ],
+    [
+     527,
+     1761
+    ],
+    [
+     523,
+     1773
+    ],
+    [
+     524,
+     1781
+    ],
+    [
+     515,
+     1788
+    ],
+    [
+     509,
+     1790
+    ],
+    [
+     507,
+     1794
+    ],
+    [
+     519,
+     1811
+    ],
+    [
+     539,
+     1811
+    ],
+    [
+     542,
+     1809
+    ],
+    [
+     542,
+     1807
+    ]
+   ],
+   "type": "state"
+  },
+  {
+   "label": "Szünet",
+   "note": "",
+   "pts": [
+    [
+     594,
+     1837
+    ],
+    [
+     593,
+     1840
+    ],
+    [
+     589,
+     1840
+    ],
+    [
+     581,
+     1838
+    ],
+    [
+     574,
+     1833
+    ],
+    [
+     561,
+     1834
+    ],
+    [
+     556,
+     1829
+    ],
+    [
+     555,
+     1808
+    ],
+    [
+     565,
+     1786
+    ],
+    [
+     569,
+     1783
+    ],
+    [
+     578,
+     1783
+    ],
+    [
+     582,
+     1786
+    ],
+    [
+     584,
+     1791
+    ],
+    [
+     591,
+     1791
+    ],
+    [
+     601,
+     1794
+    ],
+    [
+     609,
+     1805
+    ],
+    [
+     609,
+     1813
+    ],
+    [
+     598,
+     1824
+    ],
+    [
+     599,
+     1834
+    ],
+    [
+     597,
+     1837
+    ],
+    [
+     593,
+     1838
+    ]
+   ],
+   "type": "state"
+  }
+ ],
+ "tag": "UNG"
+}

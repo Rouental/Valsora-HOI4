@@ -1,0 +1,17 @@
+{
+ "provinces": {
+  "805,817": {
+   "t": "plains"
+  },
+  "813,824": {
+   "t": "plains"
+  }
+ },
+ "states": {
+  "805,817": {
+   "pop": 942000
+  }
+ },
+ "status": "draft",
+ "tag": "SGN"
+}

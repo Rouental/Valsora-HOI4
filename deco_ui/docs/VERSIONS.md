@@ -87,6 +87,20 @@ it before touching the UI. In short:
   values a size smaller; the decision counts beside the seal; the division designer's combat width and the commanders'
   skill centred (the game rounds centred text up, measured on the screenshots); the fleet panel's long names fit; the
   news story a size smaller so it ends above the page's rule.
+- **v0.10.2** (2026-10-18, not yet seen in game; from the author's screenshots of v0.10.1 and a mockup): the flag
+  medallion after the author's mockup ("a rough mockup of how I'd like the flag box to look"): a gilt rim on the flag,
+  a gilt line round its mat and two stepped gilt brackets at each corner (`layout.FLAG_MARGIN`, `FRAME_LINE`,
+  `FRAME_STEPS`), the corner diamonds gone; the name 1 px right ("it looks like the name isn't centered?": the game
+  centres a line on its advances, the last letter's tracking included; `layout.NAME_SHIFT`); the experience badges
+  centred at the foot of the army, navy and air buttons, their numbers centred ("The xp bars should be at the bottom
+  center ... The xp number should be centered in the box"; the digits' y measured on the screenshot); the factories
+  military, naval, civilian ("to match the order in the list"); the faction card's flags eleven a row ("room for a few
+  more in each row"); the state panel's flag and name clear of its corner bracket ("the decorative corner in the top
+  left is covered by the flag"); the country and leader events without corner brackets ("The corners of this look
+  weird. It seems like you have a lot of trouble with this particular decorative element": one big bracket in one
+  corner, two small ones at the foot, none under the back button; the double chamfered frame is the corner now); the
+  Release Nation window's list of states scrolling above its checkboxes (`make_popups.py`, the game's
+  `popupwindow.gui` with one change: "This screen overflows").
 - **Proposals for the side panels' own pictures** (research, production, the market, the overview strip, the
   intelligence agency, the spirit banners) are in `deco_ui/art/proposals/panel_pictures/`, **not in the mod**
   (author, 2026-10-15: "don't put them in the mod yet. I'd like to see and approve them first").

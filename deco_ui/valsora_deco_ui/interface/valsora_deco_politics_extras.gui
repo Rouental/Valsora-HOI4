@@ -100,22 +100,22 @@ guiTypes = {
 	containerWindowType = {
 		name = "valsora_deco_pol_faction_members_window"
 		position = { x = 72 y = 590 }
-		size = { width = 136 height = 24 }
+		size = { width = 176 height = 24 }
 		Orientation = UPPER_LEFT
 		clipping = no
 		gridBoxType = {
 			name = "valsora_deco_pol_faction_members_grid"
 			position = { x = 0 y = 0 }
-			size = { width = 136 height = 24 }
-			slotsize = { width = 17 height = 12 }
-			max_slots = { x = 8 y = 2 }
+			size = { width = 176 height = 24 }
+			slotsize = { width = 16 height = 12 }
+			max_slots = { x = 11 y = 2 }
 			format = "UPPER_LEFT"
 		}
 	}
 	containerWindowType = {
 		name = "valsora_deco_pol_faction_member_entry"
 		position = { x = 0 y = 0 }
-		size = { width = 17 height = 12 }
+		size = { width = 16 height = 12 }
 		Orientation = UPPER_LEFT
 		clipping = no
 		instantTextBoxType = {
@@ -124,7 +124,7 @@ guiTypes = {
 			font = "valsora_deco_value_12"
 			text = "VAL_DECO_POL_FACTION_MEMBER_FLAG"
 			format = left
-			maxWidth = 17
+			maxWidth = 16
 			maxHeight = 12
 			fixedsize = yes
 			vertical_alignment = center

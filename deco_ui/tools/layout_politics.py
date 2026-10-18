@@ -200,8 +200,10 @@ FACTION_ROLE = dict(y=4, h=11)
 FACTION_NAME_Y = 31
 # v0.9: the members' flags, as the Government mockup has them (a scripted GUI's list over the game's faction_members,
 # which follows the faction as it changes; each flag is the text icon [This.GetFlag], about 12 x 8 in game); v0.9.1:
-# two rows of eight (the user: "if there's a large number of nations in a faction, will it wrap around?")
-FACTION_MEMBERS = dict(x=54, y=50, slot=(17, 12), cols=8, rows=2)
+# two rows of eight (the user: "if there's a large number of nations in a faction, will it wrap around?"); v0.10.2: rows
+# of eleven, to the card's right edge (the user: "The flags should stretch further across the faction box to allow for
+# more nations. Currently the rows are only 8 when there's room for a few more in each row")
+FACTION_MEMBERS = dict(x=54, y=50, slot=(16, 12), cols=11, rows=2)
 FOCUS_CARD = dict(x=266, y=SEC3_Y + 16, w=X1 - 266, h=78)
 FOCUS_ICON = dict(cx=38, cy=39, scale=0.62)        # the focus picture, centred on the card's medallion
 FOCUS_TITLE = dict(x=76, y=8, w=158, h=36)

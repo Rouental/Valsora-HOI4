@@ -1636,21 +1636,6 @@
  },
  {
   "a": [
-   920,
-   1140
-  ],
-  "b": [
-   920,
-   1144
-  ],
-  "through": [
-   920,
-   1141
-  ],
-  "name": "Republican Illiricium 17 - Royalist Illiricium 1"
- },
- {
-  "a": [
    1002,
    1238
   ],
@@ -2533,36 +2518,6 @@
    1469
   ],
   "name": "Garfield Republics 5 - Garfield Republics 6"
- },
- {
-  "a": [
-   1008,
-   1332
-  ],
-  "b": [
-   1008,
-   1328
-  ],
-  "through": [
-   1008,
-   1331
-  ],
-  "name": "Malvekia 3 - North Pollana 1"
- },
- {
-  "a": [
-   1012,
-   1317
-  ],
-  "b": [
-   1009,
-   1320
-  ],
-  "through": [
-   1011,
-   1318
-  ],
-  "name": "San Sierra 32 - North Pollana 1"
  },
  {
   "a": [

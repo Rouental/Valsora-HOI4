@@ -52,6 +52,13 @@ ALIASES = {
     "kampf empire": "KPF",
     # 2026-10-18: the flag file's layer for Rouental's Reibonne flag (nations.COSMETICS, flown as the People's Republic)
     "rouental (reibonne)": "ROU_REIBONNE",
+    # 2026-10-18: flags that came by the Gazetteer (Ungar's four governments', Krionik's releasable Formosa), as the
+    # flag file names its layers
+    "ungar (authoritarian)": "UNG_fascism",
+    "ungar (communist)": "UNG_communism",
+    "ungar (democratic)": "UNG_democratic",
+    "ungar (theocratic)": "UNG_theocracy",
+    "formosa": "FOM",
 }
 
 

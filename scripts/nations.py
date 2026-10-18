@@ -439,14 +439,14 @@ RELEASABLE = {
     "MTN": ["Everlon", "Tocsin", "Rolantelle", "Rempart"],
     "ORF": ["Oriflamme", "Glacierre"],
     "GHS": ["Ghessone"],
-    "RVR": ["Leclerc", "Marais Verte"],
+    "RVR": ["Callentroix", "Bicêtre", "Marais Verte"],  # 2026-10-18: Leclerc split in two (the Gazetteer), the larger first
     "PSC": ["Belleplaine-sur-Mer", "Baie de Torres", "Graisivaudan"],
     # 2026-10-07, later (author). The Alliance of the East's states still go to Lustiana,
     # Hollier and Selgrave in the civil war (ANNEX); it is only releasable by hand.
     "AOE": ["Chirac", "Serpette", "Maïeul", "Moelle"],
     "RCL": ["La Recolt", "Fleurastre", "Fourier"],
     "SGT": ["Sangterre", "Carune la Cœur"],
-    "KOV": ["Kové"],
+    "KOV": ["Kové", "Temerre"],  # 2026-10-18: Kové's west half is Temerre (the Gazetteer)
     "HVQ": ["Hevique", "Avarre"],
     "SRE": ["Serie", "Verdoyantes"],
     # (2026-10-08, author: Tethia starts as part of Belekria; its land is its subregion since 2026-10-17, SUBREGIONS)
@@ -474,6 +474,11 @@ CORES = {
     "SMN": [(2003, 414), (2034, 409), (2100, 401), (2131, 397), (2167, 408),
             (1943, 450), (1978, 437), (1978, 467), (2007, 455), (2031, 462), (2054, 427)],
 }
+# Claims on states other nations own (author, 2026-10-18: "Sminishia should also start with claims on Belekria 64 and
+# all of western sminishia"): a tag for every state that country owns at the start, or a pixel inside one state
+# (Belekria 64 by its pixel, since the numbers of unnamed states shift; West Sminishia's since later that day, "give
+# West Sminishia Belekria 64", so the tag covers it too)
+CLAIMS = {"SMN": ["WSM", (1952, 415)]}
 # Nations on whose land the owner holds no core (author, 2026-10-17: "Tethia and Kalnsfereta shouldn't be core
 # provinces of Belekria"): owner -> the releasables whose states (SUBREGIONS, RELEASABLE) it owns without a core
 NO_OWNER_CORE = {"BLK": ["TTH", "KLF"]}

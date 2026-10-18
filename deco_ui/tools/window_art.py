@@ -98,6 +98,10 @@ def w_close():
             f'clip-path:{chamfer(4.4)};box-shadow:inset 0 2px 4px rgba(0,0,0,.7)"></div>')
 
 
+# the release dialog's text (make_popups.py, v0.10.2): under the header band, ending above the first checkbox (y 198)
+RELEASE_TEXT_Y, RELEASE_TEXT_END = 76, 190
+
+
 def pol_goal(w, h):
     """the confirmation popups: a header band for the title (y 6 to 62), the body under it"""
     return shell(w, h) + band(w, 6, 62) + diamond(20, 34) + diamond(w - 20, 34)

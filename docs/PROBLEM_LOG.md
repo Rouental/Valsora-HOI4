@@ -725,6 +725,49 @@ screenshot and `error.log`)
 
 ## Map problems found while building
 
+**The suggestions closed Rouental's and Terreich's map tools on the Gazetteer** (2026-10-18; found by the Gazetteer's
+tests, which open Rouental's state panel and Cities tab)
+- Cause: the Gazetteer opens a nation's map tools only where its states are drawn lines (`gazetteer.finals`: no two of
+  its states in one area the Necessary Borders and Necessary States lines enclose). `apply_suggestions.py` changed the
+  game's States layer but drew nothing on Necessary States, so Leclerc's and Kove's halves, and Rosenburg and
+  Terreichstadt inside Terreich's areas, shared areas: Rouental and Terreich were no longer "drawn". The mod itself was
+  unaffected (the build doesn't use the check), but the site would have closed their tools and the next import dropped
+  their map facts.
+- Fix: the new states' borders drawn on Necessary States in its own ink (405 px; `Map.draw_lines`, so the script does
+  it itself from now on); Rouental, Terreich, North Pollana and Ungar (its six states from the page) count as drawn:
+  49 nations.
+
+**More provinces left a state in two strategic regions** (2026-10-18, `pdn_tools.py refine`)
+- Cause: the build gives each province the state and the region covering most of its pixels on the layers, and the
+  States layer's lines cross some provinces (Ungar's drawn states, at (1029, 843): a 332 px province in three state
+  colours). Cut in two, a piece lying mostly in the neighbour's colour became the neighbour's, in another region.
+  Painting each piece with its province's region alone wasn't enough; the state was the cause.
+- Fix: each cut province's pixels take, on the States and Strategic Regions layers, the state and region the build
+  already gave the whole province, so nothing the build reads changes but the provinces. Checked: every one of the
+  3,192 states has the owner its land's majority colour gives it.
+
+**The refinement measured the build against the wrong map** (2026-10-18)
+- Cause: `refine` aims at a border count the build will reach, and the build adds borders of its own (the corners
+  where four provinces met: about 340); it took that overhead as the last build's count less the layer's count, but
+  measured the layer after re-cutting the tundra, so the overhead read 513 and only 11 provinces were added for the
+  ~200 borders the tundra freed.
+- Fix: the layer is counted before the tundra pass (the map the last build was made from); with it 67 provinces
+  were added.
+
+**Gazetteer suggestions left provinces of 1 or 2 px, and an islet split a sea province** (2026-10-18,
+`apply_suggestions.py`)
+- Cause: the new state lines (Rouental's Leclerc and Kove, Ungar's drawn states) cut provinces at the lines' edges into
+  scraps; and North Pollana's islet, grown to a province's 16 px, closed a 2 px pocket of the sea province round it
+  ("Province colour (44,19,168) is in 2 separate pieces").
+- Fix: a second pass gives every scrap under 16 px to the neighbour of its own state it touches most; the islet
+  grows only where the sea it takes leaves the sea province one piece. The map was restored from before and the
+  suggestions applied again.
+
+**A check of tags broke the next check** (2026-10-18, `check_mod.py`)
+- Cause: the new check that cores and claims name defined tags looped with a variable named `kind`, the name of the
+  provinces' kinds the next check reads ("IndexError: string index out of range").
+- Fix: renamed; check_mod runs clean, and the mutation test covers the new check (an unknown tag in `add_claim_by`).
+
 **The superevent text check never ran** (2026-10-17, found while looking for unused code)
 - `superevents_deco.check_texts`, written with the Deco UI's superevent window (v0.6, 2026-10-15) to stop the build
   when a quote, an attribution or a song would not fit its box (a box too short drops lines silently), was never

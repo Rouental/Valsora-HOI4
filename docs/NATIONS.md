@@ -601,3 +601,43 @@ Tethia's 8 states and Kalnsfereta's 6 without a core of its own (`nations.NO_OWN
 made taller, Zastava's and Mylostrva's plain ends shortened (Mylostrva's 1 px frame, an export edge, cut off;
 `fit_flag.py` refused it, its mantle reaching the top, so by hand). And **Pakitsk** PKT, Belka's.
 `dist/preview_yastreovakia_20261017.png` shows the countries and the releasables.
+
+## 2026-10-18: the Gazetteer's first big import, more provinces, the tundra
+
+**2026-10-18** (the author: "a number of changes have been made on the Gazetteer. Please add them to the mod, I want to
+see how you handle a significant number of changes at once"; the export the author saved that morning, 21 nations with a
+password, 17 with something entered). What each page brought, as the build takes it (`gazetteer.py status`): **Rouental**
+its states' populations, 133 provinces' terrain, 29 cities, a river, its people (James Navy the admiral); **Terreich**
+its states' names and kinds (Berlinhafen its capital), 323 provinces, cities, a party leader (Eduard von
+Hohenzollern-Wolfstark, Semi-Constitutional Monarchy) and Agrarian Socialism for its communists; **Ungar** its five
+governments' names (the Grand Duchy of Ungar; the Peasant's Republic, the Republic of the Ungarians, the Ungar Free
+State, the Ungarian Synod), their party leaders with portraits, a flag for each of them (`UNG_<ideology>.png`) and its
+colour; **Port Almohavid** (PAM) its ruler Usamah Lakhdar with a portrait and its flag; **Merlovich** "The Federation of
+Merlovich" and 31 cities; **Krionik** a releasable of its own, **Formosa** FOM ("the Federal Republic of Formosa",
+Stratocracy, Elena Andronikos, its one state at (4175, 1518)), and leaders for its three principalities; **Evriches,
+Hollier, Lustiana, Lazacia, Seigne, Saint-Gervais** states, provinces and cities; Kurikia a city. Formosa's flag (a
+dragon with a caption, 640 x 347) was fitted by hand, then (the author: "just keep the dragon on a yellow background
+with the red outline, no text and no extra outlines") the dragon alone on the field's yellow with its red outline.
+The culture requests (Merlovich Australian, Ungar Hungarian) were already so.
+
+**The suggestions** on the map, 15 (`apply_suggestions.py`, each by its label): **Rouental** "Split Leclerc in Two"
+(north Bicêtre, south Callentroix) and "Split Kove in Two" (west Temerre, east Kové); Riverraine (RVR) is released with
+Callentroix, Bicêtre and Marais Verte, Kové (KOV) with Kové and Temerre, the first its capital (Claude's reading; the
+releasables were named for the old states). **North Pollana** an islet of its own ("It can stay part of the same state,
+but it's an island") and its state in two provinces. **Terreich** Reuenland-Thuringen one state; the Triftsund-Inseln
+and Teuton's isles merged "very sparse", in states of two (the author: "with the isles that Terreich wanted combined, put
+them into groups of two": Triftsund-Inseln is two states of that name, Teuton one), each isle a province; Rosenburg and
+Terreichstadt new states round their cities. **Ungar** six states drawn on the page: Tópart (31 px), Erődítmény (63),
+Megkoronázott (806), Menedék (1,791), Aranylómezők (1,530) and Szünet (1,100).
+
+**Later that day** (the author's messages): **Sminishia** claims Belekria 64 and all of West Sminishia ("Sminishia should
+also start with claims on Belekria 64 and all of western sminishia": `nations.CLAIMS`, the mod's first claims; West
+Sminishia's six were already its cores), and then **Belekria 64 is West Sminishia's** ("Also, give West Sminishia
+Belekria 64"; the claim stays, on West Sminishia's land). **No strait crossings** join Royalist and Republican Illiricium
+or reach North Pollana (three dropped: `straits.NEVER`, `NEVER_ANY`). **Belekria 1, 4, 5, 6 and 15 are tundra** ("and
+thus don't need high counts"): their 84 provinces are 27 now, ~600 px each, and the borders freed went to provinces
+elsewhere. **More provinces** everywhere else (the author: "a general increase of the province count. For example,
+Evriches should have at least 3 or 4 provinces"): every nation at least four where its land allows (Evriches, South
+Pollana and Haidao 2 → 4, the Holy See 2 → 3, Bromé, Khaleeya and Sombor 3 → 4), every state of 240 px at least two, then
+the largest provinces cut, up to 2,000 borders short of HOI4's limit; what the author drew (Royalist Illiricium's and
+Seigne's provinces), Terreich's sparse isles and Merlovich are as they were.

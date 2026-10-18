@@ -1,7 +1,7 @@
 ﻿l_braz_por:
  VAL_DECO_TB_COUNTRY_NAME:0 "[ROOT.GetName]"
  VAL_DECO_TB_PP_DAILY:0 "[?political_power_daily|+=2]"
- VAL_DECO_TB_FACTORY_COUNTS:0 "§W◆§![?num_of_civilian_factories|0] §O◆§![?num_of_military_factories|0] §C◆§![?num_of_naval_factories|0]"
+ VAL_DECO_TB_FACTORY_COUNTS:0 "§O◆§![?num_of_military_factories|0] §C◆§![?num_of_naval_factories|0] §W◆§![?num_of_civilian_factories|0]"
  VAL_DECO_TB_PP:0 "Political Power"
  VAL_DECO_TB_STABILITY:0 "Stability"
  VAL_DECO_TB_WAR_SUPPORT:0 "War Support"

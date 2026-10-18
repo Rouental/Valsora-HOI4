@@ -1,0 +1,32 @@
+{
+ "cities": [
+  {
+   "name": "Port Almohavid",
+   "size": "large",
+   "vp": 25,
+   "x": 3551,
+   "y": 1641
+  }
+ ],
+ "flags": {
+  "base": {
+   "file": "assets/4555e1a4bacc9980731bba4d.png",
+   "h": 406,
+   "name": "image-1792298788010.png",
+   "w": 640
+  }
+ },
+ "people": {
+  "ruler": {
+   "name": "Usamah Lakhdar",
+   "portrait": {
+    "file": "assets/3d91209b786b10c83131fe38.jpg",
+    "h": 414,
+    "name": "229015.jpg",
+    "w": 640
+   }
+  }
+ },
+ "status": "draft",
+ "tag": "PAM"
+}

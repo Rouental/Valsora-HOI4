@@ -196,6 +196,24 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
 - **To pull it** from the site: the author's **Save every nation as a file**
   (`valsora-gazetteer-all.json`, each nation's pictures inside as `images`), then
   `python3 scripts/gazetteer.py import` it (Claude can't sign in to the author's Firebase).
+- **Reading the site directly** (2026-10-18, the author: "In the future you need a way to read the website
+  directly"): `python3 scripts/gazetteer_fetch.py [OUT]` writes the same file (default
+  `work/gazetteer_in/valsora-gazetteer-all-<UTC time>.json`) straight from Firestore's REST API, as a Google service
+  account of the `valsora-hoi4` project with the **Cloud Datastore Viewer** role: it reads everything and changes
+  nothing, and the site's rules (which keep each nation behind its password) don't apply to it, so it reads
+  `owner/keys` and through each password the nation's folder `n/<TAG>/<key>` (the key as the page's `keyFor` makes
+  it), `planned/list` and `planned/unlock`, and keeps of each document what the page's `saveAllFile` keeps. Its key
+  (the JSON file Google gives for the account) is the environment's secret `GAZETTEER_SERVICE_ACCOUNT` (the JSON
+  itself) or a file named by `GAZETTEER_SERVICE_ACCOUNT_FILE`; it never goes into the repository, `work/` or the
+  chat. The token is signed by `openssl` from a temporary file deleted at once (the `cryptography` package isn't
+  usable everywhere this runs). Until the author adds the secret, their saved file is the way in.
+  The author's steps, once: Google Cloud console › the `valsora-hoi4` project › IAM & Admin › Service accounts ›
+  Create (a name such as `claude-reader`) › role **Cloud Datastore Viewer** › Done; then the account › Keys › Add key
+  › JSON; then the environment's settings in Claude (the cloud environment menu in the session's title bar › Edit),
+  the file's contents as the secret `GAZETTEER_SERVICE_ACCOUNT` (under Network secrets where offered, else an
+  environment variable); a new session picks it up. Tested against a stand-in for Google (`tests/gazetteer/fetch.py`:
+  the token request checked with the test key's public half, a nation's folder over two pages, the file compared
+  with the page's).
   Then rebuild (and `river_provinces.py` after new rivers), run `gazetteer.py suggestions` if
   there are any, and tell the author the open requests and what `status` lists for doing by
   hand. From the claude.ai atlas (the first version): ArtifactData `get` of `data/users/me` / `keys` and of `planned` / `list`,

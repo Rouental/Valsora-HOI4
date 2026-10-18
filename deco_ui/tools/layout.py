@@ -71,12 +71,23 @@ if FLAG_SCALE != 1:
     MED = dict(MED, h=MED["h"] + _dy)
     MED_STEPS = (MED_STEPS[0] + _dy, MED_STEPS[1] + _dy)
     NAME = dict(NAME, y=NAME["y"] + _dy)
-FLAG_FRAME = dict(x=FLAG["x"] - 8, y=FLAG["y"] - 8, w=FLAG["w"] + 16, h=FLAG["h"] + 16)  # gilt + mat + gilt
+# the flag's frame (v0.10.2, from the user's mockup of the medallion): a gilt rim on the flag, a lacquer mat, a gilt
+# line round it, and at each corner two gilt brackets stepping out from it (FRAME_STEPS: each one's distance in from
+# the frame's outer edge and the length of its arms); 8 px with a hairline, a mat and corner diamonds until then
+FLAG_MARGIN = 10
+FLAG_FRAME = dict(x=FLAG["x"] - FLAG_MARGIN, y=FLAG["y"] - FLAG_MARGIN, w=FLAG["w"] + 2 * FLAG_MARGIN,
+                  h=FLAG["h"] + 2 * FLAG_MARGIN)
+FRAME_LINE = 5                                    # the gilt line round the mat, in from the frame's edge
+FRAME_STEPS = ((0, 7), (2, 12))                   # the corner brackets: (in from the edge, arm length)
 # the name's text box reaches this much further above and below NAME (v0.8.2): in a box exactly two lines of the large
 # font high (2 x 20 px), the game showed only the first line ("KAMPFIAN ...", "UTOPIAN ...": the user's screenshot,
 # 2026-10-15); centred in the taller box, one or two lines land where they did
 NAME_SLACK = 4
 NAME_FONTS = ("valsora_deco_name_big", "valsora_deco_name")   # big for most names, small for long words
+# the game centres a line on its letters' advances, the last letter's tracking (gen_fonts: 4 and 1 px) included, so a
+# centred name's ink sat left of the medallion's middle: 1 px, measured on the user's mockup (v0.10.2: "it looks like
+# the name isn't centered?"; ROUENTAL's ink 27 to 134, the plate 4 to 159). Each font's box is that much further right
+NAME_SHIFT = {"valsora_deco_name_big": 1, "valsora_deco_name": 0}
 # v0.4: the seal hanging from the medallion is the DECISIONS button (used far more than factions);
 # the faction button moved into the crown row (first slot)
 SEAL = dict(x=70, y=125 + MED["h"] - 148, w=44, h=44)   # decisions seal (octagon, 2 frames like vanilla)
@@ -201,7 +212,12 @@ RTRAY = dict(x=1466, y=62, h=46)
 OVERVIEW_W, OVERVIEW_H = 44, 40
 OVERVIEW = {"army": 1584, "navy": 1632, "air": 1680}
 OVERVIEW_Y = 65
-XP_BADGE = dict(dx=22, dy=27, w=26, h=15)            # experience badge on each overview button
+# experience badge on each overview button: centred on its foot, inside it (v0.10.2, the user: "The xp bars should be
+# at the bottom center of the army, navy and air tabs. The xp number should be centered in the box"; it sat at the
+# right, 4 px past the button's edge and 2 px below it). text_y: the digits' box y, from the screenshot of v0.10.1 (with
+# y 5 the game drew the digits' ink 5.5 to 13.8 px down the 15 px badge, 2.5 px lower than the preview's font model
+# has it), so the ink is centred at 7.5 in game
+XP_BADGE = dict(dx=(OVERVIEW_W - 26) // 2, dy=OVERVIEW_H - 15, w=26, h=15, text_y=3)
 XP_KEYS = {"army": "land", "navy": "navy", "air": "air"}
 PLAYLIST = dict(x=1492, y=72, w=26, h=26)
 CP = dict(x=1526, y=66, w=50, h=32)                  # command power: icon + value

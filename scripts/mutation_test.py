@@ -333,6 +333,12 @@ def m_prerequisite(mod):
     return "ROU_no_such_focus is referenced but is not a focus in the tree"
 
 
+def m_claim_tag(mod):
+    f = next(f for f in sorted((mod / "history/states").glob("*.txt")) if "add_claim_by = " in f.read_text())
+    edit(mod, f"history/states/{f.name}", lambda t: re.sub(r"add_claim_by = \w+", "add_claim_by = QQX", t, count=1))
+    return "add_claim_by QQX is not a defined tag"
+
+
 def m_state_loc(mod):
     edit(mod, "localisation/english/valsora_l_english.yml", lambda t: re.sub(r"\n VAL_STATE_1:0 \"[^\"]*\"", "", t, count=1))
     return "state name VAL_STATE_1 has no localisation"
@@ -437,7 +443,7 @@ BATCHES = {
     "map": [m_crlf, m_adjacency_end, m_strait_through_land, m_building_row, m_ships_in_port, m_earth_map_file, m_weather_big, m_supply_node_sea,
             m_railway_apart, m_x_crossing, m_land_low, m_terrain_ocean],
     "history": [m_technology, m_module, m_equipment, m_idea, m_battalion, m_define, m_earth_history, m_popularities,
-                m_ruling_party, m_recruit_unknown, m_faction_template, m_bookmark, m_descriptor, m_autonomy],
+                m_ruling_party, m_recruit_unknown, m_faction_template, m_bookmark, m_descriptor, m_autonomy, m_claim_tag],
     "content": [m_decision_stand_in, m_event_stand_in, m_old_date, m_tree_label, m_start_year, m_trait, m_advisor_slot,
                 m_prerequisite, m_state_loc, m_decision_loc, m_trigger_for, m_scripted_effect, m_war_goal, m_song,
                 m_company_include, m_company_tag, m_company_loc, m_concern_trait, m_idea_loc, m_skill_range, m_skill_kind],

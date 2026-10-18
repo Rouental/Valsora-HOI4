@@ -3,7 +3,7 @@
 guiTypes = {
 	containerWindowType = {
 		name = "valsora_deco_country_name_window"
-		position = { x = 20 y = 75 }
+		position = { x = 21 y = 75 }
 		size = { width = 152 height = 48 }
 		Orientation = UPPER_LEFT
 		clipping = no

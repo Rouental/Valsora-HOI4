@@ -1,4 +1,4 @@
-VALSORA DECO UI - v0.10.1 (for HOI4 1.19)
+VALSORA DECO UI - v0.10.2 (for HOI4 1.19)
 =========================================
 
 An art deco interface for the Valsora total conversion: core skin and fonts,
@@ -29,6 +29,35 @@ Valsora repository's scripts/common.py and rebuild (sh scripts/run_all.sh).
 
 The layout is built for 1920 px of UI width: 1920x1080 at 100% UI scale, or
 2560x1440 at up to 133%.
+
+
+NEW IN v0.10.2
+--------------
+From your screenshots of 18 October:
+  - The flag medallion after your mockup: a gilt rim on the flag, a gilt
+    line round it and two stepped brackets at each corner (no corner
+    diamonds); the country's name 1 px further right, so it sits in the
+    middle (the game centres the letters' spacing after the last one too).
+  - The army, navy and air experience badges centred at the foot of their
+    buttons, the number in the middle of the badge.
+  - The top bar's factories read military, naval, civilian, as the list
+    under them does.
+  - The politics screen's faction card: eleven flags a row (eight before).
+  - The state panel's flag and name moved right, clear of the corner.
+  - The country and leader events lose their corner brackets: the double
+    chamfered frame is the corner, the same at all four.
+  - The Release Nation window: a long list of states scrolls above the
+    checkboxes instead of running over them.
+
+Things to check in game (v0.10.2):
+  - the medallion's frame and the name's centring (a one-line and a
+    two-line name);
+  - the experience badges' numbers;
+  - the factories' order and colours;
+  - a faction with more than eight members on the politics screen;
+  - the state panel's top left corner;
+  - a leader event (A Word with the General) and a country event;
+  - Release Nation for Crvenognjište (Krionik): the list of states.
 
 
 NEW IN v0.10.1

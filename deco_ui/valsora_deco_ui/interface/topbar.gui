@@ -1102,7 +1102,7 @@ guiTypes = {
 		# experience badges (moved here from the top row so they draw above the army/navy/air buttons)
 		containerWindowType = {
 			name = "land"
-			position = { x = -314 y = 93 }
+			position = { x = -327 y = 91 }
 			clipping = no
 			size = { width = 26 height = 15 }
 			Orientation = UPPER_RIGHT
@@ -1122,7 +1122,7 @@ guiTypes = {
 			
 			instantTextBoxType = {
 				name ="experience_value"
-				position = { x = 0 y = 5 }
+				position = { x = 0 y = 3 }
 				font = "valsora_deco_value_12"
 				text = "999"
 				format = centre
@@ -1134,7 +1134,7 @@ guiTypes = {
 		}
 		containerWindowType = {
 			name = "navy"
-			position = { x = -266 y = 93 }
+			position = { x = -279 y = 91 }
 			clipping = no
 			size = { width = 26 height = 15 }
 			Orientation = UPPER_RIGHT
@@ -1154,7 +1154,7 @@ guiTypes = {
 			
 			instantTextBoxType = {
 				name ="navy_experience_value"
-				position = { x = 0 y = 5 }
+				position = { x = 0 y = 3 }
 				font = "valsora_deco_value_12"
 				text = "999"
 				format = centre
@@ -1166,7 +1166,7 @@ guiTypes = {
 		}
 		containerWindowType = {
 			name = "air"
-			position = { x = -218 y = 93 }
+			position = { x = -231 y = 91 }
 			clipping = no
 			size = { width = 26 height = 15 }
 			Orientation = UPPER_RIGHT
@@ -1186,7 +1186,7 @@ guiTypes = {
 			
 			instantTextBoxType = {
 				name ="air_experience_value"
-				position = { x = 0 y = 5 }
+				position = { x = 0 y = 3 }
 				font = "valsora_deco_value_12"
 				text = "999"
 				format = centre

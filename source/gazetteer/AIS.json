@@ -1,0 +1,282 @@
+{
+ "about": {
+  "culture": "Australian"
+ },
+ "cities": [
+  {
+   "name": "Nui'ao",
+   "vp": 5,
+   "x": 1936,
+   "y": 1042
+  },
+  {
+   "name": "Pavalam",
+   "vp": 5,
+   "x": 1694,
+   "y": 1108
+  },
+  {
+   "name": "Morland Heads",
+   "vp": 5,
+   "x": 2169,
+   "y": 1135
+  },
+  {
+   "name": "Port Arlington",
+   "vp": 5,
+   "x": 2049,
+   "y": 1146
+  },
+  {
+   "name": "Bateman",
+   "vp": 5,
+   "x": 2201,
+   "y": 1169
+  },
+  {
+   "name": "Hostra",
+   "vp": 10,
+   "x": 1905,
+   "y": 1191
+  },
+  {
+   "name": "Staile",
+   "vp": 5,
+   "x": 1809,
+   "y": 1205
+  },
+  {
+   "name": "Wollert",
+   "vp": 5,
+   "x": 2091,
+   "y": 1205
+  },
+  {
+   "name": "Avabourne",
+   "vp": 5,
+   "x": 2012,
+   "y": 1206
+  },
+  {
+   "name": "Kuthia",
+   "vp": 10,
+   "x": 1864,
+   "y": 1212
+  },
+  {
+   "name": "La'Fleur",
+   "vp": 10,
+   "x": 1839,
+   "y": 1215
+  },
+  {
+   "name": "Etchford",
+   "vp": 5,
+   "x": 1987,
+   "y": 1227
+  },
+  {
+   "name": "Asmain",
+   "vp": 20,
+   "x": 1826,
+   "y": 1239
+  },
+  {
+   "name": "Port Seymour",
+   "vp": 5,
+   "x": 2072,
+   "y": 1243
+  },
+  {
+   "name": "Eclyea",
+   "vp": 10,
+   "x": 1796,
+   "y": 1255
+  },
+  {
+   "name": "Arafiet",
+   "vp": 5,
+   "x": 1943,
+   "y": 1259
+  },
+  {
+   "name": "Esmye",
+   "vp": 5,
+   "x": 1784,
+   "y": 1269
+  },
+  {
+   "name": "Adresh",
+   "vp": 5,
+   "x": 1891,
+   "y": 1269
+  },
+  {
+   "name": "Montilla Point",
+   "vp": 5,
+   "x": 1756,
+   "y": 1282
+  },
+  {
+   "name": "Achail",
+   "vp": 5,
+   "x": 1800,
+   "y": 1294
+  },
+  {
+   "name": "Otrea",
+   "vp": 20,
+   "x": 1919,
+   "y": 1306
+  },
+  {
+   "capital": true,
+   "name": "Hirane",
+   "vp": 5,
+   "x": 1838,
+   "y": 1313
+  },
+  {
+   "name": "Tadulla",
+   "vp": 5,
+   "x": 2098,
+   "y": 1315
+  },
+  {
+   "name": "Draetan",
+   "vp": 5,
+   "x": 1811,
+   "y": 1323
+  },
+  {
+   "name": "Creonia",
+   "vp": 10,
+   "x": 1927,
+   "y": 1324
+  },
+  {
+   "name": "San Marco",
+   "vp": 5,
+   "x": 1781,
+   "y": 1354
+  },
+  {
+   "name": "Sanford",
+   "vp": 5,
+   "x": 1809,
+   "y": 1362
+  },
+  {
+   "name": "Astbry",
+   "vp": 5,
+   "x": 1917,
+   "y": 1370
+  },
+  {
+   "name": "Altos",
+   "vp": 5,
+   "x": 1596,
+   "y": 1381
+  },
+  {
+   "name": "Pecrana",
+   "vp": 10,
+   "x": 1820,
+   "y": 1384
+  },
+  {
+   "name": "Dublin",
+   "vp": 10,
+   "x": 1874,
+   "y": 1394
+  }
+ ],
+ "politics": {
+  "names": {
+   "base": {
+    "adj": "Merlovichan",
+    "def": "The Federation of Merlovich",
+    "name": "Merlovich"
+   }
+  }
+ },
+ "provinces": {
+  "1854,1260": {
+   "t": "desert"
+  },
+  "1855,1275": {
+   "t": "desert"
+  },
+  "1860,1292": {
+   "t": "desert"
+  },
+  "1864,1265": {
+   "t": "desert"
+  },
+  "1865,1281": {
+   "t": "desert"
+  },
+  "1866,1254": {
+   "t": "desert"
+  },
+  "1871,1287": {
+   "t": "desert"
+  },
+  "1875,1254": {
+   "t": "desert"
+  },
+  "1875,1298": {
+   "t": "desert"
+  },
+  "1878,1268": {
+   "t": "desert"
+  },
+  "1881,1284": {
+   "t": "desert"
+  },
+  "1887,1297": {
+   "t": "desert"
+  },
+  "1888,1274": {
+   "t": "desert"
+  },
+  "1890,1253": {
+   "t": "desert"
+  },
+  "1896,1283": {
+   "t": "desert"
+  },
+  "1904,1256": {
+   "t": "desert"
+  },
+  "1905,1293": {
+   "t": "desert"
+  },
+  "1909,1281": {
+   "t": "desert"
+  },
+  "1910,1268": {
+   "t": "desert"
+  },
+  "1917,1293": {
+   "t": "desert"
+  },
+  "1920,1261": {
+   "t": "desert"
+  },
+  "1921,1278": {
+   "t": "desert"
+  },
+  "1927,1290": {
+   "t": "desert"
+  },
+  "1931,1268": {
+   "t": "desert"
+  },
+  "1944,1258": {
+   "t": "desert"
+  }
+ },
+ "status": "draft",
+ "tag": "AIS"
+}

@@ -1,0 +1,13 @@
+{
+ "cities": [
+  {
+   "capital": true,
+   "name": "Markovograd",
+   "vp": 10,
+   "x": 1156,
+   "y": 692
+  }
+ ],
+ "status": "draft",
+ "tag": "KRK"
+}

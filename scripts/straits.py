@@ -40,6 +40,11 @@ DEFAULT_GAP = 10   # px: what `approve` takes without --max-gap
 BIG = 10000        # px: landmasses this big may have more than one crossing between them
 SPACING = 150      # px between two crossings of the same pair of big landmasses
 TIERS = [(6, (70, 200, 90)), (10, (235, 200, 60)), (15, (240, 140, 50)), (GMAX, (225, 70, 70))]
+# countries no crossing may join, whatever the strait's width (author, 2026-10-18: "The strait crossing connecting
+# Royalist and Republican Illiricium shouldn't exist"), and countries no crossing may reach at all (the same day:
+# "Neither should the crossings to North Pollana"): `approve` leaves them out
+NEVER = {frozenset(("ILR", "KIL"))}
+NEVER_ANY = {"NPL"}
 
 
 def ascii(s):
@@ -256,7 +261,8 @@ def approve(args):
     bad = (drop | add) - known
     if bad:
         sys.exit(f"no crossing numbered {sorted(bad)} in {PROPOSAL}")
-    chosen = [e for e in prop if (e["gap"] <= gap or e["n"] in add) and e["n"] not in drop]
+    chosen = [e for e in prop if (e["gap"] <= gap or e["n"] in add) and e["n"] not in drop
+              and frozenset(e["owners"]) not in NEVER and not NEVER_ANY & set(e["owners"])]
     APPROVED.write_text(json.dumps([dict(a=e["a"], b=e["b"], through=e["through"], name=e["name"])
                                     for e in chosen], ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     print(f"{len(chosen)} crossings into {APPROVED} (up to {gap} px, {len(drop)} dropped, {len(add)} added); rebuild")

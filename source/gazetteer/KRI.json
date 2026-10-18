@@ -1,0 +1,119 @@
+{
+ "game_releasables": {
+  "CRV": {
+   "leader": {
+    "name": "Anya Ristić",
+    "portrait": {
+     "file": "assets/3e3072f5484cfe4d2325aeca.png",
+     "h": 320,
+     "name": "ribyOrvm.jpg",
+     "w": 234
+    }
+   },
+   "states": [
+    "2481,535",
+    "2400,552",
+    "2490,564",
+    "2419,569",
+    "2503,582",
+    "2344,585",
+    "2607,585",
+    "2667,594",
+    "2455,599",
+    "2372,600",
+    "2400,604",
+    "2530,605",
+    "2611,617",
+    "2575,618",
+    "2655,622",
+    "2315,634",
+    "2518,636",
+    "2578,636",
+    "2378,638",
+    "2631,650",
+    "2554,654",
+    "2286,660",
+    "2584,687",
+    "2274,700",
+    "2321,704",
+    "2590,717",
+    "2237,730",
+    "2286,731",
+    "2202,742",
+    "2338,743",
+    "2290,747",
+    "2257,753",
+    "2181,773",
+    "2292,779",
+    "2321,784",
+    "2216,786",
+    "2243,788",
+    "2232,802",
+    "2293,805",
+    "2158,809",
+    "2322,822",
+    "2252,830",
+    "2159,841",
+    "2304,848",
+    "2214,857",
+    "2171,862",
+    "2259,875",
+    "2224,886",
+    "2263,914",
+    "2270,946"
+   ]
+  },
+  "MYL": {
+   "leader": {
+    "name": "Pribislav Zorić",
+    "portrait": {
+     "file": "assets/61551f10cf36ce43834a63eb.png",
+     "h": 320,
+     "name": "BWTG4rDm.jpg",
+     "w": 251
+    }
+   }
+  },
+  "ZST": {
+   "leader": {
+    "name": "Mikael Kozlov",
+    "portrait": {
+     "file": "assets/f71304ec04d4d85b3e5c9d52.png",
+     "h": 320,
+     "name": "aUFByDqm.jpg",
+     "w": 318
+    }
+   }
+  }
+ },
+ "releasables": [
+  {
+   "adj": "Formosan",
+   "def": "the Federal Republic of Formosa",
+   "flag": {
+    "file": "assets/c7dbdc02d993236c929ee998.png",
+    "h": 347,
+    "name": "Krionik - New Formosa 2.png",
+    "w": 640
+   },
+   "id": "rl-mvdd2iejtjzf6v",
+   "leader": {
+    "name": "Elena Andronikos",
+    "portrait": {
+     "file": "assets/fbe3c88767c6b4ba6d02260d.jpg",
+     "h": 640,
+     "name": "OIP.webp",
+     "w": 410
+    }
+   },
+   "name": "Formosa",
+   "ruling": "stratocracy",
+   "states": [
+    "4175,1518"
+   ],
+   "tag": "FOM"
+  }
+ ],
+ "status": "draft",
+ "tag": "KRI"
+}

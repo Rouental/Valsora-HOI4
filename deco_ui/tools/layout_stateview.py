@@ -20,11 +20,13 @@ BG = dict(x=5, y=5, w=450, h=650)
 X0, X1 = 20, 440
 
 HEADER = (5, 58)
-OWNERS = (20, 16)                      # owner flag(s) (the game's overlapping box)
+# v0.10.2: the flag, its well and the name 10 px right, clear of the panel's corner bracket (to x 25 in the window; the
+# user: "In the state tab, the decorative corner in the top left is covered by the flag")
+OWNERS = (30, 16)                      # owner flag(s) (the game's overlapping box)
 CONTROLLER = (362, 16)                 # controller flag when occupied (and its border at -5, -4), left of close
-FLAG_WELL = dict(x=16, y=12, w=50, h=34)
-NAME = dict(x=78, y=12, w=276, h=24)   # state name, gilt capitals
-SUBTITLE = dict(x=78, y=36, w=276, h=16)    # the game's "owner" text
+FLAG_WELL = dict(x=26, y=12, w=50, h=34)
+NAME = dict(x=88, y=12, w=266, h=24)   # state name, gilt capitals
+SUBTITLE = dict(x=88, y=36, w=266, h=16)    # the game's "owner" text
 CLOSE = (-36, 10)                      # UPPER_RIGHT
 
 STATS = (58, 124)

@@ -375,7 +375,20 @@ sx = lambda f: round(W * f, 2)
 med = [(0, -2), (W, -2), (W, s1), (sx(.88), s1), (sx(.88), s2), (sx(.74), s2), (sx(.74), H),
        (sx(.26), H), (sx(.26), s2), (sx(.12), s2), (sx(.12), s1), (0, s1)]
 F, FR = L.FLAG, L.FLAG_FRAME
+FL, FM = L.FRAME_LINE, L.FLAG_MARGIN
 fx, fy = FR["x"] - L.MED["x"], FR["y"] - L.MED["y"]
+
+
+def corner_steps(x, y, w, h, arm, colour="#E3C77E"):
+    """a 1 px gilt bracket at each corner of the box (x, y, w, h), its arms arm px long"""
+    out = ""
+    for cx, cy, sx_, sy_ in ((x, y, 1, 1), (x + w - 1, y, -1, 1), (x, y + h - 1, 1, -1), (x + w - 1, y + h - 1, -1, -1)):
+        hx = cx if sx_ > 0 else cx - arm + 1
+        vy = cy if sy_ > 0 else cy - arm + 1
+        out += (f'<div style="position:absolute;left:{hx}px;top:{cy}px;width:{arm}px;height:1px;background:{colour}"></div>'
+                f'<div style="position:absolute;left:{cx}px;top:{vy}px;width:1px;height:{arm}px;background:{colour}"></div>')
+    return out
+
 cy = fy + FR["h"] / 2
 wings = ""
 for dy, ln in [(-6, 18), (0, 13), (6, 8)]:
@@ -387,14 +400,18 @@ for dy, ln in [(-6, 18), (0, 13), (6, 8)]:
         wings += f'<div style="position:absolute;left:{x}px;top:{cy + dy}px;width:{ln}px;height:1px;background:linear-gradient({grad})"></div>'
 add("tb_medallion", D + "topbar_medallion.dds", W, H,
     plate(med, "linear-gradient(180deg,#1B262D,#0C1317)", "linear-gradient(180deg,#8B6A2C,#E8CD84 40%,#8B6A2C)")
-    # frame: outer gilt hairline, lacquer mat, inner gilt 2px, dark flag bed
-    + f'<div style="position:absolute;left:{fx}px;top:{fy}px;width:{FR["w"]}px;height:{FR["h"]}px;background:#C9A55A;box-shadow:0 4px 10px rgba(0,0,0,.55)"></div>'
-    + f'<div style="position:absolute;left:{fx + 1}px;top:{fy + 1}px;width:{FR["w"] - 2}px;height:{FR["h"] - 2}px;background:{LAC},linear-gradient(180deg,#16212A,#0B1115)"></div>'
-    + f'<div style="position:absolute;left:{fx + 6}px;top:{fy + 6}px;width:{F["w"] + 4}px;height:{F["h"] + 4}px;background:linear-gradient(180deg,#F1DC9C,#9C7A36)"></div>'
-    + f'<div style="position:absolute;left:{fx + 8}px;top:{fy + 8}px;width:{F["w"]}px;height:{F["h"]}px;background:#0B1014"></div>'
-    # small diamonds at the mat's corners
-    + "".join(f'<div style="position:absolute;left:{x - 2}px;top:{y - 2}px;width:4px;height:4px;background:#E3C77E;transform:rotate(45deg)"></div>'
-              for x, y in [(fx + 3, fy + 3), (fx + FR["w"] - 3, fy + 3), (fx + 3, fy + FR["h"] - 3), (fx + FR["w"] - 3, fy + FR["h"] - 3)])
+    # frame (v0.10.2, the user's mockup, "it doesn't have to be exactly the same. Please adjust coloring and shading
+    # and such so it fits in with the rest of the UI"): a gilt line round a lacquer mat (the plates' gilt gradient), a
+    # gilt rim on the flag, the dark flag bed, and two brackets stepping out from each corner of the line, fading as
+    # they go out (the rules' gilt, then the faint gilt of the frames' second lines)
+    + f'<div style="position:absolute;left:{fx + FL}px;top:{fy + FL}px;width:{FR["w"] - 2 * FL}px;height:{FR["h"] - 2 * FL}px;'
+      f'background:linear-gradient(180deg,#E8CD84,#8B6A2C);box-shadow:0 4px 10px rgba(0,0,0,.55)"></div>'
+    + f'<div style="position:absolute;left:{fx + FL + 1}px;top:{fy + FL + 1}px;width:{FR["w"] - 2 * FL - 2}px;height:{FR["h"] - 2 * FL - 2}px;'
+      f'background:{LAC},linear-gradient(180deg,#16212A,#0B1115)"></div>'
+    + f'<div style="position:absolute;left:{fx + FM - 2}px;top:{fy + FM - 2}px;width:{F["w"] + 4}px;height:{F["h"] + 4}px;background:linear-gradient(180deg,#F1DC9C,#9C7A36)"></div>'
+    + f'<div style="position:absolute;left:{fx + FM}px;top:{fy + FM}px;width:{F["w"]}px;height:{F["h"]}px;background:#0B1014"></div>'
+    + "".join(corner_steps(fx + d, fy + d, FR["w"] - 2 * d, FR["h"] - 2 * d, arm, colour)
+              for (d, arm), colour in zip(L.FRAME_STEPS, ("rgba(201,165,90,.45)", "#C9A55A")))
     + wings)
 
 # flag: own 82x52 masked shield, so the game's flag is drawn 1:1 (no stretching)
@@ -1553,8 +1570,7 @@ EV_BOTTOM = ('<div class="lac" style="position:absolute;left:0;right:0;top:0;bot
              '<path d="M4.5,0V187.5L12.5,195.5H568.5L576.5,187.5V0" fill="none" stroke="rgba(201,165,90,.35)"/>'
              # the picture (210 x 176 at 5, 5): a gilt frame round it, small fans at its corners
              '<rect x="3.5" y="3.5" width="213" height="179" fill="none" stroke="#C9A55A"/>'
-             '<rect x="1.5" y="1.5" width="217" height="183" fill="none" stroke="rgba(201,165,90,.3)"/></svg>'
-             '<i class="ck sm bl" style="left:8px;bottom:13px"></i><i class="ck sm br" style="right:8px;bottom:13px"></i>')
+             '<rect x="1.5" y="1.5" width="217" height="183" fill="none" stroke="rgba(201,165,90,.3)"/></svg>')
 add("ev_bottom", EV + "event_report_bottom_win.dds", 581, 206, EV_BOTTOM)
 # an option: a chamfered lacquer plate with a gilt rim, as wide as its entry (layout_events: make_events.py widens the
 # entry to it and centres it in each window); the rest of the game's 352 px picture is clear
@@ -1565,14 +1581,14 @@ add("ev_option", EV + "event_option_entry.dds", 352, 48,
     f'<div class="frame" style="left:16px;width:{_OW - 32}px;top:41px;height:1px;background:rgba(201,165,90,.25)"></div>')
 add("ev_clip", EV + "event_pic_clip.dds", 55, 30, "")        # the paper clip: none on lacquer
 add("ev_clip2", EV + "events/clip.dds", 53, 29, "")          # the leader and operative events' clip too
-# a leader event's foot (its bottom_window_end, 581 x 59): the country event's chamfered foot and corner brackets
+# a leader event's foot (its bottom_window_end, 581 x 59): the country event's chamfered foot (no corner brackets since
+# v0.10.2: crests.ev_top)
 add("ev_bottom_end", EV + "event_report_bottom_win_2.dds", 581, 59,
     '<div class="lac" style="position:absolute;left:0;right:0;top:0;bottom:6px;'
     'clip-path:polygon(0 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,10px 100%,0 calc(100% - 10px))"></div>'
     '<svg width="581" height="59" style="position:absolute;left:0;top:0">'
     '<path d="M.5,0V42.5L10.5,52.5H570.5L580.5,42.5V0" fill="none" stroke="#C9A55A"/>'
-    '<path d="M4.5,0V40.5L12.5,48.5H568.5L576.5,40.5V0" fill="none" stroke="rgba(201,165,90,.35)"/></svg>'
-    '<i class="ck sm bl" style="left:8px;bottom:13px"></i><i class="ck sm br" style="right:8px;bottom:13px"></i>')
+    '<path d="M4.5,0V40.5L12.5,48.5H568.5L576.5,40.5V0" fill="none" stroke="rgba(201,165,90,.35)"/></svg>')
 add("ev_minimize", EV + "event_button_minimize.dds", 32, 33,
     '<div style="position:absolute;left:5px;top:5.5px;width:22px;height:22px;transform:rotate(45deg);border:1px solid #E3C77E;'
     'background:#0B1014;box-sizing:border-box"></div>'

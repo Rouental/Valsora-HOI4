@@ -1803,7 +1803,7 @@
   "path": "gfx/interface/valsora_deco/topbar_medallion.dds",
   "w": 156,
   "h": 148,
-  "sig": "a7c6eef0db0418f1d57ed88720b6b00635437aa18f21950f7d2bc3b7755a84c7"
+  "sig": "d8bcd042f84ce098f08654f25d8136b9c3de768d55fdb17325f5e9e6fdb89be4"
  },
  {
   "key": "flag_mask",
@@ -2419,7 +2419,7 @@
   "path": "gfx/interface/valsora_deco/stateview/stateview_bg.dds",
   "w": 450,
   "h": 650,
-  "sig": "2fae2eb7d66424d9190046910cba9cacdf84f37272f30ebf81fb87bfa97afac9"
+  "sig": "70361eeb42e1557d8857349523ba01a74ecbd331ef21bbb9317aca27c82309f3"
  },
  {
   "key": "sv_tile",
@@ -2930,7 +2930,7 @@
   "path": "gfx/interface/event_report_top_win.dds",
   "w": 581,
   "h": 121,
-  "sig": "97873f3b186cf5709b2d8c00351a4df1211cfb5146924a85d95c633490559110"
+  "sig": "e454a8bbcfe7f67ed659c73a3132099beabbda91c5c6752ce13ae254f25470b5"
  },
  {
   "key": "ev_mid",
@@ -2944,7 +2944,7 @@
   "path": "gfx/interface/event_report_bottom_win.dds",
   "w": 581,
   "h": 206,
-  "sig": "3557d3c93de8394f141607987ce0a816f6002fc6329849e1e94af47375e14943"
+  "sig": "0d918767f54b845477c9e999e1302314041b3144affb338d1176a6cfda1bf130"
  },
  {
   "key": "ev_option",
@@ -2972,7 +2972,7 @@
   "path": "gfx/interface/event_report_bottom_win_2.dds",
   "w": 581,
   "h": 59,
-  "sig": "ca9718e7a06acef6cdbf72c75d842f73d8870dda9df4c3559765fcd11e89c8d1"
+  "sig": "19a692a99fcafb13fa69a681b2438555813ccd60dd3ff2e720c78f2afd3829d0"
  },
  {
   "key": "ev_minimize",

@@ -1,0 +1,84 @@
+{
+ "cities": [
+  {
+   "name": "Tuile",
+   "size": "city",
+   "vp": 5,
+   "x": 839,
+   "y": 807
+  },
+  {
+   "name": "Mirais",
+   "vp": 5,
+   "x": 830,
+   "y": 813
+  },
+  {
+   "name": "Grande Hollier",
+   "size": "metropolis",
+   "vp": 25,
+   "x": 848,
+   "y": 815
+  },
+  {
+   "name": "Annette",
+   "vp": 5,
+   "x": 828,
+   "y": 824
+  }
+ ],
+ "people": {
+  "ruler": {
+   "name": "Jacme Thouars-Hollier",
+   "portrait": {
+    "file": "assets/7251739ba84f7d68de88d7fe.jpg",
+    "h": 640,
+    "name": "19_janvier_2020_(77)_cropped.jpg",
+    "w": 453
+   }
+  }
+ },
+ "provinces": {
+  "826,822": {
+   "t": "forest"
+  },
+  "829,813": {
+   "t": "forest"
+  },
+  "841,806": {
+   "t": "hills"
+  },
+  "844,794": {
+   "t": "mountain"
+  },
+  "845,825": {
+   "t": "forest"
+  },
+  "848,813": {
+   "t": "urban"
+  },
+  "854,808": {
+   "t": "mountain"
+  },
+  "858,823": {
+   "t": "mountain"
+  },
+  "858,835": {
+   "t": "forest"
+  }
+ },
+ "states": {
+  "841,806": {
+   "pop": 4504000
+  },
+  "848,813": {
+   "name": "Grande Hollier",
+   "pop": 1510000
+  },
+  "858,823": {
+   "pop": 5228000
+  }
+ },
+ "status": "draft",
+ "tag": "HLR"
+}

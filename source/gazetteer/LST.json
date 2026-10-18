@@ -1,0 +1,52 @@
+{
+ "cities": [
+  {
+   "capital": true,
+   "name": "Tanière",
+   "size": "city",
+   "vp": 20,
+   "x": 837,
+   "y": 776
+  },
+  {
+   "name": "Mensiere",
+   "vp": 5,
+   "x": 808,
+   "y": 784
+  }
+ ],
+ "people": {
+  "ruler": {
+   "portrait": {
+    "file": "assets/c126c8c8dfc5c02595c3715a.jpg",
+    "h": 640,
+    "name": "ad3e7ebb776fb2d08e140cff78b7ed10.jpg",
+    "w": 480
+   }
+  }
+ },
+ "provinces": {
+  "810,785": {
+   "t": "hills"
+  },
+  "810,794": {
+   "t": "hills"
+  },
+  "822,790": {
+   "t": "forest"
+  },
+  "834,788": {
+   "t": "forest"
+  },
+  "837,776": {
+   "t": "forest"
+  }
+ },
+ "states": {
+  "837,776": {
+   "pop": 2132000
+  }
+ },
+ "status": "draft",
+ "tag": "LST"
+}
