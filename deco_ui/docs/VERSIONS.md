@@ -100,7 +100,9 @@ it before touching the UI. In short:
   weird. It seems like you have a lot of trouble with this particular decorative element": one big bracket in one
   corner, two small ones at the foot, none under the back button; the double chamfered frame is the corner now); the
   Release Nation window's list of states scrolling above its checkboxes (`make_popups.py`, the game's
-  `popupwindow.gui` with one change: "This screen overflows").
+  `popupwindow.gui` with one change: "This screen overflows"); the state panel's resistance and compliance in two rows
+  inside the claims band, their bars the panel's gilt wells, amber to coral and jade ("Compliance and resistance look
+  out of place": the second row ran over the State Modifiers rule, the bars the game's).
 - **Proposals for the side panels' own pictures** (research, production, the market, the overview strip, the
   intelligence agency, the spirit banners) are in `deco_ui/art/proposals/panel_pictures/`, **not in the mod**
   (author, 2026-10-15: "don't put them in the mod yet. I'd like to see and approve them first").

@@ -22,7 +22,8 @@ centres the last letter's tracking too: `layout.NAME_SHIFT`); the experience bad
 digits' y from the screenshot (`layout.XP_BADGE`); the factories military, naval, civilian; the faction card eleven
 flags a row; the state panel's flag clear of its corner bracket; the events without corner brackets (a bracket in a
 chamfered corner reads as a mistake: the double chamfered frame is the corner); the Release Nation window's text above
-its checkboxes (`make_popups.py`, `popupwindow.gui`, the generators' first change to it). **Not yet seen in game.**
+its checkboxes (`make_popups.py`, `popupwindow.gui`, the generators' first change to it); the state panel's resistance
+and compliance in two rows in the claims band, their bars gilt wells (`layout_stateview.RES_*`, 'sv_res_*'). **Not yet seen in game.**
 
 **v0.10.1 (2026-10-17, later)** came before it, from the user's look at v0.10 in game (screenshots, section
 10): the loading pictures out of the mod again, kept for later (the loading screen draws the game's own; section 6,
@@ -255,7 +256,7 @@ tools/
   make_setup.py             frontendgamesetupview.gui (v0.10.1): the country selection one card wider (nine cards for
                             the Vale start), the country's details spaced; its pictures are setup_art.py's
   make_popups.py            popupwindow.gui (v0.10.2): the release dialog's text box above its checkboxes (the
-                            game's ran 20 px over the first); the bounds are window_art.RELEASE_TEXT_Y/END
+                            game's ran 20 px over the first), six whole lines; the bounds are window_art.RELEASE_TEXT_Y/END
   preview_battleplan.py     build/preview_battleplan.png (+ _vanilla); preview_windows.py, preview_mapviews.py,
                             preview_combat.py, preview_diplo.py, preview_setup.py, preview_popups.py likewise (v0.10)
   medallion_check.py        the windows the medallion would hide (v0.9): every top-level window in the top left corner

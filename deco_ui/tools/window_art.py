@@ -98,8 +98,9 @@ def w_close():
             f'clip-path:{chamfer(4.4)};box-shadow:inset 0 2px 4px rgba(0,0,0,.7)"></div>')
 
 
-# the release dialog's text (make_popups.py, v0.10.2): under the header band, ending above the first checkbox (y 198)
-RELEASE_TEXT_Y, RELEASE_TEXT_END = 76, 190
+# the release dialog's text (make_popups.py, v0.10.2): under the header band, ending above the first checkbox (y 198),
+# six whole lines of its font (hoi_18mbs, 18 px a line), so no sliver of a seventh shows above the slider's end
+RELEASE_TEXT_Y, RELEASE_TEXT_END = 76, 76 + 6 * 18
 
 
 def pol_goal(w, h):

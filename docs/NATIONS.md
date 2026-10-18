@@ -633,7 +633,7 @@ Megkoronázott (806), Menedék (1,791), Aranylómezők (1,530) and Szünet (1,10
 **Later that day** (the author's messages): **Sminishia** claims Belekria 64 and all of West Sminishia ("Sminishia should
 also start with claims on Belekria 64 and all of western sminishia": `nations.CLAIMS`, the mod's first claims; West
 Sminishia's six were already its cores), and then **Belekria 64 is West Sminishia's** ("Also, give West Sminishia
-Belekria 64"; the claim stays, on West Sminishia's land). **No strait crossings** join Royalist and Republican Illiricium
+Belekria 64"; the claim stays, on West Sminishia's land). **Vilna 2 is two islands** ("Vilna 2 should be 2 islands": a neck of land at (1980, 605) joined two of its islets; `pdn_tools.py channel`). **No strait crossings** join Royalist and Republican Illiricium
 or reach North Pollana (three dropped: `straits.NEVER`, `NEVER_ANY`). **Belekria 1, 4, 5, 6 and 15 are tundra** ("and
 thus don't need high counts"): their 84 provinces are 27 now, ~600 px each, and the borders freed went to provinces
 elsewhere. **More provinces** everywhere else (the author: "a general increase of the province count. For example,

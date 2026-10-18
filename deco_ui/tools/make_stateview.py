@@ -69,6 +69,10 @@ CT = LS.CLAIMS_TEXT
 at(f"{W}>claims", font=BODY13, position=(CT["x"], CT["y"]), maxWidth=CT["w"], maxHeight=CT["h"], format="left")
 at(f"{W}>state_claims", position=LS.CLAIMS_FLAGS)
 at(f"{W}>resistance_container", position=LS.RESISTANCE)
+for row, (icon, pos) in enumerate((("state_resistance_icon", "resistance_status_pos"),
+                                   ("state_compliance_icon", "compliance_status_pos"))):
+    at(f"{W}>resistance_container>{icon}", position=(0, row * LS.RES_ROW), scale=str(LS.RES_SCALE))
+    at(f"{W}>resistance_container>{pos}", position=(LS.RES_BAR_X, row * LS.RES_ROW + 1))
 # labels the game does not have
 added = "\n\t\t\t# ===== Valsora Deco: section labels ====="
 for key, x, y in [("VICTORY_POINTS", c0, LS.STAT_LABEL_Y), ("MANPOWER", c1, LS.STAT_LABEL_Y),

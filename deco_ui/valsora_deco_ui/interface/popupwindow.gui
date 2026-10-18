@@ -1671,7 +1671,7 @@ guiTypes = {
 			borderSize = {x = 0 y = 0}
 			text = "Long text here!"
 			maxWidth = 430
-			maxHeight = 114
+			maxHeight = 108
 			format = centre
 			scrollbartype = "standardtext_slider"
 		}

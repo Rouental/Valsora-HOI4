@@ -230,13 +230,13 @@ the page, its rules or its import.
   (2026-10-16: Plaija's Vietnamese names; the fonts have Vietnamese since, composed where a face lacks it; the factory
   diamond, U+25C6, only in the value fonts that draw it; mutation-tested).
 - Its `reference/` (the game's files, git-ignored) must never be committed: it is Paradox's content.
-- **Now v0.10.1** (2026-10-17, not yet seen in game). v0.9's restyled screens are one commit, `8dece16`: `git revert 8dece16` and a rebuild of both take them out. Previews that show the game's own art stay in the git-ignored `deco_ui/build/` and are only sent to the author. Proposals not in the mod, waiting for the author: `deco_ui/art/proposals/` (panel pictures: "I'd like to see and approve them first"; the larger flags: "don't add anything to do with it into the mod yet").
+- **Now v0.10.2** (2026-10-18, not yet seen in game; v0.10.1 seen 2026-10-18). v0.9's restyled screens are one commit, `8dece16`: `git revert 8dece16` and a rebuild of both take them out. Previews that show the game's own art stay in the git-ignored `deco_ui/build/` and are only sent to the author. Proposals not in the mod, waiting for the author: `deco_ui/art/proposals/` (panel pictures: "I'd like to see and approve them first"; the larger flags: "don't add anything to do with it into the mod yet").
 
 ## Current state
 
 Where things stand; the history, date by date, is `docs/HISTORY.md` (add each day's entry at its top).
 
-- **The build** (2026-10-18, later): 21,535 provinces (21,147 land, 363 sea, 25 lakes), 63,530 province borders
+- **The build** (2026-10-18, later): 21,536 provinces (21,148 land, 363 sea, 25 lakes), 63,531 province borders
   (HOI4 draws 65,536; 2,000 kept free by `pdn_tools.py refine`: `docs/BORDER_LIMIT.md`), 3,192 states, 179 strategic
   regions (137 land, made from the nations on 2026-10-16: `land_regions.py`, not redone for the borders since; 42 sea);
   413 strait crossings (none between the Illiriciums or to North Pollana); Belekria 1, 4, 5, 6 and 15 coarse as
@@ -306,8 +306,8 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
 4. **What still reads as the 1940s**: the tech tree's names, descriptions and pictures (its dates are 2036's;
    `docs/TECH_TREE_2036.md` is a proposal), the 3D models, and the game's own pictures inside the side panels (the
    Deco UI's proposals wait for approval).
-5. **Province borders**: 3,769 left under HOI4's limit (61,767 of 65,536, 2026-10-17), room for about 1,250 more
-   provinces (`docs/BORDER_LIMIT.md`).
+5. **Province borders**: 2,005 left under HOI4's limit (63,531 of 65,536, 2026-10-18), the buffer `pdn_tools.py
+   refine` keeps for the states still to be drawn (`docs/BORDER_LIMIT.md`).
 
 ## Working with the author
 

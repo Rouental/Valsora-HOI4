@@ -2422,6 +2422,41 @@
   "sig": "70361eeb42e1557d8857349523ba01a74ecbd331ef21bbb9317aca27c82309f3"
  },
  {
+  "key": "sv_res_bg",
+  "path": "gfx/interface/occupation/resistance_bar_state_bg.dds",
+  "w": 87,
+  "h": 19,
+  "sig": "20c4acde8c047cefcc3c70af110a79bf5f182f68dfd75dffd6224f1889f7876f"
+ },
+ {
+  "key": "sv_comp_bg",
+  "path": "gfx/interface/occupation/compliance_bar_state_bg.dds",
+  "w": 87,
+  "h": 19,
+  "sig": "1f3381c7f42b071cc28030b1bda335de49978ab139fe72233348f43d2865496b"
+ },
+ {
+  "key": "sv_res_fill",
+  "path": "gfx/interface/occupation/resistance_bar_state.dds",
+  "w": 81,
+  "h": 14,
+  "sig": "662cdd2d4bbe9887616d4f0bb7e6bb3f8bcf5ad4b7783629fe6eeaffe46ac17a"
+ },
+ {
+  "key": "sv_comp_fill",
+  "path": "gfx/interface/occupation/compliance_bar_state.dds",
+  "w": 81,
+  "h": 14,
+  "sig": "1fa98d8377c0d43fee35cc236c3020be39e4ce310fcc0d01a31d71457c630647"
+ },
+ {
+  "key": "sv_bar_empty",
+  "path": "gfx/interface/occupation/state_bar_empty.dds",
+  "w": 81,
+  "h": 14,
+  "sig": "66920b43d960fef3ffb18374404db77f3a148f9894c9ee1067994bc5f9c06ea5"
+ },
+ {
   "key": "sv_tile",
   "path": "gfx/interface/valsora_deco/stateview/building_tile.dds",
   "w": 56,

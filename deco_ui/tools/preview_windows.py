@@ -67,7 +67,7 @@ def draw(vanilla):
         from window_art import RELEASE_TEXT_END, RELEASE_TEXT_Y
         ty, th = RELEASE_TEXT_Y, RELEASE_TEXT_END - RELEASE_TEXT_Y
     texts.append(("hoi_18mbs", "Do you want to liberate Crvenognjište in " + ", ".join(f"Krionik {n}" for n in range(1, 60))
-                  + "?", x + 23, y + ty, 430, th, "centre", False))
+                  + "?", x + 23, y + ty, 430, th, "centre", False, True))
     for i, s in enumerate(("Release as puppet", "Play as", "Retain States With Our Core")):
         put(GI + "generic_checkbox.dds", x + 50, y + 198 + 36 * i, 2, int(i == 0))
         texts.append(("hoi_18mbs", s, x + 100, y + 202 + 36 * i, 200, 18, "left", False))
@@ -101,7 +101,12 @@ def draw(vanilla):
     put(GI + "closebutton.dds", x + 276 - 53, y + 10, 1, 0)
 
     arr = np.asarray(cv.convert("RGB"), dtype=np.float32) / 255
-    for font, s, tx, ty, w, h, fmt, valign in texts:
+    for font, s, tx, ty, w, h, fmt, valign, *clip in texts:
+        if clip:  # a scrolling text box: the game shows only what fits in it, the rest under its slider
+            tmp = arr.copy()
+            V.draw_text(tmp, font, s, tx, ty, w, fmt, max_h=h, valign=valign)
+            arr[ty:ty + h, tx:tx + w] = tmp[ty:ty + h, tx:tx + w]
+            continue
         V.draw_text(arr, font, s, tx, ty, w, fmt, max_h=h, valign=valign)
     out = BUILD + ("preview_windows_vanilla.png" if vanilla else "preview_windows.png")
     Image.fromarray((np.clip(arr, 0, 1) * 255).astype(np.uint8)).save(out)

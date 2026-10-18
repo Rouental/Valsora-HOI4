@@ -48,6 +48,9 @@ From your screenshots of 18 October:
     chamfered frame is the corner, the same at all four.
   - The Release Nation window: a long list of states scrolls above the
     checkboxes instead of running over them.
+  - An occupied state's resistance and compliance: two tidy rows beside
+    the claims, their bars gilt wells filled amber and jade (the second
+    ran over State Modifiers).
 
 Things to check in game (v0.10.2):
   - the medallion's frame and the name's centring (a one-line and a
@@ -57,7 +60,8 @@ Things to check in game (v0.10.2):
   - a faction with more than eight members on the politics screen;
   - the state panel's top left corner;
   - a leader event (A Word with the General) and a country event;
-  - Release Nation for Crvenognjište (Krionik): the list of states.
+  - Release Nation for Crvenognjište (Krionik): the list of states;
+  - an occupied state's panel: resistance and compliance.
 
 
 NEW IN v0.10.1

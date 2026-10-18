@@ -943,6 +943,19 @@ sv += (f'<div style="position:absolute;left:4px;right:4px;top:{p0}px;height:{p1 
        'background:linear-gradient(90deg,rgba(201,165,90,.14),rgba(201,165,90,.02))"></div>')
 sv += hrule(8, p0, BW - 16, WIDE) + hrule(8, p1, BW - 16, SOFT)
 add("sv_bg", SVP + "stateview_bg.dds", BW, BH, sv)
+# resistance and compliance bars (v0.10.2: "Compliance and resistance look out of place"): the game's bars, at its
+# paths and sizes, as the panel's wells: a chamfered dark well with a gilt hairline (87 x 19), filled amber to coral
+# for resistance, jade for compliance (81 x 14, drawn at (1-3, 2) in it by the game), the rest dark
+OCC = "gfx/interface/occupation/"
+_well = (bar("linear-gradient(180deg,#0B1014,#141D23)", "rgba(201,165,90,.7)", 4, .12))
+add("sv_res_bg", OCC + "resistance_bar_state_bg.dds", 87, 19, _well)
+add("sv_comp_bg", OCC + "compliance_bar_state_bg.dds", 87, 19, _well)
+_fill = lambda top, bottom: (f'<div style="position:absolute;inset:0;background:linear-gradient(180deg,{top},{bottom})"></div>'
+                             '<div style="position:absolute;left:0;right:0;top:1px;height:1px;background:rgba(255,248,220,.35)"></div>')
+add("sv_res_fill", OCC + "resistance_bar_state.dds", 81, 14, _fill("#F0B060", "#B5523F"))
+add("sv_comp_fill", OCC + "compliance_bar_state.dds", 81, 14, _fill("#6FC2A8", "#2E6E60"))
+add("sv_bar_empty", OCC + "state_bar_empty.dds", 81, 14,
+    '<div style="position:absolute;inset:0;background:rgba(11,16,20,.85)"></div>')
 TW, TH = LS.TILE["w"], LS.TILE["h"]
 add("sv_tile", SVP + "building_tile.dds", TW, TH,
     f'<div style="position:absolute;left:1px;top:1px;width:{TW - 2}px;height:{TH - 2}px;background:radial-gradient(circle at 50% 40%,#1A262C,#0B1115);'

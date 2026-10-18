@@ -11,7 +11,7 @@ fingerprint below). Run `python3 scripts/pdn_check.py` on the copy before sendin
 
 | sent as | fingerprint (sha256, first 12) | made | what changed |
 |---|---|---|---|
-| HOI4 Mod Map 10-18.pdn | 50fb3d00a4d6 | 2026-10-18, later | The Gazetteer's suggestions (Rouental's Leclerc and Kove split; North Pollana's islet and second province; Terreich's merged states and isles in pairs, Rosenburg, Terreichstadt; Ungar's six drawn states); more provinces map-wide (21,147 land, up from 20,552), Belekria 1, 4, 5, 6 and 15 coarse as tundra; Belekria 64 West Sminishia's; Ungar's, Terreich's and Rouental's new state names in `state_names.json` |
+| HOI4 Mod Map 10-18.pdn | 83a5f6772010 | 2026-10-18, later | The Gazetteer's suggestions (their new state lines drawn on Necessary States) (Rouental's Leclerc and Kove split; North Pollana's islet and second province; Terreich's merged states and isles in pairs, Rosenburg, Terreichstadt; Ungar's six drawn states); more provinces map-wide (21,148 land, up from 20,552), Belekria 1, 4, 5, 6 and 15 coarse as tundra; Belekria 64 West Sminishia's; Ungar's, Terreich's and Rouental's new state names in `state_names.json`; Vilna 2 cut into two islands |
 | HOI4 Mod Map 10-17.pdn | d8ce78a4d80d | 2026-10-17, the night | Yastreovakia redrawn; the states of Belekria, Krionik, Terreich, Kurikia, San Sierra, Sennheiser, Gorbastan, Zukchiva, the Sminishias, Pakitsk and Hollier from the author's lines, their split provinces re-cut; Seigne's and Royalist Illiricium's drawn provinces; two islands cut free; five cities. Sent undated that night and on 2026-10-18, dated on 2026-10-18 |
 
 ## The flag file (`source/New_Mod_Flags.pdn`)

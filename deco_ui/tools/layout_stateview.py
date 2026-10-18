@@ -48,7 +48,11 @@ BUILD_GRID = dict(x=X0 - 4, y=278)
 CLAIMS = (354, 400)
 CLAIMS_TEXT = dict(x=X0, y=366, w=110, h=20)
 CLAIMS_FLAGS = (130, 362)
-RESISTANCE = (236, 358)
+# resistance and compliance (occupied states), two rows in the claims band's right half (v0.10.2, the user: "Compliance
+# and resistance look out of place": the game's rows are 30 px apart, so compliance ran over the State Modifiers rule at
+# y 400): the icons at RES_SCALE, RES_ROW px apart, each bar (87 x 19, gen_textures 'sv_res_*') beside its icon
+RESISTANCE = (236, 356)
+RES_SCALE, RES_ROW, RES_BAR_X = 0.7, 23, 28
 
 MODIFIERS = (400, 456)
 PROV_HEAD = (456, 486)

@@ -17,8 +17,8 @@ states and countries came next.
   export** imported (17 nations with something entered: Rouental, Terreich, Ungar, Port Almohavid, Merlovich, Krionik's
   Formosa and others: `docs/NATIONS.md`), its 15 suggestions put on the map (`apply_suggestions.py`), Formosa's flag
   fitted (the dragon alone, the author's choice), the six new flags into the flag file (10-18-3). **More provinces**:
-  `pdn_tools.py refine`, 20,552 land provinces to 21,147 (Evriches, South Pollana and Haidao 4 each), 63,530 borders
-  built, 2,006 under HOI4's limit; Belekria 1, 4, 5, 6 and 15 re-cut coarse as tundra (84 provinces to 27), the borders
+  `pdn_tools.py refine`, 20,552 land provinces to 21,148 (Evriches, South Pollana and Haidao 4 each), 63,531 borders
+  built, 2,005 under HOI4's limit; Belekria 1, 4, 5, 6 and 15 re-cut coarse as tundra (84 provinces to 27), the borders
   that freed spent elsewhere. **Sminishia's claims** (`nations.CLAIMS`, checked by `check_mod.py` and the mutation
   test, now 58 breaks); **Belekria 64** to West Sminishia (now West Sminishia 1); **no crossings** between the
   Illiriciums or to North Pollana (413 left). **Reading the site directly**: `gazetteer_fetch.py`, a read-only service
@@ -26,7 +26,8 @@ states and countries came next.
   Deco UI v0.10.2**: the medallion's frame from the author's mockup, shaded as the rest of the interface ("it doesn't
   have to be exactly the same"), the name centred; the experience badges centred; the factories military, naval,
   civilian; eleven faction flags a row; the state panel's corner clear; the events without corner brackets; the Release
-  Nation window's list above its checkboxes. Problems met on the way (provinces left in two regions, the overhead
+  Nation window's list above its checkboxes, the state panel's resistance and compliance in gilt wells. Vilna 2 cut into
+  its two islands. Problems met on the way (provinces left in two regions, the overhead
   measured on the wrong map, scraps of 1-2 px, a check breaking the next): `docs/PROBLEM_LOG.md`.
 - 2026-10-18 (the author: the review deck of every Deco UI change, "no icon of the game's changes until I've seen it";
   the map and the flag file sent dated, "10/17-2, 10/17-3"; their own flag file, "If it's not corrupted, maybe it's
