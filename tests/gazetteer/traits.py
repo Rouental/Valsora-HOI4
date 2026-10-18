@@ -1,6 +1,7 @@
 """The Gazetteer's trait pickers (2026-10-15): a ruler's, a party leader's, a general's, an admiral's and an
-advisor's traits from the base game (index.json's lists, from source/vanilla/index/traits.json), at most six; a
-request for a new trait; the every-nation file with them. Desktop and phone; with no shared atlas (local mode), the
+advisor's traits from the base game (index.json's lists, from source/vanilla/index/traits.json), at most six; what
+each does (2026-10-18, the author: "you should be able to see the effects of the traits"), under the chosen ones' chips
+and in a fold listing the whole list, whose Add adds one; a request for a new trait; the every-nation file with them. Desktop and phone; with no shared atlas (local mode), the
 lists work and the request form is a note instead.
 
     python3 scripts/facts_export.py          # after a build: the map data the page reads
@@ -62,7 +63,28 @@ def owner(b, url, size):
     page.click("#pane-people .person >> nth=0 >> .tchip .x >> nth=0")
     pp = wait_doc(page, f"{base}/people", lambda v: v["ruler"]["traits"] == [bb])
     check(pp and pp["ruler"]["traits"] == [bb], f"{label}: removing a ruler trait: {pp and pp.get('ruler')}")
-    for k in options(page, "#pp-ruler-traits")[:5]:
+    # what the traits do: under the chips, and every trait of the list in the fold, where Add adds one
+    fx = TR["effects"]["country"]
+    first = "#pane-people .person >> nth=0"
+    teff = page.inner_text(f"{first} >> .teff")
+    want = "; ".join(fx.get(bb) or ["No effect in the game's files"])
+    check(want in teff, f"{label}: the chosen trait's effects: {teff[:120]} (want {want[:80]})")
+    page.click(f"{first} >> .traitbook summary")
+    rows = page.locator(f"{first} >> .traitbook .tbrow").count()
+    check(rows == len(TR["ruler"]), f"{label}: the fold lists {rows} of {len(TR['ruler'])} traits")
+    book = page.inner_text(f"{first} >> .traitbook")
+    some = [k for k, *_ in TR["ruler"] if fx.get(k)][:4]
+    check(len(some) == 4 and all(fx[k][0] in book for k in some), f"{label}: the fold's effects: {some}")
+    c = next(k for k in ruler_opts if k != bb)
+    name = dict((k, n) for k, n, *_ in TR["ruler"])[c]
+    page.evaluate("""n => [...document.querySelectorAll('#pane-people .person .traitbook .tbrow')]
+        .find(r => r.querySelector('b').textContent === n).querySelector('button').click()""", name)
+    pp = wait_doc(page, f"{base}/people", lambda v: v["ruler"]["traits"] == [bb, c])
+    check(pp and pp["ruler"]["traits"] == [bb, c], f"{label}: Add in the fold: {pp and pp.get('ruler')}")
+    time.sleep(0.3)
+    check(page.evaluate("document.querySelector('#pane-people .person .traitbook').open"), f"{label}: the fold closed when a trait was added")
+    page.screenshot(path=str(H.SHOTS / f"traits_{label}_effects.png"))
+    for k in options(page, "#pp-ruler-traits")[:4]:
         pick(page, "#pp-ruler-traits", k)
     pp = wait_doc(page, f"{base}/people", lambda v: len(v["ruler"]["traits"]) == 6)
     check(pp and len(pp["ruler"]["traits"]) == 6, f"{label}: six ruler traits not saved: {pp and pp.get('ruler')}")
@@ -108,6 +130,8 @@ def owner(b, url, size):
     pick(page, f"#pp-c-traits-{g}", gopts[-1])
     pp = wait_doc(page, f"{base}/people", lambda v: len(v[g]["traits"]) == 2)
     check(pp and pp[g]["traits"] == [gopts[0], gopts[-1]] and pp[g]["role"] == "general", f"{label}: general: {pp and pp.get(g)}")
+    gfx = page.inner_text(f"{grow} .teff")
+    check(all("; ".join(TR["effects"]["unit"][k]) in gfx for k in (gopts[0], gopts[-1])), f"{label}: the general's trait effects: {gfx[:160]}")
 
     ad, arow = add_character("Amiral Trait", "admiral")
     aopts = options(page, f"#pp-c-traits-{ad}")

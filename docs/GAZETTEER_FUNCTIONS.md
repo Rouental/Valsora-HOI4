@@ -52,9 +52,9 @@ the nation's password; without it, the page shows the map and what the mod has, 
 - **H7 The status line** under the map: what is under the pointer (state, city, releasable, terrain, supply hub,
   coast, its pixel) and the page's short messages.
 - **H8 Guide** (beside the nation's name; 2026-10-16): the quick-start guide, six short illustrated steps (welcome
-  and saving, the map and its tools (the open map's, or Suggest while the states aren't drawn), how big a province is
-  (2026-10-17: Rouental's, Cardonia's and sparse land's provinces at one scale), the tabs, asking for more, the
-  password). It shows by itself once in a browser, the first time a player unlocks a nation (never to the
+  and saving, the map and its tools (the open map's, or Suggest while the states aren't drawn), how big a state is
+  (2026-10-18, in the place of 2026-10-17's province step: Rouental's, Cardonia's and Zukchiva's states at one scale),
+  the tabs, asking for more, the password). It shows by itself once in a browser, the first time a player unlocks a nation (never to the
   owner); Skip, Escape or Start close it. A first version of the tutorial: it will follow the final layout.
 
 ## The map
@@ -86,8 +86,10 @@ and M8.
 - **M10 The hint** under the tools: what the tool does (on a phone, a tap shows all of it).
 - **M11 Colours**, **open**: States, Terrain, Population (a shade per density).
 - **M12 Zoom in, zoom out, fit the map, and the key (?)**, at the map's top right.
-- **M15 Sizes** (beside Undo; 2026-10-17): the province size ruler, three squares (dense, usual as Cardonia's, sparse)
-  at the map's zoom, and how big the nation's own provinces are now.
+- **M15 Sizes** (beside Undo; 2026-10-17): the size ruler at the map's zoom, two rows (2026-10-18): states (Rouental's,
+  Cardonia's, Zukchiva's) and provinces (dense, usual as Cardonia's, sparse), and how big the nation's own are now.
+- **M16 Suggestions** (beside Sizes, when the nation has any; 2026-10-18): hides what was drawn with Suggest, so the
+  provinces under it show, and shows it again; the Suggest tool and **Show** (MP2) bring it back.
 - **M13 The key:** what the colours mean in each view.
 - **M14 The parts boxes** (lower right): the mainland, each piece overseas, and the World map (the whole world, for
   suggestions).
@@ -124,9 +126,10 @@ With no state picked, every state is a button (● for the named ones).
 ## Map tab
 
 - **MP1** **owner**: **Open them now** / **Close them again**, this nation's map tools (as O4).
-- **MP2 Suggestions.** Each one: its kind, "What is it?", how many provinces it would hold (an area or a state:
-  Cardonia's size, sparse and dense; 2026-10-17), **Show**, **Make it a state** (an area, closed only), **Delete**, and
-  more about it.
+- **MP2 Suggestions.** Each one: its kind, "What is it?", how big it is against Cardonia's states (2026-10-18) and how
+  many provinces it would hold (an area or a state: Cardonia's size, sparse and dense; 2026-10-17), **Show**, **Make
+  it a state** (an area, closed only), **Delete**, and more about it.
+- **MP7 How big is a state?** (2026-10-18): the state size guide, folded until opened, above MP6.
 - **MP6 How big is a province?** (2026-10-17): the province size guide, folded until opened.
 - **MP3 Rivers you drew**, **open**: each one's size (major, minor, erase stroke), points and length, **Show**,
   **Delete**.
@@ -168,6 +171,9 @@ With no state picked, every state is a button (● for the named ones).
   concern), name, logo, what it is in the game, notes, **Delete**; **Ask for a new kind of company**. *Game:* a
   military-industrial organisation (a designer without the DLC), or an industrial concern.
 - **PE7 Portraits** are cropped to 156 × 210 from the top (a note).
+- **PE8 What a trait does** (every trait list in PE1 to PE5; 2026-10-18): each chosen trait's effects under its chip
+  ("Brave: Organization loss when below 25%: −10%; Defense: +1"), and **What each trait does**, folded: every trait of
+  that list with its effects and **Add**.
 
 ## Releasables tab
 

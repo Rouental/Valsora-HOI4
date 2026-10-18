@@ -4066,5 +4066,1507 @@
 "ww_one_trauma",
 "zaibatsu_bank"
 ]
+},
+"effects": {
+"unit": {
+"adaptable": [
+"Terrain Penalty Reduction: +30%",
+"Cold acclimatization gain factor: +10%",
+"Hot acclimatization gain factor: +10%"
+],
+"air_controller": [
+"Navy carrier air targetting: +10%",
+"Sortie efficiency: +10%"
+],
+"ambusher": [
+"Max Entrenchment: +5",
+"Recon Bonus While Entrenched: +25%"
+],
+"arctic_water_expert": [
+"Naval attrition: −8%"
+],
+"armor_officer": [
+"Learns Panzer Leader faster: +100%",
+"Attack gained on promotion: +100%",
+"Planning gained on promotion: +100%"
+],
+"ascari_officer": [
+"Infantry Defense: +5%",
+"Cavalry Defence: +5%",
+"Camelry Defense: +5%",
+"Desert: Defense +5%",
+"Defense gained on promotion: +100%",
+"Logistics gained on promotion: +100%"
+],
+"aviation_enthusiast": [
+"Learns Air Controller faster: +100%"
+],
+"battleship_adherent": [
+"Capital Ship Attack: +10%",
+"Naval AA attack: −20%"
+],
+"bearer_of_artillery": [
+"Artillery Attack: +15%"
+],
+"big_guns_expert": [
+"Capital Ship Attack: +15%"
+],
+"blockade_runner": [
+"Retreat Decision Chance: +20%",
+"Fleet speed while retreating: +15%",
+"Convoy speed while retreating: +5%"
+],
+"blue_water_expert": [
+"Deep Oceans: Attack +10%, Movement +10%, Defense +10%"
+],
+"bold": [
+"Naval Damage: +5%",
+"Naval Speed: +10%"
+],
+"brave": [
+"Organization loss when below 25%: −10%",
+"Defense: +1"
+],
+"brilliant_strategist": [
+"Attack: +1",
+"Planning: +1",
+"Attack gained on promotion: +100%",
+"Planning gained on promotion: +100%"
+],
+"camouflage_expert": [
+"Damage Reduction Against CAS: +50%",
+"Air Superiority Bonus in Combat: −50%"
+],
+"career_officer": [
+"Promotion Cost: −25%",
+"Planning gained on promotion: +100%",
+"Logistics gained on promotion: +100%"
+],
+"carrier_officer": [
+"Learns Air Controller faster: +50%",
+"Learns Spotter faster: +50%"
+],
+"caustic_personality": [
+"Ships at battle start: −25%"
+],
+"cavalry_expert": [
+"Cavalry Defense: +10%"
+],
+"cavalry_leader": [
+"Cavalry Attack: +12%",
+"Motorized Attack: +12%",
+"Mechanized Attack: +12%"
+],
+"cavalry_officer": [
+"Learns Cavalry Leader faster: +100%",
+"Attack gained on promotion: +100%",
+"Logistics gained on promotion: +100%"
+],
+"chief_engineer": [
+"Critical receive chance: −5%"
+],
+"combined_arms_expert": [
+"Motorized Defense: +15%",
+"Mechanized Defense: +15%",
+"Increased chance of executing Blitz and Encirclement tactics"
+],
+"commando": [
+"Non-Combat Out of Supply Penalties: −25%"
+],
+"concealment_expert": [
+"Navy visibility: −10%"
+],
+"craven": [
+"Retreat Decision Chance: +25%",
+"Naval Damage: −5%"
+],
+"crisis_magician": [
+"Effects of sustained Critical Hits: −50%"
+],
+"cruiser_captain": [
+"Light Cruiser: Naval Damage +10%, Naval Speed +10%",
+"Heavy Cruiser: Naval Damage +10%, Naval Speed +10%"
+],
+"cruiser_officer": [
+"Learns Superior Tactician faster: +50%",
+"Learns Fleet Protector faster: +50%"
+],
+"cuts_corners": [
+"Naval Damage: +20%",
+"Naval Defense: −10%"
+],
+"desert_fox": [
+"Desert: Movement +5%, Attack +10%, Defense +10%"
+],
+"destroyer_leader": [
+"Destroyer: Naval Damage +10%, Torpedo hit chance +10%, Navy visibility −10%"
+],
+"destroyer_officer": [
+"Learns Blockade Runner faster: +50%",
+"Learns Fleet Protector faster: +50%"
+],
+"dive_bomber": [
+"Close Air Support (Carrier): Ground attack factor +10%, Air Support Mission Efficiency +10%"
+],
+"engineer_officer": [
+"Learns Engineer faster: +100%",
+"Attack gained on promotion: +100%",
+"Planning gained on promotion: +100%"
+],
+"expeditionary_leader_trait": [
+"Max commander army size: −18",
+"Max army group size: −4",
+"Division Attack on Non-Core territory: +10%",
+"Division Defense on Non-Core territory: +10%"
+],
+"expert_improviser": [
+"Desert: Movement +10%",
+"Hills: Movement +10%",
+"Forest: Movement +10%",
+"Mountain: Movement +10%",
+"Plains: Movement +10%",
+"Urban: Movement +10%",
+"Jungle: Movement +10%",
+"Marsh: Movement +10%",
+"Unlocks the ability Makeshift Bridges"
+],
+"fighter_director": [
+"Fighter sortie efficiency: +20%"
+],
+"fleet_protector": [
+"Screening Efficiency: +20%"
+],
+"flight_deck_manager": [
+"Sortie efficiency: +10%"
+],
+"fly_swatter": [
+"Naval AA attack: +10%"
+],
+"fortress_buster": [
+"Fort: Attack +15%",
+"Unlocks the ability Siege Artillery"
+],
+"gentlemanly": [
+"Enemy retreat chance: +20%",
+"Navy Organization: +5"
+],
+"green_water_expert": [
+"Shallow Sea: Attack +10%, Movement +10%, Defense +10%"
+],
+"ground_pounder": [
+"Shore bombardment bonus: +25%"
+],
+"guerilla_fighter": [
+"Entrenchment speed: +50%"
+],
+"gunnery_expert": [
+"Learns Ironside faster: +100%"
+],
+"harsh_leader": [
+"Attack: +1",
+"Division Recovery Rate: −10%",
+"Attack gained on promotion: +100%",
+"Logistics gained on promotion: +100%"
+],
+"heavy_ship_officer": [
+"Learns Superior Tactician faster: +50%",
+"Learns Ironside faster: +50%"
+],
+"hill_fighter": [
+"Hills: Movement +5%, Attack +10%, Defense +10%"
+],
+"hunter_killer": [
+"Submarine Detection: +20%",
+"Submarine Attack: +10%"
+],
+"infantry_expert": [
+"Infantry Attack: +10%"
+],
+"infantry_leader": [
+"Infantry Defense: +13%"
+],
+"infantry_officer": [
+"Learns Infantry Leader faster: +100%",
+"Defense gained on promotion: +100%",
+"Planning gained on promotion: +100%"
+],
+"inflexible_strategist": [
+"Defense: +1",
+"Logistics: +1",
+"Defense gained on promotion: +100%",
+"Logistics gained on promotion: +100%"
+],
+"inshore_fighter": [
+"Fjords and Archipelagos: Attack +10%, Movement +10%, Defense +10%"
+],
+"invader_ii": [
+"Extra marine supply grace: +240",
+"Unlocks the ability Naval Assault Plan"
+],
+"ironside": [
+"Capital Ship Armor: +10%"
+],
+"irregulars_officer": [
+"Irregular Infantry Attack: +5%",
+"Cavalry Speed: +5%",
+"Camelry Speed: +5%",
+"Non-Combat Out of Supply Penalties: −10%",
+"Desert: Movement +10%",
+"Attack gained on promotion: +100%",
+"Planning gained on promotion: +100%"
+],
+"jaeger": [
+"Learns Trickster faster: +100%",
+"Learns Winter Specialist faster: +100%",
+"Learns Commando faster: +100%",
+"Learns Swamp Fox faster: +100%",
+"Learns Ranger faster: +100%",
+"Learns Hill Fighter faster: +100%",
+"Learns Urban Assault Specialist faster: +100%",
+"Learns Invader faster: +100%",
+"Equipment Capture Ratio: +3%",
+"Attack gained on promotion: +100%",
+"Logistics gained on promotion: +100%"
+],
+"jungle_rat": [
+"Jungle: Movement +5%, Attack +10%, Defense +10%"
+],
+"lancer": [
+"Torpedo screen penetration: +25%"
+],
+"loading_drill_master": [
+"Torpedo cooldown: −25%"
+],
+"lone_wolf": [
+"Enemy fleet size penalty: +10%"
+],
+"marksman": [
+"Chance to score Critical Hit: +10%"
+],
+"media_personality": [
+"Army reassignment duration: +100%",
+"Attack gained on promotion: +100%",
+"Defense gained on promotion: +100%"
+],
+"militias_officer": [
+"Militia Defense: +5%",
+"Militia Speed: +5%",
+"Militia Organization: +5%",
+"Defense gained on promotion: +100%",
+"Planning gained on promotion: +100%"
+],
+"mine_craft": [
+"Naval minelaying efficiency: +25%",
+"Naval minesweeping efficiency: +25%",
+"Naval mines avoidance: +25%"
+],
+"naval_invader": [
+"Amphibious Invasion Speed: +30%",
+"Invasion preparation: −30%"
+],
+"naval_liason": [
+"Shore bombardment bonus: +25%"
+],
+"naval_lineage": [
+"Retreat Decision Chance: −25%",
+"Ships at battle start: +25%"
+],
+"navy_career_officer": [
+"Experience gain: +10%"
+],
+"navy_media_personality": [
+"Attack when in combat alongside the Pride of the Fleet: +10%",
+"Defense when in combat alongside the Pride of the Fleet: +10%"
+],
+"old_guard": [
+"Max Entrenchment: +1",
+"Experience gain: −25%"
+],
+"old_guard_navy": [
+"Experience gain: −25%"
+],
+"organizer": [
+"Planning Speed: +10%"
+],
+"panzer_expert": [
+"Armor Defense: +10%",
+"Increased chance of executing Blitz and Encirclement tactics"
+],
+"panzer_leader": [
+"Armor speed: +5%",
+"Armor Attack: +16%",
+"Attack gained on promotion: +200%"
+],
+"paratrooper": [
+"Extra paratrooper supply grace: +240",
+"Unlocks the ability Glider Planes"
+],
+"politically_connected": [
+"Experience gain: −10%",
+"Promotion Cost: −50%",
+"Planning gained on promotion: +100%",
+"Logistics gained on promotion: +100%"
+],
+"promoted_from_the_ranks": [
+"Promotion Cost: +50%",
+"Planning Speed: +10%",
+"Reconnaissance: +5%"
+],
+"ranger": [
+"Forest: Movement +5%, Attack +10%, Defense +10%"
+],
+"safety_first": [
+"Critical receive chance: −25%"
+],
+"scavenger": [
+"Equipment Capture Ratio: +3%"
+],
+"search_pattern_expert": [
+"Spotting Speed: +20%"
+],
+"seawolf": [
+"Submarine Attack: +20%"
+],
+"silent_hunter": [
+"Torpedo reveal chance: −15%"
+],
+"skilled_staffer": [
+"Max commander army size: +6",
+"Logistics gained on promotion: +200%"
+],
+"skirmisher": [
+"Unlocks the ability Probing Attack"
+],
+"smoke_screen_expert": [
+"Retreat Decision Chance: +25%"
+],
+"spotter": [
+"Spotting Speed: +10%"
+],
+"submarine_officer": [
+"Learns Sea Wolf faster: +50%",
+"Learns Spotter faster: +50%"
+],
+"superior_tactician": [
+"Positioning: +25%"
+],
+"swamp_fox": [
+"Marsh: Movement +5%, Attack +10%, Defense +10%"
+],
+"torpedo_bomber": [
+"Naval Bomber (Carrier): Naval Bombing +10%, Naval Mission Efficiency +10%, Naval Targeting +5%"
+],
+"torpedo_expert": [
+"Torpedo hit chance: +10%"
+],
+"trait_cautious": [
+"Leader default proximity offset: +1",
+"Planning Speed: −20%",
+"Chance to get wounded in combat: −50%",
+"Defense gained on promotion: +100%",
+"Logistics gained on promotion: +100%"
+],
+"trait_engineer": [
+"River: Attack +5%",
+"Fort: Attack +10%"
+],
+"trait_mountaineer": [
+"Mountain: Movement +5%, Attack +10%, Defense +10%"
+],
+"trait_reckless": [
+"Leader default proximity offset: −1",
+"Planning Speed: +20%",
+"Chance to get wounded in combat: +50%",
+"Attack gained on promotion: +100%",
+"Defense gained on promotion: −100%",
+"Planning gained on promotion: +100%"
+],
+"trickster": [
+"Reconnaissance: +25%"
+],
+"urban_assault_specialist": [
+"Urban: Movement +5%, Attack +10%, Defense +10%"
+],
+"winter_expert": [
+"Cold acclimatization gain factor: +40%"
+],
+"winter_specialist": [
+"Winter Attrition: −50%"
+]
+},
+"country": {
+"agrarian_nationalist": [
+"Political Power Gain: +5%",
+"Max Factories in a State: +10%",
+"Consumer Goods Factories factor: −10%"
+],
+"agrarian_old_guard": [
+"Monthly Population: +10%",
+"Trade Laws Cost: +10%"
+],
+"agricultural_capitalist": [
+"Consumer Goods Factories factor: −15%",
+"Daily Support for Unaligned: +0.05"
+],
+"air_air_combat_training_1": [
+"Ace generation chance: +5%",
+"Command cap increase: +10"
+],
+"air_air_combat_training_2": [
+"Ace generation chance: +10%",
+"Command cap increase: +20"
+],
+"air_air_combat_training_3": [
+"Ace generation chance: +15%",
+"Command cap increase: +30"
+],
+"air_air_superiority_2": [
+"Air Superiority Mission Efficiency: +10%",
+"Command cap increase: +20"
+],
+"air_air_superiority_3": [
+"Air Superiority Mission Efficiency: +15%",
+"Command cap increase: +30"
+],
+"air_airborne_1": [
+"Organization After Paradropping: +120%",
+"Paratrooper aa defense: +10%",
+"Command cap increase: +10"
+],
+"air_airborne_2": [
+"Organization After Paradropping: +180%",
+"Paratrooper aa defense: +15%",
+"Command cap increase: +20"
+],
+"air_bomber_interception_1": [
+"Interception Mission Efficiency: +5%",
+"Command cap increase: +10"
+],
+"air_bomber_interception_2": [
+"Interception Mission Efficiency: +10%",
+"Command cap increase: +20"
+],
+"air_chief_all_weather_1": [
+"Bad Weather Penalty: −10%",
+"Air Experience Gain: +0.2",
+"Command cap increase: +10"
+],
+"air_chief_all_weather_2": [
+"Bad Weather Penalty: −20%",
+"Air Experience Gain: +0.3",
+"Command cap increase: +20"
+],
+"air_chief_ground_support_1": [
+"Air Superiority: +5%",
+"Air Experience Gain: +0.2",
+"Command cap increase: +10"
+],
+"air_chief_ground_support_2": [
+"Air Superiority: +10%",
+"Air Experience Gain: +0.3",
+"Command cap increase: +20"
+],
+"air_chief_ground_support_3": [
+"Air Superiority: +15%",
+"Air Experience Gain: +0.4",
+"Command cap increase: +30"
+],
+"air_chief_night_operations_1": [
+"Night Operations Penalty: −10%",
+"Air Experience Gain: +0.2",
+"Command cap increase: +10"
+],
+"air_chief_night_operations_2": [
+"Night Operations Penalty: −20%",
+"Air Experience Gain: +0.3",
+"Command cap increase: +20"
+],
+"air_chief_old_guard": [
+"Air Experience Gain: +0.3",
+"Maximum Command Power Increase: +10"
+],
+"air_chief_reform_1": [
+"Air Experience Gain: +0.2",
+"Air Experience Gain: +5%",
+"Command cap increase: +10"
+],
+"air_chief_reform_2": [
+"Air Experience Gain: +0.3",
+"Air Experience Gain: +10%",
+"Command cap increase: +20"
+],
+"air_chief_reform_3": [
+"Air Experience Gain: +0.4",
+"Air Experience Gain: +15%",
+"Command cap increase: +30"
+],
+"air_chief_safety_1": [
+"Air Accidents Chance: −5%",
+"Air Experience Gain: +0.2",
+"Command cap increase: +10"
+],
+"air_chief_safety_2": [
+"Air Accidents Chance: −10%",
+"Air Experience Gain: +0.3",
+"Command cap increase: +20"
+],
+"air_close_air_support_2": [
+"Air Support Mission Efficiency: +10%",
+"Ground attack factor: +5%",
+"Command cap increase: +20"
+],
+"air_close_air_support_3": [
+"Air Support Mission Efficiency: +15%",
+"Ground attack factor: +8%",
+"Command cap increase: +30"
+],
+"air_naval_strike_1": [
+"Naval Bombing: +2%",
+"Naval Targeting: +2%",
+"Naval Agility: +2%",
+"Command cap increase: +10"
+],
+"air_naval_strike_2": [
+"Naval Bombing: +3%",
+"Naval Targeting: +3%",
+"Naval Agility: +3%",
+"Command cap increase: +20"
+],
+"air_pilot_training_2": [
+"Air Wing Training Experience Gain: +10%",
+"Command cap increase: +20"
+],
+"air_pilot_training_3": [
+"Air Wing Training Experience Gain: +15%",
+"Command cap increase: +30"
+],
+"air_strategic_bombing_2": [
+"Air strategic bomber defence: +2%",
+"Strategic Bombing: +5%",
+"Command cap increase: +20"
+],
+"air_tactical_bombing_2": [
+"Ground support: +15%",
+"Command cap increase: +20"
+],
+"air_warfare_theorist": [
+"Air Doctrine Cost: −10%"
+],
+"ambitious_union_boss": [
+"Daily Communism Support: +0.1",
+"Consumer Goods Factories factor: −15%"
+],
+"anarcho_communist_council": [
+"Surrender Limit: +20%",
+"Division Defense on core territory: +15%",
+"Stability: −5%",
+"Mobilization speed: +5%"
+],
+"anti_communist": [
+"Acceptance of Communist Diplomacy: −50",
+"Daily Communism Support: −0.01"
+],
+"anti_communist_crusader": [
+"Stability: +5%",
+"Daily Communism Support: −0.1"
+],
+"anti_soviet_socialist": [
+"Political Power Gain: +5%",
+"War Support: +5%",
+"Acceptance of Democratic Diplomacy: +40",
+"Ideology drift defense: +10%"
+],
+"anti_unionist_pure_anarchist": [
+"Consumer Goods Factories factor: −5%",
+"Construction Speed: +10%",
+"Free repair: +15%"
+],
+"appeaser": [
+"War Support: −5%",
+"Stability: +10%"
+],
+"armaments_organizer": [
+"Civilian to Military Factory conversion cost: −20%",
+"Supply Hub construction speed: +10%"
+],
+"army_CombinedArms_2": [
+"Motorized Attack: +10%",
+"Motorized Defense: +10%",
+"Mechanized Attack: +10%",
+"Mechanized Defense: +10%",
+"Command cap increase: +20"
+],
+"army_armored_1": [
+"Armor Attack: +5%",
+"Armor Defense: +5%",
+"Command cap increase: +10"
+],
+"army_armored_2": [
+"Armor Attack: +10%",
+"Armor Defense: +10%",
+"Command cap increase: +20"
+],
+"army_armored_3": [
+"Armor Attack: +15%",
+"Armor Defense: +15%",
+"Command cap increase: +30"
+],
+"army_artillery_1": [
+"Artillery Attack: +10%",
+"Artillery Defense: +5%",
+"Command cap increase: +10"
+],
+"army_artillery_2": [
+"Artillery Attack: +15%",
+"Artillery Defense: +10%",
+"Command cap increase: +20"
+],
+"army_artillery_3": [
+"Artillery Attack: +20%",
+"Artillery Defense: +15%",
+"Command cap increase: +30"
+],
+"army_cavalry_1": [
+"Cavalry Attack: +5%",
+"Cavalry Defense: +5%",
+"Command cap increase: +10"
+],
+"army_cavalry_2": [
+"Cavalry Attack: +10%",
+"Cavalry Defense: +10%",
+"Command cap increase: +20"
+],
+"army_cavalry_3": [
+"Cavalry Attack: +15%",
+"Cavalry Defense: +15%",
+"Command cap increase: +30"
+],
+"army_chief_army_high_command": [
+"Artillery Attack: +15%",
+"Artillery Defense: +10%",
+"Max planning factor: +10%",
+"Army Experience Gain: +0.3",
+"Command cap increase: +20"
+],
+"army_chief_defensive_1": [
+"Division Defense: +5%",
+"Army Experience Gain: +0.2",
+"Command cap increase: +10"
+],
+"army_chief_defensive_2": [
+"Division Defense: +10%",
+"Army Experience Gain: +0.3",
+"Command cap increase: +20"
+],
+"army_chief_defensive_3": [
+"Division Defense: +15%",
+"Army Experience Gain: +0.4",
+"Command cap increase: +30"
+],
+"army_chief_drill_1": [
+"Division training time: −5%",
+"Army Experience Gain: +0.2",
+"Command cap increase: +10"
+],
+"army_chief_drill_2": [
+"Division training time: −10%",
+"Army Experience Gain: +0.3",
+"Command cap increase: +20"
+],
+"army_chief_drill_3": [
+"Division training time: −15%",
+"Army Experience Gain: +0.4",
+"Command cap increase: +30"
+],
+"army_chief_entrenchment_1": [
+"Max Entrenchment: +3",
+"Mobilization speed: −2%",
+"Army Experience Gain: +0.2",
+"Command cap increase: +10"
+],
+"army_chief_maneuver_1": [
+"Divisions speed: +5%",
+"Army Experience Gain: +0.2",
+"Command cap increase: +10"
+],
+"army_chief_maneuver_2": [
+"Divisions speed: +10%",
+"Army Experience Gain: +0.3",
+"Command cap increase: +20"
+],
+"army_chief_maneuver_3": [
+"Divisions speed: +15%",
+"Army Experience Gain: +0.4",
+"Command cap increase: +30"
+],
+"army_chief_morale_1": [
+"Non-Combat Out of Supply Penalties: −3%",
+"Army Experience Gain: +0.2",
+"Command cap increase: +10"
+],
+"army_chief_morale_2": [
+"Non-Combat Out of Supply Penalties: −6%",
+"Army Experience Gain: +0.3",
+"Command cap increase: +20"
+],
+"army_chief_morale_3": [
+"Non-Combat Out of Supply Penalties: −9%",
+"Army Experience Gain: +0.4",
+"Command cap increase: +30"
+],
+"army_chief_offensive_1": [
+"Division Attack: +5%",
+"Army Experience Gain: +0.2",
+"Command cap increase: +10"
+],
+"army_chief_offensive_2": [
+"Division Attack: +10%",
+"Army Experience Gain: +0.3",
+"Command cap increase: +20"
+],
+"army_chief_offensive_3": [
+"Division Attack: +15%",
+"Army Experience Gain: +0.4",
+"Command cap increase: +30"
+],
+"army_chief_old_guard": [
+"Army Experience Gain: +0.2",
+"Maximum Command Power Increase: +10"
+],
+"army_chief_organizational_1": [
+"Division Organization: +4%",
+"Army Experience Gain: +0.2",
+"Command cap increase: +10"
+],
+"army_chief_organizational_2": [
+"Division Organization: +8%",
+"Army Experience Gain: +0.3",
+"Command cap increase: +20"
+],
+"army_chief_planning_1": [
+"Planning Speed: +5%",
+"Army Experience Gain: +0.2",
+"Command cap increase: +10"
+],
+"army_chief_planning_2": [
+"Planning Speed: +10%",
+"Army Experience Gain: +0.3",
+"Command cap increase: +20"
+],
+"army_chief_reform_1": [
+"Army Experience Gain: +0.2",
+"Army Experience Gain: +5%",
+"Command cap increase: +10"
+],
+"army_chief_reform_2": [
+"Army Experience Gain: +0.3",
+"Army Experience Gain: +10%",
+"Command cap increase: +20"
+],
+"army_chief_reform_3": [
+"Army Experience Gain: +0.4",
+"Army Experience Gain: +15%",
+"Command cap increase: +30"
+],
+"army_commando_1": [
+"Special forces Attack: +5%",
+"Special Forces Cap: +3",
+"Command cap increase: +10"
+],
+"army_commando_2": [
+"Special forces Attack: +10%",
+"Special Forces Cap: +6",
+"Command cap increase: +20"
+],
+"army_commando_3": [
+"Special forces Attack: +15%",
+"Special Forces Cap: +10",
+"Command cap increase: +30"
+],
+"army_concealment_1": [
+"Enemy Air Support: −5%",
+"Command cap increase: +10"
+],
+"army_concealment_2": [
+"Enemy Air Support: −10%",
+"Command cap increase: +20"
+],
+"army_entrenchment_1": [
+"Entrenchment speed: +8%",
+"Command cap increase: +10"
+],
+"army_entrenchment_2": [
+"Entrenchment speed: +16%",
+"Command cap increase: +20"
+],
+"army_entrenchment_3": [
+"Entrenchment speed: +24%",
+"Command cap increase: +30"
+],
+"army_german_ground_commander": [
+"Amphibious Invasion Speed: +10%",
+"Organization After Paradropping: +10%",
+"Infantry Attack: +5%",
+"Maximum Command Power Increase: +60",
+"Command cap increase: +30"
+],
+"army_guerilla_organizer_1": [
+"Planning Speed: +2%",
+"Entrenchment speed: +2%",
+"Supply Consumption: −2%",
+"Non-Combat Out of Supply Penalties: −2%",
+"Resistance Growth Speed in our states occupied by the enemy: +5%"
+],
+"army_guerilla_organizer_2": [
+"Planning Speed: +4%",
+"Entrenchment speed: +4%",
+"Supply Consumption: −4%",
+"Non-Combat Out of Supply Penalties: −4%",
+"Resistance Growth Speed in our states occupied by the enemy: +10%"
+],
+"army_infantry_1": [
+"Infantry Attack: +5%",
+"Infantry Defense: +10%",
+"Command cap increase: +10"
+],
+"army_infantry_2": [
+"Infantry Attack: +10%",
+"Infantry Defense: +15%",
+"Command cap increase: +20"
+],
+"army_infantry_3": [
+"Infantry Attack: +15%",
+"Infantry Defense: +20%",
+"Command cap increase: +30"
+],
+"army_logistics_1": [
+"Attrition: −4%",
+"Command cap increase: +10"
+],
+"army_logistics_2": [
+"Attrition: −8%",
+"Command cap increase: +20"
+],
+"army_radio_intelligence_2": [
+"Civilian Intelligence: +6%",
+"Army Intelligence: +6%",
+"Navy Intelligence: +6%",
+"Air Intelligence: +6%",
+"Initiative: +4%",
+"Command cap increase: +20"
+],
+"army_regrouping_1": [
+"Division Recovery Rate: +4%",
+"Command cap increase: +10"
+],
+"army_regrouping_2": [
+"Division Recovery Rate: +8%",
+"Command cap increase: +20"
+],
+"army_regrouping_3": [
+"Division Recovery Rate: +12%",
+"Command cap increase: +30"
+],
+"assault_avaition": [
+"New operational integrity mastery gain: +15%"
+],
+"backroom_backstabber": [
+"Subversive activities cost: −25%",
+"Ideology drift defense: +25%",
+"Justify war goal time: −10%"
+],
+"backroom_windbag": [
+"Political Power Gain: +2%",
+"Ideology drift defense: +5%"
+],
+"blitzkrieg_theorist": [
+"Armor technology: Maximum speed +10%",
+"New mobile warfare mastery gain: +15%"
+],
+"captain_of_industry": [
+"Civilian Factory construction speed: +10%",
+"Infrastructure construction speed: +10%",
+"Railway construction speed: +10%",
+"Refinery construction speed: +10%"
+],
+"close_air_support_proponent": [
+"New battlefield support mastery gain: +15%"
+],
+"collectivization_specialist": [
+"Factory Output: +5%"
+],
+"communist_council_trait": [
+"Ideology drift defense: +20%",
+"Division Attack on core territory: +10%",
+"Political Power Gain: +10%"
+],
+"communist_revolutionary": [
+"Daily Communism Support: +0.1"
+],
+"compassionate_gentleman": [
+"Improve relations opinion: +25%",
+"Compliance Growth Speed: +2%",
+"Resistance Target: −5%",
+"Stability: +5%"
+],
+"conservative_grandee": [
+"Political Power Gain: +5%",
+"Political Advisor Cost: −10%"
+],
+"conservative_nationalist": [
+"Stability: +10%",
+"Infrastructure construction speed: +20%"
+],
+"constitutional_philosopher": [
+"Political Power Gain: +10%",
+"Stability: +10%"
+],
+"cossack_ataman": [
+"Justify war goal time: −25%",
+"Generate wargoal tension: −50%",
+"Cavalry Attack: +15%",
+"Cavalry Defense: +15%"
+],
+"council_of_theorists": [
+"Army Experience Gain: +0.03",
+"Air Experience Gain: +0.03",
+"Naval Experience Gain: +0.03",
+"Land Doctrine Cost: −5%",
+"Air Doctrine Cost: −5%",
+"Naval Doctrine Cost: −5%"
+],
+"dealbroker": [
+"Trade Laws Cost: −25%",
+"Conscription Laws Cost: −25%",
+"Economy Laws Cost: −25%"
+],
+"democratic_council_trait": [
+"Recruitable Population: +2%",
+"Recruitable Population Factor: +10%",
+"Daily Democracy Support: +0.05"
+],
+"democratic_reformer": [
+"Daily Democracy Support: +0.1"
+],
+"devoted_communist": [
+"Factory Output: +10%",
+"Resistance Activity Chance: −10%",
+"Compliance gain: +0.05"
+],
+"dive_bomber": [
+"Close Air Support: Air ground attack +10%",
+"Air Doctrine Cost: −10%"
+],
+"eager_collaborator": [
+"Max volunteer force divisions: +2",
+"Improve relations maintain cost: −100%",
+"Acceptance of Fascist Diplomacy: +75"
+],
+"economic_organizer": [
+"Stability: +5%",
+"Consumer Goods Factories factor: −15%"
+],
+"economist": [
+"Production Efficiency Cap: +5%",
+"Consumer Goods Factories factor: −5%"
+],
+"editor": [
+"Political Power Gain: +5%",
+"Stability: +5%"
+],
+"education_reformer": [
+"Research Speed: +5%"
+],
+"experienced_insurgent": [
+"War Support: +15%",
+"Maximum Command Power Increase: +25",
+"Daily Command Power Gain Multiplier: +25%",
+"Defensive war stability: +40%"
+],
+"face_licker": [
+"Political Power Gain: −10%",
+"War Support: +5%",
+"Recruitable Population: +1%"
+],
+"fascist_council_trait": [
+"Attack against major countries: +20%",
+"Divisions speed: +10%",
+"Construction Speed: +10%"
+],
+"fascist_demagogue": [
+"Daily Fascism Support: +0.1"
+],
+"finance_graduate": [
+"Consumer Goods Factories factor: −10%"
+],
+"financial_expert": [
+"Consumer Goods Factories factor: −15%"
+],
+"fortification_armchair_general": [
+"Land Fort construction speed: +10%",
+"Coastal Fort construction speed: +10%",
+"Anti Air construction speed: +10%"
+],
+"fortification_engineer": [
+"Land Fort construction speed: +20%",
+"Coastal Fort construction speed: +20%",
+"Anti Air construction speed: +20%"
+],
+"freedom_fighter": [
+"Stability: +25%",
+"War Support: +15%",
+"Division Defense on core territory: +10%"
+],
+"grand_battle_plan_expert": [
+"Grand battleplan mastery gain: +15%"
+],
+"grand_fleet_proponent": [
+"New fleet in being mastery gain: +15%"
+],
+"harsh_propagandist": [
+"Daily Fascism Support: +0.1",
+"Daily Support for Unaligned: +0.05",
+"Offensive war stability: +15%"
+],
+"hawk": [
+"War Support: +10%",
+"Stability: −5%",
+"Justify war goal time: −10%"
+],
+"head_of_intelligence": [
+"Operative slots: +1",
+"Agency upgrade time: −15%"
+],
+"humanist": [
+"War Support: −5%",
+"Civilian Intelligence: +15%",
+"Political Power Gain: +15%"
+],
+"ideological_crusader": [
+"Same ideology monthly opinion: +100%",
+"Party popularity stability: +10%"
+],
+"industry_reformer": [
+"Civilian Factory construction speed: +10%",
+"Infrastructure construction speed: +5%",
+"Consumer Goods Factories factor: −10%"
+],
+"leftist_intellectual": [
+"Daily Communism Support: +0.05",
+"Acceptance of Communist Diplomacy: +25",
+"Research Speed: +5%"
+],
+"liberal_journalist": [
+"Daily Democracy Support: +0.05",
+"Political Power Gain: +10%"
+],
+"liberal_professor": [
+"Daily Democracy Support: +0.05",
+"Political Power Gain: +10%",
+"Research Speed: +2%"
+],
+"lieutenant_of_industry": [
+"Civilian Factory construction speed: +5%",
+"Infrastructure construction speed: +5%",
+"Railway construction speed: +5%",
+"Refinery construction speed: +5%"
+],
+"little_rocket_man": [],
+"marxist_fundamentalist": [
+"Daily Communism Support: +0.1",
+"Stability: +15%"
+],
+"marxist_philosopher": [
+"Daily Communism Support: +0.05",
+"Political Power Gain: +10%",
+"Research Speed: +5%"
+],
+"mass_assault_expert": [
+"Mass assault mastery gain: +15%"
+],
+"mastermind_code_cracker": [
+"Decryption Power: +15"
+],
+"military_theorist": [
+"Land Doctrine Cost: −10%"
+],
+"minister_of_ecclesiastical_affairs": [
+"Research Speed: +6%"
+],
+"mobile_warfare_expert": [
+"New mobile warfare mastery gain: +15%"
+],
+"modernizer_and_diplomat": [
+"Justify war goal time on us: +25%",
+"Declare war tension on us: +10%",
+"Research Speed: +2%",
+"Political Power Gain: +5%"
+],
+"national_integralist": [
+"Political Power Gain: +15%",
+"Weekly Stability: +0.1%"
+],
+"naval_aviation_pioneer": [
+"New base strike mastery gain: +15%"
+],
+"naval_theorist": [
+"Naval Doctrine Cost: −10%"
+],
+"navy_amphibious_assault_2": [
+"Amphibious Invasion Speed: +10%",
+"Command cap increase: +20"
+],
+"navy_amphibious_assault_3": [
+"Amphibious Invasion Speed: +15%",
+"Command cap increase: +30"
+],
+"navy_anti_submarine_1": [
+"Submarine Detection: +10%",
+"Command cap increase: +10"
+],
+"navy_anti_submarine_2": [
+"Submarine Detection: +15%",
+"Command cap increase: +20"
+],
+"navy_capital_ship_1": [
+"Capital Ship Attack: +5%",
+"Capital Ship Armor: +5%",
+"Command cap increase: +10"
+],
+"navy_capital_ship_2": [
+"Capital Ship Attack: +10%",
+"Capital Ship Armor: +10%",
+"Command cap increase: +20"
+],
+"navy_carrier_2": [
+"Sortie efficiency: +15%",
+"Command cap increase: +20"
+],
+"navy_chief_commerce_raiding_1": [
+"Convoy Raiding Efficiency: +10%",
+"Naval Experience Gain: +0.2",
+"Command cap increase: +10"
+],
+"navy_chief_commerce_raiding_2": [
+"Convoy Raiding Efficiency: +15%",
+"Naval Experience Gain: +0.3",
+"Command cap increase: +20"
+],
+"navy_chief_commerce_raiding_3": [
+"Convoy Raiding Efficiency: +20%",
+"Naval Experience Gain: +0.4",
+"Command cap increase: +30"
+],
+"navy_chief_decisive_battle_1": [
+"Capital Ship Attack: +5%",
+"Capital Ship Armor: +5%",
+"Screen Attack: +5%",
+"Screen Defense: +5%",
+"Naval Experience Gain: +0.2",
+"Command cap increase: +10"
+],
+"navy_chief_decisive_battle_2": [
+"Capital Ship Attack: +10%",
+"Capital Ship Armor: +10%",
+"Screen Attack: +10%",
+"Screen Defense: +10%",
+"Naval Experience Gain: +0.3",
+"Command cap increase: +20"
+],
+"navy_chief_maneuver_1": [
+"Naval Speed: +5%",
+"Naval Experience Gain: +0.2",
+"Command cap increase: +10"
+],
+"navy_chief_maneuver_2": [
+"Naval Speed: +10%",
+"Naval Experience Gain: +0.3",
+"Command cap increase: +20"
+],
+"navy_chief_naval_aviation_1": [
+"Navy carrier air attack: +3%",
+"Navy carrier air targetting: +3%",
+"Navy carrier air agility: +4%",
+"Naval Experience Gain: +0.2",
+"Command cap increase: +10"
+],
+"navy_chief_naval_aviation_2": [
+"Navy carrier air attack: +6%",
+"Navy carrier air targetting: +7%",
+"Navy carrier air agility: +8%",
+"Naval Experience Gain: +0.3",
+"Command cap increase: +20"
+],
+"navy_chief_naval_gunnery_designer_2": [
+"Light Gun hit chance: +0.2%",
+"Heavy Gun hit chance: +5%",
+"Capital Ship Attack: +10%",
+"Naval AA attack: +4%",
+"Shore bombardment bonus: +10%",
+"Naval Experience Gain: +0.3",
+"Command cap increase: +20"
+],
+"navy_chief_old_guard": [
+"Naval Experience Gain: +0.3",
+"Maximum Command Power Increase: +10"
+],
+"navy_chief_reform_1": [
+"Naval Experience Gain: +0.2",
+"Naval Experience Gain: +5%",
+"Command cap increase: +10"
+],
+"navy_chief_reform_2": [
+"Naval Experience Gain: +0.3",
+"Naval Experience Gain: +10%",
+"Command cap increase: +20"
+],
+"navy_chief_reform_3": [
+"Naval Experience Gain: +0.4",
+"Naval Experience Gain: +15%",
+"Command cap increase: +30"
+],
+"navy_fleet_logistics_2": [
+"Naval Max Range Factor: +10%",
+"Command cap increase: +20"
+],
+"navy_naval_air_defense_1": [
+"Naval AA attack: +8%",
+"Command cap increase: +10"
+],
+"navy_naval_air_defense_2": [
+"Naval AA attack: +15%",
+"Command cap increase: +20"
+],
+"navy_screen_1": [
+"Screen Attack: +5%",
+"Screen Defense: +10%",
+"Command cap increase: +10"
+],
+"navy_screen_2": [
+"Screen Attack: +10%",
+"Screen Defense: +15%",
+"Command cap increase: +20"
+],
+"navy_submarine_1": [
+"Submarine Attack: +10%",
+"Submarine Defense: +5%",
+"Command cap increase: +10"
+],
+"navy_submarine_2": [
+"Submarine Attack: +15%",
+"Submarine Defense: +10%",
+"Command cap increase: +20"
+],
+"nazi_sympathizer": [
+"Daily Fascism Support: +0.1",
+"Same ideology monthly opinion: +75%"
+],
+"noble_beurocrat": [
+"Stability: +5%",
+"Political Power Gain: +15%"
+],
+"non_aligned_council_trait": [
+"Division Attack on core territory: +5%",
+"Division Defense on core territory: +10%",
+"Mobilization speed: +15%",
+"Recruitable Population Factor: +10%"
+],
+"nuclear_enthusiast": [
+"Nuclear Research Special Projects Speed: +10%"
+],
+"old_figurehead": [
+"Political Power Gain: +15%"
+],
+"patriotic_socialist": [
+"Daily Communism Support: +0.05",
+"War Support: +10%"
+],
+"popular_figurehead": [
+"Stability: +15%"
+],
+"prince_of_terror": [
+"Damage to Garrisons: −25%",
+"Foreign subversive activites: −30%",
+"Non-core Manpower: +2%"
+],
+"quartermaster_general": [
+"Air Base construction speed: +15%",
+"Naval Base construction speed: +15%",
+"Rocket Site construction speed: +15%",
+"Radar Station construction speed: +15%",
+"Nuclear Reactor construction speed: +15%"
+],
+"red_army_organizer": [
+"Division Organization: +12%",
+"Army Experience Gain: +0.4",
+"Daily Communism Support: +0.1",
+"Command cap increase: +30"
+],
+"reluctant_interventionist": [
+"Stability: +5%",
+"Lend-lease tension limit: −20%",
+"Request lease tension: −20%"
+],
+"resolute_social_democrat": [
+"Stability: +5%",
+"Political Power Gain: +5%",
+"Daily Democracy Support: +0.1"
+],
+"retired_officer": [
+"War Support: +5%",
+"High Command Cost: −25%",
+"Air Chief Cost: −25%",
+"Army Chief Cost: −25%",
+"Navy Chief Cost: −25%"
+],
+"revolutionary_culture_minister": [
+"Daily Communism Support: +0.1",
+"Political Power Gain: +15%"
+],
+"revolutionary_poet": [
+"Daily Communism Support: +0.05",
+"Political Power Gain: +15%"
+],
+"right_industrialist": [
+"Daily Support for Unaligned: +0.05",
+"Civilian Factory construction speed: +10%",
+"Infrastructure construction speed: +10%",
+"Railway construction speed: +10%",
+"Refinery construction speed: +10%"
+],
+"royalist_bulldog": [
+"War Support: +10%",
+"Daily Support for Unaligned: +0.1",
+"Weekly War Support (Enemy Bombing): +0.1%"
+],
+"sanation_militarist": [
+"Daily Support for Unaligned: +0.05",
+"Land Doctrine Cost: −10%",
+"Army Experience Gain: +0.04"
+],
+"silent_workhorse": [
+"Political Power Gain: +15%"
+],
+"smooth_talking_charmer": [
+"Improve relations maintain cost: −50%",
+"Trade deal opinion factor: +10%",
+"Political Power Gain: +5%"
+],
+"social_reformer": [
+"Daily Democracy Support: +0.1",
+"Stability: +15%"
+],
+"socialist_economist": [
+"Consumer Goods Factories factor: −10%",
+"Production Efficiency Cap: +5%"
+],
+"socialist_journalist": [
+"Daily Communism Support: +0.05",
+"Political Power Gain: +5%",
+"Compliance gain: +0.02"
+],
+"socialist_justice": [
+"Daily Communism Support: +0.05",
+"Resistance Target: −5%"
+],
+"socialist_writer": [
+"Daily Communism Support: +0.1",
+"Recruitable Population Factor: +10%"
+],
+"soviet_economist": [
+"Consumer Goods Factories factor: −10%",
+"War Support: +5%",
+"Refinery construction speed: +15%",
+"Subversive activities cost: −5%"
+],
+"special_operations_specialist": [
+"Organization After Paradropping: +10%",
+"Paratrooper aa defense: +25%",
+"Supply Grace: +72"
+],
+"staunch_anti_fascist": [
+"Same ideology monthly opinion: +25%",
+"War Support: +10%",
+"Political Power Gain: +10%"
+],
+"staunch_monarchist": [
+"Daily Support for Unaligned: +0.1"
+],
+"staunch_stalinist": [
+"Factory Output: +10%",
+"Ideology drift defense: +15%"
+],
+"submarine_specialist": [
+"New convoy raiding mastery gain: +15%"
+],
+"superior_firepower_expert": [
+"Superior firepower mastery gain: +15%"
+],
+"surveyor": [
+"Divisions speed: +10%",
+"Initiative: +8%",
+"Reinforce Rate: +2%",
+"Command cap increase: +20"
+],
+"technocrat": [
+"Civilian Factory construction speed: +5%",
+"Research Speed: +5%"
+],
+"tenacious_negotiator": [
+"Political Power Gain: +10%",
+"Trade deal opinion factor: +25%"
+],
+"the_soldier_king": [
+"Daily Command Power Gain Multiplier: +5%",
+"Stability: +5%",
+"Army Experience Gain: +5%"
+],
+"traditionalist_theorist": [
+"Daily Support for Unaligned: +0.05",
+"Political Power Gain: +15%"
+],
+"veteran_communist": [
+"Stability: +5%",
+"Factory Output: +5%"
+],
+"veteran_minister": [
+"Army Experience Gain: +10%",
+"High Command Cost: −15%",
+"Maximum Command Power Increase: +20",
+"Daily Command Power Gain Multiplier: +10%"
+],
+"veteran_trade_unionist": [
+"Factory Output: +5%",
+"Construction Speed: +5%",
+"Stability: +5%",
+"Political Power Gain: −10%"
+],
+"victory_through_airpower": [
+"New strategic destruction mastery gain: +15%"
+],
+"voice_of_restraint": [
+"Daily Democracy Support: +0.05",
+"Stability: +10%"
+],
+"war_industrialist": [
+"Military Factory construction speed: +10%",
+"Dockyard construction speed: +10%",
+"Fuel Silo construction speed: +10%"
+],
+"war_profiteer": [
+"Military Factory construction speed: +5%",
+"Dockyard construction speed: +5%"
+],
+"well_renowned_military_theorist": [
+"Land Doctrine Cost: −15%",
+"Operations track mastery gain: +15%",
+"Army Experience Gain: +0.01"
+],
+"womens_rights_activist": [
+"Daily Democracy Support: +0.05",
+"Daily Political Power Gain: +0.05",
+"Stability: +5%"
+]
+}
 }
 }

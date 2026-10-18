@@ -144,6 +144,128 @@ def loc_names(V):
     return out
 
 
+# what a trait does, as the game's tooltips say it (2026-10-18, the author: "When looking at the traits for leaders and
+# such, you should be able to see the effects of the traits"): each modifier's name from its tooltip (`KEY_tt`, which
+# also says whether it is a percentage) or its MODIFIER_ key, the skills by name, terrain and unit bonuses under the
+# terrain's or unit's name; what isn't a number (who may have it, the AI's weights, xp) left out
+SKILLS = {"attack_skill": "Attack", "defense_skill": "Defense", "planning_skill": "Planning", "logistics_skill": "Logistics",
+          "maneuvering_skill": "Maneuvering", "coordination_skill": "Coordination", "skill": "Skill"}
+STATS = {"attack": "Attack", "defence": "Defense", "defense": "Defense", "movement": "Movement", "breakthrough": "Breakthrough",
+         "soft_attack": "Soft attack", "hard_attack": "Hard attack", "max_organisation": "Organization",
+         "max_strength": "Strength", "dig_in_speed_factor": "Entrenchment speed"}
+MODIFIER_BLOCKS = ("modifier", "non_shared_modifier", "corps_commander_modifier", "field_marshal_modifier")
+NOT_EFFECTS = {"type", "trait_type", "gui_row", "gui_column", "new_commander_weight", "allowed", "ai_will_do", "gain_xp",
+               "gain_xp_leader", "gain_xp_on_spotting", "trait_xp_factor", "show_in_combat", "prerequisites",
+               "mutually_exclusive", "parent", "any_parent", "all_parents", "num_parents_needed", "slot", "cost", "sprite",
+               "random", "specialist_advanced", "enable_ability", "ai_strategy", "name", "visible", "available",
+               "custom_prerequisite_tooltip", "on_add", "on_remove", "daily_effect", "unit_type", "override_effect_tooltip",
+               "command_power"}  # an advisor's command power cost, 0 in every trait
+
+
+def percent(k, v, fmt=None):
+    """whether the game shows a modifier as a percentage: its tooltip says so where it has one; otherwise the game's
+    habit, factors and multipliers and fractions are, flat amounts (`_flat`, a daily `_gain`, daily experience, whole
+    numbers such as skills or caps) are not"""
+    if k.endswith("_flat"):
+        return False
+    if fmt is not None:
+        return "%" in fmt
+    if k.endswith(("_factor", "_mult", "_chance")):
+        return True
+    if k.endswith(("_flat", "_gain", "_increase", "_cap")) or k.startswith("experience_gain") or k in SKILLS:
+        return False
+    try:
+        return abs(float(v)) < 1
+    except (TypeError, ValueError):
+        return False
+
+
+def trait_effects(V, loc, bodies, consts=None):
+    """{trait: [effect, ...]} for the traits in `bodies` ({trait: its block}); `consts`, the files' @constants"""
+    consts = consts or {}
+    abilities = {}  # ability -> its name's key
+    for f in sorted(glob.glob(str(V / "common/abilities/*.txt"))):
+        for top, _, body in read(f):
+            if top == "ability" and isinstance(body, list):
+                for k, _, v in body:
+                    if isinstance(v, list):
+                        abilities[k] = next((x for kk, _, x in v if kk == "name" and isinstance(x, str)), "")
+    def text(k):
+        t = loc.get(k)
+        for _ in range(3):  # $KEY$ inside a text: that key's text
+            if not t or "$" not in t:
+                break
+            t = re.sub(r"\$(\w+)\$", lambda m: loc.get(m[1], ""), t)
+        return re.sub(r"\s+", " ", re.sub(r"\$[^$]*\$|£", "", t or "")).strip(" :") or None
+
+    def label(k, v=None):
+        tt = loc.get(k + "_tt") or ""
+        m = re.search(r"\$(\w+)\$\s*:\s*\$RIGHT\|([^$]*)\$", tt)
+        name = text(m[1]) if m else None
+        for c in (f"MODIFIER_{k.upper()}", f"modifier_{k}", f"MODIFIERS_{k.upper()}", k.upper(), k):
+            name = name or text(c)
+        return name or k.replace("_", " ").removesuffix(" factor").capitalize(), percent(k, v, m[2] if m else None)
+
+    def num(v, pct):
+        try:
+            x = float(consts.get(v, v)) * (100 if pct else 1)
+        except ValueError:
+            return None
+        if x == 0:
+            return None
+        x = round(x, 1 if pct else 3)
+        s = f"{x:g}"
+        return ("+" if x > 0 else "\u2212") + s.lstrip("-") + ("%" if pct else "")
+
+    def mods(block, under=None):
+        out = []
+        for k, _, v in block:
+            if k is None or k in NOT_EFFECTS:
+                continue
+            if isinstance(v, list):  # a terrain's or a unit's own bonuses
+                inner = [f"{STATS.get(kk) or label(kk)[0]} {num(vv, True if kk in STATS else label(kk, vv)[1])}"
+                         for kk, _, vv in v if isinstance(vv, str) and num(vv, True) is not None]
+                if inner:
+                    out.append(f"{text(k) or k.replace('_', ' ').capitalize()}: " + ", ".join(inner))
+                continue
+            if k in ("custom_modifier_tooltip", "custom_effect_tooltip"):
+                if text(v):
+                    out.append(text(v))
+                continue
+            name, pct = label(k, consts.get(v, v))
+            val = num(v, pct)
+            if val is not None:
+                out.append(f"{name}: {val}")
+        return out
+
+    eff = {}
+    for t, body in bodies.items():
+        out = []
+        for k, _, v in body:
+            if k in SKILLS and isinstance(v, str):
+                if num(v, False):
+                    out.append(f"{SKILLS[k]}: {num(v, False)}")
+            elif k and k.endswith("_skill_factor") and k[:-7] in SKILLS and isinstance(v, str):
+                out.append(f"{SKILLS[k[:-7]]} gained on promotion: {num(v, True)}")
+            elif k in MODIFIER_BLOCKS and isinstance(v, list):
+                out += mods(v)
+            elif k == "sub_unit_modifiers" and isinstance(v, list):
+                out += mods(v)
+            elif k == "equipment_bonus" and isinstance(v, list):
+                out += mods([(kk, None, [x for x in vv if x[0] != "instant"]) for kk, _, vv in v if isinstance(vv, list)])
+            elif isinstance(v, str) and k not in NOT_EFFECTS and k not in SKILLS:
+                out += mods([(k, None, v)])
+            elif k in ("custom_modifier_tooltip", "custom_effect_tooltip"):
+                out += mods([(k, None, v)])
+            elif k == "trait_xp_factor" and isinstance(v, list):  # learns other traits faster
+                out += [f"Learns {text(kk) or kk.replace('_', ' ')} faster: {num(vv, True)}" for kk, _, vv in v
+                        if isinstance(vv, str) and num(vv, True)]
+            elif k == "enable_ability" and isinstance(v, str):
+                out.append(f"Unlocks the ability {text(abilities.get(v, '')) or v.replace('_', ' ')}")
+        eff[t] = [e for e in out if e]
+    return eff
+
+
 def traits(V, earth):
     """The base game's traits the Gazetteer offers its leaders (2026-10-15, the author: "add the option to add
     base-game traits to leaders"): generals' and admirals' from the generic unit leader traits (00_traits.txt; the
@@ -156,19 +278,27 @@ def traits(V, earth):
     # a country's own traits start with its tag in capitals (GER_..., trait_SPA_..., JUNO_...)
     earthy = lambda k: bool(re.match(r"(?:trait_)?[A-Z][A-Z0-9]{1,4}_", k))
     named = lambda k: bool(loc.get(k)) and "$" not in loc[k] and not earthy(k)
-    unit = {}
+    unit, bodies, consts = {}, {}, {}
     for f in sorted(glob.glob(str(V / "common/unit_leader/*.txt"))):
         for top, _, body in read(f):
+            if top and top.startswith("@") and isinstance(body, str):
+                consts[top] = body
             if top == "leader_traits" and isinstance(body, list):
                 for k, _, v in body:
                     if k and isinstance(v, list):
                         d = {kk: vv for kk, _, vv in v if isinstance(vv, str)}
                         unit[k] = (d.get("type"), d.get("trait_type"), Path(f).name == "00_traits.txt")
+                        bodies.setdefault(("unit", k), v)
     country = set()
     for f in sorted(glob.glob(str(V / "common/country_leader/*.txt"))):
         for top, _, body in read(f):
+            if top and top.startswith("@") and isinstance(body, str):
+                consts[top] = body
             if top == "leader_traits" and isinstance(body, list):
                 country |= {k for k, _, v in body if k and isinstance(v, list)}
+                for k, _, v in body:
+                    if k and isinstance(v, list):
+                        bodies.setdefault(("country", k), v)
     ruler, slots = {}, {s: {} for s, _ in ADVISOR_SLOTS}
     costs = {s: {} for s, _ in ADVISOR_SLOTS}
     who = {}            # (role or slot, trait) -> the countries whose characters have it
@@ -204,7 +334,7 @@ def traits(V, earth):
                if generic and t in kinds and tt in TRAIT_GROUPS and named(k)]
         order = list(TRAIT_GROUPS.values())
         return sorted(out, key=lambda x: (order.index(x[2]), x[1].lower()))
-    return {
+    out = {
         "general": unit_list({"land", "all", "corps_commander"}),
         "admiral": unit_list({"navy", "all"}),
         "ruler": sorted(([k, loc[k]] for k in ruler if named(k) and len(who[("ruler", k)]) > 1),
@@ -215,6 +345,12 @@ def traits(V, earth):
                               key=lambda x: x[1].lower()) for s, _ in ADVISOR_SLOTS},
         "defined": {"unit": sorted(unit), "country": sorted(country)},
     }
+    offered = {("unit", k) for r in ("general", "admiral") for k, *_ in out[r]} | \
+        {("country", k) for k, *_ in out["ruler"]} | {("country", k) for v in out["advisor"].values() for k, *_ in v}
+    eff = trait_effects(V, loc, {k: bodies[k] for k in offered}, consts)
+    out["effects"] = {"unit": {k: v for (w, k), v in sorted(eff.items()) if w == "unit"},
+                      "country": {k: v for (w, k), v in sorted(eff.items()) if w == "country"}}
+    return out
 
 
 # the base game's generic arms companies (common/military_industrial_organization/organizations/

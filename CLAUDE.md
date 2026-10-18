@@ -243,7 +243,7 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   states of 48 are the author's own lines (`gazetteer.finals`; 39 until 2026-10-17's map: Belekria, Krionik, Terreich,
   Gorbastan, Zukchiva, Sennheiser, Sminishia, West Sminishia and Hollier joined). The four great powers, one per
   ideology but Theocratic (author, 2026-10-17): Krionik (Monarchist), Kampf (Authoritarian), Sarkis (Communist),
-  Fraxhemark (Democratic); great in name for now (their industry is as drawn). Two starts, both on 1 January 2036. The Deco UI is v0.10.1 (`deco_ui/docs/VERSIONS.md`). The Gazetteer shows players a quick-start guide the first time they unlock a nation.
+  Fraxhemark (Democratic); great in name for now (their industry is as drawn). Two starts, both on 1 January 2036. The Deco UI is v0.10.1 (`deco_ui/docs/VERSIONS.md`). The Gazetteer shows players a quick-start guide the first time they unlock a nation, a state size guide (Cardonia's states the usual size, author 2026-10-18) before the province one, a button to hide suggestions, and what each base-game trait does.
   Rouental has test decisions for every kind of event and a test superevent (`test_events.py`).
   **A blank slate** (author, 2026-10-16: "is there a way you could reset any edits made thus far? I'd like a blank
   slate. The same goes for the mod. I'd like it just as it was on the last pdn, no extra rivers or internal borders"):
@@ -266,7 +266,9 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   out of the loading boxes and the battle plan bar, its icons off centre, "Other countries" off the edge of game
   setup, its details disorganised, the combat width and the commanders' skill off centre (white on tan), the fleet's
   names running over, a news story over its rule: all fixed in v0.10.1, not yet seen. Older findings, all fixed since: `deco_ui/docs/VERSIONS.md`. Not seen yet besides: the two starts, Vilna and Placeholdgrad. The Deco UI's checklist for the author is in `deco_ui/valsora_deco_ui/README.txt` (Things to check) and `deco_ui/CLAUDE.md` (section 10).
-- **Waiting on the author:** from the 2026-10-17 map: names for the new states (`dist/state_numbers_belekria.png`,
+- **Waiting on the author:** whose the motto flag is ("a safe haven amid the storm", Arabic on indigo, four hands in white
+  and gold: `dist/flag_proposals/safe_haven/`) and which version; whether to add the ~25 flags not in the flag file as
+  layers (`docs/MAP_VERSIONS.md`); from the 2026-10-17 map: names for the new states (`dist/state_numbers_belekria.png`,
   `_krionik`, `_terreich`, `_kurikia`, `_san_sierra`, `_sennheiser`, `_gorbastan_zukchiva`, and Cardonia's 5 and
   Hollier's 1 new ones), flags for Belekria's eight new republics, and the bump of Kieska's new land by Sombor that is
   painted as Crvenognjište (Kieska's, with a Crvenognjište core: `docs/NATIONS.md`); names for the 137 land strategic regions (`dist/region_names.md`, renumbered for the

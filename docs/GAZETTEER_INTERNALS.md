@@ -239,6 +239,35 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   Map tab's folded section), `renderSizes` (the ruler, drawn at every `draw()`: squares of side sqrt(px) x the zoom) and
   `sugArea` (a suggested area by the shoelace sum; a drawn state by the land `sugFill` kept) read them. Tested by
   `guide.py` (the step, the ruler's scale and zoom, the section's fold, an area's estimate).
+  **State sizes** (2026-10-18, the author: "More important than the guide for provinces is the guide for states"):
+  `sizes.states`, Cardonia's states' median land (map pixels) and quartiles, provinces per state, Rouental's and
+  Zukchiva's (`STATE_LARGE_AT`, states the author drew in Yastreovakia's north) median and provinces, the map's median
+  and count, and three pictures (`_state_pic`: a 240 x 154 window at 2x, each state its own tint so that no two
+  neighbours share one, the states' lines and the border two screen pixels dark, the provinces' one and faint; shown
+  smoothed, `.statepics`, since they are drawn larger than the card shows them). `stateGuideBody` is the guide's third
+  step (in the province step's place) and the Map tab's first folded section (`.statesec`, `app.ui.stateSizesOpen`;
+  the province one is `.provsec`); `renderSizes` draws two rows (`.szstates` over `.szprov`), each hidden with a
+  "zoom in / out" hint when its squares would be under 5 or over 150 px; `sugSizeNote` compares a suggestion with
+  Cardonia's quartiles first, then its provinces. Tested by `guide.py`.
+  **Hiding suggestions** (2026-10-18): `app.ui.hideSug`, the **Suggestions** button (`#sugbtn`, `renderSugBtn`, shown
+  when the nation has suggestions and the part isn't the world map): `renderPart` leaves the drawn states' fill out,
+  `draw()` the suggestions' lines and names, `sugAtScreen` and `sugStateAtScreen` find none; `showSuggestions(true)`
+  when the Suggest tool is chosen or a suggestion is shown (`selectSug`). Not remembered between visits. Tested by
+  `guide.py` (the map under one changes, a hidden one can't be clicked, the tool and Show bring them back).
+  **Trait effects** (2026-10-18, the author: "When looking at the traits for leaders and such, you should be able to see
+  the effects of the traits"): `traits.json` `effects` {unit: {trait: [text]}, country: {...}} for every trait offered
+  (`vanilla_sync.trait_effects`): skills (`attack_skill = 1` "Attack: +1", `*_skill_factor` "... gained on promotion"),
+  the modifier blocks (`modifier`, `non_shared_modifier`, `corps_commander_modifier`, `field_marshal_modifier`), a
+  terrain's or unit's own (`hills = { attack = 0.1 }` "Hills: Attack +10%"), `sub_unit_modifiers`, `equipment_bonus`,
+  country traits' top-level modifiers, `trait_xp_factor` ("Learns Spotter faster"), `enable_ability`, custom tooltips;
+  `@constants` of the files resolved; what is not an effect (`NOT_EFFECTS`: the AI's weights, xp, who may have it) left
+  out. A modifier's name is the one its tooltip (`KEY_tt`, `$NAME$: $RIGHT|+=%1$`) names, else `MODIFIER_KEY`,
+  `modifier_key`, `MODIFIERS_KEY`; it is a percentage where the tooltip says so, else by the game's habit
+  (`vanilla_sync.percent`: `_factor`, `_mult`, `_chance` and fractions are; `_flat`, daily `_gain`, experience and whole
+  numbers aren't). Only "Little Rocket Man" does nothing ("No effect in the game's files"). The page: `traitList`
+  gives the list its `.fx`, `traitFx`, `traitPicker` (each chosen trait's effects under the chips, `.teff`; the option's
+  and chip's title; a folded `.traitbook`, every trait of the list with **Add**, its fold kept in `app.ui.traitBook`).
+  Tested by `traits.py`.
   **Political advisors and companies** (author, 2026-10-15: "allow people to create political advisors and
   companies"): political advisors are advisors of `political_advisor` (`{role: "advisor", slot:
   "political_advisor"}`), in a section of their own. Companies are `co-<id>` entries of the `people` document (so the

@@ -1,9 +1,12 @@
 """The Gazetteer's quick-start guide (2026-10-16, the author's overnight list: "a short illustrated walkthrough shown
 the first time someone opens their nation"): six steps (the province sizes since 2026-10-17), shown once in a browser the first time a player unlocks a
 nation, never to the owner by itself; Next, Back, Skip, Escape; the Guide button shows it again; its map step follows
-the nation (map tools open, or the states not drawn yet); it fits a phone. And the province size guide (2026-10-17, the
-author: "maybe there should be a guide for province size?"): its step, the ruler beside the zoom buttons at the map's
-zoom, the Map tab's section, and a suggested area's size in provinces.
+the nation (map tools open, or the states not drawn yet); it fits a phone. And the size guides: the province's
+(2026-10-17, the author: "maybe there should be a guide for province size?") and the state's, which comes first
+(2026-10-18: "More important than the guide for provinces is the guide for states ... Cardonia's states are about the
+ideal size"): the state step, the ruler's two rows beside the zoom buttons at the map's zoom, the Map tab's two
+sections, and a suggested area's size against Cardonia's states and in provinces. And the Suggestions button, which
+hides what was drawn with Suggest (2026-10-18: "I wasn't able to see the provinces beneath them").
 
     python3 scripts/facts_export.py          # after a build: the map data the page reads
     python3 tests/gazetteer/guide.py         # PROBLEMS: none, screenshots in work/gazetteer_test/shots/
@@ -83,10 +86,11 @@ def friend(b, url, size, theme, pw, store):
         page.click("#guide-card button:has-text('Next')")
         time.sleep(0.1)
         page.screenshot(path=str(H.SHOTS / f"guide_{i + 2}_{label}.png"))
-        if i == 1:  # the province sizes: three pictures loaded, the card on the screen
+        if i == 1:  # the state sizes: three pictures loaded, the card on the screen
             text = page.inner_text("#guide-card")
-            check("How big is a province?" in text and "Cardonia" in text, f"{label}: the sizes step: {text[:120]}")
-            pics = page.evaluate("[...document.querySelectorAll('#guide-card .sizepics img')].map(i => i.complete && i.naturalWidth)")
+            check("How big is a state?" in text and "Cardonia" in text and "Zukchiva" in text and "provinces" in text,
+                  f"{label}: the sizes step: {text[:160]}")
+            pics = page.evaluate("[...document.querySelectorAll('#guide-card .statepics img')].map(i => i.complete && i.naturalWidth)")
             check(len(pics) == 3 and all(pics), f"{label}: the sizes step's pictures: {pics}")
             box = page.evaluate("(() => { const r = document.getElementById('guide-card').getBoundingClientRect(); return [r.left, r.top, r.right, r.bottom]; })()")
             check(box[0] >= 0 and box[1] >= 0 and box[2] <= size[0] and box[3] <= size[1], f"{label}: the sizes card runs off the screen: {box}")
@@ -134,41 +138,86 @@ def friend(b, url, size, theme, pw, store):
 
 
 def sizes(page, label, size):
-    """the ruler, the Map tab's section and a suggested area's size"""
+    """the ruler (states and provinces), the Map tab's sections, a suggested area's size, the Suggestions button"""
     check(page.evaluate("document.getElementById('sizes').hidden"), f"{label}: the ruler shows before it is asked for")
     page.click("#sizebtn")
-    for _ in range(3):  # close enough for Cardonia's size to show
-        if page.evaluate("document.querySelectorAll('#sizes .sq').length"):
+    rows = lambda: page.evaluate("""[...document.querySelectorAll('#sizes .szrow')].map(r => [r.className,
+        [...r.querySelectorAll('.sq')].map(e => e.getBoundingClientRect().width)])""")
+    for _ in range(4):  # close enough for both rows to show
+        if all(len(sq) == 3 for _, sq in rows()):
             break
         page.click("#zin")
         time.sleep(0.15)
-    sq = page.evaluate("[...document.querySelectorAll('#sizes .sq')].map(e => e.getBoundingClientRect().width)")
-    check(len(sq) == 3 and sq[0] < sq[1] < sq[2], f"{label}: the ruler's squares: {sq}")
-    z = page.evaluate("[app.index.sizes.usual, app.index.sizes.sparse, app.view.s]")
+    got = dict((c.split()[-1], sq) for c, sq in rows())
+    sq, st = got.get("szprov", []), got.get("szstates", [])
+    check(len(sq) == 3 and sq[0] < sq[1] < sq[2], f"{label}: the ruler's province squares: {sq}")
+    check(len(st) == 3 and st[0] < st[1] < st[2], f"{label}: the ruler's state squares: {st}")
+    z = page.evaluate("[app.index.sizes.usual, app.index.sizes.states.usual, app.view.s]")
     if len(sq) == 3:
-        check(abs(sq[1] - (z[0] ** 0.5) * z[2]) < 1.5, f"{label}: the usual square isn't to scale: {sq[1]} at zoom {z[2]}")
+        check(abs(sq[1] - (z[0] ** 0.5) * z[2]) < 1.5, f"{label}: the usual province square isn't to scale: {sq[1]} at zoom {z[2]}")
+    if len(st) == 3:
+        check(abs(st[1] - (z[1] ** 0.5) * z[2]) < 1.5, f"{label}: Cardonia's state square isn't to scale: {st[1]} at zoom {z[2]}")
+    check("States" in page.inner_text("#sizes") and "Provinces" in page.inner_text("#sizes"), f"{label}: the ruler's rows aren't named")
     page.click("#zin")
     time.sleep(0.15)
-    sq2 = page.evaluate("[...document.querySelectorAll('#sizes .sq')].map(e => e.getBoundingClientRect().width)")
+    sq2 = dict((c.split()[-1], q) for c, q in rows()).get("szprov", [])
     check(not sq2 or (len(sq) == 3 and sq2[1] > sq[1]) or "Zoom out" in page.inner_text("#sizes"), f"{label}: the ruler didn't follow the zoom: {sq} -> {sq2}")
     r = page.evaluate("(() => { const a = document.getElementById('sizes').getBoundingClientRect(), b = document.querySelector('.mapctl').getBoundingClientRect(); return [a.right, b.left, a.left]; })()")
     check(r[0] <= r[1] and r[2] >= 0, f"{label}: the ruler runs into the zoom buttons or off the map: {r}")
     page.screenshot(path=str(H.SHOTS / f"sizes_ruler_{label}.png"))
     page.click("#sizebtn")
     check(page.evaluate("document.getElementById('sizes').hidden"), f"{label}: the ruler didn't hide")
-    # the Map tab: the section, folded, keeps its fold when the pane is drawn again; a suggested area's size
+    # the Map tab: the two sections, the state's first, folded, keep their fold when the pane is drawn again; a suggested
+    # area's size
     page.evaluate("showTab('map')")
     time.sleep(0.2)
-    page.evaluate("document.querySelector('#pane-map .sizesec summary').click()")
+    secs = page.evaluate("[...document.querySelectorAll('#pane-map .sizesec summary')].map(e => e.textContent)")
+    check(secs == ["How big is a state?", "How big is a province?"], f"{label}: the Map tab's size sections: {secs}")
+    page.evaluate("document.querySelector('#pane-map .statesec summary').click()")
+    page.evaluate("document.querySelector('#pane-map .provsec summary').click()")
     page.evaluate("""edit('suggest', {s_test1: {type: 'area', pts: [[600, 780], [700, 780], [700, 840], [600, 840]], label: 'A test', note: ''}})""")
     time.sleep(0.3)
     page.evaluate("renderMapPane(true)")
     time.sleep(0.2)
-    check(page.evaluate("document.querySelector('#pane-map .sizesec').open"), f"{label}: the section folded when the pane was drawn again")
+    check(page.evaluate("document.querySelector('#pane-map .statesec').open && document.querySelector('#pane-map .provsec').open"),
+          f"{label}: a section folded when the pane was drawn again")
+    pics = page.evaluate("[...document.querySelectorAll('#pane-map .statesec img')].map(i => i.complete && i.naturalWidth)")
+    check(len(pics) == 3 and all(pics), f"{label}: the Map tab's state pictures: {pics}")
     text = page.inner_text("#pane-map")
-    check("About 6,000 map pixels: 38 provinces of Cardonia" in text, f"{label}: the area's size: {[l for l in text.splitlines() if 'map pixels' in l][:2]}")
+    want = "About 6,000 map pixels: larger than most of Cardonia's states (820 to 1,840), 4.6 times the usual one; 38 provinces of Cardonia"
+    check(want in text, f"{label}: the area's size: {[l for l in text.splitlines() if 'map pixels' in l][:2]}")
     page.screenshot(path=str(H.SHOTS / f"sizes_pane_{label}.png"), full_page=False)
+    suggestions(page, label)
     page.evaluate("edit('suggest', {s_test1: null})")
+
+
+def suggestions(page, label):
+    """the Suggestions button hides what was drawn with Suggest, so the provinces under it show; the Suggest tool and
+    Show bring it back"""
+    page.evaluate("app.ui.sel.sug = null; renderBase(); requestDraw()")
+    time.sleep(0.3)
+    check(not page.evaluate("document.getElementById('sugbtn').hidden"), f"{label}: no Suggestions button with a suggestion drawn")
+    px = "(() => { const c = document.getElementById('map'), r = c.getBoundingClientRect(); const q = gToScreen(650, 810); " \
+         "const d = window.devicePixelRatio || 1; return q ? [...c.getContext('2d').getImageData(Math.round(q[0] * d), Math.round(q[1] * d), 1, 1).data] : null; })()"
+    page.evaluate("locate(650, 810)")
+    time.sleep(0.4)
+    before = page.evaluate(px)
+    page.click("#sugbtn")
+    time.sleep(0.4)
+    check(page.evaluate("document.getElementById('sugbtn').getAttribute('aria-pressed')") == "false", f"{label}: the button isn't off")
+    after = page.evaluate(px)
+    check(before and after and before != after, f"{label}: hiding the suggestions didn't change the map under one: {before} {after}")
+    check(page.evaluate("sugAtScreen(...gToScreen(600, 780)) === null"), f"{label}: a hidden suggestion can still be clicked")
+    page.screenshot(path=str(H.SHOTS / f"sug_hidden_{label}.png"))
+    page.evaluate("setTool('suggest')")
+    time.sleep(0.2)
+    check(page.evaluate("!app.ui.hideSug && document.getElementById('sugbtn').getAttribute('aria-pressed') === 'true'"),
+          f"{label}: the Suggest tool didn't bring the suggestions back")
+    page.evaluate("setTool('select')")
+    page.click("#sugbtn")
+    page.evaluate("selectSug('s_test1')")
+    time.sleep(0.2)
+    check(page.evaluate("!app.ui.hideSug"), f"{label}: showing a suggestion didn't bring them back")
 
 
 def main():

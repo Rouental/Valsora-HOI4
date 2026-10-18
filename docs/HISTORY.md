@@ -10,6 +10,20 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-18 (the author: the review deck of every Deco UI change, "no icon of the game's changes until I've seen it";
+  the map and the flag file sent dated, "10/17-2, 10/17-3"; their own flag file, "If it's not corrupted, maybe it's
+  being generated for a different update of PDN?"; the Gazetteer's guide for states, hiding suggestions, trait effects;
+  a flag in Arabic calligraphy): **the flag file**: paint.net refused every copy of ours since 2026-10-13, because
+  `writepdn.py` gave the new layers' blend modes ids that .NET's BinaryFormatter reads as the same as other new objects'
+  (found by reading the files with .NET itself; `docs/PROBLEM_LOG.md`); fixed, checked by `pdn_check.py` and the new
+  `scripts/pdn_dotnet/`, and the flag file written again on the author's own copy with all 101 flags
+  (`New_Mod_Flags 10-18.pdn`). **The Gazetteer**: a state size guide, first (Cardonia's states, about 1,310 px and 7
+  provinces each, as the usual size; Rouental's and Zukchiva's either side; the quick start's third step, a section on
+  the Map tab, a row of Sizes, and each suggestion against Cardonia's states), the province guide kept after it;
+  **Suggestions** above the map hides what was drawn with Suggest; every base-game trait shows what it does, as the
+  game's tooltips say it (`vanilla_sync.trait_effects`). **The motto flag** ("a safe haven amid the storm") in four
+  Arabic hands, white and gold on indigo, not in the mod until the author says whose it is
+  (`dist/flag_proposals/safe_haven/`). The map and the mod are as on 2026-10-17.
 - 2026-10-17, the second night (the author: Belekria's cores, a province size guide, the password search, "three or
   four big things to surprise me ... DO NOT ADD THEM TO THE MOD YET!", one a full mockup of the tech tree, and "ways to
   make the modding process more efficient both for you, and for me"): Belekria owns Tethia's and Kalnsfereta's states

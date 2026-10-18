@@ -110,7 +110,16 @@ same guide to your friends, with a ruler at the map's zoom):
 | sparse | 300 to 800 px | tundra (northern Yastreovakia), deserts (Usnistan), ice, high mountains, deep jungle |
 
 Rouental's provinces are about 150 px, much like Cardonia's: it looks detailed because its
-states are small (two or three provinces each). Each new province costs about 3 of the
+states are small (two or three provinces each).
+
+**How big a state should be** (your rule, 2026-10-18: "Cardonia's states are about the ideal size"; the Gazetteer's
+guide shows it first, since your friends draw states and the build cuts the provinces):
+
+| land | size | for example |
+|---|---|---|
+| usual | about **1,310 px** (36 × 36), most between 820 and 1,840, about 7 provinces | Cardonia's states |
+| dense | down to about 330 px, 2 provinces | Rouental's states |
+| empty | about 1,860 px, 10 provinces, or larger | Zukchiva's states (Yastreovakia's north) | Each new province costs about 3 of the
 65,536 borders, and about 3,800 are left (October 2026), room for about 1,250 more
 provinces on the whole map: where you go smaller, go bigger somewhere empty. Never under
 16 px, or thinner than 3.
