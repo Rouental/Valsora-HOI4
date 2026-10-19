@@ -59,43 +59,44 @@ def fan(cx, cy, r, n=9, spread=70, colour="rgba(201,165,90,.16)"):
 
 
 # the leader's frame (v0.11, the author: "the leader portrait [should be stylized] like the [one] in the politics screen
-# ... as things are the leader portrait in the diplomacy tab, larger portraits like Krionik's start to get cut off"):
-# the politics screen's arch (a thin rim, a thick gilt one, the diamond on top, a sunburst in the arch), flatter here,
-# so that the whole portrait fits under it: the game's 156 x 210 at PORTRAIT_SCALE (103 x 139) at `portrait`, the arch's
-# opening `hole` (x0, x1, its top, the springline, the bottom); the arch clears the portrait's top corners. The plate
-# ends at `right`, under the politics block beside it (at the panel's x 138, the frame's 125)
-PORTRAIT_SCALE = 0.66
-LEADER = dict(w=134, h=175, right=124.5, hole=(9, 118, 10, 36, 168), portrait=(12, 28, 103, 139))
+# ... as things are the leader portrait in the diplomacy tab, larger portraits like Krionik's start to get cut off").
+# 2026-10-19 (the author: "The portrait on the diplo screen doesn't work the way the politics screen did"): v0.11 set the
+# portrait, small (0.66), under a flatter arch with an empty dark cap above it; now it is the politics screen's frame
+# made smaller: the portrait fills the opening, its top in the round-headed arch (a semicircle the portrait's width,
+# its top corners under the lacquer, as layout_politics.FRAME's), a thin rim and a thick gilt one, the diamond on top
+# and the sunburst behind on the lacquer round the arch. The game's 156 x 210 at PORTRAIT_SCALE (112 x 151) at
+# `portrait`, which is the opening; the plate ends at `right`, under the politics block beside it
+PORTRAIT_SCALE = 0.72
+LEADER = dict(w=134, h=175, right=124.5, portrait=(7, 12, 112, 151))
 
 
-def arch_path(x0, x1, top, sh, bottom, d=0.0):
-    """the arch's outline grown by d px (an elliptical top: half-width (x1 - x0) / 2, height sh - top)"""
-    a, b = (x1 - x0) / 2 + d, sh - top + d
-    return f"M{x0 - d},{bottom + d}L{x0 - d},{sh}A{a},{b} 0 0 1 {x1 + d},{sh}L{x1 + d},{bottom + d}Z"
+def arch_path(x0, x1, top, bottom, d=0.0):
+    """the round-headed arch over x0-x1 from top to bottom, grown by d px"""
+    r = (x1 - x0) / 2
+    sh = top + r
+    return f"M{x0 - d},{bottom + d}L{x0 - d},{sh}A{r + d},{r + d} 0 0 1 {x1 + d},{sh}L{x1 + d},{bottom + d}Z"
 
 
 def leader_frame():
     import math
-    W, H, R = LEADER["w"], LEADER["h"], LEADER["right"]
-    x0, x1, top, sh, bottom = LEADER["hole"]
+    W, H = LEADER["w"], LEADER["h"]
     px, py, pw, ph = LEADER["portrait"]
+    x0, x1, top, bottom = px, px + pw, py, py + ph
     cx = (x0 + x1) / 2
-    hole = arch_path(x0, x1, top, sh, bottom)
-    outer = arch_path(x0, x1, top, sh, bottom, 5.5)
-    # the sunburst behind the portrait: rays from under its middle, seen in the arch above it and at its sides
-    rays = "".join(f'<path d="M{cx},{py + ph * .55}L{cx + 160 * math.cos(math.radians(a - 2.2)):.1f},'
-                   f'{py + ph * .55 + 160 * math.sin(math.radians(a - 2.2)):.1f}L{cx + 160 * math.cos(math.radians(a + 2.2)):.1f},'
-                   f'{py + ph * .55 + 160 * math.sin(math.radians(a + 2.2)):.1f}Z" fill="rgba(227,199,126,.16)"/>'
+    hole = arch_path(x0, x1, top, bottom)
+    outer = arch_path(x0, x1, top, bottom, 5.5)
+    # the sunburst behind the portrait, as the politics screen's: rays from its middle, seen on the lacquer round it
+    oy = py + ph * .45
+    rays = "".join(f'<path d="M{cx},{oy}L{cx + 200 * math.cos(math.radians(a - 2.2)):.1f},'
+                   f'{oy + 200 * math.sin(math.radians(a - 2.2)):.1f}L{cx + 200 * math.cos(math.radians(a + 2.2)):.1f},'
+                   f'{oy + 200 * math.sin(math.radians(a + 2.2)):.1f}Z" fill="rgba(227,199,126,.16)"/>'
                    for a in range(-180, 1, 12))
-    # the arch less the portrait's rectangle (the game draws this frame over the portrait)
-    well_path = hole + f"M{px},{py}h{pw}v{ph}h{-pw}Z"
-    return svg(W, H, f'<clipPath id="arch"><path d="{well_path}" clip-rule="evenodd"/></clipPath>'
-                     # the lacquer round the arch, out to the thin rim
-                     f'<path d="{outer}{hole}" fill="url(#pin)" fill-rule="evenodd"/>'
-                     # inside the arch: a dark well and the sunburst (the portrait covers its lower part)
-                     f'<g clip-path="url(#arch)"><rect width="{W}" height="{H}" fill="#0B1014"/>{rays}</g>'
+    plate = f"M{x0 - 5.5},0H{x1 + 5.5}V{bottom + 5.5}H{x0 - 5.5}Z"   # the lacquer: all of the plate but the opening
+    return svg(W, H, f'<clipPath id="ring"><path d="{plate}{hole}" clip-rule="evenodd"/></clipPath>'
+                     # the lacquer round the arch (it hides the portrait's top corners) and the sunburst on it
+                     f'<g clip-path="url(#ring)"><path d="{plate}" fill="url(#pin)"/>{rays}</g>'
                      f'<path d="{outer}" fill="none" stroke="#B8954F" stroke-width="1"/>'
-                     f'<path d="{arch_path(x0, x1, top, sh, bottom, 1.5)}" fill="none" stroke="url(#g)" stroke-width="3"/>'
+                     f'<path d="{arch_path(x0, x1, top, bottom, 1.5)}" fill="none" stroke="url(#g)" stroke-width="3"/>'
                      f'<path d="M{cx - 5},{top - 1.5}l5 -3.5 5 3.5 -5 3.5z" fill="#E3C77E"/>')
 
 

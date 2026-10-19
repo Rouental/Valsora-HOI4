@@ -10,6 +10,15 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-19, later still (the author's screenshots of v0.11.1 and notes): **the map 10-19-2** (`docs/MAP_VERSIONS.md`):
+  the Cultists' two islets in Cultists 23, Almohavid 2 and 3 one impassable province (the author's edit hadn't saved),
+  Almohavid 10 plain desert: 21,049 provinces, 62,061 borders (3,475 free), 3,191 states (22 impassable); **no supply
+  hub or starting division in impassable land** (the hubs' depot models stood in the deserts and jungle; checked by
+  `check_mod.py`); **Krionik's new realms no longer share states with Crvenognjište** (a state painted for one nation of
+  the Subregions layer is its alone, whatever a Gazetteer page saved earlier); **Deco UI v0.11.2**
+  (`deco_ui/docs/VERSIONS.md`): the approved icons in the mod, the diplomacy portrait as the politics screen's, the
+  loading bar's diamond, and the notes held from v0.11 (decision plates, production resources, decision icons); the
+  editing guide says how to mark a passable city with one way in inside an impassable area.
 - 2026-10-19, later (the author's map upload and Gazetteer export of that day): the map 10-19 (`docs/MAP_VERSIONS.md`): the Cultists' and New Formosa's state lines (the recut kept only round them), the author's strategic region fixes, eleven new nations (Krionik's realms, Sangrád, the ports, the Sisterhood, and Xugang, Terreich's puppet: `docs/NATIONS.md`), impassable jungle on the areas layer (green with red stripes, `areas.py`), provinces along Terreich's new rivers, Ostaria's five drawn states (`apply_suggestions.py --only=OST`); the Gazetteer's export imported (Terreich, Usnistan's nations, Krionik, Ostaria). 21,050 provinces, 62,064 borders (3,472 free), 3,192 states, 205 countries (161 on the map).
 - 2026-10-19, later (the author: "Could you please try to design an emblem for the Association of Reibonnaise states? It should function both as the small logo for the game, and something that could be seen outside of it"): the emblem, a proposal in two versions (`dist/emblem_proposals/reibonnaise_association/`): a blue roundel in a gilt rim, a ring of eight lozenges (one per member), a fleur-de-lis over an upright sword; a seal with the name and "Strength in Unity" for outside the game, the game's 200 x 100 logo and 32 x 32 miniature. Not in the mod until the author picks.
 - 2026-10-19, later (the author's screenshots of v0.11): **Deco UI v0.11.1**: the music player and its controller in the deco style (the controller a tab under the music button), the production lines' boxes and the trade rows drawn by hand (`deco_ui/docs/VERSIONS.md`); the icon proposals' factory back as it was ("it matching the civilian factory icon is good"), the production line buttons redrawn instead (a high-cut helmet over an assault rifle, a modern tank).

@@ -113,8 +113,10 @@ BELOW_MEDALLION = SEAL["y"] + SEAL["h"] + 4
 # v0.11 (the author, of v0.10.3 in game: "Their tops should be level with the rest of the bar, currently it looks like
 # they're just a pixel or two low. Their bottoms should remain anchored to the bottom"): the plates reach DEC_RAISE px
 # above the first step, over the gilt rule the step draws, their bottoms on the second step as before.
+# 2026-10-19 (the author, of v0.11: "Now the decisions notification tabs are a little too high"): 1 px, not 2 (their
+# screenshot: the tops a pixel above the rule beside them)
 _edge = lambda f: MED["x"] + round(MED["w"] * f)
-DEC_RAISE = 2
+DEC_RAISE = 1
 DEC_PLATE = dict(w=_edge(.26) - _edge(.12), h=MED_STEPS[1] - MED_STEPS[0] + DEC_RAISE)
 DEC_CUT = 6
 DEC_BADGES = dict(timeout=(_edge(.12), MED_STEPS[0] - DEC_RAISE), to_take=(_edge(.74), MED_STEPS[0] - DEC_RAISE))

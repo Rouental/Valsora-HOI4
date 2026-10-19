@@ -334,9 +334,9 @@ guiTypes = {
 
 				iconType = {
 					name = "leader_portrait"
-					position = { x = 25 y = 28 }
+					position = { x = 20 y = 12 }
 					spriteType = "GFX_leader_unknown"
-					scale = 0.66
+					scale = 0.72
 				}
 
 				iconType = {
@@ -498,7 +498,7 @@ guiTypes = {
 				iconType = {
 					name = "win_header_short"
 					position = { x = 8 y= 6 }
-					spriteType = "GFX_win_header_short"
+					spriteType = "GFX_valsora_deco_none"
 				}
 
 				gridboxtype = {

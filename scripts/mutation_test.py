@@ -358,6 +358,23 @@ def m_impassable_capital(mod):
     return f"{own}'s capital state {sid} is impassable"
 
 
+def _impassable_province(mod):
+    return re.search(r"provinces = \{\s*(\d+)", _impassable(mod).read_text()).group(1)
+
+
+def m_supply_node_impassable(mod):
+    p = _impassable_province(mod)
+    edit(mod, "map/supply_nodes.txt", lambda t: re.sub(r"^1 \d+", f"1 {p}", t, count=1))
+    return f"supply node on province {p}, in impassable state"
+
+
+def m_unit_impassable(mod):
+    p = _impassable_province(mod)
+    f = next(g for g in sorted((mod / "history/units").glob("*_2036.txt")) if "location = " in g.read_text())
+    edit(mod, f"history/units/{f.name}", lambda t: re.sub(r"\blocation = \d+", f"location = {p}", t, count=1))
+    return f"{f.name}: a unit starts on province {p}, in impassable state"
+
+
 def m_state_loc(mod):
     edit(mod, "localisation/english/valsora_l_english.yml", lambda t: re.sub(r"\n VAL_STATE_1:0 \"[^\"]*\"", "", t, count=1))
     return "state name VAL_STATE_1 has no localisation"
@@ -463,7 +480,7 @@ BATCHES = {
             m_railway_apart, m_x_crossing, m_land_low, m_terrain_ocean],
     "history": [m_technology, m_module, m_equipment, m_idea, m_battalion, m_define, m_earth_history, m_popularities,
                 m_ruling_party, m_recruit_unknown, m_faction_template, m_bookmark, m_descriptor, m_autonomy, m_claim_tag,
-                m_impassable_unlinked, m_impassable_capital],
+                m_impassable_unlinked, m_impassable_capital, m_supply_node_impassable, m_unit_impassable],
     "content": [m_decision_stand_in, m_event_stand_in, m_old_date, m_tree_label, m_start_year, m_trait, m_advisor_slot,
                 m_prerequisite, m_state_loc, m_decision_loc, m_trigger_for, m_scripted_effect, m_war_goal, m_song,
                 m_company_include, m_company_tag, m_company_loc, m_concern_trait, m_idea_loc, m_skill_range, m_skill_kind],

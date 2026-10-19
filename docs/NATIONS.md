@@ -679,3 +679,11 @@ and named (Hügelsanfte, Weizenfelder, Westmarsch, Silberkrone, Blauküste; Silb
 its capital). From the Gazetteer besides: Terreich's 71 states, 552 provinces' terrain, 8 cities and 35 rivers;
 Levantinin, Mustawi, North Koronista, Al-Radiyaa and Port Almohavid their states, provinces, cities, people and flags
 (the four flags in HOI4's shape into `source/flags/`).
+
+**2026-10-19, later** (the author: "with the releasables in Krionik, each state should only belong to one of the
+releasables. Currently you have it so that the new releasables share territory with the old ones"): Crvenognjište's
+list of states on Krionik's Gazetteer page (50, saved when its ruler was set, before Belska, Koroletz, Targoviste and
+Kosavichy were painted over part of it) had given it 17 of their states too; a state painted for one nation of the
+Subregions layer is now that nation's alone (`build_mod.py`), so Crvenognjište holds 33, each realm only its own.
+Almohavid (the author: "Almohavid 2 & 3 are combined, and Almohavid 10 is just desert rather than impassible desert"):
+its 2 and 3 one impassable state, its 10 (now named Almohavid 9) passable desert.

@@ -14,9 +14,16 @@ Treat assumed items as hypotheses.
 
 ---------------------------------------------------------------------------------------------------
 
-## 1. Status (v0.11.1)
+## 1. Status (v0.11.2)
 
-**v0.11.1 (2026-10-19)** is the current version (`docs/VERSIONS.md`): the music player in the deco style
+**v0.11.2 (2026-10-19, later)** is the current version (`docs/VERSIONS.md`): the game's icons in the Deco style in the
+mod (`icons_art.py`, `ic_`, the approved proposals of `proposals_icons.py`), the diplomacy portrait filling its arch as
+the politics screen's (`diplomacy_art.LEADER`) and the actions list's empty header hidden, the loading bar's diamond
+whole, the decision plates 1 px lower (`layout.DEC_RAISE`), the production header's resource strip under all seven
+cells, the decisions' and events' icon wells on their icons (`decisions_art.DECISION_WELL`, `EVENT_WELL`). **Not yet
+seen in game.**
+
+**v0.11.1 (2026-10-19)** came before it: the music player in the deco style
 (`music_art.py`, `mu_`; `make_music.py` for `musicplayer.gui`'s station box), the top bar's music controller a tab hanging
 from the tray under the music button that slides down out of it (`music_art.TAB`, set by `make_topbar.py`), the
 production lines and the trade rows drawn by hand (`production_art.py`, `pl_`: the automatic translation had lost the
@@ -285,15 +292,16 @@ tools/
                             (the diplomacy panel's own pictures, dv_; preview_diplomacy.py), decisions_art.py (the
                             decisions tab, dc_; v0.11), music_art.py (the music player and the top bar's music
                             controller, mu_; 2026-10-19), production_art.py (the production lines and the trade rows,
-                            pl_; 2026-10-19)
+                            pl_; 2026-10-19), icons_art.py (the game's icons in the Deco style, ic_: the approved
+                            proposals of proposals_icons.py, 2026-10-19)
   make_panel_pictures.py    the side panels' own pictures, the approved drafts (v0.11): proposals_panel_mockups.py's
                             translate() and photo_plate() and v0.7's hand-drawn proposals, at the game's paths, less
                             the army overview's and the agency's (KEEP_GAME) and those an art module draws (DRAWN)
   make_music.py             musicplayer.gui (2026-10-19): the station box's plate, note and title; writes
                             valsora_deco_music.gfx (its sprites and the top bar's music tab)
   preview_music.py          build/preview_music.png (+ _vanilla): the music player and the top bar's controller tab
-  proposals_icons.py        proposals (v0.11): the game's icons redrawn in the Deco style -> art/proposals/icons/,
-                            build/proposals_icons.png (beside the game's)
+  proposals_icons.py        the game's icons redrawn in the Deco style (v0.11): proposals first -> art/proposals/icons/,
+                            build/proposals_icons.png (beside the game's); the approved ones are in the mod (icons_art.py)
   make_loading.py           the four loading screens (v0.10, out of the mod again in v0.10.1, kept for later): run by
                             hand into build/loading_screens/ (--into-mod: where the mod would ship them); needs the
                             Valsora build's work/
@@ -997,6 +1005,9 @@ GP.write_gui(MOD + "interface/x.gui", t)    # braces checked, engine_safe applie
 
 ## 10. Open items and things to check in game
 
+- **v0.11.2**: the new icons (the production screen's, the focus filters, the decisions' envelopes, the resources);
+  the diplomacy portrait (a large one, as Krionik's) and the actions list at its top; the loading bar's diamond; the
+  decision plates level with the rule; the production resources inside their strip; the decision and event icons.
 - **v0.11.1**: the music player (header, buttons in each state, volume, station box) and the controller tab (slides
   down from under the music button; hidden in the tray when closed, **(assumed)**: the game shows the window at its
   `position` when closed, as the side panels, and the tray, drawn after it, covers it there); production lines (land,

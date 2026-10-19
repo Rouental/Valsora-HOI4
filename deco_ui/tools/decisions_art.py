@@ -11,8 +11,8 @@ category's riveted header with its metal socket, the green rows, the round statu
   well at its left;
 - an event's row (512 x 33), the status lights (2 and 3 frames of 23 x 23: off, on, locked) as diamonds, the events'
   checkboxes (2 frames of 28 x 23), the fold button (2 frames of 24 x 25: up, down), the description's tile (48 x 48).
-Left as the game's: the "take" envelopes, the timer and event-type strips (icons: no icon of the game's changes without
-the author's yes; they are on the icon proposal sheet, art/proposals/icons/).
+Left as the game's: the timer and event-type strips (icons: no icon of the game's changes without the author's yes); the
+"take" envelopes are icons_art.py's since 2026-10-19 (the author's approval of the icon proposals).
 
 gen_textures.py adds them (keys dc_*).
 """
@@ -72,8 +72,17 @@ def event_header():
                   + well(x1 + 4, 14, EV["w"] - 8, EV["h"] - 8, 5, "rgba(10,15,18,.7)")))
 
 
-def row(fill, w, h, icon_w):
-    return bar(fill, c=5) + svg(w, h, well(5, 4, 5 + icon_w, h - 4, 4))
+# the icon's well in a row, centred on the icon the game draws there (2026-10-19, the author: "Icons on the events &
+# decisions are out of alignment with their boxes"; v0.11's wells started at x 5): a decision's icon is centred at the
+# row's (30, 19) (countrydecisionview.gui: decision_item>icon, centerposition, the game's 50 px icons with their ink in
+# about 38), an event's type icon (30 x 26) at the picture's x 16 to 46, y 3 to 29 (event_item>event_type_icon at
+# (15, 3), the picture at x -1)
+DECISION_WELL = (11, 1, 49, 38)
+EVENT_WELL = (13, 2, 49, 31)
+
+
+def row(fill, w, h, box):
+    return bar(fill, c=5) + svg(w, h, well(*box, 4))
 
 
 def light(state):
@@ -103,8 +112,8 @@ ADDS = [
     ("dc_category_header", D + "category_header_bg.dds", 516, 53, category_header),
     ("dc_event_header", D + "event_header_bg.dds", 515, 83, event_header),
     ("dc_decision_item", D + "decision_item_bg.dds", 1536, 40,
-     lambda: frames(1536, 40, *(row(f, 512, 40, 36) for f in (DIM_FILL, LIT_FILL, STEEL_FILL)))),
-    ("dc_event_item", D + "event_item_bg.dds", 512, 33, lambda: row(BAR_FILL, 512, 33, 30)),
+     lambda: frames(1536, 40, *(row(f, 512, 40, DECISION_WELL) for f in (DIM_FILL, LIT_FILL, STEEL_FILL)))),
+    ("dc_event_item", D + "event_item_bg.dds", 512, 33, lambda: row(BAR_FILL, 512, 33, EVENT_WELL)),
     ("dc_light2", D + "checkbox_small4.dds", 46, 23, lambda: frames(46, 23, light("off"), light("on"))),
     ("dc_light3", D + "checkbox_small5.dds", 69, 23, lambda: frames(69, 23, light("off"), light("on"), light("locked"))),
     ("dc_checkbox", G + "generic_checkbox3.dds", 56, 23, lambda: frames(56, 23, checkbox(False), checkbox(True))),

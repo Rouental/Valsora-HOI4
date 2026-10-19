@@ -1773,9 +1773,11 @@ add("sc_slider_bar", SC + "slider_bg.dds", 404, 42, sc_slider_bar())
 LD = "gfx/interface/"
 
 
-def ld_plate(w, h, x0, x1, y0, y1, hang):
+def ld_plate(w, h, x0, x1, y0, y1, hang, d=12):
     """a lacquer plate x0-x1, y0-y1 with chamfered free corners (the bottom ones if it hangs from the top edge, else
-    the top ones), a gilt rim and a diamond in the middle of its free edge (ld_rule adds the inner hairline)"""
+    the top ones), a gilt rim and a diamond (d px square, turned) in the middle of its free edge (ld_rule adds the
+    inner hairline); the diamond must fit in the picture: d * 0.71 + 1.5 px either side of the edge"""
+    assert (y1 if hang else y0) + d * .71 + 1.5 <= h and (y1 if hang else y0) - d * .71 - 1.5 >= 0, "the diamond is cut off"
     c = 14
     if hang:
         pts = [(x0, y0), (x1, y0), (x1, y1 - c), (x1 - c, y1), (x0 + c, y1), (x0, y1 - c)]
@@ -1786,7 +1788,7 @@ def ld_plate(w, h, x0, x1, y0, y1, hang):
     return (f'<div style="position:absolute;inset:0;background:{GOLD_V};clip-path:{poly(pts)}"></div>'
             f'<div style="position:absolute;inset:0;background:{LAC},linear-gradient(180deg,#141E24,#0B1115);'
             f'clip-path:{poly(inset_poly(pts, 1.4))}"></div>'
-            + f'<div style="position:absolute;left:{mid - 6}px;top:{dy - 6}px;width:12px;height:12px;transform:rotate(45deg);'
+            + f'<div style="position:absolute;left:{mid - d / 2}px;top:{dy - d / 2}px;width:{d}px;height:{d}px;transform:rotate(45deg);'
               f'background:#0B1014;box-shadow:0 0 0 1.5px #C9A55A"></div>'
             + f'<div style="position:absolute;left:{mid - 2}px;top:{dy - 2}px;width:4px;height:4px;transform:rotate(45deg);background:#E3C77E"></div>')
 
@@ -1799,11 +1801,13 @@ def ld_rule(pts):
 
 
 def ld_status():
-    x0, x1, y0, y1 = 206, 1194, 0, 92
+    # the foot at y 84, not the picture's last row: its diamond, centred on the foot, lost its lower half below the
+    # 92 px picture (the author, 2026-10-19: "Half of the diamond on the top bar in the loading screen is cut off")
+    x0, x1, y0, y1 = 206, 1194, 0, 84
     c = 14
     pts = [(x0, y0 - 6), (x1, y0 - 6), (x1, y1 - c), (x1 - c, y1), (x0 + c, y1), (x0, y1 - c)]
-    return ld_plate(1400, 92, x0, x1, y0 - 6, y1, True) + ld_rule(pts)   # no corner brackets: they poked through the
-    # chamfers (the author's screenshot, v0.10)
+    return ld_plate(1400, 92, x0, x1, y0 - 6, y1, True, d=9) + ld_rule(pts)   # no corner brackets: they poked through
+    # the chamfers (the author's screenshot, v0.10)
 
 
 def ld_tip():
@@ -1813,7 +1817,8 @@ def ld_tip():
     return ld_plate(1400, 148, x0, x1, y0, y1, False) + ld_rule(pts)
 
 
-TRACK = (6, 18)       # the progress bar's rows inside its 40 px picture: screen y 68-80, inside the status plate
+TRACK = (2, 14)       # the progress bar's rows inside its 40 px picture: screen y 64-76, above the status plate's
+# hairline (79) and its diamond (from 76.1)
 add("ld_status", LD + "Loadingscreen_loadingstatus.dds", 1400, 92, ld_status())
 add("ld_tip", LD + "Loadingscreen_loadingtip.dds", 1400, 148, ld_tip())
 add("ld_track", LD + "LoadingScreen_Progress_1.dds", 934, 40,

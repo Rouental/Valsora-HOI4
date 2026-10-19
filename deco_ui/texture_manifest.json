@@ -1621,7 +1621,7 @@
   "path": "gfx/interface/diplo_leader_frame.dds",
   "w": 134,
   "h": 175,
-  "sig": "dc4adf7d44459791a94249f6fea9e379989ab7ba093a24f351fe909cd45f86c0"
+  "sig": "f7caa30c73dd0b7f72f53d4ae58aff1b1e3d915384df650b092c103a24504a31"
  },
  {
   "key": "dv_flag_frame",
@@ -1719,14 +1719,14 @@
   "path": "gfx/interface/decisionview/decision_item_bg.dds",
   "w": 1536,
   "h": 40,
-  "sig": "3ee8ef1775c0e2491921e2d990a61d42503648b5e21acd2034fca2bf0f9660de"
+  "sig": "544d50e9b36b688dd4a84ad70960d893d6921c5f6910903dd332d09990d4ff94"
  },
  {
   "key": "dc_event_item",
   "path": "gfx/interface/decisionview/event_item_bg.dds",
   "w": 512,
   "h": 33,
-  "sig": "164acb589110ea69cb3cce0a9c3bee3cb036bfc2b1dc19e94f4e2087e664db17"
+  "sig": "51b205da0e49581e1f3af572acdfea07c0b088e301178526d63139a192799c9f"
  },
  {
   "key": "dc_light2",
@@ -1902,6 +1902,111 @@
   "w": 1944,
   "h": 45,
   "sig": "432b46ee88e20563c255d59e52482297ae974bfae98bdf1553732b077a9bca67"
+ },
+ {
+  "key": "ic_resources_strip",
+  "path": "gfx/interface/resources_strip.dds",
+  "w": 189,
+  "h": 27,
+  "sig": "1ec6861b376642e4d20596cf57622c913ea538cf3bfbdc07c9f9e73be02c2646"
+ },
+ {
+  "key": "ic_filter_pol_power",
+  "path": "gfx/interface/focusview/filter/pol_power_icon.dds",
+  "w": 27,
+  "h": 27,
+  "sig": "83c786a6846964e9ff71d58680e61a79cfefc0b4afb5b203fe3b71f8984653b4"
+ },
+ {
+  "key": "ic_filter_research",
+  "path": "gfx/interface/focusview/filter/research_icon.dds",
+  "w": 27,
+  "h": 27,
+  "sig": "80fd4f755421249b068ee4686aa7b9d55288d591e89607fc745408df1fb83c85"
+ },
+ {
+  "key": "ic_filter_industry",
+  "path": "gfx/interface/focusview/filter/industry_icon.dds",
+  "w": 27,
+  "h": 27,
+  "sig": "ab7e3a00d6cf75d9fb8c01cd886f9c86905e93c9cf60ec431a894a28f92df25c"
+ },
+ {
+  "key": "ic_military_factory_icon",
+  "path": "gfx/interface/military_factory_icon.dds",
+  "w": 27,
+  "h": 23,
+  "sig": "4f26c94b34a0bee1683923575b2b8a2c406ef0f438e3860fee7f9c46a96f656a"
+ },
+ {
+  "key": "ic_dockyard_icon",
+  "path": "gfx/interface/dockyard_icon.dds",
+  "w": 29,
+  "h": 21,
+  "sig": "d1e38a8a68aab770647428402f1d23c8640fa7f2293e0b9072c24657cc4b8336"
+ },
+ {
+  "key": "ic_dockyard_icon_with_wrench",
+  "path": "gfx/interface/dockyard_icon_with_wrench.dds",
+  "w": 29,
+  "h": 21,
+  "sig": "154ac482380eabd6a5649738593320f8a7b590e017d6675c7e7c5f1234730021"
+ },
+ {
+  "key": "ic_efficiency_icon",
+  "path": "gfx/interface/efficiency_icon.dds",
+  "w": 24,
+  "h": 21,
+  "sig": "2e167e2e008ce5e81f5481a5ea4633bceabb38cb112acca47fccfa2b8295507c"
+ },
+ {
+  "key": "ic_efficiency_cap_icon",
+  "path": "gfx/interface/efficiency_cap_icon.dds",
+  "w": 24,
+  "h": 21,
+  "sig": "1f0736000dc00f4b356b691cd64789857e10d37648fd2bae14e672fe468c8896"
+ },
+ {
+  "key": "ic_factory_bombing_defence_icon",
+  "path": "gfx/interface/factory_bombing_defence_icon.dds",
+  "w": 29,
+  "h": 29,
+  "sig": "e8d37d31b5e48c8a06484061102817c6c5219c2db7034e7c63dcf864e989ec4b"
+ },
+ {
+  "key": "ic_add_prod_inf_art_line",
+  "path": "gfx/interface/add_prod_inf_art_line.dds",
+  "w": 243,
+  "h": 41,
+  "sig": "e24b42b077a32ba86fea83740109eb9d6df7d4a44aaab59bbc56f5560289acd7"
+ },
+ {
+  "key": "ic_add_prod_armour_line",
+  "path": "gfx/interface/add_prod_armour_line.dds",
+  "w": 243,
+  "h": 41,
+  "sig": "0598b3f149ea219d00c608a21bbe1a5512833ee64f7d3edab1becffbc4e51fa4"
+ },
+ {
+  "key": "ic_add_prod_aircraft_line",
+  "path": "gfx/interface/add_prod_aircraft_line.dds",
+  "w": 243,
+  "h": 41,
+  "sig": "11ea71268e67dcc44e2fbcc116e0bb4e16e8c6935b55bb474b423805f212ed9e"
+ },
+ {
+  "key": "ic_add_prod_naval_line",
+  "path": "gfx/interface/add_prod_naval_line.dds",
+  "w": 243,
+  "h": 41,
+  "sig": "dd37ec78318a62b62710088be46fb4a3558274bbe61887d4325721cb1a07cc1d"
+ },
+ {
+  "key": "ic_decision_select_icon_strip",
+  "path": "gfx/interface/decisionview/decision_select_icon_strip.dds",
+  "w": 160,
+  "h": 28,
+  "sig": "71d513f6a4ce6f6ab9123d43ef5dc976cf706db4702ff286b93027f25bbae9a5"
  },
  {
   "key": "mm_column",
@@ -2964,15 +3069,15 @@
   "key": "tb_dec_count_left",
   "path": "gfx/interface/valsora_deco/dec_count_left.dds",
   "w": 88,
-  "h": 19,
-  "sig": "f030786562d26a749faec42aaa1679fc550f5c9f710992773a0e6f556e876d17"
+  "h": 18,
+  "sig": "0561c80fda2bbaf615656e57155ab263e810c40654a99a10f647e6f42072bdef"
  },
  {
   "key": "tb_dec_count_right",
   "path": "gfx/interface/valsora_deco/dec_count_right.dds",
   "w": 88,
-  "h": 19,
-  "sig": "e408eeb2a00685030e442597f7b9e265407c8de742a590e35a3215f99e5507e1"
+  "h": 18,
+  "sig": "d313892fabe02e7c2f4ac549bdf4b95be9ab41d868906f847259af3153241964"
  },
  {
   "key": "shared_production_line_arrow_left",
@@ -3413,27 +3518,27 @@
   "path": "gfx/interface/Loadingscreen_loadingstatus.dds",
   "w": 1400,
   "h": 92,
-  "sig": "b2ec4def5defb2e1d6e1e934b4e5114c42b55e842a37e63fa3e2adae56b4fb30"
+  "sig": "2c0bf5756cfe8c897a2b0a61fab762db06ad178d4c255d89633eb5b6d5017b2b"
  },
  {
   "key": "ld_tip",
   "path": "gfx/interface/Loadingscreen_loadingtip.dds",
   "w": 1400,
   "h": 148,
-  "sig": "9fa88a36da87711a1f9b77be5a29a42dfef76bbd0109a26f6fe38a31268bc150"
+  "sig": "2c924d063af7fec310c950c7bc4118c70387348b2ada19b85077908a5aa19924"
  },
  {
   "key": "ld_track",
   "path": "gfx/interface/LoadingScreen_Progress_1.dds",
   "w": 934,
   "h": 40,
-  "sig": "8f7f48a7bab7b8b8eba5cd996e905e9263f65ab62746f7aa3bb58cd347652e33"
+  "sig": "2be2662b25482e83a52fe9c272fbbe97f00c6c7b3f1de716e6517f9b225898cb"
  },
  {
   "key": "ld_fill",
   "path": "gfx/interface/LoadingScreen_Progress_2.dds",
   "w": 934,
   "h": 40,
-  "sig": "4fdb9e4c8bb9249043b93631a117001d8da39b5b1bcc93f3a970853bd5281fb1"
+  "sig": "868849fe4e9deb69bc73af78f3e1dee1ce9bd9401f3722bfa999f31f56786aac"
  }
 ]

@@ -14,7 +14,7 @@ from paths import VANILLA as _VANILLA
 # every one of their textures to the game's size
 ART_MODULES = ["designer_art", "battleplan_art", "mapview_art", "combat_art", "diplo_art", "setup_art", "window_art",
                "popup_art", "diplomacy_art", "decisions_art", "music_art",
-               "production_art"]
+               "production_art", "icons_art"]
 
 def chamfer(c):
     return f"polygon({c}px 0,calc(100% - {c}px) 0,100% {c}px,100% calc(100% - {c}px),calc(100% - {c}px) 100%,{c}px 100%,0 calc(100% - {c}px),0 {c}px)"

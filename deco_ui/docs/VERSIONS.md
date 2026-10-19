@@ -174,6 +174,28 @@ it before touching the UI. In short:
     equipment's plate, the factory slots, the resource wells) and turned the game's scratches into gilt specks along
     the trade rows (`make_panel_pictures.DRAWN`).
 
+- **v0.11.2** (2026-10-19, later, not yet seen in game; the author's screenshots of v0.11.1 and the notes they had held
+  with v0.11, "Do not act on the following yet", now acted on):
+  - **the game's icons in the Deco style, in the mod** (the author: "You haven't changed the icons yet, but maybe I
+    forgot to approve that"): `icons_art.py` (`ic_`) draws `proposals_icons.py`'s fifteen at the game's paths: the
+    resources strip, the focus tree's three filters, the production screen's factory, dockyard (and with its wrench),
+    efficiency (and its cap) and bombing defence icons, its four add-a-line buttons, the decisions' envelopes;
+  - the diplomacy tab's portrait as the politics screen's (the author: "The diplomacy view is about the same as last
+    time"): the portrait at 0.72 filling a round-headed arch, its top corners under the lacquer, the sunburst on it
+    (`diplomacy_art.LEADER`; v0.11 had it at 0.66 under a flatter arch with an empty cap above); the actions list's
+    empty header strip hidden ("an odd and seemingly useless cut off bar visible if you scroll all the way up");
+  - the loading bar's diamond whole ("Half of the diamond on the top bar in the loading screen is cut off"): the
+    status plate's foot at y 84, the diamond smaller, the progress track 4 px higher (`gen_textures.ld_status`);
+  - the decision count plates 1 px lower ("a little too high": `layout.DEC_RAISE` 1);
+  - the production screen's resource strip under all seven cells, the cog medallions gone ("resource counts go past
+    the bar": `proposals_panels.production`, the hand-drawn header);
+  - the decisions' and events' icon wells centred on their icons ("Icons on the events & decisions are out of
+    alignment with their boxes": `decisions_art.DECISION_WELL`, `EVENT_WELL`).
+  Not changed: the `error.log`'s "Token theocracy is a dynamic token" (the politics screen's popularity of the
+  Theocratic party, `[?party_popularity_100@theocracy|0]`: the game knows its own four ideologies' tokens, not ours;
+  a multiplayer desync warning, harmless in single player, and no way is known to declare the token); the faction
+  screen ("Odd appearance of faction screen"): asked what looks odd.
+
 ## From the root manual's "Current state" (2026-10-17)
 
 Where things stand; the history, date by date, is `docs/HISTORY.md` (add each day's entry at its top).

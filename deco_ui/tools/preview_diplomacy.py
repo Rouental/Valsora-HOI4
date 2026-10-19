@@ -53,7 +53,7 @@ def draw(vanilla):
     face = read_dds(VALSORA + "gfx/leaders/VAL/ROU_roland_cahun.dds")
     sc = .74 if vanilla else DA.PORTRAIT_SCALE
     face = face.resize((round(face.width * sc), round(face.height * sc)), Image.LANCZOS)
-    put(face, *((20, oy + 10) if vanilla else (25, oy + 28)))
+    put(face, *((20, oy + 10) if vanilla else (13 + DA.LEADER["portrait"][0], oy + DA.LEADER["portrait"][1])))
     put(pic(GI + "diplo_leader_frame.dds", vanilla), 13, oy)
     put(pic(GI + "diplo_top_bg_diplo_tab.dds", vanilla), 138, oy)
     put(fake_pie(33), 157 + 35.5 - 33, oy + 9 + 35.5 - 33)

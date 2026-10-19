@@ -445,6 +445,18 @@ def main():
                                                      gnotes) if G else ({}, {})
     for tag, f in gfacts_rel.items():
         G[tag] = gazetteer.merge_facts(G.get(tag), f)
+    # a state painted for one nation of the Subregions layer is that nation's alone (author, 2026-10-19: "each state
+    # should only belong to one of the releasables"): a page's list saved before the layer was repainted (Krionik's
+    # Crvenognjište, 50 states, over the realms painted that day) keeps the rest
+    painted_for = {state_by_name[nm]: tag for tag in nations.SUBREGIONS for nm in nations.RELEASABLE[tag]}
+    for tag in list(gland):
+        others = [s for s in gland[tag] if painted_for.get(s, tag) != tag]
+        if others:
+            gnotes.append(f"Gazetteer: {tag}'s states on its page include {len(others)} painted for "
+                         f"{', '.join(sorted({painted_for[s] for s in others}))} (the Subregions layer); left to them")
+            gland[tag] = [s for s in gland[tag] if s not in others]
+            if not gland[tag]:
+                del gland[tag]
     for tag, land in gland.items():
         for s in land:
             state_by_name.setdefault(state_name[s], s)
@@ -625,7 +637,7 @@ def main():
             "\thistory = {",
             f"\t\towner = {tag}",
             *([] if s in no_owner_core else [f"\t\tadd_core_of = {tag}"]),
-            *[f"\t\tadd_core_of = {t}" for t in extra_cores[s]],
+            *[f"\t\tadd_core_of = {t}" for t in dict.fromkeys(extra_cores[s])],
             *[f"\t\tadd_claim_by = {t}" for t in claims[s]],
             *([] if s in impassable and not is_cap else
               [f"\t\tvictory_points = {{ {pid[cap]} {city_vp.get(cap, 10 if is_cap else CITY_VP if cap in city_of else 1)} }}",
@@ -830,7 +842,10 @@ def main():
     # supply hubs: one in every state, unless the Gazetteer places a nation's own (then those
     # and its capital); railways only from the Gazetteer
     ghubs = gazetteer.hubs(G, lab, kind, state_of, rj["owners"])
-    nodes = [state_capital[s] for s in range(len(states)) if COUNTRIES[owners[s]][0] not in ghubs]
+    # (none in impassable land: the hub's depot model stood in the deserts and the jungle, the author's screenshots of
+    # 2026-10-19; the base game's Sahara has none)
+    nodes = [state_capital[s] for s in range(len(states)) if COUNTRIES[owners[s]][0] not in ghubs
+             and (s not in impassable or s == capital_state.get(owners[s]))]
     for tag, hs in ghubs.items():
         nodes += hs + [state_capital[capital_state[by_tag[tag]]]]
     write("map/supply_nodes.txt", "".join(f"1 {pid[c]}\n" for c in dict.fromkeys(nodes)))
@@ -966,7 +981,10 @@ def main():
         if tag == "ROU" or not mine:
             continue
         mine.sort(key=lambda s: (s != capital_state[c], -len(states[s]), s))
-        write(f"history/units/{tag}_2036.txt", nations.generic_oob(tag, [int(pid[state_capital[s]]) for s in mine]))
+        # never a division in impassable land (author's screenshot, 2026-10-19: Almohavid's stood in its desert)
+        posts = [s for s in mine if s not in impassable or s == capital_state[c]]
+        write(f"history/units/{tag}_2036.txt", nations.generic_oob(tag, [int(pid[state_capital[s]]) for s in posts],
+                                                                    len(mine)))
         army[tag] = [nations.GENERIC_ARMY_TECH,
                      f'set_oob = "{tag}_2036"']
     for c in present:

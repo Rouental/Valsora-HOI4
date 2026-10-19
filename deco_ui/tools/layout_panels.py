@@ -16,6 +16,7 @@ Bottom-anchored elements stay where they are, and boxes that run to the bottom (
 "to the parent's edge minus n") end where they did, so moving content down only makes the lists shorter.
 """
 import layout_politics as LP
+import diplomacy_art as DA
 
 TOP = LP.TOP                      # 62: the band's bottom
 OPEN_MS = LP.OPEN_MS              # 0: a panel opens at once from vanilla's off-screen position (layout_politics)
@@ -70,15 +71,20 @@ def blockers(width, panel_x):
 # much like politics as possible ... larger portraits like Krionik's start to get cut off"). The flag's frame is the
 # bar's 71 px tall (diplomacy_art.FLAG's mat) and moves to the bar's top (y -4) and the tabs' left edge (x 15); the
 # names stop 4 px before the opinion box (the game's x 341 + 33), so a long one is cut with "..." where it would have
-# run under it; the portrait is the game's at diplomacy_art.PORTRAIT_SCALE inside the flatter arch of its frame
-# (diplomacy_art.LEADER["portrait"], the frame at the block's (13, 0))
+# run under it; the portrait is the game's at diplomacy_art.PORTRAIT_SCALE filling the arch of its frame, as the politics
+# screen's (2026-10-19; diplomacy_art.LEADER["portrait"], the frame at the block's (13, 0))
 DIPLO_NAME_W = 341 + 33 - 4 - 245
 DIPLO = {"country_info>diplo_flag_frame": dict(position=(15 - 8, -4 - 1)),
          "country_info>diplo_country_flag": dict(position=(15 - 8 + 26, -4 - 1 + 11)),
          "country_info>country_name": dict(maxWidth=DIPLO_NAME_W),
          "country_info>faction>faction_name": dict(maxWidth=DIPLO_NAME_W),
          "country_info>leader_name": dict(maxWidth=DIPLO_NAME_W),
-         "country_info>diplomacy_tab_top>leader_portrait": dict(position=(13 + 12, 28), scale="0.66")}
+         "country_info>diplomacy_tab_top>leader_portrait": dict(position=(13 + DA.LEADER["portrait"][0],
+                                                                          DA.LEADER["portrait"][1]),
+                                                                scale=str(DA.PORTRAIT_SCALE)),
+         # the actions list's empty header strip, seen cut off at the list's top when scrolled up (the author,
+         # 2026-10-19: "an odd and seemingly useless cut off bar visible if you scroll all the way up"): hidden
+         "country_info>diplomatic_actions>win_header_short": dict(sprite="GFX_valsora_deco_none")}
 
 # the decisions tab's events box and rows (v0.11, decisions_art.py): the game wrote their texts in its typewriter faces,
 # dark ink for the paper it drew them on; on the Deco UI's lacquer they take its light faces (elements of the file's

@@ -1,8 +1,9 @@
 """Proposals: the game's icons redrawn in the Deco UI's style, as close to the game's as the style allows (2026-10-18, the
 author: "For things like those icons there, the resource icons, icons on the production screen, etc. I'd like you to
-make an attempt at recreating them as close as possible, but in the Deco aesthetic"). NOT in the mod (no icon of the
-game's changes without the author's yes on the drawn icon): written to art/proposals/icons/ as PNGs at the game's sizes
-and frames, and build/proposals_icons.png beside the game's (which holds the game's art, so stays in build/).
+make an attempt at recreating them as close as possible, but in the Deco aesthetic"). Written to art/proposals/icons/
+as PNGs at the game's sizes and frames, and build/proposals_icons.png beside the game's (which holds the game's art, so
+stays in build/). In the mod since 2026-10-19 (the author's approval): icons_art.py draws ITEMS at the game's paths; a
+new or redrawn icon is shown here first (no icon of the game's changes without the author's yes on the drawn icon).
 
     CHROMIUM_PATH=/opt/pw-browsers/chromium python proposals_icons.py
 

@@ -82,7 +82,7 @@ New detail goes into those files; this one gets a line.
   `gazetteer_site`, `publish_site.sh`, `tests/gazetteer/`); vanilla (`vanilla_sync`, `pdxscript`); tests not in the
   game (`terrain_test`, `usnistan_prototype`, `coarse_preview`); `build_flags15.sh` (the larger flags' test version).
 - **HOI4's hard rules** (all checked by `check_mod.py`): the map is 5120×2560 (the largest size under the game's cap);
-  **at most 65,536 province borders** (3,472 left on 2026-10-19; new land is cut at ~190 px; `borders.py` counts); provinces
+  **at most 65,536 province borders** (3,475 left on 2026-10-19; new land is cut at ~190 px; `borders.py` counts); provinces
   one 4-connected blob of 16+ px, no 2×2 window of four provinces; `definition.csv` CRLF; localisation UTF-8 with BOM;
   every province in one strategic region, a state's provinces in one, naval regions contiguous; the map files exactly
   map-sized. Map errors crash on launch unless the game runs with `-debug`: always test with it.
@@ -234,14 +234,14 @@ the page, its rules or its import.
   (2026-10-16: Plaija's Vietnamese names; the fonts have Vietnamese since, composed where a face lacks it; the factory
   diamond, U+25C6, only in the value fonts that draw it; mutation-tested).
 - Its `reference/` (the game's files, git-ignored) must never be committed: it is Paradox's content.
-- **Now v0.11.1** (2026-10-19: the music player and its controller, the production lines' boxes, the trade rows; v0.11 of 2026-10-18, night, the top bar's findings, diplomacy like politics, the panels' pictures and the decisions tab, seen 2026-10-19; v0.10.2 to v0.10.4 seen 2026-10-18). v0.9's restyled screens are one commit, `8dece16`: `git revert 8dece16` and a rebuild of both take them out. Previews that show the game's own art stay in the git-ignored `deco_ui/build/` and are only sent to the author. Proposals not in the mod, waiting for the author: `deco_ui/art/proposals/` (the game's icons in the Deco style, `icons/`; the larger flags: "don't add anything to do with it into the mod yet").
+- **Now v0.11.2** (2026-10-19, later: the game's icons in the Deco style in the mod, approved, `deco_ui/tools/icons_art.py`; the diplomacy portrait as the politics screen's; the loading bar's diamond; the decision plates, the production resources, the decisions' icon wells; v0.11.1 of 2026-10-19, the music player and its controller, the production lines' boxes, the trade rows, seen the same day; v0.11 of 2026-10-18, night, the top bar's findings, diplomacy like politics, the panels' pictures and the decisions tab, seen 2026-10-19; v0.10.2 to v0.10.4 seen 2026-10-18). v0.9's restyled screens are one commit, `8dece16`: `git revert 8dece16` and a rebuild of both take them out. Previews that show the game's own art stay in the git-ignored `deco_ui/build/` and are only sent to the author. Proposals not in the mod, waiting for the author: `deco_ui/art/proposals/` (the larger flags: "don't add anything to do with it into the mod yet").
 
 ## Current state
 
 Where things stand; the history, date by date, is `docs/HISTORY.md` (add each day's entry at its top).
 
-- **The build** (2026-10-19): 21,050 provinces (20,662 land, 363 sea, 25 lakes), 62,064 province borders
-  (HOI4 draws 65,536: 3,472 free, `docs/BORDER_LIMIT.md`), 3,192 states (24 impassable: Usnistan's deserts and the
+- **The build** (2026-10-19): 21,049 provinces (20,661 land, 363 sea, 25 lakes), 62,061 province borders
+  (HOI4 draws 65,536: 3,475 free, `docs/BORDER_LIMIT.md`), 3,191 states (22 impassable, without supply hubs or troops: Usnistan's deserts and the
   Cultists' striped jungle, the
   author's areas layer, `scripts/areas.py`; one province each, as the base game's great deserts; their land and the yellow areas desert terrain, cut coarse), 179 strategic
   regions (137 land, made from the nations on 2026-10-16: `land_regions.py`, not redone for the borders since; 42 sea);
@@ -253,7 +253,7 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   Gorbastan, Zukchiva, Sennheiser, Sminishia, West Sminishia and Hollier joined; Ungar's six from the Gazetteer on
   2026-10-18). The four great powers, one per
   ideology but Theocratic (author, 2026-10-17): Krionik (Monarchist), Kampf (Authoritarian), Sarkis (Communist),
-  Fraxhemark (Democratic); great in name for now (their industry is as drawn). Two starts, both on 1 January 2036. The Deco UI is v0.11.1 (`deco_ui/docs/VERSIONS.md`). The Gazetteer shows players a quick-start guide the first time they unlock a nation, a state size guide (Cardonia's states the usual size, author 2026-10-18) before the province one, a button to hide suggestions, what each base-game trait does, and (2026-10-18, night) the neighbours' terrain.
+  Fraxhemark (Democratic); great in name for now (their industry is as drawn). Two starts, both on 1 January 2036. The Deco UI is v0.11.2 (`deco_ui/docs/VERSIONS.md`). The Gazetteer shows players a quick-start guide the first time they unlock a nation, a state size guide (Cardonia's states the usual size, author 2026-10-18) before the province one, a button to hide suggestions, what each base-game trait does, and (2026-10-18, night) the neighbours' terrain.
   Rouental has test decisions for every kind of event, a test superevent and one that sets off many alerts at once
   (`test_events.py`).
   **The Gazetteer's facts are in the mod again** (2026-10-18: the author's export of that morning, 17 nations with
@@ -270,14 +270,14 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   Valsora Atlas (the build in a browser, a private Artifact: `docs/ATLAS.md`). Proposals made the same night, not in
   the mod: the tech tree's full mockup (`docs/tech_tree_mockup/`), a world map poster (`dist/posters/`), the Deco UI's
   next screens (`deco_ui/art/proposals/next_screens/`).
-- **Seen in game last** (2026-10-19): v0.11: the music player and its controller, the trade rows' specks and the production lines without boxes, fixed in v0.11.1 (not yet seen); the faction screen, the diplomacy portrait, the decision plates a little high, the production screen's resource counts and the decisions' icons noted, waiting ("Do not act on the following yet"). Before that (2026-10-18, night): v0.10.4 (the factories' colours, the decision plates a pixel low, the logistics numbers crowded, the music button, the diplomacy and intel tabs, the panels' drafts, the decisions tab, the focus filters' icons: all changed in v0.11, not yet seen). Before that (2026-10-18, later) the Deco UI v0.10.2: the decision counts still round dots in the
+- **Seen in game last** (2026-10-19, later): v0.11.1: the loading bar's diamond half cut off, the diplomacy portrait unchanged and a cut-off bar over its actions, the icons not yet in (approved then): all changed in v0.11.2, with the notes held from v0.11 (the decision plates, the resource counts, the decisions' icons); the faction screen's "odd appearance" asked about; the theocracy token warning explained, not changed. Before that (2026-10-19): v0.11: the music player and its controller, the trade rows' specks and the production lines without boxes, fixed in v0.11.1 (not yet seen); the faction screen, the diplomacy portrait, the decision plates a little high, the production screen's resource counts and the decisions' icons noted, waiting ("Do not act on the following yet"). Before that (2026-10-18, night): v0.10.4 (the factories' colours, the decision plates a pixel low, the logistics numbers crowded, the music button, the diplomacy and intel tabs, the panels' drafts, the decisions tab, the focus filters' icons: all changed in v0.11, not yet seen). Before that (2026-10-18, later) the Deco UI v0.10.2: the decision counts still round dots in the
   shoulders, not the shoulder-shaped plates the author had outlined: plates in v0.10.3, not yet seen. Before that
   (2026-10-18) v0.10.1 (the author's screenshots and a mockup of the medallion):
   the Release Nation window's list over its checkboxes, eight faction flags a row with room for more, the events'
   corner brackets ("you have a lot of trouble with this particular decorative element"), the factories' order, the
   state panel's corner under the flag, the experience badges off centre, the medallion's name 1 px left: all changed
   in v0.10.2, not yet seen. Before that (2026-10-17) v0.10's findings, fixed in v0.10.1. Older findings, all fixed since: `deco_ui/docs/VERSIONS.md`. Not seen yet besides: the two starts, Vilna and Placeholdgrad. The Deco UI's checklist for the author is in `deco_ui/valsora_deco_ui/README.txt` (Things to check) and `deco_ui/CLAUDE.md` (section 10).
-- **Waiting on the author:** (2026-10-19, later) Claude's guesses for the eleven new nations (governments, formal names,
+- **Waiting on the author:** (2026-10-19, later still) Rouental's border edits of 10-18-3 (a city state in the east, cutouts for Vair, Carcarelle and Grande Reliette), not in the file received: to send again; what looks odd on the faction screen; (2026-10-19, later) Claude's guesses for the eleven new nations (governments, formal names,
   colours, tags: `docs/NATIONS.md`, 2026-10-19) and whether the ports and Sangrád are meant as releasables; names for the
   Cultists' 23 states (`dist/state_numbers_cultists.png`) and New Formosa's eleven (Krionik's page can name them);
   (2026-10-19) the Association's emblem, A (gold lozenges) or B (red and white), before it goes in the mod (`dist/emblem_proposals/reibonnaise_association/`); (2026-10-18, night) names for Usnistan's 60 new states
@@ -325,7 +325,7 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
 4. **What still reads as the 1940s**: the tech tree's names, descriptions and pictures (its dates are 2036's;
    `docs/TECH_TREE_2036.md` is a proposal), the 3D models, and the game's own pictures inside the side panels (the
    Deco UI's proposals wait for approval).
-5. **Province borders**: 3,472 left under HOI4's limit (62,064 of 65,536, 2026-10-19; the coarse deserts gave
+5. **Province borders**: 3,475 left under HOI4's limit (62,061 of 65,536, 2026-10-19; the coarse deserts gave
    back 1,368 on 2026-10-18), for the states still to be drawn (`docs/BORDER_LIMIT.md`).
 
 ## Working with the author

@@ -101,13 +101,12 @@ def research():
 def production():
     w, h = 550, 253
     s = frame(w, h)
-    s += ('<div style="position:absolute;left:59px;top:15px;width:422px;height:31px;background:linear-gradient(180deg,#1A252C,#0E1519);'
+    # the resource strip under the game's 7 resource cells (countryproductionlineview.gui: resources_grid, 70 px slots
+    # from x 25 to 515, each with a rounded well the game draws). Until 2026-10-19 the strip ran from x 59 to 481 with
+    # 3 wells of its own (the game's picture's) and cog medallions at its ends, under the first and last cells (the
+    # author: "In the production screen, resource counts go past the bar they're supposed to be on")
+    s += ('<div style="position:absolute;left:19px;top:15px;width:502px;height:31px;background:linear-gradient(180deg,#1A252C,#0E1519);'
           'box-shadow:inset 0 0 0 1px rgba(201,165,90,.6)"></div>')
-    s += "".join(well(x, 18, 71, 25) for x in (60, 202, 342))
-    for cx in (35, 505):          # cog medallions in place of the crossed hammers
-        s += sunburst(cx, 30, 22, .35, 12)
-        s += (f'<div style="position:absolute;left:{cx - 13}px;top:17px;width:26px;height:26px;border-radius:50%;background:#11191E;'
-              f'box-shadow:0 0 0 1px #C9A55A"></div><div style="position:absolute;left:{cx - 9}px;top:21px">{icon("factory", 18, GOLD, 1.4)}</div>')
     s += ('<div style="position:absolute;left:14px;top:52px;width:522px;height:30px;background:linear-gradient(180deg,#17222A,#0E1519);'
           'box-shadow:inset 0 1px 0 rgba(201,165,90,.6),inset 0 -1px 0 rgba(201,165,90,.25)"></div>')
     for x0, x1 in ((14, 272), (274, 536)):

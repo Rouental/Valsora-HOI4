@@ -824,7 +824,7 @@ guiTypes = {
 				iconType = {
 					name = "decisionview_amount_timeout_bg"
 					spriteType = "GFX_valsora_deco_dec_count_left"
-					position = { x = -151 y = 114 }
+					position = { x = -151 y = 115 }
 					alwaystransparent = yes
 					frame = 2
 
@@ -844,7 +844,7 @@ guiTypes = {
 				iconType = {
 					name = "decisionview_amount_to_take_bg"
 					spriteType = "GFX_valsora_deco_dec_count_right"
-					position = { x = -55 y = 114 }
+					position = { x = -55 y = 115 }
 					alwaystransparent = yes
 					frame = 1
 				}

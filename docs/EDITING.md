@@ -83,6 +83,12 @@ layer whose name it doesn't know.
   the base game's great deserts. Desert and jungle states get fewer, larger provinces (desert
   about 600 px, jungle 400), which frees borders for the rest of the map. Lines you draw on
   Necessary States round the areas are states too, as in Usnistan. White (tundra) isn't read yet: say what tundra should be.
+  **A passable place inside an impassable area** (a city deep in the jungle, reached by one path; the author's idea
+  for the Cultists, 2026-10-19): leave the city and the path unpainted on this layer (or paint them green, for
+  ordinary jungle), and give them a state of their own with lines on Necessary States (the city and its path one
+  state, or the path its own). A state mostly red or striped is impassable; one mostly unpainted or green isn't. The
+  path should be a few provinces wide at least (about 20 px), so a province fits in it, and it must touch passable
+  land where you want the one way in.
 
 On the **Provinces** layer the sea provinces are blues, so sea is easy to tell from land.
 They are made from the **Ocean Province Lines** layer (see "Sea provinces" below), so

@@ -31,6 +31,25 @@ The layout is built for 1920 px of UI width: 1920x1080 at 100% UI scale, or
 2560x1440 at up to 133%.
 
 
+NEW IN v0.11.2
+--------------
+  - The game's icons in the Deco style, as approved: the resources, the
+    focus tree's filters, the production screen's icons and its
+    add-a-line buttons, the decisions' envelopes.
+  - Diplomacy: the leader's portrait fills its arch as on the politics
+    screen; the cut-off bar at the top of the actions list is gone.
+  - The loading bar's diamond is whole; the decision count plates 1 px
+    lower; the production screen's resource strip runs under all seven
+    resources; the decisions' and events' icons centred in their wells.
+
+Things to check in game (v0.11.2):
+  - the new icons (production screen, focus tree filters, decisions);
+  - the diplomacy tab's portrait (a large one, as Krionik's), the
+    actions list scrolled to the top;
+  - the loading bar; the decision plates; the production resources;
+  - the decisions and events lists' icons.
+
+
 NEW IN v0.11.1
 --------------
   - The music player in the deco style: its header, buttons, volume and

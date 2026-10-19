@@ -505,6 +505,14 @@ def main(mod):
         lvl, p = ln.split()
         if int(p) not in state_of:
             err(f"supply node on province {p}, which is in no state")
+        elif state_of[int(p)] in impassable:
+            # its depot model stood in the deserts (author's screenshot, 2026-10-19); the base game's Sahara has none
+            err(f"supply node on province {p}, in impassable state {state_of[int(p)]}")
+    # no division starts in impassable land, which no unit may enter (Almohavid's stood in its desert, 2026-10-19)
+    for f in sorted((mod / "history/units").glob("*.txt")):
+        for p in re.findall(r"\blocation\s*=\s*(\d+)", f.read_text(encoding="utf-8-sig")):
+            if state_of.get(int(p)) in impassable:
+                err(f"{f.name}: a unit starts on province {p}, in impassable state {state_of[int(p)]}")
     # railways (the Gazetteer's): level, count, then provinces in a row that touch, on land in states
     for ln in (mod / "map/railways.txt").read_text().splitlines():
         f = [int(v) for v in ln.split()]

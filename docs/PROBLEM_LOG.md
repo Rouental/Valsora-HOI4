@@ -6,6 +6,51 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**A building model in the impassable deserts and jungle; a division in Almohavid's desert** (2026-10-19, the author's
+screenshots: "Currently there's some sort of 3d building model in the impassible deserts / jungle, is that normal?")
+- Cause: the build put a supply hub in every state's capital province (`map/supply_nodes.txt`), the impassable ones too,
+  and the hub's depot is a model on the map; the generic armies stood one division a state, Almohavid's last in its
+  impassable desert, which no unit may enter. The base game's Sahara has neither.
+- Fix: no hub and no starting division in an impassable state (`build_mod.py`; the army keeps its size, counted on all
+  its states); `check_mod.py` fails on either (mutation-tested).
+
+**Krionik's new realms shared their states with Crvenognjište** (2026-10-19, the author: "each state should only belong
+to one of the releasables. Currently you have it so that the new releasables share territory with the old ones")
+- Cause: Krionik's Gazetteer page had saved Crvenognjište's 50 states when its ruler was set, before the author painted
+  Belska, Koroletz, Targoviste and Kosavichy over part of that land; a page's list wins over the Subregions layer, so
+  17 states were cored by Crvenognjište and by the new realm painted there.
+- Fix: a state painted for one nation of the Subregions layer is that nation's alone; a page's list keeps the rest
+  (`build_mod.py`, a note in the build's log). No state is now cored by two releasables (Formosa's own core was written
+  twice on one state, from its page and `nations.CORES`: written once now).
+
+**The diplomacy portrait still wasn't the politics screen's; a cut-off bar over the actions** (2026-10-19, the author:
+"The diplomacy view is about the same as last time. Were you not able to fix the portrait, or did you just forget?
+There's also an odd and seemingly useless cut off bar visible if you scroll all the way up")
+- Cause: held, not forgotten: their note of v0.11 came under "Do not act on the following yet". v0.11 had set the
+  portrait small (0.66) under a flatter arch with an empty dark cap above it; the politics screen's portrait fills its
+  arch. The bar is the game's empty `win_header_short` at the top of the scrolling actions list.
+- Fix: the portrait at 0.72, filling a round-headed arch as the politics screen's, its top corners under the lacquer,
+  the sunburst on it (`diplomacy_art.LEADER`); the header strip hidden (`layout_panels.DIPLO`).
+
+**The loading bar's diamond was cut in half** (2026-10-19, the author: "Half of the diamond on the top bar in the loading
+screen is cut off")
+- Cause: the status plate hung to the picture's last row (y 92) and its diamond was centred on that edge, so its lower
+  half fell outside the 92 px picture.
+- Fix: the plate's foot at y 84, a smaller diamond, the progress track 4 px higher (`gen_textures.ld_status`, `TRACK`);
+  `ld_plate` stops if a diamond would leave its picture.
+
+**The production screen's resource counts ran past their bar** (2026-10-19, the author's screenshot of v0.11)
+- Cause: the hand-drawn header (v0.7's proposal, `proposals_panels.production`) kept the game's strip, x 59 to 481 with
+  cog medallions at its ends, but the game lays its 7 resource cells from x 25 to 515: the first and last ran over the
+  medallions.
+- Fix: the strip from x 19 to 521 under all seven, the medallions gone.
+
+**The decisions' and events' icons sat off their wells** (2026-10-19, the author: "Icons on the events & decisions are
+out of alignment with their boxes")
+- Cause: `decisions_art.row` drew the icon's well from x 5; the game centres a decision's icon at the row's (30, 19) and
+  draws an event's type icon at x 16 to 46: 7 and 11 px to the right.
+- Fix: the wells centred on the icons (`decisions_art.DECISION_WELL`, `EVENT_WELL`).
+
 **The production lines had no boxes, the trade rows had specks and stray lines** (2026-10-19, the author's screenshots of
 v0.11: "The production screen doesn't have any boxes", "Trade screen has off artifacts and lines")
 - Cause: v0.11 put the side panels' drafted pictures in the mod as `make_panel_pictures.py` makes them, the game's

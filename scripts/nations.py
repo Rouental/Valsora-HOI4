@@ -586,10 +586,10 @@ def generic_divisions(n_states):
     return max(2, min(24, round(n_states / 6) + 2))
 
 
-def generic_oob(tag, vps):
+def generic_oob(tag, vps, states=None):
     """history/units/<tag>_2036.txt: vps are the victory point provinces of the
-    country's states, capital first."""
-    n = generic_divisions(len(vps))
+    country's states, capital first, where the divisions stand; states (len(vps) if not given) sizes the army."""
+    n = generic_divisions(states or len(vps))
     out = ["division_template = {", '\tname = "Infantry Division"', "\tregiments = {",
            *[f"\t\tinfantry = {{ x = {x} y = {y} }}" for x in range(3) for y in range(3) if (x, y) != (2, 2)],
            "\t\tartillery_brigade = { x = 3 y = 0 }", "\t}",
