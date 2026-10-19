@@ -1764,6 +1764,146 @@
   "sig": "df6651cf143d3e03359296cb2a3814fd2ed9054bbdae435b4abbd93aec69aac8"
  },
  {
+  "key": "mu_header",
+  "path": "gfx/interface/topbar/musicplayer/musicplayer_header_bg.dds",
+  "w": 594,
+  "h": 121,
+  "sig": "6cb619045acca352c91836cff5a334ad14e66055826a4e2fc8dbf0d3145e65b1"
+ },
+ {
+  "key": "mu_prev",
+  "path": "gfx/interface/topbar/musicplayer/musicplayer_previous_button.dds",
+  "w": 39,
+  "h": 39,
+  "sig": "f0c17cadfe9a2a670f4d02a5148eadebee30f8453856a9ac17ce9cca2a4862a4"
+ },
+ {
+  "key": "mu_next",
+  "path": "gfx/interface/topbar/musicplayer/musicplayer_next_button.dds",
+  "w": 39,
+  "h": 39,
+  "sig": "73e1cee3b6206f05c1121a7fd8af1b647bc1aeff20ec527dce7a5e5d794718c4"
+ },
+ {
+  "key": "mu_play_pause",
+  "path": "gfx/interface/topbar/musicplayer/musicplayer_play_pause_button.dds",
+  "w": 138,
+  "h": 40,
+  "sig": "65081fbe62206d4ad0dab8abba920b3d29711217d36a3afc7238a236d5d39f9e"
+ },
+ {
+  "key": "mu_shuffle",
+  "path": "gfx/interface/topbar/musicplayer/toggle_shuffle_buttons.dds",
+  "w": 213,
+  "h": 39,
+  "sig": "f295deab402ecedd1470c2bc450e1a7e9f3388c17b096ca74ca2cab9b889426e"
+ },
+ {
+  "key": "mu_volume",
+  "path": "gfx/interface/topbar/musicplayer/music_vol_progress.dds",
+  "w": 75,
+  "h": 16,
+  "sig": "15f36a34e6e06da0bda4a503eb0526be138167b040639b182e7fd6e79124e4c5"
+ },
+ {
+  "key": "mu_track_rule",
+  "path": "gfx/interface/topbar/musicplayer/music_player_entry_bg.dds",
+  "w": 518,
+  "h": 30,
+  "sig": "b2ba7e331136d924dc3444ff10120a27cc29742f2d1f36054976a3fd391c2fcd"
+ },
+ {
+  "key": "mu_playing",
+  "path": "gfx/interface/topbar/musicplayer/selected_song.dds",
+  "w": 610,
+  "h": 21,
+  "sig": "090502041d0648d5465392ed85688e7ebf1145ed76a908518c1da51114f1b433"
+ },
+ {
+  "key": "mu_disabled",
+  "path": "gfx/interface/topbar/musicplayer/disabled_song.dds",
+  "w": 501,
+  "h": 21,
+  "sig": "52f50320e1da8bc9e9c7551e0585a9f8366d90d54e83f023557a3c56b21ce1aa"
+ },
+ {
+  "key": "mu_small_pause",
+  "path": "gfx/interface/topbar/musicplayer/music_pause_button.dds",
+  "w": 66,
+  "h": 33,
+  "sig": "d54b38babeb18f30a1123b3ebca4dca4e739659033e6f4889e3bfd634f3cf0ad"
+ },
+ {
+  "key": "mu_small_next",
+  "path": "gfx/interface/topbar/musicplayer/music_next_button.dds",
+  "w": 33,
+  "h": 33,
+  "sig": "7d17fc10e99de853b2ec837dd321eb88f72702d9bc3684ddbb1a19d5d7217f2d"
+ },
+ {
+  "key": "mu_small_player",
+  "path": "gfx/interface/topbar/musicplayer/musicplayer_button.dds",
+  "w": 32,
+  "h": 32,
+  "sig": "c0f800d2fc1eae10468c530bd89ae960812b3846a3a08ee540d1843de1a7420e"
+ },
+ {
+  "key": "mu_tab",
+  "path": "gfx/interface/valsora_deco/music_tab.dds",
+  "w": 120,
+  "h": 42,
+  "sig": "24e93b8806f7d36d054c4e49d001922dfa0d7779cf58e36a432f6a2d1ce9c035"
+ },
+ {
+  "key": "mu_station",
+  "path": "gfx/interface/valsora_deco/music_station.dds",
+  "w": 190,
+  "h": 122,
+  "sig": "e0ae69163646473fa5c342050abe5ad9e9a08e753e844f8b820656cb10ba05f5"
+ },
+ {
+  "key": "mu_note",
+  "path": "gfx/interface/valsora_deco/music_note.dds",
+  "w": 44,
+  "h": 44,
+  "sig": "8df86a293a557585514c694d6c578d760cebc6de5995bef4646cbd495485d0dd"
+ },
+ {
+  "key": "pl_item",
+  "path": "gfx/interface/production_item.dds",
+  "w": 511,
+  "h": 108,
+  "sig": "41b4c172fcac638c7e7bdb4a79a2211f0d4823b7ec2c5cfbe5af6078de134744"
+ },
+ {
+  "key": "pl_selected",
+  "path": "gfx/interface/production_line_selected.dds",
+  "w": 511,
+  "h": 108,
+  "sig": "7f5216918603a75340e5f90e5e28e4b145603a2e53102999a799beb01679dbae"
+ },
+ {
+  "key": "pl_naval_strip",
+  "path": "gfx/interface/naval_production_item_slots_strip.dds",
+  "w": 1533,
+  "h": 108,
+  "sig": "fa1b699a0323d9a8c2369889814847bafb13eb7951dc63ff2e73d03d14f211fa"
+ },
+ {
+  "key": "pl_naval_selected",
+  "path": "gfx/interface/naval_production_line_selected.dds",
+  "w": 511,
+  "h": 94,
+  "sig": "eab94da1410926a4d0e0fd3eb9925ce49f9cbdfd0214e8a6dae96fe49d95b0a7"
+ },
+ {
+  "key": "pl_trade_row",
+  "path": "gfx/interface/tradeview/country_trade_entry_bg_wide.dds",
+  "w": 1944,
+  "h": 45,
+  "sig": "432b46ee88e20563c255d59e52482297ae974bfae98bdf1553732b077a9bca67"
+ },
+ {
   "key": "mm_column",
   "path": "gfx/interface/mapmode/mapmode_main_bg.dds",
   "w": 87,

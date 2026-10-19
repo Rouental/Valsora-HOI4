@@ -190,40 +190,40 @@ guiTypes = {
 
 		containerWindowType = {
 			name = "toggle_music_commands_win"
-			position = { x = -289 y = 113 }
-			show_position = { x = -450 y = 113 }
+			position = { x = -442 y = 65 }
+			show_position = { x = -442 y = 108 }
 			show_animation_type = decelerated
 			hide_animation_type = accelerated
-			animation_time = 450
+			animation_time = 250
 			Orientation = upper_right	
 			clipping = no
-			size = { width=228 height=42 }
+			size = { width = 120 height = 42 }
 	
 			background = {
 				name = "Background"		
-				quadTextureSprite ="GFX_playlist_bg"
+				quadTextureSprite ="GFX_valsora_deco_music_tab"
 			}
 
 			buttonType = {
 				name = "music_pause_button"
 				quadTextureSprite ="GFX_music_pause_button"
-				position = { x= -195 y = 6 }
-				Orientation = UPPER_RIGHT
+				position = { x = 7 y = 4 }
+				Orientation = UPPER_LEFT
 			}	
 
 			buttonType = {
 				name = "music_next_button"
 				quadTextureSprite ="GFX_music_next_button"
-				position = { x= -165 y = 6 }
-				Orientation = UPPER_RIGHT
+				position = { x = 44 y = 4 }
+				Orientation = UPPER_LEFT
 				pdx_tooltip = "MUSICPLAYER_NEXT"
 			}
 
 			buttonType = {
 				name = "musicplayer_button"
 				quadTextureSprite ="GFX_musicplayer_button"
-				position = { x= -130 y = 6 }
-				Orientation = UPPER_RIGHT
+				position = { x = 81 y = 5 }
+				Orientation = UPPER_LEFT
 			}			
 				
 		}		

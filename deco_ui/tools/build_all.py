@@ -20,6 +20,7 @@ STAGES = [
     ["make_topbar.py", "make_politics.py", "make_stateview.py", "make_focus.py", "make_menu.py", "make_panels.py",
      "make_leadergroups.py", "make_mapviews.py", "make_events.py", "make_research.py", "make_setup.py",
      "make_popups.py",                                       # v0.10.2: the release dialog's text above its checkboxes
+     "make_music.py",                                        # 2026-10-19: the music player's station box
      "make_panel_pictures.py"],                              # v0.11: the side panels' own pictures
     ["validate_preview.py"],                                 # the checks, before any preview
     ["preview_screens.py", "preview_panels.py", "preview_focus.py", "preview_armybar.py", "preview_events.py",

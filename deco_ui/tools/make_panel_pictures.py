@@ -19,8 +19,11 @@ from paths import ART, MOD, VANILLA
 
 GI = "gfx/interface/"
 KEEP_GAME = ("armyoverview_", "overview_filter_entry", "overview_top_strip", "operatives/", "operations/", "crypto/")
-# drawn by an art module instead (decisions_art.py: the decisions tab, restyled whole the same day)
-DRAWN = {"decisionview/decision_item_bg.dds", "decisionview/event_header_bg.dds"}
+# drawn by an art module instead (decisions_art.py: the decisions tab, restyled whole the same day; production_art.py
+# (2026-10-19): the production lines and the trade rows, whose translation lost their boxes and left specks)
+DRAWN = {"decisionview/decision_item_bg.dds", "decisionview/event_header_bg.dds", "production_item.dds",
+         "production_line_selected.dds", "naval_production_line_selected.dds", "naval_production_item_slots_strip.dds",
+         "tradeview/country_trade_entry_bg_wide.dds"}
 
 
 def kept(rel):

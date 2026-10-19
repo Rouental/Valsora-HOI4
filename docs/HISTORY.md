@@ -10,6 +10,7 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-19, later (the author's screenshots of v0.11): **Deco UI v0.11.1**: the music player and its controller in the deco style (the controller a tab under the music button), the production lines' boxes and the trade rows drawn by hand (`deco_ui/docs/VERSIONS.md`); the icon proposals' factory back as it was ("it matching the civilian factory icon is good"), the production line buttons redrawn instead (a high-cut helmet over an assault rifle, a modern tank).
 - 2026-10-19 (the author: "by and large I like them, but the efficiency, dockyard, and production icons aren't
   great ... the shield on bombing defense could be better"): the Deco icon proposals redrawn
   (`deco_ui/tools/proposals_icons.py`, `deco_ui/art/proposals/icons/`), still not in the mod. Their other notes of

@@ -6,6 +6,25 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**The production lines had no boxes, the trade rows had specks and stray lines** (2026-10-19, the author's screenshots of
+v0.11: "The production screen doesn't have any boxes", "Trade screen has off artifacts and lines")
+- Cause: v0.11 put the side panels' drafted pictures in the mod as `make_panel_pictures.py` makes them, the game's
+  pictures translated automatically into the Deco palette (`proposals_panel_mockups.translate`). On the production line
+  it found none of the boxes (the equipment's plate, the 15 factory slots, the resource wells: their edges are faint
+  in the game's metal) and on the trade row (three frames side by side, which it read as one picture) it took the
+  metal's scratches for the thin bright lines it gilds.
+- Fix: those five pictures drawn by hand from the game's measured layout (`deco_ui/tools/production_art.py`), left out
+  of the translation (`make_panel_pictures.DRAWN`). A picture of boxes in a textured metal wants drawing, not
+  translating; the other translated pictures are worth a look in game for the same faults.
+
+**The music controller popped in out of nowhere** (2026-10-19, the author: "make it fit in better as currently it just
+kinda pops in our of nowhere")
+- Cause: the game slides its strip in from the right, out from under its own top bar's picture; the Deco UI had kept
+  that slide under its tray, where there is nothing for it to come out of.
+- Fix: a tab hanging from the tray under the music button, sliding down out of the tray, which is drawn after it and
+  hides it there (`music_art.TAB`, `make_topbar.py`).
+
+
 **The diplomacy tab didn't match the politics screen** (2026-10-18, the author's screenshots of v0.10.4: "the box isn't
 aligned with the flag. Focus icon isn't centered ... larger portraits like Krionik's start to get cut off")
 - Causes: the flag's frame was 68 px tall and 3 px under the 71 px bar beside it; the left wells were drawn 5.5 px off

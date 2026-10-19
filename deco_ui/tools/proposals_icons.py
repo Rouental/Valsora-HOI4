@@ -17,8 +17,8 @@ line, no texture. The icons:
                                                                       unavailable), modern kit (Valsora is 2036)
   decisionview/decision_select_icon_strip.dds   4 x 40 x 28  the decisions' envelopes (can't take, take, under way, timed)
 Redrawn 2026-10-19 (the author: "by and large I like them, but the efficiency, dockyard, and production icons aren't
-great ... the shield on bombing defense could be better as well"): the factory with the game's sawtooth roof and two
-stacks, the dockyard a gantry crane over a ship (the wrench an open-ended one across it), efficiency the game's zigzag
+great ... the shield on bombing defense could be better as well"; by production they meant the add-a-line buttons): the
+dockyard a gantry crane over a ship (the wrench an open-ended one across it), efficiency the game's zigzag
 over gilt bars rising to it, the bombing defence a heater shield in two-tone steel with a ridge.
 """
 import os
@@ -86,11 +86,10 @@ WORKS = (f'<path d="M3.5,23.5V12L9,15V12L14.5,15V12L20,15V6H23.5V23.5Z" fill="#7
          f'<path d="M5.5,17.5H8.5M11,17.5H14M16.5,17.5H19.5" stroke="{LIT}" stroke-width="1"/>')
 
 # ------------------------------------------------------------------ the production screen
-# the factory's sawtooth roof and two stacks, as the game's (a roof of three teeth, the stacks rising from the third)
-MIL_FACTORY = (f'<path d="M2.5,21.5V13L7,10V13L11.5,10V13L14,11.2V2.5H16.5V11H18.5V2.5H21V11.5L24.5,13.5V21.5Z" '
-               f'fill="url(#jade)" {O}/>'
-               f'<path d="M14,4.5H16.5M18.5,4.5H21" stroke="{LIT}" stroke-width="1"/>'
-               + "".join(f'<rect x="{5 + 5 * i}" y="15.5" width="2" height="3" fill="#0D1F1A"/>' for i in range(4)))
+# the factory as the civilian one's (the WORKS filter): the author, 2026-10-19: "The military factory icon was okay, it
+# matching the civilian factory icon is good"
+MIL_FACTORY = (f'<path d="M2.5,21.5V11L8,14V11L13.5,14V11L19,14V3H21.5V7H24V21.5Z" fill="url(#jade)" {O}/>'
+               f'<path d="M4.5,18H22" stroke="{LIT}" stroke-width="1" opacity=".7"/>')
 
 
 def outlined(d, colour, width, dark=1.6):
@@ -105,10 +104,10 @@ def dockyard(wrench=False):
     body = (f'<path d="M4.5,19.5L6.5,6.5M11.5,19.5L9.5,6.5M5.5,13H10.5M5,16.5L10.7,9.5M6,9.5L11,16.5" '
             f'fill="none" stroke="url(#steel)" stroke-width="1.3"/>'
             f'<path d="M2.5,3.5H23.5V6.5H2.5Z" fill="url(#steel)" {O}/>'
-            f'<path d="M20.5,6.5V10.5" stroke="url(#g)" stroke-width="1"/><path d="M19,10.5H22" stroke="url(#g)" stroke-width="1.2"/>'
+            f'<path d="M20.5,6.5V10.5" stroke="{GOLD}" stroke-width="1"/><path d="M19,10.5H22" stroke="{GOLD}" stroke-width="1.2"/>'
             f'<path d="M14.5,14.5H27.5L25,19.5H16.5Z" fill="url(#steel)" {O}/>'
             f'<path d="M18,14.5V11.5H22V14.5" fill="url(#steel)" {O}/>'
-            f'<path d="M1.5,20H27.5" stroke="url(#g)" stroke-width="1.2"/>')
+            f'<path d="M1.5,20H27.5" stroke="{GOLD}" stroke-width="1.2"/>')
     if wrench:
         body += (outlined("M8,18L17.5,8.5", "#C9D1D4", 2.4)
                  + '<circle cx="19.5" cy="6.5" r="4" fill="#C9D1D4" stroke="#0B1014" stroke-width="1"/>'
@@ -153,13 +152,25 @@ BOMB_DEFENCE = (f'<path d="M1.5,25.5V14L6,11V14L10.5,11V14L12,13V4.5H14.5V12.5L1
                 f'<path d="{SHIELD}" fill="none" stroke="url(#g)" stroke-width="1.3" stroke-linejoin="round"/>')
 
 # ------------------------------------------------------------------ the add-a-line buttons (3 frames of 81 x 41)
-HELMET_GUN = (f'<path d="M7,22Q7,10 19,10Q29,10 30,20L30,22Z" fill="url(#jade)" {O}/>'
-              f'<path d="M7,22H33" stroke="url(#g)" stroke-width="1.4"/>'
-              f'<path d="M12,33L50,22" stroke="url(#jade)" stroke-width="3" stroke-linecap="round"/>'
-              f'<circle cx="24" cy="31" r="4" fill="url(#jade)" {O}/>')
-TANK = (f'<path d="M6,31H46Q49,31 47,27L44,24H9L5,28Q4,31 6,31Z" fill="url(#jade)" {O}/>'
-        f'<path d="M14,24L17,18H33L37,24Z" fill="url(#jade)" {O}/><path d="M33,20.5H56" stroke="url(#g)" stroke-width="1.8"/>'
-        + "".join(f'<circle cx="{11 + 7 * i}" cy="28.5" r="1.3" fill="{LIT}"/>' for i in range(5)))
+# a high-cut combat helmet over an assault rifle (the game's: a WWII helmet and a field gun)
+HELMET_GUN = (f'<path d="M10.5,17.5Q10.5,6.5 21,6.5Q31.5,6.5 31.5,17.5H28Q27.5,14.5 25,14.5L24.5,17.5Z" fill="url(#jade)" {O}/>'
+              f'<path d="M15,10Q18,8.4 21,8.4" fill="none" stroke="{LIT}" stroke-width="1" opacity=".7"/>'
+              f'<path d="M5.5,25L12.5,24V29L7.5,31.5Z" fill="url(#jade)" {O}/>'
+              f'<path d="M12.5,23.5H33V28H12.5Z" fill="url(#jade)" {O}/>'
+              f'<path d="M33,24.5H43V27.5H33Z" fill="#14201C" {O}/>'
+              f'<path d="M23,28H26.5Q27.5,32 29.5,35H26Q24,32 23,28Z" fill="url(#jade)" {O}/>'
+              f'<path d="M17,23.5V21.2H24V23.5" fill="none" stroke="{GOLD}" stroke-width="1.1"/>'
+              f'<path d="M43,26H55" stroke="{GOLD}" stroke-width="1.5"/>'
+              f'<path d="M15,25.5H31" stroke="{LIT}" stroke-width=".8" opacity=".6"/>')
+# a modern main battle tank, side on: the angular turret, the long gun, six road wheels under a skirt
+TANK = (f'<path d="M7,28.5H45Q47,31.5 44,34.5H9Q5.5,31.5 7,28.5Z" fill="#14201C" {O}/>'
+        + "".join(f'<circle cx="{11.5 + 6.4 * i}" cy="31.5" r="2.2" fill="url(#jade)" stroke="url(#g)" stroke-width=".7"/>'
+                  for i in range(6))
+        + f'<path d="M4.5,28.5L8,23.5H44L48,28.5Z" fill="url(#jade)" {O}/>'
+        f'<path d="M14.5,23.5L17.5,17.5H33L38,20.5V23.5Z" fill="url(#jade)" {O}/>'
+        f'<path d="M22,17.5V15.5H27V17.5" fill="url(#jade)" stroke="url(#g)" stroke-width="1"/>'
+        f'<path d="M37,19.5H57" stroke="{GOLD}" stroke-width="1.8"/><path d="M53,18.3V20.7" stroke="{GOLD}" stroke-width="2.4"/>'
+        f'<path d="M9,26H43" stroke="{LIT}" stroke-width=".8" opacity=".6"/>')
 JET = (f'<path d="M30,6L33,16L52,27V30L33,26L32,32L37,35V37L30,35L23,37V35L28,32L27,26L8,30V27L27,16Z" '
        f'fill="url(#jade)" {O}/>')
 ANCHOR = (f'<circle cx="30" cy="8" r="3" fill="none" stroke="url(#steel)" stroke-width="2"/>'
@@ -197,7 +208,7 @@ def envelope(kind):
     else:
         e += (f'<circle cx="30" cy="16" r="7.5" fill="#11191E" stroke="url(#g)" stroke-width="1.4"/>'
               f'<path d="M30,11.5V16L33,18" fill="none" stroke="{LIT}" stroke-width="1.4"/>'
-              f'<path d="M28.5,7H31.5M30,7V8.5" stroke="url(#g)" stroke-width="1.4"/>')
+              f'<path d="M28.5,7H31.5M30,7V8.5" stroke="{GOLD}" stroke-width="1.4"/>')
     return e
 
 

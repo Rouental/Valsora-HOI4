@@ -172,8 +172,16 @@ t = set_attrs(t, "background", sprite="GFX_valsora_deco_medallion", position=G(L
 t = set_attrs(t, "player_flag", sprite="GFX_valsora_deco_player_flag", position=G(L.FLAG["x"], L.FLAG["y"]))
 t = set_attrs(t, "observer_flag_overlay", position=G(L.FLAG["x"] - 1, L.FLAG["y"] + 1))
 t = set_attrs(t, "armyoverview_buttons_bg", sprite="GFX_valsora_deco_topbar_right", position=GR(L.RPLATE["x"], L.RPLATE["y"]))
-mx = -289
-t = set_attrs(t, "toggle_music_commands_win", position=(mx, L.MUSIC_Y + 1), show_position=(-450, L.MUSIC_Y + 1))
+# the music controller (2026-10-19, the author: "in the case of the controller popup, make it fit in better as currently
+# it just kinda pops in out of nowhere"): a tab hanging from the tray under the music button (music_art.TAB), which
+# slides down from behind the tray (drawn after it, armyoverview_buttons_bg) instead of in from the right
+from music_art import TAB  # noqa: E402
+MW = "toggle_music_commands_win"
+t = set_attrs(t, MW, position=GR(TAB["x"], TAB["hidden_y"]), show_position=GR(TAB["x"], TAB["y"]),
+              size=(TAB["w"], TAB["h"]), animation_time=250)
+t = GP.set_background(t, MW, "GFX_valsora_deco_music_tab")
+for k, (bx, by) in zip(("music_pause_button", "music_next_button", "musicplayer_button"), TAB["buttons"]):
+    t = set_attrs(t, k, position=(bx, by), Orientation="UPPER_LEFT")
 
 # ---------------------------------------------------------------- 3. primary readouts in the band
 PRIMARY = {  # key: (hover bg, icon, text, deco icon sprite)

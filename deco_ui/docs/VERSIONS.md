@@ -156,6 +156,24 @@ it before touching the UI. In short:
   intelligence agency, the spirit banners) were in `deco_ui/art/proposals/panel_pictures/`; all but the overview strip
   and the agency's went in with v0.11.
 
+- **v0.11.1** (2026-10-19, not yet seen in game; the author's screenshots of v0.11: "Please also style the music
+  controlller and the music player to better match the ui, and in the case of the controller popup, make it fit in
+  better as currently it just kinda pops in our of nowhere. Trade screen has off artifacts and lines. The production
+  screen doesn't have any boxes"):
+  - the music player (`music_art.py`, `mu_`; `make_music.py` for `musicplayer.gui`): the faceplate a lacquer plate
+    with the track's well and a gilt loudspeaker in a sunburst either side (the game's megaphones), the control rail
+    under it, the buttons chamfered plates with gilt glyphs (previous, play / pause, next, the station's music, shuffle
+    and shuffle off), the volume's gilt fill, the station box a lacquer plate with the top bar's note and its title in
+    gilt capitals; the track list keeps its ivory sheet (the typewriter text is dark), its rules and margin bronze, the
+    playing track's pointer jade, a disabled track's line oxblood. Preview `build/preview_music.png` (+ `_vanilla`);
+  - the controller (`toggle_music_commands_win`): a tab hanging from the tray under the music button
+    (`music_art.TAB`), sliding down from behind the tray (the game slid its strip in from the right, out of nothing),
+    its three buttons as the player's;
+  - the production lines and the trade rows (`production_art.py`, `pl_`): drawn by hand from the game's measured
+    layout instead of `make_panel_pictures.py`'s automatic translation, which had lost the line's boxes (the
+    equipment's plate, the factory slots, the resource wells) and turned the game's scratches into gilt specks along
+    the trade rows (`make_panel_pictures.DRAWN`).
+
 ## From the root manual's "Current state" (2026-10-17)
 
 Where things stand; the history, date by date, is `docs/HISTORY.md` (add each day's entry at its top).

@@ -233,7 +233,7 @@ the page, its rules or its import.
   (2026-10-16: Plaija's Vietnamese names; the fonts have Vietnamese since, composed where a face lacks it; the factory
   diamond, U+25C6, only in the value fonts that draw it; mutation-tested).
 - Its `reference/` (the game's files, git-ignored) must never be committed: it is Paradox's content.
-- **Now v0.11** (2026-10-18, night: the top bar's findings, diplomacy like politics, the panels' pictures and the decisions tab; not yet seen in game; v0.10.2 to v0.10.4 seen 2026-10-18). v0.9's restyled screens are one commit, `8dece16`: `git revert 8dece16` and a rebuild of both take them out. Previews that show the game's own art stay in the git-ignored `deco_ui/build/` and are only sent to the author. Proposals not in the mod, waiting for the author: `deco_ui/art/proposals/` (the game's icons in the Deco style, `icons/`; the larger flags: "don't add anything to do with it into the mod yet").
+- **Now v0.11.1** (2026-10-19: the music player and its controller, the production lines' boxes, the trade rows; v0.11 of 2026-10-18, night, the top bar's findings, diplomacy like politics, the panels' pictures and the decisions tab, seen 2026-10-19; v0.10.2 to v0.10.4 seen 2026-10-18). v0.9's restyled screens are one commit, `8dece16`: `git revert 8dece16` and a rebuild of both take them out. Previews that show the game's own art stay in the git-ignored `deco_ui/build/` and are only sent to the author. Proposals not in the mod, waiting for the author: `deco_ui/art/proposals/` (the game's icons in the Deco style, `icons/`; the larger flags: "don't add anything to do with it into the mod yet").
 
 ## Current state
 
@@ -250,7 +250,7 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   Gorbastan, Zukchiva, Sennheiser, Sminishia, West Sminishia and Hollier joined; Ungar's six from the Gazetteer on
   2026-10-18). The four great powers, one per
   ideology but Theocratic (author, 2026-10-17): Krionik (Monarchist), Kampf (Authoritarian), Sarkis (Communist),
-  Fraxhemark (Democratic); great in name for now (their industry is as drawn). Two starts, both on 1 January 2036. The Deco UI is v0.11 (`deco_ui/docs/VERSIONS.md`). The Gazetteer shows players a quick-start guide the first time they unlock a nation, a state size guide (Cardonia's states the usual size, author 2026-10-18) before the province one, a button to hide suggestions, what each base-game trait does, and (2026-10-18, night) the neighbours' terrain.
+  Fraxhemark (Democratic); great in name for now (their industry is as drawn). Two starts, both on 1 January 2036. The Deco UI is v0.11.1 (`deco_ui/docs/VERSIONS.md`). The Gazetteer shows players a quick-start guide the first time they unlock a nation, a state size guide (Cardonia's states the usual size, author 2026-10-18) before the province one, a button to hide suggestions, what each base-game trait does, and (2026-10-18, night) the neighbours' terrain.
   Rouental has test decisions for every kind of event, a test superevent and one that sets off many alerts at once
   (`test_events.py`).
   **The Gazetteer's facts are in the mod again** (2026-10-18: the author's export of that morning, 17 nations with
@@ -267,7 +267,7 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   Valsora Atlas (the build in a browser, a private Artifact: `docs/ATLAS.md`). Proposals made the same night, not in
   the mod: the tech tree's full mockup (`docs/tech_tree_mockup/`), a world map poster (`dist/posters/`), the Deco UI's
   next screens (`deco_ui/art/proposals/next_screens/`).
-- **Seen in game last** (2026-10-18, night): v0.10.4 (the factories' colours, the decision plates a pixel low, the logistics numbers crowded, the music button, the diplomacy and intel tabs, the panels' drafts, the decisions tab, the focus filters' icons: all changed in v0.11, not yet seen). Before that (2026-10-18, later) the Deco UI v0.10.2: the decision counts still round dots in the
+- **Seen in game last** (2026-10-19): v0.11: the music player and its controller, the trade rows' specks and the production lines without boxes, fixed in v0.11.1 (not yet seen); the faction screen, the diplomacy portrait, the decision plates a little high, the production screen's resource counts and the decisions' icons noted, waiting ("Do not act on the following yet"). Before that (2026-10-18, night): v0.10.4 (the factories' colours, the decision plates a pixel low, the logistics numbers crowded, the music button, the diplomacy and intel tabs, the panels' drafts, the decisions tab, the focus filters' icons: all changed in v0.11, not yet seen). Before that (2026-10-18, later) the Deco UI v0.10.2: the decision counts still round dots in the
   shoulders, not the shoulder-shaped plates the author had outlined: plates in v0.10.3, not yet seen. Before that
   (2026-10-18) v0.10.1 (the author's screenshots and a mockup of the medallion):
   the Release Nation window's list over its checkboxes, eight faction flags a row with room for more, the events'

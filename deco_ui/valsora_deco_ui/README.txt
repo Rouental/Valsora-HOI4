@@ -31,6 +31,24 @@ The layout is built for 1920 px of UI width: 1920x1080 at 100% UI scale, or
 2560x1440 at up to 133%.
 
 
+NEW IN v0.11.1
+--------------
+  - The music player in the deco style: its header, buttons, volume and
+    station box; the track list stays on its ivory sheet.
+  - The music controller opens as a tab hanging under the music button,
+    sliding down out of the tray.
+  - The production lines have their boxes again (the equipment's plate,
+    the factory slots, the resource wells); the trade rows lose their
+    specks and stray lines.
+
+Things to check in game (v0.11.1):
+  - the music player (open it from the controller): the header, the
+    buttons (play / pause, shuffle on and off), the volume;
+  - the controller: it slides down from under the music button and is
+    hidden in the tray when closed;
+  - a few production lines (land and naval, one selected), the trade list.
+
+
 NEW IN v0.11
 ------------
   - Top bar: military factories green, civilian orange; the decision
