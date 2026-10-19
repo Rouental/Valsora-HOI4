@@ -211,6 +211,9 @@ TAG_CULTURE = {
     **{t: dict(names="SOV", portraits="europe", gfx="eastern_european")
        for t in ("DRK", "STB", "SDE", "SVT", "SRY", "KLF", "BLY", "KSP")},
     **{t: dict(names="SER", portraits="europe", gfx="eastern_european") for t in ("ZST", "CRV", "MYL")},
+    # 2026-10-19: Krionik's other realms, city and ports as Krionik (Claude's)
+    **{t: dict(names="SER", portraits="europe", gfx="eastern_european")
+       for t in ("BLS", "KRZ", "TGV", "KSV", "LGR", "SGD", "PNY", "PVS", "PGZ")},
     "MRG": dict(names="HOL", portraits="europe", gfx="western_european"),  # Dutch (author)
     "ZWT": dict(names="HOL", portraits="europe", gfx="western_european"),
     "OCR": dict(names="GER", portraits="europe", gfx="western_european"),
@@ -250,7 +253,7 @@ TAG_CULTURE = {
     # from the names. Chinese, Vietnamese and Tibetan are our own lists (vanilla's
     # Chinese one is family names only, its Tibetan one eleven names and two titles)
     **{t: dict(names="CHN", portraits="asia", gfx="asian")
-       for t in ("QNG", "XUE", "HLG", "ASC", "HDO", "KRN", "RDP", "KNH", "CRT", "DHI", "PZH")},
+       for t in ("QNG", "XUE", "HLG", "ASC", "HDO", "KRN", "RDP", "KNH", "CRT", "DHI", "PZH", "XUG")},  # Xugang 2026-10-19
     **{t: dict(names="JAP", portraits="asia", gfx="asian")
        for t in ("TSU", "KZN", "SHO", "SHN")},  # Sho: Ryukyu's Shō dynasty
     "WAN": dict(names="KOR", portraits="asia", gfx="asian"),  # the peninsula facing Tenkyoku
@@ -283,7 +286,7 @@ TAG_CULTURE = {
        for t in ("LEV", "UTP")},  # Hobbes's Leviathan, More's Utopia
     **{t: _FRENCH for t in ("LVN", "SLN")},  # crusaders; "Solorianois"
     **{t: dict(names="GER", portraits="europe", gfx="western_european")
-       for t in ("HZB", "SNH")},  # Hohenzburg like Kampf, its overlord
+       for t in ("HZB", "SNH", "SIS")},  # Hohenzburg like Kampf, its overlord; the Sisterhood as Sennheiser (2026-10-19)
     # the Arklen Free State after the Orange Free State; Felter, an island republic
     **{t: dict(names="HOL", portraits="europe", gfx="western_european") for t in ("ARK", "FLT")},
     # New Paradise, Nuevo Paraíso until 2026-10-13 and now Anglost's dominion: English like it

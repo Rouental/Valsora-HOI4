@@ -1,0 +1,71 @@
+{
+ "cities": [
+  {
+   "capital": true,
+   "name": "Mardinat Al-Janub",
+   "size": "city",
+   "vp": 30,
+   "x": 3436,
+   "y": 1767
+  },
+  {
+   "name": "Aswad",
+   "vp": 15,
+   "x": 3451,
+   "y": 1804
+  }
+ ],
+ "flags": {
+  "base": {
+   "file": "assets/ccc7b6a8eff538ad8a9ffb7d.png",
+   "h": 311,
+   "name": "New_Mod_Flags 10-18-3.png",
+   "w": 490
+  }
+ },
+ "provinces": {
+  "3414,1772": {
+   "t": "desert"
+  },
+  "3425,1738": {
+   "t": "desert"
+  },
+  "3428,1815": {
+   "t": "desert"
+  },
+  "3430,1793": {
+   "t": "desert"
+  },
+  "3437,1773": {
+   "t": "hills"
+  },
+  "3452,1799": {
+   "t": "desert"
+  },
+  "3455,1756": {
+   "t": "desert"
+  },
+  "3463,1775": {
+   "t": "desert"
+  },
+  "3470,1815": {
+   "t": "desert"
+  }
+ },
+ "states": {
+  "3425,1738": {
+   "name": "The Radiyaan Wall"
+  },
+  "3428,1815": {
+   "name": "The Nyeusi Desert"
+  },
+  "3455,1756": {
+   "name": "Al-Janub"
+  },
+  "3470,1815": {
+   "name": "Shamal"
+  }
+ },
+ "status": "draft",
+ "tag": "RDY"
+}

@@ -114,6 +114,17 @@
    "tag": "FOM"
   }
  ],
+ "states": {
+  "121,1641": {
+   "name": "Port Nyasha"
+  },
+  "2720,1195": {
+   "name": "Port Grazda"
+  },
+  "4275,2257": {
+   "name": "Port Vostok"
+  }
+ },
  "status": "draft",
  "tag": "KRI"
 }

@@ -654,3 +654,28 @@ are impassable, each tied to a passable state of its nation; the marked land is 
 which a corner of the lines runs into, keeps its 23 states. Their map tools on the Gazetteer stay closed until the
 author says (`gazetteer.finals`). **Rouental** and **Terreich**: their new state and province lines (Rouental 57
 states, `dist/state_names_rouental.png`; Terreich 68, `dist/state_names_terreich.png`).
+
+## 2026-10-19: Krionik's realms, Xugang, the Gazetteer's second big import
+
+**2026-10-19** (the author's map upload "HOI4_Mod_Map_10-18-3" and the Gazetteer export of that morning: "Terrain,
+leaders, flags, and more in Usnistan. Some provinces in Rouental. Some fixing of strategic regions"). **New
+releasables from the Subregions layer** (names on Subnames, the author's; tags, adjectives, map colours, governments
+and formal names Claude's guesses, for the author to change): inside Krionik and its principalities, **Belska** BLS (4
+states), **Koroletz** KRZ (8), **Targoviste** TGV (3), **Kosavichy** KSV (7) and **Lagrád** LGR (6, the islands that
+were Mylostrva's), each "the Principality of …", Absolute Monarchy, Serbian like Krionik; **Sangrád** SGD, the city
+painted in its own colour where Zastava's capital was (a state of 70 px of its own now; Zastava's capital moved to the
+middle of its land), and Krionik's three overseas ports, **Port Nyasha** PNY, **Port Vostok** PVS and **Port Grazda**
+PGZ (one state each, the names its Gazetteer page gives them), each "the Free City of …", Oligarchy; and in
+Sennheiser, **the Sisterhood** SIS (6 states), a Holy Order, Sennheiser's culture. Their colours come from the paint,
+softened; each flies a stripe until it has a flag. **Xugang** XUG (the author: "Xugang should start out as a vassal
+of Terreich"): Terreich's exclave on the eastern continent, the state its page names Xugang, is its own nation, "the
+Territory of Xugang", Terreich's puppet as Stormarn and Arcadia are, Social Democracy as Terreich, the Qinguo lands'
+culture (Claude's guesses). **Formosa** (Krionik's page's releasable) has cores on all eleven states the author's lines
+cut New Formosa into (it was one state when the page picked it), and its flag (640 x 347) fitted by hand to 640 x 406,
+plain rows of its yellow field added above and below the dragon. **The Cultists**: their new state lines (23 states,
+`dist/state_numbers_cultists.png`), the striped area impassable jungle (the author: "my idea with the red and green
+striped region of the Cultist territory is that it is impassible jungle"). **Ostaria**: the five states its page drew
+and named (Hügelsanfte, Weizenfelder, Westmarsch, Silberkrone, Blauküste; Silberkrone "Ostaria's capital city", made
+its capital). From the Gazetteer besides: Terreich's 71 states, 552 provinces' terrain, 8 cities and 35 rivers;
+Levantinin, Mustawi, North Koronista, Al-Radiyaa and Port Almohavid their states, provinces, cities, people and flags
+(the four flags in HOI4's shape into `source/flags/`).

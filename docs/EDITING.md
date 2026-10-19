@@ -76,8 +76,9 @@ layer whose name it doesn't know.
   build).
 - **"Impassible / Desert / Jungle / Tundra"** (from 18 October 2026; any layer whose name starts
   with Impassible, Impassable or Desert): paint areas solid, **red** for impassable desert,
-  **yellow** for desert, **green** for jungle. The build gives that land the terrain, and a state
-  mostly red is impassable (no army can enter it; it changes hands with the passable state of
+  **yellow** for desert, **green** for jungle, **green with red stripes** for impassable jungle (from 19
+  October: the Cultists'). The build gives that land the terrain, and a state
+  mostly red, or striped, is impassable (no army can enter it; it changes hands with the passable state of
   its nation beside it, as the base game's Sahara does) and **one province**, however big, like
   the base game's great deserts. Desert and jungle states get fewer, larger provinces (desert
   about 600 px, jungle 400), which frees borders for the rest of the map. Lines you draw on

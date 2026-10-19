@@ -146,7 +146,8 @@ HISTORY = {
     # 2026-10-07 (author): Merlgould and Schteirmark start as vassals
     "VLN": ["set_autonomy = { target = MGD autonomous_state = autonomy_puppet }"],
     "TUP": ["set_autonomy = { target = STM autonomous_state = autonomy_puppet }",
-            "set_autonomy = { target = ARC autonomous_state = autonomy_puppet }"],  # author, 2026-10-12
+            "set_autonomy = { target = ARC autonomous_state = autonomy_puppet }",  # author, 2026-10-12
+            "set_autonomy = { target = XUG autonomous_state = autonomy_puppet }"],  # author, 2026-10-19
     "PTK": ["set_autonomy = { target = MRG autonomous_state = autonomy_puppet }"],  # author, 2026-10-08
     "BLK": ["set_autonomy = { target = WSM autonomous_state = autonomy_puppet }"],  # author, 2026-10-09
     # Daravon leads the Synthesist Internationale with Artzen and Scealand
@@ -361,6 +362,12 @@ LEADERS = {
     # 2026-10-17: Belekria's republics as Belekria (Vanguardism), Krionik's principalities princes (Claude's guesses)
     **{t: ["leninism"] for t in ("DRK", "STB", "SDE", "SVT", "SRY", "KLF", "BLY", "KSP")},
     **{t: ["despotism"] for t in ("ZST", "CRV", "MYL")},
+    # 2026-10-19: Krionik's other realms princes as the principalities, the city and the ports oligarchies, the
+    # Sisterhood a holy order (Claude's guesses, for the author to change)
+    **{t: ["despotism"] for t in ("BLS", "KRZ", "TGV", "KSV", "LGR")},
+    **{t: ["oligarchism"] for t in ("SGD", "PNY", "PVS", "PGZ")},
+    "SIS": ["holy_order"],
+    "XUG": ["socialism"],  # 2026-10-19: as Terreich, its overlord (Claude's guess)
     "RSV": ["council_communism"], "OST": ["despotism"],  # Hierocracy (author)
     # 2026-10-17 (author): Krionik a Regency Council (Stratocracy before), Kampf Fascism (Absolute Monarchy
     # before), Sarkis Vanguardism (Revanchism before), "so there are four great powers (those three +
@@ -462,8 +469,14 @@ SUBREGIONS = {
     # Belekria's republics
     "DRK": (1776, 293), "STB": (1796, 355), "SDE": (1914, 329), "SVT": (2019, 288), "SRY": (1995, 358),
     "KLF": (2083, 356), "TTH": (2169, 342), "BLY": (1831, 401), "KSP": (1892, 411),
-    # Krionik's principalities, at their cities (Visokagorod, Vazgorod, Sedišta)
-    "ZST": (2077, 703), "CRV": (2269, 949), "MYL": (2441, 767),
+    # Krionik's principalities, at their cities (Visokagorod, Vazgorod, Sedišta); Zastava's moved off the city the
+    # author painted Sangrád on (2026-10-19), to the middle of its land
+    "ZST": (2157, 670), "CRV": (2269, 949), "MYL": (2441, 767),
+    # 2026-10-19 (the author's Subregions): Krionik's other realms, inside its land and its principalities' (each at
+    # a pixel well inside it), Sangrád (its own 70 px state), the ports (their states, the Gazetteer's names), and
+    # Sennheiser's Sisterhood
+    "BLS": (2492, 542), "KRZ": (2590, 661), "TGV": (2205, 765), "KSV": (2130, 805), "LGR": (2320, 900),
+    "SGD": (2077, 703), "PNY": (121, 1641), "PVS": (4275, 2257), "PGZ": (2720, 1195), "SIS": (2602, 972),
     # Pakitsk, Belka's since 2026-10-17
     "PKT": (2523, 393),
 }
@@ -473,6 +486,10 @@ SUBREGIONS = {
 CORES = {
     "SMN": [(2003, 414), (2034, 409), (2100, 401), (2131, 397), (2167, 408),
             (1943, 450), (1978, 437), (1978, 467), (2007, 455), (2031, 462), (2054, 427)],
+    # Formosa, the Gazetteer's releasable of Krionik: the whole of New Formosa, which was one state when Krionik's page
+    # picked it and which the author's lines of 2026-10-19 cut into eleven
+    "FOM": [(4105, 1510), (4177, 1505), (4130, 1533), (4065, 1543), (4160, 1552), (4014, 1573), (4116, 1570),
+            (4056, 1584), (3971, 1602), (4091, 1610), (4004, 1617)],
 }
 # Claims on states other nations own (author, 2026-10-18: "Sminishia should also start with claims on Belekria 64 and
 # all of western sminishia"): a tag for every state that country owns at the start, or a pixel inside one state
@@ -734,6 +751,13 @@ FORMAL_NAMES = {
         ("DRK", "Drakonogolovnik"), ("STB", "Staraya Belekria"), ("SDE", "Sredneestvo"), ("SVT", "Severntochka"),
         ("SRY", "Serayachasy"), ("KLF", "Kalnsfereta"), ("BLY", "Belayosen"), ("KSP", "Krasnoeporte"))},
     **{t: f"the Principality of {n}" for t, n in (("ZST", "Zastava"), ("CRV", "Crvenognjište"), ("MYL", "Mylostrva"))},
+    # 2026-10-19 (Claude's, as the principalities)
+    **{t: f"the Principality of {n}" for t, n in (("BLS", "Belska"), ("KRZ", "Koroletz"), ("TGV", "Targoviste"),
+                                                   ("KSV", "Kosavichy"), ("LGR", "Lagrád"))},
+    **{t: f"the Free City of {n}" for t, n in (("SGD", "Sangrád"), ("PNY", "Port Nyasha"), ("PVS", "Port Vostok"),
+                                                ("PGZ", "Port Grazda"))},
+    "SIS": "the Sisterhood",
+    "XUG": "the Territory of Xugang",  # 2026-10-19 (Claude's guess)
     "WAN": "the Republic of Wanea",
     "QNG": "the Qinguo Republics",  # "the Qingou Republics" until 2026-10-13 (author)
     "XUE": "the Republic of Xuè",
@@ -1361,6 +1385,7 @@ CITY_NAMES = {
 # countries get the sizeable state nearest the middle of their land.
 CAPITALS = {
     "ROU": (660, 805),  # Rêverie, the small state the author drew for it ("Rouental 27")
+    "OST": (541, 1515),  # Silberkrone, "Ostaria's capital city" (its page's states, 2026-10-19)
     "CRD": (805, 670),  # Winterthorn (author, 2026-10-01)
     # the author's cities, made capitals (2026-10-01): the dots on Necessary Cities
     "CTF": (791, 1004),  # Venezzo

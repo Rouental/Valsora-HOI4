@@ -1,0 +1,50 @@
+{
+ "flags": {
+  "base": {
+   "file": "assets/bc51f73c7e1a99788a59cdb6.png",
+   "h": 311,
+   "name": "New_Mod_Flags 10-18-3.png",
+   "w": 490
+  }
+ },
+ "states": {
+  "3336,1638": {
+   "name": "The Mustawi Desert"
+  },
+  "3349,1700": {
+   "name": "Sombrak"
+  },
+  "3352,1771": {
+   "name": "The Lesser Waste"
+  },
+  "3353,1608": {
+   "name": "Karonga"
+  },
+  "3364,1663": {
+   "name": "Dedzen"
+  },
+  "3366,1688": {
+   "name": "The Southern Dunes"
+  },
+  "3366,1740": {
+   "name": "Guilleme"
+  },
+  "3377,1667": {
+   "name": "Balaka"
+  },
+  "3386,1803": {
+   "name": "The Nyeusi Desert"
+  },
+  "3392,1626": {
+   "name": "The Northern Dunes"
+  },
+  "3397,1591": {
+   "name": "Lilonga"
+  },
+  "3399,1743": {
+   "name": "The Radiyaan Wall"
+  }
+ },
+ "status": "draft",
+ "tag": "MST"
+}

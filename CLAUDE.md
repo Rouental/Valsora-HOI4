@@ -7,7 +7,7 @@ under OneDrive — keep that segment in any absolute path). Valsora takes place 
 the game starts on 1 January 2036 (see "2036" under Decisions worth keeping).
 
 The map is the author's drawing at game size, 5120×2560: its land, rivers and the countries and states they
-outline region by region (160 nations on the map, 194 countries with the releasables and the civil war's), and the
+outline region by region (161 nations on the map, 205 countries with the releasables and the civil war's), and the
 sea provinces their friend Merlo drew. Rouental is the built-out nation (leaders, focus tree, civil war, army); the
 rest have set rulers and the game's generic content, moved to 2036. The interface is the author's art deco design,
 the Valsora Deco UI (`deco_ui/`). The Gazetteer, a web site, lets the author's friends fill in their own nations.
@@ -82,7 +82,7 @@ New detail goes into those files; this one gets a line.
   `gazetteer_site`, `publish_site.sh`, `tests/gazetteer/`); vanilla (`vanilla_sync`, `pdxscript`); tests not in the
   game (`terrain_test`, `usnistan_prototype`, `coarse_preview`); `build_flags15.sh` (the larger flags' test version).
 - **HOI4's hard rules** (all checked by `check_mod.py`): the map is 5120×2560 (the largest size under the game's cap);
-  **at most 65,536 province borders** (3,370 left on 2026-10-18, night; new land is cut at ~190 px; `borders.py` counts); provinces
+  **at most 65,536 province borders** (3,472 left on 2026-10-19; new land is cut at ~190 px; `borders.py` counts); provinces
   one 4-connected blob of 16+ px, no 2×2 window of four provinces; `definition.csv` CRLF; localisation UTF-8 with BOM;
   every province in one strategic region, a state's provinces in one, naval regions contiguous; the map files exactly
   map-sized. Map errors crash on launch unless the game runs with `-debug`: always test with it.
@@ -107,8 +107,8 @@ New detail goes into those files; this one gets a line.
   (rigid blocks, scale 0.375, straits traced, islets dropped, Antarctica removed) is history now that the author draws
   at game size.
 - **The areas layer** (author, 2026-10-18): red is impassable desert, "like the big African deserts that are one
-  massive province" (one province a state, `impassable = yes`); yellow desert; the lines round them on Necessary
-  States are states too (`scripts/areas.py`, `pdn_tools.py areas`).
+  massive province" (one province a state, `impassable = yes`); yellow desert; green with red stripes impassable jungle
+  (2026-10-19); the lines round them on Necessary States are states too (`scripts/areas.py`, `pdn_tools.py areas`).
 - **No bricks are left** (2026-10-15): every lake is one province and all land is cut like an outlined patch.
 - **Enclosed water becomes lakes**; the two inland seas with islands are navigable sea.
 - **Sea provinces and sea regions are Merlo's** (2026-10-12, the author's friend; `sea_provinces.py`), seamless across
@@ -120,9 +120,10 @@ New detail goes into those files; this one gets a line.
   - Two starts on 1 January 2036: Valsora (Rouental, Merlovich) and the Vale of Reibonne (the Association's eight);
     two, because with one the game skips its scenario screen and Back loops.
   - Colours follow the flags (author); `pdn_tools.py recolour Countries OLD=NEW` keeps the `.pdn` in step.
-  - **Every nation's record**, who drew, named and decided what and when, is `docs/NATIONS.md`. As built: 194
-    countries in the mod, the 160 on the map and 34 that own nothing at the start (Rouental's 13 releasables,
-    Belekria's 9 republics, Krionik's 3 principalities and Formosa (the Gazetteer's), Pakitsk, the civil war's 7); `dist/countries.md` lists them.
+  - **Every nation's record**, who drew, named and decided what and when, is `docs/NATIONS.md`. As built: 205
+    countries in the mod, the 161 on the map and 44 that own nothing at the start (Rouental's 13 releasables,
+    Belekria's 9 republics, Krionik's 3 principalities, 5 realms, Sangrád, 3 ports and Formosa (the Gazetteer's),
+    Sennheiser's Sisterhood, Pakitsk, the civil war's 7); `dist/countries.md` lists them.
     Off the map but kept in `COUNTRIES`: the United States of Solitas and Russovichia.
   - **A new or changed nation** (the rules the record kept to):
     - The author's are the names, governments, formal names and rulers, and whatever else they name. Claude picks
@@ -239,14 +240,16 @@ the page, its rules or its import.
 
 Where things stand; the history, date by date, is `docs/HISTORY.md` (add each day's entry at its top).
 
-- **The build** (2026-10-18, night): 21,084 provinces (20,696 land, 363 sea, 25 lakes), 62,166 province borders
-  (HOI4 draws 65,536: 3,370 free, `docs/BORDER_LIMIT.md`), 3,179 states (22 impassable: Usnistan's deserts, the
+- **The build** (2026-10-19): 21,050 provinces (20,662 land, 363 sea, 25 lakes), 62,064 province borders
+  (HOI4 draws 65,536: 3,472 free, `docs/BORDER_LIMIT.md`), 3,192 states (24 impassable: Usnistan's deserts and the
+  Cultists' striped jungle, the
   author's areas layer, `scripts/areas.py`; one province each, as the base game's great deserts; their land and the yellow areas desert terrain, cut coarse), 179 strategic
   regions (137 land, made from the nations on 2026-10-16: `land_regions.py`, not redone for the borders since; 42 sea);
   419 strait crossings (none between the Illiriciums or to North Pollana); Belekria 1, 4, 5, 6 and 15 coarse as
-  tundra; Sminishia's claims on West Sminishia's land (`nations.CLAIMS`); 194 countries
-  in the mod, 160 of them on the map, 95 of those with a flag of their own (65 fly a stripe in their map colour); the
-  states of 49 are drawn lines (`gazetteer.finals`; 39 until 2026-10-17's map: Belekria, Krionik, Terreich,
+  tundra; Sminishia's claims on West Sminishia's land (`nations.CLAIMS`); 205 countries
+  in the mod, 161 of them on the map (2026-10-19: Krionik's realms, Sangrád, its ports and the Sisterhood
+  releasable; Xugang Terreich's puppet: `docs/NATIONS.md`), 95 of those with a flag of their own (65 fly a stripe in their map colour); the
+  states of 61 are drawn lines (`gazetteer.finals`, 2026-10-19; 49 on 2026-10-18; 39 until 2026-10-17's map: Belekria, Krionik, Terreich,
   Gorbastan, Zukchiva, Sennheiser, Sminishia, West Sminishia and Hollier joined; Ungar's six from the Gazetteer on
   2026-10-18). The four great powers, one per
   ideology but Theocratic (author, 2026-10-17): Krionik (Monarchist), Kampf (Authoritarian), Sarkis (Communist),
@@ -274,7 +277,10 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   corner brackets ("you have a lot of trouble with this particular decorative element"), the factories' order, the
   state panel's corner under the flag, the experience badges off centre, the medallion's name 1 px left: all changed
   in v0.10.2, not yet seen. Before that (2026-10-17) v0.10's findings, fixed in v0.10.1. Older findings, all fixed since: `deco_ui/docs/VERSIONS.md`. Not seen yet besides: the two starts, Vilna and Placeholdgrad. The Deco UI's checklist for the author is in `deco_ui/valsora_deco_ui/README.txt` (Things to check) and `deco_ui/CLAUDE.md` (section 10).
-- **Waiting on the author:** (2026-10-19) the Association's emblem, A (gold lozenges) or B (red and white), before it goes in the mod (`dist/emblem_proposals/reibonnaise_association/`); (2026-10-18, night) names for Usnistan's 60 new states
+- **Waiting on the author:** (2026-10-19, later) Claude's guesses for the eleven new nations (governments, formal names,
+  colours, tags: `docs/NATIONS.md`, 2026-10-19) and whether the ports and Sangrád are meant as releasables; names for the
+  Cultists' 23 states (`dist/state_numbers_cultists.png`) and New Formosa's eleven (Krionik's page can name them);
+  (2026-10-19) the Association's emblem, A (gold lozenges) or B (red and white), before it goes in the mod (`dist/emblem_proposals/reibonnaise_association/`); (2026-10-18, night) names for Usnistan's 60 new states
   (`dist/state_numbers_usnistan_deserts.png`) and Rouental's and Terreich's new ones; whether the nine desert nations'
   map tools open on the Gazetteer now their states are drawn (`gazetteer.finals`); the desert size Claude chose
   (600 px: `areas.PROVINCE_PX`) and what tundra should be; Rouental's elite divisions
@@ -304,7 +310,7 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
 
 ## Known gaps
 
-1. **States**: 112 of the 160 nations on the map have states Claude cut from their
+1. **States**: 100 of the 161 nations on the map (2026-10-19) have states Claude cut from their
    outlines (`apply_outlines.py`, about 1,300 px each), not lines of the author's; their Gazetteer map tools stay
    closed until the author draws them. The old `.pdn`'s country colours, moved to the new layout, are its Notes
    layer.
@@ -319,8 +325,8 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
 4. **What still reads as the 1940s**: the tech tree's names, descriptions and pictures (its dates are 2036's;
    `docs/TECH_TREE_2036.md` is a proposal), the 3D models, and the game's own pictures inside the side panels (the
    Deco UI's proposals wait for approval).
-5. **Province borders**: 3,370 left under HOI4's limit (62,166 of 65,536, 2026-10-18, night: the coarse deserts gave
-   back 1,368), for the states still to be drawn (`docs/BORDER_LIMIT.md`).
+5. **Province borders**: 3,472 left under HOI4's limit (62,064 of 65,536, 2026-10-19; the coarse deserts gave
+   back 1,368 on 2026-10-18), for the states still to be drawn (`docs/BORDER_LIMIT.md`).
 
 ## Working with the author
 

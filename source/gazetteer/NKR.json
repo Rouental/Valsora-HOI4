@@ -1,0 +1,159 @@
+{
+ "cities": [
+  {
+   "name": "Kumwagilia",
+   "size": "city",
+   "vp": 20,
+   "x": 3292,
+   "y": 1687
+  },
+  {
+   "capital": true,
+   "name": "Mtanza",
+   "size": "large",
+   "vp": 30,
+   "x": 3298,
+   "y": 1731
+  },
+  {
+   "name": "Moto",
+   "vp": 10,
+   "x": 3251,
+   "y": 1766
+  },
+  {
+   "name": "Chole",
+   "size": "village",
+   "vp": 5,
+   "x": 3272,
+   "y": 1812
+  }
+ ],
+ "flags": {
+  "base": {
+   "file": "assets/bd717ae790e275f529368e37.png",
+   "h": 311,
+   "name": "New_Mod_Flags 10-18-3.png",
+   "w": 490
+  }
+ },
+ "people": {
+  "ruler": {
+   "name": "Musa Mosses",
+   "portrait": {
+    "file": "assets/073a237ada4de62b5fdf825e.jpg",
+    "h": 640,
+    "name": "OIP.webp",
+    "w": 452
+   }
+  }
+ },
+ "provinces": {
+  "3174,1807": {
+   "t": "desert"
+  },
+  "3193,1792": {
+   "t": "desert"
+  },
+  "3203,1769": {
+   "t": "hills"
+  },
+  "3230,1780": {
+   "t": "desert"
+  },
+  "3235,1807": {
+   "t": "desert"
+  },
+  "3252,1830": {
+   "t": "desert"
+  },
+  "3253,1712": {
+   "t": "desert"
+  },
+  "3253,1766": {
+   "t": "desert"
+  },
+  "3259,1797": {
+   "t": "desert"
+  },
+  "3261,1781": {
+   "t": "desert"
+  },
+  "3266,1753": {
+   "t": "desert"
+  },
+  "3268,1818": {
+   "t": "desert"
+  },
+  "3277,1672": {
+   "t": "desert"
+  },
+  "3290,1758": {
+   "t": "desert"
+  },
+  "3292,1671": {
+   "t": "hills"
+  },
+  "3301,1693": {
+   "t": "desert"
+  },
+  "3301,1729": {
+   "t": "desert"
+  },
+  "3305,1656": {
+   "t": "desert"
+  },
+  "3318,1717": {
+   "t": "desert"
+  },
+  "3320,1772": {
+   "t": "desert"
+  },
+  "3331,1688": {
+   "t": "desert"
+  },
+  "3338,1725": {
+   "t": "desert"
+  }
+ },
+ "states": {
+  "3193,1792": {
+   "name": "Kongwa",
+   "pop": 2171000
+  },
+  "3235,1807": {
+   "name": "The Great Eye",
+   "pop": 701000
+  },
+  "3253,1712": {
+   "name": "The Red Wastes",
+   "pop": 2662000
+  },
+  "3268,1818": {
+   "name": "Chole",
+   "pop": 794000
+  },
+  "3290,1758": {
+   "name": "Kilosa",
+   "pop": 849000
+  },
+  "3301,1693": {
+   "name": "Bagamoyo",
+   "pop": 1512000
+  },
+  "3305,1656": {
+   "name": "The Mustawi Desert",
+   "pop": 636000
+  },
+  "3318,1717": {
+   "name": "Dihinda",
+   "pop": 2690000
+  },
+  "3320,1772": {
+   "name": "The Lesser Wastes",
+   "pop": 1345000
+  }
+ },
+ "status": "draft",
+ "tag": "NKR"
+}

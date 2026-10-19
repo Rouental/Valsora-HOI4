@@ -1,8 +1,8 @@
 tag,name,full,ideology,subideology,culture,leader,states,note
 ABL,Abalón,the Kingdom of Abalón,Monarchist,Absolute Monarchy,Spanish,José Antonio Linares,5,
 AGL,Anglost,the Kingdom of Anglost,Democratic,Constitutional Monarchy,English,Russell Collin,58,
-AIS,Merlovich,the Federation of Merlovich,Democratic,Liberalism,Australian,PLACEHOLDER,15,
-AMH,Almohavid,the Kingdom of Almohavid,Democratic,Constitutional Monarchy,Moroccan,Qasim Aamara,9,
+AIS,Merlovich,The Federation of Merlovich,Democratic,Liberalism,Australian,PLACEHOLDER,15,
+AMH,Almohavid,the Kingdom of Almohavid,Democratic,Constitutional Monarchy,Moroccan,Qasim Aamara,10,
 AOE,Alliance of the East,the Alliance of the East,Monarchist,Oligarchy,French,Louis Canrobert,0,no land at the start (releasable or civil war)
 ARC,Arcadia,the Republic of Arcadia,Democratic,Conservatism,Greek,Spyridion Papagos,17,puppet of Terreich und Preußen
 ARK,Arklen,the Arklen Free State,Democratic,Conservatism,Dutch,Sijmen Steen,1,
@@ -13,7 +13,8 @@ ATR,Atrocha,the Republic of Atrocha,Democratic,Liberalism,Spanish,Astrid Bethanc
 AVE,Avesária,the Avesária Dimokratía,Monarchist,Semi-Constitutional Monarchy,Greek,Nikosanis Coisan II,6,
 AVN,Arovannea,the Confederative Republics of Arovannea,Democratic,Conservatism,German,Estúr Illger fön Reegen,26,
 BKA,Belka,the Most Serene State of Belka,Authoritarian,Fascism,Russian,Aleksandr Isayev,49,
-BLK,Belekria,the Union of Belekrian Republics,Communist,Vanguardism,Russian,Roman Voroshilov,68,
+BLK,Belekria,the Union of Belekrian Republics,Communist,Vanguardism,Russian,Roman Voroshilov,67,
+BLS,Belska,the Principality of Belska,Monarchist,Absolute Monarchy,Serbian,Slobodan Zivkovic,0,no land at the start (releasable or civil war)
 BLY,Belayosen,the Socialist Republic of Belayosen,Communist,Vanguardism,Russian,Levan Golivin,0,no land at the start (releasable or civil war)
 BRL,Brillagne,the Holy State of Brillagne,Theocratic,Hierocracy,French,Mahaut VI,0,no land at the start (releasable or civil war)
 BRO,Bromé,the Grand Duchy of Bromé,Monarchist,Semi-Constitutional Monarchy,Latin American,Jose Castañeda,1,
@@ -23,11 +24,11 @@ CRD,Cardonia,the Cardonian Kingdom,Monarchist,Enlightened Absolutism,English,Art
 CRL,Carcarelle,the Kingdom of Carcarelle,Monarchist,Absolute Monarchy,French,Matthieu Gallieni,0,no land at the start (releasable or civil war)
 CRP,Crépuscule,the Principality of Crépuscule,Monarchist,Absolute Monarchy,French,Denis Boué de Lapeyrère,0,no land at the start (releasable or civil war)
 CRT,Charity,the Empire of Charitia,Monarchist,Absolute Monarchy,Chinese,Cao Jianhua,56,
-CRV,Crvenognjište,the Principality of Crvenognjište,Monarchist,Absolute Monarchy,Serbian,Danilo Stepanovic,0,no land at the start (releasable or civil war)
+CRV,Crvenognjište,the Principality of Crvenognjište,Monarchist,Absolute Monarchy,Serbian,Anya Ristić,0,no land at the start (releasable or civil war)
 CRZ,Coraliza,the Principality of Coraliza,Democratic,Constitutional Monarchy,Portuguese,Bernardo Teixeira,6,
 CSC,Cascadia,the United Forests of Cascadia,Communist,Anarcho-Communism,American,Donald Abbott,41,
 CTF,Côtefer,the Bleacherist Republic of Côtefer,Authoritarian,Bleacherism,Italian,Costanzo Solari,5,puppet of Republican Illiricium
-CUL,Cultists,the Cult of the Great Cthulu,Theocratic,Prophetic Rule,Persian,Ehsan Zahedi,21,
+CUL,Cultists,the Cult of the Great Cthulu,Theocratic,Prophetic Rule,Persian,Ehsan Zahedi,23,
 DHI,Daihai,the Island Principalities of Daihai,Monarchist,Feudalism,Chinese,Wei Lianfeng,1,
 DNL,Danelaw,the Kingdom of Danelaw-Scandinavia,Monarchist,Elective Monarchy,Swedish,Martin Nisshagen,20,
 DRK,Drakonogolovnik,the Socialist Republic of Drakonogolovnik,Communist,Vanguardism,Russian,Makary Pustobriko,0,no land at the start (releasable or civil war)
@@ -40,6 +41,7 @@ ESD,Estande,the Kingdom of Estande,Democratic,Constitutional Monarchy,Portuguese
 ETR,Entroterra,the Bleacherist Republic of Entroterra,Authoritarian,Bleacherism,Italian,Emilio Albricci,9,puppet of Republican Illiricium
 EVR,Evriches,the County of Evriches,Monarchist,Feudalism,French,Adolphe Duchêne,1,in The Association of Reibonnaise States
 FLT,Felter,the Republic of Felter,Democratic,Liberalism,Dutch,Frits Vos,29,
+FOM,Formosa,the Federal Republic of Formosa,Democratic,Stratocracy,Serbian,Elena Andronikos,0,no land at the start (releasable or civil war)
 FRX,Fraxhemark,Fraxhemark,Democratic,Social Democracy,American,Jerome Wharton,141,
 FTH,The Faithful,the Faithful Children of the Goddess and Her Saint,Theocratic,Holy Order,French,Jean Gouraud,0,no land at the start (releasable or civil war)
 GAE,Gaellia,the Kingdom of Gaellia,Monarchist,Absolute Monarchy,Irish,Patrick McCullough,6,
@@ -54,7 +56,7 @@ GRD,Malvekia,the Duchy of Malvekia,Monarchist,Enlightened Absolutism,Spanish,Pas
 GYC,Gran Yucanoa,the Federation of Gran Yucanoa,Democratic,Liberalism,Latin American,The General Cortes,13,
 HDO,Haidao,the Associated City of Haidao,Democratic,Liberalism,Chinese,Cai Yichen,1,in The Great Lake Republics
 HLG,Hulinguo,the Hulinguo Republic,Democratic,Populism,Chinese,Qiu Xuewen,3,in The Great Lake Republics
-HLR,Hollier,the Principality of Hollier,Monarchist,Absolute Monarchy,French,Leroy Dupetit-Thouars,3,in The Association of Reibonnaise States
+HLR,Hollier,the Principality of Hollier,Monarchist,Absolute Monarchy,French,Jacme Thouars-Hollier,3,in The Association of Reibonnaise States
 HLY,Hulya,the Territory of Hulya,Democratic,Conservatism,Turkish,Emin Koval,1,
 HMN,Humanist State,the Humanist State,Authoritarian,Humanism,Persian,Arash Tabrizi,23,
 HOA,Hoalepa,the Exteriorem Kingdom of Hoalepa,Democratic,Constitutional Monarchy,Australian,George Tupou VII the Generous,3,
@@ -64,22 +66,24 @@ HWT,Scealand,the Republik of Scealand,Communist,Orthodox Marxism,German,Ralph Kl
 HZB,Hohenzburg,the State of Hohenzburg,Authoritarian,Strongman Rule,German,Walter Leinweber,8,puppet of Kampfian Empire
 ILR,Republican Illiricium,the Senatorial Republic of Illiricium,Authoritarian,Bleacherism,Italian,Ema Milize,18,
 ISG,Isigoriya,the State of Isigoriya,Authoritarian,Military Junta,Ghanaian,James Apea,3,
-KHB,Al-Khabid,the Kingdom of Al-Khabid,Monarchist,Oligarchy,Arabic (Saudi),Uthman ibn Hisham,8,
+KHB,Al-Khabid,the Kingdom of Al-Khabid,Monarchist,Oligarchy,Arabic (Saudi),Uthman ibn Hisham,5,
 KHY,Khaleeya,the Kingdom of Khaleeya,Monarchist,Feudalism,Arabic (Saudi),Nur al-Din al-Hijazi,1,
 KIL,Royalist Illiricium,the Kingdom of Illiricium,Monarchist,Legitimism,Italian,Beatrice di Alqiro,2,
 KKB,Kilkire-Foraois,the High Kingdom of Kilkire-Foraois,Monarchist,Elective Monarchy,Irish,Peter O'Mara,30,
 KLF,Kalnsfereta,the Socialist Republic of Kalnsfereta,Communist,Vanguardism,Russian,Vsevolod Kondakov,0,no land at the start (releasable or civil war)
-KLS,Kalaistan,the Republic of Kalaistan,Authoritarian,Military Junta,Persian,Mazdak Shahbakhti,3,
+KLS,Kalaistan,the Republic of Kalaistan,Authoritarian,Military Junta,Persian,Mazdak Shahbakhti,2,
 KMY,Kamyachyn,the Republic of Kamyachyn,Democratic,Liberalism,Ukrainian,Konstantin Yudenich,5,
 KNH,Kianhua,the United States of Kianhua,Democratic,Liberalism,Chinese,Tang Zhongyi,53,
 KOV,Kové,the County of Kové,Monarchist,Feudalism,French,Lucien Delay,0,no land at the start (releasable or civil war)
 KPF,Kampfian Empire,the Iron Empire of Kampf,Authoritarian,Fascism,German,Max Reimer,95,
-KRI,Krionik,the Royal Confederation of the Kriosnika,Monarchist,Regency Council,Serbian,Kriosaivak Council of Marshals,132,
+KRI,Krionik,the Royal Confederation of the Kriosnika,Monarchist,Regency Council,Serbian,Kriosaivak Council of Marshals,142,
 KRK,Kurikia,Kurikia,Democratic,Conservatism,Russian,Nikolay Giligashvili,56,
 KRN,Kuran,the Red Mountains of Kuran,Communist,Vanguardism,Chinese,Hou Zhongyi,2,
-KRS,Koronista,the Sultanate of Koronista,Monarchist,Absolute Monarchy,Turkish,Said Koval,3,
+KRS,Koronista,the Sultanate of Koronista,Monarchist,Absolute Monarchy,Turkish,Said Koval,6,
+KRZ,Koroletz,the Principality of Koroletz,Monarchist,Absolute Monarchy,Serbian,Dusan Bojovic,0,no land at the start (releasable or civil war)
 KSK,Kieska,the Confederated Kingdoms of Kieska,Monarchist,Oligarchy,Polish,Wojciech Aleksandrowicz,21,
 KSP,Krasnoeporte,the Socialist Republic of Krasnoeporte,Communist,Vanguardism,Russian,Robert Nikolayevich,0,no land at the start (releasable or civil war)
+KSV,Kosavichy,the Principality of Kosavichy,Monarchist,Absolute Monarchy,Serbian,Goran Maric,0,no land at the start (releasable or civil war)
 KYS,Kyras,the Commonwealth of Kyras,Democratic,Liberalism,Persian,Jamshid Ayrum,33,
 KZN,Kaizan,the Kingdom of Kaizan,Monarchist,Personal Union,Japanese,Tadakuni Tamon,4,puppet of Charity
 KZW,Kizimwe,the Kizimwe Conference of Bishops,Theocratic,Synodal Rule,Eritrean,Fikrejesus Teklerb,3,
@@ -87,11 +91,12 @@ LAN,Las Anod,the United Isle of Las Anod,Democratic,Conservatism,Irish,Michael R
 LCF,Locus,the Worker's Republic of Locus Felicitatis,Communist,Council Communism,American,Stonewall Cleburne,3,
 LEV,Leviathan,the Republic of Leviathan,Democratic,Populism,English,Geoffrey Jellicoe,1,
 LFR,Lafari,the Worker's Republic of the Lafari,Communist,Council Communism,Ethiopian,Anbassu Mikael,29,
+LGR,Lagrád,the Principality of Lagrád,Monarchist,Absolute Monarchy,Serbian,Miliutin Veric,0,no land at the start (releasable or civil war)
 LNT,Placeholdaire,the Republic of Placeholdaire,Democratic,Conservatism,French,Charles Gallieni,15,
 LST,Lustiana,the Duchy of Lustiana,Monarchist,Elective Monarchy,French,Charles Bourbaki,1,in The Association of Reibonnaise States
 LTH,Leithanien,the Republic of Leithanien,Democratic,Populism,German,Helmut Shulz,7,
-LVN,Levantinin,the Crusader State of Levantinin,Theocratic,Holy Order,French,Jules Dupetit-Thouars,12,
-LZC,Lanzerac,the Republic of Lanzerac,Democratic,Lordly Republic,French,Aimable Dubois,1,in The Association of Reibonnaise States
+LVN,Levantinin,the Crusader State of Levantinin,Theocratic,Holy Order,French,Ian Westgrove,8,
+LZC,Lanzerac,the Republic of Lanzerac,Democratic,Lordly Republic,French,Aymeric Mesny,1,in The Association of Reibonnaise States
 MAH,Mahina,the Republic of Mahina,Democratic,Liberalism,Polynesian,Wiremu Aumua,1,
 MDC,Meddacah,the Meddacah River Autonomous Zone,Authoritarian,Fascism,Arabic (Kuwaiti),Saad Al-Amin,3,
 MGD,Merlgould,the Kingdom of Merlgould,Monarchist,Personal Union,Portuguese,Diogo de Arriaga,1,puppet of Volinovia
@@ -99,37 +104,40 @@ MKL,Mekele,the Mekele Peoples' State,Communist,Anarcho-Communism,Ethiopian,Hapte
 MQS,Muqadasa Salamat,the Holy Republic of Muqadasa Salamat,Theocratic,Divine Republicanism,Arabic (Saudi),Shukri ibn Umar,19,
 MRC,The Marches,the Alliance of the Marcher Lords,Monarchist,Oligarchy,French,Louis Forey,0,no land at the start (releasable or civil war)
 MRG,Merikaan,the Republic of Merikaan,Democratic,Conservatism,Dutch,Jan Bruggink,4,puppet of Peatiktist
-MST,Mustawi,the Republic of Mustawi,Authoritarian,Strongman Rule,Arabic (Kuwaiti),Ruh Al Mutairi,11,
+MST,Mustawi,the Republic of Mustawi,Authoritarian,Strongman Rule,Arabic (Kuwaiti),Ruh Al Mutairi,12,
 MTN,Duchy of the Mountains,the Duchy of the Mountains,Monarchist,Feudalism,French,Aurelien Duchêne,0,no land at the start (releasable or civil war)
 MYH,Myehn,the Imperial Republic of Myehn,Democratic,Conservatism,Burmese,Mun Naung,63,
-MYL,Mylostrva,the Principality of Mylostrva,Monarchist,Absolute Monarchy,Serbian,Dejan Jokic,0,no land at the start (releasable or civil war)
+MYL,Mylostrva,the Principality of Mylostrva,Monarchist,Absolute Monarchy,Serbian,Pribislav Zorić,0,no land at the start (releasable or civil war)
 MZG,Mezzogiorno,the Bleacherist Republic of Mezzogiorno,Authoritarian,Bleacherism,Italian,Fabrizio Caramore,5,puppet of Republican Illiricium
-NKR,North Koronista,the Republic of North Koronista,Authoritarian,Strongman Rule,Turkish,Nuri Gökberk,18,
+NKR,North Koronista,the Republic of North Koronista,Authoritarian,Strongman Rule,Turkish,Musa Mosses,9,
 NPL,North Pollana,the Worker's State of Pollana,Communist,Party Centralism,Latin American,Vicente Arista,1,
 NPR,New Paradise,the Dominion of New Paradise,Democratic,Conservatism,English,Richard Nicholson,8,dominion of Anglost
 NRM,Normania,the Principality of Normania,Democratic,Constitutional Monarchy,English,Hubert Golightly,5,dominion of Anglost
 OCR,Ostercoirasreich,the Kaiserinnreichfedderation of Ostercoirasreich,Monarchist,Feudalism,German,Ferdinand Lauck,4,
 ORF,Oriflamme,the Oriflamme Alliance,Monarchist,Oligarchy,French,Gustave Humbert,0,no land at the start (releasable or civil war)
 ORT,Oriental Territories,the Oriental Territories,Monarchist,Oligarchy,French,Julien de MacMahon,0,no land at the start (releasable or civil war)
-OST,Ostaria,the Archcounty of Ostaria,Monarchist,Absolute Monarchy,German,Adolf Göttmann,4,
-PAM,Port Almohavid,the Free Port of Almohavid,Democratic,Lordly Republic,Moroccan,Ryan Khayat,1,
+OST,Ostaria,the Archcounty of Ostaria,Monarchist,Absolute Monarchy,German,Otto von Maier,5,
+PAM,Port Almohavid,the Free Port of Almohavid,Democratic,Lordly Republic,Moroccan,Usamah Lakhdar,1,
+PGZ,Port Grazda,the Free City of Port Grazda,Monarchist,Oligarchy,Serbian,Zivota Radulovic,0,no land at the start (releasable or civil war)
 PHG,Placeholdgrad,Placeholdgrad,Democratic,Radical Republicanism,Russian,Bagrat Gelashvili,3,
 PKT,Pakitsk,the Republic of Pakitsk,Authoritarian,Strongman Rule,Russian,Aslan Selin,0,no land at the start (releasable or civil war)
 PLH,Vultuca,the United Kingdom of Vultuca,Democratic,Constitutional Monarchy,Portuguese,Abel Ivens,26,
 PLJ,Plaija,the People's Republic of Plaija,Communist,Orthodox Marxism,Vietnamese,Mai Đức Tài,65,
 PNC,Ponchomagnifico,the Community of Ponchomagnifico,Authoritarian,Strongman Rule,Spanish,Mauricio Gómez,6,
+PNY,Port Nyasha,the Free City of Port Nyasha,Monarchist,Oligarchy,Serbian,Vaselien Putnik,0,no land at the start (releasable or civil war)
 PSC,Piscary,the Duchy of the Piscary,Monarchist,Feudalism,French,Achille Bosquet,0,no land at the start (releasable or civil war)
 PTK,Peatiktist,the Constitutional Dictatorship of Peatiktist,Authoritarian,Strongman Rule,German,Philipp Gross,27,
+PVS,Port Vostok,the Free City of Port Vostok,Monarchist,Oligarchy,Serbian,Miodrag Blaznacac,0,no land at the start (releasable or civil war)
 PZH,Pinzahao,the Liberated Peoples of Pinzahao,Democratic,Radical Republicanism,Chinese,Yuan Wenzhong,6,
 QNG,Qinguo,the Qinguo Republics,Democratic,Liberalism,Chinese,Huang Yuheng,24,leads The Great Lake Republics
 RCL,Recolt,the Principality of the Recolt,Monarchist,Absolute Monarchy,French,Henri de Castelnau,0,no land at the start (releasable or civil war)
 RDP,Red Path,the People's Republic of Kianhua,Communist,Vanguardism,Chinese,Xiong Yaozu,6,
-RDY,Al-Radiyaa,the Republic of Al-Radiyaa,Democratic,Conservatism,Arabic (Kuwaiti),Amani Ahmed,6,
+RDY,Al-Radiyaa,the Republic of Al-Radiyaa,Democratic,Conservatism,Arabic (Kuwaiti),Amani Ahmed,4,
 REC,Recaxa,the Republic of Recaxa,Democratic,Agrarianism,Latin American,Diana Zorreguieta,16,
 RLA,HMMLA,Her Majesty's Most Loyal Army,Authoritarian,Strongman Rule,French,Serelle Cahun,0,no land at the start (releasable or civil war)
 RLT,Reliette,the Grand Duchy of Reliette,Monarchist,Feudalism,French,Félix Boué de Lapeyrère,0,no land at the start (releasable or civil war)
 RMD,Romanoddle,the Romanoddlian Federation,Democratic,Social Democracy,English,Max Cockburn,93,
-ROU,Rouental,The Sacred Principality of Rouental,Monarchist,Feudalism,French,Roland II Cahun,56,leads The Association of Reibonnaise States
+ROU,Rouental,The Sacred Principality of Rouental,Monarchist,Feudalism,French,Roland II Cahun,58,leads The Association of Reibonnaise States
 RST,Rastava,Rastava,Authoritarian,Revanchism,Portuguese,Caetano Amaral,13,
 RVR,Riverraine,the Grand Duchy of the Riverraine,Monarchist,Feudalism,French,Denis Bourbaki,0,no land at the start (releasable or civil war)
 RYB,Royabad,the Sultanate of Royabad,Monarchist,Absolute Monarchy,Persian,Omid Ahura,33,
@@ -138,13 +146,15 @@ SCZ,Sicilianzo,the Kingdom of Sicilianzo,Democratic,Constitutional Monarchy,Ital
 SDE,Sredneestvo,the Socialist Republic of Sredneestvo,Communist,Vanguardism,Russian,Vsevolod Agafonov,0,no land at the start (releasable or civil war)
 SEE,Holy See,the Kingdom of the Church,Theocratic,Hierocracy,Italian,Camillo Cadorna,1,
 SFE,Santa Fe,the Fifth Republic of Santa Fe,Communist,Party Centralism,Latin American,Lázaro Mejía,7,
-SGN,Seigne,the County of the Seigne,Monarchist,Feudalism,French,Armand Delay,1,in The Association of Reibonnaise States
+SGD,Sangrád,the Free City of Sangrád,Monarchist,Oligarchy,Serbian,Milan Stepanovic,0,no land at the start (releasable or civil war)
+SGN,Seigne,the County of the Seigne,Monarchist,,French,,1,in The Association of Reibonnaise States
 SGT,Sangterre,the Duchy of Sangterre,Monarchist,Feudalism,French,Lucien Anthoine,0,no land at the start (releasable or civil war)
 SGV,Selgrave,the Duchy of Selgrave,Monarchist,Oligarchy,French,Pierre Boué de Lapeyrère,1,in The Association of Reibonnaise States
 SHN,Shinnokawa,the Empire of Shinnokawa,Monarchist,Absolute Monarchy,Japanese,Hyoe Yamamoto,1,
 SHO,Sho,the Kingdom of the Sho Dynasty,Monarchist,Oligarchy,Japanese,Kenkichi Yashiro,13,
+SIS,The Sisterhood,the Sisterhood,Theocratic,Holy Order,German,Theodor Weidhardt,0,no land at the start (releasable or civil war)
 SKL,Skillia,the Republic of Skillia,Communist,Agrarian Socialism,Greek,Militiadis Staikopoulos,4,
-SLA,Solaria,the Holy State of Solaria,Theocratic,Hierocracy,Italian,Fabrizio Sacchi,3,
+SLA,Solaria,the Holy State of Solaria,Theocratic,Hierocracy,Italian,Fabrizio Sacchi,4,
 SLN,Soloriania,the Solorianois Confederacy,Democratic,Liberalism,French,Félicien Ropert,4,
 SMB,Sombor,the Free City of Sombor,Democratic,Lordly Republic,Serbian,Nebojsa Paskas,1,valsora_protectorate of Krionik
 SMN,Sminishia,the Worker's Republic of Sminishia,Democratic,Social Democracy,Croatian,Dzivo Erdödy,9,
@@ -168,13 +178,14 @@ SVT,Severntochka,the Socialist Republic of Severntochka,Communist,Vanguardism,Ru
 TBS,Terrabis-Seran,the Commonwealth of Terrabis-Seran,Democratic,Social Democracy,English,Lester Haig,81,
 TCN,Transcainia,the Kingdom of Transcainia,Monarchist,Oligarchy,German,Peter Eisele,7,
 TEX,Texaria,the Republic of Texaria,Democratic,Liberalism,Russian,Iyun' Savon,5,
+TGV,Targoviste,the Principality of Targoviste,Monarchist,Absolute Monarchy,Serbian,Milos Jokic,0,no land at the start (releasable or civil war)
 THD,Thorian Dynamics,Thorian Dynamics,Authoritarian,Megacorporation,American,Hamilton Pickett,5,
 TKY,Tenkyoku,the Remnant of Tenkyoku,Theocratic,Prophetic Rule,Japanese,Tomonosuke Okubo,1,
 TRC,Troc,the Democratic Republic of Troc,Democratic,Liberalism,English,Colbert Dundas,15,
 TSU,Tsuruma,the Most Serene Republic of Tsuruma,Democratic,Lordly Republic,Japanese,Akihiro Tanaka,5,
 TTH,Tethia,the Principality of Tethia,Monarchist,Absolute Monarchy,Polish,Jakub Kowalski,0,no land at the start (releasable or civil war)
-TUP,Terreich und Preußen,the Bundeskaiserreich of Terreich und Preußen,Democratic,Social Democracy,German,Charlotte Gustoff,71,
-UNG,Ungar,the Grand Duchy of Ungar,Monarchist,Feudalism,Hungarian,Bertalan Baross,4,
+TUP,Terreich und Preußen,the Bundeskaiserreich of Terreich und Preußen,Democratic,Social Democracy,German,Charlotte Gustoff,68,
+UNG,Ungar,the Grand Duchy of Ungar,Monarchist,Feudalism,Hungarian,Vászoly Ármin II,6,
 UTP,Utopian Republic,the Second Utopian Republic,Democratic,Lordly Republic,English,Albert Plummer,68,
 UYZ,Uyizar,the Khanate of Uyizar,Monarchist,Khanate,Uzbek,Po'lat Azamatov,16,
 VAI,Vair,the Duchy of Vair,Monarchist,Feudalism,French,François Dubail,0,no land at the start (releasable or civil war)
@@ -184,11 +195,12 @@ VNT,Vineta,the People's Rule Over Vineta,Communist,Party Centralism,Welsh,Rhys M
 VSK,Volstokn,the Tsaral Realm of Volstokn,Monarchist,Enlightened Absolutism,Finnish,Petri Mäkinen,62,
 WAN,Wanea,the Republic of Wanea,Democratic,Agrarianism,Korean,Hee-Seok Rim,5,
 WRS,Wersh,the Republic of Wersh,Authoritarian,Revanchism,English,Stanley Beatty,21,
-WSM,West Sminishia,the Autonomous Region of Western Sminishia,Communist,Vanguardism,Croatian,Juraj Sorkocevic,6,puppet of Belekria
+WSM,West Sminishia,the Autonomous Region of Western Sminishia,Communist,Vanguardism,Croatian,Juraj Sorkocevic,7,puppet of Belekria
 XUE,Xuè,the Republic of Xuè,Democratic,Conservatism,Chinese,Lü Jiahui,12,in The Great Lake Republics
+XUG,Xugang,the Territory of Xugang,Democratic,Social Democracy,Chinese,Feng Zhihao,1,puppet of Terreich und Preußen
 YTR,Yatar,the Khanate of Yatar,Monarchist,Khanate,Kazakh,Azat Akhmetov,7,
 ZLZ,Zoluzeme,the Kingdom of Zoluzeme,Monarchist,Absolute Monarchy,Latvian,Eduards Krogzems,2,
 ZNZ,Zanzimibia,the People's Republic of Zanzimibia,Democratic,Social Democracy,Nigerian,Oluwayemisi Amaechi,9,
-ZST,Zastava,the Principality of Zastava,Monarchist,Absolute Monarchy,Serbian,Nikola Petrovic,0,no land at the start (releasable or civil war)
+ZST,Zastava,the Principality of Zastava,Monarchist,Absolute Monarchy,Serbian,Mikael Kozlov,0,no land at the start (releasable or civil war)
 ZUK,Zukchiva,the Republic of Zukchiva,Democratic,Liberalism,Macedonian,Isidor Trajcevski,12,
 ZWT,Zwintern,the State of Zwintern,Authoritarian,Technocracy,Dutch,Govert Roelofsen,6,

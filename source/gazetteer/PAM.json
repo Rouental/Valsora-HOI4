@@ -2,7 +2,7 @@
  "cities": [
   {
    "name": "Port Almohavid",
-   "size": "large",
+   "size": "metropolis",
    "vp": 25,
    "x": 3551,
    "y": 1641
@@ -25,6 +25,41 @@
     "name": "229015.jpg",
     "w": 640
    }
+  }
+ },
+ "provinces": {
+  "3551,1641": {
+   "hub": true,
+   "t": "urban"
+  }
+ },
+ "rails": [
+  {
+   "level": 3,
+   "pts": [
+    [
+     3550,
+     1641
+    ],
+    [
+     3552,
+     1641
+    ]
+   ]
+  }
+ ],
+ "states": {
+  "3551,1641": {
+   "aa": 1,
+   "air": 2,
+   "cat": "metropolis",
+   "civ": 4,
+   "dock": 3,
+   "infra": 4,
+   "mil": 2,
+   "name": "Port Almohavid",
+   "naval": 2,
+   "pop": 641000
   }
  },
  "status": "draft",

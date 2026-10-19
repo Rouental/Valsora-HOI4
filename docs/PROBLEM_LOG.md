@@ -784,6 +784,14 @@ screenshot and `error.log`)
 
 ## Map problems found while building
 
+**Sangrád's own state broke a province into 14 pieces** (2026-10-19, the build: "Province colour (100,97,239) is in 14
+separate pieces", then "A province has only 3 pixels")
+- Cause: the city the author painted on Subregions (70 px) was given a province and state of its own from the pixels
+  of exactly its colour; the dot's soft edge left crumbs of the province it sat in, which was itself almost all inside
+  the dot.
+- Fix: the crumbs, and then the whole of that little province, joined Sangrád (`scratchpad` scripts, a one-off). A
+  city painted as its own subregion needs the dot's whole patch, edge and all.
+
 **`regroup_states.py --recut` redid states it shouldn't have** (2026-10-18, night, the upload "HOI4_Mod_Map_10-18_1")
 - What happened: the new state lines were in Usnistan, Rouental and Terreich, but the script makes every country with
   lines of its own its drawn areas again, map-wide: Ungar's Tópart (31 px, a Gazetteer suggestion) joined

@@ -1,0 +1,111 @@
+{
+ "cities": [
+  {
+   "name": "Kyrenia",
+   "size": "city",
+   "vp": 50,
+   "x": 3261,
+   "y": 1558
+  }
+ ],
+ "flags": {
+  "base": {
+   "file": "assets/e13c553a94952cd2beb33b4b.png",
+   "h": 311,
+   "name": "New_Mod_Flags 10-18-3.png",
+   "w": 490
+  }
+ },
+ "people": {
+  "ruler": {
+   "name": "Ian Westgrove",
+   "portrait": {
+    "file": "assets/a8f28aae5b108078f222d3d8.jpg",
+    "h": 640,
+    "name": "SirMalcolmRoss.jpeg",
+    "w": 477
+   }
+  }
+ },
+ "provinces": {
+  "3195,1589": {
+   "t": "desert"
+  },
+  "3206,1648": {
+   "t": "desert"
+  },
+  "3217,1573": {
+   "t": "desert"
+  },
+  "3222,1596": {
+   "t": "desert"
+  },
+  "3224,1557": {
+   "t": "desert"
+  },
+  "3238,1585": {
+   "t": "desert"
+  },
+  "3243,1561": {
+   "t": "desert"
+  },
+  "3251,1639": {
+   "t": "desert"
+  },
+  "3253,1613": {
+   "t": "desert"
+  },
+  "3256,1576": {
+   "t": "desert"
+  },
+  "3261,1560": {
+   "t": "urban"
+  },
+  "3273,1623": {
+   "t": "desert"
+  },
+  "3279,1591": {
+   "t": "desert"
+  },
+  "3283,1640": {
+   "t": "desert"
+  },
+  "3288,1602": {
+   "t": "plains"
+  },
+  "3303,1624": {
+   "t": "desert"
+  },
+  "3328,1606": {
+   "t": "desert"
+  }
+ },
+ "states": {
+  "3206,1648": {
+   "name": "The Red Wastes"
+  },
+  "3243,1561": {
+   "name": "Othello"
+  },
+  "3253,1613": {
+   "name": "Halki"
+  },
+  "3261,1560": {
+   "name": "Kyrenia"
+  },
+  "3273,1623": {
+   "name": "Platamon"
+  },
+  "3279,1591": {
+   "name": "Kantara"
+  },
+  "3303,1624": {
+   "name": "The Mustawi Desert"
+  },
+  "3328,1606": {
+   "name": "Larnaca"
+  }
+ },
+ "status": "draft",
+ "tag": "LVN"
+}

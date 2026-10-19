@@ -360,8 +360,12 @@ def main():
 
     # a state mostly marked impassable is impassable (areas.py)
     impassable = []
-    if marked.get("impassable") is not None and marked["impassable"].any():
-        red = np.bincount(lab.ravel(), weights=marked["impassable"].ravel(), minlength=n)
+    imp = None
+    for k in area_layer.IMPASSABLE:  # the red deserts and the striped jungle (areas.py)
+        if marked.get(k) is not None:
+            imp = marked[k] if imp is None else imp | marked[k]
+    if imp is not None and imp.any():
+        red = np.bincount(lab.ravel(), weights=imp.ravel(), minlength=n)
         size_px = np.bincount(lab.ravel(), minlength=n)
         impassable = [s for s, g in enumerate(states) if red[g].sum() > 0.5 * size_px[g].sum()]
 

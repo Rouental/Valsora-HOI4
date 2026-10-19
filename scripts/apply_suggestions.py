@@ -21,6 +21,7 @@ source/state_names.json (the Gazetteer's own names, where a nation gave one, sti
 
     python3 scripts/apply_suggestions.py            # what each would do, nothing saved
     python3 scripts/apply_suggestions.py --apply    # saved; then rebuild
+    --only=TAG[,TAG]                                # only those nations' (the rest of PLAN applied already)
 """
 import json
 import sys
@@ -51,6 +52,8 @@ PLAN = [
     ("TUP", "Rosenburg", "new", dict(name="Rosenburg")),
     ("TUP", "Terreichstadt", "new", dict(name="Terreichstadt")),
     ("UNG", None, "drawn", {}),
+    # 2026-10-19: Ostaria's five states, drawn and named on its page (the ones above were applied on 2026-10-18)
+    ("OST", None, "drawn", {}),
 ]
 
 
@@ -344,7 +347,10 @@ def main():
     names, L = T.load()
     M = Map(L)
     facts = {}
+    only = next((a.split("=", 1)[1].split(",") for a in sys.argv if a.startswith("--only=")), None)
     for tag, sid, how, args in PLAN:
+        if only and tag not in only:
+            continue
         f = facts.setdefault(tag, json.loads(Path(f"source/gazetteer/{tag}.json").read_text(encoding="utf-8")))
         sugs = f.get("suggest", [])
         if how == "drawn":
