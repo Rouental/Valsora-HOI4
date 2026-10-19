@@ -9,11 +9,11 @@ colour. The current names are the build's ("<country with most of its states> Re
 | # | countries | current name | new name |
 |---|---|---|---|
 | 1 | Cascadia | Cascadia Region 1 | |
-| 2 | Cascadia | Cascadia Region 2 | |
+| 2 | Cascadia, Cardonia | Cascadia Region 2 | |
 | 3 | Troc | Troc Region 1 | |
 | 4 | Wersh | Wersh Region 1 | |
-| 5 | Cardonia | Cardonia Region 1 | |
-| 6 | Rouental, Hollier, Selgrave, Lustiana ... | Rouental Region 1 | |
+| 5 | Rouental, Hollier, Selgrave, Lustiana ... | Rouental Region 1 | |
+| 6 | Cardonia | Cardonia Region 1 | |
 | 7 | Kurikia | Kurikia Region 1 | |
 | 8 | Belekria, Kurikia | Belekria Region 3 | |
 | 9 | Vultuca, Coraliza, Merlgould | Vultuca Region 1 | |
@@ -39,10 +39,10 @@ colour. The current names are the build's ("<country with most of its states> Re
 | # | countries | current name | new name |
 |---|---|---|---|
 | 26 | Transcainia, Leithanien, Serentia | Transcainia Region 1 | |
-| 27 | Scealand, Artzen, Ostaria, Daravon | Scealand Region 1 | |
+| 27 | Scealand, Ostaria, Artzen, Daravon | Scealand Region 1 | |
 | 28 | Anglost | Anglost Region 2 | |
 | 29 | Peatiktist | Peatiktist Region 1 | |
-| 30 | Zwintern, Merikaan | Zwintern Region 1 | |
+| 30 | Zwintern, Merikaan, Terrabis-Seran | Zwintern Region 1 | |
 | 31 | Großlöwenburg, Krionik | Großlöwenburg Region 1 | |
 | 32 | Terrabis-Seran, Vineta | Terrabis-Seran Region 1 | |
 | 33 | Großlöwenburg, Ungar | Großlöwenburg Region 2 | |
@@ -89,7 +89,7 @@ colour. The current names are the build's ("<country with most of its states> Re
 | 59 | Belekria | Belekria Region 1 | |
 | 60 | Belka | Belka Region 1 | |
 | 61 | Belka | Belka Region 2 | |
-| 62 | Pakitsk | Pakitsk Region 1 | |
+| 62 | Belka | Belka Region 3 | |
 | 63 | Sanada | Sanada Region 3 | |
 | 64 | Volstokn | Volstokn Region 2 | |
 | 65 | Sanada | Sanada Region 2 | |
@@ -97,13 +97,13 @@ colour. The current names are the build's ("<country with most of its states> Re
 | 67 | Sanada | Sanada Region 4 | |
 | 68 | Brethren | Brethren Region 1 | |
 | 69 | Sanada, Sarkis | Sanada Region 1 | |
-| 70 | Sminishia | Sminishia Region 1 | |
+| 70 | Sminishia, West Sminishia, Belekria | Sminishia Region 1 | |
 | 71 | Krionik | Krionik Region 4 | |
 | 72 | Gorbastan, Vilna | Gorbastan Region 1 | |
 | 73 | Krionik | Krionik Region 3 | |
 | 74 | Zukchiva | Zukchiva Region 1 | |
 | 75 | Krionik | Krionik Region 2 | |
-| 76 | Krionik | Krionik Region 1 | |
+| 76 | Krionik, Kieska, Belka | Krionik Region 1 | |
 | 77 | Krionik, Skillia | Krionik Region 5 | |
 | 78 | Kieska, Placeholdgrad, Zoluzeme, Sombor | Kieska Region 1 | |
 | 79 | Volstokn | Volstokn Region 3 | |
@@ -126,13 +126,13 @@ colour. The current names are the build's ("<country with most of its states> Re
 | 91 | Soloriania, Anglost, Kilkire-Foraois, Sarkis ... | Soloriania Region 1 | |
 | 92 | Utopian Republic | Utopian Republic Region 3 | |
 | 93 | Utopian Republic | Utopian Republic Region 1 | |
-| 94 | Levantinin, Zanzimibia, Koronista | Levantinin Region 1 | |
+| 94 | Zanzimibia, Levantinin, Koronista | Zanzimibia Region 1 | |
 | 95 | Royabad | Royabad Region 1 | |
 | 96 | North Koronista | North Koronista Region 1 | |
 | 97 | Mustawi, Al-Khabid | Mustawi Region 1 | |
 | 98 | Humanist State | Humanist State Region 1 | |
 | 99 | South Usnistan | South Usnistan Region 1 | |
-| 100 | Almohavid, Al-Radiyaa, Kalaistan, Solaria ... | Almohavid Region 1 | |
+| 100 | Almohavid, Al-Radiyaa, Solaria, Kalaistan ... | Almohavid Region 1 | |
 
 ## Orientalis
 
@@ -152,7 +152,7 @@ colour. The current names are the build's ("<country with most of its states> Re
 | 112 | Kianhua | Kianhua Region 1 | |
 | 113 | Red Path, Kuran | Red Path Region 1 | |
 | 114 | Sarkis, Haidao | Sarkis Region 6 | |
-| 115 | Kianhua, Terreich und Preußen | Kianhua Region 2 | |
+| 115 | Kianhua, Xugang | Kianhua Region 2 | |
 | 116 | Estande, Wanea, Daihai | Estande Region 1 | |
 | 117 | Krionik | Krionik Region 7 | |
 | 118 | Chineasia | Chineasia Region 2 | |
@@ -166,7 +166,7 @@ colour. The current names are the build's ("<country with most of its states> Re
 | 126 | Chineasia | Chineasia Region 1 | |
 | 127 | Felter, Terrabis-Seran | Felter Region 1 | |
 | 128 | Arpino | Arpino Region 1 | |
-| 129 | Arpino | Arpino Region 5 | |
+| 129 | Arpino, Krionik | Arpino Region 5 | |
 | 130 | Plaija | Plaija Region 2 | |
 | 131 | Arpino | Arpino Region 3 | |
 | 132 | Ganden | Ganden Region 1 | |

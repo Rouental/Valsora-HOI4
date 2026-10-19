@@ -11,6 +11,9 @@ names are there already), so a name given by number survives a rebuild that renu
                                                     source/region_names.json; then rebuild
     python3 scripts/region_map.py --draft        -> dist/region_names_draft.md: a first draft of every name (Claude's),
                                                     in the table --apply reads
+    python3 scripts/region_map.py --names-map [FILE]  -> dist/region_names_map.png: the map with the names of FILE's
+                                                    table (the draft by default) where the numbers are (2026-10-19, the
+                                                    author: "Please provide the map with the region names on it")
 """
 import json
 import re
@@ -63,7 +66,8 @@ def regions():
     return out, reg_px, rj
 
 
-def draw(regs, reg_px, rj):
+def draw(regs, reg_px, rj, out="dist/region_numbers.png", label=None,
+         title="Valsora's land strategic regions, numbered (dist/region_names.md lists them)"):
     land = np.isin(reg_px, [g["id"] - 1 for g in regs])
     h, w = reg_px.shape
     img = np.zeros((h, w, 3), np.float32)
@@ -80,14 +84,31 @@ def draw(regs, reg_px, rj):
     img[edge] = (0.18, 0.16, 0.14)
     im = Image.fromarray((img * 255).astype(np.uint8)).resize((w // SCALE, h // SCALE), Image.LANCZOS)
     d = ImageDraw.Draw(im)
-    font = ImageFont.truetype(FONT, 17)
+    font = ImageFont.truetype(FONT, 17 if label is None else 12)
     for g in regs:
-        d.text((g["x"] / SCALE, g["y"] / SCALE), str(g["number"]), font=font, fill=(20, 20, 20), anchor="mm",
-               stroke_width=3, stroke_fill=(255, 255, 255))
+        text = str(g["number"]) if label is None else label(g)
+        words = text.split(" ")
+        if label is not None and len(text) > 14 and len(words) > 1:   # long names on two lines
+            half = (len(words) + 1) // 2
+            text = " ".join(words[:half]) + "\n" + " ".join(words[half:])
+        d.multiline_text((g["x"] / SCALE, g["y"] / SCALE), text, font=font, fill=(20, 20, 20), anchor="mm",
+                         align="center", stroke_width=3 if label is None else 2, stroke_fill=(255, 255, 255))
     lf = ImageFont.truetype(FONT, 22)
-    d.text((24, 20), "Valsora's land strategic regions, numbered (dist/region_names.md lists them)", font=lf,
-           fill=(20, 20, 20), stroke_width=3, stroke_fill=(255, 255, 255))
-    im.save("dist/region_numbers.png", optimize=True)
+    d.text((24, 20), title, font=lf, fill=(20, 20, 20), stroke_width=3, stroke_fill=(255, 255, 255))
+    im.save(out, optimize=True)
+
+
+def names_map(regs, reg_px, path="dist/region_names_draft.md"):
+    """the numbered map with the names of a table of --apply's kind (its number in the first column, the name in the
+    last) written where the numbers are, a long name on two lines"""
+    names = {}
+    for line in open(path, encoding="utf-8"):
+        cells = [c.strip() for c in line.strip().strip("|").split("|")]
+        if len(cells) >= 2 and cells[0].isdigit() and cells[-1]:
+            names[int(cells[0])] = cells[-1]
+    draw(regs, reg_px, None, out="dist/region_names_map.png", label=lambda g: names.get(g["number"], g["name"]),
+         title=f"Valsora's land strategic regions, named ({path}: the numbers of dist/region_numbers.png)")
+    print(f"{len(names)} names: dist/region_names_map.png")
 
 
 def write(regs):
@@ -330,6 +351,10 @@ def apply(path):
 if __name__ == "__main__":
     if "--apply" in sys.argv:
         apply(sys.argv[sys.argv.index("--apply") + 1])
+    elif "--names-map" in sys.argv:
+        i = sys.argv.index("--names-map")
+        regs, reg_px, rj = regions()
+        names_map(regs, reg_px, *sys.argv[i + 1:i + 2])
     elif "--draft" in sys.argv:
         regs, reg_px, rj = regions()
         draft(regs, reg_px, rj)

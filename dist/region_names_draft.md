@@ -15,11 +15,11 @@ Cities are the ones you named on the Cities layer.
 | # | countries | why | cities | draft name |
 |---|---|---|---|---|
 | 1 | Cascadia | Cascadia, the northern part |  | Northern Cascadia |
-| 2 | Cascadia | Cascadia, the southern part |  | Southern Cascadia |
+| 2 | Cascadia, Cardonia | Cascadia, the southern part |  | Southern Cascadia |
 | 3 | Troc | Troc |  | Troc |
 | 4 | Wersh | Wersh |  | Wersh |
-| 5 | Cardonia | Cardonia | Winterthorn | Cardonia |
-| 6 | Rouental, Hollier, Selgrave, Lustiana ... | Rouental and its neighbours (your name for it) | Vair, Carcarelle, Rêverie, Seraine | The Vale of Reibonne |
+| 5 | Rouental, Hollier, Selgrave, Lustiana ... | Rouental and its neighbours (your name for it) | Vair, Carcarelle, Rêverie, Seraine | The Vale of Reibonne |
+| 6 | Cardonia | Cardonia | Winterthorn | Cardonia |
 | 7 | Kurikia | Kurikia, the north-western part | Markovograd | North-Western Kurikia |
 | 8 | Belekria, Kurikia | the nations in it |  | Belekria and Kurikia |
 | 9 | Vultuca, Coraliza, Merlgould | the nations in it |  | Vultuca, Coraliza and Merlgould |
@@ -45,10 +45,10 @@ Cities are the ones you named on the Cities layer.
 | # | countries | why | cities | draft name |
 |---|---|---|---|---|
 | 26 | Transcainia, Leithanien, Serentia | the nations in it | Rostock, Litzstädt, Thielfurt, Weißadel | Transcainia, Leithanien and Serentia |
-| 27 | Scealand, Artzen, Ostaria, Daravon | 4 nations (Scealand, Artzen, Ostaria, Daravon); its coast faces the Midtierre Sea |  | The Scealändisch Coast |
+| 27 | Scealand, Ostaria, Artzen, Daravon | 4 nations (Scealand, Artzen, Ostaria, Daravon); its coast faces the Midtierre Sea |  | The Scealändisch Coast |
 | 28 | Anglost | Anglost |  | Anglost |
 | 29 | Peatiktist | Peatiktist |  | Peatiktist |
-| 30 | Zwintern, Merikaan | the nations in it |  | Zwintern and Merikaan |
+| 30 | Zwintern, Merikaan, Terrabis-Seran | the nations in it |  | Zwintern, Merikaan and Terrabis-Seran |
 | 31 | Großlöwenburg, Krionik | Großlöwenburg |  | Großlöwenburg |
 | 32 | Terrabis-Seran, Vineta | the nations in it |  | Terrabis-Seran and Vineta |
 | 33 | Großlöwenburg, Ungar | the nations in it |  | Großlöwenburg and Ungar |
@@ -95,7 +95,7 @@ Cities are the ones you named on the Cities layer.
 | 59 | Belekria | Belekria, the eastern part |  | Eastern Belekria |
 | 60 | Belka | Belka, the north-western part |  | North-Western Belka |
 | 61 | Belka | Belka, the south-eastern part |  | South-Eastern Belka |
-| 62 | Pakitsk | Pakitsk |  | Pakitsk |
+| 62 | Belka | Belka, the eastern part |  | Eastern Belka |
 | 63 | Sanada | Sanada, the western part |  | Western Sanada |
 | 64 | Volstokn | Volstokn, the western part |  | Western Volstokn |
 | 65 | Sanada | Sanada, around its centre |  | Central Sanada |
@@ -103,18 +103,18 @@ Cities are the ones you named on the Cities layer.
 | 67 | Sanada | Sanada, the eastern part |  | Eastern Sanada |
 | 68 | Brethren | Brethren |  | Brethren |
 | 69 | Sanada, Sarkis | Sanada's islands off its main land |  | The Sanadan Isles |
-| 70 | Sminishia | Sminishia |  | Sminishia |
-| 71 | Krionik | Krionik, the south-western part |  | South-Western Krionik |
+| 70 | Sminishia, West Sminishia, Belekria | the nations in it | Bijelkop, South Bijelkop | Sminishia, West Sminishia and Belekria |
+| 71 | Krionik | Krionik, the western part | Visokagorod | Western Krionik |
 | 72 | Gorbastan, Vilna | Gorbastan |  | Gorbastan |
-| 73 | Krionik | Krionik, the western part |  | Western Krionik |
+| 73 | Krionik | Krionik, the north-western part |  | North-Western Krionik |
 | 74 | Zukchiva | Zukchiva |  | Zukchiva |
 | 75 | Krionik | Krionik, the northern part |  | Northern Krionik |
-| 76 | Krionik | Krionik, the north-eastern part |  | North-Eastern Krionik |
-| 77 | Krionik, Skillia | the nations in it |  | Krionik and Skillia |
+| 76 | Krionik, Kieska, Belka | the nations in it |  | Krionik, Kieska and Belka |
+| 77 | Krionik, Skillia | the nations in it | Sedišta | Krionik and Skillia |
 | 78 | Kieska, Placeholdgrad, Zoluzeme, Sombor | 4 nations (Kieska, Placeholdgrad, Zoluzeme, Sombor); its coast faces the North Menotius |  | The Kieskan Coast |
 | 79 | Volstokn | Volstokn, the eastern part |  | Eastern Volstokn |
 | 80 | Ryśny | Ryśny |  | Ryśny |
-| 81 | Krionik | Krionik, the southern part |  | Southern Krionik |
+| 81 | Krionik | Krionik, the southern part | Vazgorod | Southern Krionik |
 | 82 | Sennheiser | Sennheiser |  | Sennheiser |
 
 ## Usnistan
@@ -132,13 +132,13 @@ Cities are the ones you named on the Cities layer.
 | 91 | Soloriania, Anglost, Kilkire-Foraois, Sarkis ... | 5 nations (Soloriania, Anglost, Kampfian Empire, Sarkis ...); its coast faces the North Menotius |  | The Solorianois Coast |
 | 92 | Utopian Republic | Utopian Republic, the south-eastern part |  | South-Eastern Utopian Republic |
 | 93 | Utopian Republic | Utopian Republic, the north-eastern part |  | North-Eastern Utopian Republic |
-| 94 | Levantinin, Zanzimibia, Koronista | the nations in it |  | Levantinin, Zanzimibia and Koronista |
+| 94 | Zanzimibia, Levantinin, Koronista | the nations in it |  | Levantinin, Zanzimibia and Koronista |
 | 95 | Royabad | Royabad |  | Royabad |
 | 96 | North Koronista | North Koronista |  | North Koronista |
 | 97 | Mustawi, Al-Khabid | the nations in it |  | Mustawi and Al-Khabid |
 | 98 | Humanist State | Humanist State |  | Humanist State |
 | 99 | South Usnistan | South Usnistan |  | South Usnistan |
-| 100 | Almohavid, Al-Radiyaa, Kalaistan, Solaria ... | 6 nations (Almohavid, Al-Radiyaa, Kalaistan, Solaria ...); its coast faces the South Menotius |  | The South Menotius Coast |
+| 100 | Almohavid, Al-Radiyaa, Solaria, Kalaistan ... | 6 nations (Almohavid, Al-Radiyaa, Kalaistan, Solaria ...); its coast faces the South Menotius |  | The South Menotius Coast |
 
 ## Orientalis
 
@@ -158,7 +158,7 @@ Cities are the ones you named on the Cities layer.
 | 112 | Kianhua | Kianhua, the western part |  | Western Kianhua |
 | 113 | Red Path, Kuran | the nations in it |  | Red Path and Kuran |
 | 114 | Sarkis, Haidao | Sarkis, the eastern part |  | Eastern Sarkis |
-| 115 | Kianhua, Terreich und Preußen | Kianhua, the eastern part |  | Eastern Kianhua |
+| 115 | Kianhua, Xugang | Kianhua, the eastern part |  | Eastern Kianhua |
 | 116 | Estande, Wanea, Daihai | the nations in it |  | Estande, Wanea and Daihai |
 | 117 | Krionik | Krionik's land on Orientalis |  | Kriosnik Orientalis |
 | 118 | Chineasia | Chineasia's islands off its main land |  | The Chineasian Isles |
@@ -172,7 +172,7 @@ Cities are the ones you named on the Cities layer.
 | 126 | Chineasia | Chineasia, the north-western part |  | North-Western Chineasia |
 | 127 | Felter, Terrabis-Seran | Felter |  | Felter |
 | 128 | Arpino | Arpino, the north-western part |  | North-Western Arpino |
-| 129 | Arpino | Arpino, the south-western part |  | South-Western Arpino |
+| 129 | Arpino, Krionik | Arpino, the south-western part |  | South-Western Arpino |
 | 130 | Plaija | Plaija, the western part |  | Western Plaija |
 | 131 | Arpino | Arpino, around its centre |  | Central Arpino |
 | 132 | Ganden | Ganden |  | Ganden |

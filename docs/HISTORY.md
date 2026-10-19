@@ -10,6 +10,13 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-19, night (the author's answers to the 26 open questions and new notes, all held: "don't edit the following
+  in the mod yet"): the mod unchanged. The answers recorded (`dist/open_questions.md`, the root manual's waiting list);
+  the new notes held (`deco_ui/docs/VERSIONS.md`); cleared as a proposal, **the Association's emblem C** after the
+  author's sketch (`dist/emblem_proposals/reibonnaise_association/make_c.py`); sent again or new: the land regions'
+  draft names on the map (`region_map.py --names-map`, `dist/region_names_map.png`; the numbers and drafts renumbered
+  for today's regions), the strait crossings on today's map (`straits.py find`: 501 proposed), the motto flag's options
+  (Port Almohavid flies the Ruq'ah, white), Usnistan's flags (`dist/flags_usnistan.png`), the tech tree mockup.
 - 2026-10-19, evening (the author's recording: "changing the terrain of one province can change it on others"): **the
   Gazetteer's keys left from before a cut** read in one order by the page and the build, and gathered into a place's own
   key when it is edited (`docs/PROBLEM_LOG.md`); `tests/gazetteer/stale.py`; the site republished; the mod unchanged.

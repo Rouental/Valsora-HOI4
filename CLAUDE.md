@@ -278,36 +278,24 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   corner brackets ("you have a lot of trouble with this particular decorative element"), the factories' order, the
   state panel's corner under the flag, the experience badges off centre, the medallion's name 1 px left: all changed
   in v0.10.2, not yet seen. Before that (2026-10-17) v0.10's findings, fixed in v0.10.1. Older findings, all fixed since: `deco_ui/docs/VERSIONS.md`. Not seen yet besides: the two starts, Vilna and Placeholdgrad. The Deco UI's checklist for the author is in `deco_ui/valsora_deco_ui/README.txt` (Things to check) and `deco_ui/CLAUDE.md` (section 10).
-- **Waiting on the author:** (all of it, numbered for the author to answer, 2026-10-19: `dist/open_questions.md`; keep it in
-  step) (2026-10-19, later still) Rouental's border edits of 10-18-3 (a city state in the east, cutouts for Vair, Carcarelle and Grande Reliette), not in the file received: to send again; what looks odd on the faction screen; (2026-10-19, later) Claude's guesses for the eleven new nations (governments, formal names,
-  colours, tags: `docs/NATIONS.md`, 2026-10-19) and whether the ports and Sangrád are meant as releasables; names for the
-  Cultists' 23 states (`dist/state_numbers_cultists.png`) and New Formosa's eleven (Krionik's page can name them);
-  (2026-10-19) the Association's emblem, A (gold lozenges) or B (red and white), before it goes in the mod (`dist/emblem_proposals/reibonnaise_association/`); (2026-10-18, night) names for Usnistan's 60 new states
-  (`dist/state_numbers_usnistan_deserts.png`) and Rouental's and Terreich's new ones; whether the nine desert nations'
-  map tools open on the Gazetteer now their states are drawn (`gazetteer.finals`); the desert size Claude chose
-  (600 px: `areas.PROVINCE_PX`) and what tundra should be; Rouental's elite divisions
-  refilled with new men (how to keep them full: the reply of 2026-10-18, night); the jungle and tundra marks of the earlier upload (the layer "Desert", not in the
-  latest one); a read-only service account for the Gazetteer (its key as the environment's
-  secret `GAZETTEER_SERVICE_ACCOUNT`: `docs/GAZETTEER_INTERNALS.md`); from the Gazetteer's suggestions, Claude's
-  readings to confirm: Riverraine's and Kové's capitals (Callentroix, Kové), the two Triftsund-Inseln states sharing
-  their name, Ungar's city-states of 31 and 63 px (Tópart, Erődítmény); whose the motto flag is ("a safe haven amid the storm", Arabic on indigo, four hands in white
-  and gold: `dist/flag_proposals/safe_haven/`) and which version; from the 2026-10-17 map: names for the new states (`dist/state_numbers_belekria.png`,
-  `_krionik`, `_terreich`, `_kurikia`, `_san_sierra`, `_sennheiser`, `_gorbastan_zukchiva`, and Cardonia's 5 and
-  Hollier's 1 new ones), flags for Belekria's eight new republics, and the bump of Kieska's new land by Sombor that is
-  painted as Crvenognjište (Kieska's, with a Crvenognjište core: `docs/NATIONS.md`); names for the 137 land strategic regions (`dist/region_names.md`, renumbered for the
-  new regions; a first draft of every name, Claude's, is `dist/region_names_draft.md`, 2026-10-17); the wider strait crossings
-  (`dist/straits_map.png`: the orange and red ones, 10-20 px; the 414 green and yellow ones are in the mod since 2026-10-17;
-  `straits.py approve --max-gap 10 --add N,...`, then a rebuild);
-  what the Deco UI restyles after v0.10 (`deco_ui/docs/SCREEN_INVENTORY.md`'s suggestions: the unit counters, the division
-  and ship details, the trait trees ...); whether fuel, supply and convoys stay in the top bar's strip (an experiment, the author's); whether v0.9's restyled screens stay; the larger flags' test version (`docs/HD_FLAGS_TEST.md`); the panel picture proposals (on
-  hold, the author: "I don't want to move ahead with the panel pictures just yet"); the tech tree (its eight questions
-  answered on 2026-10-16 and recorded in `docs/TECH_TREE_2036.md`: a realistic 2036, the tree beginning where the base
-  game's ends, nuclear weapons for the superpowers only, Krionik, Kampf and Fraxhemark or Sarkis as the superpowers;
-  the author is still brainstorming and will say more about the tree's shape, so nothing is built until then); the other
-  size options
-  (`docs/SPEED_AND_SIZE.md`). Settled (2026-10-15): the news
-  masthead stays VALSORAN STANDARD, its globe the ringed one, the event cards' crest the keystone; the zip stays in
-  `dist/` (Decisions worth keeping, "The mod's zip").
+- **Waiting on the author:** (all of it, numbered, with the author's answers of 2026-10-19, night: `dist/open_questions.md`;
+  keep it in step) **The go-ahead** for everything answered (nothing of it is in the mod yet: "don't edit the following
+  in the mod yet"): Sangrád renamed Visokagorod (it and the three ports stay releasable), James Navy out (a test),
+  tundra white and impassable tundra white and red on the areas layer (`areas.py`), the desert nations' map tools open,
+  and the Deco UI's held notes (`deco_ui/docs/VERSIONS.md`, "Held": the loading diamonds, the diplomacy portrait and
+  tabs, the factory icons everywhere, the construction screen, the alerts, the insignia icons and ten numbered shields,
+  the training bar, the production modifiers' icons, the faction goals). **The new map**: Rouental's internal borders
+  redone almost entirely (task: the city state and the cutouts for Vair, Carcarelle and Grande Reliette come with it),
+  the Cultists' path, the tundra marks. **Still to answer** (`dist/open_questions.md`): the desert provinces' size (600
+  px, `q4`), the old upload's tundra, jungle and desert marks (`q5`), the strait crossings to mark (`dist/straits_map.png`,
+  today's map), Claude's guesses for the eleven new nations, the Association's emblem C (the author's sketch, cleared
+  as a proposal: `dist/emblem_proposals/reibonnaise_association/`), which motto flag Port Almohavid keeps (it flies the
+  Ruq'ah, white: `dist/flag_proposals/safe_haven/`), the land regions' names (`dist/region_names_map.png`), Rouental's
+  elite divisions (refilled at the start, so they lose experience), the tech tree's open questions
+  (`docs/TECH_TREE_2036.md`). **Later, the author's**: flags for Belekria's eight republics, state names
+  (`dist/state_numbers_*.png`). Settled: the Gazetteer stays on the download (no service account), fuel, supply and
+  convoys stay in the top bar, v0.9's screens stay, the flags stay at their size (the larger flags' test dropped);
+  (2026-10-15) the news masthead VALSORAN STANDARD, its ringed globe, the event cards' keystone; the zip in `dist/`.
 
 ## Known gaps
 

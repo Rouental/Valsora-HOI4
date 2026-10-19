@@ -6,6 +6,14 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**Very small provinces left beside Rosenburg and Terreichstadt** (2026-10-19, night, the author: "The only error was
+cutting out Rosenburg and Terreichstadt leading to very small leftover provinces. I've already fixed that though")
+- Cause: applying Terreich's Gazetteer suggestions (`apply_suggestions.py`, 2026-10-18) cut the two cities out of the
+  provinces round them as provinces of their own, and what was left of those provinces beside the cities was small.
+- Fix: the author's, on their copy of the map; it comes with their next upload. Still to do: when a suggestion cuts a
+  city out, merge a leftover under the size guide's smallest (~120 px) into its neighbour (`merge_provinces.py`), and
+  look at the leftovers in `pdn_diff.py`'s pictures before sending the map back.
+
 **On the Gazetteer, painting one province's terrain changed others** (2026-10-19, the author's recording of Terreich:
 "changing the terrain of one province can change it on others")
 - Cause: facts are kept under pixel keys ("x,y"), and when the map is cut again a province can hold several keys from

@@ -6065,7 +6065,7 @@
    ],
    "gap": 2.2,
    "kind": "link",
-   "name": "Cultists 20 - Cultists 20",
+   "name": "Cultists 23 - Cultists 23",
    "owners": [
     "CUL",
     "CUL"
@@ -6092,7 +6092,7 @@
    ],
    "gap": 2.0,
    "kind": "link",
-   "name": "Cultists 19 - Cultists 20",
+   "name": "Cultists 23 - Cultists 23",
    "owners": [
     "CUL",
     "CUL"
@@ -6335,7 +6335,7 @@
    ],
    "gap": 12.0,
    "kind": "link",
-   "name": "Mustawi 1 - Kyras 19",
+   "name": "Lilonga - Kyras 19",
    "owners": [
     "MST",
     "KYS"
@@ -6713,7 +6713,7 @@
    ],
    "gap": 14.1,
    "kind": "link",
-   "name": "Krionik 129 - Daihai 1",
+   "name": "Krionik 137 - Daihai 1",
    "owners": [
     "KRI",
     "DHI"
@@ -6956,7 +6956,7 @@
    ],
    "gap": 8.5,
    "kind": "link",
-   "name": "Krionik 129 - Tsuruma 2",
+   "name": "Krionik 133 - Tsuruma 2",
    "owners": [
     "KRI",
     "TSU"
@@ -7793,7 +7793,7 @@
    ],
    "gap": 4.5,
    "kind": "link",
-   "name": "Krionik 131 - Krionik 131",
+   "name": "Port Nyasha - Port Nyasha",
    "owners": [
     "KRI",
     "KRI"
@@ -7820,7 +7820,7 @@
    ],
    "gap": 5.0,
    "kind": "link",
-   "name": "Terreich und Preußen 3 - Terreich und Preußen 3",
+   "name": "Steilmark - Steilmark",
    "owners": [
     "TUP",
     "TUP"
@@ -7874,7 +7874,7 @@
    ],
    "gap": 5.1,
    "kind": "link",
-   "name": "Triftsund-Inseln - Triftsund-Inseln",
+   "name": "Wesrtriftsund-Inseln - Wesrtriftsund-Inseln",
    "owners": [
     "TUP",
     "TUP"
@@ -7955,7 +7955,7 @@
    ],
    "gap": 5.0,
    "kind": "link",
-   "name": "Triftsund-Inseln - Triftsund-Inseln",
+   "name": "Wesrtriftsund-Inseln - Osttriftsund-Inseln",
    "owners": [
     "TUP",
     "TUP"
@@ -7982,7 +7982,7 @@
    ],
    "gap": 2.2,
    "kind": "link",
-   "name": "Terreich und Preußen 28 - Triftsund-Inseln",
+   "name": "Schädental - Osttriftsund-Inseln",
    "owners": [
     "TUP",
     "TUP"
@@ -8009,7 +8009,7 @@
    ],
    "gap": 4.5,
    "kind": "link",
-   "name": "Terreich und Preußen 28 - Triftsund-Inseln",
+   "name": "Schädental - Osttriftsund-Inseln",
    "owners": [
     "TUP",
     "TUP"
@@ -8036,7 +8036,7 @@
    ],
    "gap": 4.1,
    "kind": "link",
-   "name": "Terreich und Preußen 50 - Teuton",
+   "name": "Warsch-Westfalen - Teuton",
    "owners": [
     "TUP",
     "TUP"
@@ -8063,7 +8063,7 @@
    ],
    "gap": 2.0,
    "kind": "link",
-   "name": "Terreich und Preußen 30 - Terreich und Preußen 30",
+   "name": "Gleis-Westfalen - Gleis-Westfalen",
    "owners": [
     "TUP",
     "TUP"
@@ -8090,7 +8090,7 @@
    ],
    "gap": 7.2,
    "kind": "link",
-   "name": "Terreich und Preußen 30 - Teuton",
+   "name": "Gleis-Westfalen - Teuton",
    "owners": [
     "TUP",
     "TUP"
@@ -8117,7 +8117,7 @@
    ],
    "gap": 8.1,
    "kind": "link",
-   "name": "Terreich und Preußen 23 - Teuton",
+   "name": "Südpreußen - Teuton",
    "owners": [
     "TUP",
     "TUP"
@@ -8198,7 +8198,7 @@
    ],
    "gap": 2.0,
    "kind": "link",
-   "name": "Terreich und Preußen 37 - Terreich und Preußen 32",
+   "name": "Pommerland - Brennen",
    "owners": [
     "TUP",
     "TUP"
@@ -8252,7 +8252,7 @@
    ],
    "gap": 5.8,
    "kind": "link",
-   "name": "Peatiktist 27 - Terreich und Preußen 7",
+   "name": "Peatiktist 27 - Ansbach",
    "owners": [
     "PTK",
     "TUP"
@@ -8279,7 +8279,7 @@
    ],
    "gap": 5.8,
    "kind": "link",
-   "name": "Terreich und Preußen 16 - Terreich und Preußen 13",
+   "name": "Aschmark - Weisbach-Frankenberg",
    "owners": [
     "TUP",
     "TUP"
@@ -8306,7 +8306,7 @@
    ],
    "gap": 4.0,
    "kind": "link",
-   "name": "Terreich und Preußen 2 - Estande 70",
+   "name": "Kopenhagen - Estande 70",
    "owners": [
     "TUP",
     "ESD"
@@ -9386,7 +9386,7 @@
    ],
    "gap": 11.0,
    "kind": "link",
-   "name": "Krionik 130 - Chineasia 6",
+   "name": "Krionik 140 - Chineasia 6",
    "owners": [
     "KRI",
     "CNA"
@@ -9440,7 +9440,7 @@
    ],
    "gap": 19.7,
    "kind": "link",
-   "name": "Krionik 129 - Krionik 130",
+   "name": "Krionik 137 - Krionik 140",
    "owners": [
     "KRI",
     "KRI"
@@ -9467,7 +9467,7 @@
    ],
    "gap": 7.1,
    "kind": "link",
-   "name": "Krionik 129 - Krionik 130",
+   "name": "Krionik 137 - Krionik 140",
    "owners": [
     "KRI",
     "KRI"
@@ -9548,7 +9548,7 @@
    ],
    "gap": 12.2,
    "kind": "link",
-   "name": "Krionik 130 - Chineasia 6",
+   "name": "Krionik 140 - Chineasia 6",
    "owners": [
     "KRI",
     "CNA"
@@ -9575,7 +9575,7 @@
    ],
    "gap": 8.6,
    "kind": "link",
-   "name": "Krionik 129 - Krionik 130",
+   "name": "Krionik 139 - Krionik 140",
    "owners": [
     "KRI",
     "KRI"
@@ -9602,7 +9602,7 @@
    ],
    "gap": 12.0,
    "kind": "link",
-   "name": "Krionik 129 - Chineasia 6",
+   "name": "Krionik 139 - Chineasia 6",
    "owners": [
     "KRI",
     "CNA"
@@ -9656,7 +9656,7 @@
    ],
    "gap": 2.2,
    "kind": "link",
-   "name": "Krionik 129 - Chineasia 6",
+   "name": "Krionik 139 - Chineasia 6",
    "owners": [
     "KRI",
     "CNA"

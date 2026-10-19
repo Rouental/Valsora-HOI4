@@ -15,7 +15,8 @@
   "id": 29,
   "continent": "nonscio",
   "owners": [
-   "Cascadia"
+   "Cascadia",
+   "Cardonia"
   ],
   "name": "Cascadia Region 2",
   "x": 281,
@@ -44,17 +45,6 @@
   "y": 688
  },
  "5": {
-  "colour": "b5961c",
-  "id": 24,
-  "continent": "nonscio",
-  "owners": [
-   "Cardonia"
-  ],
-  "name": "Cardonia Region 1",
-  "x": 722,
-  "y": 703
- },
- "6": {
   "colour": "bf736e",
   "id": 36,
   "continent": "nonscio",
@@ -71,6 +61,17 @@
   "name": "Rouental Region 1",
   "x": 723,
   "y": 823
+ },
+ "6": {
+  "colour": "b5961c",
+  "id": 24,
+  "continent": "nonscio",
+  "owners": [
+   "Cardonia"
+  ],
+  "name": "Cardonia Region 1",
+  "x": 722,
+  "y": 703
  },
  "7": {
   "colour": "47a644",
@@ -144,7 +145,7 @@
  },
  "13": {
   "colour": "6cdd5b",
-  "id": 35,
+  "id": 34,
   "continent": "nonscio",
   "owners": [
    "Placeholdaire",
@@ -321,8 +322,8 @@
   "continent": "araseos",
   "owners": [
    "Scealand",
-   "Artzen",
    "Ostaria",
+   "Artzen",
    "Daravon"
   ],
   "name": "Scealand Region 1",
@@ -357,11 +358,12 @@
   "continent": "araseos",
   "owners": [
    "Zwintern",
-   "Merikaan"
+   "Merikaan",
+   "Terrabis-Seran"
   ],
   "name": "Zwintern Region 1",
-  "x": 304,
-  "y": 1865
+  "x": 301,
+  "y": 1825
  },
  "31": {
   "colour": "7aba42",
@@ -685,7 +687,7 @@
    "West Sminishia"
   ],
   "name": "Belekria Region 2",
-  "x": 1891,
+  "x": 1881,
   "y": 341
  },
  "59": {
@@ -696,7 +698,7 @@
    "Belekria"
   ],
   "name": "Belekria Region 1",
-  "x": 2079,
+  "x": 2080,
   "y": 322
  },
  "60": {
@@ -726,9 +728,9 @@
   "id": 10,
   "continent": "yastreovakia",
   "owners": [
-   "Pakitsk"
+   "Belka"
   ],
-  "name": "Pakitsk Region 1",
+  "name": "Belka Region 3",
   "x": 2537,
   "y": 404
  },
@@ -816,7 +818,9 @@
   "id": 15,
   "continent": "yastreovakia",
   "owners": [
-   "Sminishia"
+   "Sminishia",
+   "West Sminishia",
+   "Belekria"
   ],
   "name": "Sminishia Region 1",
   "x": 2022,
@@ -830,8 +834,8 @@
    "Krionik"
   ],
   "name": "Krionik Region 4",
-  "x": 2066,
-  "y": 756
+  "x": 2059,
+  "y": 760
  },
  "72": {
   "colour": "739a5d",
@@ -853,8 +857,8 @@
    "Krionik"
   ],
   "name": "Krionik Region 3",
-  "x": 2199,
-  "y": 671
+  "x": 2211,
+  "y": 676
  },
  "74": {
   "colour": "9e9724",
@@ -875,19 +879,21 @@
    "Krionik"
   ],
   "name": "Krionik Region 2",
-  "x": 2312,
-  "y": 616
+  "x": 2336,
+  "y": 610
  },
  "76": {
   "colour": "b8b959",
   "id": 22,
   "continent": "yastreovakia",
   "owners": [
-   "Krionik"
+   "Krionik",
+   "Kieska",
+   "Belka"
   ],
   "name": "Krionik Region 1",
   "x": 2568,
-  "y": 585
+  "y": 587
  },
  "77": {
   "colour": "4b9753",
@@ -898,8 +904,8 @@
    "Skillia"
   ],
   "name": "Krionik Region 5",
-  "x": 2523,
-  "y": 793
+  "x": 2524,
+  "y": 795
  },
  "78": {
   "colour": "b04f8c",
@@ -939,14 +945,14 @@
  },
  "81": {
   "colour": "8d4754",
-  "id": 34,
+  "id": 35,
   "continent": "yastreovakia",
   "owners": [
    "Krionik"
   ],
   "name": "Krionik Region 6",
-  "x": 2298,
-  "y": 810
+  "x": 2248,
+  "y": 840
  },
  "82": {
   "colour": "28bc6c",
@@ -1099,11 +1105,11 @@
   "id": 90,
   "continent": "usnistan",
   "owners": [
-   "Levantinin",
    "Zanzimibia",
+   "Levantinin",
    "Koronista"
   ],
-  "name": "Levantinin Region 1",
+  "name": "Zanzimibia Region 1",
   "x": 3226,
   "y": 1615
  },
@@ -1170,8 +1176,8 @@
   "owners": [
    "Almohavid",
    "Al-Radiyaa",
-   "Kalaistan",
    "Solaria",
+   "Kalaistan",
    "Port Almohavid",
    "Mekele"
   ],
@@ -1343,7 +1349,7 @@
   "continent": "orientalis",
   "owners": [
    "Kianhua",
-   "Terreich und Preußen"
+   "Xugang"
   ],
   "name": "Kianhua Region 2",
   "x": 4783,
@@ -1505,7 +1511,8 @@
   "id": 131,
   "continent": "orientalis",
   "owners": [
-   "Arpino"
+   "Arpino",
+   "Krionik"
   ],
   "name": "Arpino Region 5",
   "x": 4319,

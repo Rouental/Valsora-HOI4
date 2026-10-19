@@ -211,6 +211,19 @@ it before touching the UI. In short:
   - the alerts: only across half the screen (they wrap after 11 in the screenshot); they should run to the music tray
     before wrapping; their frames in the Deco style (gilt octagons), the icons kept and centred.
 
+- **Held: the author's notes of 2026-10-19, night** (screenshots; "Again, don't edit the following in the mod yet,
+  though you can provide clarification and answers to my questions"). Nothing done yet:
+  - the default army icons (the insignia picker's) redrawn to suit the UI, and ten new ones: the numbers 1 to 10 on a
+    shield whose colour can be changed;
+  - the training bar (the deployment line): its text cut off, stray lines;
+  - the production modifiers' line: dockyard output, factory output "and I think one or two more" are still the game's
+    icons, not the Deco UI's;
+  - the faction screen's goals: the lined background at the top, a gold line, then a solid colour, like a folder, with
+    the text over all of it and crossing the line (the game's goal-slot picture as `make_panel_pictures.py`'s automatic
+    translation left it; to draw by hand, the text clear of the line).
+  Cleared to start, as a proposal only: the Association of Reibonnaise States' emblem after the author's sketch
+  (version C, `dist/emblem_proposals/reibonnaise_association/`).
+
 ## From the root manual's "Current state" (2026-10-17)
 
 Where things stand; the history, date by date, is `docs/HISTORY.md` (add each day's entry at its top).
