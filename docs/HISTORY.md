@@ -10,6 +10,7 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-19, later (the author: "Could you please try to design an emblem for the Association of Reibonnaise states? It should function both as the small logo for the game, and something that could be seen outside of it"): the emblem, a proposal in two versions (`dist/emblem_proposals/reibonnaise_association/`): a blue roundel in a gilt rim, a ring of eight lozenges (one per member), a fleur-de-lis over an upright sword; a seal with the name and "Strength in Unity" for outside the game, the game's 200 x 100 logo and 32 x 32 miniature. Not in the mod until the author picks.
 - 2026-10-19, later (the author's screenshots of v0.11): **Deco UI v0.11.1**: the music player and its controller in the deco style (the controller a tab under the music button), the production lines' boxes and the trade rows drawn by hand (`deco_ui/docs/VERSIONS.md`); the icon proposals' factory back as it was ("it matching the civilian factory icon is good"), the production line buttons redrawn instead (a high-cut helmet over an assault rifle, a modern tank).
 - 2026-10-19 (the author: "by and large I like them, but the efficiency, dockyard, and production icons aren't
   great ... the shield on bombing defense could be better"): the Deco icon proposals redrawn
