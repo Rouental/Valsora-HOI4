@@ -61,6 +61,9 @@ is a fine answer for anything that isn't a name. Each item says where to look.
 
 ## The interface (Deco UI)
 
+(Your notes on v0.11.2 of 2026-10-19, evening, are written down in `deco_ui/docs/VERSIONS.md` under "Held" and wait for
+your go-ahead.)
+
 19. **The faction screen:** what looks odd? In your screenshot I see the Long Term column tinted blue, grey carved
     leaves in the bottom corners, and the "Faction Influence" label sitting on the frame line.
 20. **Fuel, supply and convoys in the top bar's strip:** keep the experiment, or back to a tray?

@@ -196,6 +196,21 @@ it before touching the UI. In short:
   a multiplayer desync warning, harmless in single player, and no way is known to declare the token); the faction
   screen ("Odd appearance of faction screen"): asked what looks odd.
 
+- **Held: the author's notes on v0.11.2** (2026-10-19, evening, with screenshots; "do not fix these or anything else I
+  send until I give you the go-ahead"). Nothing done yet:
+  - the loading screen: the upper diamond (on the status plate's foot) looks odd beside the lower one (the tip's); both
+    should look the same;
+  - the diplomacy tab: the round-headed portrait suits it less than the politics screen; its rays stop suddenly at the
+    plate's edge, where the politics screen's run on and fade out; the bottoms of the Diplomacy and Intel Ledger tab
+    buttons are cut off; perhaps a gilt octagon frame instead;
+  - the new military factory, civilian factory and dockyard icons everywhere the game shows those (the production
+    units, the dropdown under the factory side, the resource deficit icons still the game's); the build aircraft button
+    as the air tab's jet; the build infantry & artillery button a helmet and a howitzer, not a rifle;
+  - the construction screen: icons running into their headers; restyle its buttons as subtle octagons and its icons
+    about 1 to 1 in the Deco palette;
+  - the alerts: only across half the screen (they wrap after 11 in the screenshot); they should run to the music tray
+    before wrapping; their frames in the Deco style (gilt octagons), the icons kept and centred.
+
 ## From the root manual's "Current state" (2026-10-17)
 
 Where things stand; the history, date by date, is `docs/HISTORY.md` (add each day's entry at its top).
