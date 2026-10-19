@@ -10,6 +10,9 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-19, evening (the author's recording: "changing the terrain of one province can change it on others"): **the
+  Gazetteer's keys left from before a cut** read in one order by the page and the build, and gathered into a place's own
+  key when it is edited (`docs/PROBLEM_LOG.md`); `tests/gazetteer/stale.py`; the site republished; the mod unchanged.
 - 2026-10-19, later still (the author's screenshots of v0.11.1 and notes): **the map 10-19-2** (`docs/MAP_VERSIONS.md`):
   the Cultists' two islets in Cultists 23, Almohavid 2 and 3 one impassable province (the author's edit hadn't saved),
   Almohavid 10 plain desert: 21,049 provinces, 62,061 borders (3,475 free), 3,191 states (22 impassable); **no supply

@@ -1876,16 +1876,26 @@ function resolve() {  // the facts' pixel keys -> this map's states and province
   const N = app.N;
   N.stateKey = N.states.map(s => s.key); N.stateFacts = N.states.map(() => null);
   N.provKey = N.prov.map(p => p.key); N.provFacts = N.prov.map(() => null);
-  N.orphans = [];
+  N.orphans = []; N.dupKeys = { states: new Map(), provinces: new Map() };
+  // Several keys can name one place once the map is cut again (a key is a pixel; the province or state round it
+  // changes). They are read in one fixed order, the same as the build's (gazetteer.page_order): by key, the place's
+  // own key last, later keys winning field by field. Until 2026-10-19 the first key in the store's order won, and that
+  // order changed with every save, so painting one province could change others (the author's recording, Terreich).
+  // Edits are always written under the place's own key (editState, editProv), the others cleared then.
   for (const [kind, keys, facts, of] of [["states", N.stateKey, N.stateFacts, p => N.prov[p].s], ["provinces", N.provKey, N.provFacts, p => p]]) {
-    const all = F(kind);
+    const all = F(kind), hits = [];
     for (const k of Object.keys(all)) {
       const v = all[k];
       if (!v || !isObj(v)) continue;
       const [x, y] = keyXY(k), p = ownProvAt(x, y);
       if (p < 0) { if (Object.keys(compact(v)).length) N.orphans.push([kind, k]); continue; }
       const i = of(p);
-      if (!facts[i] || k === keys[i]) { facts[i] = facts[i] && k !== keys[i] ? merge(v, facts[i]) : (facts[i] ? merge(facts[i], v) : v); keys[i] = k; }
+      hits.push([k === keys[i] ? 1 : 0, k, i, v]);
+    }
+    hits.sort((a, b) => a[0] - b[0] || (a[1] < b[1] ? -1 : a[1] > b[1] ? 1 : 0));
+    for (const [own, k, i, v] of hits) {
+      facts[i] = facts[i] ? merge(facts[i], v) : v;
+      if (!own) { if (!N.dupKeys[kind].has(i)) N.dupKeys[kind].set(i, []); N.dupKeys[kind].get(i).push(k); }
     }
   }
   // cities: which own province each is in
@@ -1957,8 +1967,17 @@ function pf(p) { return app.N.provFacts[p] || {}; }
 function stateName(s) { const f = sf(s); return f.name || app.N.states[s].name || `State ${app.N.states[s].id}`; }
 function statePop(s) { const f = sf(s); return f.pop != null ? f.pop : app.N.states[s].pop; }
 function provTerrain(p) { const t = pf(p).t; return t || app.N.prov[p].t; }
-function editState(s, delta) { return edit("states", { [app.N.stateKey[s]]: delta }); }
-function editProv(p, delta) { return edit("provinces", { [app.N.provKey[p]]: delta }); }
+// an edit goes under the place's own key; keys left from before the map was cut again (resolve) are gathered into it
+// first and cleared, so the place has one key from then on
+function editPlace(kind, keys, facts, i, delta) {
+  const stale = app.N.dupKeys[kind].get(i) || [];
+  if (!stale.length) return edit(kind, { [keys[i]]: delta });
+  const d = { [keys[i]]: merge(clone(facts[i] || {}), delta) };
+  for (const k of stale) d[k] = null;
+  return edit(kind, d);
+}
+function editState(s, delta) { return editPlace("states", app.N.stateKey, app.N.stateFacts, s, delta); }
+function editProv(p, delta) { return editPlace("provinces", app.N.provKey, app.N.provFacts, p, delta); }
 
 // what changed -> what to redraw
 function changed(kind) {

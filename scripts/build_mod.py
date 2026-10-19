@@ -256,7 +256,7 @@ def main():
     by_tag = {v[0]: c for c, v in COUNTRIES.items()}
     # what friends filled in on the Gazetteer (source/gazetteer/, scripts/gazetteer.py)
     G, gnotes = gazetteer.load(), []
-    gfacts = gazetteer.state_facts(G, lab, state_of, rj["owners"], gnotes) if G else {}
+    gfacts = gazetteer.state_facts(G, lab, state_of, rj["owners"], gnotes, anchor, states, size) if G else {}
     # the releasables the Gazetteer's players made: countries owning nothing, with cores on
     # the states they hold most of, named, led and coloured as their facts say
     grel = gazetteer.releasables(G, lab, kind, state_of, rj["owners"], gnotes,

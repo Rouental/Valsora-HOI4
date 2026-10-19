@@ -199,7 +199,7 @@ the page, its rules or its import.
   - Only the author's Claude publishes the site (`gh-pages`, allowed for it alone: "it's ok to put it on a new branch").
 - **Republish** after map changes: `sh scripts/publish_site.sh "message"`; test the page first, after
   `python3 scripts/facts_export.py`: `python3 tests/gazetteer/run.py`, `traits.py`, `companies.py`, `ingame.py`,
-  `reset.py` and `guide.py` (same folder).
+  `reset.py`, `guide.py` and `stale.py` (same folder).
 - **Into the mod:** the author's **Save every nation as a file**, then `python3 scripts/gazetteer.py import FILE`
   (`source/gazetteer/<TAG>.json`, pictures in `source/gazetteer/assets/`, flags of HOI4's shape into `source/flags/`),
   a rebuild (`river_provinces.py` first after new rivers), `gazetteer.py suggestions` if there are any, and
@@ -277,15 +277,15 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   corner brackets ("you have a lot of trouble with this particular decorative element"), the factories' order, the
   state panel's corner under the flag, the experience badges off centre, the medallion's name 1 px left: all changed
   in v0.10.2, not yet seen. Before that (2026-10-17) v0.10's findings, fixed in v0.10.1. Older findings, all fixed since: `deco_ui/docs/VERSIONS.md`. Not seen yet besides: the two starts, Vilna and Placeholdgrad. The Deco UI's checklist for the author is in `deco_ui/valsora_deco_ui/README.txt` (Things to check) and `deco_ui/CLAUDE.md` (section 10).
-- **Waiting on the author:** (2026-10-19, later still) Rouental's border edits of 10-18-3 (a city state in the east, cutouts for Vair, Carcarelle and Grande Reliette), not in the file received: to send again; what looks odd on the faction screen; (2026-10-19, later) Claude's guesses for the eleven new nations (governments, formal names,
+- **Waiting on the author:** (all of it, numbered for the author to answer, 2026-10-19: `dist/open_questions.md`; keep it in
+  step) (2026-10-19, later still) Rouental's border edits of 10-18-3 (a city state in the east, cutouts for Vair, Carcarelle and Grande Reliette), not in the file received: to send again; what looks odd on the faction screen; (2026-10-19, later) Claude's guesses for the eleven new nations (governments, formal names,
   colours, tags: `docs/NATIONS.md`, 2026-10-19) and whether the ports and Sangrád are meant as releasables; names for the
   Cultists' 23 states (`dist/state_numbers_cultists.png`) and New Formosa's eleven (Krionik's page can name them);
   (2026-10-19) the Association's emblem, A (gold lozenges) or B (red and white), before it goes in the mod (`dist/emblem_proposals/reibonnaise_association/`); (2026-10-18, night) names for Usnistan's 60 new states
   (`dist/state_numbers_usnistan_deserts.png`) and Rouental's and Terreich's new ones; whether the nine desert nations'
   map tools open on the Gazetteer now their states are drawn (`gazetteer.finals`); the desert size Claude chose
   (600 px: `areas.PROVINCE_PX`) and what tundra should be; Rouental's elite divisions
-  refilled with new men (how to keep them full: the reply of 2026-10-18, night); the icon proposals
-  (`deco_ui/art/proposals/icons/`); the jungle and tundra marks of the earlier upload (the layer "Desert", not in the
+  refilled with new men (how to keep them full: the reply of 2026-10-18, night); the jungle and tundra marks of the earlier upload (the layer "Desert", not in the
   latest one); a read-only service account for the Gazetteer (its key as the environment's
   secret `GAZETTEER_SERVICE_ACCOUNT`: `docs/GAZETTEER_INTERNALS.md`); from the Gazetteer's suggestions, Claude's
   readings to confirm: Riverraine's and Kové's capitals (Callentroix, Kové), the two Triftsund-Inseln states sharing

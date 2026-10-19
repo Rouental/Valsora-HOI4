@@ -480,7 +480,8 @@ def main():
     for m in river_lines.problems(np.where(rv >= 0, rv, river_lines.NONE).astype(np.uint8), ~water):
         print("note: river problem (the game may draw this river wrong):", m)
     rivers = np.where(rv >= 0, rv, np.where(water, 254, 255)).astype(np.uint8)
-    terr = gazetteer.terrain(G, terr, lab, kind, state_of, owners, gnotes)
+    anchor, centre, size = anchors(lab, n)  # before the Gazetteer's terrain: its keys are these anchors
+    terr = gazetteer.terrain(G, terr, lab, kind, state_of, owners, gnotes, anchor)
     terrain_bmp = np.where(water, TERRAIN_OCEAN, terr).astype(np.uint8)
     for m in gnotes:
         print("note:", m)
@@ -493,7 +494,6 @@ def main():
     np.savez_compressed("work/provinces.npz", prov=lab, kind=kind, cont=cont,
                         colors=np.stack([colours >> 16, (colours >> 8) & 255, colours & 255], 1).astype(np.uint8),
                         terrain=np.array(ptype))
-    anchor, centre, size = anchors(lab, n)
     np.savez_compressed("work/regions.npz", anchor=anchor, centre=centre, size=size,
                         state_of=state_of, region_of=region_of)
     subregions = read_subregions(L, lab, n)

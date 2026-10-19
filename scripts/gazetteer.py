@@ -995,15 +995,17 @@ def at(lab, key):
     return int(lab[y, x])
 
 
-def terrain(G, terr, lab, kind, state_of, owners, notes):
-    """The terrain the facts give provinces, painted onto the Terrain layer's land pixels."""
+def terrain(G, terr, lab, kind, state_of, owners, notes, anchor=None):
+    """The terrain the facts give provinces, painted onto the Terrain layer's land pixels (in page_order: with the
+    provinces' anchors, a province's own key wins over keys left from before the map was cut again)."""
     if not any("provinces" in f for f in G.values()):
         return terr
     own = _owner_of(lab, state_of, owners)
     paint = np.full(len(kind), -1, np.int32)
     lost = 0
+    own_key = (lambda p: anchor_key(anchor, p)) if anchor is not None else (lambda p: None)
     for tag, f in G.items():
-        for k, v in f.get("provinces", {}).items():
+        for k, v in page_order((f.get("provinces") or {}).items(), lambda k: at(lab, k), own_key):
             p = at(lab, k)
             if kind[p] != 1 or own[p] != tag:
                 lost += 1
@@ -1115,18 +1117,43 @@ def cities(G, layer, lab, kind, state_of, owners, notes):
     return out
 
 
-def state_facts(G, lab, state_of, owners, notes):
-    """{state index: its facts} for every state the facts name by a pixel inside it."""
+def page_order(items, place_of, own_key):
+    """(key, facts) in the order the page reads them (2026-10-19): several keys can name one place once the map is cut
+    again (a key is a pixel, and the province or state round it changes), and the page and the build must agree which
+    wins. By key, as strings sort; the place's own key (its anchor pixel, the one the page writes under) last, so an
+    edit made since the cut wins; later keys win field by field (merge_facts). Until then the page took the first in
+    whatever order the store handed them back, which changed with every save (the author's recording: painting one
+    province changed others across Terreich), and the build the last in the file's order."""
+    keyed = []
+    for k, v in items:
+        try:
+            place = place_of(k)
+        except (ValueError, IndexError):
+            continue
+        keyed.append(((place is not None and place >= 0 and k == own_key(place), k), k, v))
+    return [(k, v) for _, k, v in sorted(keyed, key=lambda t: t[0])]
+
+
+def anchor_key(anchor, i):
+    """a province's own key: its anchor pixel "x,y" (facts_export.py names provinces and states by it)"""
+    return f"{int(anchor[i][1])},{int(anchor[i][0])}"
+
+
+def state_facts(G, lab, state_of, owners, notes, anchor=None, states=None, size=None):
+    """{state index: its facts} for every state the facts name by a pixel inside it (in page_order when the anchors,
+    the states' provinces and their sizes are given: the state's own key is its largest province's anchor)."""
     own = _owner_of(lab, state_of, owners)
     out, lost = {}, 0
+    own_key = ((lambda s: anchor_key(anchor, max(states[s], key=lambda i: (size[i], -i)))) if anchor is not None
+               else (lambda s: None))
     for tag, f in G.items():
-        for k, v in f.get("states", {}).items():
+        for k, v in page_order((f.get("states") or {}).items(), lambda k: int(state_of[at(lab, k)]), own_key):
             p = at(lab, k)
             s = int(state_of[p])
             if s < 0 or own[p] != tag:
                 lost += 1
                 continue
-            out[s] = {**out.get(s, {}), **v}
+            out[s] = merge_facts(out.get(s, {}), v)
     if lost:
         notes.append(f"Gazetteer: {lost} state facts no longer land on their nation's states")
     return out

@@ -25,7 +25,13 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   nothing is committed when the site is unchanged). Pages redeploys in a minute or two (the
   "pages build and deployment" run in Actions; github.io itself can't be reached from
   Claude's sandbox). Test the page first: `python3 tests/gazetteer/run.py`, `traits.py`, `companies.py`, `ingame.py`,
-  `reset.py` and `guide.py`.
+  `reset.py`, `guide.py` and `stale.py`.
+- **Keys left from before a cut** (2026-10-19, the author's recording: painting one province changed others): a
+  state's or province's facts are kept under a pixel key, so once the map is cut again one place can hold several keys.
+  The page (`resolve`) and the build (`gazetteer.page_order`) read them in one order, by key with the place's own key
+  (its anchor) last, later keys winning field by field; an edit gathers a place's old keys into its own and clears
+  them (`editPlace`). Before, the page took the first in the store's order, which changed with every save.
+  `tests/gazetteer/stale.py`.
 - **Firebase** (set up by the author, 2026-10-15): Firestore (Standard, production mode), Google
   sign-in with `rouental.github.io` among the authorized domains, the web app's settings in
   `source/gazetteer_site/firebase-config.json` (not secret). The rules,

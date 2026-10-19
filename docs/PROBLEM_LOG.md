@@ -6,6 +6,19 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**On the Gazetteer, painting one province's terrain changed others** (2026-10-19, the author's recording of Terreich:
+"changing the terrain of one province can change it on others")
+- Cause: facts are kept under pixel keys ("x,y"), and when the map is cut again a province can hold several keys from
+  before (Terreich's provinces, cut along its rivers on 10-19: 51 of them held two or three, often with other terrain).
+  The page showed the first key in the store's order, and that order changed whenever a save came back, so any edit
+  could flip those 51 provinces between their old values, all over the map. The build's import took the last in the
+  file's order: the two could disagree too.
+- Fix: one order for both (`gazetteer.page_order`, the page's `resolve`): by key, the place's own key (its anchor, the
+  one the page writes under) last, later keys winning field by field; an edit of a place with old keys gathers them
+  into its own key and clears them (`editPlace`), so the place has one key from then on. `tests/gazetteer/stale.py`
+  (the old page fails it: the same data showed forest or plains by the store's order). The mod built from the export
+  of 10-19 is unchanged.
+
 **A building model in the impassable deserts and jungle; a division in Almohavid's desert** (2026-10-19, the author's
 screenshots: "Currently there's some sort of 3d building model in the impassible deserts / jungle, is that normal?")
 - Cause: the build put a supply hub in every state's capital province (`map/supply_nodes.txt`), the impassable ones too,
