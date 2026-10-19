@@ -10,6 +10,11 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-19 (the author: "by and large I like them, but the efficiency, dockyard, and production icons aren't
+  great ... the shield on bombing defense could be better"): the Deco icon proposals redrawn
+  (`deco_ui/tools/proposals_icons.py`, `deco_ui/art/proposals/icons/`), still not in the mod. Their other notes of
+  the day (the faction screen, the diplomacy portrait, the decision plates a little high, the production screen's
+  resource counts, the decisions' icons, an `error.log`) wait: "Do not act on the following yet".
 - 2026-10-18, night, later (the author: "By impassible I mean like the big African deserts that are one massive
   province. And yes, the new lines on necessary states are also states"): each of the 22 impassable states one
   province (`areas.PROVINCE_PX`): 21,084 provinces, 62,166 borders (3,370 under the limit).

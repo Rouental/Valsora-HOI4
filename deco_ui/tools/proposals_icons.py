@@ -16,6 +16,10 @@ line, no texture. The icons:
   add_prod_inf_art_line, _armour_line, _aircraft_line, _naval_line   3 x 81 x 41  its add-a-line buttons (normal, hover,
                                                                       unavailable), modern kit (Valsora is 2036)
   decisionview/decision_select_icon_strip.dds   4 x 40 x 28  the decisions' envelopes (can't take, take, under way, timed)
+Redrawn 2026-10-19 (the author: "by and large I like them, but the efficiency, dockyard, and production icons aren't
+great ... the shield on bombing defense could be better as well"): the factory with the game's sawtooth roof and two
+stacks, the dockyard a gantry crane over a ship (the wrench an open-ended one across it), efficiency the game's zigzag
+over gilt bars rising to it, the bombing defence a heater shield in two-tone steel with a ridge.
 """
 import os
 
@@ -35,6 +39,8 @@ DEFS = ('<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="
         '<stop offset="1" stop-color="#22604C"/></linearGradient>'
         '<linearGradient id="silver" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C9D1D4"/>'
         '<stop offset="1" stop-color="#6E7A80"/></linearGradient>'
+        '<linearGradient id="bar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E8CD84"/>'
+        '<stop offset="1" stop-color="#6B4A1C"/></linearGradient>'
         '<radialGradient id="chrome" cx=".38" cy=".35" r=".7"><stop offset="0" stop-color="#9CC6C2"/>'
         '<stop offset=".6" stop-color="#3D6E6C"/><stop offset="1" stop-color="#1B3433"/></radialGradient></defs>')
 O = 'stroke="url(#g)" stroke-width="1.2" stroke-linejoin="round"'      # the gilt outline
@@ -80,32 +86,71 @@ WORKS = (f'<path d="M3.5,23.5V12L9,15V12L14.5,15V12L20,15V6H23.5V23.5Z" fill="#7
          f'<path d="M5.5,17.5H8.5M11,17.5H14M16.5,17.5H19.5" stroke="{LIT}" stroke-width="1"/>')
 
 # ------------------------------------------------------------------ the production screen
-MIL_FACTORY = (f'<path d="M2.5,21.5V11L8,14V11L13.5,14V11L19,14V3H21.5V7H24V21.5Z" fill="url(#jade)" {O}/>'
-               f'<path d="M4.5,18H22" stroke="{LIT}" stroke-width="1" opacity=".7"/>')
+# the factory's sawtooth roof and two stacks, as the game's (a roof of three teeth, the stacks rising from the third)
+MIL_FACTORY = (f'<path d="M2.5,21.5V13L7,10V13L11.5,10V13L14,11.2V2.5H16.5V11H18.5V2.5H21V11.5L24.5,13.5V21.5Z" '
+               f'fill="url(#jade)" {O}/>'
+               f'<path d="M14,4.5H16.5M18.5,4.5H21" stroke="{LIT}" stroke-width="1"/>'
+               + "".join(f'<rect x="{5 + 5 * i}" y="15.5" width="2" height="3" fill="#0D1F1A"/>' for i in range(4)))
+
+
+def outlined(d, colour, width, dark=1.6):
+    """a stroke with a dark rim under it, so a thin line reads on any fill"""
+    return (f'<path d="{d}" fill="none" stroke="#0B1014" stroke-width="{width + dark}" stroke-linecap="round" '
+            f'stroke-linejoin="round"/><path d="{d}" fill="none" stroke="{colour}" stroke-width="{width}" '
+            f'stroke-linecap="round" stroke-linejoin="round"/>')
 
 
 def dockyard(wrench=False):
-    body = (f'<path d="M3.5,20.5V3.5H13V7H5.5V20.5Z" fill="url(#steel)" {O}/>'
-            f'<path d="M9,7V11" stroke="url(#g)" stroke-width="1.2"/>'
-            f'<path d="M15,20.5V13L19.5,9.5L24,13V20.5Z" fill="url(#steel)" {O}/>'
-            f'<path d="M2,20.5H27" stroke="url(#g)" stroke-width="1.2"/>')
+    """a gantry crane over a ship on its slipway (the game's: a crane and a shed)"""
+    body = (f'<path d="M4.5,19.5L6.5,6.5M11.5,19.5L9.5,6.5M5.5,13H10.5M5,16.5L10.7,9.5M6,9.5L11,16.5" '
+            f'fill="none" stroke="url(#steel)" stroke-width="1.3"/>'
+            f'<path d="M2.5,3.5H23.5V6.5H2.5Z" fill="url(#steel)" {O}/>'
+            f'<path d="M20.5,6.5V10.5" stroke="url(#g)" stroke-width="1"/><path d="M19,10.5H22" stroke="url(#g)" stroke-width="1.2"/>'
+            f'<path d="M14.5,14.5H27.5L25,19.5H16.5Z" fill="url(#steel)" {O}/>'
+            f'<path d="M18,14.5V11.5H22V14.5" fill="url(#steel)" {O}/>'
+            f'<path d="M1.5,20H27.5" stroke="url(#g)" stroke-width="1.2"/>')
     if wrench:
-        body += (f'<path d="M8.5,17.5L16,10" stroke="#C9D1D4" stroke-width="2.4" stroke-linecap="round"/>'
-                 f'<circle cx="17" cy="9" r="2.8" fill="none" stroke="#C9D1D4" stroke-width="1.6"/>')
+        body += (outlined("M8,18L17.5,8.5", "#C9D1D4", 2.4)
+                 + '<circle cx="19.5" cy="6.5" r="4" fill="#C9D1D4" stroke="#0B1014" stroke-width="1"/>'
+                 + '<path d="M19.5,6.5L23.5,2.5L25,4L21,8Z" fill="#0B1014"/>'
+                 + '<path d="M17,5.2Q18,3.6 19.8,3.4" fill="none" stroke="#FFFFFF" stroke-width=".8" opacity=".7"/>')
     return body
 
 
+# the zigzag over its bars, as the game's: gilt bars rising from the floor to under the line
+ZIG = [(2, 10), (7, 5.5), (12, 11.5), (18.5, 4)]
+
+
+def zig_y(x):
+    for (x0, y0), (x1, y1) in zip(ZIG, ZIG[1:]):
+        if x0 <= x <= x1:
+            return y0 + (y1 - y0) * (x - x0) / (x1 - x0)
+    return ZIG[-1][1]
+
+
 def efficiency(cap=False):
-    bars = "".join(f'<rect x="{3 + 5 * i}" y="{19 - 3 * i}" width="3.4" height="{2 + 3 * i}" fill="#8B6A2C" '
-                   f'stroke="url(#g)" stroke-width=".8"/>' for i in range(4))
+    bars = "".join(f'<rect x="{x}" y="{zig_y(x + 1.3) + 3:.1f}" width="2.6" height="{17.5 - zig_y(x + 1.3):.1f}" '
+                   f'fill="url(#bar)" stroke="#0B1014" stroke-width=".6"/>' for x in (2.5, 6.8, 11.1, 15.4, 19.7))
+    line = "M" + " L".join(f"{x},{y}" for x, y in ZIG)
     if cap:
-        return bars + f'<path d="M2,5.5H22" stroke="#EE8C7E" stroke-width="1.8"/><path d="M14,4V10L17,7.5" fill="none" stroke="#EE8C7E" stroke-width="1.4"/>'
-    return bars + f'<path d="M3,13L9,8L13,10L20,3.5" fill="none" stroke="{LIT}" stroke-width="1.6"/><path d="M16,3.5H20.5V8" fill="none" stroke="{LIT}" stroke-width="1.6"/>'
+        return (bars + outlined("M1.5,3H22.5", "#EE8C7E", 1.6) + outlined(line, "#EE8C7E", 1.8))
+    return (bars + outlined(line + " L20.5,2", LIT, 1.8)
+            + '<path d="M17,1.2L22.8,0.8L22.4,6.6Z" fill="#F1DC9C" stroke="#0B1014" stroke-width=".8" stroke-linejoin="round"/>')
 
 
-BOMB_DEFENCE = (f'<path d="M2.5,26.5V15L7.5,18V15L12.5,18V15L17,18V7H19.5V26.5Z" fill="#7A3A2E" {O}/>'
-                f'<path d="M17.5,12.5L24.5,10L27,11V18Q27,24 21,27Q16,24 16,18V13Z" fill="url(#silver)" {O}/>'
-                f'<path d="M21.5,13V25" stroke="{RULE}" stroke-width="1"/>')
+# a heater shield, two-tone steel with a ridge and a gilt rim, before the factory (the game's: a brick works and a
+# steel shield)
+SHIELD = "M13.5,10.5Q20.5,8.6 27.5,10.5V17Q27.5,24.5 20.5,28Q13.5,24.5 13.5,17Z"
+BOMB_DEFENCE = (f'<path d="M1.5,25.5V14L6,11V14L10.5,11V14L12,13V4.5H14.5V12.5L17,13.5V25.5Z" fill="#7A3A2E" {O}/>'
+                + "".join(f'<rect x="{3.5 + 3.5 * i}" y="18" width="1.8" height="2.4" fill="#2A1410"/>' for i in range(3))
+                + f'<path d="{SHIELD}" fill="#0B1014" stroke="#0B1014" stroke-width="2.4"/>'
+                f'<clipPath id="sh"><path d="{SHIELD}"/></clipPath>'
+                f'<g clip-path="url(#sh)"><rect x="12" y="8" width="8.5" height="21" fill="#D9DFE2"/>'
+                f'<rect x="20.5" y="8" width="8" height="21" fill="#7E8A90"/>'
+                f'<path d="M15.5,12.2Q20.5,11 25.5,12.2V17Q25.5,23 20.5,25.6Q15.5,23 15.5,17Z" fill="none" '
+                f'stroke="rgba(11,16,20,.35)" stroke-width=".8"/></g>'
+                f'<path d="M20.5,9.6V27.5" stroke="{RULE}" stroke-width="1"/>'
+                f'<path d="{SHIELD}" fill="none" stroke="url(#g)" stroke-width="1.3" stroke-linejoin="round"/>')
 
 # ------------------------------------------------------------------ the add-a-line buttons (3 frames of 81 x 41)
 HELMET_GUN = (f'<path d="M7,22Q7,10 19,10Q29,10 30,20L30,22Z" fill="url(#jade)" {O}/>'
