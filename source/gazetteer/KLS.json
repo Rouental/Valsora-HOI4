@@ -1,0 +1,72 @@
+{
+ "cities": [
+  {
+   "name": "Baeid",
+   "vp": 10,
+   "x": 3449,
+   "y": 1706
+  },
+  {
+   "name": "Kalai Kubra",
+   "size": "village",
+   "vp": 5,
+   "x": 3527,
+   "y": 1727
+  },
+  {
+   "name": "Qasira",
+   "size": "village",
+   "vp": 5,
+   "x": 3466,
+   "y": 1735
+  }
+ ],
+ "flags": {
+  "base": {
+   "file": "assets/9ca82b9e520ad18add8bab80.png",
+   "h": 311,
+   "name": "flag temp.png",
+   "w": 490
+  }
+ },
+ "people": {
+  "ruler": {
+   "portrait": {
+    "file": "assets/2a137e1cb1b3b36946e6a266.jpg",
+    "h": 381,
+    "name": "Abdel-Fattah-al-Sisi-Egyptian.webp",
+    "w": 640
+   }
+  }
+ },
+ "provinces": {
+  "3392,1704": {
+   "t": "desert"
+  },
+  "3414,1710": {
+   "t": "desert"
+  },
+  "3447,1705": {
+   "t": "desert"
+  },
+  "3452,1735": {
+   "t": "desert"
+  },
+  "3459,1721": {
+   "t": "desert"
+  },
+  "3489,1727": {
+   "t": "plains"
+  }
+ },
+ "states": {
+  "3414,1710": {
+   "name": "Baeid"
+  },
+  "3452,1735": {
+   "name": "Kalai"
+  }
+ },
+ "status": "draft",
+ "tag": "KLS"
+}

@@ -1,6 +1,7 @@
 {
  "cities": [
   {
+   "capital": true,
    "name": "Kyrenia",
    "size": "city",
    "vp": 50,

@@ -1,0 +1,127 @@
+{
+ "cities": [
+  {
+   "name": "Tiir",
+   "size": "city",
+   "vp": 15,
+   "x": 3355,
+   "y": 1805
+  },
+  {
+   "name": "Mustanqa'",
+   "vp": 10,
+   "x": 3333,
+   "y": 1822
+  },
+  {
+   "capital": true,
+   "name": "Madinat Al-Taj",
+   "size": "large",
+   "vp": 20,
+   "x": 3333,
+   "y": 1844
+  },
+  {
+   "name": "Al-Tariq",
+   "size": "village",
+   "vp": 3,
+   "x": 3376,
+   "y": 1871
+  }
+ ],
+ "flags": {
+  "base": {
+   "file": "assets/4e0b7cdb520cb67c4b8e74fe.png",
+   "h": 311,
+   "name": "flag temp.png",
+   "w": 490
+  }
+ },
+ "people": {
+  "ruler": {
+   "portrait": {
+    "file": "assets/0d84237d9f59c32cda7566ac.jpg",
+    "h": 640,
+    "name": "OIP.webp",
+    "w": 427
+   }
+  }
+ },
+ "provinces": {
+  "3282,1846": {
+   "t": "desert"
+  },
+  "3288,1824": {
+   "t": "desert"
+  },
+  "3306,1849": {
+   "t": "desert"
+  },
+  "3307,1801": {
+   "t": "desert"
+  },
+  "3310,1823": {
+   "t": "desert"
+  },
+  "3326,1867": {
+   "t": "desert"
+  },
+  "3334,1842": {
+   "t": "plains"
+  },
+  "3338,1819": {
+   "t": "marsh"
+  },
+  "3348,1862": {
+   "t": "desert"
+  },
+  "3353,1805": {
+   "t": "plains"
+  },
+  "3355,1821": {
+   "t": "desert"
+  },
+  "3358,1841": {
+   "t": "desert"
+  },
+  "3371,1867": {
+   "t": "desert"
+  },
+  "3377,1829": {
+   "t": "desert"
+  },
+  "3383,1850": {
+   "t": "desert"
+  },
+  "3403,1834": {
+   "t": "desert"
+  },
+  "3405,1858": {
+   "t": "desert"
+  }
+ },
+ "states": {
+  "3307,1801": {
+   "name": "The Lesser Wastes",
+   "pop": 196000
+  },
+  "3310,1823": {
+   "name": "Al-Khadra'",
+   "pop": 3297000
+  },
+  "3326,1867": {
+   "name": "Kharab",
+   "pop": 720000
+  },
+  "3355,1821": {
+   "name": "Kharak",
+   "pop": 1209000
+  },
+  "3403,1834": {
+   "name": "The Nyeusi Desert",
+   "pop": 229000
+  }
+ },
+ "status": "draft",
+ "tag": "KHB"
+}

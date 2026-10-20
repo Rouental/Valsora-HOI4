@@ -1,0 +1,138 @@
+{
+ "cities": [
+  {
+   "name": "Wahid",
+   "vp": 5,
+   "x": 3424,
+   "y": 1587
+  },
+  {
+   "name": "Maladh Khorat",
+   "vp": 5,
+   "x": 3504,
+   "y": 1631
+  },
+  {
+   "name": "Bawabat",
+   "vp": 5,
+   "x": 3493,
+   "y": 1659
+  },
+  {
+   "capital": true,
+   "name": "Almohavid al-Sughra",
+   "size": "large",
+   "vp": 10,
+   "x": 3539,
+   "y": 1663
+  },
+  {
+   "name": "Wasi",
+   "size": "village",
+   "vp": 5,
+   "x": 3426,
+   "y": 1670
+  },
+  {
+   "name": "Khan",
+   "size": "village",
+   "vp": 5,
+   "x": 3431,
+   "y": 1686
+  },
+  {
+   "name": "Almas",
+   "size": "city",
+   "vp": 5,
+   "x": 3523,
+   "y": 1687
+  }
+ ],
+ "flags": {
+  "base": {
+   "file": "assets/bdb99ab923ad804528c9ca46.png",
+   "h": 311,
+   "name": "flag temp.png",
+   "w": 490
+  }
+ },
+ "people": {
+  "ruler": {
+   "portrait": {
+    "file": "assets/0de79755bdf31ca559b15c64.jpg",
+    "h": 587,
+    "name": "Sharif-Al-Emadi-Qatars-finance-minister-since-2013.jpg",
+    "w": 640
+   }
+  }
+ },
+ "provinces": {
+  "3416,1687": {
+   "t": "desert"
+  },
+  "3426,1591": {
+   "t": "desert"
+  },
+  "3433,1633": {
+   "t": "desert"
+  },
+  "3453,1661": {
+   "t": "desert"
+  },
+  "3474,1682": {
+   "t": "desert"
+  },
+  "3505,1657": {
+   "t": "hills"
+  },
+  "3515,1640": {
+   "t": "desert"
+  },
+  "3516,1700": {
+   "t": "desert"
+  },
+  "3544,1654": {
+   "t": "desert"
+  }
+ },
+ "states": {
+  "3416,1687": {
+   "name": "Murur Amin",
+   "pop": 216000
+  },
+  "3426,1591": {
+   "name": "Al-'Uzla",
+   "pop": 140000
+  },
+  "3433,1633": {
+   "name": "The Northern Dunes",
+   "pop": 644000
+  },
+  "3453,1661": {
+   "name": "Hadidiyya",
+   "pop": 125000
+  },
+  "3474,1682": {
+   "name": "The Yamut Desert",
+   "pop": 353000
+  },
+  "3505,1657": {
+   "name": "Bawabat",
+   "pop": 103000
+  },
+  "3515,1640": {
+   "name": "Maladh",
+   "pop": 112000
+  },
+  "3516,1700": {
+   "name": "Jawhara",
+   "pop": 278000
+  },
+  "3544,1654": {
+   "name": "Almohavid",
+   "pop": 460000
+  }
+ },
+ "status": "draft",
+ "tag": "AMH"
+}

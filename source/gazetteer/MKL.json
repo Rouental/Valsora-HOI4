@@ -1,0 +1,43 @@
+{
+ "cities": [
+  {
+   "name": "Dar-al-Mekele",
+   "vp": 5,
+   "x": 3514,
+   "y": 1717
+  }
+ ],
+ "flags": {
+  "base": {
+   "file": "assets/2332607d64cdb736f7334f6d.png",
+   "h": 311,
+   "name": "flag temp.png",
+   "w": 490
+  }
+ },
+ "people": {
+  "ruler": {
+   "portrait": {
+    "file": "assets/dd93b21af7829cbc9a8aa957.jpg",
+    "h": 640,
+    "name": "667b231ce52e8b29c226995fc9efeb31.jpg",
+    "w": 501
+   }
+  }
+ },
+ "provinces": {
+  "3476,1709": {
+   "t": "desert"
+  },
+  "3493,1702": {
+   "t": "desert"
+  }
+ },
+ "states": {
+  "3493,1702": {
+   "name": "Mekele"
+  }
+ },
+ "status": "draft",
+ "tag": "MKL"
+}

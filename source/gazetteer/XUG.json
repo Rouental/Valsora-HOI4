@@ -1,0 +1,37 @@
+{
+ "cities": [
+  {
+   "name": "Lianguang",
+   "size": "city",
+   "vp": 10,
+   "x": 4869,
+   "y": 1193
+  },
+  {
+   "capital": true,
+   "name": "Xugang",
+   "size": "large",
+   "vp": 20,
+   "x": 4880,
+   "y": 1199
+  }
+ ],
+ "provinces": {
+  "4864,1208": {
+   "t": "mountain"
+  },
+  "4870,1197": {
+   "t": "urban"
+  },
+  "4879,1204": {
+   "t": "urban"
+  }
+ },
+ "states": {
+  "4879,1204": {
+   "cat": "metropolis"
+  }
+ },
+ "status": "draft",
+ "tag": "XUG"
+}

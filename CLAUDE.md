@@ -252,7 +252,7 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   419 strait crossings (none between the Illiriciums or to North Pollana); Belekria 1, 4, 5, 6 and 15 coarse as
   tundra; Sminishia's claims on West Sminishia's land (`nations.CLAIMS`); the 137 land regions named (the drafts, 2026-10-20); 204 countries
   in the mod, 161 of them on the map (2026-10-19: Krionik's realms, Sangrád (Visokagorod since 2026-10-20) and its ports
-  releasable; Xugang Terreich's puppet; the Sisterhood removed 2026-10-20: `docs/NATIONS.md`), 95 of those with a flag of their own (65 fly a stripe in their map colour); the
+  releasable; Xugang Terreich's puppet; the Sisterhood removed 2026-10-20: `docs/NATIONS.md`), 104 of those with a flag of their own (57 fly a stripe in their map colour); the
   states of 61 are drawn lines (`gazetteer.finals`, 2026-10-19; 49 on 2026-10-18; 39 until 2026-10-17's map: Belekria, Krionik, Terreich,
   Gorbastan, Zukchiva, Sennheiser, Sminishia, West Sminishia and Hollier joined; Ungar's six from the Gazetteer on
   2026-10-18). The four great powers, one per
@@ -260,9 +260,8 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   Fraxhemark (Democratic); great in name for now (their industry is as drawn). Two starts, both on 1 January 2036. The Deco UI is v0.12.1 (`deco_ui/docs/VERSIONS.md`). Rouental's rivers run along its borders (97 % of their pixels, 2026-10-20: `river_borders.py`; map-wide 93 %, the other nations' stretches listed in `docs/MAP_PIPELINE.md`). The Royal Host forms on the first day (`on_startup`); every country has the game's Army HQ template. The Gazetteer shows players a quick-start guide the first time they unlock a nation, a state size guide (Cardonia's states the usual size, author 2026-10-18) before the province one, a button to hide suggestions, what each base-game trait does, and (2026-10-18, night) the neighbours' terrain.
   Rouental has test decisions for every kind of event, a test superevent and one that sets off many alerts at once
   (`test_events.py`).
-  **The Gazetteer's facts are in the mod again** (2026-10-18: the author's export of that morning, 17 nations with
-  something entered, `source/gazetteer/`; its 15 suggestions put on the map by `apply_suggestions.py`), after the
-  blank slate of 2026-10-16. `gazetteer_fetch.py` reads the site directly once the author adds a read-only service
+  **The Gazetteer's facts are in the mod** (the author's export of 2026-10-20, night, 30 nations, `source/gazetteer/`;
+  the 15 suggestions of 2026-10-18's put on the map by `apply_suggestions.py`), after the blank slate of 2026-10-16. `gazetteer_fetch.py` reads the site directly once the author adds a read-only service
   account's key as the secret `GAZETTEER_SERVICE_ACCOUNT` (`docs/GAZETTEER_INTERNALS.md`); until then their saved file. The Gazetteer offers the base game's traits for every leader and takes requests for new ones,
   and has political advisors and companies (arms makers and industrial concerns of the base game's kinds, with logos;
   requests for new kinds); since 2026-10-15 (later) it shows what the game already has, editable (the author's own

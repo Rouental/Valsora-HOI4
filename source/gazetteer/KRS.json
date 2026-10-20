@@ -1,0 +1,93 @@
+{
+ "cities": [
+  {
+   "capital": true,
+   "name": "A'zam Madinat",
+   "size": "metropolis",
+   "vp": 40,
+   "x": 3166,
+   "y": 1838
+  }
+ ],
+ "flags": {
+  "base": {
+   "file": "assets/a21e1aa65ccb3a5e6f4d6e14.png",
+   "h": 311,
+   "name": "flag temp.png",
+   "w": 490
+  }
+ },
+ "people": {
+  "ruler": {
+   "portrait": {
+    "file": "assets/ff5f35e893680d7318f3478b.jpg",
+    "h": 602,
+    "name": "59719.jpg",
+    "w": 640
+   }
+  }
+ },
+ "provinces": {
+  "3148,1840": {
+   "t": "forest"
+  },
+  "3159,1834": {
+   "t": "plains"
+  },
+  "3161,1849": {
+   "t": "plains"
+  },
+  "3164,1822": {
+   "t": "desert"
+  },
+  "3164,1863": {
+   "t": "marsh"
+  },
+  "3167,1838": {
+   "t": "urban"
+  },
+  "3175,1853": {
+   "t": "plains"
+  },
+  "3178,1841": {
+   "t": "plains"
+  },
+  "3187,1837": {
+   "t": "desert"
+  },
+  "3194,1848": {
+   "t": "plains"
+  },
+  "3204,1834": {
+   "t": "desert"
+  },
+  "3206,1851": {
+   "t": "desert"
+  },
+  "3212,1820": {
+   "t": "desert"
+  }
+ },
+ "states": {
+  "3161,1849": {
+   "name": "Sallat al-Khubz"
+  },
+  "3164,1822": {
+   "name": "Maris al-Shamal"
+  },
+  "3167,1838": {
+   "name": "A'zam Madinat"
+  },
+  "3194,1848": {
+   "name": "Khasab"
+  },
+  "3204,1834": {
+   "name": "Maris al-Sharq"
+  },
+  "3212,1820": {
+   "name": "The Great Eye"
+  }
+ },
+ "status": "draft",
+ "tag": "KRS"
+}

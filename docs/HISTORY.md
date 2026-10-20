@@ -10,6 +10,11 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-20, night (the author: "Overnight, there are some additions to the Gazetteer"): **the Gazetteer's export
+  of that night in the mod** (`docs/NATIONS.md`): flags and rulers' portraits for Almohavid, Al-Khabid, Kalaistan,
+  Koronista and Mekele (Al-Radiyaa's portrait too), their states', provinces' and cities' facts; Krionik's realms
+  and ports their formal names and flags (nine flags fitted to 82:52, Port Vostok's by hand). Rouental unchanged. The
+  Gazetteer republished. 104 of the 161 nations on the map fly a flag of their own.
 - 2026-10-20, later (the author's notes on the build of that morning, with screenshots): **the Deco UI v0.12.1**
   (`deco_ui/docs/VERSIONS.md`): the army insignias in the picker at last (the list file `gfx/army_icons/army_icons.txt`:
   the game's 14 as Deco grey masks the army's colour tints, ten numbered shields, the 14 in gilt untinted), the faction

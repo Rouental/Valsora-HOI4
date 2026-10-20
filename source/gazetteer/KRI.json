@@ -1,5 +1,14 @@
 {
  "game_releasables": {
+  "BLS": {
+   "def": "the Grand Duchy of Belska",
+   "flag": {
+    "file": "assets/3bbdccbc5cbcd39a81c675af.png",
+    "h": 380,
+    "name": "Krionik - Sargrád.png",
+    "w": 640
+   }
+  },
   "CRV": {
    "leader": {
     "name": "Anya Ristić",
@@ -63,6 +72,33 @@
     "2270,946"
    ]
   },
+  "KRZ": {
+   "def": "the Grand Duchy of Koroletz",
+   "flag": {
+    "file": "assets/ffc21d808e8504aa8cb31826.png",
+    "h": 380,
+    "name": "Krionik - Koroletz.png",
+    "w": 640
+   }
+  },
+  "KSV": {
+   "def": "the Duchy of Kosavichy",
+   "flag": {
+    "file": "assets/44ab1f4a0af559582959132c.png",
+    "h": 380,
+    "name": "Krionik - Kosavichy.png",
+    "w": 640
+   }
+  },
+  "LGR": {
+   "def": "the Duchy of Lagrád",
+   "flag": {
+    "file": "assets/931924e4f6a186dae7649a58.png",
+    "h": 380,
+    "name": "Krionik - Lagrád.png",
+    "w": 640
+   }
+  },
   "MYL": {
    "leader": {
     "name": "Pribislav Zorić",
@@ -72,6 +108,47 @@
      "name": "BWTG4rDm.jpg",
      "w": 251
     }
+   }
+  },
+  "PGZ": {
+   "flag": {
+    "file": "assets/136b0fbd5ea7f77e19631cbf.png",
+    "h": 373,
+    "name": "Nova Columbia Battle Flag 2.png",
+    "w": 640
+   }
+  },
+  "PNY": {
+   "flag": {
+    "file": "assets/01b1c3a6e30aa56e79f6cbf9.png",
+    "h": 380,
+    "name": "Krionik - Port Nyasha 2.png",
+    "w": 640
+   }
+  },
+  "PVS": {
+   "flag": {
+    "file": "assets/1d6bc7275a25acb5f0055990.png",
+    "h": 380,
+    "name": "Krionik - Port Vostok 2.png",
+    "w": 640
+   }
+  },
+  "SGD": {
+   "flag": {
+    "file": "assets/e6559703d81fda20a4e76059.png",
+    "h": 380,
+    "name": "Krionik - Sanada.png",
+    "w": 640
+   }
+  },
+  "TGV": {
+   "def": "the County of Targoviste",
+   "flag": {
+    "file": "assets/ce47558a7709103c552861dd.png",
+    "h": 380,
+    "name": "Krionik - Targoviste.png",
+    "w": 640
    }
   },
   "ZST": {
@@ -109,7 +186,18 @@
    "name": "Formosa",
    "ruling": "stratocracy",
    "states": [
-    "4175,1518"
+    "4094,1511",
+    "4175,1518",
+    "4108,1533",
+    "4056,1536",
+    "4023,1566",
+    "4161,1577",
+    "4136,1580",
+    "4093,1585",
+    "3983,1586",
+    "4019,1618",
+    "4074,1620",
+    "3987,1630"
    ],
    "tag": "FOM"
   }

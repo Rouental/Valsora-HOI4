@@ -736,3 +736,26 @@ The author: "go ahead with the rest of it, and all the other changes I had been 
   lozenges, a gilt rim: "I'm not a fan of any of them, I'm attaching my own logo"), `source/factions/
   reibonnaise_association.png`, in the game as the faction's logo and miniature (`nations.faction_logos`).
 - Claude's guesses for the eleven nations of 2026-10-19 kept (author: "That's good for now").
+
+## 2026-10-20, night: the Gazetteer's export of that night
+
+The author: "Overnight, there are some additions to the Gazetteer. (Rouental hasn't been touched, so if there's any
+changes there it's just a result of the new states, and can be ignored for now.)" The file (saved 2026-10-20 07:02
+UTC) holds 30 nations; Rouental's page came through unchanged.
+- **New in the mod from their pages**: the flags of **Almohavid** AMH, **Al-Khabid** KHB, **Kalaistan** KLS,
+  **Koronista** KRS and **Mekele** MKL (82:52 as sent; their map colours stay as they were), portraits for the rulers
+  of those five and of **Al-Radiyaa** RDY (each cut round the face; the rulers keep their names), and their states',
+  provinces' and cities' facts (Almohavid 9 states, Al-Khabid 5, Kalaistan 2, Koronista 6, Mekele 1); capitals
+  Almohavid al-Sughra, Madinat Al-Taj and A'zam Madinat. **Schteirmark** STM: an "about" text only.
+- **Krionik's page** gives its realms and ports their flags and formal names: **Belska** "the Grand Duchy of Belska",
+  **Koroletz** "the Grand Duchy of Koroletz", **Kosavichy** "the Duchy of Kosavichy", **Lagrád** "the Duchy of
+  Lagrád", **Targoviste** "the County of Targoviste" (they were Claude's "the Principality of …"); flags for those five
+  and for **Port Grazda**, **Port Nyasha**, **Port Vostok** and **Visokagorod**. All nine came at 640 x 380 (Port
+  Grazda's 640 x 373) and were fitted to 82:52 without stretching: `fit_flag.py` for eight (Belska's, Koroletz's,
+  Kosavichy's, Lagrád's and Visokagorod's stripes shortened at the ends, Port Grazda's, Port Nyasha's and
+  Targoviste's made taller), Port Vostok's by hand (its shield lies across both stripes, which the script refuses:
+  20 plain columns taken out at the hoist, 21 at the fly).
+- Changed besides: Terreich's province terrain (607 provinces, 552 before), Levantinin's and Al-Radiyaa's cities,
+  Al-Radiyaa's states. **Port Almohavid**'s page no longer carries a flag; the mod keeps the one it flies (the Kufi in
+  gold). Terreich's page still has four facts on Xugang's land, left to Xugang.
+

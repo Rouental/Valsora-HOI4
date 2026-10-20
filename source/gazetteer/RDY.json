@@ -2,7 +2,7 @@
  "cities": [
   {
    "capital": true,
-   "name": "Mardinat Al-Janub",
+   "name": "Mardinat al-Janub",
    "size": "city",
    "vp": 30,
    "x": 3436,
@@ -21,6 +21,16 @@
    "h": 311,
    "name": "New_Mod_Flags 10-18-3.png",
    "w": 490
+  }
+ },
+ "people": {
+  "ruler": {
+   "portrait": {
+    "file": "assets/fe121e950059b6ca0b283d2b.jpg",
+    "h": 640,
+    "name": "tripoli-dec-25-2018-libyan-interior-minister-765767.jpg",
+    "w": 499
+   }
   }
  },
  "provinces": {
@@ -60,7 +70,7 @@
    "name": "The Nyeusi Desert"
   },
   "3455,1756": {
-   "name": "Al-Janub"
+   "name": "al-Janub"
   },
   "3470,1815": {
    "name": "Shamal"
