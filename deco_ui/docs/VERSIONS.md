@@ -174,6 +174,33 @@ it before touching the UI. In short:
     equipment's plate, the factory slots, the resource wells) and turned the game's scratches into gilt specks along
     the trade rows (`make_panel_pictures.DRAWN`).
 
+- **v0.12** (2026-10-20, not yet seen in game; the author's go-ahead for every held note: "go ahead with the rest of it,
+  and all the other changes I had been holding back until now"):
+  - the loading screen's two diamonds alike: one size (`LD_DIAMOND = 9`), the rim bright at the free edge on both plates;
+  - the diplomacy tab's leader in a gilt octagon (`diplomacy_art.CHAMFER`), its rays fading out in the frame's corners,
+    the Diplomacy and Details tabs whole (the bar of `intel_ledger/tab.dds` ends 3 px above the picture's foot, where
+    the game lays the leader block over it);
+  - the factories, dockyards and resource deficits in the Deco icons everywhere (`production_icons_art.py`, `pf_`: the
+    production lines' factory pictograms, the header's output and efficiency icons, the resource deficit strip, the text
+    icons, the filter checkboxes under the factory sides); the infantry and artillery button a helmet and a towed howitzer,
+    the aircraft button the air tab's jet (`proposals_icons.py`);
+  - the construction screen (`construction_art.py`, `cn_`): its category headers clear of the first row of buildings
+    (`diplo_details_header` holds its plate in its top 42 px), the buildings, the category medallions and the ±1/5/10
+    buttons as octagons in the Deco palette, its small icons redrawn;
+  - the alerts in gilt octagons (`alerts_art.py`, `al_`, the game's icons kept, centred) and 26 a row to the music tray
+    (`layout.ALERTS_END = 2612`: with 1200 the game broke the row after 11, as if it read (x - start) / 2 as the row's
+    width or (x + start) / 2 as the last icon's x; **assumed** from one screenshot);
+  - the training bar (the deployment line) drawn by hand (`deployment_art.py`, `dl_`): no specks over the name, no stray
+    oval under Add Unit;
+  - the faction goals one plain plate, no folder band through the text (`faction_art.py`, `fg_`);
+  - the army insignias in the Deco palette and ten numbered shields, 1 to 10, in five colours (frames 81 to 130:
+    `insignia_art.py`, `ia_`; `make_insignia.py` writes `theatreselector.gfx` with 131 frames). The game gives an
+    insignia no colour of its own (the picker's sliders colour the army on the map), so each number comes in crimson,
+    blue, jade, lacquer and ivory.
+  Previews: `build/preview_alerts.png`, `preview_loading_bar.png`, `preview_deployment.png`, `preview_faction_goals.png`,
+  `preview_diplomacy.png`, `preview_insignia.png`, `preview_insignia_picker.png`, `preview_production_icons.png`,
+  `preview_construction_icons.png`, `preview_construction_mock.png` (each beside the game's `_vanilla` where there is one).
+
 - **v0.11.2** (2026-10-19, later, not yet seen in game; the author's screenshots of v0.11.1 and the notes they had held
   with v0.11, "Do not act on the following yet", now acted on):
   - **the game's icons in the Deco style, in the mod** (the author: "You haven't changed the icons yet, but maybe I
@@ -196,7 +223,7 @@ it before touching the UI. In short:
   a multiplayer desync warning, harmless in single player, and no way is known to declare the token); the faction
   screen ("Odd appearance of faction screen"): asked what looks odd.
 
-- **Held: the author's notes on v0.11.2** (2026-10-19, evening, with screenshots; "do not fix these or anything else I
+- **Held, done in v0.12: the author's notes on v0.11.2** (2026-10-19, evening, with screenshots; "do not fix these or anything else I
   send until I give you the go-ahead"). Nothing done yet:
   - the loading screen: the upper diamond (on the status plate's foot) looks odd beside the lower one (the tip's); both
     should look the same;
@@ -211,7 +238,7 @@ it before touching the UI. In short:
   - the alerts: only across half the screen (they wrap after 11 in the screenshot); they should run to the music tray
     before wrapping; their frames in the Deco style (gilt octagons), the icons kept and centred.
 
-- **Held: the author's notes of 2026-10-19, night** (screenshots; "Again, don't edit the following in the mod yet,
+- **Held, done in v0.12: the author's notes of 2026-10-19, night** (screenshots; "Again, don't edit the following in the mod yet,
   though you can provide clarification and answers to my questions"). Nothing done yet:
   - the default army icons (the insignia picker's) redrawn to suit the UI, and ten new ones: the numbers 1 to 10 on a
     shield whose colour can be changed;

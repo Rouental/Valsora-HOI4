@@ -60,44 +60,52 @@ def fan(cx, cy, r, n=9, spread=70, colour="rgba(201,165,90,.16)"):
 
 # the leader's frame (v0.11, the author: "the leader portrait [should be stylized] like the [one] in the politics screen
 # ... as things are the leader portrait in the diplomacy tab, larger portraits like Krionik's start to get cut off").
-# 2026-10-19 (the author: "The portrait on the diplo screen doesn't work the way the politics screen did"): v0.11 set the
-# portrait, small (0.66), under a flatter arch with an empty dark cap above it; now it is the politics screen's frame
-# made smaller: the portrait fills the opening, its top in the round-headed arch (a semicircle the portrait's width,
-# its top corners under the lacquer, as layout_politics.FRAME's), a thin rim and a thick gilt one, the diamond on top
-# and the sunburst behind on the lacquer round the arch. The game's 156 x 210 at PORTRAIT_SCALE (112 x 151) at
-# `portrait`, which is the opening; the plate ends at `right`, under the politics block beside it
+# 2026-10-19 (the author: "The portrait on the diplo screen doesn't work the way the politics screen did"): the portrait
+# filled a round-headed arch, as the politics screen's. 2026-10-20 (the author: "I don't think the rounded portrait works
+# quite as well for this screen as it does for the politics one, and the rays coming off the portrait don't look as good
+# when they're cut off so suddenly, whereas in the politics screen they continue on and fade out ... Maybe a gilt octagon
+# will look better?"): the opening is a gilt octagon, the portrait's rectangle with its corners cut (CHAMFER), a thick
+# gilt rim and a thin one round it, the diamond on top; the lacquer hides the portrait's corners, and the rays, from the
+# portrait's middle, show in those corners and fade out before the plate's edge (the plate is as big as the frame's
+# picture allows, so they can't run on as the politics screen's do). The game's 156 x 210 at PORTRAIT_SCALE (112 x 151)
+# at `portrait`, which is the opening's box; the plate ends at `right`, under the politics block beside it
 PORTRAIT_SCALE = 0.72
 LEADER = dict(w=134, h=175, right=124.5, portrait=(7, 12, 112, 151))
+CHAMFER = 24
 
 
-def arch_path(x0, x1, top, bottom, d=0.0):
-    """the round-headed arch over x0-x1 from top to bottom, grown by d px"""
-    r = (x1 - x0) / 2
-    sh = top + r
-    return f"M{x0 - d},{bottom + d}L{x0 - d},{sh}A{r + d},{r + d} 0 0 1 {x1 + d},{sh}L{x1 + d},{bottom + d}Z"
+def octagon_path(x0, y0, x1, y1, c, d=0.0):
+    """the portrait's box with its corners cut by c, grown by d px (its cut edges stay parallel)"""
+    return cham(x0 - d, y0 - d, x1 + d, y1 + d, c + d * (2 ** .5 - 1))
 
 
 def leader_frame():
     import math
     W, H = LEADER["w"], LEADER["h"]
     px, py, pw, ph = LEADER["portrait"]
-    x0, x1, top, bottom = px, px + pw, py, py + ph
-    cx = (x0 + x1) / 2
-    hole = arch_path(x0, x1, top, bottom)
-    outer = arch_path(x0, x1, top, bottom, 5.5)
-    # the sunburst behind the portrait, as the politics screen's: rays from its middle, seen on the lacquer round it
-    oy = py + ph * .45
-    rays = "".join(f'<path d="M{cx},{oy}L{cx + 200 * math.cos(math.radians(a - 2.2)):.1f},'
-                   f'{oy + 200 * math.sin(math.radians(a - 2.2)):.1f}L{cx + 200 * math.cos(math.radians(a + 2.2)):.1f},'
-                   f'{oy + 200 * math.sin(math.radians(a + 2.2)):.1f}Z" fill="rgba(227,199,126,.16)"/>'
-                   for a in range(-180, 1, 12))
-    plate = f"M{x0 - 5.5},0H{x1 + 5.5}V{bottom + 5.5}H{x0 - 5.5}Z"   # the lacquer: all of the plate but the opening
-    return svg(W, H, f'<clipPath id="ring"><path d="{plate}{hole}" clip-rule="evenodd"/></clipPath>'
-                     # the lacquer round the arch (it hides the portrait's top corners) and the sunburst on it
-                     f'<g clip-path="url(#ring)"><path d="{plate}" fill="url(#pin)"/>{rays}</g>'
-                     f'<path d="{outer}" fill="none" stroke="#B8954F" stroke-width="1"/>'
-                     f'<path d="{arch_path(x0, x1, top, bottom, 1.5)}" fill="none" stroke="url(#g)" stroke-width="3"/>'
-                     f'<path d="M{cx - 5},{top - 1.5}l5 -3.5 5 3.5 -5 3.5z" fill="#E3C77E"/>')
+    x0, x1, y0, y1 = px, px + pw, py, py + ph
+    cx, cy = (x0 + x1) / 2, (y0 + y1) / 2
+    c = CHAMFER
+    hole = octagon_path(x0, y0, x1, y1, c)
+    plate = f"M{x0 - 5.5},{y0 - 5.5}H{x1 + 5.5}V{y1 + 5.5}H{x0 - 5.5}Z"   # the lacquer: all of the plate but the opening
+    # the rays: from the portrait's middle, as the politics screen's sunburst, seen in the plate's corners; a blurred
+    # octagon a little larger than the opening fades them out towards the plate's edge
+    rays = "".join(f'<path d="M{cx},{cy}L{cx + 200 * math.cos(math.radians(a - 2.2)):.1f},'
+                   f'{cy + 200 * math.sin(math.radians(a - 2.2)):.1f}L{cx + 200 * math.cos(math.radians(a + 2.2)):.1f},'
+                   f'{cy + 200 * math.sin(math.radians(a + 2.2)):.1f}Z" fill="rgba(227,199,126,.5)"/>'
+                   for a in range(-180, 180, 9))
+    fade = (f'<filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="4.5"/></filter>'
+            f'<mask id="fade" maskUnits="userSpaceOnUse" x="0" y="0" width="{W}" height="{H}">'
+            f'<path d="{octagon_path(x0, y0, x1, y1, c, 7)}" fill="#fff" filter="url(#soft)"/></mask>')
+    # the rays only beyond the thin rim (between the rims they read as a dashed line)
+    beyond = octagon_path(x0, y0, x1, y1, c, 5.5)
+    return svg(W, H, f'{fade}<clipPath id="ring"><path d="{plate}{hole}" clip-rule="evenodd"/></clipPath>'
+                     f'<clipPath id="beyond"><path d="{plate}{beyond}" clip-rule="evenodd"/></clipPath>'
+                     f'<g clip-path="url(#ring)"><path d="{plate}" fill="url(#pin)"/></g>'
+                     f'<g clip-path="url(#beyond)"><g mask="url(#fade)">{rays}</g></g>'
+                     f'<path d="{octagon_path(x0, y0, x1, y1, c, 5.5)}" fill="none" stroke="#B8954F" stroke-width="1"/>'
+                     f'<path d="{octagon_path(x0, y0, x1, y1, c, 1.5)}" fill="none" stroke="url(#g)" stroke-width="3"/>'
+                     f'<path d="M{cx - 5},{y0 - 1.5}l5 -3.5 5 3.5 -5 3.5z" fill="#E3C77E"/>')
 
 
 # the flag's frame: the flag (82 x 52) at (26, 11)

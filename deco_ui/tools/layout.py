@@ -255,6 +255,11 @@ MUSIC_Y = 112
 ALERTS_START = (MENU_X, 70)
 ALERT_STEP, ALERT_W = 48, 44                         # alerticon_offset x; the icons' width
 ALERTS_ROW_MAX = (RTRAY["x"] - 8 - ALERT_W - ALERTS_START[0]) // ALERT_STEP * ALERT_STEP   # last icon offset in a row
+# (in game, v0.11.2, the author's screenshot) alerticon_endposition is not the row's width as the game's comment says:
+# with x = 1200 (meant for 26 a row from x 188) the game broke the row after 11. Both readings that give 11 there,
+# (x - start) / 2 as the row's width or (x + start) / 2 as the last icon's screen x, break where we want with
+# x = start + 2 * ALERTS_ROW_MAX + half a step (assumed: one screenshot; check a long row in game)
+ALERTS_END = ALERTS_START[0] + 4 + 2 * ALERTS_ROW_MAX + ALERT_STEP // 2   # +4: the gui x of ALERTS_START (layout.GUI)
 
 if __name__ == "__main__":
     for s in STRIP:

@@ -15,7 +15,8 @@ line, no texture. The icons:
   military_factory_icon (27 x 23), dockyard_icon and dockyard_icon_with_wrench (29 x 21), efficiency_icon and
   efficiency_cap_icon (24 x 21), factory_bombing_defence_icon (29 x 29)   the production screen
   add_prod_inf_art_line, _armour_line, _aircraft_line, _naval_line   3 x 81 x 41  its add-a-line buttons (normal, hover,
-                                                                      unavailable), modern kit (Valsora is 2036)
+                                                                      unavailable), modern kit (Valsora is 2036): a
+                                                                      helmet and a howitzer, a tank, the air tab's jet
   decisionview/decision_select_icon_strip.dds   4 x 40 x 28  the decisions' envelopes (can't take, take, under way, timed)
 Redrawn 2026-10-19 (the author: "by and large I like them, but the efficiency, dockyard, and production icons aren't
 great ... the shield on bombing defense could be better as well"; by production they meant the add-a-line buttons): the
@@ -28,6 +29,11 @@ from PIL import Image, ImageDraw, ImageFont
 from playwright.sync_api import sync_playwright
 
 from paths import ART, BUILD, CHROMIUM, VANILLA
+from icons import ICONS
+
+
+def _air_path():
+    return ICONS["air"].split('"')[1]
 
 OUT = ART + "proposals/icons/"
 GI = "gfx/interface/"
@@ -153,16 +159,35 @@ BOMB_DEFENCE = (f'<path d="M1.5,25.5V14L6,11V14L10.5,11V14L12,13V4.5H14.5V12.5L1
                 f'<path d="{SHIELD}" fill="none" stroke="url(#g)" stroke-width="1.3" stroke-linejoin="round"/>')
 
 # ------------------------------------------------------------------ the add-a-line buttons (3 frames of 81 x 41)
-# a high-cut combat helmet over an assault rifle (the game's: a WWII helmet and a field gun)
-HELMET_GUN = (f'<path d="M10.5,17.5Q10.5,6.5 21,6.5Q31.5,6.5 31.5,17.5H28Q27.5,14.5 25,14.5L24.5,17.5Z" fill="url(#jade)" {O}/>'
-              f'<path d="M15,10Q18,8.4 21,8.4" fill="none" stroke="{LIT}" stroke-width="1" opacity=".7"/>'
-              f'<path d="M5.5,25L12.5,24V29L7.5,31.5Z" fill="url(#jade)" {O}/>'
-              f'<path d="M12.5,23.5H33V28H12.5Z" fill="url(#jade)" {O}/>'
-              f'<path d="M33,24.5H43V27.5H33Z" fill="#14201C" {O}/>'
-              f'<path d="M23,28H26.5Q27.5,32 29.5,35H26Q24,32 23,28Z" fill="url(#jade)" {O}/>'
-              f'<path d="M17,23.5V21.2H24V23.5" fill="none" stroke="{GOLD}" stroke-width="1.1"/>'
-              f'<path d="M43,26H55" stroke="{GOLD}" stroke-width="1.5"/>'
-              f'<path d="M15,25.5H31" stroke="{LIT}" stroke-width=".8" opacity=".6"/>')
+# a high-cut combat helmet over a towed howitzer (2026-10-20, the author: "the build infantry & artillery button to be a
+# helmet and a howitzer, rather than a helmet and rifle"): the M777's long barrel on its cradle, the carriage on a wheel,
+# the split trail on the ground (the game's: a WWII helmet and a field gun)
+NS = 'vector-effect="non-scaling-stroke"'
+HELMET = (f'<path d="M6.5,14.5Q6.5,3.5 17,3.5Q27.5,3.5 27.5,14.5H24Q23.5,11.5 21,11.5L20.5,14.5Z" fill="url(#jade)" {O} {NS}/>'
+          f'<path d="M11,7Q14,5.4 17,5.4" fill="none" stroke="{LIT}" stroke-width="1" opacity=".7"/>'
+          f'<path d="M8.5,9.5L12,9.2" stroke="{GOLD}" stroke-width="1"/>')
+HOWITZER = ('<g transform="translate(17,27.5) rotate(-20)">'
+            f'<rect x="0" y="-1.5" width="35" height="3" fill="url(#jade)" {O} {NS}/>'
+            f'<rect x="31" y="-2.6" width="5" height="5.2" fill="#14201C" {O} {NS}/>'
+            f'<rect x="-3" y="-3" width="15" height="6" rx="1" fill="url(#jade)" {O} {NS}/>'
+            f'<path d="M1,-1.2H10" stroke="{LIT}" stroke-width=".8" opacity=".6"/></g>'
+            f'<path d="M11,28.5L24,27.5L26,32.5H13Z" fill="url(#jade)" {O} {NS}/>'
+            f'<path d="M14,31L2.5,36.5L3.5,38.5L16,33Z" fill="url(#jade)" {O} {NS}/>'
+            f'<path d="M1.2,35.8L3.2,39.6" stroke="{GOLD}" stroke-width="1.6"/>'
+            f'<circle cx="21" cy="33.5" r="4.2" fill="#14201C" {O} {NS}/>'
+            '<circle cx="21" cy="33.5" r="1.4" fill="url(#g)"/>')
+HELMET_HOWITZER = HELMET + HOWITZER
+HH_BOX = (1, 3, 53, 40)                  # its extent
+
+
+def fit(body, box, to):
+    """body drawn in box (x0, y0, x1, y1), scaled into to, centred, its aspect kept"""
+    s = min((to[2] - to[0]) / (box[2] - box[0]), (to[3] - to[1]) / (box[3] - box[1]))
+    tx = to[0] + ((to[2] - to[0]) - (box[2] - box[0]) * s) / 2 - box[0] * s
+    ty = to[1] + ((to[3] - to[1]) - (box[3] - box[1]) * s) / 2 - box[1] * s
+    return f'<g transform="translate({tx:.2f},{ty:.2f}) scale({s:.4f})">{body}</g>'
+
+
 # a modern main battle tank, side on: the angular turret, the long gun, six road wheels under a skirt
 TANK = (f'<path d="M7,28.5H45Q47,31.5 44,34.5H9Q5.5,31.5 7,28.5Z" fill="#14201C" {O}/>'
         + "".join(f'<circle cx="{11.5 + 6.4 * i}" cy="31.5" r="2.2" fill="url(#jade)" stroke="url(#g)" stroke-width=".7"/>'
@@ -172,8 +197,10 @@ TANK = (f'<path d="M7,28.5H45Q47,31.5 44,34.5H9Q5.5,31.5 7,28.5Z" fill="#14201C"
         f'<path d="M22,17.5V15.5H27V17.5" fill="url(#jade)" stroke="url(#g)" stroke-width="1"/>'
         f'<path d="M37,19.5H57" stroke="{GOLD}" stroke-width="1.8"/><path d="M53,18.3V20.7" stroke="{GOLD}" stroke-width="2.4"/>'
         f'<path d="M9,26H43" stroke="{LIT}" stroke-width=".8" opacity=".6"/>')
-JET = (f'<path d="M30,6L33,16L52,27V30L33,26L32,32L37,35V37L30,35L23,37V35L28,32L27,26L8,30V27L27,16Z" '
-       f'fill="url(#jade)" {O}/>')
+# the air tab's delta-canard jet (icons.py's "air"; 2026-10-20, the author: "rework build aircraft button to look like the
+# jet on the air tab button"), filled
+AIR_JET = f'<path d="{_air_path()}" fill="url(#jade)" {O} {NS}/>'
+JET_BOX = (3.4, 2.5, 20.6, 21.4)
 ANCHOR = (f'<circle cx="30" cy="8" r="3" fill="none" stroke="url(#steel)" stroke-width="2"/>'
           f'<path d="M30,11V35M22,16H38M14,26Q16,35 30,35Q44,35 46,26" fill="none" stroke="url(#steel)" stroke-width="2.6" stroke-linecap="round"/>'
           f'<path d="M12,28L14,24L17,28M48,28L46,24L43,28" fill="none" stroke="url(#steel)" stroke-width="2"/>')
@@ -226,7 +253,8 @@ ITEMS = [  # name, the game's path (under gfx/interface/), w, h, svg body
     ("factory_bombing_defence_icon", "factory_bombing_defence_icon.dds", 29, 29, BOMB_DEFENCE),
     *[(f"add_prod_{k}_line", f"add_prod_{k}_line.dds", 243, 41,
        "".join(at(81 * i, line_button(art, s)) for i, s in enumerate(("normal", "hover", "off"))))
-      for k, art in (("inf_art", HELMET_GUN), ("armour", TANK), ("aircraft", JET), ("naval", ANCHOR))],
+      for k, art in (("inf_art", fit(HELMET_HOWITZER, HH_BOX, (3, 2, 53, 38))), ("armour", TANK),
+                     ("aircraft", fit(AIR_JET, JET_BOX, (12, 2, 48, 38))), ("naval", ANCHOR))],
     ("decision_select_icon_strip", "decisionview/decision_select_icon_strip.dds", 160, 28,
      "".join(at(40 * i, envelope(k)) for i, k in enumerate(("no", "take", "busy", "timed")))),
 ]

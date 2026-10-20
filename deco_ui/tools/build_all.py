@@ -21,14 +21,17 @@ STAGES = [
      "make_leadergroups.py", "make_mapviews.py", "make_events.py", "make_research.py", "make_setup.py",
      "make_popups.py",                                       # v0.10.2: the release dialog's text above its checkboxes
      "make_music.py",                                        # 2026-10-19: the music player's station box
-     "make_panel_pictures.py"],                              # v0.11: the side panels' own pictures
+     "make_panel_pictures.py",                               # v0.11: the side panels' own pictures
+     "make_insignia.py"],                                    # 2026-10-20: the army insignias' frame count
     ["validate_preview.py"],                                 # the checks, before any preview
     ["preview_screens.py", "preview_panels.py", "preview_focus.py", "preview_armybar.py", "preview_events.py",
      "preview_game_fonts.py", "preview_research.py", "preview_designers.py",
      # v0.10's screens: the battle plan, the frames and popups, the badges, the battles, diplomacy, game setup
      "preview_battleplan.py", "preview_windows.py", "preview_popups.py", "preview_mapviews.py", "preview_combat.py",
      "preview_diplo.py", "preview_setup.py",
-     "preview_navy.py"],                                     # v0.10.1: the selected fleet's panel
+     "preview_navy.py",                                      # v0.10.1: the selected fleet's panel
+     "preview_alerts.py", "preview_deployment.py",           # 2026-10-20: the alerts, loading bar, training, goals
+     "preview_insignia.py"],                                 # 2026-10-20: the army insignias
 ]
 # the generators write files the next ones read (make_topbar writes the fonts' .gfx, make_politics reads Valsora's
 # screen ...), so they stay one after another

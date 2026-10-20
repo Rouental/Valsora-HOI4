@@ -1,4 +1,4 @@
-VALSORA DECO UI - v0.10.4 (for HOI4 1.19)
+VALSORA DECO UI - v0.12 (for HOI4 1.19)
 =========================================
 
 An art deco interface for the Valsora total conversion: core skin and fonts,
@@ -29,6 +29,35 @@ Valsora repository's scripts/common.py and rebuild (sh scripts/run_all.sh).
 
 The layout is built for 1920 px of UI width: 1920x1080 at 100% UI scale, or
 2560x1440 at up to 133%.
+
+
+NEW IN v0.12
+------------
+  - The loading screen's two diamonds alike.
+  - Diplomacy: the leader in a gilt octagon, the rays fading out in its
+    corners; the Diplomacy and Details tabs whole.
+  - Factories, dockyards and resource shortages in the Deco icons
+    everywhere (production lines, the header, the filters, text icons);
+    the infantry & artillery button a helmet and a howitzer, the aircraft
+    button the air tab's jet.
+  - The construction screen: the headers clear of the buildings, the
+    buildings, medallions and +1/5/10 buttons as octagons.
+  - The alerts in gilt octagons, 26 a row, across to the music tray.
+  - The training bar (deployment) drawn again: no stray lines or specks.
+  - The faction goals one plain plate, the text clear of any line.
+  - The army insignias in the Deco palette, and ten numbered shields
+    (1 to 10) in five colours at the end of the insignia list.
+
+Things to check in game (v0.12):
+  - a long row of alerts ("Test: Many Alerts at Once"): 26 a row, up to
+    the music tray (an assumption from one screenshot);
+  - the loading screen's diamonds; the diplomacy tab (a big portrait,
+    as Krionik's) and its two tabs;
+  - the production screen (lines, header, filters, the add buttons) and
+    the construction screen (a category open, the buttons);
+  - the deployment line of a division in training; the faction goals;
+  - the insignia picker (the numbered shields at the end) and an army
+    with one on the army bar.
 
 
 NEW IN v0.11.2

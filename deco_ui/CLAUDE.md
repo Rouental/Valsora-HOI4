@@ -14,9 +14,17 @@ Treat assumed items as hypotheses.
 
 ---------------------------------------------------------------------------------------------------
 
-## 1. Status (v0.11.2)
+## 1. Status (v0.12)
 
-**v0.11.2 (2026-10-19, later)** is the current version (`docs/VERSIONS.md`): the game's icons in the Deco style in the
+**v0.12 (2026-10-20)** is the current version (`docs/VERSIONS.md`): every note the author had held, done at once
+(made by three helpers side by side, each with a texture manifest of its own): the loading diamonds alike, the diplomacy
+leader in a gilt octagon and its tabs whole, the factory and dockyard icons everywhere (`production_icons_art.py`,
+`pf_`), the construction screen's octagons (`construction_art.py`, `cn_`), the alerts in gilt octagons to the music
+tray (`alerts_art.py`, `al_`; `layout.ALERTS_END`), the training bar (`deployment_art.py`, `dl_`), the faction goals
+(`faction_art.py`, `fg_`), the insignias and ten numbered shields (`insignia_art.py`, `ia_`, `make_insignia.py`).
+**Not yet seen in game.**
+
+**v0.11.2 (2026-10-19, later)** came before it (`docs/VERSIONS.md`): the game's icons in the Deco style in the
 mod (`icons_art.py`, `ic_`, the approved proposals of `proposals_icons.py`), the diplomacy portrait filling its arch as
 the politics screen's (`diplomacy_art.LEADER`) and the actions list's empty header hidden, the loading bar's diamond
 whole, the decision plates 1 px lower (`layout.DEC_RAISE`), the production header's resource strip under all seven
@@ -293,7 +301,11 @@ tools/
                             decisions tab, dc_; v0.11), music_art.py (the music player and the top bar's music
                             controller, mu_; 2026-10-19), production_art.py (the production lines and the trade rows,
                             pl_; 2026-10-19), icons_art.py (the game's icons in the Deco style, ic_: the approved
-                            proposals of proposals_icons.py, 2026-10-19)
+                            proposals of proposals_icons.py, 2026-10-19); v0.12 (2026-10-20): alerts_art.py (al_),
+                            deployment_art.py (dl_), faction_art.py (fg_), insignia_art.py (ia_; make_insignia.py
+                            writes theatreselector.gfx), production_icons_art.py (pf_), construction_art.py (cn_);
+                            previews preview_alerts.py, preview_deployment.py, preview_insignia.py,
+                            preview_production_icons.py
   make_panel_pictures.py    the side panels' own pictures, the approved drafts (v0.11): proposals_panel_mockups.py's
                             translate() and photo_plate() and v0.7's hand-drawn proposals, at the game's paths, less
                             the army overview's and the agency's (KEEP_GAME) and those an art module draws (DRAWN)
@@ -664,7 +676,9 @@ Build order matters. `gen_fonts` runs first because `layout.py` measures strings
   others are `alerticon_offset` (48,44) and `alerticon_endposition` x, which is the row width before
   wrapping. Alert icons measure about 43x38 **(in game)**. The mod sets start and extended to the
   same point (188,71) and the row width to 1200 (26 per row, up to the right-hand tray; 432, 10 per row, until v0.9.1,
-  when the logistics tray hung beside them).
+  when the logistics tray hung beside them). **(in game, v0.11.2)** with x 1200 the row broke after 11, not 26: the
+  game reads `alerticon_endposition` x either as twice the row's width from the start or as twice the last icon's x
+  (both give 11); since v0.12 it is `layout.ALERTS_END` = 2612, 26 a row under either reading **(assumed)**.
 
 ### Measured from screenshots (in game)
 
@@ -1005,6 +1019,12 @@ GP.write_gui(MOD + "interface/x.gui", t)    # braces checked, engine_safe applie
 
 ## 10. Open items and things to check in game
 
+- **v0.12**: a long row of alerts (Rouental's "Test: Many Alerts at Once"): 26 a row to the music tray, in their gilt
+  octagons; the loading screen's two diamonds; the diplomacy tab's octagon (a big portrait, as Krionik's) and its
+  Diplomacy and Details tabs whole; the production screen's lines, header, filters and add buttons; the construction
+  screen (a category open, its buttons); a division in training on the deployment line; the faction goals; the
+  insignia picker's numbered shields (frames 81 to 130: **(assumed)** the picker lists every frame of the sprite) and
+  an army with one on the army bar.
 - **v0.11.2**: the new icons (the production screen's, the focus filters, the decisions' envelopes, the resources);
   the diplomacy portrait (a large one, as Krionik's) and the actions list at its top; the loading bar's diamond; the
   decision plates level with the rule; the production resources inside their strip; the decision and event icons.

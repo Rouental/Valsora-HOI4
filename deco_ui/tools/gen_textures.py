@@ -180,7 +180,10 @@ SHARED = {   # vanilla path: (w, h, html)
     "gfx/interface/deployment_binding.dds": (533, 35, bar(c=6)),
     "gfx/interface/tradeview/trade_header.dds": (516, 35, bar(c=6)),
     "gfx/interface/intel_ledger/tab_bg.dds": (520, 40, bar(DIM_FILL, c=6, shine=.1)),
-    "gfx/interface/diplo_details_header.dds": (241, 51, bar(c=7)),
+    # the plate in the picture's top 42 px, as the game's visible plate (2026-10-20, the author: "On the construction
+    # screen, icons currently run into their headers"): the construction screen sets each category's building grid 43
+    # px below its header picture, so a plate filling all 51 px ran 8 px under the first row of buildings
+    "gfx/interface/diplo_details_header.dds": (241, 51, f'<div style="position:absolute;left:0;right:0;top:0;height:42px">{bar(c=7)}</div>'),
     "gfx/interface/generic_text_bg_108.dds": (108, 27,
         '<div style="position:absolute;inset:0;background:#0A0F12;box-shadow:inset 0 0 0 1px rgba(201,165,90,.35)"></div>'),
     "gfx/interface/tiles/tiling_sort_button.dds": (60, 23, bar(c=4, shine=.15)),
@@ -189,7 +192,12 @@ SHARED = {   # vanilla path: (w, h, html)
     # user's screenshot)
     "gfx/interface/tab_large.dds": (516, 42, frames(516, 42, *(f'<div style="position:absolute;left:4px;right:4px;top:0;bottom:0">{b}</div>'
                                                                for b in (lit_bar(7), bar(DIM_FILL, "rgba(201,165,90,.4)", 7, .1))))),
-    "gfx/interface/intel_ledger/tab.dds": (520, 42, frames(520, 42, lit_bar(7), bar(DIM_FILL, "rgba(201,165,90,.4)", 7, .1))),
+    # the diplomacy panel's Diplomacy and Details tabs (its only user): the game lays the tab's leader block and the
+    # details' box 2 px over the tab's foot (its picture flares there into the strip under it), which cut off our bar's
+    # lower rim (the author, 2026-10-19: "the bottom of the diplomacy and intel buttons gets cut off"): the bar ends 3 px
+    # above the picture's foot
+    "gfx/interface/intel_ledger/tab.dds": (520, 42, frames(520, 42, *(f'<div style="position:absolute;left:0;right:0;top:0;height:39px">{b}</div>'
+                                                                   for b in (lit_bar(7), bar(DIM_FILL, "rgba(201,165,90,.4)", 7, .1))))),
     "gfx/interface/diplo_filter_entry.dds": (246, 34, frames(246, 34, lit_bar(5), bar(c=5))),
     "gfx/interface/sort_button_100x29_2.dds": (200, 29, frames(200, 29, lit_bar(4), bar(c=4, shine=.15))),
     # vanilla's is a .tga, which the game loads only when no .dds of the same name exists
@@ -1773,7 +1781,11 @@ add("sc_slider_bar", SC + "slider_bg.dds", 404, 42, sc_slider_bar())
 LD = "gfx/interface/"
 
 
-def ld_plate(w, h, x0, x1, y0, y1, hang, d=12):
+LD_DIAMOND = 9     # both plates' diamond: the status plate's foot leaves room for no larger one between the track
+# (to screen y 76) and the picture's last row (91)
+
+
+def ld_plate(w, h, x0, x1, y0, y1, hang, d=LD_DIAMOND):
     """a lacquer plate x0-x1, y0-y1 with chamfered free corners (the bottom ones if it hangs from the top edge, else
     the top ones), a gilt rim and a diamond (d px square, turned) in the middle of its free edge (ld_rule adds the
     inner hairline); the diamond must fit in the picture: d * 0.71 + 1.5 px either side of the edge"""
@@ -1785,7 +1797,12 @@ def ld_plate(w, h, x0, x1, y0, y1, hang, d=12):
         pts = [(x0 + c, y0), (x1 - c, y0), (x1, y0 + c), (x1, y1), (x0, y1), (x0, y0 + c)]
     mid = (x0 + x1) / 2
     dy = y1 if hang else y0
-    return (f'<div style="position:absolute;inset:0;background:{GOLD_V};clip-path:{poly(pts)}"></div>'
+    # the rim bright at the free edge, where the diamond sits, and dark towards the screen's edge: the same on both
+    # plates (the author, 2026-10-19: "Both the top and bottom diamond should look the same"; the hanging plate's
+    # foot had the gradient's dark end)
+    rim = (f"linear-gradient(0deg,#E8CD84 {h - y1}px,#8B6A2C {h}px)" if hang
+           else f"linear-gradient(180deg,#E8CD84 {y0}px,#8B6A2C {h}px)")
+    return (f'<div style="position:absolute;inset:0;background:{rim};clip-path:{poly(pts)}"></div>'
             f'<div style="position:absolute;inset:0;background:{LAC},linear-gradient(180deg,#141E24,#0B1115);'
             f'clip-path:{poly(inset_poly(pts, 1.4))}"></div>'
             + f'<div style="position:absolute;left:{mid - d / 2}px;top:{dy - d / 2}px;width:{d}px;height:{d}px;transform:rotate(45deg);'
@@ -1806,7 +1823,7 @@ def ld_status():
     x0, x1, y0, y1 = 206, 1194, 0, 84
     c = 14
     pts = [(x0, y0 - 6), (x1, y0 - 6), (x1, y1 - c), (x1 - c, y1), (x0 + c, y1), (x0, y1 - c)]
-    return ld_plate(1400, 92, x0, x1, y0 - 6, y1, True, d=9) + ld_rule(pts)   # no corner brackets: they poked through
+    return ld_plate(1400, 92, x0, x1, y0 - 6, y1, True) + ld_rule(pts)   # no corner brackets: they poked through
     # the chamfers (the author's screenshot, v0.10)
 
 
