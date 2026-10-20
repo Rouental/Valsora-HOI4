@@ -10,6 +10,23 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-20, later (the author's notes on the build of that morning, with screenshots): **the Deco UI v0.12.1**
+  (`deco_ui/docs/VERSIONS.md`): the army insignias in the picker at last (the list file `gfx/army_icons/army_icons.txt`:
+  the game's 14 as Deco grey masks the army's colour tints, ten numbered shields, the 14 in gilt untinted), the faction
+  logos centred (top bar, faction screen), the stray line over the diplomacy portrait covered, the faction goals on a
+  solid ground, the state panel's building icons centred, the division list's corner chamfered, the railway icon traced
+  after the game's, the loading bar's diamond a lozenge in a lozenge. **The Royal Host** forms on the game's first day
+  (`on_startup`: its own men, then `load_oob`), full and at its experience; **an Army HQ template** for every country
+  (`history/general/valsora_hq_template.txt`, the game's own, lost with `history/general`). **Rouental's rivers along
+  its borders** (the author: "Rivers need to go along the borders of states and provinces"): `scripts/river_borders.py`
+  (new) made 35 river moves onto province borders on the author's river layers (Lugunica and Karsten among them), cut
+  Verdoyantres', Pâturage's and Graisivaudan's provinces again along their rivers and gave 13 slivers across a river
+  to the province on the other side; `rivers.trace` puts a diagonal step's corner on a province border when it can
+  (map-wide). Rouental's river pixels on a border 64 % → 97 %, map-wide 88 % → 93 %; its Gazetteer province facts
+  re-keyed. **Mekele** cut again (one province had been bent round the other: `pdn_tools.tidiest`, `areas X,Y`).
+  **The Rouental grouping map**, a private claude.ai page where the author picks provinces and saves groups to merge
+  (`scripts/province_picker.py`). The map 10-20-2; the Gazetteer republished. The build: 21,147 provinces, 62,355
+  borders (3,181 free).
 - 2026-10-20 (the author's go-ahead: "go ahead with the rest of it, and all the other changes I had been holding back
   until now"): **Rouental's states from its fiefs** (the author's fief map, `source/Rouental Fiefs.pdn`, "Let's go with
   the 30 pixel version for the test": `scripts/fief_states.py`): 178 states (58 before) and 224 provinces (129), every

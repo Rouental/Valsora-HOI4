@@ -10,7 +10,10 @@ the other changes I had been holding back until now"): `docs/HISTORY.md`, 2026-1
 | 10 | flags for Belekria's eight new republics: "I'll get those to you eventually" | |
 | 14 | state names (the numbered sheets `dist/state_numbers_*.png`) | |
 | 15 | the land regions' names: the drafts are in the mod now ("I'm fine with those for now, I'll edit them later"); change any in `dist/region_names_draft.md`'s last column | |
-| 24 | Rouental's Royal Host: it should now start at full strength and keep its experience (its own men added just before it forms); if the game still refills it, say so and it gets its experience back after the refill instead | in game |
+| 24 | Rouental's Royal Host: it now forms on the game's first day (its own men, then the divisions), so it should start full and at its experience; it is not on the start screen's division count, only once the game runs. If it still starts short, say so | in game |
+| 26 | the Army HQ designer: every country now starts with the game's own HQ template; does a new HQ template save now? If not, the button's tooltip or the `error.log` line is the next clue | in game |
+| 27 | the game's generic political advisors and theorists (`generic_advisors.txt`) were switched off with the Earth histories, so no Valsoran country has any besides those the Gazetteer gives: bring them back for every country? | |
+| 28 | Rouental's provinces to merge or make into states: pick them on the grouping map (https://claude.ai/artifact/RsMPNHMPW1PdhS1Soa6W19, private to you), saved there for Claude to apply | your groups |
 | 25 | the tech tree: "I'm not really ready to start with the tech tree in earnest yet" | `docs/TECH_TREE_2036.md` |
 
 New to look at:
@@ -20,6 +23,8 @@ New to look at:
   Their lines are on Necessary States in the map 10-20 for you to edit; the old province lines there are gone.
 - **Rouental's Gazetteer page** still holds the populations of its old states; the mod shares them out over the new
   ones (and will again at the next import). Saving the page's states afresh makes that unnecessary.
+- **Rouental's rivers** run along its borders now (map 10-20-2): 35 stretches redrawn on your river layers. Karsten's river runs round its east end instead of across it, and Frélogne is 25 px (its corner beyond the river went to Valdélise). In Graisivaudan, La Recolt and Tige the river comes from your Gazetteer page, so the land moved, not the river.
+- **The Deco UI v0.12.1**: your notes on v0.12 (`deco_ui/valsora_deco_ui/README.txt`, Things to check).
 - **The Deco UI v0.12**: every held note done (`deco_ui/valsora_deco_ui/README.txt`, Things to check). The alerts' row
   rests on an assumption from one screenshot: 26 a row up to the music tray.
 - **Tundra**: paint it white on the areas layer, impassable tundra white with red stripes (solid, not the layer's

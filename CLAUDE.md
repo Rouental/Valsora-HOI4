@@ -70,19 +70,19 @@ New detail goes into those files; this one gets a line.
   then as needed `pdn_tools.py owners` (settle the moved borders; plan first, `--apply`), `apply_outlines.py` (new
   outlines), `regroup_states.py --recut` (their state lines; the provinces the lines cut are cut again; it redoes every country with lines of its own, so keep its result only where the lines changed: `docs/PROBLEM_LOG.md`, 2026-10-18),
   `pdn_tools.py provinces` (their province lines), `pdn_tools.py channel` / `necks` (islands to cut free), `river_provinces.py`
-  (after new rivers), `pdn_tools.py areas` (the marked deserts and jungles coarse; after a build); rebuild; `state_map.py` for the newly drawn states to name; send the `.pdn` back, dated (`docs/MAP_VERSIONS.md`).
+  (after new rivers; `river_borders.py TAG` for a nation of small drawn provinces), `pdn_tools.py areas` (the marked deserts and jungles coarse; after a build); rebuild; `state_map.py` for the newly drawn states to name; send the `.pdn` back, dated (`docs/MAP_VERSIONS.md`).
 - **The scripts** (each one's detail in `docs/MAP_PIPELINE.md`'s table): the build (`readpdn`, `read_layers`,
   `build_mod`, `deco_ui`, `check_mod`, `export_canvas`, `package`, with `nations`, `cultures`, `ideologies`,
   `superevents`, `superevents_deco`, `test_events`, `minimap`, `globe`, `vanilla_parts`, `straits`, `borders`);
-  by hand on the `.pdn` (`pdn_tools`, `apply_outlines`, `regroup_states`, `sea_provinces`, `river_provinces`,
+  by hand on the `.pdn` (`pdn_tools`, `apply_outlines`, `regroup_states`, `sea_provinces`, `river_provinces`, `river_borders`,
   `merge_provinces`, `land_regions`, `fief_states` (a nation's states from the author's fief map), `pdn_diff`, `pdn_check`, `pdn_dotnet` (paint.net's own reader, .NET), `pdn_recover`, `writepdn`, `nrbf`, `organic`, `rivers`);
   flags (`import_flags`, `fit_flag`); after a build, reports and maps (`country_list`, `nation_sheet`, `collages`,
-  `state_map`, `region_map`, `border_report`, `superevent_preview`, and the Valsora Atlas `atlas_export` +
+  `state_map`, `region_map`, `border_report`, `province_picker` (a nation's provinces to group, a private claude.ai page), `superevent_preview`, and the Valsora Atlas `atlas_export` +
   `atlas.html`, the build in a browser, not in the mod: `docs/ATLAS.md`); the Gazetteer (`facts_export`, `gazetteer`,
   `gazetteer_site`, `publish_site.sh`, `tests/gazetteer/`); vanilla (`vanilla_sync`, `pdxscript`); tests not in the
   game (`terrain_test`, `usnistan_prototype`, `coarse_preview`); `build_flags15.sh` (the larger flags' test version).
 - **HOI4's hard rules** (all checked by `check_mod.py`): the map is 5120×2560 (the largest size under the game's cap);
-  **at most 65,536 province borders** (3,184 left on 2026-10-20; new land is cut at ~190 px; `borders.py` counts); provinces
+  **at most 65,536 province borders** (3,181 left on 2026-10-20; new land is cut at ~190 px; `borders.py` counts); provinces
   one 4-connected blob of 16+ px, no 2×2 window of four provinces; `definition.csv` CRLF; localisation UTF-8 with BOM;
   every province in one strategic region, a state's provinces in one, naval regions contiguous; the map files exactly
   map-sized. Map errors crash on launch unless the game runs with `-debug`: always test with it.
@@ -238,14 +238,14 @@ the page, its rules or its import.
   (2026-10-16: Plaija's Vietnamese names; the fonts have Vietnamese since, composed where a face lacks it; the factory
   diamond, U+25C6, only in the value fonts that draw it; mutation-tested).
 - Its `reference/` (the game's files, git-ignored) must never be committed: it is Paradox's content.
-- **Now v0.12** (2026-10-20: every note the author had held, `deco_ui/docs/VERSIONS.md`); before it v0.11.2 (2026-10-19, later: the game's icons in the Deco style in the mod, approved, `deco_ui/tools/icons_art.py`; the diplomacy portrait as the politics screen's; the loading bar's diamond; the decision plates, the production resources, the decisions' icon wells; v0.11.1 of 2026-10-19, the music player and its controller, the production lines' boxes, the trade rows, seen the same day; v0.11 of 2026-10-18, night, the top bar's findings, diplomacy like politics, the panels' pictures and the decisions tab, seen 2026-10-19; v0.10.2 to v0.10.4 seen 2026-10-18). v0.9's restyled screens are one commit, `8dece16`: `git revert 8dece16` and a rebuild of both take them out. Previews that show the game's own art stay in the git-ignored `deco_ui/build/` and are only sent to the author. Proposals not in the mod, waiting for the author: `deco_ui/art/proposals/` (the larger flags: "don't add anything to do with it into the mod yet").
+- **Now v0.12.1** (2026-10-20, later: the insignias in the picker, the faction logos centred, the diplomacy line, the goals' ground, the state panel's icons, the division list's corner, the railway icon, the loading diamond; `deco_ui/docs/VERSIONS.md`); before it v0.12 (2026-10-20: every note the author had held, seen that day); before that v0.11.2 (2026-10-19, later: the game's icons in the Deco style in the mod, approved, `deco_ui/tools/icons_art.py`; the diplomacy portrait as the politics screen's; the loading bar's diamond; the decision plates, the production resources, the decisions' icon wells; v0.11.1 of 2026-10-19, the music player and its controller, the production lines' boxes, the trade rows, seen the same day; v0.11 of 2026-10-18, night, the top bar's findings, diplomacy like politics, the panels' pictures and the decisions tab, seen 2026-10-19; v0.10.2 to v0.10.4 seen 2026-10-18). v0.9's restyled screens are one commit, `8dece16`: `git revert 8dece16` and a rebuild of both take them out. Previews that show the game's own art stay in the git-ignored `deco_ui/build/` and are only sent to the author. Proposals not in the mod, waiting for the author: `deco_ui/art/proposals/` (the larger flags: "don't add anything to do with it into the mod yet").
 
 ## Current state
 
 Where things stand; the history, date by date, is `docs/HISTORY.md` (add each day's entry at its top).
 
-- **The build** (2026-10-20): 21,146 provinces (20,758 land, 363 sea, 25 lakes), 62,352 province borders
-  (HOI4 draws 65,536: 3,184 free, `docs/BORDER_LIMIT.md`), 3,312 states (Rouental's 178 its fiefs since 2026-10-20; 22 impassable, without supply hubs or troops: Usnistan's deserts and the
+- **The build** (2026-10-20, later): 21,147 provinces (20,759 land, 363 sea, 25 lakes), 62,355 province borders
+  (HOI4 draws 65,536: 3,181 free, `docs/BORDER_LIMIT.md`), 3,312 states (Rouental's 178 its fiefs since 2026-10-20; 22 impassable, without supply hubs or troops: Usnistan's deserts and the
   Cultists' striped jungle, the
   author's areas layer, `scripts/areas.py`; one province each, as the base game's great deserts; their land and the yellow areas desert terrain, cut coarse), 179 strategic
   regions (137 land, made from the nations on 2026-10-16: `land_regions.py`, not redone for the borders since; 42 sea);
@@ -257,7 +257,7 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   Gorbastan, Zukchiva, Sennheiser, Sminishia, West Sminishia and Hollier joined; Ungar's six from the Gazetteer on
   2026-10-18). The four great powers, one per
   ideology but Theocratic (author, 2026-10-17): Krionik (Monarchist), Kampf (Authoritarian), Sarkis (Communist),
-  Fraxhemark (Democratic); great in name for now (their industry is as drawn). Two starts, both on 1 January 2036. The Deco UI is v0.12 (`deco_ui/docs/VERSIONS.md`). The Gazetteer shows players a quick-start guide the first time they unlock a nation, a state size guide (Cardonia's states the usual size, author 2026-10-18) before the province one, a button to hide suggestions, what each base-game trait does, and (2026-10-18, night) the neighbours' terrain.
+  Fraxhemark (Democratic); great in name for now (their industry is as drawn). Two starts, both on 1 January 2036. The Deco UI is v0.12.1 (`deco_ui/docs/VERSIONS.md`). Rouental's rivers run along its borders (97 % of their pixels, 2026-10-20: `river_borders.py`; map-wide 93 %, the other nations' stretches listed in `docs/MAP_PIPELINE.md`). The Royal Host forms on the first day (`on_startup`); every country has the game's Army HQ template. The Gazetteer shows players a quick-start guide the first time they unlock a nation, a state size guide (Cardonia's states the usual size, author 2026-10-18) before the province one, a button to hide suggestions, what each base-game trait does, and (2026-10-18, night) the neighbours' terrain.
   Rouental has test decisions for every kind of event, a test superevent and one that sets off many alerts at once
   (`test_events.py`).
   **The Gazetteer's facts are in the mod again** (2026-10-18: the author's export of that morning, 17 nations with
@@ -274,7 +274,7 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   Valsora Atlas (the build in a browser, a private Artifact: `docs/ATLAS.md`). Proposals made the same night, not in
   the mod: the tech tree's full mockup (`docs/tech_tree_mockup/`), a world map poster (`dist/posters/`), the Deco UI's
   next screens (`deco_ui/art/proposals/next_screens/`).
-- **Seen in game last** (2026-10-19, evening): v0.11.2, the author's notes held until their go-ahead ("do not fix these or
+- **Seen in game last** (2026-10-20): v0.12 (the author's screenshots): the faction logo off centre (top bar and faction screen), a line's remains above the diplomacy portrait, the faction goals without a solid ground, the state panel's icons off centre, the division list's corner past the chamfer, the insignias missing from the picker, the railway icon, the loading diamond, the Royal Host still short of experience, the Army HQ designer that would not save, the rivers through Rouental's provinces, Mekele's cut: all changed in v0.12.1 and the map 10-20-2, not yet seen. Before that (2026-10-19, evening): v0.11.2, the author's notes held until their go-ahead ("do not fix these or
   anything else I send until I give you the go-ahead"): `deco_ui/docs/VERSIONS.md`, "Held". Before that (2026-10-19, later): v0.11.1: the loading bar's diamond half cut off, the diplomacy portrait unchanged and a cut-off bar over its actions, the icons not yet in (approved then): all changed in v0.11.2, with the notes held from v0.11 (the decision plates, the resource counts, the decisions' icons); the faction screen's "odd appearance" asked about; the theocracy token warning explained, not changed. Before that (2026-10-19): v0.11: the music player and its controller, the trade rows' specks and the production lines without boxes, fixed in v0.11.1 (not yet seen); the faction screen, the diplomacy portrait, the decision plates a little high, the production screen's resource counts and the decisions' icons noted, waiting ("Do not act on the following yet"). Before that (2026-10-18, night): v0.10.4 (the factories' colours, the decision plates a pixel low, the logistics numbers crowded, the music button, the diplomacy and intel tabs, the panels' drafts, the decisions tab, the focus filters' icons: all changed in v0.11, not yet seen). Before that (2026-10-18, later) the Deco UI v0.10.2: the decision counts still round dots in the
   shoulders, not the shoulder-shaped plates the author had outlined: plates in v0.10.3, not yet seen. Before that
   (2026-10-18) v0.10.1 (the author's screenshots and a mockup of the medallion):
@@ -287,7 +287,9 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   (`dist/straits_map_red.png`); the old upload's tundra, jungle and desert marks ("I'll add those back in later");
   flags for Belekria's eight republics and state names (later, the author's); the region names (the drafts in the mod
   "for now"); whether the Royal Host now starts full and keeps its experience (in game); the tech tree ("not really
-  ready"). To look at: Rouental's 178 fief states and their names (two Vedettes), the releasables' carried-over land, the
+  ready"); in game, the Army HQ designer (it should save now); the game's generic political advisors, switched off with
+  `history/general` (bring them back?); Rouental's provinces to group on the grouping map (a private claude.ai page,
+  `scripts/province_picker.py`; the groups read back with ArtifactData). To look at: Rouental's 178 fief states and their names (two Vedettes), the releasables' carried-over land, the
   Gazetteer page's old state populations (shared out in the mod, `gazetteer.rekey`), the Deco UI v0.12's Things to
   check (the alerts' row an assumption). Rouental's border edits of 10-18-3 (a city state in the east, cutouts for
   Vair, Carcarelle and Grande Reliette) come with the author's new map. Settled: the desert provinces' size ("a good
@@ -312,7 +314,7 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
 4. **What still reads as the 1940s**: the tech tree's names, descriptions and pictures (its dates are 2036's;
    `docs/TECH_TREE_2036.md` is a proposal), the 3D models, and the game's own pictures inside the side panels (the
    Deco UI's proposals wait for approval).
-5. **Province borders**: 3,184 left under HOI4's limit (62,352 of 65,536, 2026-10-20: Rouental's fiefs took 291; the
+5. **Province borders**: 3,181 left under HOI4's limit (62,355 of 65,536, 2026-10-20: Rouental's fiefs took 291, its rivers 3; the
    coarse deserts gave back 1,368 on 2026-10-18), for the states still to be drawn (`docs/BORDER_LIMIT.md`).
 
 ## Working with the author

@@ -6,6 +6,42 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**Rivers through the middle of Rouental's new states and provinces** (2026-10-20, the author's screenshot: a river
+across Verdoyantres; "Rivers need to go along the borders of states and provinces. Provinces should be recut, or in
+cases like Lugunica and Karsten where there is no room for a recut, move the river to follow the border instead").
+- Cause: `fief_states.py` cut Rouental's 178 states and their provinces from the fief map without looking at the
+  rivers, and `river_provinces.py` was not run after it (it would not have suited anyway: it cuts every crossed state
+  into ~190 px provinces, merging the fiefs' small ones). The fief map's borders mostly follow the rivers, but a pixel
+  or two off after the fit to the game map, so the rivers ran 1–3 px inside the states' edges: only 64 % of
+  Rouental's river pixels lay on a province border (map-wide 88 %). A second cause, map-wide: `rivers.trace` put the
+  corner pixel of every diagonal step on the same side, whether or not that side was on a province border.
+- Fix:
+  - `rivers.trace(..., prefer=)`: a diagonal step's corner goes on a province border when one of its two choices is
+    (read_layers.py passes the provinces' border pixels). Map-wide 87.6 % → 90.3 % on a border on its own, Rouental
+    64 % → 74 %.
+  - New `scripts/river_borders.py TAG [--apply] [--rekey]`: every stretch of river inside one of the nation's
+    provinces is a cut (the province's parts big enough: the state's banks cut again into provinces at the state's
+    own province size), a move (a sliver or a part too small for a province: the river drawn again on the author's
+    river layer along the province's border, the shortest clean way between the river pixels either side), a give
+    (a Gazetteer river, which the .pdn can't move, or no clean way round: the sliver, up to 20 px, joins the province
+    across it, state and region with it, and the state lines are drawn again) or left (a river's end inside a
+    province; a single pixel at a bend). Run five times, a rebuild between.
+  - Rouental: 35 river moves onto borders, in five runs (a few stretches twice) (Caux-Gautier, Beaufort, Nerice, Hyères, Nerié du Sud, Sézanne,
+    Carcarelle, Carrefour, Chattanay, Crionique, Corraise, Thiollier, Clovis, Saintiers, Éislek, Archambelle, Travante,
+    Ganelonne, Rochemont, Rivage-d'Argent, Ertois, Friere, Rochejaquelein, Berrige, Lugunica, Karsten, Rathaine,
+    Belleplaine-sur-Mer, Rolantelle, Verdoyantres); 3 states' provinces cut again along a river (Verdoyantres 4 → 4,
+    Pâturage 2 → 2, Graisivaudan 3 → 4); 13 slivers of 1–17 px given across a river (Graisivaudan, La Recolt and Tige
+    along the river on Rouental's Gazetteer page; Archambelle, Beaufort, Frélogne, Leclerc, Rolantelle, Trézelles where
+    the river couldn't be moved cleanly), 81 px changing state. Rouental's river pixels on a border: 64 % → 97 %; the
+    rest are 21 single pixels at bends, two rivers' ends inside a province (Travante, Échirolles) and 2 px in Ertois.
+    Map-wide 92.7 %.
+  - Karsten: the river now runs round its east end (along its north, east and south edges) instead of across it.
+    Frélogne is 25 px now (its 6-px corner beyond the river went to Valdélise), under the fiefs' 30.
+  - Rouental's Gazetteer province facts (terrain) and `source/gazetteer/rekey/ROU.npz` follow the new provinces
+    (`river_borders.py ROU --rekey`, after the last build). 21,147 provinces, 62,355 borders (3,181 free).
+- Lesson: whatever cuts provinces or moves borders must look at the rivers; run `river_borders.py TAG` after any
+  such tool (a plan costs nothing).
+
 **Mekele's two provinces were cut oddly, one wrapped round the other** (2026-10-20, the author: "Another note: at
 least in the Gazeteer, Mekele's provinces are cut weird", with a Gazetteer screenshot of Mekele)
 - Cause: Mekele is one desert state of 1,368 px, so the cut that made the marked deserts' provinces larger
@@ -15,8 +51,8 @@ least in the Gazeteer, Mekele's provinces are cut weird", with a Gazetteer scree
   them as tidy as any other cut of theirs; Mekele's was the one wrong.
 - Fix: the cut now tries two placements, k-means and pieces one after another along the area's length
   (`organic.along`), and keeps the one whose least compact piece is rounder (`pdn_tools.tidiest`). `pdn_tools.py areas
-  X,Y` cuts a state of the areas again even when it is already coarse. Mekele 1 is to be cut so (the preview: two
-  provinces side by side, the river on the coast kept on a border).
+  X,Y` cuts a state of the areas again even when it is already coarse. Mekele 1 was cut so: two provinces side by
+  side, the river on the coast kept on a border.
 
 **The Army HQ designer would not save a new HQ** (2026-10-20, the author: "This might be due to a base game thing I just
 don't understand, but the army hq division designer doesn't let me save, even with xp available and all research

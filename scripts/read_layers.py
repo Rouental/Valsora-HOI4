@@ -471,7 +471,13 @@ def main():
     if g_rivers:
         print(f"note: Gazetteer: {g_rivers} river pixels drawn on the page")
     if any(nm in L for nm in OPTIONAL) or g_rivers or any("rivers" in f for f in G.values()):
-        auto = river_lines.trace(lines["Major Rivers"], lines["Minor Rivers"], ~water)
+        # a diagonal step's corner pixel on a province border where it can be (2026-10-20)
+        pb = np.zeros((H, W), bool)
+        pb[:, 1:] |= lab[:, 1:] != lab[:, :-1]
+        pb[:, :-1] |= lab[:, 1:] != lab[:, :-1]
+        pb[1:] |= lab[1:] != lab[:-1]
+        pb[:-1] |= lab[1:] != lab[:-1]
+        auto = river_lines.trace(lines["Major Rivers"], lines["Minor Rivers"], ~water, prefer=pb)
         drawn = sum(int(m.sum()) for m in lines.values())
         rv = np.where(rv >= 0, rv, np.where(auto != river_lines.NONE, auto, -1))
         print(f"note: Rivers: {drawn} pixels drawn on Major/Minor Rivers became "

@@ -9,7 +9,8 @@ the rest:
     water, and it is extended to touch the water if it stops a few pixels short;
   * the main stem runs from the mouth to the farthest end, preferring major pixels;
     every side branch is a tributary, recursively;
-  * diagonal steps get a corner pixel;
+  * diagonal steps get a corner pixel, on a province border where one of the two is (2026-10-20: the river along a
+    border, not one step inside it at every bend);
   * each pixel is major or minor after the layer it was drawn on (a river can change
     size along its course); major stretches widen from index 7 to 8 towards the mouth
     (HOI4 counts 7+ as large rivers), minor ones from 3 to 4 (small rivers).
@@ -31,8 +32,9 @@ MIN_BRANCH = 6   # shorter side branches are drawing slips, not tributaries
 MAJOR_WIDTH, MINOR_WIDTH = 7, 3
 
 
-def trace(major, minor, land):
-    """major, minor, land: HxW bool. Returns HxW uint8 rivers.bmp indices, NONE elsewhere."""
+def trace(major, minor, land, prefer=None):
+    """major, minor, land: HxW bool; prefer: HxW bool, the pixels a diagonal step's corner goes on when it can (the
+    province borders), or None. Returns HxW uint8 rivers.bmp indices, NONE elsewhere."""
     h, w = land.shape
     drawn = (major | minor) & land
     skel = skeletonize(drawn)
@@ -72,7 +74,10 @@ def trace(major, minor, land):
         for q in path[1:]:
             p = res[-1]
             if p[0] != q[0] and p[1] != q[1]:
-                for c in ((p[0], q[1]), (q[0], p[1])):
+                cs = ((p[0], q[1]), (q[0], p[1]))
+                if prefer is not None and not prefer[cs[0]] and prefer[cs[1]]:
+                    cs = cs[::-1]
+                for c in cs:
                     if land[c] and not placed[c] and c not in res:
                         res.append(c)
                         break
