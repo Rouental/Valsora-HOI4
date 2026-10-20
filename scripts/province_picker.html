@@ -65,6 +65,8 @@ textarea { width: 100%; min-height: 40px; background: var(--well); border: 1px s
 .legend { display: flex; flex-wrap: wrap; gap: 10px 16px; font-size: 12px; color: var(--label); margin-top: 8px }
 .legend i { display: inline-block; width: 18px; height: 3px; vertical-align: middle; margin-right: 5px }
 .num { font-variant-numeric: tabular-nums }
+select { background: var(--well); border: 1px solid rgba(201,165,90,.45); padding: 2px 4px }
+.nogov .gov { display: none }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important } }
 </style>
 
@@ -82,7 +84,10 @@ textarea { width: 100%; min-height: 40px; background: var(--well); border: 1px s
       <button class="zoom" data-z="6" aria-pressed="false">6×</button>
       <span class="sp"></span>
       <label class="meta"><input type="checkbox" id="showRivers" checked> rivers</label>
-      <label class="meta"><input type="checkbox" id="showStates" checked> state colours</label>
+      <label class="meta gov"><input type="checkbox" id="showGovs"> governorates</label>
+      <label class="meta">colours <select id="colourBy">
+        <option value="states">by state</option><option value="govs" class="gov">by governorate</option><option value="plain">plain</option>
+      </select></label>
     </div>
     <div class="scroll" id="scroll"><canvas id="map" aria-label="Map of Rouental's provinces: click a province to select it"></canvas></div>
     <div class="legend">
@@ -91,6 +96,7 @@ textarea { width: 100%; min-height: 40px; background: var(--well); border: 1px s
       <span><i style="background:#05080A;height:3px"></i>a state's border</span>
       <span><i style="background:rgba(5,8,10,.55);height:1px"></i>a province's border</span>
       <span><i style="background:#5E9FD0"></i>river</span>
+      <span class="gov"><i style="background:#F4ECD9;height:4px"></i>a governorate's border</span>
     </div>
     <div class="tip" id="tip" hidden></div>
   </div>
@@ -100,6 +106,7 @@ textarea { width: 100%; min-height: 40px; background: var(--well); border: 1px s
       <h2 id="selHead">Selection</h2>
       <p class="hint">Click provinces to select or unselect them. Shift-click a province to take its whole state.</p>
       <div id="selInfo" class="hint">Nothing selected.</div>
+      <div id="selWarn" class="warn bad" hidden></div>
       <div class="chips" id="selChips"></div>
       <div class="row">
         <button class="primary" id="newGroup" disabled>Group the selection</button>
@@ -119,6 +126,8 @@ textarea { width: 100%; min-height: 40px; background: var(--well); border: 1px s
 const DATA = /*DATA*/null;
 const $ = s => document.querySelector(s);
 const P = DATA.provinces, S = DATA.states, N = P.length;
+const G = DATA.governorates || [];            // the governorates (a province's g: its place here, -1 for none)
+if (!G.length) document.body.classList.add("nogov");
 const [W, H] = DATA.size;
 const OTHER = 65535, WATER = 65534;
 $("#meta").textContent = `${N} provinces in ${S.length} states · map of ${DATA.built}`;
@@ -140,6 +149,17 @@ function stateColour(s) {
   const h = (s * 137.508) % 360;
   return `hsl(${h.toFixed(0)} 22% ${s % 2 ? 34 : 40}%)`;
 }
+function govColour(g) {
+  if (g == null || g < 0) return "#4A5A50";
+  const h = (g * 97.3 + 20) % 360;
+  return `hsl(${h.toFixed(0)} 30% ${g % 3 === 0 ? 33 : g % 3 === 1 ? 40 : 46}%)`;
+}
+function govName(p) { const g = P[p - 1].g; return g >= 0 && G[g] ? G[g].name : "no governorate" }
+
+// the viewer's choices (a convenience: the page works the same without them)
+const pref = (k, v) => { try { if (v === undefined) return localStorage.getItem("pp-" + k); localStorage.setItem("pp-" + k, v); } catch (e) { return null } };
+if (G.length && pref("govs") === "1") $("#showGovs").checked = true;
+{ const c = pref("colour"); if (c && (c !== "govs" || G.length)) $("#colourBy").value = c; }
 
 function loadMap() {
   return new Promise((resolve, reject) => {
@@ -177,13 +197,13 @@ function paintBase() {
   base.width = W; base.height = H;
   const g = base.getContext("2d"), im = g.createImageData(W, H), d = im.data;
   const colOf = new Array(N + 1);
-  const showStates = $("#showStates").checked;
+  const by = $("#colourBy").value;
   const gcol = new Map(groups.map(gr => [gr.id, gr.colour]));
   for (let p = 1; p <= N; p++) {
     let c;
     if (selected.has(p)) c = "#F1DC9C";
     else if (groupOf.has(p)) c = gcol.get(groupOf.get(p));
-    else c = showStates ? stateColour(P[p - 1].s) : "#4A5A50";
+    else c = by === "states" ? stateColour(P[p - 1].s) : by === "govs" ? govColour(P[p - 1].g) : "#4A5A50";
     colOf[p] = parse(c);
   }
   const showRivers = $("#showRivers").checked;
@@ -234,6 +254,8 @@ function render(z) {
   const mine = a => a >= 1 && a <= N;
   lines((a, b) => mine(a) && mine(b) && P[a - 1].s === P[b - 1].s, "rgba(5,8,10,.55)", 1);
   lines((a, b) => mine(a) && mine(b) && P[a - 1].s !== P[b - 1].s, "#05080A", Math.max(2, z * .7));
+  const govs = G.length && $("#showGovs").checked;
+  if (govs) lines((a, b) => mine(a) && mine(b) && P[a - 1].g !== P[b - 1].g, "#F4ECD9", Math.max(3, z * 1.1));
   lines((a, b) => mine(a) !== mine(b), "#E3C77E", Math.max(2, z * .6));
   // victory points: a small gilt diamond at the province's anchor
   for (let p = 1; p <= N; p++) {
@@ -247,6 +269,17 @@ function render(z) {
   for (const b of DATA.insets) {
     g.strokeStyle = "rgba(201,165,90,.7)"; g.lineWidth = 1;
     g.strokeRect(b.x * z + .5, b.y * z + .5, b.w * z - 1, b.h * z - 1);
+  }
+  // the governorates' names, each over the province nearest its middle
+  if (govs) {
+    g.textAlign = "center"; g.textBaseline = "middle"; g.lineJoin = "round";
+    for (const v of G) {
+      const size = Math.max(11, z * (v.named ? 3.6 : 2.8));
+      g.font = `${v.named ? "" : "italic "}${size}px ${v.named ? getComputedStyle(document.documentElement).getPropertyValue("--display") : getComputedStyle(document.body).fontFamily}`;
+      const t = v.named ? v.name.toUpperCase() : v.name.replace("Governorate", "Gov."), x = (v.at[0] + .5) * z, y = (v.at[1] + .5) * z;
+      g.strokeStyle = "rgba(5,8,10,.85)"; g.lineWidth = Math.max(3, size * .28); g.strokeText(t, x, y);
+      g.fillStyle = v.named ? "#F4ECD9" : "#C9BC98"; g.fillText(t, x, y);
+    }
   }
   return c;
 }
@@ -274,7 +307,9 @@ function describe(p) {
   const q = P[p - 1], st = S[q.s];
   const grp = groupOf.has(p) ? groups.find(g => g.id === groupOf.get(p)) : null;
   return `<b>${q.vp ? esc(q.vp) : "Province " + q.id}</b>${q.vp ? ` <span class="s">(victory points ${q.v})</span>` : ""}<br>`
-    + `<span class="s">State</span> ${esc(st.name)}<br><span class="s">Province</span> <span class="num">${q.id}</span> · `
+    + `<span class="s">State</span> ${esc(st.name)}<br>`
+    + (G.length ? `<span class="s">Governorate</span> ${esc(govName(p))}<br>` : "")
+    + `<span class="s">Province</span> <span class="num">${q.id}</span> · `
     + `<span class="num">${q.px}</span> px · ${esc(q.t)}${grp ? `<br><span class="s">Group</span> ${esc(grp.name)}` : ""}`;
 }
 function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]) }
@@ -285,11 +320,15 @@ function refresh() { paintBase(); draw(); renderSelection(); renderGroups(); }
 function renderSelection() {
   const n = selected.size;
   $("#newGroup").disabled = !n || !canWrite; $("#clearSel").disabled = !n;
-  if (!n) { $("#selInfo").textContent = "Nothing selected."; $("#selChips").replaceChildren(); return; }
+  const warn = $("#selWarn");
+  if (!n) { $("#selInfo").textContent = "Nothing selected."; $("#selChips").replaceChildren(); warn.hidden = true; return; }
   const states = new Set([...selected].map(p => P[p - 1].s));
   const px = [...selected].reduce((t, p) => t + P[p - 1].px, 0);
   $("#selInfo").textContent = `${n} province${n > 1 ? "s" : ""} · ${px} px · ${states.size} state${states.size > 1 ? "s" : ""}: `
-    + [...states].map(s => S[s].name).join(", ");
+    + [...states].map(s => S[s].name).join(", ") + (G.length ? ` · ${[...new Set([...selected].map(govName))].join(", ")}` : "");
+  const gs = G.length ? new Set([...selected].map(p => P[p - 1].g)) : new Set();
+  warn.hidden = gs.size < 2;
+  if (gs.size > 1) warn.textContent = `Across ${gs.size} governorates (${[...gs].map(g => g >= 0 ? G[g].name : "no governorate").join(", ")}).`;
   $("#selChips").replaceChildren(...[...selected].map(p => {
     const c = document.createElement("span"); c.className = "chip" + (P[p - 1].vp ? " vp" : "");
     c.textContent = label(p); c.title = "Unselect"; c.onclick = () => { selected.delete(p); refresh(); }; return c;
@@ -323,7 +362,8 @@ for (const b of document.querySelectorAll(".zoom")) b.addEventListener("click", 
   draw();
 });
 $("#showRivers").addEventListener("change", () => { paintBase(); draw(); });
-$("#showStates").addEventListener("change", () => { paintBase(); draw(); });
+$("#showGovs").addEventListener("change", e => { pref("govs", e.target.checked ? "1" : "0"); paintBase(); draw(); });
+$("#colourBy").addEventListener("change", e => { pref("colour", e.target.value); paintBase(); draw(); });
 $("#clearSel").addEventListener("click", () => { selected.clear(); refresh(); });
 
 // ---- groups and their checks
@@ -351,6 +391,10 @@ function checks(gr) {
     if (e && e.river) riv++;
   }
   if (riv && gr.kind === "province") out.push(["", `A river runs between ${riv === 1 ? "two of them" : riv + " pairs of them"}: merged, the river would cross the province.`]);
+  const gs = G.length ? new Set(ps.map(p => P[p - 1].g)) : new Set();
+  if (gs.size > 1)
+    out.push(["bad", `Crosses ${gs.size} governorates (${[...gs].map(g => g >= 0 ? G[g].name : "no governorate").join(", ")}): `
+      + (gr.kind === "province" ? "the merged province would lie in more than one." : "the new state would straddle their border.")]);
   return out;
 }
 
@@ -372,7 +416,7 @@ function renderGroups() {
       </div>
       <div class="meta num">${ps.length} provinces · ${px} px</div>
       <div class="chips">${ps.map(p => `<span class="chip${P[p - 1].vp ? " vp" : ""}" data-p="${p}" title="${esc(S[P[p - 1].s].name)}">${esc(label(p))}</span>`).join("")}</div>
-      <div class="checks">${(() => { const c = checks(gr); return c.length ? c.map(([k, t]) => `<div class="warn ${k}">${esc(t)}</div>`).join("") : '<div class="ok">One piece, one state, no river between.</div>'; })()}</div>
+      <div class="checks">${(() => { const c = checks(gr); return c.length ? c.map(([k, t]) => `<div class="warn ${k}">${esc(t)}</div>`).join("") : `<div class="ok">One piece, one state${G.length ? ", one governorate" : ""}, no river between.</div>`; })()}</div>
       <textarea aria-label="Note for Claude" data-f="note-${gr.id}" id="note-${gr.id}" placeholder="A note for Claude (a name for the new province or state, which capital to keep...)" ${canWrite ? "" : "disabled"}>${esc(gr.note || "")}</textarea>
       <div class="row">
         <button data-a="show">Select these</button>
