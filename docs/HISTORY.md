@@ -10,6 +10,20 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-20 (the author's go-ahead: "go ahead with the rest of it, and all the other changes I had been holding back
+  until now"): **Rouental's states from its fiefs** (the author's fief map, `source/Rouental Fiefs.pdn`, "Let's go with
+  the 30 pixel version for the test": `scripts/fief_states.py`): 178 states (58 before) and 224 provinces (129), every
+  fief of 30 game px or more a state, the smaller merged into a neighbour (crownland only with crownland, within the
+  governorate), Rêverie kept as it was, the names read from the fief map (`source/fief_names_ROU.json`); the
+  releasables' and the civil war's lists carried over by land, the fiefs they are named after with them (`nations.py`);
+  the Gazetteer's facts of the old states shared out over the new ones (`gazetteer.rekey`,
+  `source/gazetteer/rekey/ROU.npz`). The Sisterhood removed (map and files); Sangrád renamed Visokagorod; James Navy
+  out; Port Almohavid's flag the Kufi in gold; the Association's logo the author's own (`source/factions/`); the 137
+  land regions' draft names in the mod; white (tundra) and white with red (impassable tundra) read from the areas layer
+  (`areas.py`); the Royal Host starts at full strength (`add_manpower` of exactly its own men); the strait map of the
+  crossings over 15 px (`straits.py map`). The Deco UI v0.12: every held note (`deco_ui/docs/VERSIONS.md`). The map
+  10-20 and the flag file 10-20 (`docs/MAP_VERSIONS.md`); the Gazetteer republished (Rouental's states, the desert
+  nations' map tools). The build: 21,146 provinces, 62,352 borders (3,184 free), 3,312 states, 204 countries.
 - 2026-10-19, night (the author's answers to the 26 open questions and new notes, all held: "don't edit the following
   in the mod yet"): the mod unchanged. The answers recorded (`dist/open_questions.md`, the root manual's waiting list);
   the new notes held (`deco_ui/docs/VERSIONS.md`); cleared as a proposal, **the Association's emblem C** after the

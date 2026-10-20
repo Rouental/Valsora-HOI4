@@ -33,9 +33,12 @@ ROU_ARMY_HISTORY = [
     *[f"add_equipment_to_stockpile = {{ type = {e} amount = {n} producer = ROU }}" for e, n in (
         ("infantry_equipment_1", 3000), ("support_equipment_1", 600), ("motorized_equipment_1", 1500),
         ("mechanized_equipment_1", 400), ("artillery_equipment_1", 500), ("anti_air_equipment_1", 300))],
-    # last, once the techs and the tank design exist (no extra manpower since 2026-10-16, the author: "I don't know if
-    # you're still giving nations the extra manpower to make sure their armies aren't empty, but if you are please
-    # remove it"; the divisions' men come out of the country's own pool)
+    # the Royal Host's own men, just before it forms, so it starts at full strength (the author, 2026-10-20: refilled
+    # at once from the pool when the game began, which cost the divisions their experience; "Sounds good" to starting
+    # them full): exactly what its divisions take, so the pool after is what it would have been (no extra manpower for
+    # the generic armies since 2026-10-16, the author: "if you are please remove it")
+    "ROU_HOST_MANPOWER",
+    # last, once the techs and the tank design exist
     'set_oob = "ROU_2036"',
 ]
 
@@ -55,6 +58,13 @@ ROU_HOST = [("Division Blindée de la Garde", 2, "Rouental"),
             ("Division Mécanisée Royale", 1, "Saintiers"), ("Division Mécanisée Royale", 1, "Cournin"),
             ("Division Motorisée Royale", 2, "Rêverie"), ("Division Motorisée Royale", 2, "Charmas"),
             ("Division Motorisée Royale", 2, "Rochemont"), ("Division Motorisée Royale", 2, "Vendée")]
+# the men each battalion and company takes (the game's common/units, 1.19.3)
+UNIT_MANPOWER = {"medium_armor": 500, "mechanized": 1200, "motorized": 1200, "engineer": 300, "recon": 500,
+                 "maintenance_company": 500, "signal_company": 500, "field_hospital": 500, "anti_air": 300,
+                 "logistics_company": 500, "artillery": 300}
+ROU_HOST_MEN = sum(n * sum(UNIT_MANPOWER[u] for col in ROU_TEMPLATES[name]["regiments"] for u in col)
+                   + n * sum(UNIT_MANPOWER[u] for u in ROU_TEMPLATES[name]["support"]) for name, n, _ in ROU_HOST)
+ROU_ARMY_HISTORY[ROU_ARMY_HISTORY.index("ROU_HOST_MANPOWER")] = f"add_manpower = {ROU_HOST_MEN}"
 
 # The Feudal Army national spirit (author, 2026-10-02; harshness not final): the price
 # of the levy system (docs/ROUENTAL_ARMY.md), with the author's placeholder picture
@@ -362,11 +372,10 @@ LEADERS = {
     # 2026-10-17: Belekria's republics as Belekria (Vanguardism), Krionik's principalities princes (Claude's guesses)
     **{t: ["leninism"] for t in ("DRK", "STB", "SDE", "SVT", "SRY", "KLF", "BLY", "KSP")},
     **{t: ["despotism"] for t in ("ZST", "CRV", "MYL")},
-    # 2026-10-19: Krionik's other realms princes as the principalities, the city and the ports oligarchies, the
-    # Sisterhood a holy order (Claude's guesses, for the author to change)
+    # 2026-10-19: Krionik's other realms princes as the principalities, the city and the ports oligarchies (Claude's
+    # guesses, for the author to change)
     **{t: ["despotism"] for t in ("BLS", "KRZ", "TGV", "KSV", "LGR")},
     **{t: ["oligarchism"] for t in ("SGD", "PNY", "PVS", "PGZ")},
-    "SIS": ["holy_order"],
     "XUG": ["socialism"],  # 2026-10-19: as Terreich, its overlord (Claude's guess)
     "RSV": ["council_communism"], "OST": ["despotism"],  # Hierocracy (author)
     # 2026-10-17 (author): Krionik a Regency Council (Stratocracy before), Kampf Fascism (Absolute Monarchy
@@ -431,31 +440,31 @@ RULING = {"BRL": "theocracy", "RLA": "fascism",
 # all but the Alliance of the East declare war on Rouental.
 CIVIL_WAR = {
     "BRL": ["Brillagne"],
-    "CRP": ["Crépuscule", "Ténèbres", "Lyrié et Rivielle"],
-    "RLT": ["Reliette", "Aureimontes", "Tuilerie", "Vinterre"],
-    "MRC": ["Cylône", "Osgrande", "Aurillac-de-Ciel", "Coffrefort"],
-    "RLA": ["Rêverie", "Rouental", "Saintiers", "Cournin", "Vendée"],
-    "VAI": ["Vair", "Pavois", "Caux-Gautier"],
-    "FTH": ["Hevique", "Avarre"],
+    "CRP": ["Crépuscule", "Aube", "Petit Crépuscule", "Noirceur", "Pénombre", "Ténèbres", "Toussaint", "Lyrié et Rivielle", "725,858", "Sorrelle", "Rendanne", "Brouge"],
+    "RLT": ["Reliette", "Oramlitus", "Piscisinum", "Reliquae", "Aureimontes", "Avignalle", "Gourdelle", "Marque", "Sézanne", "Vinterre", "Arduécu", "Plaiserre", "Ariminum", "Shalquoir", "Dortaine", "Thermidor"],
+    "MRC": ["Cylône", "Brochets", "Erdoine", "Élan", "Baïonnette", "Osgrande", "Coidron", "Belleterre", "Monteaux", "La Marche", "Aurillac-de-Ciel", "752,780", "Coffrefort"],
+    "RLA": ["Rêverie", "Rouental", "Saintiers", "Rouërie", "Stofflet", "Charet", "Cournin", "Vendée"],
+    "VAI": ["Vair", "Pavois", "Fleurent", "Haute Couronne", "Nerice", "Caux-Gautier", "Beaufort", "Leonis", "Ligue Mercéatique"],
+    "FTH": ["Hevique", "Antraine", "Rendement", "Blédoré", "Avarre"],
 }
 # Nations Rouental can release (author, 2026-10-05): they own nothing at the start and
 # hold cores on these states (the first is the capital), so they show in Rouental's
 # list of releasable nations
 RELEASABLE = {
-    "CRL": ["Carcarelle", "Nerié", "Hyères"],
-    "MTN": ["Everlon", "Tocsin", "Rolantelle", "Rempart"],
-    "ORF": ["Oriflamme", "Glacierre"],
-    "GHS": ["Ghessone"],
-    "RVR": ["Callentroix", "Bicêtre", "Marais Verte"],  # 2026-10-18: Leclerc split in two (the Gazetteer), the larger first
-    "PSC": ["Belleplaine-sur-Mer", "Baie de Torres", "Graisivaudan"],
+    "CRL": ["Carcarelle", "Carrefour", "Hyères", "Chattanay", "Nerié du Nord", "Vareinne", "Maréebleue", "Chantelleux", "Taracourt", "Nerié du Sud", "Clairval", "Bordeleau", "Focislar"],
+    "MTN": ["Everlon", "Merabeau", "Tocsin", "Mabrenne", "Montserrat", "Poitevallée", "Prèsloin", "Falaise", "Fleurmarais", "Hardatre", "Rempart", "Serrié", "Rolantelle"],
+    "ORF": ["Oriflamme", "Raocourt", "Thiollier", "Clovis", "Darantes", "Trézelles", "Corraise", "Lillon", "Glacierre"],
+    "GHS": ["Ghessone", "Fleurdoux", "Ronnaire", "Archambelle", "Travante"],
+    "RVR": ["Callentroix", "Rivage-d'Argent", "Courrac", "Échirolles", "Carnaux", "Verlayne", "Valdélise", "Frélogne", "Marais Verts", "Vesontio", "Crionique", "Gironte", "Spreivald", "Valenmont"],  # 2026-10-18: Leclerc split in two (the Gazetteer), the larger first
+    "PSC": ["Belleplaine-sur-Mer", "Rathaine", "Lugunica", "Karsten", "Rougeamera", "Baie de Torres", "Côte d'Ambre", "Grand Brume", "Graisivaudan", "Nouveau Brume"],
     # 2026-10-07, later (author). The Alliance of the East's states still go to Lustiana,
     # Hollier and Selgrave in the civil war (ANNEX); it is only releasable by hand.
-    "AOE": ["Chirac", "Serpette", "Maïeul", "Moelle"],
-    "RCL": ["La Recolt", "Fleurastre", "Fourier"],
-    "SGT": ["Sangterre", "Carune la Cœur"],
-    "KOV": ["Kové", "Temerre"],  # 2026-10-18: Kové's west half is Temerre (the Gazetteer)
-    "HVQ": ["Hevique", "Avarre"],
-    "SRE": ["Serie", "Verdoyantes"],
+    "AOE": ["Chirac", "Serpette", "Maïeul", "Moelle", "Petit Selgrave", "Sérieux"],
+    "RCL": ["La Recolt", "Tige", "Reveille", "Glenn", "Jeriche", "Usironne", "Ligue des Cités Libres", "Fleurastre", "Loquinne", "Fourier"],
+    "SGT": ["Sangterre", "Noiétoile", "Transiger", "Carune la Cœur", "Astre"],
+    "KOV": ["Kové", "Leclerc", "Berrige", "Rapproche", "Sumonde", "Ivaine", "Temerre"],  # 2026-10-18: Kové's west half is Temerre (the Gazetteer)
+    "HVQ": ["Hevique", "Antraine", "Rendement", "Blédoré", "Avarre"],
+    "SRE": ["Serie", "Quebelle", "Himelle", "Barielle", "Friere", "Daubey", "Verdoyantres", "Pâturage"],
     # (2026-10-08, author: Tethia starts as part of Belekria; its land is its subregion since 2026-10-17, SUBREGIONS)
     # 2026-10-09, later (author): Rouental's islets off Solitas
     "ORT": ["Concorde et Volonté"],
@@ -473,10 +482,9 @@ SUBREGIONS = {
     # author painted Sangrád on (2026-10-19), to the middle of its land
     "ZST": (2157, 670), "CRV": (2269, 949), "MYL": (2441, 767),
     # 2026-10-19 (the author's Subregions): Krionik's other realms, inside its land and its principalities' (each at
-    # a pixel well inside it), Sangrád (its own 70 px state), the ports (their states, the Gazetteer's names), and
-    # Sennheiser's Sisterhood
+    # a pixel well inside it), Visokagorod (Sangrád until 2026-10-20; its own 70 px state), the ports (their states, the Gazetteer's names)
     "BLS": (2492, 542), "KRZ": (2590, 661), "TGV": (2205, 765), "KSV": (2130, 805), "LGR": (2320, 900),
-    "SGD": (2077, 703), "PNY": (121, 1641), "PVS": (4275, 2257), "PGZ": (2720, 1195), "SIS": (2602, 972),
+    "SGD": (2077, 703), "PNY": (121, 1641), "PVS": (4275, 2257), "PGZ": (2720, 1195),
     # Pakitsk, Belka's since 2026-10-17
     "PKT": (2523, 393),
 }
@@ -510,7 +518,7 @@ CIVIL_WAR_ONLY = {"FTH", "RLA"}
 # Prince is executed (author, 2026-10-02: "a more credible threat to the player")
 ASSOCIATION = ("GDN", "LST", "EVR", "HLR", "SGV", "LZC", "SGN")
 ANNEX = {"LST": ["Maïeul", "Serpette"], "HLR": ["Chirac"],
-         "SGV": ["Moelle"]}  # Moelle, the north of the old Maïeul (2026-10-02)
+         "SGV": ["Moelle", "Petit Selgrave", "Sérieux"]}  # Moelle, the north of the old Maïeul (2026-10-02), and its fiefs
 
 # The Reibonnaise nations (author, 2026-10-02): +20 opinion of each other for their
 # historical ties, except while one of them is communist, and -20 opinion of every
@@ -754,9 +762,8 @@ FORMAL_NAMES = {
     # 2026-10-19 (Claude's, as the principalities)
     **{t: f"the Principality of {n}" for t, n in (("BLS", "Belska"), ("KRZ", "Koroletz"), ("TGV", "Targoviste"),
                                                    ("KSV", "Kosavichy"), ("LGR", "Lagrád"))},
-    **{t: f"the Free City of {n}" for t, n in (("SGD", "Sangrád"), ("PNY", "Port Nyasha"), ("PVS", "Port Vostok"),
+    **{t: f"the Free City of {n}" for t, n in (("SGD", "Visokagorod"), ("PNY", "Port Nyasha"), ("PVS", "Port Vostok"),
                                                 ("PGZ", "Port Grazda"))},
-    "SIS": "the Sisterhood",
     "XUG": "the Territory of Xugang",  # 2026-10-19 (Claude's guess)
     "WAN": "the Republic of Wanea",
     "QNG": "the Qinguo Republics",  # "the Qingou Republics" until 2026-10-13 (author)
@@ -1321,7 +1328,7 @@ faction_template_alliance_of_the_vale = {
 faction_template_reibonnaise_association = {
 	name = VAL_reibonnaise_association
 	manifest = faction_manifest_strength_in_unity
-	icon = GFX_faction_logo_generic
+	icon = GFX_faction_logo_valsora_reibonnaise_association
 	visible = {
 		always = no
 	}
@@ -1504,10 +1511,45 @@ def rouental_division_names():
                     "%de Levée Féodale", levies))
 
 
+# The factions' own logos (author, 2026-10-20: the Association's, "I'm attaching my own logo"): source/factions/<name>.png,
+# any size, square; the game's logo is two 100 px frames (the logo at 80 px, then lit with a glow) and a 32 px
+# miniature, GFX_faction_logo_valsora_<name> and its _miniature (the game pairs them by name)
+FACTION_LOGOS = ("reibonnaise_association",)
+
+
+def faction_logos(out, write):
+    from PIL import ImageFilter
+    sprites = []
+    for name in FACTION_LOGOS:
+        src = Image.open(f"source/factions/{name}.png").convert("RGBA")
+        logo = src.resize((80, 80), Image.LANCZOS)
+        strip = Image.new("RGBA", (200, 100), (0, 0, 0, 0))
+        strip.alpha_composite(logo, (10, 10))
+        halo = Image.new("RGBA", (100, 100), (0, 0, 0, 0))
+        halo.alpha_composite(src.resize((90, 90), Image.LANCZOS), (5, 5))
+        a = np.asarray(halo.split()[3].filter(ImageFilter.GaussianBlur(4)), float)
+        glow = np.zeros((100, 100, 4), np.uint8)
+        glow[..., :3] = (241, 220, 156)                     # the Deco UI's highlight
+        glow[..., 3] = np.clip(a * 1.4, 0, 255).astype(np.uint8)
+        lit = Image.fromarray(glow)
+        lit.alpha_composite(logo, (10, 10))
+        strip.alpha_composite(lit, (100, 0))
+        base = out / "gfx/interface/factions/faction_logos"
+        base.mkdir(parents=True, exist_ok=True)
+        write_dds(base / f"valsora_{name}.dds", np.asarray(strip))
+        write_dds(base / f"valsora_{name}_miniature.dds", np.asarray(src.resize((32, 32), Image.LANCZOS)))
+        sprites += [f'\tspriteType = {{\n\t\tname = "GFX_faction_logo_valsora_{name}"\n\t\ttexturefile = '
+                    f'"gfx/interface/factions/faction_logos/valsora_{name}.dds"\n\t\tnoOfFrames = 2\n\t}}\n',
+                    f'\tspriteType = {{\n\t\tname = "GFX_faction_logo_valsora_{name}_miniature"\n\t\ttexturefile = '
+                    f'"gfx/interface/factions/faction_logos/valsora_{name}_miniature.dds"\n\t}}\n']
+    write("interface/valsora_factions.gfx", "spriteTypes = {\n" + "".join(sprites) + "}\n")
+
+
 def write_files(write, out, state_ids, state_vp):
     """Write every nation-specific file into the mod folder. state_ids: state name -> id;
     state_vp: state name -> its victory point province."""
     write("common/factions/templates/valsora_factions.txt", FACTION_TEMPLATES)
+    faction_logos(out, write)
     write("common/autonomous_states/valsora_protectorate.txt", PROTECTORATE)
     write("common/characters/AIS.txt", CHARACTERS)
     write("common/characters/ROU.txt", ROU_CHARACTERS)

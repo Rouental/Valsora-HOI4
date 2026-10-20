@@ -82,7 +82,11 @@ layer whose name it doesn't know.
   its nation beside it, as the base game's Sahara does) and **one province**, however big, like
   the base game's great deserts. Desert and jungle states get fewer, larger provinces (desert
   about 600 px, jungle 400), which frees borders for the rest of the map. Lines you draw on
-  Necessary States round the areas are states too, as in Usnistan. White (tundra) isn't read yet: say what tundra should be.
+  Necessary States round the areas are states too, as in Usnistan. **White** is tundra and **white with red
+  stripes** impassable tundra (from 20 October 2026, your answer: "Tundra will be marked as white. Any impassible
+  tundra will be marked with white and red"): the game's snowy plains (plains under permanent snow, the nearest it
+  has to tundra), provinces of about 600 px, and the striped one impassable as the red. Paint the white solid (not
+  the layer's background: a white background would make the whole map tundra).
   **A passable place inside an impassable area** (a city deep in the jungle, reached by one path; the author's idea
   for the Cultists, 2026-10-19): leave the city and the path unpainted on this layer (or paint them green, for
   ordinary jungle), and give them a state of their own with lines on Necessary States (the city and its path one

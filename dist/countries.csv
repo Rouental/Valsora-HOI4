@@ -2,7 +2,7 @@ tag,name,full,ideology,subideology,culture,leader,states,note
 ABL,Abalón,the Kingdom of Abalón,Monarchist,Absolute Monarchy,Spanish,José Antonio Linares,5,
 AGL,Anglost,the Kingdom of Anglost,Democratic,Constitutional Monarchy,English,Russell Collin,58,
 AIS,Merlovich,The Federation of Merlovich,Democratic,Liberalism,Australian,PLACEHOLDER,15,
-AMH,Almohavid,the Kingdom of Almohavid,Democratic,Constitutional Monarchy,Moroccan,Qasim Aamara,10,
+AMH,Almohavid,the Kingdom of Almohavid,Democratic,Constitutional Monarchy,Moroccan,Qasim Aamara,9,
 AOE,Alliance of the East,the Alliance of the East,Monarchist,Oligarchy,French,Louis Canrobert,0,no land at the start (releasable or civil war)
 ARC,Arcadia,the Republic of Arcadia,Democratic,Conservatism,Greek,Spyridion Papagos,17,puppet of Terreich und Preußen
 ARK,Arklen,the Arklen Free State,Democratic,Conservatism,Dutch,Sijmen Steen,1,
@@ -137,7 +137,7 @@ REC,Recaxa,the Republic of Recaxa,Democratic,Agrarianism,Latin American,Diana Zo
 RLA,HMMLA,Her Majesty's Most Loyal Army,Authoritarian,Strongman Rule,French,Serelle Cahun,0,no land at the start (releasable or civil war)
 RLT,Reliette,the Grand Duchy of Reliette,Monarchist,Feudalism,French,Félix Boué de Lapeyrère,0,no land at the start (releasable or civil war)
 RMD,Romanoddle,the Romanoddlian Federation,Democratic,Social Democracy,English,Max Cockburn,93,
-ROU,Rouental,The Sacred Principality of Rouental,Monarchist,Feudalism,French,Roland II Cahun,58,leads The Association of Reibonnaise States
+ROU,Rouental,The Sacred Principality of Rouental,Monarchist,Feudalism,French,Roland II Cahun,179,leads The Association of Reibonnaise States
 RST,Rastava,Rastava,Authoritarian,Revanchism,Portuguese,Caetano Amaral,13,
 RVR,Riverraine,the Grand Duchy of the Riverraine,Monarchist,Feudalism,French,Denis Bourbaki,0,no land at the start (releasable or civil war)
 RYB,Royabad,the Sultanate of Royabad,Monarchist,Absolute Monarchy,Persian,Omid Ahura,33,
@@ -146,13 +146,12 @@ SCZ,Sicilianzo,the Kingdom of Sicilianzo,Democratic,Constitutional Monarchy,Ital
 SDE,Sredneestvo,the Socialist Republic of Sredneestvo,Communist,Vanguardism,Russian,Vsevolod Agafonov,0,no land at the start (releasable or civil war)
 SEE,Holy See,the Kingdom of the Church,Theocratic,Hierocracy,Italian,Camillo Cadorna,1,
 SFE,Santa Fe,the Fifth Republic of Santa Fe,Communist,Party Centralism,Latin American,Lázaro Mejía,7,
-SGD,Sangrád,the Free City of Sangrád,Monarchist,Oligarchy,Serbian,Milan Stepanovic,0,no land at the start (releasable or civil war)
-SGN,Seigne,the County of the Seigne,Monarchist,,French,,1,in The Association of Reibonnaise States
+SGD,Visokagorod,the Free City of Visokagorod,Monarchist,Oligarchy,Serbian,Milan Stepanovic,0,no land at the start (releasable or civil war)
+SGN,Seigne,the County of the Seigne,Monarchist,Feudalism,French,Armand Delay,1,in The Association of Reibonnaise States
 SGT,Sangterre,the Duchy of Sangterre,Monarchist,Feudalism,French,Lucien Anthoine,0,no land at the start (releasable or civil war)
 SGV,Selgrave,the Duchy of Selgrave,Monarchist,Oligarchy,French,Pierre Boué de Lapeyrère,1,in The Association of Reibonnaise States
 SHN,Shinnokawa,the Empire of Shinnokawa,Monarchist,Absolute Monarchy,Japanese,Hyoe Yamamoto,1,
 SHO,Sho,the Kingdom of the Sho Dynasty,Monarchist,Oligarchy,Japanese,Kenkichi Yashiro,13,
-SIS,The Sisterhood,the Sisterhood,Theocratic,Holy Order,German,Theodor Weidhardt,0,no land at the start (releasable or civil war)
 SKL,Skillia,the Republic of Skillia,Communist,Agrarian Socialism,Greek,Militiadis Staikopoulos,4,
 SLA,Solaria,the Holy State of Solaria,Theocratic,Hierocracy,Italian,Fabrizio Sacchi,4,
 SLN,Soloriania,the Solorianois Confederacy,Democratic,Liberalism,French,Félicien Ropert,4,

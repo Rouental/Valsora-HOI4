@@ -44,7 +44,7 @@ import os
 import re
 import sys
 import zlib
-from collections import defaultdict
+from collections import Counter, defaultdict
 from heapq import heappop, heappush
 from pathlib import Path
 
@@ -746,6 +746,68 @@ def new_tag(name, taken):
     raise SystemExit("no free tag left")
 
 
+def rekey(tag, n):
+    """A nation whose states were cut again from a map of its own (fief_states.py, 2026-10-20: Rouental's fiefs):
+    its page's facts still name the old states and provinces by pixels inside them, and one old state is now several.
+    source/gazetteer/rekey/<TAG>.npz holds the old and the new layout of the land; a state's facts (its keys merged in
+    page order) go to the new states lying on it: its population shared out by area, its other facts (category ...)
+    to the new state lying most on it, its name dropped (the new states take their fiefs' names); a province's to the
+    new provinces lying mostly on it. A key the page wrote since (a pixel of a new state or province, inside a new
+    place no old fact reaches) stays as it is. Delete the file once the nation's page has been saved with the new
+    states."""
+    f = DIR / "rekey" / f"{tag}.npz"
+    if not f.exists():
+        return n
+    z = np.load(f)
+    X0, Y0, X1, Y1 = (int(v) for v in z["box"])
+    oS, oP, u, p = z["old_states"], z["old_provinces"], z["states"], z["provinces"]
+    skey = dict(zip(z["state_ids"].tolist(), z["state_keys"].tolist()))
+    pkey = dict(zip(z["province_ids"].tolist(), z["province_keys"].tolist()))
+
+    def inside(k):
+        x, y = xy(k)
+        return X0 <= x < X1 and Y0 <= y < Y1 and u[y - Y0, x - X0] > 0
+
+    def group(facts, old):
+        """old place colour -> its facts, keys merged as strings sort; the rest of the keys as they are"""
+        by, rest = defaultdict(dict), {}
+        for k in sorted(facts or {}):
+            if inside(k):
+                x, y = xy(k)
+                by[int(old[y - Y0, x - X0])] = merge_facts(by[int(old[y - Y0, x - X0])], facts[k])
+            else:
+                rest[k] = facts[k]
+        return by, rest
+
+    if n.get("states"):
+        by, out = group(n["states"], oS)
+        for c, v in by.items():
+            m = oS == c
+            ids, cnt = np.unique(u[m & (u > 0)], return_counts=True)
+            if not len(ids):
+                continue
+            main = int(ids[np.argmax(cnt)])
+            for s, a in zip(ids.tolist(), cnt.tolist()):
+                k = skey[s]
+                g = dict(out.get(k, {}))
+                if "pop" in v:
+                    g["pop"] = g.get("pop", 0) + int(round(v["pop"] * a / cnt.sum()))
+                if s == main:
+                    g.update({kk: vv for kk, vv in v.items() if kk not in ("pop", "name")})
+                if g:
+                    out[k] = g
+        n["states"] = out
+    if n.get("provinces"):
+        by, out = group(n["provinces"], oP)
+        for q in z["province_ids"].tolist():
+            m = p == q
+            c = Counter(oP[m].tolist()).most_common(1)[0][0]
+            if c in by and pkey[q] not in out:
+                out[pkey[q]] = by[c]
+        n["provinces"] = out
+    return n
+
+
 def import_nations(nations, planned=None, sources=(), unlock=None):
     """{tag: {"facts", "meta", "requests", "images"}} (and the owner's nations not on the
     map yet, and their switches of the map tools) -> source/gazetteer/; then the new flags
@@ -764,7 +826,7 @@ def import_nations(nations, planned=None, sources=(), unlock=None):
         facts = with_pictures(v.get("facts") or {}, v.get("images") or {}, missing)
         if missing:
             print(f"{tag}: {len(missing)} pictures are not in the file; left out")
-        n = normalise(tag, facts, v.get("meta") or {}, v.get("requests") or (), sources, todo)
+        n = rekey(tag, normalise(tag, facts, v.get("meta") or {}, v.get("requests") or (), sources, todo))
         if opened is not None and opened.get(tag) is False:
             dropped = [k for k in MAP_KINDS if n.pop(k, None) is not None]
             dropped += [f"the {k} of {r.get('name') or r['id']}" for r in n.get("releasables", [])

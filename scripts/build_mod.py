@@ -395,7 +395,7 @@ def main():
     # the author's state names, by a pixel inside the state (state ids shift); numbered
     # for them by scripts/state_map.py
     names_file = Path("source/state_names.json")
-    named = {}
+    named, by_key = {}, {}
     for key, nm in (json.loads(names_file.read_text(encoding="utf-8")) if names_file.exists() else {}).items():
         x, y = map(int, key.split(","))
         s = int(state_of[lab[y, x]])
@@ -405,7 +405,11 @@ def main():
             raise SystemExit(f"source/state_names.json: {named[s]} and {nm} name the same state")
         named[s] = nm
         state_name[s] = nm
+        by_key[key] = s
     by_old_name = {nm: s for s, nm in named.items()}  # nations.py's references keep working after a rename
+    # nations.py's lists may name a state by its key in state_names.json ("x,y"): two states of one name (Rouental's
+    # two Vedettes, 2026-10-20)
+    by_old_name = {**by_key, **by_old_name}
     for s, f in gfacts.items():
         if f.get("name"):
             named[s] = state_name[s] = f["name"]

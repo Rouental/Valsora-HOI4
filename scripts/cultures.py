@@ -286,7 +286,7 @@ TAG_CULTURE = {
        for t in ("LEV", "UTP")},  # Hobbes's Leviathan, More's Utopia
     **{t: _FRENCH for t in ("LVN", "SLN")},  # crusaders; "Solorianois"
     **{t: dict(names="GER", portraits="europe", gfx="western_european")
-       for t in ("HZB", "SNH", "SIS")},  # Hohenzburg like Kampf, its overlord; the Sisterhood as Sennheiser (2026-10-19)
+       for t in ("HZB", "SNH")},  # Hohenzburg like Kampf, its overlord
     # the Arklen Free State after the Orange Free State; Felter, an island republic
     **{t: dict(names="HOL", portraits="europe", gfx="western_european") for t in ("ARK", "FLT")},
     # New Paradise, Nuevo Paraíso until 2026-10-13 and now Anglost's dominion: English like it

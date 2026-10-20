@@ -1,5 +1,9 @@
 # Rouental's fiefs on the game's states
 
+**Since 2026-10-20 the states are the fiefs** (`scripts/fief_states.py`, `docs/DECISIONS.md`): 178 states from the
+fief map, each fief of 30 game px or more its own. What follows, and `source/rouental_fiefs_by_state.json`, describe
+the 58 states before, as overlaid on 2026-10-02.
+
 Made 2026-10-02 by overlaying the author's fief map (`Rouental_Map_TEMP_2.pdn`) on the game's
 states (`dist/rouental_fiefs_overlay.png`). Each fief label was read, matched to
 `source/names/rouental_fiefs.txt` and placed in the state under most of its area. The data is

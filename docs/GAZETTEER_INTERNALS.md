@@ -26,6 +26,13 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   "pages build and deployment" run in Actions; github.io itself can't be reached from
   Claude's sandbox). Test the page first: `python3 tests/gazetteer/run.py`, `traits.py`, `companies.py`, `ingame.py`,
   `reset.py`, `guide.py` and `stale.py`.
+- **Facts of states cut again from a nation's own map** (2026-10-20, Rouental's fiefs: `fief_states.py`): one old
+  state became several, and its facts (Carcarelle's population) would land whole on the one new state holding its key.
+  `gazetteer.rekey(tag, n)`, called by the import (and run once on `source/gazetteer/ROU.json`), reads the old and new
+  layout from `source/gazetteer/rekey/<TAG>.npz`: an old state's facts (its keys merged as strings sort) go to the new
+  states on it, the population shared by area, the rest to the state lying most on it, the name dropped; an old
+  province's to the new provinces lying mostly on it. Keys the page writes since (the new places' own) stay and win.
+  Delete the file once Rouental's page has been saved over the new states.
 - **Keys left from before a cut** (2026-10-19, the author's recording: painting one province changed others): a
   state's or province's facts are kept under a pixel key, so once the map is cut again one place can hold several keys.
   The page (`resolve`) and the build (`gazetteer.page_order`) read them in one order, by key with the place's own key

@@ -114,12 +114,14 @@ def owner(b, url, size):
     check(rel is not None, f"{label}: Carcarelle's new name wasn't saved")
     # a state of Rouental's own goes to Carcarelle: its whole land is saved, and the state leaves the releasable that had it
     before = page.evaluate("app.N.relSets.get('g-CRL').size")
-    target = page.evaluate("""() => { const N = app.N, own = N.relSets.get('g-CRL');
-        const other = [...N.relSets.get('g-GHS')][0]; return other; }""")
+    # a releasable of the game's with one state (Ghessone until 2026-10-20, when Rouental's fiefs gave it five)
+    one = page.evaluate("""() => app.N.relList.find(r => r.game && r.game.kind === 'releasable' && r.id !== 'g-CRL'
+        && (app.N.relSets.get(r.id) || new Set()).size === 1).id""")
+    target = page.evaluate("""id => [...app.N.relSets.get(id)][0]""", one)
     page.evaluate("s => { app.ui.relMode = 'add'; selectRel('g-CRL'); paintRel(app.N.states[s].provs[0]); }", target)
     rel = wait_doc(page, f"{base}/releasables", lambda v: (v.get("g-CRL") or {}).get("states") and len([k for k, on in v["g-CRL"]["states"].items() if on]) == before + 1)
     check(rel is not None, f"{label}: Carcarelle's new land wasn't saved as its whole list of states")
-    check(page.evaluate("app.N.relSets.get('g-GHS').size") == 1, f"{label}: Ghessone, whose only state it was, lost it")
+    check(page.evaluate("id => app.N.relSets.get(id).size", one) == 1, f"{label}: {one}, whose only state it was, lost it")
     # Brillagne's ruler is Mahaut: changed on the People tab
     brl = page.inner_text("#pane-release .relcard:has(#rl-name-g-BRL)")
     check("Mahaut VI" in brl and "People tab" in brl, f"{label}: Brillagne's ruler: {brl[-300:]}")

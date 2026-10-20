@@ -711,3 +711,28 @@ borders "redone almost entirely").
   41 of them a single fief, the others 2 to 13; the crownlands 6 states of their own). Rouental today: 58 states, 129
   provinces. The fief lines would be read from the file itself, the game map keeping Rouental's outline; merged
   fiefs' names as victory points.
+
+## 2026-10-20, later: the go-ahead (Rouental's fiefs, the Sisterhood, Visokagorod, the Association's logo)
+
+The author: "go ahead with the rest of it, and all the other changes I had been holding back until now".
+- **Rouental's states are its fiefs** ("Let's go with the 30 pixel version for the test. Add it to the mod, and please
+  update the pdn as well"): 178 states and 224 provinces (`fief_states.py --min 30 --keep "660,805=Rêverie"`), each
+  named after its largest fief as the fief map writes it (`source/fief_names_ROU.json`, read by Claude off the
+  PROVINCE Names layer: Verdoyantres, not the old state's Verdoyantes; two fiefs are called Vedette); Rêverie, the city
+  state the author drew for the capital, kept as it was. The 9 crownland fiefs make 6 states of their own. The
+  releasables (13) and the civil war's risers (7) keep the land they had: each list takes the new states lying on its
+  old states, the first its old capital's, and the fiefs it named go with it (Kové and Temerre to Kové, Callentroix to
+  Riverraine, Rolantelle to the Marcher Lords: the old states' names lay off their fiefs, `docs/PROBLEM_LOG.md`). The
+  Alliance of the East's land going to Selgrave in the civil war is Moelle and its two fiefs (Petit Selgrave, Sérieux).
+  The Gazetteer's facts of the old states shared out over the new (Carcarelle's population by area); James Navy (a
+  test) out of Rouental's characters.
+- **The Sisterhood** (SIS, Sennheiser's releasable of 2026-10-19) removed, its Subregions patch and Subnames label too
+  (author: "Please remove the Sisterhood from the map and files").
+- **Sangrád is Visokagorod** (author: "Rename Sangrad to Visokagorod"), SGD still, "the Free City of Visokagorod",
+  Visokagorodian (Claude's guess); it and the three ports stay releasable (author).
+- **Port Almohavid's flag** the motto flag's Kufi in gold (author: "Let's go Kufi in gold"; it flew the Ruq'ah in
+  white).
+- **The Association of Reibonnaise States' logo** is the author's own (a roundel, red and blue halves, a gold anchor and
+  lozenges, a gilt rim: "I'm not a fan of any of them, I'm attaching my own logo"), `source/factions/
+  reibonnaise_association.png`, in the game as the faction's logo and miniature (`nations.faction_logos`).
+- Claude's guesses for the eleven nations of 2026-10-19 kept (author: "That's good for now").

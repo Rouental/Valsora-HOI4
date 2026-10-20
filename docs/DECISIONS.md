@@ -195,6 +195,12 @@ Moved out of `CLAUDE.md` word for word on 2026-10-17 (`CLAUDE.md` keeps one line
       that comes later doesn't change the colour unless the author asks.
     - Flags in another shape are fitted to 82:52 without stretching (Flags, under Nation content).
   - The adjectives of the neighbours are guesses; the author may rename them.
+- **Rouental's states are its fiefs** (author, 2026-10-20: "Let's go with the 30 pixel version for the test. Add it to
+  the mod, and please update the pdn as well"): the author's fief map (`source/Rouental Fiefs.pdn`) read onto the game
+  map by `fief_states.py`, a state for every fief of 30 game px or more, the smaller merged into a neighbour,
+  crownland only with crownland (the red Fief Markers: "the areas currently under the direct control of the Sacred
+  Prince") and within the governorate; the states' lines on Necessary States for the author to edit. The lore of the
+  crownlands and governorates is in `docs/NATIONS.md` (2026-10-20).
 - **State names** are the author's, in `source/state_names.json` ("x,y" of a pixel
   inside the state → name, since ids shift; `build_mod.py` stops if a pixel is in no
   state or two name one state). Unnamed states are "Country N". First set (2026-10-01):

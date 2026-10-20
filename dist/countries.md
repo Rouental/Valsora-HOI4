@@ -1,6 +1,6 @@
 # Valsora: every country
 
-205 countries, 161 owning land at the start. Read from the built mod; regenerate with `python3 scripts/country_list.py`.
+204 countries, 161 owning land at the start. Read from the built mod; regenerate with `python3 scripts/country_list.py`.
 
 | Tag | Name | Full name | Ideology | Sub-ideology | Culture | Leader | States | Notes |
 |---|---|---|---|---|---|---|---|---|
@@ -8,7 +8,7 @@
 | KHB | Al-Khabid | the Kingdom of Al-Khabid | Monarchist | Oligarchy | Arabic (Saudi) | Uthman ibn Hisham | 5 |  |
 | RDY | Al-Radiyaa | the Republic of Al-Radiyaa | Democratic | Conservatism | Arabic (Kuwaiti) | Amani Ahmed | 4 |  |
 | AOE | Alliance of the East | the Alliance of the East | Monarchist | Oligarchy | French | Louis Canrobert | 0 | no land at the start (releasable or civil war) |
-| AMH | Almohavid | the Kingdom of Almohavid | Democratic | Constitutional Monarchy | Moroccan | Qasim Aamara | 10 |  |
+| AMH | Almohavid | the Kingdom of Almohavid | Democratic | Constitutional Monarchy | Moroccan | Qasim Aamara | 9 |  |
 | AGL | Anglost | the Kingdom of Anglost | Democratic | Constitutional Monarchy | English | Russell Collin | 58 |  |
 | ARC | Arcadia | the Republic of Arcadia | Democratic | Conservatism | Greek | Spyridion Papagos | 17 | puppet of Terreich und Preußen |
 | ARK | Arklen | the Arklen Free State | Democratic | Conservatism | Dutch | Sijmen Steen | 1 |  |
@@ -140,20 +140,19 @@
 | ILR | Republican Illiricium | the Senatorial Republic of Illiricium | Authoritarian | Bleacherism | Italian | Ema Milize | 18 |  |
 | RVR | Riverraine | the Grand Duchy of the Riverraine | Monarchist | Feudalism | French | Denis Bourbaki | 0 | no land at the start (releasable or civil war) |
 | RMD | Romanoddle | the Romanoddlian Federation | Democratic | Social Democracy | English | Max Cockburn | 93 |  |
-| ROU | Rouental | The Sacred Principality of Rouental | Monarchist | Feudalism | French | Roland II Cahun | 58 | leads The Association of Reibonnaise States |
+| ROU | Rouental | The Sacred Principality of Rouental | Monarchist | Feudalism | French | Roland II Cahun | 179 | leads The Association of Reibonnaise States |
 | RYB | Royabad | the Sultanate of Royabad | Monarchist | Absolute Monarchy | Persian | Omid Ahura | 33 |  |
 | KIL | Royalist Illiricium | the Kingdom of Illiricium | Monarchist | Legitimism | Italian | Beatrice di Alqiro | 2 |  |
 | RYS | Ryśny | the United Voivodes of Ryśny | Democratic | Agrarianism | Polish | Marcin Kozłowski | 8 |  |
 | SSA | San Sierra | the People's Republic of San Sierra | Communist | Council Communism | Spanish | Emilio Díaz | 48 |  |
 | SNA | Sanada | the United Sanadan Clans | Monarchist | Khanate | Buryat | Bulgan Barannikov | 84 |  |
-| SGD | Sangrád | the Free City of Sangrád | Monarchist | Oligarchy | Serbian | Milan Stepanovic | 0 | no land at the start (releasable or civil war) |
 | SGT | Sangterre | the Duchy of Sangterre | Monarchist | Feudalism | French | Lucien Anthoine | 0 | no land at the start (releasable or civil war) |
 | SFE | Santa Fe | the Fifth Republic of Santa Fe | Communist | Party Centralism | Latin American | Lázaro Mejía | 7 |  |
 | SRK | Sarkis | the People's State of Sarkis | Communist | Vanguardism | Armenian | Vahe Babaian | 201 |  |
 | SRZ | Sarza | the Empire of Sarza | Monarchist | Absolute Monarchy | Persian | Ardashir Khorram-din | 33 |  |
 | HWT | Scealand | the Republik of Scealand | Communist | Orthodox Marxism | German | Ralph Kleiber | 6 | in The Synthesist Internationale |
 | STM | Schteirmark | the Duchy of Schteirmark | Monarchist | Feudalism | German | Werner Winkler | 4 | puppet of Terreich und Preußen |
-| SGN | Seigne | the County of the Seigne | Monarchist |  | French |  | 1 | in The Association of Reibonnaise States |
+| SGN | Seigne | the County of the Seigne | Monarchist | Feudalism | French | Armand Delay | 1 | in The Association of Reibonnaise States |
 | SGV | Selgrave | the Duchy of Selgrave | Monarchist | Oligarchy | French | Pierre Boué de Lapeyrère | 1 | in The Association of Reibonnaise States |
 | STO | Selto | the Empire of Selto-Hamborn | Monarchist | Absolute Monarchy | English | Jeremy Collin | 4 |  |
 | SNH | Sennheiser | the Sennheiser Union | Democratic | Constitutional Monarchy | German | Erich Nazarenus | 16 |  |
@@ -184,7 +183,6 @@
 | TEX | Texaria | the Republic of Texaria | Democratic | Liberalism | Russian | Iyun' Savon | 5 |  |
 | FTH | The Faithful | the Faithful Children of the Goddess and Her Saint | Theocratic | Holy Order | French | Jean Gouraud | 0 | no land at the start (releasable or civil war) |
 | MRC | The Marches | the Alliance of the Marcher Lords | Monarchist | Oligarchy | French | Louis Forey | 0 | no land at the start (releasable or civil war) |
-| SIS | The Sisterhood | the Sisterhood | Theocratic | Holy Order | German | Theodor Weidhardt | 0 | no land at the start (releasable or civil war) |
 | THD | Thorian Dynamics | Thorian Dynamics | Authoritarian | Megacorporation | American | Hamilton Pickett | 5 |  |
 | TCN | Transcainia | the Kingdom of Transcainia | Monarchist | Oligarchy | German | Peter Eisele | 7 |  |
 | TRC | Troc | the Democratic Republic of Troc | Democratic | Liberalism | English | Colbert Dundas | 15 |  |
@@ -195,6 +193,7 @@
 | VAI | Vair | the Duchy of Vair | Monarchist | Feudalism | French | François Dubail | 0 | no land at the start (releasable or civil war) |
 | VIL | Vilna | the Free Republic of Vilna | Democratic | Conservatism | Jewish (Israeli names) | Yaakov Reuben | 2 |  |
 | VNT | Vineta | the People's Rule Over Vineta | Communist | Party Centralism | Welsh | Rhys Moss | 7 |  |
+| SGD | Visokagorod | the Free City of Visokagorod | Monarchist | Oligarchy | Serbian | Milan Stepanovic | 0 | no land at the start (releasable or civil war) |
 | VLN | Volinovia | the Kingdom of Volinovia | Monarchist | Enlightened Absolutism | Portuguese | Fernando Pinto | 16 |  |
 | VSK | Volstokn | the Tsaral Realm of Volstokn | Monarchist | Enlightened Absolutism | Finnish | Petri Mäkinen | 62 |  |
 | PLH | Vultuca | the United Kingdom of Vultuca | Democratic | Constitutional Monarchy | Portuguese | Abel Ivens | 26 |  |

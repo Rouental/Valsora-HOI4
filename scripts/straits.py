@@ -5,6 +5,10 @@ across as in the base game (map/adjacencies.csv, type "sea"). 2026-10-17, the au
     python3 scripts/straits.py find             after a build: dist/straits_proposed.json and dist/straits_map.png
                                                 (the whole map at full size, each crossing ringed in the colour of
                                                 its width and numbered); the mod does not change
+    python3 scripts/straits.py map --min-gap PX [--out FILE]
+                                                the proposal's crossings wider than PX px of sea alone, on today's
+                                                build (2026-10-20, the author: "Could you provide a map with just the
+                                                red ones?": --min-gap 15, dist/straits_map_red.png)
     python3 scripts/straits.py approve [--max-gap PX] [--drop N,N,...] [--add N,N,...]
                                                 the proposal's crossings up to PX px of sea (default DEFAULT_GAP),
                                                 less --drop, plus --add (wider ones), into source/straits.json, which
@@ -184,7 +188,7 @@ def find():
     print(f"wrote {PROPOSAL} and {MAP}")
 
 
-def draw(out, prov, kind, pk, j):
+def draw(out, prov, kind, pk, j, path=MAP, title="Proposed strait crossings (scripts/straits.py), by width of sea"):
     from PIL import Image, ImageDraw, ImageFont
     sys.path.insert(0, "scripts")
     from common import COUNTRIES
@@ -240,14 +244,14 @@ def draw(out, prov, kind, pk, j):
     # the key
     x, y = 20, 20
     d.rectangle([x - 8, y - 8, x + 420, y + 24 * len(TIERS) + 30], fill=(16, 24, 34))
-    d.text((x, y), "Proposed strait crossings (scripts/straits.py), by width of sea", font=font, fill=(255, 255, 255))
+    d.text((x, y), title, font=font, fill=(255, 255, 255))
     lo = 0
     for i, (t, col) in enumerate(TIERS):
         n = sum(lo < e["gap"] <= t for e in out)
         d.ellipse([x, y + 26 + 24 * i, x + 14, y + 40 + 24 * i], outline=col, width=3)
         d.text((x + 24, y + 26 + 24 * i), f"{lo}-{t} px: {n}", font=font, fill=(255, 255, 255))
         lo = t
-    im.save(MAP, optimize=True)
+    im.save(path, optimize=True)
 
 
 def approve(args):
@@ -290,6 +294,15 @@ if __name__ == "__main__":
     cmd = sys.argv[1] if len(sys.argv) > 1 else ""
     if cmd == "find":
         find()
+    elif cmd == "map":
+        a = sys.argv[2:]
+        lo = float(a[a.index("--min-gap") + 1]) if "--min-gap" in a else 0
+        path = Path(a[a.index("--out") + 1]) if "--out" in a else Path(f"dist/straits_map_over_{int(lo)}px.png")
+        cr = [e for e in json.loads(PROPOSAL.read_text(encoding="utf-8"))["crossings"] if e["gap"] > lo]
+        prov, kind, state_of, j = load()
+        pk = np.asarray(kind)[prov]
+        draw(cr, prov, kind, pk, j, path, f"Strait crossings wider than {lo:g} px of sea (their numbers in {PROPOSAL})")
+        print(f"{len(cr)} crossings over {lo:g} px -> {path}")
     elif cmd == "approve":
         approve(sys.argv[2:])
     else:

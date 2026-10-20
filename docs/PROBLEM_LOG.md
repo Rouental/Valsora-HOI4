@@ -6,6 +6,15 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**The Royal Host lost its experience as the game began** (2026-10-19, the author: "There is enough manpower that they
+are already instantly refilled at the beginning of the game, but that lowers their experience right off the bat")
+- Cause: a division of the history's order of battle takes its men from the country's pool, whatever its
+  `start_manpower_factor` (2026-10-04), and the generic armies' extra manpower went on 2026-10-16 at the author's word:
+  the Host formed short of men, the game refilled it at once, and new men dilute experience.
+- Fix: Rouental's history gives the pool exactly the Host's own men (`nations.ROU_HOST_MEN`, 102,000 from the game's
+  units' manpower) just before `set_oob`, so it forms full and the pool after is what it would have been. Not seen in
+  game yet; if the game still refills it, the fallback is to give the experience back after the refill.
+
 **Very small provinces left beside Rosenburg and Terreichstadt** (2026-10-19, night, the author: "The only error was
 cutting out Rosenburg and Terreichstadt leading to very small leftover provinces. I've already fixed that though")
 - Cause: applying Terreich's Gazetteer suggestions (`apply_suggestions.py`, 2026-10-18) cut the two cities out of the
@@ -849,6 +858,27 @@ screenshot and `error.log`)
 - Fix: no trailing newline.
 
 ## Map problems found while building
+
+**Rouental's fief map at the game's scale: stray one-pixel provinces, two Vedettes, names on the wrong land**
+(2026-10-20, `fief_states.py` on `source/Rouental Fiefs.pdn`)
+- Stray provinces: a fief at 1/26 of its drawn size can touch itself only at corners; such pieces of a state became
+  provinces of 1 or 2 px (15 under 16 px in the first plan). Fix: `fief_states.tidy` gives every stray piece of a state
+  to the neighbouring state it shares most border with (an island stays its own), then merges again any state that
+  fell under the minimum: no province under 30 px.
+- Two fiefs are named Vedette (north by Coffrefort, south by Lyrié et Rivielle): nations.py's lists name states, and
+  one name can only find one. Fix: a list may name a state by its key in `source/state_names.json` ("752,780",
+  `build_mod.by_key`); the two Vedettes are named so in the civil war's lists.
+- The old states' names lay off their fiefs: the state the author's Gazetteer page called Callentroix was mostly the
+  fief Rolantelle and the reverse, and the fiefs Kové and Temerre lay in the old state of Lyrié et Rivielle. Carried
+  over by land alone, Kové's releasable would have held neither Kové nor Temerre. Fix: each list takes the new states
+  lying on its old states, and a fief a list named goes to that list (Kové and Temerre to Kové, Callentroix to
+  Riverraine, Rolantelle to the Marcher Lords).
+- The Gazetteer's facts named the old states by pixels inside them: one old state's population (Carcarelle's 3.96
+  million) would have gone to whichever small new state held its key. Fix: `gazetteer.rekey` shares each old state's
+  population out by area (others to the state lying most on it, names dropped) and gives each new province its old
+  province's terrain; the import does it too while `source/gazetteer/rekey/ROU.npz` is there.
+- The Gazetteer's test of the game's releasables (`tests/gazetteer/ingame.py`) took Ghessone as a releasable of one
+  state; it has five now. It picks any releasable of one state.
 
 **Sangrád's own state broke a province into 14 pieces** (2026-10-19, the build: "Province colour (100,97,239) is in 14
 separate pieces", then "A province has only 3 pixels")

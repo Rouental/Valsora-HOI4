@@ -291,18 +291,18 @@ COUNTRIES = {
     "crvenognjiste": ("CRV", "Crvenognjište", "Crvenognjištan", (10, 120, 110)),  # flag teal, lighter: Krionik's green
     "mylostrva": ("MYL", "Mylostrva", "Mylostrvan", (215, 170, 25)),          # flag gold: its navy is Sennheiser's blue
     # 2026-10-19, the author's Subregions and Subnames (names theirs; tags, adjectives and colours Claude's guesses, the
-    # colours from the paint, softened): Krionik's other realms, the city of Sangrád, its three overseas ports, and
-    # Sennheiser's Sisterhood
+    # colours from the paint, softened): Krionik's other realms, the city of Sangrád, its three overseas ports
+    # (Sennheiser's Sisterhood, of the same day, removed 2026-10-20: the author)
     "belska": ("BLS", "Belska", "Belskan", (212, 212, 202)),
     "koroletz": ("KRZ", "Koroletz", "Koroletzian", (78, 78, 82)),
     "targoviste": ("TGV", "Targoviste", "Targovistean", (44, 134, 214)),
     "kosavichy": ("KSV", "Kosavichy", "Kosavichian", (62, 182, 188)),
     "lagrad": ("LGR", "Lagrád", "Lagrádian", (226, 204, 122)),
-    "sangrad": ("SGD", "Sangrád", "Sangrádian", (84, 44, 192)),
+    # Visokagorod, Sangrád until 2026-10-20 (author: "Rename Sangrad to Visokagorod"); its adjective Claude's guess
+    "visokagorod": ("SGD", "Visokagorod", "Visokagorodian", (84, 44, 192)),
     "port_nyasha": ("PNY", "Port Nyasha", "Nyashan", (198, 42, 104)),
     "port_vostok": ("PVS", "Port Vostok", "Vostokian", (196, 198, 214)),
     "port_grazda": ("PGZ", "Port Grazda", "Grazdan", (222, 186, 44)),
-    "sisterhood": ("SIS", "The Sisterhood", "Sisterhood", (94, 168, 172)),
     # 2026-10-19 (the author: "Xugang should start out as a vassal of Terreich"): Terreich's exclave on the eastern
     # continent, its own nation, Terreich's puppet; adjective and colour Claude's guesses (Terreich's slate, lighter)
     "xugang": ("XUG", "Xugang", "Xugangese", (118, 96, 150)),
