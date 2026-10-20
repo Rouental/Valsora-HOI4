@@ -687,3 +687,27 @@ Kosavichy were painted over part of it) had given it 17 of their states too; a s
 Subregions layer is now that nation's alone (`build_mod.py`), so Crvenognjište holds 33, each realm only its own.
 Almohavid (the author: "Almohavid 2 & 3 are combined, and Almohavid 10 is just desert rather than impassible desert"):
 its 2 and 3 one impassable state, its 10 (now named Almohavid 9) passable desert.
+
+## 2026-10-20: Rouental's fief map (a trial, not in the mod)
+
+The author sent `Rouental_Map_TEMP_2.pdn` (8000 x 4471, 28 layers: PROVINCE Colors / Borders / Names are the fiefs,
+Fief Markers the crownlands, Rough Governorates and Governorate Lines / Names the governorates, with Cities, Rivers,
+Mountains, Cultures, River Basins, Conquests and a Flag Map; "Map Example" is a style reference) and asked how it would
+split into states for the most granularity. Not applied: the author's new main map comes first (Rouental's internal
+borders "redone almost entirely").
+- **The lore** (author, 2026-10-20): the red Fief Markers are **crownlands**, "the areas currently under the direct
+  control of the Sacred Prince rather than a vassal, or ceded out to a family member as an appanage". The
+  **governorates** "were a failed attempt at centralization": appointed governors became "mostly powerless
+  figureheads while the regional parliaments took control and ended up as just another barrier against the Prince's
+  authority", except **Couronneterre**, "a group of vassals extremely loyal to and under the direct control of the
+  Prince" (the central governorate).
+- **The fit**: the file's Rouental is the game's at 25.84 file px to a game px (game x = 574.3 + file x / 25.84, game
+  y = 746.3 + file y / 25.84; 93 % overlap with the game's outline). Its 404 fiefs average ~50 game px, half under 17,
+  191 under a province's 16 px minimum; 9 are crownlands (1,182 game px), 37 lie in Couronneterre, 25 rough
+  governorate areas in all.
+- **The trial** (each fief a state, a smaller one merged into the neighbour it shares the most border with, crownland
+  only with crownland, within its governorate; provinces of ~140 px inside; borders counted on today's map): states of
+  at least 16 px, 225 states and 270 provinces (+440 borders); 30 px, 176 and 222 (+297); 50 px, 137 and 186 (+188;
+  41 of them a single fief, the others 2 to 13; the crownlands 6 states of their own). Rouental today: 58 states, 129
+  provinces. The fief lines would be read from the file itself, the game map keeping Rouental's outline; merged
+  fiefs' names as victory points.
