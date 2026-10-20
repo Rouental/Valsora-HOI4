@@ -76,3 +76,47 @@ def split(ys, xs, seeds, seed=0):
         lab[miss] = lab[idx[0][miss], idx[1][miss]]
     lab = _connected(lab, mask)
     return lab[ys - y0, xs - x0] - 1
+
+
+def along(ys, xs, k, seed=0):
+    """k organic pieces one after another along the area's length (2026-10-20: k-means seeds cut a long or bent state
+    lengthwise, or left one piece wrapped round another, as Mekele's, the author: "Mekele's provinces are cut weird").
+    The seeds sit on the area's spine: the farthest pixel from any pixel is one end, and the seeds are the pixels at
+    1/2k, 3/2k ... of the way from it (by area, measured through the area), each the one deepest inside at its distance;
+    the pieces grow from them as split's do. Returns a piece number (0-based) per pixel; every piece is 4-connected."""
+    if k <= 1:
+        return np.zeros(len(ys), int)
+    y0, x0 = ys.min(), xs.min()
+    h, w = ys.max() - y0 + 1, xs.max() - x0 + 1
+    mask = np.zeros((h, w), bool)
+    mask[ys - y0, xs - x0] = True
+
+    def walk(sy, sx):
+        """distance through the area (4-neighbour steps) from (sy, sx), -1 outside"""
+        d = np.full((h, w), -1, np.int32)
+        d[sy, sx] = 0
+        front = [(sy, sx)]
+        step = 0
+        while front:
+            step += 1
+            nxt = []
+            for y, x in front:
+                for yy, xx in ((y + 1, x), (y - 1, x), (y, x + 1), (y, x - 1)):
+                    if 0 <= yy < h and 0 <= xx < w and mask[yy, xx] and d[yy, xx] < 0:
+                        d[yy, xx] = step
+                        nxt.append((yy, xx))
+            front = nxt
+        return d
+
+    d0 = walk(ys[0] - y0, xs[0] - x0)
+    ey, ex = np.unravel_index(np.argmax(d0), d0.shape)
+    d = walk(ey, ex)
+    depth = ndi.distance_transform_edt(mask)
+    order = np.sort(d[mask])
+    seeds = []
+    for j in range(k):
+        target = order[min(len(order) - 1, int((j + .5) / k * len(order)))]
+        near = mask & (np.abs(d - target) <= 1)
+        cy, cx = np.unravel_index(np.argmax(np.where(near, depth, -1)), near.shape)
+        seeds.append((cy + y0, cx + x0))
+    return split(ys, xs, seeds, seed)

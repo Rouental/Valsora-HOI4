@@ -66,10 +66,13 @@
         Islands stuck together: in the land masses holding TAG's land, the lobes the necks narrower than about
         2 x radius + 1 px join (lobes of min-lobe px or more) are cut apart by 2 px channels of sea. Without --apply it
         prints the necks and draws work/pdn_tools/necks.png, and saves nothing.
-    python3 scripts/pdn_tools.py areas
+    python3 scripts/pdn_tools.py areas [X,Y ...]
         The states mostly inside the author's marked areas (the "Impassible / Desert / Jungle / Tundra" layer,
         areas.py) cut again into fewer, larger provinces (areas.PROVINCE_PX: impassable one province a state, desert 600 px, jungle
         400), the rivers of the last build kept on province borders. Run river_provinces.py first after new rivers.
+        Each piece is the tidier of two cuts (`tidiest`). A state already as coarse is left as it is, unless a pixel
+        of it is given: those states are cut again all the same (2026-10-20: Mekele's, one province wrapped round the
+        other, the author: "Mekele's provinces are cut weird").
     python3 scripts/pdn_tools.py refine [--apply] [--borders N]
         More provinces, where they are fewest (the author, 2026-10-18: "I'd like a general increase of the province
         count. For example, Evriches should have at least 3 or 4 provinces ... still leave a buffer"): every nation
@@ -780,14 +783,40 @@ def marked_states(names, L, St, land):
     return out
 
 
-def areas_cut(names, L):
+def tidiest(ys, xs, k, seed=0):
+    """k organic pieces of the area (ys, xs), the tidier of two cuts: seeds where k-means puts them
+    (apply_outlines.organic_split) or one after another along the area's length (organic.along), whichever's least
+    compact piece is the more compact (perimeter² / area: a piece wrapped round another, or a ring, is far from
+    round). k-means alone could leave one piece wrapped round another (2026-10-20, Mekele's; the author: "Mekele's
+    provinces are cut weird")."""
+    import organic
+    from apply_outlines import organic_split
+    if k <= 1:
+        return np.zeros(len(ys), int)
+    g = np.full((ys.max() - ys.min() + 3, xs.max() - xs.min() + 3), -1)
+    best = None
+    for parts in (organic_split(ys, xs, k, seed=seed), organic.along(ys, xs, k, seed=seed)):
+        g[ys - ys.min() + 1, xs - xs.min() + 1] = parts
+        per = Counter()
+        for a, b in ((g[:, 1:], g[:, :-1]), (g[1:], g[:-1])):
+            d = a != b
+            per.update(a[d & (a >= 0)].tolist())
+            per.update(b[d & (b >= 0)].tolist())
+        area = Counter(parts.tolist())
+        worst = max(per[q] ** 2 / area[q] for q in area)
+        if best is None or worst < best[0]:
+            best = (worst, parts)
+    return best[1]
+
+
+def areas_cut(names, L, again=()):
     """The states mostly inside the author's marked areas (areas.py: impassable, desert, jungle) cut again into
     provinces of about areas.PROVINCE_PX of their kind, fewer and larger, the rivers the last build drew kept on
     province borders (each bank cut on its own, the river pixels joining the province beside them, as
     river_provinces.py does). States with the author's own province lines are left as they are; states, countries and
-    regions don't change. Refine leaves these states as sparse as they are."""
+    regions don't change. Refine leaves these states as sparse as they are. A state already as coarse is left as it
+    is unless one of the pixels `again` lies in it."""
     import areas
-    from apply_outlines import organic_split
     from skimage.measure import label as sklabel
     t = L["Terrain"][..., :3]
     land = ~((t == OCEAN).all(-1) | (t == LAKES).all(-1))
@@ -801,7 +830,12 @@ def areas_cut(names, L):
     fresh = iter(palette(20000, False, 20261019, set(np.unique(P).tolist())))
     before = after = 0
     kinds = Counter()
-    for sc, (kind, share) in sorted(marked_states(names, L, St, land).items()):
+    marked = marked_states(names, L, St, land)
+    redo = {int(St[y, x]) for x, y in again}
+    for (x, y), sc in zip(again, [int(St[y, x]) for x, y in again]):
+        if sc not in marked:
+            raise SystemExit(f"areas: ({x}, {y}) is not in a state of the marked areas")
+    for sc, (kind, share) in sorted(marked.items()):
         if sc in locked:
             print(f"state {sc:06x}: the author's province lines are there; left as it is")
             continue
@@ -820,11 +854,11 @@ def areas_cut(names, L):
             by, bx = np.nonzero(banks == b)
             if len(by) >= MIN_PROVINCE:
                 plan.append((by, bx, max(1, round(len(by) / size)) if size else 1))
-        if not plan or sum(k for *_, k in plan) >= old:
+        if not plan or (sum(k for *_, k in plan) >= old and sc not in redo):
             continue  # no fewer provinces to be had
         out = np.zeros(m.shape, np.int64)
         for by, bx, k in plan:
-            parts = organic_split(by + y0, bx + x0, k, seed=int(sc) % 100003 + len(by))
+            parts = tidiest(by + y0, bx + x0, k, seed=int(sc) % 100003 + len(by))
             for q in np.unique(parts):
                 out[by[parts == q], bx[parts == q]] = next(fresh)
         miss = m & (out == 0)  # river pixels and scraps: the province beside them
@@ -1282,7 +1316,7 @@ def main():
         if not necks(names, L, sys.argv[2], opt("--radius", 5), opt("--min-lobe", 250), "--apply" in sys.argv):
             return
     elif cmd == "areas":
-        areas_cut(names, L)
+        areas_cut(names, L, [tuple(int(v) for v in a.split(",")) for a in sys.argv[2:]])
     elif cmd == "tidy":
         tidy(names, L)
     elif cmd == "refine":

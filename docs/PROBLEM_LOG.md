@@ -6,6 +6,18 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**Mekele's two provinces were cut oddly, one wrapped round the other** (2026-10-20, the author: "Another note: at
+least in the Gazeteer, Mekele's provinces are cut weird", with a Gazetteer screenshot of Mekele)
+- Cause: Mekele is one desert state of 1,368 px, so the cut that made the marked deserts' provinces larger
+  (`pdn_tools.py areas`, 2026-10-18) gave it two. That cut placed its pieces by k-means alone, and nothing checked the
+  shape of what came out: here a straight-edged piece of 311 px with the other, 1,057 px, bent round two of its sides.
+  A search of the whole map for a province bent round another of its own state found six more desert states, all of
+  them as tidy as any other cut of theirs; Mekele's was the one wrong.
+- Fix: the cut now tries two placements, k-means and pieces one after another along the area's length
+  (`organic.along`), and keeps the one whose least compact piece is rounder (`pdn_tools.tidiest`). `pdn_tools.py areas
+  X,Y` cuts a state of the areas again even when it is already coarse. Mekele 1 is to be cut so (the preview: two
+  provinces side by side, the river on the coast kept on a border).
+
 **The Army HQ designer would not save a new HQ** (2026-10-20, the author: "This might be due to a base game thing I just
 don't understand, but the army hq division designer doesn't let me save, even with xp available and all research
 done", with a screenshot of a new Army HQ of three HQ battalions, Save ★30)
