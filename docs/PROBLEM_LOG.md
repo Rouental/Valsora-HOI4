@@ -6,6 +6,51 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**The Army HQ designer would not save a new HQ** (2026-10-20, the author: "This might be due to a base game thing I just
+don't understand, but the army hq division designer doesn't let me save, even with xp available and all research
+done", with a screenshot of a new Army HQ of three HQ battalions, Save ★30)
+- Cause (assumed; the game gives no reason on the button): the game gives every country its first Army HQ template
+  in `history/general/taog_hq_template.txt` (Thunder at Our Gates), and the mod switches off all of `history/general`
+  (`replace_path`, with the Earth histories), so Valsora's countries started with no HQ template at all, a state the
+  game's own countries never have.
+- Fix: `build_mod.py` writes `history/general/valsora_hq_template.txt`, the game's generic template (two HQ infantry
+  battalions and the HQ support company) for every country with the DLC. To check in game: the Deploy button has a
+  template, and a new HQ template saves. If it still does not, the `error.log` line or the button's tooltip is the
+  next clue. Noticed on the way: the same switch-off also removed `generic_advisors.txt`, the game's generic political
+  advisors and theorists for every minor country, so no Valsoran country has any (asked the author).
+
+**The Royal Host still started at low experience** (2026-10-20, the author: "The army still starts off at low experience,
+presumably because of troops being refilled")
+- Cause: adding the Host's own men to the pool just before `set_oob` in Rouental's history (2026-10-20, the entry
+  below) did not help: the history file's `set_oob` does not run in the order it is written (the units are made apart
+  from the history's effects), so the divisions still formed short and the game refilled them, diluting the
+  experience. Assumed from the author's report; the game's order isn't written anywhere.
+- Fix: the Host forms on the game's first day instead: `on_startup` (`build_mod.py`, `nations.ROU_HOST_STARTUP`) gives
+  Rouental the Host's men and then `load_oob = "ROU_2036"`, in that order inside one effect, once
+  (`valsora_royal_host_formed`). The divisions are made full from a pool the game has finished making. They are not
+  on the start screen's division count, only once the game runs.
+
+**The army insignias Claude drew did not show in the picker** (2026-10-20, the author: "the army icons you designed aren't
+there", with a screenshot of the insignia picker: the game's red silhouettes, colour sliders and swatches)
+- Cause: the picker lists only the frames `gfx/army_icons/army_icons.txt` names, and colours every frame its block
+  doesn't mark `color_override = no` with the army's colour. v0.12 added 50 numbered shields to the strip but not to
+  the list, and redrew the game's 14 colourable insignias in gilt, which the tint turned back into plain silhouettes;
+  its note had wrongly said the game gives an insignia no colour.
+- Fix: the Deco UI v0.12.1 ships the list (`make_insignia.py`): the 14 redrawn as Deco grey masks (they take the colour
+  again), ten numbered shields as grey masks, and the 14 in gilt with `color_override = no` (`deco_ui/docs/VERSIONS.md`).
+
+**Interface notes on v0.12** (2026-10-20, the author's screenshots): the faction logo a little off centre in the top bar
+and on the faction screen; the remains of a line above the diplomacy portrait; the faction goals see-through; the
+state panel's icons off centre in their frames; the selected army's division list showing a square corner past the
+badge's chamfer; the railway icon's sleepers past the rails and none on the branch; the loading diamond not a diamond
+in a diamond.
+- Causes and fixes, each in `deco_ui/docs/VERSIONS.md` (v0.12.1): the logo 0.4 px off at scale .85 (now .875) and the
+  faction screen's at the game's position (moved to the box's middle); the line, the bar behind the tabs showing
+  between them and the portrait's plate (the plate covers it); the goals' picture the game's, at a tenth's opacity
+  (redrawn opaque); the building pictures where the game puts them, right of the tile's middle (centred), the slot's
+  well 5 px off its picture; the list window's own square tile under the badge (a cut-corner tile of its own); the
+  railway drawn from scratch (traced from the game's); the diamond a turned CSS square (an SVG lozenge in a lozenge).
+
 **The Royal Host lost its experience as the game began** (2026-10-19, the author: "There is enough manpower that they
 are already instantly refilled at the beginning of the game, but that lowers their experience right off the bat")
 - Cause: a division of the history's order of battle takes its men from the country's pool, whatever its

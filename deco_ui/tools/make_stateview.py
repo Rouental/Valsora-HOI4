@@ -10,6 +10,8 @@ the game's file is kept. Layout notes in layout_stateview.py.
 import os
 import sys
 
+import re
+
 import guipatch as GP
 import layout_stateview as LS
 from paths import MOD, VANILLA as VANILLA_DIR
@@ -85,9 +87,16 @@ t = GP.insert_after(t, f"{W}>state_name", added)
 # building entries: deco tiles, level plates, fonts
 for tpl in ("state_building_entry", "province_building_entry"):
     t = GP.set_background(t, tpl, D + "tile")
-    at(f"{tpl}>level_bg", sprite=D + "level")
-    at(f"{tpl}>level", font=VALUE15)
+    _, ly = GP.get_pos(t, f"{tpl}>level_bg")
+    at(f"{tpl}>level_bg", sprite=D + "level", position=(LS.LEVEL_X, ly))
+    # the number centred on the plate: its box (maxWidth) about the tile's middle
+    lw = int(re.search(r"maxWidth\s*=\s*(\d+)", GP.own_region(t[slice(*GP.find_block(t, f"{tpl}>level"))])[0]).group(1))
+    _, ty = GP.get_pos(t, f"{tpl}>level")
+    at(f"{tpl}>level", font=VALUE15, position=(LS.TILE["w"] // 2 - lw // 2, ty))
+    at(f"{tpl}>building_picture", position=LS.PICTURE)
+    at(f"{tpl}>damage_bar", position=LS.DAMAGE, rotation=0)
 at("state_shared_slot_building_entry>build_slot_bg", sprite=D + "slot", position=(LS.SLOT["x"], LS.SLOT["y"]))
+at("state_shared_slot_building_entry>damage_bar", position=LS.SLOT_DAMAGE, rotation=0)
 at("state_resource_entry>amount", font=VALUE12)
 at("province_info_window>province", font=BODY15, position=(0, -27))
 at("province_info_window>state_modifiers", font=SECTION)

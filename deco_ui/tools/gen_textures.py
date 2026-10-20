@@ -987,6 +987,30 @@ add("sv_tile", SVP + "building_tile.dds", TW, TH,
     'box-shadow:inset 0 0 0 1px rgba(201,165,90,.65)"></div>'
     + "".join(f'<div style="position:absolute;left:{x - 2}px;top:{y - 2}px;width:4px;height:4px;transform:rotate(45deg);background:#E3C77E"></div>'
               for x, y in [(1, 1), (TW - 1, 1), (1, TH - 1), (TW - 1, TH - 1)]))
+# the selected army's division list (unitview.gui army_division_list_view, the game's GFX_tiled_window_1b_thin_border):
+# the thin window, its corners cut as the army badge's above it (2026-10-20, the author: "On the army screen, a corner
+# pokes out beyond the chamfered edge": the list's window starts level with the badge, and its square corner showed
+# past the badge's chamfer). A sprite of its own (make_mapviews.py), so the 20 other windows with the thin tile keep
+# their square corners
+def chamfer_pts(w, h, c, d):
+    c2 = c - d * (2 ** .5 - 1)
+    return " ".join(f"{x:.2f},{y:.2f}" for x, y in [(d + c2, d), (w - d - c2, d), (w - d, d + c2), (w - d, h - d - c2),
+                                                    (w - d - c2, h - d), (d + c2, h - d), (d, h - d - c2), (d, d + c2)])
+
+
+UNIT_LIST_CUT = 9
+add("mv_unit_list_bg", "gfx/interface/valsora_deco/mapviews/unit_list_bg.dds", 192, 192,
+    f'<div class="lac" style="position:absolute;inset:0;opacity:.97;clip-path:{chamfer(UNIT_LIST_CUT)}"></div>'
+    f'<svg width="192" height="192" style="position:absolute;left:0;top:0">'
+    f'<polygon points="{chamfer_pts(192, 192, UNIT_LIST_CUT, .5)}" fill="none" stroke="rgba(0,0,0,.6)" stroke-width="1"/>'
+    f'<polygon points="{chamfer_pts(192, 192, UNIT_LIST_CUT, 1.5)}" fill="none" stroke="rgba(184,149,79,.6)" stroke-width="1"/></svg>')
+# a building's damage bar (GFX_damage_bar, a progress bar 38 x 5 of these 45 x 9 pictures), across the foot of its
+# picture since 2026-10-20 (layout_stateview.DAMAGE): the empty part clear (the game's black showed beside every
+# building), the damage coral
+add("sv_damage_bg", "gfx/interface/building_damage_bar_bg.dds", 45, 9, "")
+add("sv_damage", "gfx/interface/building_damage_bar.dds", 45, 9,
+    '<div style="position:absolute;inset:1px;background:linear-gradient(180deg,#F2A090,#B5523F);'
+    'box-shadow:0 0 0 1px rgba(11,16,20,.8)"></div>')
 SW, SH = LS.SLOT["w"], LS.SLOT["h"]
 add("sv_slot", SVP + "slot.dds", SW, SH,
     f'<div style="position:absolute;left:1px;top:1px;width:{SW - 2}px;height:{SH - 2}px;background:rgba(11,16,20,.7);'
@@ -1781,15 +1805,37 @@ add("sc_slider_bar", SC + "slider_bg.dds", 404, 42, sc_slider_bar())
 LD = "gfx/interface/"
 
 
-LD_DIAMOND = 9     # both plates' diamond: the status plate's foot leaves room for no larger one between the track
-# (to screen y 76) and the picture's last row (91)
+LD_DIAMOND = 16    # both plates' diamond, its height: the status plate's foot leaves room for no larger one between
+# the track (to screen y 76) and the picture's last row (91)
+# 2026-10-20 (the author, with a drawing: "The diamond on the loading screen should be a diamond inside another diamond,
+# currently the one you have is off to the side and not quite a diamond"): a lozenge as their drawing, 1.3 times as
+# tall as wide, a gilt band round a dark gap round a gilt lozenge, in a dark outline; drawn as an SVG on whole and half
+# pixels (it was a 9 px square turned by CSS, with a 4 px one in it). LD_LOZENGE: the gap's and the inner lozenge's
+# size as fractions of the outer (the drawing's .55 and .38, the gap widened a little to stay open at this size); 16 x 12
+# px, its points on whole pixels
+LD_LOZENGE = (4 / 3, .6, .34)
+
+
+def ld_diamond(cx, cy, h=LD_DIAMOND):
+    ratio, gap, inner = LD_LOZENGE
+    w = h / ratio
+
+    def loz(s):
+        return f"M{cx},{cy - h * s / 2:.2f}L{cx + w * s / 2:.2f},{cy}L{cx},{cy + h * s / 2:.2f}L{cx - w * s / 2:.2f},{cy}Z"
+    return (f'<svg width="{cx * 2:.0f}" height="{cy + h:.0f}" style="position:absolute;left:0;top:0;overflow:visible">'
+            '<defs><linearGradient id="ldg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F1DC9C"/>'
+            '<stop offset="1" stop-color="#B48F44"/></linearGradient></defs>'
+            f'<path d="{loz(1)}{loz(gap)}" fill="url(#ldg)" fill-rule="evenodd" stroke="#0B1014" stroke-width=".6" '
+            'stroke-linejoin="miter"/>'
+            f'<path d="{loz(gap)}" fill="#0B1014"/>'
+            f'<path d="{loz(inner)}" fill="url(#ldg)" stroke="#0B1014" stroke-width=".6" stroke-linejoin="miter"/></svg>')
 
 
 def ld_plate(w, h, x0, x1, y0, y1, hang, d=LD_DIAMOND):
     """a lacquer plate x0-x1, y0-y1 with chamfered free corners (the bottom ones if it hangs from the top edge, else
     the top ones), a gilt rim and a diamond (d px square, turned) in the middle of its free edge (ld_rule adds the
-    inner hairline); the diamond must fit in the picture: d * 0.71 + 1.5 px either side of the edge"""
-    assert (y1 if hang else y0) + d * .71 + 1.5 <= h and (y1 if hang else y0) - d * .71 - 1.5 >= 0, "the diamond is cut off"
+    inner hairline); the diamond (d px tall, ld_diamond) must fit in the picture: d / 2 + .5 px either side of the edge"""
+    assert (y1 if hang else y0) + d / 2 <= h and (y1 if hang else y0) - d / 2 >= 0, "the diamond is cut off"
     c = 14
     if hang:
         pts = [(x0, y0), (x1, y0), (x1, y1 - c), (x1 - c, y1), (x0 + c, y1), (x0, y1 - c)]
@@ -1805,9 +1851,7 @@ def ld_plate(w, h, x0, x1, y0, y1, hang, d=LD_DIAMOND):
     return (f'<div style="position:absolute;inset:0;background:{rim};clip-path:{poly(pts)}"></div>'
             f'<div style="position:absolute;inset:0;background:{LAC},linear-gradient(180deg,#141E24,#0B1115);'
             f'clip-path:{poly(inset_poly(pts, 1.4))}"></div>'
-            + f'<div style="position:absolute;left:{mid - d / 2}px;top:{dy - d / 2}px;width:{d}px;height:{d}px;transform:rotate(45deg);'
-              f'background:#0B1014;box-shadow:0 0 0 1.5px #C9A55A"></div>'
-            + f'<div style="position:absolute;left:{mid - 2}px;top:{dy - 2}px;width:4px;height:4px;transform:rotate(45deg);background:#E3C77E"></div>')
+            + ld_diamond(mid, dy, d))
 
 
 def ld_rule(pts):

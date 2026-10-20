@@ -14,9 +14,20 @@ Treat assumed items as hypotheses.
 
 ---------------------------------------------------------------------------------------------------
 
-## 1. Status (v0.12)
+## 1. Status (v0.12.1)
 
-**v0.12 (2026-10-20)** is the current version (`docs/VERSIONS.md`): every note the author had held, done at once
+**v0.12.1 (2026-10-20, later)** is the current version (`docs/VERSIONS.md`), from the author's screenshots of v0.12: the
+faction logo centred in the top bar's ring and the faction screen's box, no line above the diplomacy portrait
+(`diplomacy_art.PLATE_TOP`), the faction goals on an opaque background (`faction_art.goals_bg`), the state panel's
+building pictures centred in their tiles and slots and the damage bar across their foot (`layout_stateview.PICTURE`,
+`SLOT`), the division list's corners cut (`GFX_valsora_deco_unit_list_bg`), the railway icon traced from the game's
+(`construction_art.rail`), the loading diamond a lozenge in a lozenge (`gen_textures.ld_diamond`), and the army
+insignias as the picker really works: it lists only what `gfx/army_icons/army_icons.txt` names and tints every frame
+not marked `color_override = no`, so the 14 tintable ones are Deco grey masks, the ten numbered shields grey masks too
+(frames 81-90), and the 14 in gilt fixed-colour copies (91-104; `make_insignia.py` writes the list). **Not yet seen in
+game.**
+
+**v0.12 (2026-10-20)** came before it (`docs/VERSIONS.md`): every note the author had held, done at once
 (made by three helpers side by side, each with a texture manifest of its own): the loading diamonds alike, the diplomacy
 leader in a gilt octagon and its tabs whole, the factory and dockyard icons everywhere (`production_icons_art.py`,
 `pf_`), the construction screen's octagons (`construction_art.py`, `cn_`), the alerts in gilt octagons to the music
@@ -669,6 +680,17 @@ Build order matters. `gen_fonts` runs first because `layout.py` measures strings
   a picture they sent (measured by template matching against the old labels, then re-rendered: the
   picture came through chat as a lossy WebP, so it was not used directly).
 
+### Army insignias
+
+- **(in game, 2026-10-20, the author's screenshot of the picker)** the insignia picker (`insigniaselection.gui`) has
+  hue, saturation and brightness sliders and colour swatches, and lists only the frames of `GFX_theatre_army_shield`
+  that `gfx/army_icons/army_icons.txt` names, one `icon = { }` block a frame in order; a block's `available` limits it
+  (the game's 67 national insignias are each for a base-game tag; five with Waking the Tiger have no tag, so any country
+  sees the 14 tintable ones and those five). A frame whose block lacks `color_override = no` is coloured with the
+  army's colour, its grey shading tinted: the game's first 14 are grey masks. New frames need both the strip and a
+  block in the list (`make_insignia.py`); a frame meant to keep its colours needs `color_override = no`.
+  **(assumed)** the colour is multiplied in (the previews do so).
+
 ### Alerts
 
 - `interface/alerts.gui` uses positionTypes: `alerticon_startposition` (vanilla 662,38) and
@@ -1019,6 +1041,10 @@ GP.write_gui(MOD + "interface/x.gui", t)    # braces checked, engine_safe applie
 
 ## 10. Open items and things to check in game
 
+- **v0.12.1**: the insignia picker with the sliders (the 14 Deco masks and the numbered shields take the colour,
+  **(assumed)** multiplied into their greys; the gilt ones keep theirs); the state panel's icons in their tiles and
+  slots, a damaged building's bar; the faction logos; the faction goals' background; the diplomacy tab's top; the
+  selected army's corner; the railway icon; the loading diamonds.
 - **v0.12**: a long row of alerts (Rouental's "Test: Many Alerts at Once"): 26 a row to the music tray, in their gilt
   octagons; the loading screen's two diamonds; the diplomacy tab's octagon (a big portrait, as Krionik's) and its
   Diplomacy and Details tabs whole; the production screen's lines, header, filters and add buttons; the construction

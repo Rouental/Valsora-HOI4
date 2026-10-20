@@ -174,6 +174,51 @@ it before touching the UI. In short:
     equipment's plate, the factory slots, the resource wells) and turned the game's scratches into gilt specks along
     the trade rows (`make_panel_pictures.DRAWN`).
 
+- **v0.12.1** (2026-10-20, later, not yet seen in game; the author's screenshots of v0.12 in game):
+  - the top bar's faction logo in the middle of its ring ("It looks like the faction logo isn't quite centered"): at
+    scale .875, 28 px from (8, 11), exactly the ring's middle (`layout.FACTION_LOGO`; at .85 it was 0.4 px up and left);
+  - the faction screen's logo in the middle of the identity box ("The logo should also be centered on the faction
+    screen as well"): `header_section>faction_icon` at (68, 108), 13 and 14 px from the box's rims on all sides (the
+    game's (60, 110) left it 5 px from the left rim and 15 / 12 from the top and bottom ones);
+  - no line above the diplomacy portrait ("There's the remains of a line above and slightly to the left of the
+    portrait"): it was the top rim and chamfer of the bar the game draws behind the tabs (`tabs_background`,
+    `intel_ledger/tab_bg.dds`), showing between the tabs and the portrait's plate; the plate now starts on the
+    picture's second row and covers it (`diplomacy_art.PLATE_TOP`);
+  - the faction goals on a solid background ("Put the faction goals on a solid background"): the game's
+    `factions/ui/faction_goals_bg.dds` (its columns tinted at a tenth's opacity, fading out) redrawn opaque, the header
+    strip between gilt rules, the columns parted by gilt hairlines (`faction_art.goals_bg`, `fg_goals_bg`);
+  - the state panel's icons centred ("Icons aren't centered"): the buildings' pictures in the middle of their tiles,
+    the level plate and number under them (`layout_stateview.PICTURE`, `LEVEL_X`); the shared slots' well round the
+    game's slot picture, which sat 5 px right and 3 down in it (`layout_stateview.SLOT`); the damage bar across the
+    picture's foot instead of upright beside it, its empty part clear (the game's black bar showed beside every
+    building; `sv_damage_bg`, `sv_damage`);
+  - the selected army's corner ("On the army screen, a corner pokes out beyond the chamfered edge"): the division
+    list's window starts level with the army's badge, and its square corner showed past the badge's chamfer; its
+    background is now the thin window with cut corners (`GFX_valsora_deco_unit_list_bg`, `make_mapviews.BACKGROUNDS`;
+    the 20 other windows with that tile keep their square corners);
+  - **the army insignias the picker shows** ("the army icons you designed aren't there", with a screenshot of the
+    picker: colour sliders and swatches, the game's red silhouettes): the picker lists only the frames
+    `gfx/army_icons/army_icons.txt` names, and tints every frame not marked `color_override = no` with the army's
+    colour. v0.12 had redrawn the game's 14 tintable insignias in gilt (the tint made them red silhouettes again) and
+    added 50 numbered shields the list did not name. Now the 14 are Deco grey masks (a dark edge, a light line inside
+    it, the face shaded from the top), the ten numbered shields are grey masks too, so the army's colour colours them
+    ("a shield whose color can be changed"), frames 81 to 90, and the 14 in gilt follow as fixed-colour insignias,
+    frames 91 to 104 (`insignia_art.py`; `make_insignia.py` writes the list with them and `theatreselector.gfx` with
+    105 frames). That the game multiplies the colour in is **assumed** (`build/preview_insignia_picker.png` shows it
+    so, crimson and blue);
+  - the railway icon after the game's ("the bars go over the side of the track, and the track to the right has no
+    tracks. You should try to recreate the base game icon more or less 1 to 1"): the game's switch traced from its
+    46 px frame, a straight track with six sleepers and a branch with three, each rail dark-edged so the sleepers
+    break under it as the game's do (`construction_art.rail`);
+  - the loading screen's diamond a diamond in a diamond, after the author's drawing ("currently the one you have is off
+    to the side and not quite a diamond"): a lozenge 16 x 12 px, a gilt band round a dark gap round a gilt lozenge, in
+    a dark outline, drawn as an SVG on whole pixels (`gen_textures.ld_diamond`, `LD_LOZENGE`; it was a 9 px square
+    turned by CSS).
+  Previews: `build/preview_insignia_picker.png`, `preview_insignia.png`, `preview_diplomacy.png`,
+  `preview_stateview.png`, `preview_faction_goals.png`, `preview_mapviews.png`.
+  **Seen in game (v0.12, 2026-10-20):** the top bar's faction button, the faction screen, the diplomacy tab, the state
+  panel, the selected army and the insignia picker (the screenshots above), and the loading screen.
+
 - **v0.12** (2026-10-20, not yet seen in game; the author's go-ahead for every held note: "go ahead with the rest of it,
   and all the other changes I had been holding back until now"):
   - the loading screen's two diamonds alike: one size (`LD_DIAMOND = 9`), the rim bright at the free edge on both plates;

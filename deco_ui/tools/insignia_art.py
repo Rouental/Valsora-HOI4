@@ -10,15 +10,21 @@ lists every frame of the sprite, so new insignias are new frames at the strip's 
 theatreselector.gfx the new frame counts); the frames the game has keep their places, so a saved game's armies keep
 their insignias.
 
-Each of the game's insignias keeps its drawing, recoloured (restyle()): the grey metal ones (the shield, the tower, the
-spade ...) in gilt, the coloured ones in the Deco palette, each colour family moved to its Deco colour with the
-picture's own shading kept (reds to the deco crimson, blues to its blue, greens to jade, yellows and oranges to gilt,
-purples to plum, greys to warm lacquer and ivory). The selected rims are recoloured in gilt.
-
-The numbered shields: the game colours an insignia with nothing (its sprite has no colour of its own: the picker's
-colour sliders set the army's colour on the map, its counters and its front line), so a shield of each number comes in
-FILLS' five colours, 50 new frames (81 to 130): crimson, blue, jade, lacquer and ivory, the numbers in Federo, gilt
-(dark on ivory), a gilt rim.
+How the game colours them (2026-10-20, the author's screenshot of the picker, with hue, saturation and brightness sliders
+and colour swatches; gfx/army_icons/army_icons.txt): the picker lists the frames army_icons.txt names, one `icon` block
+a frame in order, and colours every frame whose block lacks `color_override = no` with the army's colour, its grey
+shading tinted; the game's first 14 (the shield, the tower, the spade ... the star, the bars) are such grey masks, the
+rest keep their own colours and are each for a base-game tag (`available`), so Valsora's countries see only the 14 and
+four more of the Waking the Tiger set. v0.12 had redrawn the 14 in gilt, which the tint turned into the game's own red
+silhouettes again, and added 50 numbered shields the list file did not name, so the picker never showed them ("the
+army icons you designed aren't there"). Now (make_insignia.py writes the list file):
+  frames 0-13      the game's 14, still tintable, redrawn as Deco masks (deco_mask): a dark edge, a light line
+                   just inside it, the face shaded light to dark from the top, the game's own detail kept faintly
+  frames 14-80     the game's own nation insignias, recoloured into the Deco palette (restyle), as before
+  frames 81-90     the numbers 1 to 10 on a Deco shield, tintable ("a shield whose color can be changed"): grey masks
+                   as the 14, the number light in a dark outline
+  frames 91-104    the 14 in gilt, as v0.12 drew them, with `color_override = no`: kept in the gilt whatever the
+                   army's colour
 
 gen_textures.py adds them (keys ia_*); preview_insignia.py draws the game's and ours side by side.
 """
@@ -35,12 +41,11 @@ A = "gfx/army_icons/"
 GAME_N, GROUP_N = 81, 6
 W, H, SW, SH = 33, 32, 35, 34             # a frame; a selected frame
 NUMBERS = range(1, 11)
-# (name, fill top, fill bottom, numeral) for the numbered shields
-FILLS = [("crimson", (150, 42, 40), (96, 22, 24), "gilt"), ("blue", (36, 84, 138), (18, 48, 82), "gilt"),
-         ("jade", (52, 120, 104), (24, 70, 60), "gilt"), ("lacquer", (32, 44, 52), (11, 16, 20), "gilt"),
-         ("ivory", (240, 232, 214), (200, 188, 156), "ink")]
-NEW_N = len(FILLS) * len(NUMBERS)
-ALL_N = GAME_N + NEW_N
+TINT_N = 14                                 # the game's tintable insignias, frames 0-13
+NUMBERED0 = GAME_N                          # the numbered shields' first frame (81)
+GILT0 = NUMBERED0 + len(NUMBERS)            # the gilt copies' first frame (91)
+NEW_N = len(NUMBERS) + TINT_N
+ALL_N = GAME_N + NEW_N                      # 105
 
 # the Deco colour each colour family of the game's insignias moves to: (hue 0-1, saturation)
 FAMILY = [(0.0, "red", (0.0, .62)), (20 / 360, "gilt", (40 / 360, .62)), (70 / 360, "jade", (166 / 360, .42)),
@@ -78,6 +83,49 @@ def restyle(fr):
                 l2 = .06 + ll[i, j] * .86
             out[i, j] = colorsys.hls_to_rgb(h2, l2, s2)
     return Image.fromarray(np.dstack([out * 255, al * 255]).clip(0, 255).astype(np.uint8), "RGBA")
+
+
+def _shift(m, dx, dy):
+    out = np.zeros_like(m)
+    h, w = m.shape
+    out[max(dy, 0):h + min(dy, 0), max(dx, 0):w + min(dx, 0)] = m[max(-dy, 0):h + min(-dy, 0), max(-dx, 0):w + min(-dx, 0)]
+    return out
+
+
+def erode(m, n=1):
+    for _ in range(n):
+        m = m & _shift(m, 1, 0) & _shift(m, -1, 0) & _shift(m, 0, 1) & _shift(m, 0, -1)
+    return m
+
+
+# the grey masks' tones (the game multiplies the army's colour into them: the light line the colour at its brightest,
+# the edge near black, the face between, lighter at the top)
+EDGE, INLINE, FACE_TOP, FACE_BOTTOM = 40, 238, 196, 118
+
+
+def deco_mask(fr):
+    """one of the game's tintable insignias as a Deco grey mask: the edge dark, a light line one pixel in, the face a
+    gradient from the top, with a third of the game's own shading kept so its holes and bevels still read"""
+    a = np.asarray(fr.convert("RGBA"), dtype=float)
+    al = a[..., 3]
+    lum = a[..., :3].mean(-1)
+    m = al > 128
+    if not m.any():
+        return fr
+    ys = np.nonzero(m.any(1))[0]
+    top, bottom = ys.min(), ys.max()
+    t = np.clip((np.arange(a.shape[0]) - top) / max(1, bottom - top), 0, 1)[:, None]
+    face = FACE_TOP * (1 - t) + FACE_BOTTOM * t
+    lo, hi = np.percentile(lum[m], 5), np.percentile(lum[m], 95)
+    detail = np.clip((lum - lo) / max(1.0, hi - lo), 0, 1) - .5      # the game's shading, about its middle
+    g = face + detail * 70
+    e1 = erode(m)
+    g = np.where(m & ~e1, EDGE, g)                                    # the edge
+    inner = e1 & ~erode(e1)
+    g = np.where(inner & erode(m, 1), np.maximum(g, INLINE), g)       # the light line inside it
+    g = np.where(~m, EDGE, g)                                         # the anti-aliased rim outside the mask: the edge
+    g = np.clip(g, 0, 255)
+    return Image.fromarray(np.dstack([g, g, g, al]).astype(np.uint8), "RGBA")
 
 
 def strip(frames, w):
@@ -129,24 +177,23 @@ def mask(poly, w=W, h=H):
     return m
 
 
-def numbered(n, fill):
-    name, top, bottom, ink = fill
+def grey_grad(w, h, top, bottom):
+    return vgrad(w, h, (top,) * 3, (bottom,) * 3)
+
+
+def numbered(n):
+    """the number n on a Deco shield, a grey mask for the game's tint: a dark edge, a light rim, a dark line inside it,
+    the field shaded from the top, the number light in a dark outline"""
     x0, y0, x1, y1, c = BOX
     big = Image.new("RGBA", (W * S, H * S))
     outer = mask(shield_poly(x0, y0, x1, y1, c))
     rim = mask(shield_poly(x0, y0, x1, y1, c, 1.6))
     inner_line = mask(shield_poly(x0, y0, x1, y1, c, 2.4))
     body = mask(shield_poly(x0, y0, x1, y1, c, 3.0))
-    big.paste(Image.new("RGB", big.size, (14, 10, 6)), (0, 0), outer)            # the dark edge round the rim
-    big.paste(gilt_grad(*big.size), (0, 0), rim)                                # the gilt rim
-    big.paste(Image.new("RGB", big.size, (30, 22, 10)), (0, 0), inner_line)     # a dark line inside it
-    big.paste(vgrad(*big.size, top, bottom), (0, 0), body)
-    # a faint sheen on the upper left of the field
-    sheen = Image.new("L", big.size)
-    ImageDraw.Draw(sheen).polygon(shield_poly(x0, y0, x1, y1, c, 3.0)[:3] + [((x0 + x1) / 2 * S, (y0 + 12) * S),
-                                                                            ((x0 + 3) * S, (y0 + 12) * S)], fill=38)
-    sheen = Image.composite(sheen, Image.new("L", big.size), body)
-    big.paste(Image.new("RGB", big.size, (255, 246, 214)), (0, 0), sheen)
+    big.paste(Image.new("RGB", big.size, (EDGE,) * 3), (0, 0), outer)                 # the dark edge round the rim
+    big.paste(grey_grad(*big.size, 236, 168), (0, 0), rim)                             # the light rim
+    big.paste(Image.new("RGB", big.size, (52,) * 3), (0, 0), inner_line)              # a dark line inside it
+    big.paste(grey_grad(*big.size, FACE_TOP - 12, FACE_BOTTOM - 22), (0, 0), body)    # the field
     # the number, centred on the field's upper two thirds
     txt = str(n)
     size = (19 if len(txt) == 1 else 16) * S
@@ -162,12 +209,9 @@ def numbered(n, fill):
         cl, ct, cr, cb = d.textbbox((0, 0), ch, font=font)
         d.text((x - cl, cy - (b - t) / 2 - t), ch, font=font, fill=255)
         x += cr - cl + track
-    if ink == "gilt":
-        edge = tm.filter(ImageFilter.MaxFilter(2 * S + 1))
-        big.paste(Image.new("RGB", big.size, (16, 11, 6)), (0, 0), Image.composite(edge, Image.new("L", big.size), body))
-        big.paste(gilt_grad(*big.size), (0, 0), tm)
-    else:
-        big.paste(Image.new("RGB", big.size, (22, 18, 12)), (0, 0), tm)
+    edge = tm.filter(ImageFilter.MaxFilter(2 * S + 1))
+    big.paste(Image.new("RGB", big.size, (22,) * 3), (0, 0), Image.composite(edge, Image.new("L", big.size), body))
+    big.paste(Image.new("RGB", big.size, (250,) * 3), (0, 0), tm)
     return big.resize((W, H), Image.LANCZOS)
 
 
@@ -189,15 +233,20 @@ def game_frames(rel, n):
 
 
 def army_strip():
-    game = [restyle(f) for f in game_frames("army_icons.dds", GAME_N)]
-    new = [numbered(n, f) for f in FILLS for n in NUMBERS]
+    src = game_frames("army_icons.dds", GAME_N)
+    game = [deco_mask(f) if k < TINT_N else restyle(f) for k, f in enumerate(src)]
+    new = [numbered(n) for n in NUMBERS] + [gilt(f) for f in src[:TINT_N]]
     return strip(game + new, W)
 
 
 def army_selected_strip():
-    game = [gilt(f) for f in game_frames("army_selected_icons.dds", GAME_N)]
-    new = [selected_rim(numbered(n, f)) for f in FILLS for n in NUMBERS]
-    return strip(game + new, SW)
+    sel = [gilt(f) for f in game_frames("army_selected_icons.dds", GAME_N)]
+    new = [selected_rim(numbered(n)) for n in NUMBERS] + sel[:TINT_N]   # a gilt copy keeps its own's rim
+    return strip(sel + new, SW)
+
+
+# the list file's blocks for the new frames, in order (make_insignia.py appends them to the game's `army` list)
+NEW_ICONS = ["\ticon = {\n\t}\n"] * len(NUMBERS) + ["\ticon = {\n\t\tcolor_override = no\n\t}\n"] * TINT_N
 
 
 def group_strip(sel=False):

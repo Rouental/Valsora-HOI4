@@ -248,7 +248,10 @@ mod/
   `<TAG>_1936`, Valsora's carry its start year). **OOB divisions take their men from
   the country's manpower pool** (verified: armies started empty), and
   `start_manpower_factor` did not prevent it. So give the country enough population,
-  or `add_manpower` before `set_oob`.
+  or `add_manpower` before `set_oob`. An army that must start full (and keep its
+  experience: refilled men dilute it) did not, even with its men added just before
+  `set_oob` in the history (Rouental's Royal Host, 2026-10-20): form it in
+  `on_startup` instead, `add_manpower` then `load_oob` in one effect, which run in order.
 - Grant the techs each template's units need in the history file before `set_oob`.
 - State population (`manpower` in the state history) sets everything downstream. Scale
   it to a believable world total.

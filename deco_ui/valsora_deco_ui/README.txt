@@ -1,4 +1,4 @@
-VALSORA DECO UI - v0.12 (for HOI4 1.19)
+VALSORA DECO UI - v0.12.1 (for HOI4 1.19)
 =========================================
 
 An art deco interface for the Valsora total conversion: core skin and fonts,
@@ -29,6 +29,35 @@ Valsora repository's scripts/common.py and rebuild (sh scripts/run_all.sh).
 
 The layout is built for 1920 px of UI width: 1920x1080 at 100% UI scale, or
 2560x1440 at up to 133%.
+
+
+NEW IN v0.12.1
+--------------
+  - The faction logo centred in the top bar's ring and in the faction
+    screen's box.
+  - No stray line above the diplomacy portrait.
+  - The faction goals on a solid background.
+  - The state panel's building icons centred in their tiles and slots;
+    a building's damage shows as a bar across its foot.
+  - The selected army's division list no longer shows a square corner
+    past the badge's chamfer.
+  - The army insignias: the 14 everyone can pick take the army's colour
+    again, redrawn in the Deco style; ten numbered shields (1 to 10)
+    that take the army's colour; and the 14 in gilt, which keep their
+    gilt whatever the colour.
+  - The railway icon after the game's own.
+  - The loading screen's diamond: a diamond inside a diamond.
+
+Things to check in game (v0.12.1):
+  - the insignia picker: the 14 Deco insignias and the numbered shields
+    coloured by the sliders (an assumption: that the game multiplies the
+    colour into their greys), the gilt ones after them; an army with one
+    of each on the map and the army bar;
+  - the state panel (a state with buildings, shared slots, a damaged
+    building if one comes up); the railway icon;
+  - the faction screen's logo and goals; the top bar's faction logo;
+  - the diplomacy tab's top; the selected army's top-left corner;
+  - the loading screen's two diamonds.
 
 
 NEW IN v0.12

@@ -55,6 +55,14 @@ TEXTS = {"naviesview.gui": {
     "home_base_view>home_base_name": ("hoi_16mbs", 14 - 13, {}),
 }}
 
+# 2026-10-20 (the author: "On the army screen, a corner pokes out beyond the chamfered edge"): the selected army's
+# division list starts level with the army's badge, and its window's square corner showed past the badge's chamfer: its
+# background is the thin window with its corners cut (gen_textures.py 'mv_unit_list_bg', valsora_deco_mapviews.gfx)
+BACKGROUNDS = {"unitview.gui": {"army_division_list_view": "GFX_valsora_deco_unit_list_bg"}}
+GFX = ("spriteTypes = {\n\tcorneredTileSpriteType = {\n\t\tname = \"GFX_valsora_deco_unit_list_bg\"\n"
+       "\t\tsize = { x = 192 y = 192 }\n\t\ttextureFile = \"gfx/interface/valsora_deco/mapviews/unit_list_bg.dds\"\n"
+       "\t\tborderSize = { x = 64 y = 64 }\n\t\ttilingCenter = yes\n\t}\n}\n")
+
 
 def shown(t, path):
     """(x, y) where the window shows: its show_position, else its position"""
@@ -84,6 +92,8 @@ for f, win in VIEWS.items():
         t = GP.set_attrs(t, win, size=SIZE[win])
     for other in BESIDE.get(f, []):
         t = move_down(t, other, dy)
+    for path, sprite in BACKGROUNDS.get(f, {}).items():
+        t = GP.set_background(t, path, sprite)
     for path, (font, ty, more) in TEXTS.get(f, {}).items():
         tx, y0 = GP.get_pos(t, path)
         t = GP.set_attrs(t, path, position=(tx, y0 + ty), **(dict(font=font) if font else {}), **more)
@@ -94,3 +104,5 @@ for f, win in VIEWS.items():
          + "); every element and name kept\n" + t)
     GP.write_gui(MOD + "interface/" + f, t)
     print(f"{f}: {win} y {y} -> {L.BELOW_MEDALLION}" + (f", {len(BESIDE[f])} beside it" if f in BESIDE else ""))
+open(MOD + "interface/valsora_deco_mapviews.gfx", "w", encoding="utf-8", newline="\n").write(
+    "# Valsora Deco UI (make_mapviews.py): the map views' sprites of our own\n" + GFX)

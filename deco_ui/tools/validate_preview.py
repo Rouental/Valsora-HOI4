@@ -396,6 +396,7 @@ for p in glob.glob(M + "gfx/interface/button_*.dds"):
 import json  # noqa: E402
 from paths import MANIFEST  # noqa: E402
 _man = {m["path"] for m in json.load(open(MANIFEST))} | set(_MPP.PATHS)   # and make_panel_pictures.py's (v0.11)
+_man.add("gfx/army_icons/army_icons.txt")       # the insignia picker's list, make_insignia.py's (2026-10-20)
 for f in glob.glob(M + "gfx/**/*", recursive=True):
     rel = f[len(M):].replace(os.sep, "/")
     if os.path.isfile(f) and not rel.startswith("gfx/fonts/") and rel not in _man:

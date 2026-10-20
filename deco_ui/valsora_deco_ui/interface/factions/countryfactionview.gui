@@ -174,7 +174,7 @@ guiTypes = {
 
 			iconType = {
 				name = "faction_icon"
-				position = { x = 60 y = 110 }
+				position = { x = 68 y = 108 }
 				spriteType = "GFX_faction_logo_generic_democratic"
 				centerposition = yes
 			}

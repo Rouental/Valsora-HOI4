@@ -33,13 +33,7 @@ ROU_ARMY_HISTORY = [
     *[f"add_equipment_to_stockpile = {{ type = {e} amount = {n} producer = ROU }}" for e, n in (
         ("infantry_equipment_1", 3000), ("support_equipment_1", 600), ("motorized_equipment_1", 1500),
         ("mechanized_equipment_1", 400), ("artillery_equipment_1", 500), ("anti_air_equipment_1", 300))],
-    # the Royal Host's own men, just before it forms, so it starts at full strength (the author, 2026-10-20: refilled
-    # at once from the pool when the game began, which cost the divisions their experience; "Sounds good" to starting
-    # them full): exactly what its divisions take, so the pool after is what it would have been (no extra manpower for
-    # the generic armies since 2026-10-16, the author: "if you are please remove it")
-    "ROU_HOST_MANPOWER",
-    # last, once the techs and the tank design exist
-    'set_oob = "ROU_2036"',
+    # the Royal Host itself forms when the game begins (ROU_HOST_STARTUP), not here
 ]
 
 # The Royal Host's order of battle: (template, division count, state name to stand in)
@@ -64,7 +58,15 @@ UNIT_MANPOWER = {"medium_armor": 500, "mechanized": 1200, "motorized": 1200, "en
                  "logistics_company": 500, "artillery": 300}
 ROU_HOST_MEN = sum(n * sum(UNIT_MANPOWER[u] for col in ROU_TEMPLATES[name]["regiments"] for u in col)
                    + n * sum(UNIT_MANPOWER[u] for u in ROU_TEMPLATES[name]["support"]) for name, n, _ in ROU_HOST)
-ROU_ARMY_HISTORY[ROU_ARMY_HISTORY.index("ROU_HOST_MANPOWER")] = f"add_manpower = {ROU_HOST_MEN}"
+# The Royal Host forms on the game's first day (on_startup, build_mod.py), its own men added to the pool just before:
+# formed by the history file (set_oob, even with its men added just before it), it started short and the game refilled
+# it at once, and new men dilute experience (the author, 2026-10-19 and again 2026-10-20: "The army still starts off at
+# low experience, presumably because of troops being refilled"). In an effect the two run in order, on a pool the game
+# has finished making, so the divisions form full and the pool after is what it would have been (no extra manpower for
+# the generic armies since 2026-10-16, the author: "if you are please remove it"). The flag keeps it to once.
+ROU_HOST_STARTUP = ["ROU = {", "\tif = {", "\t\tlimit = { NOT = { has_global_flag = valsora_royal_host_formed } }",
+                    f"\t\tadd_manpower = {ROU_HOST_MEN}", '\t\tload_oob = "ROU_2036"',
+                    "\t\tset_global_flag = valsora_royal_host_formed", "\t}", "}"]
 
 # The Feudal Army national spirit (author, 2026-10-02; harshness not final): the price
 # of the levy system (docs/ROUENTAL_ARMY.md), with the author's placeholder picture

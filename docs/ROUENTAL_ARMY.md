@@ -29,7 +29,10 @@ themselves are not.
   full equipment and 0.6 experience, with engineers, recon, AA, signals, logistics or
   maintenance, and field hospitals in support. Stationed around Rouental, Saintiers,
   Cournin, Rêverie, Charmas, Rochemont and Vendée. Rouental starts with the techs, a
-  "Char Royal" tank design (both with and without No Step Back) and a stockpile.
+  "Char Royal" tank design (both with and without No Step Back) and a stockpile. Since
+  2026-10-20 it forms on the game's first day (`on_startup`: its own 102,000 men, then
+  `load_oob`), so it starts full and keeps its experience (formed by the history file, it
+  started short and the game's refill diluted it).
 - **Which state each fief (vassal) lies in**: `docs/ROUENTAL_FIEFS.md` and
   `source/rouental_fiefs_by_state.json`, from overlaying the fief map on the game's states.
 

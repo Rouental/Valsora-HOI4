@@ -1,0 +1,474 @@
+<title>Rouental Province Groups</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Federo&family=Josefin+Sans:wght@400;600;700&display=swap">
+<style>
+/* Layout: the map fills the left, a gilt-ruled column of selection and groups on the right (stacked on phones).
+   One deliberate look, the Valsora Deco UI's lacquer and gilt, in either host theme. */
+:root {
+  --lacquer: #11191E; --lacquer-2: #17222A; --well: #0B1014; --gilt: #E3C77E; --gilt-dim: #9C7A36;
+  --cream: #F4ECD9; --label: #B7A680; --jade: #2E6E60; --coral: #EE8C7E; --amber: #E7B75A;
+  --display: "Federo", "Cinzel", Georgia, serif; --body: "Josefin Sans", "Futura", "Century Gothic", system-ui, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box }
+html, body { background: var(--lacquer); color: var(--cream) }
+body { font-family: var(--body); font-size: 15px; line-height: 1.45; margin: 0;
+  padding-block: 18px 28px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  background-image: repeating-linear-gradient(90deg, rgba(255,255,255,.018) 0 1px, transparent 1px 8px) }
+header { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; border-bottom: 1px solid var(--gilt-dim); padding-bottom: 10px; margin-bottom: 14px }
+h1 { font-family: var(--display); font-weight: 400; font-size: 30px; letter-spacing: .06em; color: var(--gilt); margin: 0; text-wrap: balance }
+.meta { color: var(--label); font-size: 13px; letter-spacing: .04em }
+.layout { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 18px; align-items: start }
+@media (max-width: 900px) { .layout { grid-template-columns: minmax(0, 1fr) } }
+.panel { background: var(--lacquer-2); border: 1px solid rgba(201,165,90,.45); clip-path: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px) }
+.mapwrap { position: relative; padding: 10px; min-width: 0 }
+.tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 8px }
+.tools .sp { flex: 1 }
+.scroll { overflow: auto; max-height: 76vh; background: var(--well); border: 1px solid rgba(201,165,90,.25); touch-action: pan-x pan-y }
+canvas { display: block; image-rendering: pixelated; cursor: crosshair }
+.tip { position: absolute; pointer-events: none; background: var(--well); border: 1px solid var(--gilt-dim); padding: 6px 9px; font-size: 13px; max-width: 260px; z-index: 5 }
+.tip b { color: var(--gilt); font-weight: 600 }
+.tip .s { color: var(--label) }
+button, select, input, textarea { font: inherit; color: var(--cream) }
+button { background: linear-gradient(180deg, #1E2930, #0E1519); border: 1px solid var(--gilt-dim); padding: 5px 11px; cursor: pointer; letter-spacing: .03em }
+button:hover:not(:disabled) { border-color: var(--gilt); color: #FFF6DA }
+button:focus-visible, select:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid var(--gilt); outline-offset: 1px }
+button:disabled { opacity: .45; cursor: default }
+button.primary { background: linear-gradient(180deg, #2C665A, #163A33); border-color: #6FC2A8 }
+button.danger { border-color: var(--coral); color: var(--coral) }
+button.zoom[aria-pressed="true"] { border-color: var(--gilt); color: var(--gilt) }
+.side { display: grid; gap: 14px; min-width: 0 }
+.side section { padding: 12px 14px }
+h2 { font-family: var(--display); font-weight: 400; font-size: 19px; letter-spacing: .08em; color: var(--gilt); margin: 0 0 8px; text-transform: uppercase }
+.hint { color: var(--label); font-size: 13px; margin: 0 0 8px }
+.chips { display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0 }
+.chip { font-size: 12px; padding: 1px 7px; border: 1px solid rgba(201,165,90,.4); background: var(--well); white-space: nowrap; cursor: pointer }
+.chip.vp { border-color: var(--gilt) }
+.row { display: flex; flex-wrap: wrap; gap: 6px }
+.group { border-top: 1px solid rgba(201,165,90,.3); padding-top: 10px; margin-top: 10px; display: grid; gap: 6px }
+.group:first-of-type { border-top: 0; margin-top: 0; padding-top: 0 }
+.ghead { display: flex; gap: 8px; align-items: center }
+.sw { width: 16px; height: 16px; flex: none; transform: rotate(45deg); border: 1px solid var(--well) }
+.ghead input { flex: 1; min-width: 0; background: var(--well); border: 1px solid rgba(201,165,90,.35); padding: 3px 7px }
+.kind { display: flex; border: 1px solid rgba(201,165,90,.45) }
+.kind label { flex: 1; text-align: center; padding: 3px 4px; font-size: 13px; cursor: pointer }
+.kind input { position: absolute; opacity: 0; pointer-events: none }
+.kind input:checked + span { color: var(--well); background: var(--gilt); display: block; margin: -3px -4px; padding: 3px 4px }
+.kind input:focus-visible + span { outline: 2px solid var(--gilt) }
+textarea { width: 100%; min-height: 40px; background: var(--well); border: 1px solid rgba(201,165,90,.35); padding: 4px 7px; resize: vertical }
+.warn { font-size: 13px; color: var(--amber) }
+.warn.bad { color: var(--coral) }
+.ok { font-size: 13px; color: #8FD3BC }
+.empty { color: var(--label); font-style: normal; border: 1px dashed rgba(201,165,90,.4); padding: 12px; font-size: 14px }
+.status { font-size: 12px; color: var(--label); min-height: 1.2em }
+.legend { display: flex; flex-wrap: wrap; gap: 10px 16px; font-size: 12px; color: var(--label); margin-top: 8px }
+.legend i { display: inline-block; width: 18px; height: 3px; vertical-align: middle; margin-right: 5px }
+.num { font-variant-numeric: tabular-nums }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important } }
+</style>
+
+<header>
+  <h1>Rouental Province Groups</h1>
+  <span class="meta" id="meta"></span>
+</header>
+
+<div class="layout">
+  <div class="panel mapwrap">
+    <div class="tools">
+      <button class="zoom" data-z="2" aria-pressed="false">2×</button>
+      <button class="zoom" data-z="3" aria-pressed="true">3×</button>
+      <button class="zoom" data-z="4" aria-pressed="false">4×</button>
+      <button class="zoom" data-z="6" aria-pressed="false">6×</button>
+      <span class="sp"></span>
+      <label class="meta"><input type="checkbox" id="showRivers" checked> rivers</label>
+      <label class="meta"><input type="checkbox" id="showStates" checked> state colours</label>
+    </div>
+    <div class="scroll" id="scroll"><canvas id="map" aria-label="Map of Rouental's provinces: click a province to select it"></canvas></div>
+    <div class="legend">
+      <span>Framed under the map: the islands and lands overseas, each at its own place on the world map</span>
+      <span><i style="background:#E3C77E"></i>the nation's border</span>
+      <span><i style="background:#05080A;height:3px"></i>a state's border</span>
+      <span><i style="background:rgba(5,8,10,.55);height:1px"></i>a province's border</span>
+      <span><i style="background:#5E9FD0"></i>river</span>
+    </div>
+    <div class="tip" id="tip" hidden></div>
+  </div>
+
+  <div class="side">
+    <section class="panel" aria-labelledby="selHead">
+      <h2 id="selHead">Selection</h2>
+      <p class="hint">Click provinces to select or unselect them. Shift-click a province to take its whole state.</p>
+      <div id="selInfo" class="hint">Nothing selected.</div>
+      <div class="chips" id="selChips"></div>
+      <div class="row">
+        <button class="primary" id="newGroup" disabled>Group the selection</button>
+        <button id="clearSel" disabled>Clear</button>
+      </div>
+    </section>
+    <section class="panel" aria-labelledby="grpHead">
+      <h2 id="grpHead">Groups</h2>
+      <p class="hint">Each group is saved here for Claude to apply to the map: merged into one province, or made one state.</p>
+      <div class="status" id="status"></div>
+      <div id="groups"><div class="empty">No groups yet. Select provinces on the map, then press Group the selection.</div></div>
+    </section>
+  </div>
+</div>
+
+<script>
+const DATA = /*DATA*/null;
+const $ = s => document.querySelector(s);
+const P = DATA.provinces, S = DATA.states, N = P.length;
+const [W, H] = DATA.size;
+const OTHER = 65535, WATER = 65534;
+$("#meta").textContent = `${N} provinces in ${S.length} states · map of ${DATA.built}`;
+
+// ---- the map's pixels
+let idx, river;                               // per pixel: province (1..N, OTHER, WATER, 0), river flag
+const pix = Array.from({ length: N + 1 }, () => []);   // province -> its pixels (y * W + x)
+const adj = new Map();                        // "a,b" (a < b) -> {len, river}
+const base = document.createElement("canvas");
+let zoom = 3, hover = 0;
+const selected = new Set();                   // province numbers (1..N)
+let groups = [];                              // {id, name, kind, note, provinces: [keys], colour}
+const groupOf = new Map();                    // province number -> group id
+const byKey = new Map(P.map((p, i) => [p.key, i + 1]));
+const COLOURS = ["#C9503C", "#3F86C9", "#5FB08A", "#C9922F", "#9A6CC2", "#D06A9C", "#4FB3B8", "#B8B33C",
+                 "#7C8BD6", "#E07B4E", "#6FA35A", "#C25454"];
+
+function stateColour(s) {
+  const h = (s * 137.508) % 360;
+  return `hsl(${h.toFixed(0)} 22% ${s % 2 ? 34 : 40}%)`;
+}
+
+function loadMap() {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => {
+      const c = document.createElement("canvas"); c.width = W; c.height = H;
+      const g = c.getContext("2d"); g.drawImage(img, 0, 0);
+      const d = g.getImageData(0, 0, W, H).data;
+      idx = new Uint16Array(W * H); river = new Uint8Array(W * H);
+      for (let i = 0; i < W * H; i++) {
+        idx[i] = (d[i * 4] << 8) | d[i * 4 + 1]; river[i] = d[i * 4 + 2];
+        if (idx[i] >= 1 && idx[i] <= N) pix[idx[i]].push(i);
+      }
+      for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+        const i = y * W + x, a = idx[i];
+        if (a < 1 || a > N) continue;
+        for (const j of [x + 1 < W ? i + 1 : -1, y + 1 < H ? i + W : -1]) {
+          if (j < 0) continue;
+          const b = idx[j];
+          if (b < 1 || b > N || b === a) continue;
+          const k = a < b ? a + "," + b : b + "," + a;
+          const e = adj.get(k) || { len: 0, river: 0 };
+          e.len++; if (river[i] || river[j]) e.river++;
+          adj.set(k, e);
+        }
+      }
+      resolve();
+    };
+    img.onerror = reject;
+    img.src = DATA.map;
+  });
+}
+
+function paintBase() {
+  base.width = W; base.height = H;
+  const g = base.getContext("2d"), im = g.createImageData(W, H), d = im.data;
+  const colOf = new Array(N + 1);
+  const showStates = $("#showStates").checked;
+  const gcol = new Map(groups.map(gr => [gr.id, gr.colour]));
+  for (let p = 1; p <= N; p++) {
+    let c;
+    if (selected.has(p)) c = "#F1DC9C";
+    else if (groupOf.has(p)) c = gcol.get(groupOf.get(p));
+    else c = showStates ? stateColour(P[p - 1].s) : "#4A5A50";
+    colOf[p] = parse(c);
+  }
+  const showRivers = $("#showRivers").checked;
+  for (let i = 0; i < W * H; i++) {
+    const a = idx[i]; let c;
+    if (a >= 1 && a <= N) c = (showRivers && river[i]) ? [94, 159, 208] : colOf[a];
+    else if (a === WATER) c = [12, 26, 38];
+    else if (a === OTHER) c = [38, 46, 52];
+    else c = [8, 12, 15];
+    d[i * 4] = c[0]; d[i * 4 + 1] = c[1]; d[i * 4 + 2] = c[2]; d[i * 4 + 3] = 255;
+  }
+  g.putImageData(im, 0, 0);
+  cache = null;
+}
+
+const _pc = document.createElement("canvas").getContext("2d");
+function parse(c) {
+  _pc.fillStyle = "#000"; _pc.fillStyle = c;
+  const v = _pc.fillStyle;
+  if (v[0] === "#") return [parseInt(v.slice(1, 3), 16), parseInt(v.slice(3, 5), 16), parseInt(v.slice(5, 7), 16)];
+  const m = v.match(/\d+/g); return [+m[0], +m[1], +m[2]];
+}
+
+let cache = null, cacheZoom = 0;                    // the map with its borders at the current zoom
+function draw() {
+  const cv = $("#map"), z = zoom;
+  if (!cache || cacheZoom !== z) { cache = render(z); cacheZoom = z; }
+  if (cv.width !== W * z) { cv.width = W * z; cv.height = H * z; }
+  const g = cv.getContext("2d");
+  g.drawImage(cache, 0, 0);
+  if (hover) outline(g, hover, "#FFFFFF", Math.max(2, z * .5));
+}
+
+function render(z) {
+  const c = document.createElement("canvas"); c.width = W * z; c.height = H * z;
+  const g = c.getContext("2d");
+  g.imageSmoothingEnabled = false;
+  g.drawImage(base, 0, 0, W * z, H * z);
+  const lines = (pred, style, width) => {
+    g.beginPath();
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+      const i = y * W + x, a = idx[i];
+      if (x + 1 < W) { const b = idx[i + 1]; if (a !== b && pred(a, b)) { g.moveTo((x + 1) * z, y * z); g.lineTo((x + 1) * z, (y + 1) * z); } }
+      if (y + 1 < H) { const b = idx[i + W]; if (a !== b && pred(a, b)) { g.moveTo(x * z, (y + 1) * z); g.lineTo((x + 1) * z, (y + 1) * z); } }
+    }
+    g.strokeStyle = style; g.lineWidth = width; g.stroke();
+  };
+  const mine = a => a >= 1 && a <= N;
+  lines((a, b) => mine(a) && mine(b) && P[a - 1].s === P[b - 1].s, "rgba(5,8,10,.55)", 1);
+  lines((a, b) => mine(a) && mine(b) && P[a - 1].s !== P[b - 1].s, "#05080A", Math.max(2, z * .7));
+  lines((a, b) => mine(a) !== mine(b), "#E3C77E", Math.max(2, z * .6));
+  // victory points: a small gilt diamond at the province's anchor
+  for (let p = 1; p <= N; p++) {
+    const q = P[p - 1]; if (!q.vp) continue;
+    const x = (q.dx + .5) * z, y = (q.dy + .5) * z, r = Math.max(2.5, z * .9);
+    g.beginPath(); g.moveTo(x, y - r); g.lineTo(x + r, y); g.lineTo(x, y + r); g.lineTo(x - r, y); g.closePath();
+    g.fillStyle = "#F1DC9C"; g.strokeStyle = "#05080A"; g.lineWidth = 1; g.fill(); g.stroke();
+  }
+  // the far islands and territories, each in a box of its own under the main map
+  g.font = `${Math.max(11, z * 3.4)}px ${getComputedStyle(document.body).fontFamily}`;
+  for (const b of DATA.insets) {
+    g.strokeStyle = "rgba(201,165,90,.7)"; g.lineWidth = 1;
+    g.strokeRect(b.x * z + .5, b.y * z + .5, b.w * z - 1, b.h * z - 1);
+  }
+  return c;
+}
+
+function outline(g, p, style, width) {
+  const z = zoom; g.beginPath();
+  for (const i of pix[p]) {
+    const x = i % W, y = (i - x) / W;
+    if (x + 1 >= W || idx[i + 1] !== p) { g.moveTo((x + 1) * z, y * z); g.lineTo((x + 1) * z, (y + 1) * z); }
+    if (x === 0 || idx[i - 1] !== p) { g.moveTo(x * z, y * z); g.lineTo(x * z, (y + 1) * z); }
+    if (y + 1 >= H || idx[i + W] !== p) { g.moveTo(x * z, (y + 1) * z); g.lineTo((x + 1) * z, (y + 1) * z); }
+    if (y === 0 || idx[i - W] !== p) { g.moveTo(x * z, y * z); g.lineTo((x + 1) * z, y * z); }
+  }
+  g.strokeStyle = style; g.lineWidth = width; g.stroke();
+}
+
+function at(ev) {
+  const r = $("#map").getBoundingClientRect();
+  const x = Math.floor((ev.clientX - r.left) / zoom), y = Math.floor((ev.clientY - r.top) / zoom);
+  if (x < 0 || y < 0 || x >= W || y >= H) return 0;
+  const a = idx[y * W + x]; return a >= 1 && a <= N ? a : 0;
+}
+
+function describe(p) {
+  const q = P[p - 1], st = S[q.s];
+  const grp = groupOf.has(p) ? groups.find(g => g.id === groupOf.get(p)) : null;
+  return `<b>${q.vp ? esc(q.vp) : "Province " + q.id}</b>${q.vp ? ` <span class="s">(victory points ${q.v})</span>` : ""}<br>`
+    + `<span class="s">State</span> ${esc(st.name)}<br><span class="s">Province</span> <span class="num">${q.id}</span> · `
+    + `<span class="num">${q.px}</span> px · ${esc(q.t)}${grp ? `<br><span class="s">Group</span> ${esc(grp.name)}` : ""}`;
+}
+function esc(s) { return String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]) }
+function label(p) { const q = P[p - 1]; return q.vp || ("#" + q.id) }
+
+// ---- selection
+function refresh() { paintBase(); draw(); renderSelection(); renderGroups(); }
+function renderSelection() {
+  const n = selected.size;
+  $("#newGroup").disabled = !n || !canWrite; $("#clearSel").disabled = !n;
+  if (!n) { $("#selInfo").textContent = "Nothing selected."; $("#selChips").replaceChildren(); return; }
+  const states = new Set([...selected].map(p => P[p - 1].s));
+  const px = [...selected].reduce((t, p) => t + P[p - 1].px, 0);
+  $("#selInfo").textContent = `${n} province${n > 1 ? "s" : ""} · ${px} px · ${states.size} state${states.size > 1 ? "s" : ""}: `
+    + [...states].map(s => S[s].name).join(", ");
+  $("#selChips").replaceChildren(...[...selected].map(p => {
+    const c = document.createElement("span"); c.className = "chip" + (P[p - 1].vp ? " vp" : "");
+    c.textContent = label(p); c.title = "Unselect"; c.onclick = () => { selected.delete(p); refresh(); }; return c;
+  }));
+}
+
+const cv = $("#map"), tip = $("#tip");
+cv.addEventListener("mousemove", ev => {
+  const p = at(ev);
+  if (p !== hover) { hover = p; draw(); }
+  if (p) {
+    tip.innerHTML = describe(p); tip.hidden = false;
+    const r = $(".mapwrap").getBoundingClientRect();
+    let x = ev.clientX - r.left + 14, y = ev.clientY - r.top + 14;
+    if (x + 270 > r.width) x = ev.clientX - r.left - 270;
+    tip.style.left = x + "px"; tip.style.top = y + "px";
+  } else tip.hidden = true;
+});
+cv.addEventListener("mouseleave", () => { hover = 0; tip.hidden = true; draw(); });
+cv.addEventListener("click", ev => {
+  const p = at(ev); if (!p) return;
+  if (ev.shiftKey) {
+    const s = P[p - 1].s, all = P.map((q, i) => i + 1).filter(i => P[i - 1].s === s);
+    const on = !all.every(i => selected.has(i));
+    for (const i of all) on ? selected.add(i) : selected.delete(i);
+  } else selected.has(p) ? selected.delete(p) : selected.add(p);
+  refresh();
+});
+for (const b of document.querySelectorAll(".zoom")) b.addEventListener("click", () => {
+  zoom = +b.dataset.z; for (const o of document.querySelectorAll(".zoom")) o.setAttribute("aria-pressed", o === b);
+  draw();
+});
+$("#showRivers").addEventListener("change", () => { paintBase(); draw(); });
+$("#showStates").addEventListener("change", () => { paintBase(); draw(); });
+$("#clearSel").addEventListener("click", () => { selected.clear(); refresh(); });
+
+// ---- groups and their checks
+function members(gr) { return gr.provinces.map(k => byKey.get(k)).filter(Boolean); }
+function checks(gr) {
+  const ps = members(gr), out = [];
+  const missing = gr.provinces.length - ps.length;
+  if (missing) out.push(["bad", `${missing} of its provinces are not on this map any more (the map was cut again)`]);
+  if (ps.length < 2 && gr.kind === "province") out.push(["", "One province: nothing to merge yet."]);
+  const set = new Set(ps), seen = new Set(), stack = ps.length ? [ps[0]] : [];
+  while (stack.length) {
+    const a = stack.pop(); if (seen.has(a)) continue; seen.add(a);
+    for (const b of set) if (!seen.has(b) && adj.has(a < b ? a + "," + b : b + "," + a)) stack.push(b);
+  }
+  if (ps.length && seen.size < ps.length)
+    out.push([gr.kind === "province" ? "bad" : "", gr.kind === "province"
+      ? "Not one piece: the game needs a province to be one area. Add the provinces between, or split the group."
+      : "Not one piece: the state would have a separate part."]);
+  const states = new Set(ps.map(p => P[p - 1].s));
+  if (gr.kind === "province" && states.size > 1)
+    out.push(["", `Spans ${states.size} states (${[...states].map(s => S[s].name).join(", ")}): the merged province goes to one of them.`]);
+  let riv = 0;
+  for (let i = 0; i < ps.length; i++) for (let j = i + 1; j < ps.length; j++) {
+    const a = ps[i], b = ps[j], e = adj.get(a < b ? a + "," + b : b + "," + a);
+    if (e && e.river) riv++;
+  }
+  if (riv && gr.kind === "province") out.push(["", `A river runs between ${riv === 1 ? "two of them" : riv + " pairs of them"}: merged, the river would cross the province.`]);
+  return out;
+}
+
+function renderGroups() {
+  const box = $("#groups");
+  if (!groups.length) {
+    box.innerHTML = '<div class="empty">No groups yet. Select provinces on the map, then press Group the selection.</div>';
+    return;
+  }
+  const active = document.activeElement && document.activeElement.dataset ? document.activeElement.dataset.f : null;
+  box.replaceChildren(...groups.map(gr => {
+    const el = document.createElement("div"); el.className = "group"; el.dataset.id = gr.id;
+    const ps = members(gr), px = ps.reduce((t, p) => t + P[p - 1].px, 0);
+    el.innerHTML = `<div class="ghead"><span class="sw" style="background:${gr.colour}"></span>
+        <input aria-label="Group name" data-f="name-${gr.id}" id="name-${gr.id}" value="${esc(gr.name)}" ${canWrite ? "" : "disabled"}></div>
+      <div class="kind" role="radiogroup" aria-label="What to do with the group">
+        <label><input type="radio" name="kind-${gr.id}" id="kp-${gr.id}" value="province" ${gr.kind === "province" ? "checked" : ""} ${canWrite ? "" : "disabled"}><span>Merge into one province</span></label>
+        <label><input type="radio" name="kind-${gr.id}" id="ks-${gr.id}" value="state" ${gr.kind === "state" ? "checked" : ""} ${canWrite ? "" : "disabled"}><span>Make one state</span></label>
+      </div>
+      <div class="meta num">${ps.length} provinces · ${px} px</div>
+      <div class="chips">${ps.map(p => `<span class="chip${P[p - 1].vp ? " vp" : ""}" data-p="${p}" title="${esc(S[P[p - 1].s].name)}">${esc(label(p))}</span>`).join("")}</div>
+      <div class="checks">${(() => { const c = checks(gr); return c.length ? c.map(([k, t]) => `<div class="warn ${k}">${esc(t)}</div>`).join("") : '<div class="ok">One piece, one state, no river between.</div>'; })()}</div>
+      <textarea aria-label="Note for Claude" data-f="note-${gr.id}" id="note-${gr.id}" placeholder="A note for Claude (a name for the new province or state, which capital to keep...)" ${canWrite ? "" : "disabled"}>${esc(gr.note || "")}</textarea>
+      <div class="row">
+        <button data-a="show">Select these</button>
+        <button data-a="add" ${selected.size && canWrite ? "" : "disabled"}>Add the selection</button>
+        <button data-a="remove" ${selected.size && canWrite ? "" : "disabled"}>Remove the selection</button>
+        <button data-a="del" class="danger" ${canWrite ? "" : "disabled"}>Delete</button>
+      </div>`;
+    el.querySelector("input[data-f]").addEventListener("change", e => save(gr, { name: e.target.value.trim() || gr.name }));
+    el.querySelector("textarea").addEventListener("change", e => save(gr, { note: e.target.value }));
+    for (const r of el.querySelectorAll('input[type="radio"]')) r.addEventListener("change", e => save(gr, { kind: e.target.value }));
+    for (const c of el.querySelectorAll(".chip")) c.addEventListener("click", () => { selected.clear(); selected.add(+c.dataset.p); refresh(); });
+    el.querySelector('[data-a="show"]').addEventListener("click", () => { selected.clear(); for (const p of ps) selected.add(p); refresh(); });
+    el.querySelector('[data-a="add"]').addEventListener("click", () => addTo(gr));
+    el.querySelector('[data-a="remove"]').addEventListener("click", () => {
+      const keep = gr.provinces.filter(k => !selected.has(byKey.get(k)));
+      save(gr, { provinces: keep, ids: keep.map(k => P[byKey.get(k) - 1]?.id ?? null) });
+    });
+    const del = el.querySelector('[data-a="del"]');
+    del.addEventListener("click", () => {
+      if (del.dataset.armed) { remove(gr); return; }
+      del.dataset.armed = "1"; del.textContent = "Delete: sure?";
+      setTimeout(() => { if (del.isConnected) { delete del.dataset.armed; del.textContent = "Delete"; } }, 4000);
+    });
+    return el;
+  }));
+  if (active) { const f = box.querySelector(`[data-f="${active}"]`); if (f) f.focus(); }
+}
+
+// ---- the store
+let db = null, canWrite = false, local = true;
+const status = t => { $("#status").textContent = t; };
+function adopt(list) {
+  groups = list; groupOf.clear();
+  for (const gr of groups) for (const k of gr.provinces) { const p = byKey.get(k); if (p) groupOf.set(p, gr.id); }
+  refresh();
+}
+function nextColour() {
+  const used = new Set(groups.map(g => g.colour));
+  return COLOURS.find(c => !used.has(c)) || COLOURS[groups.length % COLOURS.length];
+}
+async function newGroup() {
+  const ps = [...selected];
+  if (!ps.length) return;
+  const vp = ps.map(p => P[p - 1]).filter(q => q.vp).sort((a, b) => b.v - a.v)[0];
+  const name = vp ? vp.vp : S[P[ps[0] - 1].s].name;
+  const taken = takeFromOthers(ps, null);
+  const doc = { name, kind: "province", note: "", colour: nextColour(), provinces: ps.map(p => P[p - 1].key),
+                ids: ps.map(p => P[p - 1].id), map: DATA.built, made: new Date().toISOString() };
+  selected.clear();
+  if (local) { doc.id = "g" + Date.now(); adopt([...groups, doc]); return; }
+  try { await taken; await db.collection("groups").add(doc); status("Saved."); }
+  catch (e) { status(e.code === "quota_exceeded" ? "The store is full: delete a group first." : "Not saved: " + (e.message || e.code)); }
+}
+async function takeFromOthers(ps, except) {
+  // a province is in one group at most: taking it into a new group takes it out of its old one
+  for (const gr of groups) {
+    if (gr.id === except) continue;
+    const keep = gr.provinces.filter(k => !ps.includes(byKey.get(k)));
+    if (keep.length !== gr.provinces.length) await save(gr, { provinces: keep, ids: keep.map(k => P[byKey.get(k) - 1]?.id ?? null) });
+  }
+}
+async function addTo(gr) {
+  const ps = [...selected].filter(p => !gr.provinces.includes(P[p - 1].key));
+  await takeFromOthers(ps, gr.id);
+  const provinces = [...gr.provinces, ...ps.map(p => P[p - 1].key)];
+  selected.clear();
+  await save(gr, { provinces, ids: provinces.map(k => P[byKey.get(k) - 1]?.id ?? null) });
+}
+async function save(gr, patch) {
+  if (local) { Object.assign(gr, patch); adopt([...groups]); return; }
+  try { await db.collection("groups").doc(gr.id).update({ ...patch, map: DATA.built }); status("Saved."); }
+  catch (e) { status("Not saved: " + (e.message || e.code)); }
+}
+async function remove(gr) {
+  if (local) { adopt(groups.filter(g => g !== gr)); return; }
+  try { await db.collection("groups").doc(gr.id).delete(); status("Deleted."); }
+  catch (e) { status("Not deleted: " + (e.message || e.code)); }
+}
+$("#newGroup").addEventListener("click", newGroup);
+
+(async () => {
+  await loadMap();
+  refresh();
+  status("Connecting to the saved groups...");
+  const offline = msg => { canWrite = true; local = true; status(msg); refresh(); };
+  try {
+    const user = await window.claude?.use?.("user");
+    db = await window.claude?.use?.("db");
+    if (!db) { offline("Groups made here are not saved on this view (open the page on claude.ai to save them)."); return; }
+    const w = user ? await user.can("data.write") : null;
+    canWrite = w !== false; local = false;
+    if (!canWrite) status("You can look, but not change the groups.");
+    db.collection("groups").onSnapshot(snap => {
+      adopt(snap.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => String(a.made).localeCompare(String(b.made))));
+      if (canWrite) status(snap.metadata.hasPendingWrites ? "Saving..." : (snap.size ? `${snap.size} group${snap.size > 1 ? "s" : ""} saved.` : ""));
+    }, e => status("The saved groups could not be read (" + e.code + "). Reload the page."));
+  } catch (e) { offline("Groups made here are not saved on this view."); }
+})();
+</script>

@@ -59,6 +59,18 @@ PROV_HEAD = (456, 486)
 PROV_BODY = (486, 655)
 
 TILE = dict(w=56, h=48)                # building entry background (state and province buildings)
-SLOT = dict(x=2, y=-3, w=52, h=46)     # shared building slot well, at this offset in its entry
+# 2026-10-20 (the author: "Icons aren't centered"): the game draws a building's picture (46 x 46) at (12, 5) of its entry
+# and its damage bar upright at its left, the level under it centred on x 34-35, but the tile is at (0, 0), so the
+# picture ran to the tile's right edge and the bar showed black in its left part: the picture now sits in the tile's
+# middle (PICTURE), the level plate and number centred under it, the damage bar across the picture's foot (DAMAGE,
+# lying flat; its empty part is clear, so only damage shows)
+PICTURE = ((TILE["w"] - 46) // 2, (TILE["h"] - 46) // 2)
+DAMAGE = (PICTURE[0] + 4, PICTURE[1] + 37)
+LEVEL_X = (TILE["w"] - 48) // 2        # the level plate (48 wide)
+# the shared building slots: the game's slot picture (its empty or locked slot, 46 x 46, at (10, 0) of the entry): the
+# well round it, 2 px wider each side and 1 px taller (until 2026-10-20 at (2, -3), 52 x 46: the picture sat 5 px right
+# and 3 px down in it); the damage bar across the picture's foot
+SLOT = dict(x=8, y=-1, w=50, h=48)
+SLOT_DAMAGE = (14, 37)
 LEVEL = dict(w=48, h=18)
 CHIP = dict(w=44, h=24)

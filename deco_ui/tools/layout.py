@@ -121,7 +121,10 @@ DEC_PLATE = dict(w=_edge(.26) - _edge(.12), h=MED_STEPS[1] - MED_STEPS[0] + DEC_
 DEC_CUT = 6
 DEC_BADGES = dict(timeout=(_edge(.12), MED_STEPS[0] - DEC_RAISE), to_take=(_edge(.74), MED_STEPS[0] - DEC_RAISE))
 DEC_TEXT_W = 20                                      # the game's box for the number
-FACTION_LOGO = dict(dx=8, dy=11, scale=0.85)      # faction logo (32 px miniature) centred in the crown's ring
+# faction logo (32 px miniature) centred in the crown's ring (gen_textures.faction_crown: its middle at (22, 25)); 2026-10-20
+# (the author: "It looks like the faction logo isn't quite centered"): at .85 the logo was 27.2 px from (8, 11), its
+# middle 0.4 px up and left of the ring's; at .875 it is 28 px, (8, 11) to (36, 39), the ring's middle exactly
+FACTION_LOGO = dict(dx=8, dy=11, scale=0.875)
 FACTION_INIT = dict(dx=24, dy=33, w=24, h=14)     # faction initiative: bottom-right corner of the crown
 
 # ------------------------------------------------------------------ crown buttons

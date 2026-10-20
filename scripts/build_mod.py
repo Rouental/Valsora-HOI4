@@ -1090,7 +1090,9 @@ def main():
         "\t\t}", "\t}",
         # on_startup has no scope, and a scripted effect needs one (error.log, 2026-10-15: "Invalid Scope ...
         # provided: None"); the effect goes through every country itself, so any country will do
-        "\ton_startup = {", "\t\teffect = {", "\t\t\trandom_country = { valsora_reibonnaise_opinions = yes }", "\t\t}", "\t}",
+        "\ton_startup = {", "\t\teffect = {", "\t\t\trandom_country = { valsora_reibonnaise_opinions = yes }",
+        # Rouental's Royal Host forms now, full (nations.ROU_HOST_STARTUP)
+        *["\t\t\t" + line for line in nations.ROU_HOST_STARTUP], "\t\t}", "\t}",
         "}", ""]))
     # the map colour comes from colors.txt, not the country file: tags missing there get
     # generated colours (in-game, 2026-09-29), so ours replaces vanilla's
@@ -1103,9 +1105,17 @@ def main():
         + "".join(f"{cos} = {{\n\tcolor = rgb {{ {r} {g} {b} }}\n\tcolor_ui = rgb {{ {' '.join(map(str, ui_colour((r, g, b))))} }}\n}}\n"
                   for cos, (_, _, _, (r, g, b), _) in nations.COSMETICS.items()))
     ideologies.write_files(write, OUT)
-    for d in ("common/decisions", "common/ai_strategy", "common/ai_strategy_plans",
-              "history/units", "history/general"):
+    for d in ("common/decisions", "common/ai_strategy", "common/ai_strategy_plans", "history/units"):
         write(f"{d}/valsora_placeholder.txt", "# Intentionally empty: vanilla content is switched off.\n")
+    # every country's first Army HQ template, as the game's generic one (its history/general/taog_hq_template.txt,
+    # switched off with the rest of history/general): without one the Army HQ designer did not save a new HQ (the
+    # author's screenshot, 2026-10-20; that this was the cause is assumed) and the army panel's Deploy had none to deploy
+    write("history/general/valsora_hq_template.txt", "\n".join([
+        "# Every country's first Army HQ template: the game's generic one (Thunder at Our Gates)",
+        "every_possible_country = {", '\tlimit = { has_dlc = "Thunder at Our Gates" }', "\tdivision_template = {",
+        '\t\tlocalization_key = "ARMY_HQ_TEMPLATE_NAME"', "\t\ttemplate_counter = 121", "\t\tis_army_hq = yes",
+        "\t\tregiments = {", "\t\t\thq_infantry = { x = 0 y = 0 }", "\t\t\thq_infantry = { x = 0 y = 1 }", "\t\t}",
+        "\t\tsupport = {", "\t\t\thq_support_company = { x = 0 y = 0 }", "\t\t}", "\t}", "}", ""]))
     # vanilla's files the mod ships changed (2036; the generic AI strategies, events and
     # on_actions), stand-ins for its removed decisions, histories for Earth's country tags
     shipped = vanilla_parts.files()

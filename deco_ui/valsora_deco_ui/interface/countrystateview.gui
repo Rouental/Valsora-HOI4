@@ -573,13 +573,13 @@ guiTypes = {
 		
 		iconType = {
 			name = "level_bg"
-			position = { x=8 y=51 }	
+			position = { x = 4 y = 51 }	
 			spriteType = "GFX_valsora_deco_sv_level"
 		}
 		
 		instantTextboxType = {
 			name = "level"
-			position = { x = 5 y = 54 }
+			position = { x = -2 y = 54 }
 			font = "valsora_deco_value_15"
 			maxWidth = 60
 			maxHeight = 20
@@ -589,15 +589,15 @@ guiTypes = {
 		
 		buttonType = {
 			name = "building_picture"
-			position = { x = 12 y = 5 }
+			position = { x = 5 y = 1 }
 			quadTextureSprite ="GFX_buildings_strip"
 		}
 		
 		iconType = {
 			name = "damage_bar"
 			spriteType = "GFX_damage_bar"
-			position = { x=10 y=41 }
-			rotation = 1.5708		
+			position = { x = 9 y = 38 }
+			rotation = 0		
 		}	
 	}
 	
@@ -609,7 +609,7 @@ guiTypes = {
 
 		iconType = {
 			name = "build_slot_bg"
-			position = { x = 2 y = -3 }	
+			position = { x = 8 y = -1 }	
 			spriteType = "GFX_valsora_deco_sv_slot"
 			alwaystransparent = yes
 		}
@@ -636,8 +636,8 @@ guiTypes = {
 		iconType = {
 			name = "damage_bar"
 			spriteType = "GFX_damage_bar"
-			position = { x=7 y=36 }
-			rotation = 1.5708		
+			position = { x = 14 y = 37 }
+			rotation = 0		
 		}	
 	}
 	
@@ -654,13 +654,13 @@ guiTypes = {
 		
 		iconType = {
 			name = "level_bg"
-			position = { x=8 y=50 }	
+			position = { x = 4 y = 50 }	
 			spriteType = "GFX_valsora_deco_sv_level"
 		}
 		
 		instantTextboxType = {
 			name = "level"
-			position = { x = -16 y = 52 }
+			position = { x = -22 y = 52 }
 			font = "valsora_deco_value_15"
 			maxWidth = 100
 			maxHeight = 100
@@ -670,15 +670,15 @@ guiTypes = {
 
 		buttonType = {
 			name = "building_picture"
-			position = { x = 12 y = 5 }
+			position = { x = 5 y = 1 }
 			quadTextureSprite ="GFX_buildings_strip"
 		}
 		
 		iconType = {
 			name = "damage_bar"
 			spriteType = "GFX_damage_bar"
-			position = { x=10 y=42  }
-			rotation = 1.5708		
+			position = { x = 9 y = 38 }
+			rotation = 0		
 		}
 	}
 

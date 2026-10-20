@@ -786,7 +786,7 @@ guiTypes = {
 
 		background = {
 			name = "Background"
-			quadTextureSprite ="GFX_tiled_window_1b_thin_border"
+			quadTextureSprite ="GFX_valsora_deco_unit_list_bg"
 		}
 
 		# Off-screen anchor for the ctrl+g+s shortcut. containerWindowType cannot host shortcut=,

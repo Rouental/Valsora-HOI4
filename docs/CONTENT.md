@@ -137,7 +137,9 @@ Aislada is the worked example of a built-out nation:
   not stop that, in game, 2026-10-04). Until 2026-10-16 each country's history added
   the men first (`add_manpower`, 12,000 per division; Rouental 150,000); the author
   had it removed ("if you are please remove it"), so the divisions come out of the
-  country's own pool. State population is 300 per map pixel (`build_mod.POP_PER_PX`; 20 until
+  country's own pool. Rouental's Royal Host forms on the game's first day instead
+  (`on_startup`: its own men, then `load_oob`; `nations.ROU_HOST_STARTUP`, 2026-10-20), so it
+  starts full and keeps its experience. State population is 300 per map pixel (`build_mod.POP_PER_PX`; 20 until
   2026-10-04, when the whole world held 75 million and Seigne 7,000, and the pools were too small).
 - **Devlon's 15 test spirits** (author, 2026-10-14: to see how the politics screen shows many
   national spirits): `nations.TEST_SPIRITS`, ideas `DVL_test_spirit_1`..`15` with vanilla's generic

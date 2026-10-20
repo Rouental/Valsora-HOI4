@@ -1621,7 +1621,7 @@
   "path": "gfx/interface/diplo_leader_frame.dds",
   "w": 134,
   "h": 175,
-  "sig": "ed7372d22fa98f962b0617dd68128f7f771a9d33da2626c53a57d1ace45d629c"
+  "sig": "8f44bfb9be8d8f590ce43777450cfaa9c51022c7298a96b89de25131c22c8842"
  },
  {
   "key": "dv_flag_frame",
@@ -2088,16 +2088,16 @@
  {
   "key": "ia_army",
   "path": "gfx/army_icons/army_icons.dds",
-  "w": 4323,
+  "w": 3465,
   "h": 32,
-  "sig": "fc80df302477466876755f556f75e2b1992182e74f322a3cdc4bbe723ab4be1a"
+  "sig": "4783c9fd07e2eac8f2432f409783f0f0c3edccc11cf4ba536d47941c7afd9f81"
  },
  {
   "key": "ia_army_selected",
   "path": "gfx/army_icons/army_selected_icons.dds",
-  "w": 4585,
+  "w": 3675,
   "h": 34,
-  "sig": "517ab9fb383a94b2bf52f0fdead7f408c57fed3e321536ecc3597f95d15816e5"
+  "sig": "ffa4769415f569b81c39c423791517a260a410d0d4109a043b4d1bf307adc088"
  },
  {
   "key": "ia_group",
@@ -2119,6 +2119,13 @@
   "w": 486,
   "h": 88,
   "sig": "2a27c8d63e6dba1dd5152c4d9919d43912a09589e9edf628085b34ff4c5bfa07"
+ },
+ {
+  "key": "fg_goals_bg",
+  "path": "gfx/interface/factions/ui/faction_goals_bg.dds",
+  "w": 512,
+  "h": 630,
+  "sig": "2e82b065cee992c7d1dd1041d3e56a3cfcbc40e42253779d29fa4f4540baf9c2"
  },
  {
   "key": "pf_factory_icon",
@@ -2300,7 +2307,7 @@
   "path": "gfx/interface/buildings/building_icon_strip.dds",
   "w": 1426,
   "h": 46,
-  "sig": "2acbe1684ae086050606de6b5a5cb15556c8db1619c97a17ab38d85d9a3566c0"
+  "sig": "602a4dff3fe9078e8451ef16badb06d05f422a80a4823aa1350e1e4b90f00a46"
  },
  {
   "key": "cn_state_constructions",
@@ -3318,11 +3325,32 @@
   "sig": "8ddb62960566b51ae533cfe6c73c247feb1367d91dc73dbc1325d2ba8d22262a"
  },
  {
+  "key": "mv_unit_list_bg",
+  "path": "gfx/interface/valsora_deco/mapviews/unit_list_bg.dds",
+  "w": 192,
+  "h": 192,
+  "sig": "909711b5d20c4e4427d6b7758ad9851493d7d723e5e4a14dbb9cc04165342c0c"
+ },
+ {
+  "key": "sv_damage_bg",
+  "path": "gfx/interface/building_damage_bar_bg.dds",
+  "w": 45,
+  "h": 9,
+  "sig": "954be09102648032acc20107e65f8a59aebb6f95005498a6d3389fdf68b428da"
+ },
+ {
+  "key": "sv_damage",
+  "path": "gfx/interface/building_damage_bar.dds",
+  "w": 45,
+  "h": 9,
+  "sig": "5699d1aef350ad4af560453db61f4b91ad53c82de9c70f68c17f68efa2abc536"
+ },
+ {
   "key": "sv_slot",
   "path": "gfx/interface/valsora_deco/stateview/slot.dds",
-  "w": 52,
-  "h": 46,
-  "sig": "178d529f6dbb56845adae9d075ce287dc0396642eec643fc86b56e7e6e2aa284"
+  "w": 50,
+  "h": 48,
+  "sig": "f40541fe98bd5238bfd2f7f88e5a7e47bb2d9f8d27e906a7f029745867d5baf5"
  },
  {
   "key": "sv_level",
@@ -3980,14 +4008,14 @@
   "path": "gfx/interface/Loadingscreen_loadingstatus.dds",
   "w": 1400,
   "h": 92,
-  "sig": "a783652241a8120a735187326933a605289c4ed43af74d15573b161b65938adc"
+  "sig": "bfdfaa99edc29611463f74a54b9d1ef71f901280300d1ca705f0665b2c63945e"
  },
  {
   "key": "ld_tip",
   "path": "gfx/interface/Loadingscreen_loadingtip.dds",
   "w": 1400,
   "h": 148,
-  "sig": "4cb640b913b7ffee383f3b37c85d421d392908b1707b9bd3291d35d2da8c2a95"
+  "sig": "5c4d18d41f209dc202e1667072bb49c950daddc3039834ef665e115bc4594b30"
  },
  {
   "key": "ld_track",

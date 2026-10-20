@@ -132,7 +132,13 @@ PANELS = {
                     preview_hide=["tab_section_view_full_overlay_container"],
                     # v0.9.1, the user: "The name of the faction gets cut off if too long": the Association's is
                     # 323 px in the deco capitals, the game's box 300; it runs to the star box now (x 442)
-                    inner_attrs={"header_section>faction_name": dict(position=(116, 60), maxWidth=326)}),
+                    inner_attrs={"header_section>faction_name": dict(position=(116, 60), maxWidth=326),
+                                 # 2026-10-20 (the author: "The logo should also be centered on the faction screen as
+                                 # well"): the logo's middle (centerposition; its 80 px drawing in the middle of its
+                                 # 100 px frame) at the game's (60, 110) left it 15 px below the identity box's top rim
+                                 # (y 55) and 12 above its bottom one (162), 5 px from its left one (x 15); at (68, 108)
+                                 # it is 13 and 14 px from them all
+                                 "header_section>faction_icon": dict(position=(68, 108))}),
     "faction_setup": dict(file="factions/new_faction_window.gui", window="faction_setup_window",
                           title="faction_title>title", header_bg=["faction_title>faction_header_bg"],
                           close_path="faction_title>close_button", header=["faction_title"]),

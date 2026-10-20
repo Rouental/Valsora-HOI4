@@ -96,8 +96,7 @@ B[12] = ("".join(f'<ellipse cx="15" cy="15" rx="13" ry="5" fill="none" stroke="u
 B[13] = (g("M3,9Q3,5 8,5Q13,5 13,9V24H3Z") + ln("M5,24L4,28M11,24L12,28M13,14H17V22", GOLD, 1.3)   # fuel silo
          + "".join(g(f"M{x},{y}H{x + 6}V{y + 8}H{x}Z", "url(#silver)") for x, y in ((17, 12), (23, 12), (20, 20))))
 B[14] = place(CRATE, (2, 8, 20, 27), (11, 2, 29, 21)) + place(CRATE, (2, 8, 20, 27), (1, 10, 19, 29))   # supply hub
-B[15] = (ln("M8,29L11,1M14,29L14,1", GOLD, 1.5) + ln("M14,29C14,18 20,10 27,3M19,29C19,19 24,12 29,7", GOLD, 1.5)  # railway
-         + "".join(ln(f"M{7.5 - i * .3 + .2},{27 - i * 5}H{15}", RULE, 1.2) for i in range(6)))
+B[15] = ("frame", None)                                                                   # railway: RAIL below
 B[16] = jet((1, 0, 29, 30))                                                               # air facility
 B[17] = (g("M10,4H20L22,22H8Z", "url(#civ)") + ln("M15,2V22", GOLD, 1.4)                   # naval facility
          + g("M2,18L5,28H25L28,18L25,22H5Z", "url(#steel)"))
@@ -128,14 +127,53 @@ B[29] = (place(pylon(), (5, 1, 25, 29), (0, 4, 20, 30))                         
 B[30] = place(pylon(), (5, 1, 25, 29), (0, 1, 22, 30)) + place(BOLT, (13, 4, 25, 28), (19, 9, 29, 29))   # power grid
 
 
+
+
+# the railway (2026-10-20, the author: "the railroad icon could use another path. Currently the bars go over the side of
+# the track, and the track to the right has no tracks. You should try to recreate the base game icon more or less 1 to
+# 1"): the game's switch, traced from its 46 px frame and drawn in the frame's own pixels: a straight track (rails at x
+# 13 and 21, y 6 to 40) with six sleepers, and a branch leaving it, its inner rail from the left rail at y 27 and its
+# outer from the right rail at y 30, both curving up to the right, with sleepers of its own on the top three rows. Each
+# rail has a dark edge, so the sleepers break where they pass under it, as the game's do; the whole drawing is made a
+# little smaller about the frame's middle (RAIL_FIT) to stay inside the octagon
+def rail():
+    sleepers = (9, 14.5, 20, 25.5, 31, 36.5)
+    inner, outer = "M13,27C13,20 30,15 30,6", "M21,30C21,23 38,19 38,6"
+    def curve_x(d, y):                      # the curve's x at height y (sampled)
+        import re
+        x0, y0, x1, y1, x2, y2, x3, y3 = map(float, re.findall(r"-?\d+\.?\d*", d))
+        best = min((abs(((1 - s) ** 3 * y0 + 3 * (1 - s) ** 2 * s * y1 + 3 * (1 - s) * s * s * y2 + s ** 3 * y3) - y), s)
+                   for s in [i / 200 for i in range(201)])[1]
+        return (1 - best) ** 3 * x0 + 3 * (1 - best) ** 2 * best * x1 + 3 * (1 - best) * best * best * x2 + best ** 3 * x3
+    # one gilt gradient over the whole drawing, light at the top (an object's own box would shade each sleeper alike,
+    # and gives a straight rail, a box of no width, no paint at all)
+    defs = ('<defs><linearGradient id="rail_g" gradientUnits="userSpaceOnUse" x1="0" y1="6" x2="0" y2="40">'
+            '<stop offset="0" stop-color="#F6E3A6"/><stop offset="1" stop-color="#9A7634"/></linearGradient></defs>')
+    ties = "".join(f'<rect x="10.6" y="{y - 1.05}" width="13.2" height="2.1" fill="url(#rail_g)"/>' for y in sleepers)
+    ties += "".join(f'<rect x="{curve_x(inner, y) - 2.4:.2f}" y="{y - 1.05}" width="{curve_x(outer, y) - curve_x(inner, y) + 4.8:.2f}" '
+                    f'height="2.1" fill="url(#rail_g)"/>' for y in sleepers[:3])
+    rails = ""
+    for d in (inner, outer, "M13,40V6", "M21,40V6"):
+        rails += (f'<path d="{d}" fill="none" stroke="{INK}" stroke-width="3.6" stroke-linecap="butt"/>'
+                  f'<path d="{d}" fill="none" stroke="url(#rail_g)" stroke-width="1.75" stroke-linecap="butt"/>')
+    return defs + ties + rails
+
+
+RAIL_FIT = (10.6, 6, 40.4, 40)              # the drawing's box in the frame, and where it goes:
+RAIL_TO = (11.5, 7.5, 37.5, 38.5)
+RAIL = place(rail(), RAIL_FIT, RAIL_TO)
+
+
 # ------------------------------------------------------------------ the buttons: subtle octagons
 PLATE = octagon(1.5, 1.5, 44.5, 44.5, 12)
 
 
 def building(art):
+    """a building's octagon and its subject (30 x 30 units into the octagon; ("frame", None): the railway, drawn in the
+    frame's own pixels)"""
+    body = RAIL if isinstance(art, tuple) else place(art, (0, 0, 30, 30), (7, 7, 39, 39))
     return (f'<path d="{PLATE}" fill="url(#lac)" stroke="rgba(201,165,90,.5)"/>'
-            f'<path d="{octagon(4, 4, 42, 42, 10.8)}" fill="none" stroke="rgba(241,220,156,.10)"/>'
-            + place(art, (0, 0, 30, 30), (7, 7, 39, 39)))
+            f'<path d="{octagon(4, 4, 42, 42, 10.8)}" fill="none" stroke="rgba(241,220,156,.10)"/>' + body)
 
 
 def glow(bright):

@@ -72,6 +72,7 @@ def fan(cx, cy, r, n=9, spread=70, colour="rgba(201,165,90,.16)"):
 PORTRAIT_SCALE = 0.72
 LEADER = dict(w=134, h=175, right=124.5, portrait=(7, 12, 112, 151))
 CHAMFER = 24
+PLATE_TOP = 1          # the plate's top row in the frame's picture (see leader_frame)
 
 
 def octagon_path(x0, y0, x1, y1, c, d=0.0):
@@ -87,7 +88,10 @@ def leader_frame():
     cx, cy = (x0 + x1) / 2, (y0 + y1) / 2
     c = CHAMFER
     hole = octagon_path(x0, y0, x1, y1, c)
-    plate = f"M{x0 - 5.5},{y0 - 5.5}H{x1 + 5.5}V{y1 + 5.5}H{x0 - 5.5}Z"   # the lacquer: all of the plate but the opening
+    # the lacquer: all of the plate but the opening, from the picture's second row: the bar the game draws behind the
+    # tabs (tabs_background, intel_ledger/tab_bg.dds, from the frame's y 1) showed its top rim and chamfer above the
+    # plate (the author, 2026-10-20: "There's the remains of a line above and slightly to the left of the portrait")
+    plate = f"M{x0 - 5.5},{PLATE_TOP}H{x1 + 5.5}V{y1 + 5.5}H{x0 - 5.5}Z"
     # the rays: from the portrait's middle, as the politics screen's sunburst, seen in the plate's corners; a blurred
     # octagon a little larger than the opening fades them out towards the plate's edge
     rays = "".join(f'<path d="M{cx},{cy}L{cx + 200 * math.cos(math.radians(a - 2.2)):.1f},'
