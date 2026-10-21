@@ -103,7 +103,79 @@ ATTITUDES = [
     ("Mercantile", "Thinks in trade: pays coin sooner than it sends men."),
     ("Timorous", "Fearful of the Crown: yields to pressure, but its levies are poor."),
 ]
-LEVY = ["Rabble", "Militia", "Drilled", "Seasoned", "Veteran"]
+LEVY = ["Rabble", "Militia", "Drilled", "Seasoned", "Veteran", "Ceremonial"]
+LEVY_COLOURS = ["#6B3A32", "#8E5A3A", "#A88A48", "#7E9A5C", "#4C8A6C", "#E3C77E"]
+# Rouental's peoples, the fief list's cultural groups (source/names/rouental_fiefs.txt): display name, colour on the
+# peoples' map, a loyalty modifier, a line of lore. The four with lore and their leanings are the author's (2026-10-21,
+# night); the others' modifiers are 0 until the author says
+PEOPLES = {
+    "Carcasonnaise": ("Carcaraise", "#A2493B", -30, "Hold Carcarelle the true heart of Reibonne's culture: an old enmity with Rêverie"),
+    "Nataine": ("Nataine", "#8A6BA0", 0, "Descendants of the Natin empire's invaders, settled in Rouental"),
+    "Oscarl": ("Oscarl", "#3F7F6E", 25, "Fiercely loyal, grateful to have been allowed to settle in Rouental"),
+    "Chatois": ("Chatois", "#7FA06A", 30, "Raised to lordship for helping throw the invaders back: ever loyal"),
+    "Conflans": ("Conflans", "#8C8A4E", 0, ""),
+    "Recolt": ("Recolt", "#B07A3A", 0, ""),
+    "Northmarch": ("Northmarch", "#5E8E6E", 0, ""),
+    "Southmarch": ("Southmarch", "#9A9A62", 0, ""),
+    "Crépuscule": ("Crépuscule", "#6B5A7E", 0, ""),
+    "Lyrién": ("Lyrién", "#B9875E", 0, ""),
+    "Piscan": ("Piscan", "#5D8A84", 0, ""),
+    "Lustianaise": ("Lustianaise", "#A86B7E", 0, ""),
+    "Helvetican": ("Helvetican", "#9B8F7A", 0, ""),
+}
+ATTITUDE_MOD = {"Leal": 10, "Grasping": -5, "Belligerent": 0, "Quarrelsome": -5, "Pious": 0, "Proud": -10,
+                "Mercantile": 0, "Timorous": 5}
+
+
+@functools.lru_cache(maxsize=None)
+def ALL_FIEFS():
+    cwd = os.getcwd()
+    os.chdir(REPO)
+    try:
+        return [f for fs in cultures.fiefs().values() for f in fs]
+    finally:
+        os.chdir(cwd)
+
+
+@functools.lru_cache(maxsize=None)
+def peoples():
+    """state -> its people: the cultural group of the fief it is named for; a state named for no fief of the list takes
+    its governorate's commonest people (guessed); the Royal Fiefs are the Crown's"""
+    R = realm()
+    cwd = os.getcwd()
+    os.chdir(REPO)
+    try:
+        groups = cultures.fiefs()
+    finally:
+        os.chdir(cwd)
+    f2g = {}
+    for g, fs in groups.items():
+        for f in fs:
+            f2g.setdefault(f, g)
+    out, guessed = {}, set()
+    for sid in R["gov"]:
+        if sid in R["royal"]:
+            out[sid] = "Crown"
+            continue
+        g = f2g.get(R["st"][sid]["name"])
+        if g and g != "Royal Fiefs":
+            out[sid] = g
+    for sid in R["gov"]:
+        if sid not in out:
+            c = Counter(out[s] for s, gg in R["gov"].items() if gg == R["gov"][sid] and s in out and out[s] != "Crown")
+            out[sid] = c.most_common(1)[0][0] if c else "Conflans"
+            guessed.add(sid)
+    return out, guessed
+
+
+def inspected(sid, selected=()):
+    """whether the Crown knows a state's levies: its own fiefs always; a few states inspectors have seen (samples)"""
+    R = realm()
+    if sid in R["royal"]:
+        return True
+    if sid in selected:
+        return True
+    return h(R["st"][sid]["name"] + "inspected", 10) < 3
 FIRST = ["Aubert", "Bérenger", "Clémence", "Éloïse", "Fulbert", "Gaspard", "Hélène", "Isaure", "Josselin", "Lothaire",
          "Naudin", "Odile", "Perrine", "Raoul", "Sibylle", "Thibault", "Ursule", "Valéran", "Yolande", "Amaury",
          "Blanche", "Côme", "Gilles", "Hugues", "Aliénor", "Enguerrand"]
@@ -121,18 +193,45 @@ def governorates():
     for i, g in enumerate(names):
         states = sorted((s for s, gg in R["gov"].items() if gg == g), key=lambda s: -R["st"][s]["manpower"])
         seat = states[0]
-        loyal = 86 if g == "Couronneterre" else 18 + h(g, 70)
-        out[g] = dict(states=states, seat=seat, loyalty=loyal, attitude=ATTITUDES[(i * 3 + 1) % len(ATTITUDES)],
-                      governor=f"{FIRST[i % len(FIRST)]} {cultures.noble(R['st'][seat]['name'])}",
-                      manpower=sum(R["st"][s]["manpower"] for s in states))
+        P, _ = peoples()
+        att = ATTITUDES[(i * 3 + 1) % len(ATTITUDES)]
+        if g == "Carcarelle":
+            att = ATTITUDES[5]                              # Proud: a sample that fits the Carcaraise
+        mp = sum(R["st"][s]["manpower"] for s in states)
+        shares = Counter()
+        for s_ in states:
+            shares[P[s_]] += R["st"][s_]["manpower"]
+        people_mod = round(sum(PEOPLES[p][2] * n for p, n in shares.items() if p in PEOPLES) / mp)
+        elsewhere = [f for f in ALL_FIEFS() if f not in {R["st"][x]["name"] for x in states} and not f.startswith("Ligue")]
+        surname = cultures.noble(elsewhere[h(g + "surname", len(elsewhere))])
+        if g == "Crépuscule":
+            governor, origin, gov_mod = "The Prince of Crépuscule", "By the laws that bind Crépuscule to Rouental", 5
+        elif i % 2:
+            governor, origin, gov_mod = f"{FIRST[i % len(FIRST)]} {surname}", \
+                "Of the Prince's court, appointed by the Prince", -5
+        else:
+            governor, origin, gov_mod = f"{FIRST[i % len(FIRST)]} {surname}", \
+                "Recommended by the Estates General, appointed by the Prince", 5
+        noise = h(g + "noise", 31) - 15
+        base = 50
+        if g == "Couronneterre":
+            base, noise = 70, 6
+        loyal = max(2, min(97, base + people_mod + ATTITUDE_MOD[att[0]] + gov_mod + noise))
+        out[g] = dict(states=states, seat=seat, loyalty=loyal, attitude=att, governor=governor, origin=origin,
+                      manpower=mp, shares=shares,
+                      breakdown=[("Base", base), ("The peoples", people_mod), (f"Estates: {att[0]}", ATTITUDE_MOD[att[0]]),
+                                 ("The governor", gov_mod), ("Recent events", noise)])
     return out
 
 
 def levy(sid):
     R = realm()
+    name = R["st"][sid]["name"]
+    if name == "Rêverie" or name.startswith("Ligue"):
+        return 5                                            # Ceremonial: a city's few, very well drilled
     if sid in R["royal"]:
         return 4
-    return h(R["st"][sid]["name"] + "levy", 5)
+    return h(name + "levy", 5)
 
 
 # ---------------------------------------------------------------- the map as SVG, along the map's pixel edges
@@ -186,7 +285,7 @@ def _edges(cls_fn, S):
     return {k: "".join(v) for k, v in out.items()}
 
 
-def map_svg(scale, select_gov=None, select_state=None, crown=False):
+def map_svg(scale, select_gov=None, select_state=None, crown=False, lens="loyalty"):
     """the realm at `scale` screen px a map px: governorates by loyalty, the Royal Fiefs the Crown's gilt, the rest of
     the land dim; state, governorate and coast lines; the selection outlined; each governorate's seal"""
     R = realm()
@@ -194,14 +293,34 @@ def map_svg(scale, select_gov=None, select_state=None, crown=False):
     G = governorates()
     H, W = S.shape
 
+    P, _ = peoples()
+    sel = set()
+    if select_gov:
+        sel = set(G[select_gov]["states"])
+    if crown:
+        sel = set(royal)
+
     def fill_key(s):
         if s == 0:
             return None
-        if s in royal:
-            return "royal"
-        if s in gov:
-            return "g:" + gov[s]
-        return "other"
+        if s not in gov:
+            return "other"
+        mark = "|s" if s in sel else ""
+        if lens == "peoples":
+            return ("royal" if s in royal else "p:" + P[s]) + mark
+        if lens == "levies":
+            return (f"q:{levy(s)}" if inspected(s, sel) else "unknown") + mark
+        return ("royal" if s in royal else "g:" + gov[s]) + mark
+
+    def colour(k):
+        k = k.split("|")[0]
+        if k.startswith("g:"):
+            return band(G[k[2:]]["loyalty"])[2]
+        if k.startswith("p:"):
+            return PEOPLES[k[2:]][1]
+        if k.startswith("q:"):
+            return LEVY_COLOURS[int(k[2:])]
+        return {"royal": "url(#crown)", "unknown": "url(#unknown)"}[k]
 
     def edge_cls(p, q):
         ip, iq = p in gov, q in gov
@@ -217,24 +336,20 @@ def map_svg(scale, select_gov=None, select_state=None, crown=False):
 
     fills = _runs(fill_key, S)
     edges = _edges(edge_cls, S)
-    sel = set()
-    if select_gov:
-        sel = set(G[select_gov]["states"])
-    if crown:
-        sel = set(royal)
     out = [f'<svg width="{W * scale:.0f}" height="{H * scale:.0f}" viewBox="0 0 {W} {H}" style="display:block">',
            '<defs><pattern id="crown" width="3" height="3" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">'
            '<rect width="3" height="3" fill="#6E5626"/><rect width="1.1" height="3" fill="#C9A55A"/></pattern>'
+           '<pattern id="unknown" width="3" height="3" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)">'
+           '<rect width="3" height="3" fill="#20292E"/><rect width=".8" height="3" fill="#3A464C"/></pattern>'
            '<filter id="glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation=".8"/></filter></defs>',
            f'<rect width="{W}" height="{H}" fill="#0B1317"/>']
     if "other" in fills:
         out.append(f'<path d="{fills["other"]}" fill="#1B262C"/>')
     for k, d in fills.items():
-        if k.startswith("g:"):
-            g = k[2:]
-            out.append(f'<path d="{d}" fill="{band(G[g]["loyalty"])[2]}" fill-opacity="{1 if (not sel or select_gov == g) else .55}"/>')
-    if "royal" in fills:
-        out.append(f'<path d="{fills["royal"]}" fill="url(#crown)" fill-opacity="{1 if (crown or not sel) else .6}"/>')
+        if k == "other":
+            continue
+        lit = (not sel) or k.endswith("|s")
+        out.append(f'<path d="{d}" fill="{colour(k)}" fill-opacity="{1 if lit else .5}"/>')
     if select_state:
         d = _runs(lambda s: 1 if s == select_state else None, S).get(1, "")
         out.append(f'<path d="{d}" fill="#F1DC9C" fill-opacity=".35"/>')
@@ -250,7 +365,7 @@ def map_svg(scale, select_gov=None, select_state=None, crown=False):
         out.append(f'<path d="{d}" stroke="#F8E7B0" stroke-width="1.6" {style}/>')
     # the seals: an octagon in each governorate's colour; the Crown's a gilt one on its capital
     r = 4.6 / scale
-    for g, (sx, sy, depth) in R["seal"].items():
+    for g, (sx, sy, depth) in (R["seal"].items() if lens == "loyalty" else ()):
         c = band(G[g]["loyalty"])[2]
         pts = " ".join(f"{sx + r * np.cos(np.radians(22.5 + 45 * i)):.2f},{sy + r * np.sin(np.radians(22.5 + 45 * i)):.2f}"
                        for i in range(8))

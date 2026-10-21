@@ -190,7 +190,14 @@ Aislada is the worked example of a built-out nation:
 - **Rouental's names** (2026-10-02): the author's fiefs are
   `source/names/rouental_fiefs.txt` (393 fiefs under 14 headings; `cultures.fiefs`).
   **Every fief is a vassal of the Crown; the headings are cultural groups, not vassals**
-  (author's correction), and the governorates between vassals and Crown have no power.
+  (author's correction), and the governorates between vassals and Crown have no power (2026-10-21, night: "The
+  governorates still hold little power. They were designed to try to centralize the nation, but completely backfired.
+  The governor remains the crown appointee, and is responsible for trying their best to reign in the unruly vassals").
+  The cultural groups are Rouental's peoples, and their loyalty differs: the Carcaraise (the list's "Carcasonnaise",
+  renamed Carcarelle) resent Rêverie, holding Carcarelle the true heart of Reibonne's culture; the Nataine descend
+  from the Natin empire's invaders; the Oscarl are "fiercely loyal and grateful for being allowed to settle in
+  Rouental"; the Chatois, raised to lordship for helping throw the invaders back, "are ever loyal"
+  (`docs/DECISIONS.md`, the governorates' screen).
   The author will give each fief its title; per-fief levies wait for that. They give
   Rouental's name list noble surnames ("de Beaufort", "d'Aurifort") and its division
   names: "The Royal Host" (Garde Royale, Ost de <royal fief>) and "Vassal Levies"

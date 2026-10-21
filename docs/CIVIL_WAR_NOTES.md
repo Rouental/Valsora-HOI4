@@ -22,3 +22,7 @@ now is in `CLAUDE.md` (Rouental's focus tree); this is what it should become.
   - **Disunifiers**, in a faction led by Crépuscule, who want Rouental broken up.
   - Perhaps a third: faith-based unifiers.
 - Which existing tag belongs to which side is still open.
+- **Not by governorate** (the author, 2026-10-21, night, on the governorates choosing sides): "that might be the case
+  for one of the other paths, for a more traditional civil war. But the communist path is the complete collapse of
+  traditional Rouentaise society, everyone against everyone. They're not too concerned about the arbitrary lines of
+  the governorates."

@@ -178,7 +178,7 @@ def card_crown():
     out += label(330, y0 + 15, f"11 Royal Fiefs  ·  {sum(st[s]['manpower'] for s in fiefs) / 1e6:.2f} M men", 9.5, w=196, align="right")
     y = y0 + 50
     out += well(18, y, 78, 98, c=5) + portrait("roland_cahun", 19, y + 1, 76, 96)
-    out += label(108, y + 2, "Held by the King", 9.5)
+    out += label(108, y + 2, "Held by the Prince", 9.5)
     out += text(108, y + 16, "Roland II Cahun", 19, CREAM, font="fed", track=.02)
     out += text(108, y + 40, "No governor and no estates: the Crown's own land", 12.5, CREAM2, font="bod", weight=500)
     out += label(108, y + 62, "The Royal Host", 9.5)

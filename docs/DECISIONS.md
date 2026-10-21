@@ -212,6 +212,36 @@ Moved out of `CLAUDE.md` word for word on 2026-10-17 (`CLAUDE.md` keeps one line
   disconnected region, it should instead be two regions. South Montvallée should encompass Hollier, Evriches, Seigne,
   Serpette, and Chirac. North Montvallée should encompass Selgrave, Lustiana, Lanzerac, Moelle, Maieul, Serieux, and
   Petit Selgrave"), one governorate; Rêverie is a Royal Fief too ("Reverie still needs to be marked as a royal fief").
+- **The governorates' screen, the design so far** (author, 2026-10-21, night; the mockups in
+  `deco_ui/art/proposals/governorates/`): it opens as a larger window from the decisions tab ("Probably open as a
+  larger window"), its map following the game's borders exactly ("Don't go with rough shapes"); no world map mode ("how
+  useless it'd be for nations other than Rouental"). Each governorate shows its governor, loyalty and the attitude of
+  its estates, and the states inside it with their levies; the Royal Fiefs are shown and handled apart.
+  - **Governors are the Prince's appointees** ("the governors are appointed by the Prince, and aren't necessarily the
+    rulers of the vassals in the region, but instead typically a member of the Prince's court or officials recommended
+    by Rouental's estates general. (Except Crépuscule, which is always ruled by the Prince of Crépuscule, as part of the
+    laws that bind them to Rouental.)"); they don't age or die ("I doubt the game will take place over a long enough
+    period for that to work").
+  - **The governorates hold little power** ("They were designed to try to centralize the nation, but completely
+    backfired. The governor remains the crown appointee, and is responsible for trying their best to reign in the
+    unruly vassals").
+  - **Loyalty follows the peoples** (the fief list's cultural groups): "the Carcaraise people have a long history of
+    enmity with the government in Rêverie, as they see Carcarelle as the true heart of culture in Reibonne. Likewise,
+    the Nataine people are descendants of invaders from the Natin empire that settled in Rouental. Meanwhile, the
+    Oscarl are fiercely loyal and grateful for being allowed to settle in Rouental, and the Chatois are the descendants
+    of Nation slaves raised to lordship for their help in throwing back the invaders, and are ever loyal."
+  - **The estates' attitudes change at their sessions** ("I like attitudes switching with estate sessions though,
+    that's really good"); more attitudes to come from the author once the current eight each have something
+    interesting to do.
+  - **Levy quality is hidden until inspectors are sent** ("I LOVE the levy quality being hidden until you send
+    inspectors"); its steps (Rabble, Militia, Drilled, Seasoned, Veteran) "good for now, but could do with a rework.
+    After all, a city state's ceremonial crossbow corps might be small, but they could be very well trained. Maybe a
+    late "ceremonial" category?"; better-trained levies by an action or later by the focus tree.
+  - **Governorates may revolt** ("I like the idea of governorates revolting, to be sure"); more Royal Fiefs by
+    provoking a revolt and annexing, or a ruler's death.
+  - **The civil war**: governorates choosing sides may suit another, more traditional civil war path, not the
+    communist one ("the complete collapse of traditional Rouentaise society, everyone against everyone. They're not
+    too concerned about the arbitrary lines of the governorates": `docs/CIVIL_WAR_NOTES.md`).
 - **The game's generic advisors and theorists are back** (author, 2026-10-21: "Sure, might as well bring back generic
   advisors and theorists"): vanilla's `history/general/generic_advisors.txt`, its Earth cases taken out, for every
   country (`docs/MAP_PIPELINE.md`, Vanilla content switched off).
