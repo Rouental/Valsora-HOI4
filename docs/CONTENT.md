@@ -198,7 +198,21 @@ Aislada is the worked example of a built-out nation:
   from the Natin empire's invaders, fewer and less quarrelsome than the Carcaraise but proud, prickly and never fully
   Rouentaise; the Oscarl are "fiercely loyal and grateful for being allowed to settle in
   Rouental"; the Chatois, descendants of Natin slaves raised to lordship for helping throw the invaders back, "are ever loyal"
-  (`docs/DECISIONS.md`, the governorates' screen).
+  (`docs/DECISIONS.md`, the governorates' screen). The others (the author, 2026-10-21, night: "The other cultures I
+  remember off the top of my head"): **Vairande**, the people of Vair, "Haughty but generally loyal. A seafaring
+  folk"; **Riverlander** ("Riverrain in french?"), "the most numerous of the Rouentaise culture groups, plying the
+  great rivers of the nation"; **Northmarcher** ("Marchenordois"?), "A grim, serious, and disciplined people. Ever
+  watching the north from their mountain strongholds"; **Southmarcher** ("Marchesudois"?), "a martial people that
+  have been greatly influenced by Linterre to the south ... The home of Reformed Seranism"; **Crépusculaise**, "Not
+  technically Reibonnaise, and geographically outside the Vale, though ancient ties mean they share a language. Was
+  the last addition to the realm, joining through a joint marriage. Utterly loyal to their prince, though their
+  loyalty to Rêverie varies"; **Piscan**, "Traders, fishermen, and sailors of the Piscary sea"; **Helvetica**,
+  "Extremely isolated in their own little valley, extremely pious, generally loyal"; **Recoltaise**, "the breadbasket
+  of Rouental, and generally the least divided amongst separate vassals. Proud and wealthy". Which heading of the fief
+  list is which: Carcasonnaise the Carcaraise, Northmarch, Southmarch, Crépuscule, Piscan, Helvetican, Recolt, Nataine,
+  Chatois and Oscarl as named; Conflans (151 fiefs, the most) Claude's guess for the Riverlanders; the Vairande's,
+  the Lyrién and the Lustianaise open. Rouental's faith is Seranism, its head the Voix; power "tends to fluctuate
+  between the Sacred Prince, the Voix, and the Speaker of the Estates General".
   The author will give each fief its title; per-fief levies wait for that. They give
   Rouental's name list noble surnames ("de Beaufort", "d'Aurifort") and its division
   names: "The Royal Host" (Garde Royale, Ost de <royal fief>) and "Vassal Levies"

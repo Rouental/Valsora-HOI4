@@ -30,7 +30,7 @@ import realm as RM  # noqa: E402  (puts the Valsora scripts on the path)
 import nations  # noqa: E402
 import make as M  # noqa: E402  (the decisions panel, the seals)
 
-X0, Y0, WW, WH = 566, 104, 1338, 790       # the window, beside the decisions panel
+X0, Y0, WW, WH = 566, 104, 1338, 846       # the window, beside the decisions panel
 SCALE = 2.6                                 # the realm, 320 x 182 map px: 832 x 473
 MX, MY = X0 + 20, Y0 + 100
 CX, CW = X0 + 876, 446                      # the card's column
@@ -125,13 +125,12 @@ def lower_strip(lens, y):
     lore = [k for k, v in RM.PEOPLES.items() if v[3]]
     for i, k in enumerate(lore):
         name, colour, mod, line = RM.PEOPLES[k]
-        x, yy = MX + (i % 2) * 420, y + 30 + (i // 2) * 60
-        out += box(x, yy + 2, 12, 12, f"background:{colour};box-shadow:0 0 0 1px rgba(227,199,126,.7)")
-        out += text(x + 20, yy, name, 15, CREAM, font="fed", track=.06)
-        sign = f"{mod:+d}" if mod else "±0"
-        out += value(x + 330, yy + 1, f"{sign} loyalty", 12.5, M.RM.BANDS[0][2] if mod > 0 else ("#E7A493" if mod < 0 else LABEL),
-                     w=82, align="right")
-        out += text(x + 20, yy + 20, line, 12.5, CREAM2, w=392, font="bod", weight=500, lh=1.25)
+        x, yy = MX + (i % 3) * 280, y + 28 + (i // 3) * 42
+        out += box(x, yy + 2, 10, 10, f"background:{colour};box-shadow:0 0 0 1px rgba(227,199,126,.7)")
+        out += text(x + 16, yy, name, 13.5, CREAM, font="fed", track=.05)
+        if mod:
+            out += value(x + 186, yy + 1, f"{mod:+d} loyalty", 11.5, M.RM.BANDS[0][2] if mod > 0 else "#E7A493", w=82, align="right")
+        out += text(x + 16, yy + 15, line, 11, CREAM2, w=256, font="bod", weight=500, lh=1.2)
     return out
 
 

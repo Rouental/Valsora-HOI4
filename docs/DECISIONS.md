@@ -244,6 +244,17 @@ Moved out of `CLAUDE.md` word for word on 2026-10-17 (`CLAUDE.md` keeps one line
     later by the focus tree.
   - **Governorates may revolt** ("I like the idea of governorates revolting, to be sure"); more Royal Fiefs by
     provoking a revolt and annexing, or a ruler's death.
+  - **The attitudes do what Claude suggested, for now** ("For now, I quite like your suggestions for the attitudes":
+    Leal levies cheap; Grasping bought by privileges and political power; Belligerent glad of war, restless in peace;
+    Quarrelsome actions may misfire; Proud resents inspectors and new governors, prizes its charters; Mercantile pays
+    political power for men; Timorous yields cheaply, levies poor), and **Pious estates "will appreciate actions that
+    push the balance of power towards the Voix"**, the head of the Seran faith. "Rouental lacks a defined
+    constitution, and power tends to fluctuate between the Sacred Prince, the Voix, and the Speaker of the Estates
+    General."
+  - **Ceremonial troops are raised apart, as an emergency measure** ("Costs little Political power, but greatly
+    degrades loyalty and angers the vassals").
+  - **Naval levies** from "a specific few of the most powerful coastal vassals": "largely just gives destroyers, or on
+    the Piscary, cutters or corvettes. (I'm thinking that the Piscary gives a combat bonus to small ships.)"
   - **The civil war**: governorates choosing sides may suit another, more traditional civil war path, not the
     communist one ("the complete collapse of traditional Rouentaise society, everyone against everyone. They're not
     too concerned about the arbitrary lines of the governorates": `docs/CIVIL_WAR_NOTES.md`).

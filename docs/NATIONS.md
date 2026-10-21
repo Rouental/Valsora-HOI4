@@ -829,3 +829,10 @@ rather than republic. They should remain authoritarian. Give Kalaistan the natio
 - **Kalaistan** KLS: "the Kingdom of Kalaistan" (Authoritarian still, its Military Junta); the national spirit **The
   King in Chains** (`nations.FEUDAL_ARMY`'s file, the placeholder icon of the Feudal Army), with the author's text, no
   effects yet.
+
+## 2026-10-21, night: Linterre again
+
+The author: "I think I'm gonna rename Placeholdaire back to Linterre for now." **Linterre** LNT, "the Republic of
+Linterre", adjective Linterrois (its first name and adjective, 2026-09-30 to 2026-10-01; Placeholdros, then
+Placeholdaire from 2026-10-07); its unnamed states "Linterre N", its region "Linterre and Selto". Rouental's
+Southmarchers "have been greatly influenced by Linterre to the south".

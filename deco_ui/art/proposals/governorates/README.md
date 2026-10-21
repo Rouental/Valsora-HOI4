@@ -37,7 +37,7 @@ elsewhere, since governors are the Prince's courtiers or the Estates General's p
 peoples' leanings the author gave, the estates' attitude, the governor, and chance), the estates' attitudes (the author's
 four and Claude's four more: `realm.ATTITUDES`), levy quality (`realm.LEVY`, five rungs; a ceremonial corps a sidestep from them, `realm.CEREMONIAL`, the author's Blue Guard of Brume), which states the
 inspectors have seen, the reports. Real: the borders, the states and their names, manpower, the vassals' count, each
-state's people (the fief list's cultural group of the fief it is named for; 17 states named for no listed fief take
+state's people (the fief list's cultural group of the fief it is named for, by the author's names for them: Conflans as the Riverlanders is Claude's guess; 17 states named for no listed fief take
 their governorate's commonest, marked *), the Royal Fiefs, the Royal Host's stations.
 
 In game it would be a scripted GUI on a decision category (`context_type = decision_category`, the game's own way:

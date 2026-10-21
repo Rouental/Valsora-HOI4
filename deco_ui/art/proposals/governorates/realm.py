@@ -112,21 +112,22 @@ CEREMONIAL = {"Grand Brume": ("The Blue Guard of Brume", "Two or three divisions
                               "poor in their arms")}
 # Rouental's peoples, the fief list's cultural groups (source/names/rouental_fiefs.txt): display name, colour on the
 # peoples' map, a loyalty modifier, a line of lore. The four with lore and their leanings are the author's (2026-10-21,
-# night); the others' modifiers are 0 until the author says
+# night, and the rest the same night: "The other cultures I remember"); a modifier only where the author named a leaning
+# (Helvetica's "generally loyal" +10; the Nataine's -10 Claude's reading of "proud ... prickly")
 PEOPLES = {
     "Carcasonnaise": ("Carcaraise", "#A2493B", -30, "Hold Carcarelle the true heart of Reibonne's culture: an old enmity with Rêverie"),
     "Nataine": ("Nataine", "#8A6BA0", -10, "Descendants of the Natin invaders: proud, prickly, never wholly Rouentaise"),
     "Oscarl": ("Oscarl", "#3F7F6E", 25, "Fiercely loyal, grateful to have been allowed to settle in Rouental"),
     "Chatois": ("Chatois", "#7FA06A", 30, "Descendants of Natin slaves, raised to lordship for helping throw the invaders back: ever loyal"),
-    "Conflans": ("Conflans", "#8C8A4E", 0, ""),
-    "Recolt": ("Recolt", "#B07A3A", 0, ""),
-    "Northmarch": ("Northmarch", "#5E8E6E", 0, ""),
-    "Southmarch": ("Southmarch", "#9A9A62", 0, ""),
-    "Crépuscule": ("Crépuscule", "#6B5A7E", 0, ""),
+    "Conflans": ("Riverlander", "#8C8A4E", 0, "The most numerous, plying the great rivers of the nation"),   # Claude's guess: the heading
+    "Recolt": ("Recoltaise", "#B07A3A", 0, "The breadbasket of Rouental, the least divided: proud and wealthy"),
+    "Northmarch": ("Northmarcher", "#5E8E6E", 0, "Grim, serious, disciplined, ever watching the north from their mountain strongholds"),
+    "Southmarch": ("Southmarcher", "#9A9A62", 0, "A martial people, much influenced by Linterre: the home of Reformed Seranism"),
+    "Crépuscule": ("Crépusculaise", "#6B5A7E", 0, "The last to join, by a marriage: utterly loyal to their prince, to Rêverie as it varies"),
     "Lyrién": ("Lyrién", "#B9875E", 0, ""),
-    "Piscan": ("Piscan", "#5D8A84", 0, ""),
+    "Piscan": ("Piscan", "#5D8A84", 0, "Traders, fishermen and sailors of the Piscary sea"),
     "Lustianaise": ("Lustianaise", "#A86B7E", 0, ""),
-    "Helvetican": ("Helvetican", "#9B8F7A", 0, ""),
+    "Helvetican": ("Helvetica", "#9B8F7A", 10, "Isolated in their own little valley, extremely pious, generally loyal"),
 }
 ATTITUDE_MOD = {"Leal": 10, "Grasping": -5, "Belligerent": 0, "Quarrelsome": -5, "Pious": 0, "Proud": -10,
                 "Mercantile": 0, "Timorous": 5}

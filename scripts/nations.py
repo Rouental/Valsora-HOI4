@@ -671,7 +671,7 @@ FORMAL_NAMES = {
     "FTH": "the Faithful Children of the Goddess and Her Saint",
     "CRD": "the Cardonian Kingdom",
     # the author's, 2026-09-30
-    "LNT": "the Republic of Placeholdaire",
+    "LNT": "the Republic of Linterre",
     "STO": "the Empire of Selto-Hamborn",
     "RMD": "the Romanoddlian Federation",  # author, 2026-09-30
     "VLN": "the Kingdom of Volinovia",

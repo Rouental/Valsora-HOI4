@@ -10,6 +10,12 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-21, night, later (the author's lore and answers): **Linterre** again (Placeholdaire renamed back; the
+  Gazetteer republished); the governorates' design recorded (`docs/DECISIONS.md`: the attitudes as Claude suggested,
+  Pious estates and the Voix, the three powers of the Sacred Prince, the Voix and the Speaker of the Estates General,
+  ceremonial troops as an emergency measure and a sidestep from the levy ladder, naval levies, the Piscary's small
+  ships) and Rouental's peoples (`docs/CONTENT.md`); the window mockups redrawn with them
+  (`deco_ui/art/proposals/governorates/`).
 - 2026-10-21, night (the author: "I'd like to set up a system for interacting with the governorates in the decisions
   tab"; then: governor, loyalty, the parliament's attitude, the states' levies, the Royal Fiefs apart, "exactly follow
   the game's borders"): **a mockup of the governorates' map in the decisions tab** (`deco_ui/art/proposals/governorates/`,
