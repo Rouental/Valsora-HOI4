@@ -774,3 +774,25 @@ tiny bit of southern Jourdain et Moterre. That way, all of the Royal Fiefs will 
 - The ten Royal Fiefs of the fief list are all states now: Rouental, Saintiers, Cournin, Jourdain et Moterre, Aurifort,
   Éislek, Charmas, Rochemont, Bérault and Brassard.
 
+
+## 2026-10-21, later: Rouental's governorates named, HMMLA's Royal Fiefs, the Royal Host
+
+The author's answers to the open questions: the governorates' names ("1 Caux-Gautier, 2 Vair, 3 Nerié, 4 Marais Verts,
+5 Spreivald, 6 Gheso, 7 Oriflamme, 8 Normarche, 9 Rivage d'Argent, 10 Leclerc, 11 Fourier, 12 Sangterre, 13 Côte
+d'Ambre, 14 Verdoyantes, 15, 18, and 19 are one Governorate, Terres Séparées, 16 La Recolt, 17 Graisivaudan, 20
+Avarre"), as numbered on the grouping map; "They should be shown, and will eventually affect play. They'll hook into
+the levy system, with your relationship with the governorates affecting manpower in their provinces and the quality of
+their levies"; "for now they should be the strategic regions, and lines on the state panels ... Royal fiefs should also
+have a line on their state panels"; "HMMLA should have all the royal fiefs"; "Yes, keep the gold Kufi flag" (Port
+Almohavid).
+- **26 governorates** (`source/governorates_ROU.json`): the 8 the fief map names (Carcarelle, Oramlitus, Shalquoir,
+  Reliette, Sumarche, Couronneterre, Lyrié et Rivielle, Crépuscule) and the author's 20, Terres Séparées three patches
+  (the Alliance of the East's Chirac, Serpette, Maïeul, Moelle, Petit Selgrave and Sérieux). Each is a strategic region
+  of that name; the Vale of Reibonne's region keeps the Association's nine states beside them, and Brillagne, in no
+  governorate. Couronneterre, the crown's land, has 23 states, the ten Royal Fiefs among them; Reliette and Spreivald
+  one each. `python3 scripts/governorates.py` lists every governorate's states.
+- **The state panel** says "Governorate of X" for each, "Royal Fief · Governorate of Couronneterre" for the ten.
+- **HMMLA** (the civil war) rises in Rêverie and all ten Royal Fiefs (`nations.ROYAL_FIEFS`), with Stofflet, Charet and
+  Vendée as before: Jourdain et Moterre, Aurifort, Éislek, Charmas, Rochemont and Bérault added.
+- **The Royal Host** starts Elite (experience 1.0; it was 0.6, Seasoned).
+- Port Almohavid keeps the Kufi in gold.

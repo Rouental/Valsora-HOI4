@@ -201,6 +201,16 @@ Moved out of `CLAUDE.md` word for word on 2026-10-17 (`CLAUDE.md` keeps one line
   crownland only with crownland (the red Fief Markers: "the areas currently under the direct control of the Sacred
   Prince") and within the governorate; the states' lines on Necessary States for the author to edit. The lore of the
   crownlands and governorates is in `docs/NATIONS.md` (2026-10-20).
+- **Rouental's governorates are shown first, played later** (author, 2026-10-21: "They should be shown, and will
+  eventually affect play. They'll hook into the levy system, with your relationship with the governorates affecting
+  manpower in their provinces and the quality of their levies"; "for now they should be the strategic regions, and
+  lines on the state panels. I'll work more on them later. Royal fiefs should also have a line on their state
+  panels"; "Eventually I will get around to the Governorate Lines"): the fief map's rough patches, named
+  (`source/governorates_ROU.json`; 15, 18 and 19 one, Terres Séparées), are Rouental's strategic regions
+  (`scripts/governorates.py`), and the state panel says each state's governorate and whether it is a Royal Fief.
+- **The game's generic advisors and theorists are back** (author, 2026-10-21: "Sure, might as well bring back generic
+  advisors and theorists"): vanilla's `history/general/generic_advisors.txt`, its Earth cases taken out, for every
+  country (`docs/MAP_PIPELINE.md`, Vanilla content switched off).
 - **State names** are the author's, in `source/state_names.json` ("x,y" of a pixel
   inside the state → name, since ids shift; `build_mod.py` stops if a pixel is in no
   state or two name one state). Unnamed states are "Country N". First set (2026-10-01):

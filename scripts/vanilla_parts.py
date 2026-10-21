@@ -40,6 +40,77 @@ EDITS = {"common/autonomous_states/puppet.txt": [(
     """\t\tif = {\n\t\t\tlimit = { has_dlc = "Death or Dishonor" }\n\t\t\tOVERLORD = { NOT = { has_government = fascism } }\n\t\t}\n""",
     "\t\t# Valsora: Authoritarian overlords too (vanilla: no fascist overlord with Death or Dishonor)\n")]}
 
+# The game's generic advisors and theorists (history/general/generic_advisors.txt; author, 2026-10-21: "might as well
+# bring back generic advisors and theorists"): its first five blocks are the generic ones (the four political
+# advisors, then the industrialists, chiefs, high command and theorists), the rest Earth's special cases (Iceland,
+# Belgium, Afghanistan, ...), dropped. In the five, every condition naming an Earth country (the countries left out,
+# New Zealand's focuses) goes; the military block, which vanilla gives only to a list of Earth's minor countries,
+# goes to every country that is not a dynamic one, as the political advisors do
+ADVISORS = "history/general/generic_advisors.txt"
+ADVISOR_BLOCKS = 5
+EARTH = re.compile(r"\b(?:original_)?tag\s*=|is_chinese_warlord|has_completed_focus\s*=\s*[A-Z]{3}_")
+CONDITION = re.compile(r"\b(IF|if|ELSE_IF|else_if|NOT|OR|AND)\s*=\s*\{")
+
+
+def block_end(text, i):
+    """The index just past the `}` closing the block whose `{` is at i - 1."""
+    depth = 1
+    while depth:
+        c = text[i]
+        if c == "#":
+            i = text.index("\n", i)
+            continue
+        depth += {"{": 1, "}": -1}.get(c, 0)
+        i += 1
+    return i
+
+
+def strip_earth(text):
+    """The text without the condition blocks (IF, NOT, OR, ...) and the lines that name an Earth country."""
+    out, i = [], 0
+    while (m := CONDITION.search(text, i)):
+        end = block_end(text, m.end())
+        if EARTH.search(text[m.end():end - 1]):
+            start = text.rfind("\n", 0, m.start()) + 1
+            out.append(text[i:start] + "\0" if not text[start:m.start()].strip() else text[i:m.start()])
+            i = end
+        else:
+            out.append(text[i:m.end()] + strip_earth(text[m.end():end - 1]) + "}")
+            i = end
+    out.append(text[i:])
+    return re.sub(r"(?m)^[ \t]*(?:original_)?tag\s*=\s*\w+[ \t]*$", "\0", "".join(out))
+
+
+def tidy(text):
+    """strip_earth's marks taken out, with the comments above them (about what was removed) and blank lines."""
+    text = re.sub(r"(?m)(?:^[ \t]*#[^\n]*\n|^[ \t]*\n)*^\0[ \t]*\n", "", text)
+    return re.sub(r"\n(?:[ \t]*\n)+(?=\t*\})", "\n", text)
+
+
+def generic_advisors(text):
+    text = text.replace("\r\n", "\n")
+    spans, i = [], 0
+    while (m := re.compile(r"(?m)^\s*every_possible_country\s*=\s*\{").search(text, i)):
+        spans.append((m.start(), block_end(text, m.end())))
+        i = spans[-1][1]
+    tokens = [re.findall(r"token_base\s*=\s*(\w+)", text[a:b]) for a, b in spans[:ADVISOR_BLOCKS]]
+    if len(spans) <= ADVISOR_BLOCKS or tokens[-1][:1] != ["generic_captain_of_industry"] \
+            or "generic_air_warfare_theorist" not in tokens[-1]:
+        raise SystemExit(f"vanilla_parts: {ADVISORS} is not laid out as Valsora expects (game updated?)")
+    keep = []
+    for a, b in spans[:ADVISOR_BLOCKS]:
+        block = tidy(strip_earth(text[a:b]))
+        m = re.search(r"\blimit\s*=\s*\{", block)
+        if "is_dynamic_country" not in block[m.end():block_end(block, m.end())]:
+            block = block[:m.end()] + "\n\t\tis_dynamic_country = no" + block[m.end():]
+        keep.append(block.lstrip("\n"))
+    out = (text[:spans[0][0]].rstrip("\n") + "\n# Valsora: every country but the dynamic ones; Earth's special cases "
+           "and the conditions naming Earth's countries removed\n\n" + "\n\n".join(keep) + "\n")
+    if EARTH.search(out):
+        raise SystemExit(f"vanilla_parts: {ADVISORS} still names an Earth country")
+    return out
+
+
 DATE = re.compile(r"(?<![\w.@])(1[89]\d\d)(\.\d{1,2}\.\d{1,2})(?![\d])")
 START_YEAR = re.compile(r"(\bstart_year\s*=\s*)(1[89]\d\d)\b")
 GUI_YEAR = re.compile(r'(\btext\s*=\s*")(1[89]\d\d)(")')
@@ -90,6 +161,8 @@ def files():
             text = shift(text, gui=rel.endswith(".gui"))
             if rel in DROP:
                 text = drop_blocks(text, DROP[rel])
+            if rel == ADVISORS:
+                text = generic_advisors(text)
             for old, new in EDITS.get(rel, []):
                 if old not in text.replace("\r\n", "\n"):
                     raise SystemExit(f"vanilla_parts: {rel} no longer has the text Valsora changes (game updated?)")

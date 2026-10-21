@@ -31,6 +31,28 @@ The layout is built for 1920 px of UI width: 1920x1080 at 100% UI scale, or
 2560x1440 at up to 133%.
 
 
+NEW IN v0.12.2
+--------------
+  - No more broken gilt lines: the 26 side panel pictures that were
+    traced from the game's art are drawn by hand (the officer corps, the
+    Army HQ cards among them; the faction screen; construction,
+    logistics, trade, occupation and the theatre groups).
+  - The diplomacy tab's focus icon fits inside its octagon.
+  - The state panel: a line under the victory points and manpower for
+    Rouental's governorates and Royal Fiefs.
+
+Things to check in game (v0.12.2):
+  - the officer corps screen: the Army HQ templates window (three or
+    more cards), the high command and theorists, the spirits;
+  - the faction screen: commanders, intelligence (with and without a
+    spymaster), doctrine sharing, the goals and the templates;
+  - the construction, logistics, trade and occupation screens; the
+    theatre groups of the army bar;
+  - the diplomacy tab's focus icon, for a country with a focus;
+  - the state panel's line: a Rouental state ("Governorate of ...") and
+    a Royal Fief such as Rouental or Charmas.
+
+
 NEW IN v0.12.1
 --------------
   - The faction logo centred in the top bar's ring and in the faction

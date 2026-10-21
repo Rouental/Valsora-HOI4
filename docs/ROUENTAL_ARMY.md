@@ -26,7 +26,8 @@ themselves are not.
   stability −5 %. Its description says it opens the levies.
 - **The royal host** (`history/units/ROU_2036.txt`): 2 armoured ("Division Blindée de la
   Garde": 4 medium tank + 2 mechanised), 2 mechanised and 8 motorised divisions, all at
-  full equipment and 0.6 experience, with engineers, recon, AA, signals, logistics or
+  full equipment and full experience (Elite: 1.0, since 2026-10-21; 0.6 was only Seasoned, the
+  game's levels being 0.1, 0.3, 0.75 and 0.9), with engineers, recon, AA, signals, logistics or
   maintenance, and field hospitals in support. Stationed around Rouental, Saintiers,
   Cournin, Rêverie, Charmas, Rochemont and Vendée. Rouental starts with the techs, a
   "Char Royal" tank design (both with and without No Step Back) and a stockpile. Since

@@ -6,6 +6,39 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**Sloppy lines and missing pieces in the Deco UI's pictures, again and again** (2026-10-21, the author's screenshot of
+the Army HQ card, its gilt lines broken: "with a lot of the things you've generated recently, there's these weird
+sloppy lines and missing pieces of the design. I've brought it up a few times, and it seems to keep happening. Can you
+work on avoiding that?").
+- Cause: one method, not one picture. `make_panel_pictures.py` made 25 of the side panels' pictures with
+  `proposals_panel_mockups.translate()`, which rebuilt the game's art in the Deco colours by tracing its thin bright
+  lines into gilt: a line the game drew faint, broken or shaded came out as short pieces, single specks, pills and
+  half boxes. Each earlier report (the trade rows' specks and the production lines' missing boxes, 2026-10-19; the
+  deployment bar's specks and the goal slot's folder, 2026-10-20) was fixed by drawing that one picture by hand, and
+  the method stayed in use for the rest. Nothing checked the pictures for it.
+- Fix (Deco UI v0.12.2): translate() is retired. Every picture it made is drawn by hand in three art modules
+  (`deco_ui/tools/panelpics_a_art.py`: the officer corps, 7 pictures, the Army HQ card among them;
+  `panelpics_b_art.py`: the faction screen, 8; `panelpics_c_art.py`: the rest, 11), measured against the elements
+  the game's .gui puts on each, rims and wells whole, straight lines on whole pixels; `make_panel_pictures.py` skips
+  every picture a module draws. Check: `deco_ui/tools/fragments.py` (run by `validate_preview.py`) finds broken gilt
+  (specks of 4 px or fewer, thin strokes 3 to 40 px long) in every plate and background the Deco UI ships; calibrated
+  on the old translations (up to 102 pieces a picture) against the new pictures (0), with the 20 pictures whose
+  short strokes are drawn on purpose (dashes, speed lines, diamond rules) listed with their counts.
+
+**The Royal Host still started below Elite** (2026-10-21, the author's screenshot of the army panel: "they still start
+with less than elite experience, I believe because their manpower is refilled").
+- Cause: not the refill (fixed 2026-10-20: the host forms on the first day, full). Its divisions were given
+  `start_experience_factor = 0.6`, and the game's levels (`UNIT_EXP_LEVELS = { 0.1, 0.3, 0.75, 0.9 }`) make 0.6
+  Seasoned; Elite starts at 0.9. Both earlier fixes went after the refill.
+- Fix: 1.0 (`nations.py`, the host's order of battle), Elite; `docs/ROUENTAL_ARMY.md` says so.
+
+**Focus icons crossing the diplomacy tab's octagon** (2026-10-21, the author's screenshots of the diplomacy tab, both
+Merlovich's view of Rouental and Rouental's of Devlon: "focus icons aren't remaining inside the lines").
+- Cause: the diplomacy tab's octagon (v0.11, `diplomacy_art.TOP["focus"]`) is 63 px across its flats, 55 inside its
+  hairline, but the focus icon kept the game's scale, 0.9 of 100 x 88 px: 90 px wide.
+- Fix: `layout_panels.DIPLO` draws it at 0.56 (56 x 49 px), inside the hairline, as the politics screen's is
+  (0.62 in its larger well).
+
 **Rivers through the middle of Rouental's new states and provinces** (2026-10-20, the author's screenshot: a river
 across Verdoyantres; "Rivers need to go along the borders of states and provinces. Provinces should be recut, or in
 cases like Lugunica and Karsten where there is no room for a recut, move the river to follow the border instead").

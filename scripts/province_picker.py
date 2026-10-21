@@ -37,9 +37,6 @@ sys.path.insert(0, str(ROOT / "scripts"))
 import atlas_export as AE  # noqa: E402  (chdirs to the repository's root)
 from facts_export import read_loc, read_states  # noqa: E402
 
-GOV_LAYER = "Rough Governorates"
-GOV_MIN = 20000            # fief map px: smaller patches of the layer are paint left over, not governorates
-
 MARGIN = 10
 NEAR = 80                  # a piece of the nation this near the main one is drawn in the main box
 INSET_GAP = 14             # px between the boxes of the far pieces, and under the main box
@@ -137,82 +134,9 @@ def main(tag="ROU"):
 
 
 def governorates(tag, prov, mine, state_of):
-    """({province: its governorate's number in the list}, [{i, name, named, n}]) from source/governorates_<TAG>.json"""
-    import fief_states as FS
-    from collections import Counter
-    spec = json.loads((ROOT / f"source/governorates_{tag}.json").read_text(encoding="utf-8"))
-    cache = FS.WORK / "fiefmap"
-    names = (cache / "layers.txt").read_text().splitlines() if (cache / "layers.txt").exists() else []
-    if GOV_LAYER in names and (cache / f"layer{names.index(GOV_LAYER)}.npy").exists():
-        rough = np.load(cache / f"layer{names.index(GOV_LAYER)}.npy")
-    else:
-        rough = FS.read_fief_map(ROOT / spec["fief_map"])[GOV_LAYER]
-    lab = FS.components(rough)
-    small = np.bincount(lab.ravel()) < GOV_MIN
-    small[0] = True
-    lab[small[lab]] = 0
-    s, ox, oy = spec["fit"]
-    H_, W_ = lab.shape
-
-    def patch(x, y):
-        """the patch most of game pixel (x, y) lies on, 0 for none"""
-        x0, x1 = int((x - ox) * s), int((x + 1 - ox) * s)
-        y0, y1 = int((y - oy) * s), int((y + 1 - oy) * s)
-        if x1 <= 0 or y1 <= 0 or x0 >= W_ or y0 >= H_:
-            return 0
-        v = lab[max(y0, 0):y1, max(x0, 0):x1].ravel()
-        v = v[v > 0]
-        return int(np.bincount(v).argmax()) if len(v) else 0
-
-    of = {}
-    boxes = ndi.find_objects(prov + 1)
-    for q in mine:
-        sl = boxes[q]
-        ys, xs = np.nonzero(prov[sl] == q)
-        c = Counter(patch(x + sl[1].start, y + sl[0].start) for y, x in zip(ys[::2], xs[::2]))
-        c.pop(0, None)
-        of[q] = c.most_common(1)[0][0] if c else 0
-    by_state = {}
-    for q in mine:
-        if of[q]:
-            by_state.setdefault(int(state_of[q]), Counter())[of[q]] += 1
-    for q in mine:   # off every patch: the state's governorate
-        if not of[q] and int(state_of[q]) in by_state:
-            of[q] = by_state[int(state_of[q])].most_common(1)[0][0]
-    left = [q for q in mine if not of[q]]
-    for _ in range(20):   # else the neighbours' (the province's pixels next to it)
-        if not left:
-            break
-        for q in left:
-            sl = boxes[q]
-            sl = np.s_[max(sl[0].start - 1, 0):sl[0].stop + 1, max(sl[1].start - 1, 0):sl[1].stop + 1]
-            m = prov[sl] == q
-            ring = prov[sl][ndi.binary_dilation(m) & ~m]
-            c = Counter(of.get(int(r), 0) for r in ring if r >= 0)
-            c.pop(0, None)
-            if c:
-                of[q] = c.most_common(1)[0][0]
-        left = [q for q in left if not of[q]]
-    named = {}
-    for k, n in spec["names"].items():
-        x, y = map(int, k.split(","))
-        g = patch(x, y)
-        if not g:
-            raise SystemExit(f"governorates_{tag}.json: {n} at ({x}, {y}) is on no patch of {GOV_LAYER}")
-        named[g] = n
-    used = sorted({g for g in of.values() if g})
-    sub, mid = lab[::4, ::4], {}
-    for g in used:
-        xs = np.nonzero(sub == g)[1]
-        mid[g] = xs.mean() if len(xs) else 0
-    order, k, out = {}, 0, []
-    for g in sorted(used, key=lambda g: mid[g]):
-        if g not in named:
-            k += 1
-        out.append(dict(i=len(out), name=named.get(g, f"Governorate {k}"), named=g in named,
-                        n=sum(1 for q in mine if of[q] == g)))
-        order[g] = len(out) - 1
-    return {q: order.get(of[q], -1) for q in mine}, out
+    """({province: its governorate's number in the list}, [{i, name, named, n}]): governorates.py's"""
+    import governorates as G
+    return G.of_provinces(tag, prov, mine, state_of)
 
 
 def pieces(m):

@@ -28,6 +28,17 @@ DRAWN = {"decisionview/decision_item_bg.dds", "decisionview/event_header_bg.dds"
          "factions/ui/faction_goal_slot.dds"}     # faction_art.py (2026-10-20: its translation drew a folder under the goal)
 
 
+# and every picture an art module draws (2026-10-21: the translations' broken lines, the author: "weird sloppy lines and
+# missing pieces of the design"; panelpics_*_art.py draw the rest by hand)
+def _drawn_by_modules():
+    import importlib
+    from art_util import ART_MODULES
+    return {rel[len(GI):] for m in ART_MODULES for _, rel, *_ in importlib.import_module(m).ADDS if rel.startswith(GI)}
+
+
+DRAWN |= _drawn_by_modules()
+
+
 def kept(rel):
     return rel.startswith(KEEP_GAME) or rel in DRAWN
 

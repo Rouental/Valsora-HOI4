@@ -106,7 +106,7 @@ def rouental_oob(state_vp):
             k += 1
             out += ["\tdivision = {", f"\t\tdivision_name = {{ is_name_ordered = yes name_order = {k} }}",
                     f"\t\tlocation = {state_vp[state]}", f'\t\tdivision_template = "{name}"',
-                    "\t\tstart_experience_factor = 0.6", "\t\tstart_equipment_factor = 1.0",
+                    "\t\tstart_experience_factor = 1.0", "\t\tstart_equipment_factor = 1.0",
                     # unset, the manpower comes out of the pool, which the Feudal Army keeps tiny
                     "\t\tstart_manpower_factor = 1.0", "\t}"]
     return "\n".join(out + ["}", ""])
@@ -436,6 +436,12 @@ DISPLAY_COLOUR = {"AIS": (45, 105, 79)}
 RULING = {"BRL": "theocracy", "RLA": "fascism",
           "AIS": "democratic"}  # Merlovich: Liberalism (the author's friend, 2026-10-05)
 
+# Rouental's ten Royal Fiefs (the author's fief list, source/names/rouental_fiefs.txt), by state name: each a state of
+# its own since 2026-10-21 (Aurifort cut out), each with a line on its state panel (build_mod.state_lines; the author,
+# 2026-10-21: "Royal fiefs should also have a line on their state panels"); HMMLA's in the civil war
+ROYAL_FIEFS = ["Rouental", "Saintiers", "Cournin", "Jourdain et Moterre", "Aurifort", "Éislek", "Charmas", "Rochemont",
+               "Bérault", "Brassard"]
+
 # The Rouentaise civil war (author, 2026-10-02). When Rouental's communists execute the
 # Prince (focus ROU_execute_the_prince) these countries are released from the states
 # named here (they hold cores on them from the start; the first is the capital), and
@@ -445,7 +451,8 @@ CIVIL_WAR = {
     "CRP": ["Crépuscule", "Aube", "Petit Crépuscule", "Noirceur", "Pénombre", "Ténèbres", "Toussaint", "Lyrié et Rivielle", "725,858", "Sorrelle", "Rendanne", "Brouge"],
     "RLT": ["Reliette", "Oramlitus", "Piscisinum", "Reliquae", "Aureimontes", "Avignalle", "Gourdelle", "Marque", "Sézanne", "Vinterre", "Arduécu", "Plaiserre", "Ariminum", "Shalquoir", "Dortaine", "Thermidor"],
     "MRC": ["Cylône", "Brochets", "Erdoine", "Élan", "Baïonnette", "Osgrande", "Coidron", "Belleterre", "Monteaux", "La Marche", "Aurillac-de-Ciel", "752,780", "Coffrefort"],
-    "RLA": ["Rêverie", "Rouental", "Saintiers", "Brassard", "Stofflet", "Charet", "Cournin", "Vendée"],
+    # 2026-10-21 (author): "HMMLA should have all the royal fiefs"
+    "RLA": ["Rêverie", *ROYAL_FIEFS, "Stofflet", "Charet", "Vendée"],
     "VAI": ["Vair", "Pavois", "Fleurent", "Haute Couronne", "Nerice", "Caux-Gautier", "Beaufort", "Leonis", "Ligue Mercéatique"],
     "FTH": ["Hevique", "Antraine", "Rendement", "Blédoré", "Avarre"],
 }

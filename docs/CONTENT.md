@@ -92,7 +92,8 @@ Aislada is the worked example of a built-out nation:
           Army; map name HMMLA, the author's, 2026-10-02; Strongman Rule, `RLA_serelle_cahun`; flag the fox quarter of `ROU.png`,
           which is also `ROU_fascism.png`); Vair VAI (Duchy; Feudalism); The Faithful FTH
           (the Faithful Children of the Goddess and Her Saint; Holy Order). States
-          are named in `CIVIL_WAR` (first = capital); the focus file writes
+          are named in `CIVIL_WAR` (first = capital; HMMLA's holds Rêverie and all ten Royal Fiefs,
+          `nations.ROYAL_FIEFS`, the author, 2026-10-21: "HMMLA should have all the royal fiefs"); the focus file writes
           `@STATE:<name>@`, which `nations.fill` turns into ids. Two countries may
           share a name: their country files get the tag appended.
     - Left to right: Polite, Brother, Steady, Rudely.
@@ -103,6 +104,17 @@ Aislada is the worked example of a built-out nation:
     retires both Cahuns and plays superevent `rou_reality`.
   - **Plans for Cardonia** (x = 11, cost 1, not exclusive) creates an `annex_everything`
     war goal on CRD. It is for testing wars without justifying.
+  - **Governorates and Royal Fiefs** (the author, 2026-10-21: "They should be shown, and will eventually affect play.
+    They'll hook into the levy system, with your relationship with the governorates affecting manpower in their
+    provinces and the quality of their levies"; "for now they should be the strategic regions, and lines on the state
+    panels ... Royal fiefs should also have a line on their state panels"): Rouental's 26 governorates
+    (`source/governorates_ROU.json`, the fief map's rough patches until the author draws the Governorate Lines; 8
+    named on the fief map, 20 numbered on the grouping map and named by the author, three of them one: Terres
+    Séparées, the Alliance of the East's land) are its strategic regions (`scripts/governorates.py --apply`; Brillagne
+    and Concorde et Volonté are in none and keep theirs). A state in one reads "Governorate of X" on its panel, a
+    Royal Fief (`nations.ROYAL_FIEFS`, the ten, all in Couronneterre) "Royal Fief · Governorate of Couronneterre"
+    (`build_mod.state_lines`: a scripted GUI docked to the state panel, in the state's scope, its text a scripted
+    localisation by state id; with the Deco UI only, which keeps the row for it). Nothing in play yet.
   - **Faction.** ROU starts as leader of "The Association of Reibonnaise States",
     together with GDN, LST, EVR, HLR, SGV, LZC and SGN.
     - **Reibonnaise opinions** (author, 2026-10-02; `nations.REIBONNAISE`): +20

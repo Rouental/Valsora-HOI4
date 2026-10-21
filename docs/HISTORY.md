@@ -10,6 +10,18 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-21, later (the author's answers and screenshots: the Army HQ card's broken gilt, the Royal Host below Elite,
+  the diplomacy tab's focus icons): **the Deco UI v0.12.2** (`deco_ui/docs/VERSIONS.md`): the 26 side panel pictures
+  that were traced from the game's art (the cause of the "weird sloppy lines and missing pieces of the design") drawn
+  by hand in three art modules, `translate()` retired, and `deco_ui/tools/fragments.py` failing the Deco UI's
+  validation on broken gilt in any plate or background; the diplomacy tab's focus icon inside its octagon; a row on the
+  state panel for Valsora's line. **Rouental's governorates** named (the author's 20, Terres Séparées three patches;
+  `source/governorates_ROU.json`) and made its strategic regions (`scripts/governorates.py`, new: 26 regions, 205 in
+  all), and a line on the state panel: "Governorate of X", "Royal Fief · Governorate of Couronneterre" for the ten
+  (`build_mod.state_lines`, a scripted GUI in the state's scope). **HMMLA** rises in all ten Royal Fiefs
+  (`nations.ROYAL_FIEFS`). **The Royal Host** starts Elite (experience 1.0; 0.6 was Seasoned). **The game's generic
+  advisors and theorists** back for every country (`vanilla_parts.generic_advisors`: its Earth cases out). The grouping
+  map republished with the governorates' names. Port Almohavid keeps the Kufi in gold.
 - 2026-10-21 (the author: "rename Rouerie to Brassard, and put Aurifort on the map"): **Aurifort** a state of its own, cut out of northern Charmas (the fief map's Aurifort, 29 px) and the edge of Jourdain et Moterre (11 px), 40 px, one province; **Rouërie renamed Brassard**: the ten Royal Fiefs all on the map (`docs/NATIONS.md`). The map 10-21; the Gazetteer and the grouping map republished. The build: 21,148 provinces, 62,358 borders (3,178 free), 3,313 states.
 - 2026-10-20, night (the author: "Overnight, there are some additions to the Gazetteer"): **the Gazetteer's export
   of that night in the mod** (`docs/NATIONS.md`): flags and rulers' portraits for Almohavid, Al-Khabid, Kalaistan,

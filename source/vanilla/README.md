@@ -32,6 +32,9 @@ tech tree's year labels), and `common/ai_strategy/default.txt` loses its Earth-o
 
 - `common/autonomous_states/puppet.txt`: the puppet, without its clause refusing a fascist overlord with Death or
   Dishonor (`vanilla_parts.EDITS`): Valsora's Authoritarian overlords keep plain puppets (2026-10-17).
+- `history/general/generic_advisors.txt`: the generic political advisors, industrialists, chiefs, high command and
+  theorists (2026-10-21); `vanilla_parts.generic_advisors` keeps its five generic blocks for every country but the
+  dynamic ones and takes out Earth's special cases and every condition naming an Earth country or focus.
 
 ## `curated/`: vanilla's, cut by hand
 

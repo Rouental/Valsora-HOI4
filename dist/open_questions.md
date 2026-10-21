@@ -1,7 +1,8 @@
-# Open questions (2026-10-21)
+# Open questions (2026-10-21, later)
 
 The author's answers of 2026-10-19 and 2026-10-20 are in the mod (the go-ahead: "go ahead with the rest of it, and all
-the other changes I had been holding back until now"): `docs/HISTORY.md`, 2026-10-20. What is still open:
+the other changes I had been holding back until now"): `docs/HISTORY.md`, 2026-10-20. Answered on 2026-10-21 and in the mod since: the governorates' names (29), the generic advisors (27), the Kufi
+in gold (30), HMMLA's Royal Fiefs (31) (`docs/NATIONS.md`, 2026-10-21, later). What is still open:
 
 | # | question | where |
 |---|---|---|
@@ -10,16 +11,24 @@ the other changes I had been holding back until now"): `docs/HISTORY.md`, 2026-1
 | 10 | flags for Belekria's eight new republics: "I'll get those to you eventually" | |
 | 14 | state names (the numbered sheets `dist/state_numbers_*.png`) | |
 | 15 | the land regions' names: the drafts are in the mod now ("I'm fine with those for now, I'll edit them later"); change any in `dist/region_names_draft.md`'s last column | |
-| 24 | Rouental's Royal Host: it now forms on the game's first day (its own men, then the divisions), so it should start full and at its experience; it is not on the start screen's division count, only once the game runs. If it still starts short, say so | in game |
+| 24 | Rouental's Royal Host: you saw it start below Elite; its divisions were set to 0.6 experience, which the game counts as Seasoned (Elite is 0.9 and up). They start at 1.0 now, full. Does it show Elite now? | in game |
 | 26 | the Army HQ designer: every country now starts with the game's own HQ template; does a new HQ template save now? If not, the button's tooltip or the `error.log` line is the next clue | in game |
-| 27 | the game's generic political advisors and theorists (`generic_advisors.txt`) were switched off with the Earth histories, so no Valsoran country has any besides those the Gazetteer gives: bring them back for every country? | |
 | 28 | Rouental's provinces to merge or make into states: pick them on the grouping map (https://claude.ai/artifact/RsMPNHMPW1PdhS1Soa6W19, private to you), saved there for Claude to apply | your groups |
-| 29 | the governorates: names for the 20 not yet named (numbered on the grouping map); are the rough patches final, or will you draw proper lines on the Governorate Lines layer; and should they only be shown (as strategic regions, a line in the state panel, a map mode) or matter in play (what do the regional parliaments block)? Claude's suggestion: show them first (regions and the state panel line), mechanics later | your answer |
-| 30 | Port Almohavid's Gazetteer page no longer has a flag (the export of 2026-10-20, night); the mod still flies the Kufi in gold you chose. Keep it? | |
-| 31 | Aurifort (cut out 2026-10-21): your fief map puts the fief wholly in northern Charmas (29 game px), so 11 px of Jourdain et Moterre's southern edge were added ("a tiny bit of southern Jourdain et Moterre"): 40 px, one province. Like Charmas and Jourdain et Moterre it is in no civil war list (HMMLA takes Rêverie, Rouental, Saintiers, Brassard, Stofflet, Charet, Cournin and Vendée): should it, or the other royal fiefs, go to HMMLA? | the map 10-21 |
 | 25 | the tech tree: "I'm not really ready to start with the tech tree in earnest yet" | `docs/TECH_TREE_2036.md` |
 
 New to look at:
+- **The governorates** are Rouental's strategic regions now (the 26: the fief map's 8 and your 20, Terres Séparées
+  one), each named; Brillagne and Concorde et Volonté are in none. The state panel has a line under the victory points
+  and manpower: "Governorate of Vair", and for the ten "Royal Fief · Governorate of Couronneterre". The line is a
+  scripted GUI on the state panel, the first of its kind here: if it shows nowhere, or in the wrong place (the top left
+  of the screen), say so. With the Deco UI only. When you draw the Governorate Lines, `scripts/governorates.py` makes
+  the regions again from them.
+- **The generic advisors and theorists** are back for every country: the game's own (industrialists, chiefs of
+  staff, high command, theorists, the four political ones), its Earth cases taken out.
+- **HMMLA** rises in Rêverie and all ten Royal Fiefs in the civil war (Stofflet, Charet and Vendée as before).
+- **The Deco UI v0.12.2**: every picture that was traced from the game's art (the broken gilt lines you kept seeing,
+  the Army HQ card among them) is drawn by hand now, 26 of them; a check fails the build on broken gilt; the
+  diplomacy tab's focus icon fits inside its octagon (`deco_ui/valsora_deco_ui/README.txt`, Things to check).
 - **Aurifort** is a state (map 10-21), and Rouërie is now **Brassard**: the ten Royal Fiefs of your list are all on the map (Rouental, Saintiers, Cournin, Jourdain et Moterre, Aurifort, Éislek, Charmas, Rochemont, Bérault, Brassard). Aurifort's population (75,303) came out of Charmas's and Jourdain et Moterre's, by area.
 - **The grouping map** shows the governorates (the governorates switch) and warns when a group crosses one.
 - **Rouental's 178 states** from your fief map (the 30 px version): their names are the fiefs' as your map writes them

@@ -391,6 +391,10 @@ for p in glob.glob(M + "gfx/interface/button_*.dds"):
     w, h = map(int, m.groups())
     if read_dds(p).size != (w, h):
         problems.append(f"{p} size mismatch")
+# broken gilt in the plates and backgrounds (2026-10-21, the author: "weird sloppy lines and missing pieces of the
+# design"): fragments.py, calibrated on the translations it retired
+import fragments as _FR  # noqa: E402
+problems += _FR.problems()
 
 # every texture in the mod comes from the current build (stale files from older versions are reported)
 import json  # noqa: E402

@@ -14,9 +14,15 @@ Treat assumed items as hypotheses.
 
 ---------------------------------------------------------------------------------------------------
 
-## 1. Status (v0.12.1)
+## 1. Status (v0.12.2)
 
-**v0.12.1 (2026-10-20, later)** is the current version (`docs/VERSIONS.md`), from the author's screenshots of v0.12: the
+**v0.12.2 (2026-10-21)** is the current version (`docs/VERSIONS.md`): the 26 side panel pictures `make_panel_pictures.py`
+traced from the game's art drawn by hand (`panelpics_a_art.py` the officer corps, `panelpics_b_art.py` the faction
+screen, `panelpics_c_art.py` the rest; translate() retired: section 9's first pitfall), `fragments.py`'s check for
+broken gilt in `validate_preview.py`, the diplomacy tab's focus icon at 0.56 inside its octagon, and a row at the state
+panel's stats band's foot for Valsora's governorate line (`layout_stateview.STATE_LINE`). Not yet seen in game.
+
+**v0.12.1 (2026-10-20, later)** came before it, from the author's screenshots of v0.12: the
 faction logo centred in the top bar's ring and the faction screen's box, no line above the diplomacy portrait
 (`diplomacy_art.PLATE_TOP`), the faction goals on an opaque background (`faction_art.goals_bg`), the state panel's
 building pictures centred in their tiles and slots and the damage bar across their foot (`layout_stateview.PICTURE`,
@@ -317,9 +323,18 @@ tools/
                             writes theatreselector.gfx), production_icons_art.py (pf_), construction_art.py (cn_);
                             previews preview_alerts.py, preview_deployment.py, preview_insignia.py,
                             preview_production_icons.py
-  make_panel_pictures.py    the side panels' own pictures, the approved drafts (v0.11): proposals_panel_mockups.py's
-                            translate() and photo_plate() and v0.7's hand-drawn proposals, at the game's paths, less
-                            the army overview's and the agency's (KEEP_GAME) and those an art module draws (DRAWN)
+  make_panel_pictures.py    the side panels' own pictures, the approved drafts (v0.11): v0.7's hand-drawn proposals,
+                            at the game's paths, less the army overview's and the agency's (KEEP_GAME) and every
+                            picture an art module draws (DRAWN, the modules' ADDS read in). Since v0.12.2 it translates
+                            nothing: proposals_panel_mockups.translate() and photo_plate() made the broken lines the
+                            author kept seeing, and every picture they made is drawn by hand in panelpics_a_art.py
+                            (pa_: the officer corps), panelpics_b_art.py (pb_: the faction screen) and
+                            panelpics_c_art.py (pc_: the rest)
+  fragments.py              (v0.12.2) the broken-gilt check validate_preview.py runs: specks and short thin strokes of
+                            gilt in every plate and background the mod ships (120 x 40 px and up: the art modules',
+                            make_panel_pictures' and gen_textures'), calibrated on the retired translations; KNOWN
+                            lists the pictures whose short strokes are drawn on purpose, with their counts. A new
+                            picture with any fragment fails: draw it whole, or (deliberate dashes) add it to KNOWN
   make_music.py             musicplayer.gui (2026-10-19): the station box's plate, note and title; writes
                             valsora_deco_music.gfx (its sprites and the top bar's music tab)
   preview_music.py          build/preview_music.png (+ _vanilla): the music player and the top bar's controller tab
@@ -992,6 +1007,14 @@ GP.write_gui(MOD + "interface/x.gui", t)    # braces checked, engine_safe applie
 
 ## 9. Pitfalls already hit (do not repeat)
 
+- **Never trace the game's art into the Deco style** (v0.12.2; the author, 2026-10-21: "with a lot of the things
+  you've generated recently, there's these weird sloppy lines and missing pieces of the design. I've brought it up a
+  few times, and it seems to keep happening"). `proposals_panel_mockups.translate()` rebuilt the game's pictures by
+  tracing their bright lines into gilt: faint or shaded lines came out as gilt pieces, specks and half boxes, picture
+  after picture, and fixing the one reported each time left the rest. Draw every picture by hand in an art module,
+  measured against the elements the .gui puts on it (a sheet with them over it), rims and wells whole, straight lines
+  on whole pixels, and look at it at 2x before it goes in. `fragments.py` fails on broken gilt in any plate or
+  background; when a report names one broken picture, look for every picture made the same way.
 - Stretching flags makes them pixelated. Keep them 1:1.
 - A view the game puts at the screen's left edge under its top bar is drawn under the Deco UI's top bar, so the
   medallion hides its top (the armies, air wings and operatives in v0.8.1, the navy in v0.8.3). Side panels and the

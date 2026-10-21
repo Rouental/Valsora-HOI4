@@ -54,7 +54,9 @@ FILES = (
        "events/Generic.txt", "events/LAR_occupation.txt", "events/LaR_espionage_operations.txt",
        "events/Special_Project_Events.txt",
        # the puppet: Authoritarian (fascism) overlords keep plain puppets in Valsora (vanilla_parts.EDITS)
-       "common/autonomous_states/puppet.txt"])
+       "common/autonomous_states/puppet.txt",
+       # the generic advisors and theorists (history/general stays switched off: vanilla_parts keeps the generic ones)
+       "history/general/generic_advisors.txt"])
 
 # localisation files whose generic names carry years ("1936 Cruiser Hull", "1938 Medium", the game
 # rule's "Focuses Only (Until 1938)")

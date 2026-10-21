@@ -954,7 +954,8 @@ sv += hrule(8, h1, BW - 16, WIDE)
 # stats row: two column rules, rule under the row
 s0, s1 = LS.STATS[0] - oy, LS.STATS[1] - oy
 for x in LS.STAT_COLS[1:]:
-    sv += (f'<div style="position:absolute;left:{x - 12 - ox_}px;top:{s0 + 10}px;width:1px;height:{s1 - s0 - 20}px;'
+    sv += (f'<div style="position:absolute;left:{x - 12 - ox_}px;top:{LS.STAT_RULE[0] - oy}px;width:1px;'
+           f'height:{LS.STAT_RULE[1] - LS.STAT_RULE[0]}px;'
            'background:linear-gradient(180deg,transparent,rgba(201,165,90,.55) 25%,rgba(201,165,90,.55) 75%,transparent)"></div>')
 sv += hrule(8, s1, BW - 16, SOFT)
 # section rules (shared slots, buildings, claims)

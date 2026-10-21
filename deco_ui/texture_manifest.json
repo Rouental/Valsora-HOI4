@@ -2478,6 +2478,188 @@
   "sig": "b4f7c3fc6d7852efc42e54caa0a6af004abbda2456baf56b949ef30025e371cd"
  },
  {
+  "key": "pa_banner_army",
+  "path": "gfx/interface/officer_corp/officer_corp_bg_banner_army.dds",
+  "w": 516,
+  "h": 242,
+  "sig": "afc69a24d9fd2d10436456a392ea5c4acefc2b8e608cbf953df662e4afd4670e"
+ },
+ {
+  "key": "pa_banner_navy",
+  "path": "gfx/interface/officer_corp/officer_corp_bg_banner_navy.dds",
+  "w": 516,
+  "h": 242,
+  "sig": "d069009a8afa47a789ac02d5c79ca7ae88651a9ab79444305d953b9f8ff392fd"
+ },
+ {
+  "key": "pa_banner_air",
+  "path": "gfx/interface/officer_corp/officer_corp_bg_banner_air.dds",
+  "w": 516,
+  "h": 242,
+  "sig": "8cc9811b31d1d715cb5fa311c1cb173e728748c6b26d22002e138f785bac807b"
+ },
+ {
+  "key": "pa_spirit_entry_bg_strip",
+  "path": "gfx/interface/officer_corp/spirit_entry_bg_strip.dds",
+  "w": 965,
+  "h": 83,
+  "sig": "b6c05ac50c6cea54dbaa993989a02e296e6f258624b868b578ef7a37410ed5b4"
+ },
+ {
+  "key": "pa_advisor_theorist_entry",
+  "path": "gfx/interface/officer_corp/advisor_theorist_entry.dds",
+  "w": 527,
+  "h": 71,
+  "sig": "1f9eaaf381444d86feb6a97f14dbc746c457e5f10c99774059b77ad1e1d03d20"
+ },
+ {
+  "key": "pa_officer_corp_army_hq_bg",
+  "path": "gfx/interface/officer_corp/officer_corp_army_hq_bg.dds",
+  "w": 539,
+  "h": 59,
+  "sig": "2924b5d1aed311384fc15731a70b4a65d7f094b9d661a1023d2adb45eea723b5"
+ },
+ {
+  "key": "pa_army_hq_template_bg",
+  "path": "gfx/interface/officer_corp/army_hq_template_bg.dds",
+  "w": 341,
+  "h": 95,
+  "sig": "bb7eae359e88522a934e629c4ff8f79ded2f0a77ee342b1d3472ab5acf428a2e"
+ },
+ {
+  "key": "pb_identity",
+  "path": "gfx/interface/factions/ui/faction_identity_background_generic.dds",
+  "w": 522,
+  "h": 108,
+  "sig": "1dcfbb600a2d997409cf2b0aa7416ac71eb47b4fe95a0c2ea15a2deab0f649c9"
+ },
+ {
+  "key": "pb_commander",
+  "path": "gfx/interface/factions/ui/faction_supreme_commander_background.dds",
+  "w": 525,
+  "h": 126,
+  "sig": "30a1b142f07d2950f7e726030fe74d99007e186bf352a6f64016d736fa4a3b98"
+ },
+ {
+  "key": "pb_influence",
+  "path": "gfx/interface/factions/ui/faction_influence_chart_background.dds",
+  "w": 525,
+  "h": 106,
+  "sig": "c0f49f7530d08a9aeb3c6589677938289b89a242c84a17d532562b66916cdde2"
+ },
+ {
+  "key": "pb_intelligence",
+  "path": "gfx/interface/factions/ui/faction_intelligence_background.dds",
+  "w": 510,
+  "h": 100,
+  "sig": "9fd7c3580167784f1c7f5b37c9effdbf89e97b4a0cd45794a91cf89465950f1b"
+ },
+ {
+  "key": "pb_spymaster",
+  "path": "gfx/interface/factions/ui/faction_spymaster_background.dds",
+  "w": 510,
+  "h": 83,
+  "sig": "48a79eef1cd6977a3b58d254d875ecd61ca71ba49a79cf081a236442201a9b03"
+ },
+ {
+  "key": "pb_doctrine",
+  "path": "gfx/interface/factions/ui/faction_doctrine_sharing_bg.dds",
+  "w": 530,
+  "h": 108,
+  "sig": "fbb8b0c7357b2cf7089190715606e5410cc756034cb36af59b33c2f6885707a4"
+ },
+ {
+  "key": "pb_goal_button",
+  "path": "gfx/interface/factions/ui/select_faction_goal_button.dds",
+  "w": 1680,
+  "h": 92,
+  "sig": "2134cb08cc1127de793118d912e56bd0463bcbae1bcebf6b80df1da5790f5e4b"
+ },
+ {
+  "key": "pb_template",
+  "path": "gfx/interface/factions/ui/faction_identity_background_pop_up_generic.dds",
+  "w": 612,
+  "h": 364,
+  "sig": "7cdc4f164f8f3aedf8a17adfee2bccabc48e90ffad02f35bcaf36ff4832d8b26"
+ },
+ {
+  "key": "pc_construction_top",
+  "path": "gfx/interface/construction_screen_top.dds",
+  "w": 433,
+  "h": 98,
+  "sig": "bb34fa738cbae8d7b17c89f1d30afee785c8847e0e21b7d0d3d46cb0f530f4f0"
+ },
+ {
+  "key": "pc_subview_header",
+  "path": "gfx/interface/subview_header_bg_375x101.dds",
+  "w": 375,
+  "h": 101,
+  "sig": "275cb5f7e7d75a6cdc18a5230d1eeaf1321e5c6815263cd31f6829c37690ebb6"
+ },
+ {
+  "key": "pc_logistics_bottom",
+  "path": "gfx/interface/logistics_win_bottom.dds",
+  "w": 548,
+  "h": 96,
+  "sig": "5a95af08d74f1eb35ecdb6ea6b9b4473776b808c9cc0e8c6250b5ae324f9ee35"
+ },
+ {
+  "key": "pc_linechart_frame",
+  "path": "gfx/interface/linechart_frame.dds",
+  "w": 235,
+  "h": 162,
+  "sig": "19bb9d8b899cacfe35c58e87534c5c5ea4832b88e80f8c5ed6ec4e6d7e21a72b"
+ },
+ {
+  "key": "pc_trade_filter",
+  "path": "gfx/interface/tradeview/trade_filter_bg.dds",
+  "w": 504,
+  "h": 128,
+  "sig": "3baf92d3813eee5472ddd587fc35a38383e4cb2a37d55fbd6556a346416db374"
+ },
+ {
+  "key": "pc_occupation_header",
+  "path": "gfx/interface/occupation/occupation_header_bg.dds",
+  "w": 521,
+  "h": 65,
+  "sig": "eb451cbf0c5743f791458f7ae574beb36002ccfd043b5b7db5cb4e9df6e112ed"
+ },
+ {
+  "key": "pc_occupation_top",
+  "path": "gfx/interface/occupation/occupation_country_entry_bg_top.dds",
+  "w": 519,
+  "h": 121,
+  "sig": "28a7a6e8a62dc4ac15e3738c46e70719dad9d9b8cc98819d358a0fb71bf05967"
+ },
+ {
+  "key": "pc_occupation_top_locked",
+  "path": "gfx/interface/occupation/occupation_country_entry_bg_top_locked.dds",
+  "w": 519,
+  "h": 121,
+  "sig": "09f7957ad99f8700e751d447cd320bca2363c5e954f2cd1516470f15930385cd"
+ },
+ {
+  "key": "pc_occupation_state",
+  "path": "gfx/interface/occupation/occupation_state_entry_bg.dds",
+  "w": 508,
+  "h": 63,
+  "sig": "038101a70e5363f6413c8a737ced112e253eb978783bb68cda4aa42f75394121"
+ },
+ {
+  "key": "pc_occupation_garrison",
+  "path": "gfx/interface/occupation/occupation_garrison_select_entry_bg.dds",
+  "w": 1512,
+  "h": 45,
+  "sig": "f0258f46a3b0da71992afb1c0ed0f749955a611a5eeadd7de7a6b5be986bfde9"
+ },
+ {
+  "key": "pc_theater_group",
+  "path": "gfx/interface/theater/theater_group_bg.dds",
+  "w": 1525,
+  "h": 77,
+  "sig": "00d723e420e6c7885d7d295b00b0c74d781ca9677ff1d55054136ffecb5e1aec"
+ },
+ {
   "key": "mm_column",
   "path": "gfx/interface/mapmode/mapmode_main_bg.dds",
   "w": 87,
@@ -3280,7 +3462,7 @@
   "path": "gfx/interface/valsora_deco/stateview/stateview_bg.dds",
   "w": 450,
   "h": 650,
-  "sig": "70361eeb42e1557d8857349523ba01a74ecbd331ef21bbb9317aca27c82309f3"
+  "sig": "dc5a14b6fa5959eb050cc6683ec47d3db9d488256d0c1be976bd1abd4e49c915"
  },
  {
   "key": "sv_res_bg",

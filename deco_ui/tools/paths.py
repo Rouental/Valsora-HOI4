@@ -11,7 +11,7 @@ Layout (relative to the project root = the folder above tools/):
 
 Every location can be overridden with an environment variable:
     VALSORA_DECO_ROOT, VALSORA_DECO_MOD, HOI4_DIR (the game folder, used instead of reference/vanilla),
-    VALSORA_MOD_DIR (instead of reference/valsora), VALSORA_BASE_DIR (instead of ../work/deco_base: the Valsora
+    VALSORA_MOD_DIR (instead of reference/valsora), VALSORA_DECO_BUILD (instead of build/), VALSORA_BASE_DIR (instead of ../work/deco_base: the Valsora
     mod's own copies of the files the Deco UI replaces), CHROMIUM_PATH (the browser Playwright uses).
 """
 import os
@@ -34,7 +34,9 @@ VALSORA = _d(os.environ.get("VALSORA_MOD_DIR") or os.path.join(ROOT, "reference"
 # the Valsora build keeps its own in work/deco_base/ (scripts/deco_ui.py) and make_politics.py starts from there
 _base = os.environ.get("VALSORA_BASE_DIR") or os.path.join(ROOT, "..", "work", "deco_base")
 VALSORA_BASE = _d(_base) if os.path.isdir(_base) else VALSORA
-BUILD = _d(os.path.join(ROOT, "build"))
+# VALSORA_DECO_BUILD: a build folder of one's own (2026-10-21), for helpers drawing side by side (gen_textures.py
+# writes its page and screenshots there)
+BUILD = _d(os.environ.get("VALSORA_DECO_BUILD") or os.path.join(ROOT, "build"))
 # each texture's signature (gen_textures.py): in the repository, so a fresh clone redraws only what changed
 # a scratch manifest for a test run of gen_textures.py (VALSORA_TEXTURE_MANIFEST), so it leaves the committed one alone
 MANIFEST = os.environ.get("VALSORA_TEXTURE_MANIFEST") or os.path.join(ROOT, "texture_manifest.json")

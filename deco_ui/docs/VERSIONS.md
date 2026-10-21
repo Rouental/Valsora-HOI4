@@ -174,6 +174,26 @@ it before touching the UI. In short:
     equipment's plate, the factory slots, the resource wells) and turned the game's scratches into gilt specks along
     the trade rows (`make_panel_pictures.DRAWN`).
 
+- **v0.12.2** (2026-10-21, not yet seen in game; the author's screenshots of the Army HQ card and the diplomacy tab):
+  - **no more traced pictures** ("with a lot of the things you've generated recently, there's these weird sloppy lines
+    and missing pieces of the design. I've brought it up a few times, and it seems to keep happening"): the 26 pictures
+    `make_panel_pictures.py` made by tracing the game's art (`proposals_panel_mockups.translate()`, and the spymaster's
+    `photo_plate()`) are drawn by hand, each measured against the elements its .gui puts on it: the officer corps
+    (`panelpics_a_art.py`, `pa_`: the Army HQ card with a well for the template's icon and one for its name, the
+    spirits' cards with an octagonal well, the army, navy and air banners, the high command and theorists' plates, the
+    HQ ribbon), the faction screen (`panelpics_b_art.py`, `pb_`: the identity plate, the supreme commanders' cards, the
+    influence chart's plate, the intelligence slots with an ivory sheet, the spymaster's plate, the doctrine plate, the
+    goals' seven frames, the templates' three) and the rest (`panelpics_c_art.py`, `pc_`: the construction screen's
+    top, the subview header, the logistics footer, the line chart's frame, the trade filter, the occupation screen's
+    five, the theatre groups); translate() is used for nothing in the mod;
+  - **a check for broken gilt** (`fragments.py`, run by `validate_preview.py`): specks and short thin strokes of gilt
+    in every plate and background, calibrated on the old translations (up to 102 a picture) against the new pictures
+    (0); 20 pictures with short strokes on purpose listed with their counts;
+  - the diplomacy tab's focus icon inside its octagon ("focus icons aren't remaining inside the lines in the diplomacy
+    tab"): 0.56 of its size instead of 0.9 (56 x 49 px inside a 55 px hairline; `layout_panels.DIPLO_FOCUS_SCALE`);
+  - the state panel's stats 3-4 px higher and their column rules ending at y 98, leaving a row at the band's foot for
+    Valsora's line (Rouental's governorate and Royal Fief: `layout_stateview.STATE_LINE`, written by Valsora's
+    `build_mod.state_lines`).
 - **v0.12.1** (2026-10-20, later, not yet seen in game; the author's screenshots of v0.12 in game):
   - the top bar's faction logo in the middle of its ring ("It looks like the faction logo isn't quite centered"): at
     scale .875, 28 px from (8, 11), exactly the ring's middle (`layout.FACTION_LOGO`; at .85 it was 0.4 px up and left);

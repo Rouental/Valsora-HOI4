@@ -59,7 +59,7 @@ guiTypes = {
 			# ===== Valsora Deco: section labels =====
 			instantTextboxType = {
 				name = "valsora_deco_sv_label_victory_points"
-				position = { x = 20 y = 66 }
+				position = { x = 20 y = 63 }
 				font = "valsora_deco_label"
 				text = "VAL_DECO_SV_VICTORY_POINTS"
 				format = left
@@ -70,7 +70,7 @@ guiTypes = {
 			}
 			instantTextboxType = {
 				name = "valsora_deco_sv_label_manpower"
-				position = { x = 160 y = 66 }
+				position = { x = 160 y = 63 }
 				font = "valsora_deco_label"
 				text = "VAL_DECO_SV_MANPOWER"
 				format = left
@@ -81,7 +81,7 @@ guiTypes = {
 			}
 			instantTextboxType = {
 				name = "valsora_deco_sv_label_resources"
-				position = { x = 300 y = 66 }
+				position = { x = 300 y = 63 }
 				font = "valsora_deco_label"
 				text = "VAL_DECO_SV_RESOURCES"
 				format = left
@@ -165,7 +165,7 @@ guiTypes = {
 			
 			instantTextboxType = {
 				name = "victory_points"
-				position = { x = 20 y = 84 }
+				position = { x = 20 y = 80 }
 				textureFile = ""
 				font = "valsora_deco_value_15"
 				text = ""
@@ -239,7 +239,7 @@ guiTypes = {
 			
 			containerWindowType = {
 				name = "state_resources"
-				position = { x = 300 y = 76 }
+				position = { x = 300 y = 72 }
 				size = { width = 140 height = 44 }
 				
 				
@@ -262,14 +262,14 @@ guiTypes = {
 			iconType ={
 				name ="population_icon"
 				spriteType = "GFX_population_icon"
-				position = { x = 160 y = 80 }
+				position = { x = 160 y = 76 }
 				Orientation = UPPER_LEFT
 				scale = 0.55
 			}
 			
 			instantTextboxType = {
 				name = "manpower"
-				position = { x = 188 y = 84 }
+				position = { x = 188 y = 80 }
 				textureFile = ""
 				font = "valsora_deco_value_15"
 				maxWidth = 100

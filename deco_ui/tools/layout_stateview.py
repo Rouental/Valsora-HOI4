@@ -31,10 +31,20 @@ CLOSE = (-36, 10)                      # UPPER_RIGHT
 
 STATS = (58, 124)
 STAT_COLS = [X0, 160, 300]             # victory points | manpower | resources
-STAT_LABEL_Y, STAT_VALUE_Y = 66, 84
-POP_ICON = dict(x=160, y=80, scale=0.55)
+# 2026-10-21: the labels and values 3-4 px higher and the column rules ending at y 98, to leave the band's foot to the
+# state's line (STATE_LINE) as a row of its own (until then labels 66, values 84, rules 68-114)
+STAT_LABEL_Y, STAT_VALUE_Y = 63, 80
+STAT_RULE = (63, 98)                   # the column rules' top and bottom
+POP_ICON = dict(x=160, y=76, scale=0.55)
 MANPOWER_X = 188
-RESOURCES = dict(x=300, y=76, w=140, h=44)
+RESOURCES = dict(x=300, y=72, w=140, h=44)
+
+# 2026-10-21 (the author: Rouental's governorates "should be ... lines on the state panels ... Royal fiefs should also have
+# a line on their state panels"): a row at the stats band's foot, under the victory points and manpower, below the
+# column rules (STAT_RULE) and clear of the resources' icons (from x 309): "Royal Fief · Governorate of Couronneterre",
+# the longest, is 251 px in the body font. Valsora's build writes it (build_mod.py, state_lines: a scripted GUI docked
+# to the state panel, its text by state)
+STATE_LINE = dict(x=X0, y=104, w=270, h=16, font="valsora_deco_body_13")
 
 SHARED = (124, 252)
 SHARED_LABEL = dict(x=X0, y=132, w=300, h=14)

@@ -9,6 +9,7 @@ import unicodedata
 import os
 import math
 import shutil
+import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 
@@ -238,6 +239,54 @@ def neighbours(lab, anchor):
     for i in out:
         out[i].sort(key=lambda e: (-e[1], e[0]))
     return out
+
+
+def state_lines(write, regions, state_by_name):
+    """Rouental's governorates and Royal Fiefs on the state panel (the author, 2026-10-21: "for now they should be the
+    strategic regions, and lines on the state panels ... Royal fiefs should also have a line on their state panels"):
+    a state in a governorate's region (source/governorates_ROU.json "regions", by colour: governorates.py --apply)
+    reads "Governorate of X", a Royal Fief (nations.ROYAL_FIEFS) "Royal Fief · Governorate of X". A scripted GUI
+    docked to the state panel (selected_state_context: its scope the state clicked), its text a scripted localisation
+    by state id; the line's place is the Deco UI's (deco_ui/tools/layout_stateview.py STATE_LINE), so it is written
+    only with the Deco UI on (the game's own state panel has no room kept for it). Returns the localisation."""
+    spec = Path("source/governorates_ROU.json")
+    gov_of_colour = {c: g for g, c in json.loads(spec.read_text(encoding="utf-8")).get("regions", {}).items()} \
+        if spec.exists() else {}
+    gov = {s: gov_of_colour[rg.get("colour")] for rg in regions if rg.get("colour") in gov_of_colour
+           for s in rg["states"]}
+    for nm in nations.ROYAL_FIEFS:
+        if nm not in state_by_name:
+            raise SystemExit(f"nations.ROYAL_FIEFS: no state named {nm!r}")
+    royal = {state_by_name[nm] for nm in nations.ROYAL_FIEFS}
+    if not DECO_UI or not (gov or royal):
+        return []
+    lines = defaultdict(list)          # (royal?, governorate or None) -> its states
+    for s in sorted(set(gov) | royal):
+        lines[(s in royal, gov.get(s))].append(s)
+    keys, loc, entries = {}, [' VAL_STATE_LINE:0 "[GetValsoraStateLine]"', ' VAL_STATE_LINE_NONE:0 ""'], []
+    for k, ((is_royal, g), ss) in enumerate(sorted(lines.items(), key=lambda kv: (not kv[0][0], kv[0][1] or ""))):
+        text = " · ".join((["Royal Fief"] if is_royal else []) + ([f"Governorate of {g}"] if g else []))
+        loc.append(f' VAL_STATE_LINE_{k + 1}:0 "{text}"')
+        entries += ["\ttext = {", "\t\ttrigger = { OR = { " + " ".join(f"state = {s + 1}" for s in ss) + " } }",
+                    f"\t\tlocalization_key = VAL_STATE_LINE_{k + 1}", "\t}"]
+    write("common/scripted_localisation/valsora_state_lines.txt", "\n".join(
+        ["# Rouental's governorates and Royal Fiefs, one line on the state panel (build_mod.state_lines)",
+         "defined_text = {", "\tname = GetValsoraStateLine", *entries,
+         "\ttext = { localization_key = VAL_STATE_LINE_NONE }", "}", ""]))
+    write("common/scripted_guis/valsora_state_lines.txt", "\n".join([
+        "scripted_gui = {", "\tvalsora_state_lines = {", "\t\tcontext_type = selected_state_context",
+        '\t\twindow_name = "valsora_state_lines_window"', "\t\tparent_window_token = selected_state_view", "\t}", "}", ""]))
+    sys.path.insert(0, "deco_ui/tools")
+    import layout_stateview as LS
+    p = LS.STATE_LINE
+    write("interface/valsora_state_lines.gui", "\n".join([
+        "guiTypes = {", "\tcontainerWindowType = {", '\t\tname = "valsora_state_lines_window"',
+        f"\t\tposition = {{ x = {p['x']} y = {p['y']} }}", f"\t\tsize = {{ width = {p['w']} height = {p['h']} }}",
+        "\t\tOrientation = UPPER_LEFT", "\t\tclipping = no", "\t\tinstantTextBoxType = {",
+        '\t\t\tname = "valsora_state_line"', "\t\t\tposition = { x = 0 y = 0 }", f'\t\t\tfont = "{p["font"]}"',
+        '\t\t\ttext = "VAL_STATE_LINE"', "\t\t\tformat = left", f"\t\t\tmaxWidth = {p['w']}",
+        f"\t\t\tmaxHeight = {p['h']}", "\t\t\tfixedsize = yes", "\t\t}", "\t}", "}", ""]))
+    return loc
 
 
 def main():
@@ -1187,6 +1236,7 @@ def main():
     # Rouental's test decisions, one per kind of event window (the author, 2026-10-15): out when testing is done
     test_events.write_files(write)
     loc += test_events.LOCALISATION
+    loc += state_lines(write, regions, state_by_name)
     write("localisation/english/valsora_l_english.yml", "\n".join(loc) + "\n", bom=True)
     nations.write_files(write, OUT, {nm: s + 1 for nm, s in state_by_name.items()},
                         {nm: int(pid[state_capital[s]]) for nm, s in state_by_name.items()})

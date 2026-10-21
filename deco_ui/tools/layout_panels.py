@@ -84,7 +84,13 @@ DIPLO = {"country_info>diplo_flag_frame": dict(position=(15 - 8, -4 - 1)),
                                                                 scale=str(DA.PORTRAIT_SCALE)),
          # the actions list's empty header strip, seen cut off at the list's top when scrolled up (the author,
          # 2026-10-19: "an odd and seemingly useless cut off bar visible if you scroll all the way up"): hidden
-         "country_info>diplomatic_actions>win_header_short": dict(sprite="GFX_valsora_deco_none")}
+         "country_info>diplomatic_actions>win_header_short": dict(sprite="GFX_valsora_deco_none"),
+         # the focus icon inside its octagon (2026-10-21, the author: "focus icons aren't remaining inside the lines in
+         # the diplomacy tab"): the game draws it at 0.9, 90 x 79 for a focus's 100 x 88 picture (85 x 68 for the
+         # unknown focus's laurel), over an octagon 63 px across its flats (diplomacy_art.TOP["focus"], r 34); at
+         # DIPLO_FOCUS_SCALE a focus is 56 x 49, inside the octagon's inner line (55 across)
+         "country_info/active_national_focus_info>goal_icon": dict(scale=str(0.56))}
+DIPLO_FOCUS_SCALE = 0.56
 
 # the decisions tab's events box and rows (v0.11, decisions_art.py): the game wrote their texts in its typewriter faces,
 # dark ink for the paper it drew them on; on the Deco UI's lacquer they take its light faces (elements of the file's

@@ -425,7 +425,7 @@ guiTypes = {
 						position = { x = 48 y = 39 }
 						spriteType = "GFX_goal_unknown"
 						centerposition = yes
-						scale = 0.9
+						scale = 0.56
 					}
 
 					instantTextboxType = {
