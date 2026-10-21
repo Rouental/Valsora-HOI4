@@ -759,3 +759,18 @@ UTC) holds 30 nations; Rouental's page came through unchanged.
   Al-Radiyaa's states. **Port Almohavid**'s page no longer carries a flag; the mod keeps the one it flies (the Kufi in
   gold). Terreich's page still has four facts on Xugang's land, left to Xugang.
 
+## 2026-10-21: Aurifort and Brassard (the Royal Fiefs)
+
+The author: "Please rename Rouerie to Brassard, and put Aurifort on the map by cutting it out of northern Charmas and a
+tiny bit of southern Jourdain et Moterre. That way, all of the Royal Fiefs will be represented, I believe."
+- **Brassard**: the state named Rouërie (after its largest fief, a Conflans one) is Brassard, the royal fief (state 701 in
+  the build; HMMLA's civil war list follows).
+- **Aurifort**: the royal fief on the fief map between Jourdain et Moterre and Charmas (18,803 fief map px, 28 game px:
+  under the fiefs' 30, so the cut of 2026-10-20 had merged it into Charmas, crownland with crownland). Laid onto the game
+  map with the fief map's fit it is 29 px of Charmas's northern edge; with the row of Jourdain et Moterre beside it, 11 px,
+  it is a state of 40 px, one province (Charmas 113 px and Jourdain et Moterre 93 px left, each one province). Its
+  population (75,303) came out of theirs by area (Charmas 266,493 to 212,068, Jourdain et Moterre 197,390 to 176,512),
+  as the fief states' did. In Couronneterre, like both; in no civil war list, like both.
+- The ten Royal Fiefs of the fief list are all states now: Rouental, Saintiers, Cournin, Jourdain et Moterre, Aurifort,
+  Éislek, Charmas, Rochemont, Bérault and Brassard.
+

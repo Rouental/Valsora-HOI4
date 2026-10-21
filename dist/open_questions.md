@@ -1,4 +1,4 @@
-# Open questions (2026-10-20)
+# Open questions (2026-10-21)
 
 The author's answers of 2026-10-19 and 2026-10-20 are in the mod (the go-ahead: "go ahead with the rest of it, and all
 the other changes I had been holding back until now"): `docs/HISTORY.md`, 2026-10-20. What is still open:
@@ -14,9 +14,14 @@ the other changes I had been holding back until now"): `docs/HISTORY.md`, 2026-1
 | 26 | the Army HQ designer: every country now starts with the game's own HQ template; does a new HQ template save now? If not, the button's tooltip or the `error.log` line is the next clue | in game |
 | 27 | the game's generic political advisors and theorists (`generic_advisors.txt`) were switched off with the Earth histories, so no Valsoran country has any besides those the Gazetteer gives: bring them back for every country? | |
 | 28 | Rouental's provinces to merge or make into states: pick them on the grouping map (https://claude.ai/artifact/RsMPNHMPW1PdhS1Soa6W19, private to you), saved there for Claude to apply | your groups |
+| 29 | the governorates: names for the 20 not yet named (numbered on the grouping map); are the rough patches final, or will you draw proper lines on the Governorate Lines layer; and should they only be shown (as strategic regions, a line in the state panel, a map mode) or matter in play (what do the regional parliaments block)? Claude's suggestion: show them first (regions and the state panel line), mechanics later | your answer |
+| 30 | Port Almohavid's Gazetteer page no longer has a flag (the export of 2026-10-20, night); the mod still flies the Kufi in gold you chose. Keep it? | |
+| 31 | Aurifort (cut out 2026-10-21): your fief map puts the fief wholly in northern Charmas (29 game px), so 11 px of Jourdain et Moterre's southern edge were added ("a tiny bit of southern Jourdain et Moterre"): 40 px, one province. Like Charmas and Jourdain et Moterre it is in no civil war list (HMMLA takes Rêverie, Rouental, Saintiers, Brassard, Stofflet, Charet, Cournin and Vendée): should it, or the other royal fiefs, go to HMMLA? | the map 10-21 |
 | 25 | the tech tree: "I'm not really ready to start with the tech tree in earnest yet" | `docs/TECH_TREE_2036.md` |
 
 New to look at:
+- **Aurifort** is a state (map 10-21), and Rouërie is now **Brassard**: the ten Royal Fiefs of your list are all on the map (Rouental, Saintiers, Cournin, Jourdain et Moterre, Aurifort, Éislek, Charmas, Rochemont, Bérault, Brassard). Aurifort's population (75,303) came out of Charmas's and Jourdain et Moterre's, by area.
+- **The grouping map** shows the governorates (the governorates switch) and warns when a group crosses one.
 - **Rouental's 178 states** from your fief map (the 30 px version): their names are the fiefs' as your map writes them
   (`dist/state_names_rouental.png`); two are both called Vedette. The releasables and the civil war's risers kept the
   land they had; Kové, Temerre, Callentroix and Rolantelle moved to the releasable named after them or naming them.

@@ -82,7 +82,7 @@ New detail goes into those files; this one gets a line.
   `gazetteer_site`, `publish_site.sh`, `tests/gazetteer/`); vanilla (`vanilla_sync`, `pdxscript`); tests not in the
   game (`terrain_test`, `usnistan_prototype`, `coarse_preview`); `build_flags15.sh` (the larger flags' test version).
 - **HOI4's hard rules** (all checked by `check_mod.py`): the map is 5120×2560 (the largest size under the game's cap);
-  **at most 65,536 province borders** (3,181 left on 2026-10-20; new land is cut at ~190 px; `borders.py` counts); provinces
+  **at most 65,536 province borders** (3,178 left on 2026-10-21; new land is cut at ~190 px; `borders.py` counts); provinces
   one 4-connected blob of 16+ px, no 2×2 window of four provinces; `definition.csv` CRLF; localisation UTF-8 with BOM;
   every province in one strategic region, a state's provinces in one, naval regions contiguous; the map files exactly
   map-sized. Map errors crash on launch unless the game runs with `-debug`: always test with it.
@@ -154,7 +154,7 @@ New detail goes into those files; this one gets a line.
 
 ## Nation content, ideologies, cultures, superevents (in full: `docs/CONTENT.md`)
 
-- **Rouental (ROU)** is the built-out nation: 178 states, its fiefs (2026-10-20), capital Rêverie (`nations.CAPITALS`), Roland II Cahun and Serelle Cahun
+- **Rouental (ROU)** is the built-out nation: its states are its fiefs (2026-10-20; the ten Royal Fiefs all on the map since 2026-10-21, Aurifort and Brassard), capital Rêverie (`nations.CAPITALS`), Roland II Cahun and Serelle Cahun
   (`common/characters/ROU.txt`), a focus tree of five mutually exclusive paths (Polite, Kick Out Your Brother, Steady
   As She Goes, Rudely with Execute the Prince and the Rouentaise civil war, Accept Reality), the Association of
   Reibonnaise States, the Feudal Army spirit and the royal host. Merlovich (AIS) has its own focus tree. Every other
@@ -244,8 +244,8 @@ the page, its rules or its import.
 
 Where things stand; the history, date by date, is `docs/HISTORY.md` (add each day's entry at its top).
 
-- **The build** (2026-10-20, later): 21,147 provinces (20,759 land, 363 sea, 25 lakes), 62,355 province borders
-  (HOI4 draws 65,536: 3,181 free, `docs/BORDER_LIMIT.md`), 3,312 states (Rouental's 178 its fiefs since 2026-10-20; 22 impassable, without supply hubs or troops: Usnistan's deserts and the
+- **The build** (2026-10-21): 21,148 provinces (20,760 land, 363 sea, 25 lakes), 62,358 province borders
+  (HOI4 draws 65,536: 3,178 free, `docs/BORDER_LIMIT.md`), 3,313 states (Rouental's its fiefs since 2026-10-20, Aurifort cut out on 2026-10-21; 22 impassable, without supply hubs or troops: Usnistan's deserts and the
   Cultists' striped jungle, the
   author's areas layer, `scripts/areas.py`; one province each, as the base game's great deserts; their land and the yellow areas desert terrain, cut coarse), 179 strategic
   regions (137 land, made from the nations on 2026-10-16: `land_regions.py`, not redone for the borders since; 42 sea);
@@ -288,7 +288,8 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   "for now"); whether the Royal Host now starts full and keeps its experience (in game); the tech tree ("not really
   ready"); in game, the Army HQ designer (it should save now); the game's generic political advisors, switched off with
   `history/general` (bring them back?); Rouental's provinces to group on the grouping map (a private claude.ai page,
-  `scripts/province_picker.py`; the groups read back with ArtifactData). To look at: Rouental's 178 fief states and their names (two Vedettes), the releasables' carried-over land, the
+  `scripts/province_picker.py`; the groups read back with ArtifactData); the governorates (names, lines, shown or played);
+  Port Almohavid's flag (its page dropped it); Aurifort's 11 px of Jourdain et Moterre and HMMLA's list. To look at: Rouental's 178 fief states and their names (two Vedettes), the releasables' carried-over land, the
   Gazetteer page's old state populations (shared out in the mod, `gazetteer.rekey`), the Deco UI v0.12's Things to
   check (the alerts' row an assumption). Rouental's border edits of 10-18-3 (a city state in the east, cutouts for
   Vair, Carcarelle and Grande Reliette) come with the author's new map. Settled: the desert provinces' size ("a good
@@ -313,7 +314,7 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
 4. **What still reads as the 1940s**: the tech tree's names, descriptions and pictures (its dates are 2036's;
    `docs/TECH_TREE_2036.md` is a proposal), the 3D models, and the game's own pictures inside the side panels (the
    Deco UI's proposals wait for approval).
-5. **Province borders**: 3,181 left under HOI4's limit (62,355 of 65,536, 2026-10-20: Rouental's fiefs took 291, its rivers 3; the
+5. **Province borders**: 3,178 left under HOI4's limit (62,358 of 65,536, 2026-10-21: Rouental's fiefs took 291, its rivers 3, Aurifort 3; the
    coarse deserts gave back 1,368 on 2026-10-18), for the states still to be drawn (`docs/BORDER_LIMIT.md`).
 
 ## Working with the author

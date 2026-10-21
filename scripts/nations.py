@@ -445,7 +445,7 @@ CIVIL_WAR = {
     "CRP": ["Crépuscule", "Aube", "Petit Crépuscule", "Noirceur", "Pénombre", "Ténèbres", "Toussaint", "Lyrié et Rivielle", "725,858", "Sorrelle", "Rendanne", "Brouge"],
     "RLT": ["Reliette", "Oramlitus", "Piscisinum", "Reliquae", "Aureimontes", "Avignalle", "Gourdelle", "Marque", "Sézanne", "Vinterre", "Arduécu", "Plaiserre", "Ariminum", "Shalquoir", "Dortaine", "Thermidor"],
     "MRC": ["Cylône", "Brochets", "Erdoine", "Élan", "Baïonnette", "Osgrande", "Coidron", "Belleterre", "Monteaux", "La Marche", "Aurillac-de-Ciel", "752,780", "Coffrefort"],
-    "RLA": ["Rêverie", "Rouental", "Saintiers", "Rouërie", "Stofflet", "Charet", "Cournin", "Vendée"],
+    "RLA": ["Rêverie", "Rouental", "Saintiers", "Brassard", "Stofflet", "Charet", "Cournin", "Vendée"],
     "VAI": ["Vair", "Pavois", "Fleurent", "Haute Couronne", "Nerice", "Caux-Gautier", "Beaufort", "Leonis", "Ligue Mercéatique"],
     "FTH": ["Hevique", "Antraine", "Rendement", "Blédoré", "Avarre"],
 }

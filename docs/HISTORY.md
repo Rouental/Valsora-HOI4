@@ -10,6 +10,7 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-21 (the author: "rename Rouerie to Brassard, and put Aurifort on the map"): **Aurifort** a state of its own, cut out of northern Charmas (the fief map's Aurifort, 29 px) and the edge of Jourdain et Moterre (11 px), 40 px, one province; **Rouërie renamed Brassard**: the ten Royal Fiefs all on the map (`docs/NATIONS.md`). The map 10-21; the Gazetteer and the grouping map republished. The build: 21,148 provinces, 62,358 borders (3,178 free), 3,313 states.
 - 2026-10-20, night (the author: "Overnight, there are some additions to the Gazetteer"): **the Gazetteer's export
   of that night in the mod** (`docs/NATIONS.md`): flags and rulers' portraits for Almohavid, Al-Khabid, Kalaistan,
   Koronista and Mekele (Al-Radiyaa's portrait too), their states', provinces' and cities' facts; Krionik's realms
