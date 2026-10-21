@@ -161,7 +161,7 @@ New detail goes into those files; this one gets a line.
 
 ## Nation content, ideologies, cultures, superevents (in full: `docs/CONTENT.md`)
 
-- **Rouental (ROU)** is the built-out nation: its states are its fiefs (2026-10-20; the ten Royal Fiefs all on the map since 2026-10-21, Aurifort and Brassard, and Rêverie the eleventh; the author's 13 groups applied the same day, 165 states), capital Rêverie (`nations.CAPITALS`), Roland II Cahun and Serelle Cahun
+- **Rouental (ROU)** is the built-out nation: its states are its fiefs (2026-10-20; the ten Royal Fiefs all on the map since 2026-10-21, Aurifort and Brassard, and Rêverie the eleventh; the author's 13 groups applied the same day: 167 states, 216 provinces), capital Rêverie (`nations.CAPITALS`), Roland II Cahun and Serelle Cahun
   (`common/characters/ROU.txt`), a focus tree of five mutually exclusive paths (Polite, Kick Out Your Brother, Steady
   As She Goes, Rudely with Execute the Prince and the Rouentaise civil war, Accept Reality), the Association of
   Reibonnaise States, the Feudal Army spirit and the royal host (Elite since 2026-10-21; mechanized but the two armoured divisions and the 12th, motorized in Concorde), its 26 governorates (its

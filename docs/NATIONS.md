@@ -814,7 +814,7 @@ rather than republic. They should remain authoritarian. Give Kalaistan the natio
   Spreivald, Prèsloin into Poitevallée, Lugunica into Karsten, Pénombre into Petit Crépuscule; and Rochejaquelein into
   **Jourdain et Moterre**, "One state with two provinces and two cities, Jourdain in the North, Moterre in the South"
   (`nations.CITIES`: Jourdain keeps its page's 15 victory points, moved there from Elbée where the page had it; Moterre
-  5). Rouental has 165 states. Their populations are summed in its Gazetteer facts. The releasables follow the land:
+  5). Rouental has 167 states (165 in its governorates, with Brillagne and Concorde et Volonté) and 216 land provinces. Their populations are summed in its Gazetteer facts. The releasables follow the land:
   Focislar's land, Carcarelle's, is the Rivage d'Argent's now (Vesontio); the others stayed with the same releasable.
   The way back: `work/pre_groups_1021/` (the map before) or the commit before this one.
 - **South and North Montvallée** in place of Terres Séparées (`source/governorates_ROU.json`, `split`): two strategic
