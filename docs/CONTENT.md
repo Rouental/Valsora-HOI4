@@ -213,7 +213,12 @@ Aislada is the worked example of a built-out nation:
   Chatois and Oscarl as named; Conflans (151 fiefs, the most) Claude's guess for the Riverlanders; the Vairande's,
   the Lyrién and the Lustianaise open. Rouental's faith is Seranism, its head the Voix; power "tends to fluctuate
   between the Sacred Prince, the Voix, and the Speaker of the Estates General" (a triangle for it proposed:
-  `deco_ui/art/proposals/three_powers/`).
+  `deco_ui/art/proposals/three_powers/`). The Voix is **Mahaut VI** (the author, 2026-10-21, night: "The Voix is the
+  leader of Brillagne / theocratic Rouental"), the Speaker **Tara Blanchart**. Rouental "is just coming out of a long
+  regency by the previous Voix who had tried to cement her power, ended only once the previous Voix died and the new
+  one assumed the office and willingly gave up a lot of the power" (the start: Prince 40, Voix 35, Speaker 25). The
+  Southmarch's Reformed Seranists "respect the Voix as a spiritual leader, but don't consider them self bound to her.
+  Likewise, the Voix isn't fond of them, as they break with many of the Faith's commandments".
   The author will give each fief its title; per-fief levies wait for that. They give
   Rouental's name list noble surnames ("de Beaufort", "d'Aurifort") and its division
   names: "The Royal Host" (Garde Royale, Ost de <royal fief>) and "Vassal Levies"

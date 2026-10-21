@@ -258,6 +258,18 @@ Moved out of `CLAUDE.md` word for word on 2026-10-17 (`CLAUDE.md` keeps one line
   - **The civil war**: governorates choosing sides may suit another, more traditional civil war path, not the
     communist one ("the complete collapse of traditional Rouentaise society, everyone against everyone. They're not
     too concerned about the arbitrary lines of the governorates": `docs/CIVIL_WAR_NOTES.md`).
+- **The three powers' triangle** (author, 2026-10-21, night; the mockup `deco_ui/art/proposals/three_powers/`, not in
+  the mod): the Sacred Prince, the Voix and the Speaker of the Estates General as one point in a triangle, opened from
+  the politics screen; its seven zones (a power of 60 or more rules, one under 15 is shut out, the Unwritten Balance
+  between): "Yes, it looks good". The names and effects of the zones, the decisions and the drift are still Claude's.
+  - **The start**: "Probably Prince 40, Voix 35, Speaker 25. Rouental is just coming out of a long regency by the
+    previous Voix who had tried to cement her power, ended only once the previous Voix died and the new one assumed
+    the office and willingly gave up a lot of the power."
+  - **The Voix is Mahaut VI** ("The Voix is the leader of Brillagne / theocratic Rouental": the mod's `ROU_mahaut_vi`
+    and `BRL_mahaut_vi`); **the Speaker is Tara Blanchart** (not yet a character in the mod).
+  - **Reformed Seranism** (the Southmarch): "They respect the Voix as a spiritual leader, but don't consider them self
+    bound to her. Likewise, the Voix isn't fond of them, as they break with many of the Faith's commandments." So the
+    Southmarchers lose loyalty as the Voix gains power (Rule of the Voix: −10; a move toward her: −1, in the mockup).
 - **The game's generic advisors and theorists are back** (author, 2026-10-21: "Sure, might as well bring back generic
   advisors and theorists"): vanilla's `history/general/generic_advisors.txt`, its Earth cases taken out, for every
   country (`docs/MAP_PIPELINE.md`, Vanilla content switched off).

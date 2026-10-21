@@ -836,3 +836,12 @@ The author: "I think I'm gonna rename Placeholdaire back to Linterre for now." *
 Linterre", adjective Linterrois (its first name and adjective, 2026-09-30 to 2026-10-01; Placeholdros, then
 Placeholdaire from 2026-10-07); its unnamed states "Linterre N", its region "Linterre and Selto". Rouental's
 Southmarchers "have been greatly influenced by Linterre to the south".
+
+## 2026-10-21, night, last: the Voix and the Speaker
+
+The author named Rouental's three powers' holders: "The Voix is the leader of Brillagne / theocratic Rouental"
+(**Mahaut VI**, in the mod since 2026-10-02 as `ROU_mahaut_vi`, theocratic party leader and Accept Reality's ruler, and
+her copy `BRL_mahaut_vi` at the head of Brillagne; "Voix Mahaut (I can't remember if I gave you a [regnal] name
+previously)": Mahaut VI is that name), and the Speaker of the Estates General is **Tara Blanchart** (not a character in
+the mod yet: the three powers are a mockup, `deco_ui/art/proposals/three_powers/`). The previous Voix held a long
+regency and "had tried to cement her power"; Mahaut VI "willingly gave up a lot of the power".

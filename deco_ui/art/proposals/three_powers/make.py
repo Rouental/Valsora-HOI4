@@ -1,16 +1,17 @@
 """The three powers of Rouental as a triangle: a mockup (2026-10-21, night; the author: "Rouental lacks a defined
 constitution, and power tends to fluctuate between the Sacred Prince, the Voix, and the Speaker of the Estates General",
 the Pious estates "will appreciate actions that push the balance of power towards the Voix"; then "Yes, give me a mockup
-of the triangle").
+of the triangle"; then, of the zones, "Yes, it looks good"; the start "Prince 40, Voix 35, Speaker 25", Rouental "just
+coming out of a long regency by the previous Voix"; the Voix Mahaut VI, the Speaker Tara Blanchart).
 
 The game's own balance of power has two sides (a bar: common/bop, interface/powerbalanceview.gui, opened by a button on
 the politics screen); three powers need a window of our own, opened from the same place. Three screens:
   three_powers_window.png      1 June 2036: the balance in the middle zone, its six months' trail; the decision Seek the
                                Voix's Blessing hovered (where it would move the balance, the Pious estates who welcome it)
-  three_powers_throne_altar.png 1 December 2036: the Speaker under 15, Throne and Altar; a zone hovered (Sacred Majesty)
+  three_powers_throne_altar.png 1 December 2036: the Speaker under 15, Throne and Altar
   three_powers_zones.png       the seven zones and what each would do (a sheet for the author)
-Not in the mod; the zones' names and effects, the decisions, every number and the Voix's and the Speaker's portraits are
-placeholders.
+Not in the mod; the zones' names and effects, the decisions, the events and every number but the start are placeholders;
+Tara Blanchart has no portrait yet.
 
     CHROMIUM_PATH=/opt/pw-browsers/chromium python3 make.py   (after a build: the governorates' estates come from it)
 """
@@ -129,22 +130,22 @@ DECISIONS = [
 ]
 # Which estates welcome a move toward which power (the Pious the author's; the Leal and the Proud Claude's guesses)
 LEANINGS = [("Pious", "voix", "the author's"), ("Leal", "prince", "a guess"), ("Proud", "speaker", "a guess")]
-START = (40, 30, 30)                      # 1 January 2036 (a guess)
+START = (40, 35, 25)                      # 1 January 2036 (the author's: just out of the late Voix's long regency)
 
 SCREENS = {
     "window": dict(date="1 June 2036", since="January",
-                   trail=[(40, 30, 30), (41, 30, 29), (47, 28, 25), (44, 27, 29), (41, 32, 27), (41, 33, 26)],
+                   trail=[(40, 35, 25), (42, 32, 26), (48, 30, 22), (45, 29, 26), (42, 34, 24), (42, 35, 23)],
                    log=[("Jun 2036", "The month's drift", {"voix": 1, "speaker": -1}),
-                        ("May 2036", "The Voix preaches at Rêverie", {"voix": 5, "prince": -3, "speaker": -2}),
+                        ("May 2036", "Mahaut VI preaches at Rêverie", {"voix": 5, "prince": -3, "speaker": -2}),
                         ("Apr 2036", "The Estates General sits", {"speaker": 4, "prince": -3, "voix": -1}),
                         ("Mar 2036", "Rule by Royal Decree", {"prince": 6, "voix": -2, "speaker": -4}),
-                        ("Feb 2036", "The month's drift", {"prince": 1, "speaker": -1})],
+                        ("Feb 2036", "The regency's last officials retire", {"prince": 2, "voix": -3, "speaker": 1})],
                    hover=1),
     "throne_altar": dict(date="1 December 2036", since="January",
-                         trail=[(41, 33, 26), (47, 31, 22), (47, 32, 21), (43, 38, 19), (49, 36, 15), (51, 39, 10),
-                                (51, 40, 9)],
+                         trail=[(42, 35, 23), (48, 33, 19), (48, 34, 18), (44, 40, 16), (50, 38, 12), (52, 41, 7),
+                                (52, 42, 6)],
                          log=[("Dec 2036", "The month's drift", {"voix": 1, "speaker": -1}),
-                              ("Nov 2036", "The Voix anoints the Prince anew", {"prince": 2, "voix": 3, "speaker": -5}),
+                              ("Nov 2036", "Mahaut VI anoints the Prince anew", {"prince": 2, "voix": 3, "speaker": -5}),
                               ("Oct 2036", "Rule by Royal Decree", {"prince": 6, "voix": -2, "speaker": -4}),
                               ("Sep 2036", "Seek the Voix's Blessing", {"voix": 6, "prince": -4, "speaker": -2}),
                               ("Aug 2036", "The month's drift", {"voix": 1, "speaker": -1})]),
@@ -264,7 +265,9 @@ def octo(cx, cy, r, inner):
 def power_picture(k, w, h):
     if k == "prince":
         return portrait("roland_cahun", 0, 0, w, h, "object-position:50% 18%")
-    return silhouette(0, 0, w, h)
+    if k == "voix":
+        return portrait("mahaut_vi", 0, 0, w, h)
+    return silhouette(0, 0, w, h)                         # Tara Blanchart has no portrait yet
 
 
 def corners_of(T, shares):
@@ -290,7 +293,7 @@ def corners_of(T, shares):
     return out
 
 
-def politics_panel(zone):
+def politics_panel(zone, shares):
     """the politics screen the window opens from (drawn simply; the Deco UI's own is fuller): the leader, the
     popularities, and in the place of the game's balance of power button, the three powers'"""
     PX, PY, PW = GM.PX, GM.PY, GM.PW
@@ -330,7 +333,7 @@ def politics_panel(zone):
         fill = rgba(z["col"], .55) if z["col"] else "rgba(241,220,156,.15)"
         mini += f'<polygon points="{pts_attr(pts)}" fill="{fill}" stroke="rgba(227,199,126,.5)" stroke-width=".6"/>'
     mini += f'<polygon points="{pts_attr((t.A, t.B, t.C))}" fill="none" stroke="#F1DC9C" stroke-width="1.1"/>'
-    sh = {"balance": (41, 33, 26), "throne": (51, 40, 9)}[zone]
+    sh = shares
     mx, my = t.at(*sh)
     mini += f'<path d="{diamond_path(mx, my, 3.6)}" fill="#FFF4D0" stroke="#16110A" stroke-width=".8"/>'
     out += f'<svg class="a" style="left:0;top:0;overflow:visible" width="1" height="1">{mini}</svg>'
@@ -358,9 +361,9 @@ def power_cards(y, shares, since):
     out = label(RX, y, "The powers", 10, GILT) + fade_rule(RX + 90, y + 5, RX + RW)
     y += 18
     lines = {
-        "prince": ("Roland II Cahun", "The Sacred Prince", "Rules by sacred right, the Royal Host at hand."),
-        "voix": ("The Voix", "Head of the Seran faith · name to come", "The faith's voice: the Pious estates heed it."),
-        "speaker": ("The Speaker", "Of the Estates General · name to come", "Speaks for the estates of the 26 governorates."),
+        "prince": ("Roland II Cahun", "The Sacred Prince", "Free of the regency; the Royal Host at hand."),
+        "voix": ("Mahaut VI", "The Voix · head of the Seran faith", "Gave up much of the regency's power."),
+        "speaker": ("Tara Blanchart", "Speaker of the Estates General", "Speaks for the estates of 26 governorates."),
     }
     for k, share, was in zip(ORDER, shares, START):
         col = POWERS[k][2]
@@ -371,7 +374,7 @@ def power_cards(y, shares, since):
         out += label(RX + 66, y + 9, role, 9, LABEL, w=290)
         out += text(RX + 66, y + 22, name, 17, CREAM, font="fed", track=.02)
         if share < 15:
-            line, lc = "Shut out: the estates who lean to it grow restive.", "#EE8C7E"
+            line, lc = "Shut out: the Proud estates grow restive.", "#EE8C7E"
         else:
             lc = CREAM2
         out += text(RX + 66, y + 46, line, 11.5, lc, w=262, font="bod", weight=500)
@@ -469,7 +472,7 @@ def window_screen(which):
     S = SCREENS[which]
     shares = S["trail"][-1]
     zone = zone_of(*shares)
-    body = backdrop("map", dim=.2) + politics_panel(zone)
+    body = backdrop("map", dim=.2) + politics_panel(zone, shares)
     body += box(1480, 17, 210, 26, "background:linear-gradient(180deg,rgb(29,39,46),rgb(17,25,30))")
     body += text(1480, 23, f"12:00, {S['date'].replace(' 2036', ', 2036')}", 15.5, "#EDE3C9", w=206, align="center",
                  font="fed", track=.05, caps=True)
@@ -507,8 +510,9 @@ def window_screen(which):
         G = RM.governorates()
         pious = [g for g, v in G.items() if v["attitude"][0] == "Pious"]
         after = zone_of(*ghost)
-        body += tooltip(X0 + WW + 10, Y0 + 252, 330, 196, name, rows,
+        body += tooltip(X0 + WW + 10, Y0 + 252, 330, 232, name, rows,
                         f"Welcomed by the Pious estates of {', '.join(pious[:-1])} and {pious[-1]}: their loyalty up 3. "
+                        f"Sumarche's Southmarchers, of Reformed Seranism, look on coolly: loyalty down 1. "
                         f"The balance would stay in {ZONES[after]['name']}.")
     if S.get("hover_zone"):
         z = ZONES[S["hover_zone"]]
@@ -526,14 +530,15 @@ def zones_sheet():
     body += window(16, 16, w - 32, h - 32)
     body += header(22, 22, w - 44, 44, "The Three Powers: the seven zones", 22)
     T = Tri(390, 210, 600)
-    body += triangle(T, None, [(40, 30, 30)], size=13)
-    body += corners_of(T, (40, 30, 30))
+    body += triangle(T, None, [START], size=13)
+    body += corners_of(T, START)
     body += label(60, 84, "Where the balance stands decides what Rouental gets", 10, LABEL)
     body += text(60, 100, "A power of 60 or more rules; a power under 15 is shut out; between them, the old balance.",
                  13, CREAM2, w=600, font="bod", weight=500)
-    body += label(60, 830, "The marker: 1 January 2036 (Prince 40, Voix 30, Speaker 30: a guess)", 9.5, LABEL)
-    body += text(60, 848, "Everything here is a placeholder for the author: the zones' names, where their lines fall, and "
-                 "what each does.", 12.5, CREAM2, w=640, font="bod", weight=500, lh=1.3)
+    body += label(60, 830, "The marker: 1 January 2036 (Prince 40, Voix 35, Speaker 25: the author's)", 9.5, LABEL)
+    body += text(60, 848, "Rouental is just out of the late Voix's long regency; Mahaut VI, the new Voix, gave much of its "
+                 "power up. The zones' names and effects are placeholders.", 12.5, CREAM2, w=640, font="bod", weight=500,
+                 lh=1.3)
     x, y = 770, 84
     for k in ("prince", "voix", "speaker", "throne", "crown", "in_name", "balance"):
         z = ZONES[k]

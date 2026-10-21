@@ -10,6 +10,10 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-21, night, the very last (the author's answers on the triangle): the zones kept ("Yes, it looks good"); the
+  start Prince 40, Voix 35, Speaker 25, after the late Voix's long regency; the Voix **Mahaut VI** (the mod's own),
+  the Speaker **Tara Blanchart**; Reformed Seranism respects the Voix but isn't bound to her. Recorded
+  (`docs/DECISIONS.md`, `docs/CONTENT.md`, `docs/NATIONS.md`) and the mockups redrawn with them.
 - 2026-10-21, night, last (the author: "Yes, give me a mockup of the triangle"): **the three powers as a triangle**
   (`deco_ui/art/proposals/three_powers/`, not in the mod): the Sacred Prince, the Voix and the Speaker of the Estates
   General as one point in a triangle, opened from the politics screen where the game's balance of power button sits;
