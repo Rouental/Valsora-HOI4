@@ -126,7 +126,7 @@ def career_profile():
     o += D.text(1215, 393, "Compare to your statistics", 14, D.CREAM2, 200, "right") + D.checkbox(1424, 390, False, 22)
     stats = [("Campaigns", "12", "started with Rouental 9"), ("Hours played", "340", "since 1 January 2036"), ("Wars won", "18", "of 21 fought"),
              ("Peace conferences", "14", "led 11"), ("Divisions destroyed", "1,204", "lost 386"), ("Focuses completed", "412", "Rouental: Steady As She Goes ×6"),
-             ("States annexed", "96", "Cardonia most often"), ("Nations puppeted", "7", "Placeholdaire ×3")]
+             ("States annexed", "96", "Cardonia most often"), ("Nations puppeted", "7", "Linterre ×3")]
     for i, (k, v, sub) in enumerate(stats):
         c, r = i % 4, i // 4
         x, y = 395 + c * 284, 450 + r * 150

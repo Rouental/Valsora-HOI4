@@ -710,7 +710,7 @@ def theatres():
     y = ty + 2 * 84 + 4
     o += D.button(gx + 458 - 305, y, 303, 30, "+ New army group", size=11)
     y += 44
-    o += theatre_entry(gx, y, "Placeholdaire and Selto", 6, 2, ("supply",))
+    o += theatre_entry(gx, y, "Linterre and Selto", 6, 2, ("supply",))
     o += theatre_entry(gx, y + 66, "The Abalonese Coast", 4, 1, ())
     o += theatre_entry(gx, y + 132, "Midtierre Sea", 9, 2, ("hq",))
     # the selection: Serelle's army chosen in the theatre: the army bar and its counters

@@ -465,7 +465,7 @@ MAP_LABELS = """
 <div class="ml" style="left:840px;top:318px;font-size:50px;letter-spacing:.6em;transform:translate(-50%,-50%) rotate(-2deg)">Cardonia</div>
 <div class="ml" style="left:1380px;top:760px;font-size:40px;letter-spacing:.45em;transform:translate(-50%,-50%) rotate(-16deg)">Fraxhemark</div>
 <div class="ml" style="left:1440px;top:262px;font-size:30px;letter-spacing:.45em;transform:translate(-50%,-50%) rotate(10deg)">Kurikia</div>
-<div class="ml" style="left:430px;top:596px;font-size:22px;letter-spacing:.35em;transform:translate(-50%,-50%) rotate(19deg)">Placeholdaire</div>
+<div class="ml" style="left:430px;top:596px;font-size:22px;letter-spacing:.35em;transform:translate(-50%,-50%) rotate(19deg)">Linterre</div>
 <div class="ml" style="left:250px;top:108px;font-size:20px;letter-spacing:.4em;transform:translate(-50%,-50%) rotate(-8deg)">Wersh</div>
 <div class="ml" style="left:598px;top:846px;font-size:18px;letter-spacing:.4em;transform:translate(-50%,-50%) rotate(-26deg)">Selto</div>
 <div class="ml" style="left:760px;top:1000px;font-size:18px;letter-spacing:.4em;transform:translate(-50%,-50%) rotate(-6deg)">Estande</div>

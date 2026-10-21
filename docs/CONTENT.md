@@ -212,7 +212,8 @@ Aislada is the worked example of a built-out nation:
   list is which: Carcasonnaise the Carcaraise, Northmarch, Southmarch, Crépuscule, Piscan, Helvetican, Recolt, Nataine,
   Chatois and Oscarl as named; Conflans (151 fiefs, the most) Claude's guess for the Riverlanders; the Vairande's,
   the Lyrién and the Lustianaise open. Rouental's faith is Seranism, its head the Voix; power "tends to fluctuate
-  between the Sacred Prince, the Voix, and the Speaker of the Estates General".
+  between the Sacred Prince, the Voix, and the Speaker of the Estates General" (a triangle for it proposed:
+  `deco_ui/art/proposals/three_powers/`).
   The author will give each fief its title; per-fief levies wait for that. They give
   Rouental's name list noble surnames ("de Beaufort", "d'Aurifort") and its division
   names: "The Royal Host" (Garde Royale, Ost de <royal fief>) and "Vassal Levies"

@@ -10,6 +10,12 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-21, night, last (the author: "Yes, give me a mockup of the triangle"): **the three powers as a triangle**
+  (`deco_ui/art/proposals/three_powers/`, not in the mod): the Sacred Prince, the Voix and the Speaker of the Estates
+  General as one point in a triangle, opened from the politics screen where the game's balance of power button sits;
+  seven zones (a power of 60 or more rules, one under 15 is shut out, the Unwritten Balance between), a monthly drift,
+  four decisions, the estates' leanings (the Pious to the Voix, the author's; the Leal to the Prince and the Proud to the
+  Speaker, guesses); every name and number Claude's placeholder. The mockups' map label for Linterre renamed too.
 - 2026-10-21, night, later (the author's lore and answers): **Linterre** again (Placeholdaire renamed back; the
   Gazetteer republished); the governorates' design recorded (`docs/DECISIONS.md`: the attitudes as Claude suggested,
   Pious estates and the Voix, the three powers of the Sacred Prince, the Voix and the Speaker of the Estates General,

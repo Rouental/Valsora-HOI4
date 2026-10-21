@@ -302,7 +302,7 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
 - **Waiting on the author:** (`dist/open_questions.md`, 2026-10-21, later still; keep it in step) everything they had
   answered or held is in the mod (2026-10-20, their go-ahead; 2026-10-21, the governorates' names, the generic
   advisors, the Kufi in gold, HMMLA's Royal Fiefs, Rouental's groups, Montvallée, Rêverie, the Royal Host, Kalaistan).
-  New: the Vale of Reibonne's region left with Guedelon and Brillagne apart; whether the groups stay (the way back:
+  New: the three powers' triangle (`deco_ui/art/proposals/three_powers/`, a mockup); the Vale of Reibonne's region left with Guedelon and Brillagne apart; whether the groups stay (the way back:
   `work/pre_groups_1021/`, or the commit before them). Open: the strait crossings to add from the red ones
   (`dist/straits_map_red.png`); the old upload's tundra, jungle and desert marks ("I'll add those back in later");
   flags for Belekria's eight republics and state names (later, the author's); the region names (the drafts in the mod

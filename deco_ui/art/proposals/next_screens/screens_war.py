@@ -387,7 +387,7 @@ def end_of_game():
         o += D.medallion(977 + i * 100, 476, 22, g, icon_size=22, lit=(i == 0))
     ladder = [("ROU", "Rouental"), ("KRI", "Krionik"), ("FRX", "Fraxhemark"), ("KPF", "Kampfian Empire"), ("SRK", "Sarkis"),
               ("CRD", "Cardonia"), ("KRK", "Kurikia"), ("TUP", "Terreich und Preußen"), ("HLR", "Hollier"), ("BLK", "Belekria"),
-              ("WRS", "Wersh"), ("EVR", "Evriches"), ("SGV", "Selgrave"), ("LST", "Lustiana"), ("LNT", "Placeholdaire"),
+              ("WRS", "Wersh"), ("EVR", "Evriches"), ("SGV", "Selgrave"), ("LST", "Lustiana"), ("LNT", "Linterre"),
               ("ESD", "Estande"), ("GDN", "Guedelon"), ("SGN", "Seigne"), ("LZC", "Lanzerac"), ("THD", "Thorian Dynamics"),
               ("GOB", "Gorbastan"), ("ZUK", "Zukchiva"), ("SNH", "Sennheiser"), ("AIS", "Merlovich"), ("ILR", "Illiricium"),
               ("LTH", "Leithanien"), ("CNA", "Chineasia"), ("TSU", "Tsuruma"), ("PLJ", "Plaija"), ("VIL", "Vilna"),
