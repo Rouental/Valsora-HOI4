@@ -195,8 +195,9 @@ Aislada is the worked example of a built-out nation:
   The governor remains the crown appointee, and is responsible for trying their best to reign in the unruly vassals").
   The cultural groups are Rouental's peoples, and their loyalty differs: the Carcaraise (the list's "Carcasonnaise",
   renamed Carcarelle) resent Rêverie, holding Carcarelle the true heart of Reibonne's culture; the Nataine descend
-  from the Natin empire's invaders; the Oscarl are "fiercely loyal and grateful for being allowed to settle in
-  Rouental"; the Chatois, raised to lordship for helping throw the invaders back, "are ever loyal"
+  from the Natin empire's invaders, fewer and less quarrelsome than the Carcaraise but proud, prickly and never fully
+  Rouentaise; the Oscarl are "fiercely loyal and grateful for being allowed to settle in
+  Rouental"; the Chatois, descendants of Natin slaves raised to lordship for helping throw the invaders back, "are ever loyal"
   (`docs/DECISIONS.md`, the governorates' screen).
   The author will give each fief its title; per-fief levies wait for that. They give
   Rouental's name list noble surnames ("de Beaufort", "d'Aurifort") and its division

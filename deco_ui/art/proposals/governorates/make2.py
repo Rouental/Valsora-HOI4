@@ -9,7 +9,9 @@ Three screens at 1920 x 1080: the window opened from the decisions tab over the 
 state borders (realm.py), seen three ways (loyalty, peoples, the levies the inspectors have seen):
   governorates_window_carcarelle.png   loyalty; Carcarelle selected (the Carcaraise, Defiant; two states inspected)
   governorates_window_crepuscule.png   peoples; Crépuscule selected (governed by its own Prince, by law)
-  governorates_window_crown.png        levies; the Crown's Domain selected (Rêverie's ceremonial guard)
+  governorates_window_graisivaudan.png levies; Graisivaudan selected, inspected throughout (Grand Brume's Blue Guard:
+                                       a ceremonial corps, a sidestep from the ladder)
+  governorates_window_crown.png        levies; the Crown's Domain selected
 Not in the mod; governors' names and every number but the manpower are placeholders.
 
     CHROMIUM_PATH=/opt/pw-browsers/chromium python3 make2.py   (after a build: reads build/valsora_test)
@@ -84,7 +86,9 @@ def legend(lens, y):
     elif lens == "peoples":
         items = [(v[1], v[0]) for v in RM.PEOPLES.values()]
     else:
-        items = list(zip(RM.LEVY_COLOURS, RM.LEVY)) + [("repeating-linear-gradient(-45deg,#3A464C 0 .8px,#20292E .8px 3px)", "Not yet seen")]
+        items = list(zip(RM.LEVY_COLOURS, RM.LEVY)) + [
+            ("radial-gradient(circle,#E3C77E 0 1.2px,#2C4A63 1.4px) 0 0/4px 4px", "Ceremonial (a sidestep)"),
+            ("repeating-linear-gradient(-45deg,#3A464C 0 .8px,#20292E .8px 3px)", "Not yet seen")]
     if lens != "levies":
         items.append(("repeating-linear-gradient(45deg,#C9A55A 0 1.1px,#6E5626 1.1px 3px)", "Royal Fief"))
     rows = [[]]
@@ -107,8 +111,9 @@ def lower_strip(lens, y):
     out = fade_rule(MX, y, MX + 832)
     if lens == "levies":
         out += label(MX, y + 12, "The inspectors' reports", 9.5)
-        reports = [("Feb 2036", "Carcarelle", "the levies of Carcarelle are Rabble: the Carcaraise lords send their worst"),
-                   ("Jan 2036", "Oramlitus", "Oramlitus musters a Drilled levy, fewer than its rolls claim"),
+        reports = [("Feb 2036", "Grand Brume", "the Blue Guard of Brume: two divisions of leg infantry, drilled to perfection "
+                    "on their grandfathers' rifles (Ceremonial)"),
+                   ("Jan 2036", "Carcarelle", "the levies of Carcarelle are Rabble: the Carcaraise lords send their worst"),
                    ("Dec 2035", "Spreivald", "the Oscarl of Spreivald are Veteran, and ask only to serve")]
         for i, (d, where, s) in enumerate(reports):
             out += value(MX, y + 32 + i * 24, d, 12.5, LABEL, w=80) + text(MX + 84, y + 31 + i * 24, s, 13.5, CREAM2,
@@ -207,10 +212,13 @@ def states_table(sids, y, picked, sel_known, kind="Vassals"):
         p = P[sid]
         pn = RM.PEOPLES[p][0] if p in RM.PEOPLES else "Crown"
         out += text(CX + 126, y + 4, pn + ("*" if sid in guessed else ""), 12, CREAM2 if not lit else col, w=90)
-        if RM.inspected(sid, sel_known):
+        if RM.inspected(sid, sel_known) and name in RM.CEREMONIAL:
+            out += box(CX + 218, y + 1, 104, 17, "box-shadow:inset 0 0 0 1px #E3C77E;background:#1E3446")
+            out += text(CX + 218, y + 4, "Ceremonial", 11.5, "#F1DC9C", w=104, align="center", font="fed", track=.1, caps=True)
+        elif RM.inspected(sid, sel_known):
             q = RM.levy(sid)
-            out += M.pips(CX + 220, y + 7, min(q, 4) + 1, lit=("#F8E7B0" if q == 5 else "#E3C77E"))
-            out += text(CX + 278, y + 4, RM.LEVY[q], 11.5, "#F1DC9C" if q == 5 else (CREAM2 if not lit else col), w=60)
+            out += M.pips(CX + 220, y + 7, q + 1)
+            out += text(CX + 278, y + 4, RM.LEVY[q], 11.5, CREAM2 if not lit else col, w=60)
         else:
             out += text(CX + 220, y + 4, "Unknown", 12, "rgba(183,166,128,.7)", w=100, font="bod", weight=500)
         out += value(CX + 330, y + 3, f"{st[sid]['manpower'] / 1000:,.0f}k", 12.5, col, w=56, align="right")
@@ -247,6 +255,14 @@ def card_governorate(g, picked, known):
     out += peoples_row(G, y + 80)
     t, y = states_table(G["states"], y + 122, picked, known)
     out += t
+    for sid in G["states"]:
+        name = R["st"][sid]["name"]
+        if name in RM.CEREMONIAL and RM.inspected(sid, known):
+            corps, what = RM.CEREMONIAL[name]
+            corps = "the" + corps[3:] if corps.startswith("The ") else corps
+            out += text(CX, y + 4, f"{name} keeps {corps}: {what[0].lower() + what[1:]}.", 12, "#F1DC9C", w=CW, font="bod",
+                        weight=500, lh=1.3)
+            y += 36
     out += actions(y + 8, ("Send Inspectors", "Drill the Levies", "Demand Levies", "Grant Privileges", "Summon the Estates",
                            "Replace the Governor"), lit=("Send Inspectors",))
     return out
@@ -284,7 +300,6 @@ def card_crown():
     for i, sid in enumerate(fiefs):
         n = host.get(st[sid]["name"])
         out += value(CX + 392, y - 21 * (len(fiefs) - i) + 3, str(n) if n else "–", 12.5, CREAM, w=54, align="right")
-    out += text(CX, y + 8, "Rêverie's guard is Ceremonial: few, but the best drilled in the realm.", 12, LABEL, w=CW)
     return out
 
 
@@ -298,6 +313,11 @@ def screen(which):
     elif which == "crepuscule":
         g = "Crépuscule"
         body += realm_window("peoples", g, picked=None) + card_governorate(g, None, ())
+    elif which == "graisivaudan":
+        g = "Graisivaudan"
+        brume = next(x for x in G[g]["states"] if RM.realm()["st"][x]["name"] == "Grand Brume")
+        known = tuple(G[g]["states"])                      # inspectors have been through it all
+        body += realm_window("levies", g, picked=brume) + card_governorate(g, brume, known)
     else:
         body += realm_window("levies", crown=True) + card_crown()
     body += note(14, 470, "<b>A mockup, not in the mod.</b> The window opens from the Governorates category; its map is "
@@ -308,7 +328,7 @@ def screen(which):
 
 def main():
     outs = []
-    for which in ("carcarelle", "crepuscule", "crown"):
+    for which in ("carcarelle", "crepuscule", "graisivaudan", "crown"):
         body = screen(which)
         outs.append(render(body, os.path.join(HERE, f"governorates_window_{which}.png")))
     close_browser()

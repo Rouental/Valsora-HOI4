@@ -229,14 +229,19 @@ Moved out of `CLAUDE.md` word for word on 2026-10-17 (`CLAUDE.md` keeps one line
     enmity with the government in Rêverie, as they see Carcarelle as the true heart of culture in Reibonne. Likewise,
     the Nataine people are descendants of invaders from the Natin empire that settled in Rouental. Meanwhile, the
     Oscarl are fiercely loyal and grateful for being allowed to settle in Rouental, and the Chatois are the descendants
-    of Nation slaves raised to lordship for their help in throwing back the invaders, and are ever loyal."
+    of Nation slaves raised to lordship for their help in throwing back the invaders, and are ever loyal." ("Yes, I
+    meant Natin.") The Nataine "aren't as quarrelsome as the Carcaraise, nor as numerous, but they are proud, refuse to
+    integrate fully into Rouentaise culture, and can be prickly."
   - **The estates' attitudes change at their sessions** ("I like attitudes switching with estate sessions though,
     that's really good"); more attitudes to come from the author once the current eight each have something
     interesting to do.
   - **Levy quality is hidden until inspectors are sent** ("I LOVE the levy quality being hidden until you send
     inspectors"); its steps (Rabble, Militia, Drilled, Seasoned, Veteran) "good for now, but could do with a rework.
     After all, a city state's ceremonial crossbow corps might be small, but they could be very well trained. Maybe a
-    late "ceremonial" category?"; better-trained levies by an action or later by the focus tree.
+    late "ceremonial" category?"; then: "I was more thinking of it as a sidestep rather than another rung on the
+    ladder. Ceremonial units would be poorly equipped, but highly trained. For example "The Blue Guard of Brume" might
+    only be two or three divisions of leg infantry, but at elite experience"; better-trained levies by an action or
+    later by the focus tree.
   - **Governorates may revolt** ("I like the idea of governorates revolting, to be sure"); more Royal Fiefs by
     provoking a revolt and annexing, or a ruler's death.
   - **The civil war**: governorates choosing sides may suit another, more traditional civil war path, not the

@@ -14,7 +14,8 @@ sessions; levy quality hidden until inspectors are sent; a "ceremonial" levy ste
 |---|---|
 | `governorates_window_carcarelle.png` | The window opened from the decisions tab, the loyalty view: Carcarelle selected (the Carcaraise, Defiant: the loyalty's parts listed), a governor of the Prince's court, Proud estates, two of its states' levies seen by inspectors, the rest unknown; the four peoples the author has written of under the map |
 | `governorates_window_crepuscule.png` | The peoples view (every state's people, from the fief list's cultural groups): Crépuscule selected, governed by its own Prince by law |
-| `governorates_window_crown.png` | The levies view (only what inspectors have seen; the Crown's own fiefs always known): the Crown's Domain selected, Rêverie's guard Ceremonial; the inspectors' reports |
+| `governorates_window_graisivaudan.png` | The levies view (only what inspectors have seen; the Crown's own fiefs always known): Graisivaudan selected, inspected throughout, Grand Brume keeping the Blue Guard of Brume, a ceremonial corps (a sidestep from the ladder, not a rung: "poorly equipped, but highly trained"); the inspectors' reports |
+| `governorates_window_crown.png` | The levies view, the Crown's Domain selected: the eleven Royal Fiefs, held by the Prince, the Royal Host's divisions in them |
 
 **Version 1** (the first answers), `make.py`: the same in the decisions panel itself.
 
@@ -34,7 +35,7 @@ edges, so every line is a state border of the game (no rough shapes); `make.py` 
 Placeholders, not the author's: the governors' names (version 1: a first name and the seat's fief; version 2: a fief from
 elsewhere, since governors are the Prince's courtiers or the Estates General's picks), loyalty (version 2: 50, the
 peoples' leanings the author gave, the estates' attitude, the governor, and chance), the estates' attitudes (the author's
-four and Claude's four more: `realm.ATTITUDES`), levy quality (`realm.LEVY`, a sixth step Ceremonial), which states the
+four and Claude's four more: `realm.ATTITUDES`), levy quality (`realm.LEVY`, five rungs; a ceremonial corps a sidestep from them, `realm.CEREMONIAL`, the author's Blue Guard of Brume), which states the
 inspectors have seen, the reports. Real: the borders, the states and their names, manpower, the vassals' count, each
 state's people (the fief list's cultural group of the fief it is named for; 17 states named for no listed fief take
 their governorate's commonest, marked *), the Royal Fiefs, the Royal Host's stations.

@@ -103,16 +103,21 @@ ATTITUDES = [
     ("Mercantile", "Thinks in trade: pays coin sooner than it sends men."),
     ("Timorous", "Fearful of the Crown: yields to pressure, but its levies are poor."),
 ]
-LEVY = ["Rabble", "Militia", "Drilled", "Seasoned", "Veteran", "Ceremonial"]
-LEVY_COLOURS = ["#6B3A32", "#8E5A3A", "#A88A48", "#7E9A5C", "#4C8A6C", "#E3C77E"]
+LEVY = ["Rabble", "Militia", "Drilled", "Seasoned", "Veteran"]
+LEVY_COLOURS = ["#6B3A32", "#8E5A3A", "#A88A48", "#7E9A5C", "#4C8A6C"]
+# a ceremonial corps: a sidestep from the ladder, not a rung on it (the author, 2026-10-21, night: "Ceremonial units
+# would be poorly equipped, but highly trained. For example "The Blue Guard of Brume" might only be two or three
+# divisions of leg infantry, but at elite experience")
+CEREMONIAL = {"Grand Brume": ("The Blue Guard of Brume", "Two or three divisions of leg infantry: elite in their drill, "
+                              "poor in their arms")}
 # Rouental's peoples, the fief list's cultural groups (source/names/rouental_fiefs.txt): display name, colour on the
 # peoples' map, a loyalty modifier, a line of lore. The four with lore and their leanings are the author's (2026-10-21,
 # night); the others' modifiers are 0 until the author says
 PEOPLES = {
     "Carcasonnaise": ("Carcaraise", "#A2493B", -30, "Hold Carcarelle the true heart of Reibonne's culture: an old enmity with Rêverie"),
-    "Nataine": ("Nataine", "#8A6BA0", 0, "Descendants of the Natin empire's invaders, settled in Rouental"),
+    "Nataine": ("Nataine", "#8A6BA0", -10, "Descendants of the Natin invaders: proud, prickly, never wholly Rouentaise"),
     "Oscarl": ("Oscarl", "#3F7F6E", 25, "Fiercely loyal, grateful to have been allowed to settle in Rouental"),
-    "Chatois": ("Chatois", "#7FA06A", 30, "Raised to lordship for helping throw the invaders back: ever loyal"),
+    "Chatois": ("Chatois", "#7FA06A", 30, "Descendants of Natin slaves, raised to lordship for helping throw the invaders back: ever loyal"),
     "Conflans": ("Conflans", "#8C8A4E", 0, ""),
     "Recolt": ("Recolt", "#B07A3A", 0, ""),
     "Northmarch": ("Northmarch", "#5E8E6E", 0, ""),
@@ -227,8 +232,6 @@ def governorates():
 def levy(sid):
     R = realm()
     name = R["st"][sid]["name"]
-    if name == "Rêverie" or name.startswith("Ligue"):
-        return 5                                            # Ceremonial: a city's few, very well drilled
     if sid in R["royal"]:
         return 4
     return h(name + "levy", 5)
@@ -309,7 +312,9 @@ def map_svg(scale, select_gov=None, select_state=None, crown=False, lens="loyalt
         if lens == "peoples":
             return ("royal" if s in royal else "p:" + P[s]) + mark
         if lens == "levies":
-            return (f"q:{levy(s)}" if inspected(s, sel) else "unknown") + mark
+            if not inspected(s, sel):
+                return "unknown" + mark
+            return ("ceremonial" if st[s]["name"] in CEREMONIAL else f"q:{levy(s)}") + mark
         return ("royal" if s in royal else "g:" + gov[s]) + mark
 
     def colour(k):
@@ -320,7 +325,7 @@ def map_svg(scale, select_gov=None, select_state=None, crown=False, lens="loyalt
             return PEOPLES[k[2:]][1]
         if k.startswith("q:"):
             return LEVY_COLOURS[int(k[2:])]
-        return {"royal": "url(#crown)", "unknown": "url(#unknown)"}[k]
+        return {"royal": "url(#crown)", "unknown": "url(#unknown)", "ceremonial": "url(#ceremonial)"}[k]
 
     def edge_cls(p, q):
         ip, iq = p in gov, q in gov
@@ -341,6 +346,8 @@ def map_svg(scale, select_gov=None, select_state=None, crown=False, lens="loyalt
            '<rect width="3" height="3" fill="#6E5626"/><rect width="1.1" height="3" fill="#C9A55A"/></pattern>'
            '<pattern id="unknown" width="3" height="3" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)">'
            '<rect width="3" height="3" fill="#20292E"/><rect width=".8" height="3" fill="#3A464C"/></pattern>'
+           '<pattern id="ceremonial" width="3" height="3" patternUnits="userSpaceOnUse">'
+           '<rect width="3" height="3" fill="#2C4A63"/><circle cx="1.5" cy="1.5" r=".7" fill="#E3C77E"/></pattern>'
            '<filter id="glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation=".8"/></filter></defs>',
            f'<rect width="{W}" height="{H}" fill="#0B1317"/>']
     if "other" in fills:
