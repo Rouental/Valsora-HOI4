@@ -10,6 +10,8 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-21, night, the very last, later: the estates' leanings the author's ("Yes, Leal to the Prince and Proud to the
+  Speaker for now"; every attitude a side later): recorded, the triangle's mockup redrawn.
 - 2026-10-21, night, the very last (the author's answers on the triangle): the zones kept ("Yes, it looks good"); the
   start Prince 40, Voix 35, Speaker 25, after the late Voix's long regency; the Voix **Mahaut VI** (the mod's own),
   the Speaker **Tara Blanchart**; Reformed Seranism respects the Voix but isn't bound to her. Recorded

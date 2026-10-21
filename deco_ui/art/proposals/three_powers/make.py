@@ -128,8 +128,9 @@ DECISIONS = [
     ("Summon the Estates General", 40, {"speaker": 6, "prince": -3, "voix": -3}, "The estates' tempers change"),
     ("A Royal Progress", 25, {"prince": 3, "speaker": -3}, "One governorate's loyalty +5"),
 ]
-# Which estates welcome a move toward which power (the Pious the author's; the Leal and the Proud Claude's guesses)
-LEANINGS = [("Pious", "voix", "the author's"), ("Leal", "prince", "a guess"), ("Proud", "speaker", "a guess")]
+# Which estates welcome a move toward which power: the author's (the Pious, then "Yes, Leal to the Prince and Proud
+# to the Speaker for now. Eventually I'll go through and assign each attitude to a side on the balance")
+LEANINGS = [("Pious", "voix"), ("Leal", "prince"), ("Proud", "speaker")]
 START = (40, 35, 25)                      # 1 January 2036 (the author's: just out of the late Voix's long regency)
 
 SCREENS = {
@@ -420,14 +421,14 @@ def leanings(y, shares, since):
     G = RM.governorates()
     out = label(RX, y, f"The estates' leanings (their loyalty since {since})", 10, GILT) + fade_rule(RX + 330, y + 5, RX + RW)
     y += 20
-    for att, k, whose in LEANINGS:
+    for att, k in LEANINGS:
         col = POWERS[k][2]
         govs = [g for g, v in G.items() if v["attitude"][0] == att]
         i = ORDER.index(k)
         mood = math.floor((shares[i] - START[i]) * .5 + .5)
         out += GM.seal(RX + 8, y + 8, 7, rgba(col, 1))
         out += text(RX + 22, y + 1, f"{att} estates lean to {POWERS[k][0].replace('The ', 'the ')}", 13.5, CREAM)
-        out += label(RX + 22, y + 19, f"{', '.join(govs)}  ·  {whose}", 9, LABEL, w=RW - 22)
+        out += label(RX + 22, y + 19, ", ".join(govs), 9, LABEL, w=RW - 22)
         out += value(RX + RW - 110, y + 2, f"loyalty {sgn(mood)}" if mood else "loyalty even", 12, POS if mood > 0 else
                      (NEG if mood < 0 else LABEL), w=110, align="right")
         y += 38

@@ -21,13 +21,14 @@ Estates Supreme). A power under 15 is shut out (the three strips along the edges
 Crown and Estates without the Voix, the Prince in Name). Everything between is the Unwritten Balance, Rouental as it
 has long been, with no effects. Each zone carries its effects; each month the balance drifts a point or two on its own
 ("power tends to fluctuate"); decisions, events and focuses move it further. The estates of the governorates take
-sides: Pious estates welcome a move toward the Voix (the author's), and by Claude's guess Leal estates toward the
-Prince and Proud estates toward the Speaker.
+sides: Pious estates welcome a move toward the Voix, Leal estates toward the Prince and Proud estates toward the
+Speaker (the author's, "for now. Eventually I'll go through and assign each attitude to a side on the balance").
 
 **The author's:** the zones (kept), the start (Prince 40, Voix 35, Speaker 25), the holders (Roland II Cahun, Mahaut
-VI, Tara Blanchart), the Pious estates' leaning to the Voix, the Southmarchers' coolness toward her.
+VI, Tara Blanchart), the leanings (Pious to the Voix, Leal to the Prince, Proud to the Speaker, for now; every
+attitude a side later), the Southmarchers' coolness toward her.
 **Placeholders, Claude's:** the zones' names, their effects; the four decisions, their costs and shifts; the events in
-the record (the regency's last officials retiring among them); the Leal and Proud leanings; the estates' attitudes (the
+the record (the regency's last officials retiring among them); the estates' attitudes (the
 governorates' mockup's, `../governorates/realm.py`). Tara Blanchart has no portrait yet.
 
 **In game** (as planned, nothing built): the game's own balance of power has two sides only (`common/bop`, a bar), so

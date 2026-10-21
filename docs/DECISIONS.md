@@ -270,6 +270,9 @@ Moved out of `CLAUDE.md` word for word on 2026-10-17 (`CLAUDE.md` keeps one line
   - **Reformed Seranism** (the Southmarch): "They respect the Voix as a spiritual leader, but don't consider them self
     bound to her. Likewise, the Voix isn't fond of them, as they break with many of the Faith's commandments." So the
     Southmarchers lose loyalty as the Voix gains power (Rule of the Voix: −10; a move toward her: −1, in the mockup).
+  - **The estates' leanings**: Pious to the Voix, and "Yes, Leal to the Prince and Proud to the Speaker for now.
+    Eventually I'll go through and assign each attitude to a side on the balance." The other five attitudes (Grasping,
+    Belligerent, Quarrelsome, Mercantile, Timorous) lean to no one until then.
 - **The game's generic advisors and theorists are back** (author, 2026-10-21: "Sure, might as well bring back generic
   advisors and theorists"): vanilla's `history/general/generic_advisors.txt`, its Earth cases taken out, for every
   country (`docs/MAP_PIPELINE.md`, Vanilla content switched off).
