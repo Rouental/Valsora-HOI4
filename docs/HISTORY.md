@@ -10,6 +10,11 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-21, night (the author: "I'd like to set up a system for interacting with the governorates in the decisions
+  tab"; then: governor, loyalty, the parliament's attitude, the states' levies, the Royal Fiefs apart, "exactly follow
+  the game's borders"): **a mockup of the governorates' map in the decisions tab** (`deco_ui/art/proposals/governorates/`,
+  not in the mod): the realm traced from the build's own state borders, Gheso selected, the Crown's Domain selected;
+  the values placeholders.
 - 2026-10-21, later still (the author's province groups from the grouping map, their notes on the build, screenshots of
   the commander pickers, the load window and the declare war window, an error.log from a war): **Rouental's 13
   groups** (`pdn_tools.py join`, new: twelve pairs of states one state and one province, Jourdain et Moterre one state of
