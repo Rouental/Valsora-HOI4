@@ -7,7 +7,7 @@ and handled separately. ... Don't go with rough shapes for the map, exactly foll
 Two screens at 1920 x 1080, the Deco UI's decisions panel open on the map: Rouental's Governorates category with the
 realm drawn from the build's own map (realm.py: every line a state border of the game), a governorate selected (its
 governor, loyalty, estates and states, one state picked), and the Crown's Domain selected (the Royal Fiefs, held by the
-King, the Royal Host raised from them). Not in the mod; the governors, loyalty, attitudes and levy quality are
+Prince, the Royal Host raised from them). Not in the mod; the governors, loyalty, attitudes and levy quality are
 placeholders.
 
     CHROMIUM_PATH=/opt/pw-browsers/chromium python3 make.py   (after a build: reads build/valsora_test)
