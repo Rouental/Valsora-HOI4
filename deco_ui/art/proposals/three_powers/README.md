@@ -43,3 +43,6 @@ How they are made: `make.py` lays the screens out with the pieces of `../next_sc
 fonts and shapes) and draws them in Chromium; the politics screen behind is drawn simply, not the Deco UI's own.
 
     CHROMIUM_PATH=/opt/pw-browsers/chromium python3 make.py
+
+**In the game since 2026-10-21, night, bare bones**: `scripts/rouental_ui.py` (`docs/CONTENT.md`, Rouental): the button on
+the politics screen, the window, the drift, the zones' spirits, the four decisions, the leanings.

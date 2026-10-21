@@ -87,6 +87,10 @@ CITY_SIZES = ("village", "town", "city", "large", "metropolis")   # as the page'
 # victory points (author, 2026-10-15); the page shares a nation's population out by them, the build doesn't read them
 IDEOLOGIES = ("democratic", "fascism", "communism", "neutrality", "theocracy")
 ROLES = ("general", "admiral", "advisor", "other")
+# a character's gender (2026-10-21, the author: "we should be able to select the gender of characters in the gazetteer.
+# I noticed that Serelle currently seems to be considered male"): HOI4's `gender = female` / `male` in the character
+# block, a character without one a man; the page keeps a choice as `gender` on each character, the import only these
+GENDERS = ("male", "female")
 REQ_KINDS = ("subideology", "subject", "trait", "spirit", "company", "map", "other")   # as the page's
 TRAITS_FILE = Path("source/vanilla/index/traits.json")   # the base game's traits for leaders (vanilla_sync.py)
 COMPANIES_FILE = Path("source/vanilla/index/companies.json")   # the base game's kinds of company (vanilla_sync.py)
@@ -459,6 +463,8 @@ def normalise(tag, facts, meta, requests=(), sources=(), todo=None):
     tr = keep_traits(ruler.get("traits"), trait_index()["ruler"])
     if tr:
         r["traits"] = tr
+    if ruler.get("gender") in GENDERS:
+        r["gender"] = ruler["gender"]
     if r:
         people["ruler"] = r
     party = {}
@@ -475,6 +481,8 @@ def normalise(tag, facts, meta, requests=(), sources=(), todo=None):
         tr = keep_traits(v.get("traits"), trait_index()["ruler"])
         if tr:
             q["traits"] = tr
+        if v.get("gender") in GENDERS:
+            q["gender"] = v["gender"]
         if q:
             party[ideo] = q
     if party:
@@ -486,6 +494,8 @@ def normalise(tag, facts, meta, requests=(), sources=(), todo=None):
         c = {"role": v.get("role") if v.get("role") in ROLES else "general"}
         if clean(v.get("name"), 80):
             c["name"] = clean(v["name"], 80)
+        if v.get("gender") in GENDERS:
+            c["gender"] = v["gender"]
         if text(v.get("notes"), 1000):
             c["notes"] = text(v["notes"], 1000)
         pic = picture(v.get("portrait"), f"{tag} character's portrait", sources, todo)
@@ -534,6 +544,8 @@ def normalise(tag, facts, meta, requests=(), sources=(), todo=None):
             g["stats"] = st_
         if v.get("rank") in RANKS:
             g["rank"] = v["rank"]
+        if v.get("gender") in GENDERS:
+            g["gender"] = v["gender"]
         if g:
             game[cid] = g
     if game:
@@ -619,6 +631,8 @@ def normalise(tag, facts, meta, requests=(), sources=(), todo=None):
         tr = keep_traits(ld.get("traits"), trait_index()["ruler"])
         if tr:
             lead["traits"] = tr
+        if ld.get("gender") in GENDERS:
+            lead["gender"] = ld["gender"]
         if lead:
             r["leader"] = lead
         if text(v.get("notes"), 2000):
@@ -671,6 +685,8 @@ def normalise(tag, facts, meta, requests=(), sources=(), todo=None):
             lead["portrait"] = pic
         if isinstance(ld.get("traits"), list):
             lead["traits"] = keep_traits(ld["traits"], trait_index()["ruler"])
+        if ld.get("gender") in GENDERS:
+            lead["gender"] = ld["gender"]
         if lead:
             g["leader"] = lead
         if text(v.get("notes"), 2000):
@@ -1324,11 +1340,12 @@ def railways(G, lab, kind, centre, adjacency, notes):
     return out
 
 
-def leaders(tag, subs, facts, handmade, named, portraits):
+def leaders(tag, subs, facts, handmade, named, portraits, genders=None):
     """nations.LEADERS' sub-ideologies of a country with the facts' ruling one and parties
     (first rules). The ruler and the party leaders the facts name (with titles and
     portraits) go into `named`, a copy of nations.NAMED_LEADERS, their portraits into
-    `portraits` (nations.PORTRAITS)."""
+    `portraits` (nations.PORTRAITS), a gender the page gives into `genders` (a copy of nations.GENDERS, for
+    cultures.leaders)."""
     pol, ppl = (facts or {}).get("politics") or {}, (facts or {}).get("people") or {}
     if (not pol and not ppl) or handmade:
         return subs
@@ -1354,6 +1371,8 @@ def leaders(tag, subs, facts, handmade, named, portraits):
         traits = tuple(t for t in v.get("traits") or [] if t in trait_index()["ruler"])
         if v.get("name") or v.get("desc") or sprite or traits:
             named[cid] = (v.get("name") or name, sprite, v.get("desc"), traits)
+        if genders is not None and v.get("gender") in GENDERS:
+            genders[cid] = v["gender"]
     return out
 
 
@@ -1375,7 +1394,10 @@ def characters(tag, facts, portraits, small=None, generic=None):
     the author. An advisor without a post, and others, stay on `status`'s list. A general or admiral without a portrait
     gets one of `generic`'s ({"army": [...], "navy": [...]}: the base game's generic portraits of the nation's culture,
     cultures.unit_portraits), picked by its id, as the game's own generated ones are; an advisor without one shows the
-    game's silhouette, as 44 of the base game's do. Returns (character blocks, loc lines, ids)."""
+    game's silhouette, as 44 of the base game's do. The page's gender is written as the game's `gender = female` (or
+    `male`; none given, the game takes them for a man); the base game (1.19.3) has no generic portraits of women
+    generals or admirals (only scientists), so a woman without a portrait of her own still gets one of `generic`'s.
+    Returns (character blocks, loc lines, ids)."""
     blocks, loc, ids = [], [], []
     n = defaultdict(int)
     ti = trait_index()
@@ -1415,8 +1437,9 @@ def characters(tag, facts, portraits, small=None, generic=None):
             body = f"\t\t{role} = {{\n" + tr + "".join(f"\t\t\t{k} = {v}\n" for k, v in skills) + "\t\t}\n"
             port = (f"\t\tportraits = {{\n\t\t\t{kind} = {{\n\t\t\t\tlarge = {sprite}\n\t\t\t}}\n\t\t}}\n"
                     if sprite else "")
+        gender = f"\t\tgender = {c['gender']}\n" if c.get("gender") in GENDERS else ""
         blocks.append(f"\t{cid} = {{\n" + (f"\t\t# the Gazetteer's notes: {notes}\n" if notes else "")
-                      + f"\t\tname = {cid}\n" + port + body + "\t}\n")
+                      + f"\t\tname = {cid}\n" + gender + port + body + "\t}\n")
         loc.append(f' {cid}:0 "{c["name"]}"')
         ids.append(cid)
     return blocks, loc, ids
@@ -1461,7 +1484,8 @@ def _span(text, head, start=0, end=None):
 def patch_characters(text, changes, loc, portraits, notes):
     """A file of hand-made characters (nations.ROU_CHARACTERS, CHARACTERS) with the Gazetteer's changes to them: the
     ruling sub-ideology (within its ideology: the focus trees name the ideologies), titles (desc, after the ideology,
-    as check_mod.py reads it), leader traits, and a commander's rank, traits and skills. Names, titles and the name
+    as check_mod.py reads it), leader traits, a commander's rank, traits and skills, and the gender (2026-10-21: the
+    block's `gender = ...` line replaced, or one put in after its name; a man needs none). Names, titles and the name
     taken on coming to rule (nations.REGNAL_NAMES) go into `loc` ({key: text}), a new portrait into `portraits`
     (nations.PORTRAITS, under the sprite's own name, so a copy shows it too). Unchanged characters stay as they are,
     byte for byte."""
@@ -1475,6 +1499,14 @@ def patch_characters(text, changes, loc, portraits, notes):
             continue
         a, b = span
         block = text[a:b]
+        if g.get("gender") in GENDERS:
+            gl = re.search(r"\n\t\tgender = (\w+)\n", block)
+            if gl:
+                block = block[:gl.start(1)] + g["gender"] + block[gl.end(1):]
+            elif g["gender"] != "male":   # without the line the game takes the character for a man
+                nm = re.search(r"\n\t\tname = \w+\n", block)
+                at_ = nm.end() if nm else block.index("\n") + 1
+                block = block[:at_] + f"\t\tgender = {g['gender']}\n" + block[at_:]
         if g.get("name"):
             loc[cid] = g["name"]
         if g.get("regnal") and cid in nations.REGNAL_NAMES:
@@ -1528,13 +1560,18 @@ def patch_characters(text, changes, loc, portraits, notes):
     return text
 
 
-def game_character_names(changes, named, portraits, handmade):
+def game_character_names(changes, named, portraits, handmade, genders=None):
     """The generated characters of a nation of hand-made rulers (Rouental's democrat and communist leaders, whose ids
     its focus tree names), changed on the page: their names, titles, portraits and traits into `named` (as
-    nations.NAMED_LEADERS for cultures.leaders), their portraits into `portraits`."""
+    nations.NAMED_LEADERS for cultures.leaders), their portraits into `portraits`, their gender into `genders` (a copy
+    of nations.GENDERS)."""
     for cid, g in sorted(changes.items()):
         m = re.fullmatch(r"([A-Z][A-Z0-9]{2})_leader_\w+", cid)
         if not m or m.group(1) not in handmade:
+            continue
+        if genders is not None and g.get("gender") in GENDERS:
+            genders[cid] = g["gender"]
+        if set(g) <= {"gender"}:   # only the gender changed: the rest as it was
             continue
         name, sprite, *rest = named.get(cid) or (None, None)
         desc = rest[0] if rest else None

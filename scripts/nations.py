@@ -432,7 +432,14 @@ NAMED_LEADERS = {
     # still its ruler as a Grand Duchy (2026-10-13, later; the author named no other)
     "BRO_leader_semi_constitutional_monarchy": ("Jose Castañeda", None),
     "TSU_leader_lordly_republic": ("Akihiro Tanaka", None),  # author, 2026-10-13, later
+    # the Speaker of the Estates General, and democratic Rouental's ruler (author, 2026-10-21, night: "Add Tara
+    # Blanchart in the mod as a character. She is the ruler of democratic Rouental as well"; the author's painting)
+    "ROU_leader_constitutional_monarchism": ("Tara Blanchart", "GFX_portrait_ROU_tara_blanchart"),
 }
+# A character's gender (HOI4's `gender = female`; the game takes everyone else for a man): generated characters here by
+# id, hand-made ones in their own blocks below; the Gazetteer's characters by what their page says. Only what the
+# author has said (2026-10-21, night: "I noticed that Serelle currently seems to be considered male")
+GENDERS = {"ROU_leader_constitutional_monarchism": "female"}
 # Characters renamed once they rule their country (author, 2026-10-08): character ->
 # (tag, localisation key of the new name). The on_ruling_party_change on_action does it,
 # so every route to the throne counts; the name stays if they lose it again.
@@ -911,6 +918,7 @@ LOCALISATION = [
 ROU_CHARACTERS = """characters = {
 	ROU_mahaut_vi = {
 		name = ROU_mahaut_vi
+		gender = female
 		portraits = {
 			civilian = {
 				large = GFX_portrait_ROU_mahaut_vi
@@ -938,6 +946,7 @@ ROU_CHARACTERS = """characters = {
 	}
 	ROU_serelle_cahun = {
 		name = ROU_serelle_cahun
+		gender = female
 		portraits = {
 			civilian = {
 				large = GFX_portrait_ROU_serelle_cahun
@@ -964,6 +973,7 @@ ROU_CHARACTERS = """characters = {
 	# the same two women at the head of civil war factions
 	BRL_mahaut_vi = {
 		name = BRL_mahaut_vi
+		gender = female
 		portraits = {
 			civilian = {
 				large = GFX_portrait_ROU_mahaut_vi
@@ -977,6 +987,7 @@ ROU_CHARACTERS = """characters = {
 	}
 	RLA_serelle_cahun = {
 		name = RLA_serelle_cahun
+		gender = female
 		portraits = {
 			civilian = {
 				large = GFX_portrait_ROU_serelle_cahun
@@ -1375,6 +1386,8 @@ SMALL_PORTRAITS = set()
 
 PORTRAITS = {
     "ROU_mahaut_vi": ("source/portraits/mahaut_vi.jpg", 210, 40, 1000, None),
+    # the author's painting (2026-10-21, night: "Actually let's do a different picture for Tara, use this one")
+    "ROU_tara_blanchart": ("source/portraits/tara_blanchart.webp", 270, 120, 580, None),
     # the author's portrait (2026-10-05, a ready-made 156x210 .dds from the friend's build);
     # the emu stays as Communist Merlovich (author)
     "AIS_merlovich": ("source/portraits/merlovich_leader.png", 0, 0, 156, None),

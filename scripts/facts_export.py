@@ -108,8 +108,8 @@ def politics(tag, loc):
 
 
 def read_characters():
-    """The characters of the built mod (common/characters/): id -> {sprite, leader {sub, desc, traits}, general / admiral
-    {rank, traits, skill, attack, ...}, advisor {slot, traits}}"""
+    """The characters of the built mod (common/characters/): id -> {sprite, gender, leader {sub, desc, traits}, general /
+    admiral {rank, traits, skill, attack, ...}, advisor {slot, traits}}"""
     def fields(body):
         return {k: str(v) for k, _, v in body if k and not isinstance(v, list)}
 
@@ -125,6 +125,8 @@ def read_characters():
                     continue
                 d = {}
                 for k, _, v in c:
+                    if k == "gender" and not isinstance(v, list):   # gender = female (2026-10-21); none, a man
+                        d["gender"] = str(v)
                     if not isinstance(v, list):
                         continue
                     if k == "portraits":
@@ -175,12 +177,13 @@ def portrait_uri(path):
 
 def character(cid, c, loc, sprites, ruling, of):
     """What the page shows of a character in the game (2026-10-15, the author: "Leaders already in the game should be
-    represented and editable"): names, titles, portrait (ours; a base-game one only marked), roles, traits, stats"""
+    represented and editable"): names, titles, portrait (ours; a base-game one only marked), roles, traits, stats, and
+    gender (2026-10-21: "female" for a `gender = female`, else "male", the game's own default; never guessed from a name)"""
     lead = c.get("leader")
     ideo = of.get(lead["sub"]) if lead else None
     out = dict(id=cid, name=loc.get(cid, cid), portrait=portrait_uri(sprites[c["sprite"]]) if c.get("sprite") in sprites else None,
                base=bool(c.get("sprite")) and c.get("sprite") not in sprites, ruler=bool(lead) and ideo == ruling,
-               copyOf=nations.COPIES.get(cid))
+               copyOf=nations.COPIES.get(cid), gender="female" if c.get("gender") == "female" else "male")
     if lead:
         out.update(sub=lead["sub"], ideo=ideo, desc=loc.get(lead["desc"], "") if lead.get("desc") else "", traits=lead["traits"])
     if cid in nations.REGNAL_NAMES:

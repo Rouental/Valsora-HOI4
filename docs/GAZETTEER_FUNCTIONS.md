@@ -148,25 +148,27 @@ With no state picked, every state is a button (● for the named ones).
 ## People tab
 
 - **PE1 Head of state.**
-  - Most nations: name, titles (shown on the portrait in game), portrait (the game's, when it is one of ours; a
-    base-game one is a box saying so), traits, **Ask for a new trait**, and a line saying who rules in the game now.
+  - Most nations: name, gender (PE9), titles (shown on the portrait in game), portrait (the game's, when it is one of
+    ours; a base-game one is a box saying so), traits, **Ask for a new trait**, and a line saying who rules in the
+    game now.
   - The nations of your own characters: a card per ruler (PE3).
 - **PE2 The other parties.**
   - Most nations: for each ideology but the ruling one, a sub-ideology (it gives the party a set leader), and the
-    leader's name, portrait and traits.
+    leader's name, gender (PE9), portrait and traits.
   - The nations of your own characters: a card per party leader (PE3), the generated ones too.
 - **PE3 A character already in the game** (Roland, Serelle, Mahaut, the Merlovichs …): name; name once ruling
-  (Serelle VI); titles; sub-ideology, within its ideology (your own characters: the focus tree names the ideology);
-  traits; for a general or admiral, rank (general or field marshal), skill and stats, and a commander's traits;
-  portrait; **Back to the game's**. A change to Serelle or Mahaut reaches her copy at the head of HMMLA or Brillagne.
-- **PE4 Political advisors.** **Add a political advisor**; each: name, portrait, traits (a political advisor's),
-  **Ask for a new trait**, notes, **Delete**. *Game:* the politics screen's political advisors.
+  (Serelle VI); gender (PE9); titles; sub-ideology, within its ideology (your own characters: the focus tree names
+  the ideology); traits; for a general or admiral, rank (general or field marshal), skill and stats, and a
+  commander's traits; portrait; **Back to the game's**. A change to Serelle or Mahaut reaches her copy at the head of
+  HMMLA or Brillagne.
+- **PE4 Political advisors.** **Add a political advisor**; each: name, gender (PE9), portrait, traits (a political
+  advisor's), **Ask for a new trait**, notes, **Delete**. *Game:* the politics screen's political advisors.
 - **PE5 Generals, admirals and other advisors.** The game's own commanders without a party (PE3), then the site's:
   **Add a character**; each: role (general, admiral, advisor, other), an advisor's post (theorist, chief of the
-  army, navy or air force, high command, political advisor), name, portrait, traits of their kind, a general's rank,
-  a commander's skill and stats (a general's skill, attack, defence, planning and logistics; an admiral's skill,
-  attack, defence, manoeuvre and coordination), **Ask for a new trait**, notes, **Delete**. *Game:* commanders from
-  the start and advisors in their post; "other" is a note for you.
+  army, navy or air force, high command, political advisor), name, gender (PE9), portrait, traits of their kind, a
+  general's rank, a commander's skill and stats (a general's skill, attack, defence, planning and logistics; an
+  admiral's skill, attack, defence, manoeuvre and coordination), **Ask for a new trait**, notes, **Delete**. *Game:*
+  commanders from the start and advisors in their post; "other" is a note for you.
 - **PE6 Companies.** **Add a company**; each: kind (28 kinds of arms maker in four groups, 14 kinds of industrial
   concern), name, logo, what it is in the game, notes, **Delete**; **Ask for a new kind of company**. *Game:* a
   military-industrial organisation (a designer without the DLC), or an industrial concern.
@@ -174,18 +176,25 @@ With no state picked, every state is a button (● for the named ones).
 - **PE8 What a trait does** (every trait list in PE1 to PE5; 2026-10-18): each chosen trait's effects under its chip
   ("Brave: Organization loss when below 25%: −10%; Defense: +1"), and **What each trait does**, folded: every trait of
   that list with its effects and **Add**.
+- **PE9 Gender** (2026-10-21, night; your words: "we should be able to select the gender of characters in the
+  gazetteer. I noticed that Serelle currently seems to be considered male"): **Male** or **Female** for every character
+  on the People tab (PE1 to PE5) and every ruler on the Releasables tab (RL1, RL2); it shows the game's now (Serelle,
+  Mahaut and Tara Blanchart women, everyone else a man: the game takes a character for a man unless told otherwise)
+  until a player picks one; a new character starts as a man. *Game:* the character's `gender = female` (or `male`);
+  a change to Serelle or Mahaut reaches her copy (PE3). The game has no generic portraits of women generals, admirals
+  or politicians, so a woman without a portrait of her own keeps the generic one she had.
 
 ## Releasables tab
 
 - **RL1 Releasables**, the nation's own, made here: **Add a releasable**; each card: map colour; name; **Pick** (for
   the Releasables tool, M7); adjective; ruling sub-ideology; full title; land (**Pick its states** / **Change its
   states**, or closed **Draw its land**; **Show**; ✕ on a drawn area); flag (**Send a picture**, **Replace**,
-  **Remove**); ruler (portrait, name, titles, traits); about it; **Delete this releasable**. *Game:* a country with
-  cores on its states, released from the diplomacy screen.
+  **Remove**); ruler (portrait, name, gender (PE9), titles, traits); about it; **Delete this releasable**. *Game:* a
+  country with cores on its states, released from the diplomacy screen.
 - **RL2 In the game:** the releasables the mod has (Rouental's 13, Belekria's Tethia), each a card like RL1's with
   the game's values in grey: a badge, what it is, names, government, map colour, land (open: **Change its states**;
-  **Show**; **Back to the game's land**), flag (the game's, or yours: **Back to the game's**), ruler (for one of your
-  characters, a pointer to the People tab instead), about it, **Undo every change to it**.
+  **Show**; **Back to the game's land**), flag (the game's, or yours: **Back to the game's**), ruler (its gender too,
+  PE9; for one of your characters, a pointer to the People tab instead), about it, **Undo every change to it**.
 - **RL3 In the civil war:** the seven that rise against Rouental, the same cards, saying when they rise (and which
   exist only through the war).
 

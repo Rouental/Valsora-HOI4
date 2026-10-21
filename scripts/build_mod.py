@@ -981,6 +981,7 @@ def main():
     ruling, recruits, leader_blocks, leader_loc, used_names = {}, {}, [], [], set()
     company_ideas, company_mios, company_logos = {}, [], []
     named_leaders = dict(nations.NAMED_LEADERS)
+    genders = dict(nations.GENDERS)
     # the game's own characters changed on the Gazetteer (2026-10-15): the hand-made ones in their files (their copies
     # too), the generated ones of a nation of hand-made rulers by name; their names and titles into the localisation
     gchars, char_loc = gazetteer.game_characters(G), {}
@@ -988,16 +989,16 @@ def main():
         nations.ROU_CHARACTERS = gazetteer.patch_characters(nations.ROU_CHARACTERS, gchars, char_loc, nations.PORTRAITS,
                                                             gnotes)
         nations.CHARACTERS = gazetteer.patch_characters(nations.CHARACTERS, gchars, char_loc, nations.PORTRAITS, gnotes)
-        gazetteer.game_character_names(gchars, named_leaders, nations.PORTRAITS, nations.HAND_MADE)
+        gazetteer.game_character_names(gchars, named_leaders, nations.PORTRAITS, nations.HAND_MADE, genders)
     # map colours that differ from the .pdn paint: nations.py's, then the Gazetteer's
     display_colour = {**nations.DISPLAY_COLOUR, **gazetteer.colours(G)}
     for c in present:
         tag = COUNTRIES[c][0]
         # the Gazetteer's ruling sub-ideology, parties and ruler, over nations.LEADERS
         subs = gazetteer.leaders(tag, nations.LEADERS.get(tag, []), G.get(tag),
-                                 tag in nations.HAND_MADE, named_leaders, nations.PORTRAITS)
+                                 tag in nations.HAND_MADE, named_leaders, nations.PORTRAITS, genders)
         blocks, lloc, ids = cultures.leaders(tag, tag_continent[tag], subs, ideology_of, used_names,
-                                             named_leaders)
+                                             named_leaders, genders)
         leader_blocks += blocks
         leader_loc += lloc
         recruits[tag] = [f"recruit_character = {i}" for i in ids]

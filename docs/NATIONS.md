@@ -845,3 +845,14 @@ her copy `BRL_mahaut_vi` at the head of Brillagne; "Voix Mahaut (I can't remembe
 previously)": Mahaut VI is that name), and the Speaker of the Estates General is **Tara Blanchart** (not a character in
 the mod yet: the three powers are a mockup, `deco_ui/art/proposals/three_powers/`). The previous Voix held a long
 regency and "had tried to cement her power"; Mahaut VI "willingly gave up a lot of the power".
+
+## 2026-10-21, night, last: Tara Blanchart in the mod; gender
+
+The author: "Add Tara Blanchart in the mod as a character. She is the ruler of democratic Rouental as well." She is
+Rouental's democratic party leader (`ROU_leader_constitutional_monarchism`, the sub-ideology the democratic path's
+focus already promotes, named in `nations.NAMED_LEADERS`: its id kept so the communist leader's generated name stays),
+with the author's painting (`source/portraits/tara_blanchart.webp`, a photograph first: "Actually let's do a different
+picture for Tara, use this one"), and the Speaker of the Estates General in the three powers' window. The author's
+women are `gender = female` now ("I noticed that Serelle currently seems to be considered male"): Serelle Cahun and
+Mahaut VI and their copies at HMMLA and Brillagne, and Tara Blanchart; the Gazetteer takes a gender for every character.
+

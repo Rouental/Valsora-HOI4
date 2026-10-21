@@ -44,3 +44,7 @@ In game it would be a scripted GUI on a decision category (`context_type = decis
 `common/scripted_guis/_documentation.md`): the map as one picture a governorate (frames for the loyalty colours, picked
 by a variable), each governorate's clicks caught by invisible buttons the build cuts along its state borders (assumed:
 the game's buttons react on their whole rectangle), the card's texts from variables and scripted localisation.
+
+**In the game since 2026-10-21, night, bare bones** (the author: "Let's get them into the game, even if they're bare
+bones for now"): `scripts/rouental_ui.py` (`docs/CONTENT.md`, Rouental). This folder's `realm.py` is a shim now: the data
+model is `scripts/rouental_realm.py`.

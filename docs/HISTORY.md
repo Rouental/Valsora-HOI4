@@ -10,6 +10,15 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-21, night, the very last, latest (the author: "Add Tara Blanchart in the mod as a character", a gender for
+  characters on the Gazetteer, "Let's get them [the mockups] into the game, even if they're bare bones for now"):
+  **Tara Blanchart**, democratic Rouental's leader and the Speaker, with the author's painting; **gender** (`gender =
+  female` for the author's women; a Male / Female field for every character on the Gazetteer, republished); **the
+  governorates and the three powers in game, bare bones** (`scripts/rouental_ui.py`: the Governorates category and its
+  map of the realm, clickable, coloured by loyalty, a card with the states' levies and four actions, loyalty moving
+  manpower, the Blue Guard of Brume; the three powers' button on the politics screen and its window, the marker placed
+  by the shares, a monthly drift, the zones as spirits, four decisions, the estates' leanings; a test decision);
+  previews from the build's own files (`scripts/rouental_preview.py`).
 - 2026-10-21, night, the very last, later: the estates' leanings the author's ("Yes, Leal to the Prince and Proud to the
   Speaker for now"; every attitude a side later): recorded, the triangle's mockup redrawn.
 - 2026-10-21, night, the very last (the author's answers on the triangle): the zones kept ("Yes, it looks good"); the

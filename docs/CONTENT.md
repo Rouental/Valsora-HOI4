@@ -118,7 +118,43 @@ Aislada is the worked example of a built-out nation:
     "Reverie still needs to be marked as a royal fief", and the ten, all in Couronneterre) "Royal Fief · Governorate
     of Couronneterre"
     (`build_mod.state_lines`: a scripted GUI docked to the state panel, in the state's scope, its text a scripted
-    localisation by state id; with the Deco UI only, which keeps the row for it). Nothing in play yet.
+    localisation by state id; with the Deco UI only, which keeps the row for it).
+  - **The governorates and the three powers in game, bare bones** (the author, 2026-10-21, night: "I think we should
+    start to try to put the mockups into practice, to make sure everything were planning will work. Let's get them
+    into the game, even if they're bare bones for now"): `scripts/rouental_ui.py`, run after `deco_ui.py` (it reads the
+    build through `scripts/rouental_realm.py`, the mockups' data model, moved from `deco_ui/art/proposals/governorates/`)
+    and writing into it; `scripts/rouental_preview.py` draws both windows from the build's own files with the Deco UI's
+    renderer (`work/previews/`). Every name and number but the author's is the mockups' placeholder.
+    - **The Governorates** decision category (a scripted GUI, `decision_category`): Open the Map of the Realm, Raise the
+      Blue Guard of Brume (once: two divisions of leg infantry in Grand Brume, experience 1, equipment 30 %;
+      Graisivaudan's loyalty -20, every governorate's -5, the author's "emergency measure"), Survey the Realm's Levies
+      (75 PP, every 180 days: every state inspected; Proud estates -5; it keeps the category from ever emptying). The
+      map is a window of its own (1330 x 846, beside the decisions panel): every governorate drawn from the build's
+      state borders at 2.6 times, coloured by its loyalty band (five pictures a governorate, one shown; each a button,
+      to test whether the game clicks a button by its picture's shape or its rectangle) and its seal (a button on top,
+      which always works), the Royal Fiefs hatched gold, the state and governorate borders over them. The card: the
+      governor and how they came (`rouental_realm.governorates`' placeholders), loyalty (a 20-frame bar, the frame set
+      by a variable: `properties`), the estates' temper, the peoples, the states (a dynamic list over an array of the
+      selected governorate's states, in each state's scope: its name, people, levies (Unknown until inspected; Grand
+      Brume Ceremonial) and men), four actions (Send Inspectors 25 PP, Grant Privileges 50 PP, Demand Levies +5000 men,
+      Summon the Estates 20 PP: the temper rolled again). Loyalty = the governorate's fixed part (peoples, governor,
+      chance) + its estates' temper + what actions and the three powers have added + the zone's; each state's manpower
+      follows it (a dynamic modifier, `local_manpower` = (loyalty - 50) / 200, read from a state variable).
+    - **The Three Powers**: a button on the politics screen where the game's balance of power sits (the Deco UI's
+      `layout_politics.BOP`), showing the zone, opening a window beside the panel: the triangle (its zones drawn with
+      their names), the marker placed by the shares (`properties` x and y, worked out in script), the six months'
+      trail, the lit zone, the holders' portraits (Roland II Cahun, Mahaut VI, Tara Blanchart) and shares, where the
+      balance stands and what it does, the four decisions (buttons, each once in 30 days), the estates' leanings
+      (loyalty since 1 January). The shares start at 40 / 35 / 25 (the author's); each month they drift a point or two
+      (`on_monthly_ROU`); a zone is a national spirit (`ROU_zone_*`, placeholder effects); a move toward a power gives
+      the estates who lean to it half the shift as loyalty (Pious to the Voix, Leal to the Prince, Proud to the
+      Speaker; the Southmarchers lose a fifth of the Voix's gains). Rouental's Test Events category has "Test: the
+      Three Powers to the Next Zone".
+    - **Assumed, to see in game**: that a button reacts only on its picture's opaque part (if not, clicking inside a
+      governorate may pick a neighbour; the seals work either way); `properties` x, y and frame from variables; the
+      dynamic list's scope and `[This.GetName]`, `[?rou_manpower_k]` in it; a top-level scripted GUI window over the map
+      and its clicks; the politics screen's button docked to `politics_tab`; a dynamic modifier read from a state
+      variable; `on_monthly_ROU`.
   - **Faction.** ROU starts as leader of "The Association of Reibonnaise States",
     together with GDN, LST, EVR, HLR, SGV, LZC and SGN.
     - **Reibonnaise opinions** (author, 2026-10-02; `nations.REIBONNAISE`): +20
@@ -214,7 +250,9 @@ Aislada is the worked example of a built-out nation:
   the Lyrién and the Lustianaise open. Rouental's faith is Seranism, its head the Voix; power "tends to fluctuate
   between the Sacred Prince, the Voix, and the Speaker of the Estates General" (a triangle for it proposed:
   `deco_ui/art/proposals/three_powers/`). The Voix is **Mahaut VI** (the author, 2026-10-21, night: "The Voix is the
-  leader of Brillagne / theocratic Rouental"), the Speaker **Tara Blanchart**. Rouental "is just coming out of a long
+  leader of Brillagne / theocratic Rouental"), the Speaker **Tara Blanchart** (in the mod since the same night: the
+  democratic party's leader, `ROU_leader_constitutional_monarchism` named in `nations.NAMED_LEADERS`, "She is the ruler
+  of democratic Rouental as well"; the author's painting, `source/portraits/tara_blanchart.webp`). Rouental "is just coming out of a long
   regency by the previous Voix who had tried to cement her power, ended only once the previous Voix died and the new
   one assumed the office and willingly gave up a lot of the power" (the start: Prince 40, Voix 35, Speaker 25). The
   Southmarch's Reformed Seranists "respect the Voix as a spiritual leader, but don't consider them self bound to her.

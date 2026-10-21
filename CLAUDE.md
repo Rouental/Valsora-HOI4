@@ -73,7 +73,9 @@ New detail goes into those files; this one gets a line.
   (after new rivers; `river_borders.py TAG` for a nation of small drawn provinces), `pdn_tools.py areas` (the marked deserts and jungles coarse; after a build); rebuild; `state_map.py` for the newly drawn states to name; send the `.pdn` back, dated (`docs/MAP_VERSIONS.md`).
 - **The scripts** (each one's detail in `docs/MAP_PIPELINE.md`'s table): the build (`readpdn`, `read_layers`,
   `build_mod`, `deco_ui`, `check_mod`, `export_canvas`, `package`, with `nations`, `cultures`, `ideologies`,
-  `superevents`, `superevents_deco`, `test_events`, `minimap`, `globe`, `vanilla_parts`, `straits`, `borders`);
+  `superevents`, `superevents_deco`, `test_events`, `minimap`, `globe`, `vanilla_parts`, `straits`, `borders`;
+  `rouental_ui` after `deco_ui`: Rouental's governorates and three powers windows, its data `rouental_realm`, its
+  previews `rouental_preview`);
   by hand on the `.pdn` (`pdn_tools`, `apply_outlines`, `regroup_states`, `sea_provinces`, `river_provinces`, `river_borders`,
   `merge_provinces`, `land_regions`, `fief_states` (a nation's states from the author's fief map), `governorates` (a
   nation's governorates: their states, `--apply` their strategic regions), `pdn_diff`, `pdn_check`, `pdn_dotnet` (paint.net's own reader, .NET), `pdn_recover`, `writepdn`, `nrbf`, `organic`, `rivers`);
@@ -165,8 +167,13 @@ New detail goes into those files; this one gets a line.
   (`common/characters/ROU.txt`), a focus tree of five mutually exclusive paths (Polite, Kick Out Your Brother, Steady
   As She Goes, Rudely with Execute the Prince and the Rouentaise civil war, Accept Reality), the Association of
   Reibonnaise States, the Feudal Army spirit and the royal host (Elite since 2026-10-21; mechanized but the two armoured divisions and the 12th, motorized in Concorde), its 26 governorates (its
-  strategic regions, a line on the state panel; HMMLA rises in all eleven Royal Fiefs). Merlovich (AIS) has its own focus tree. Every other
+  strategic regions, a line on the state panel; HMMLA rises in all eleven Royal Fiefs); since 2026-10-21, night, the
+  mockups in game, bare bones (`scripts/rouental_ui.py`): the Governorates category and its map of the realm, and the
+  three powers (the Sacred Prince, the Voix Mahaut VI, the Speaker Tara Blanchart, democratic Rouental's leader) on the
+  politics screen. Merlovich (AIS) has its own focus tree. Every other
   country has its set ruler, generated characters, the generic focus tree and a generic infantry army.
+- **Gender**: HOI4 takes a character without `gender = female` for a man; the author's women carry it
+  (`nations.GENDERS`, the hand-made blocks), the Gazetteer's characters by their page's choice; never from a name.
 - **Every ruler is a set character** (author, 2026-09-30): `nations.LEADERS` gives each tag its sub-ideologies, the
   first leads; `cultures.leaders` makes them (`TAG_leader_<subtype>`, never `TAG_<subtype>`), names unique map-wide,
   famous surnames drawn again (`cultures.DRAW_AGAIN`). Named generated rulers: `nations.NAMED_LEADERS`.
@@ -211,7 +218,7 @@ the page, its rules or its import.
   - Only the author's Claude publishes the site (`gh-pages`, allowed for it alone: "it's ok to put it on a new branch").
 - **Republish** after map changes: `sh scripts/publish_site.sh "message"`; test the page first, after
   `python3 scripts/facts_export.py`: `python3 tests/gazetteer/run.py`, `traits.py`, `companies.py`, `ingame.py`,
-  `reset.py`, `guide.py` and `stale.py` (same folder).
+  `reset.py`, `guide.py`, `stale.py` and `gender.py` (same folder).
 - **Into the mod:** the author's **Save every nation as a file**, then `python3 scripts/gazetteer.py import FILE`
   (`source/gazetteer/<TAG>.json`, pictures in `source/gazetteer/assets/`, flags of HOI4's shape into `source/flags/`),
   a rebuild (`river_provinces.py` first after new rivers), `gazetteer.py suggestions` if there are any, and
@@ -302,7 +309,8 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
 - **Waiting on the author:** (`dist/open_questions.md`, 2026-10-21, later still; keep it in step) everything they had
   answered or held is in the mod (2026-10-20, their go-ahead; 2026-10-21, the governorates' names, the generic
   advisors, the Kufi in gold, HMMLA's Royal Fiefs, Rouental's groups, Montvallée, Rêverie, the Royal Host, Kalaistan).
-  New: the three powers' triangle (`deco_ui/art/proposals/three_powers/`, a mockup; the author's answers in, the zones' effects and whether to build it open); the Vale of Reibonne's region left with Guedelon and Brillagne apart; whether the groups stay (the way back:
+  New: the governorates' window and the three powers in game, bare bones (2026-10-21, night: what to see in game in
+  `docs/CONTENT.md`, Rouental; the zones' effects and the decisions still placeholders); the Vale of Reibonne's region left with Guedelon and Brillagne apart; whether the groups stay (the way back:
   `work/pre_groups_1021/`, or the commit before them). Open: the strait crossings to add from the red ones
   (`dist/straits_map_red.png`); the old upload's tundra, jungle and desert marks ("I'll add those back in later");
   flags for Belekria's eight republics and state names (later, the author's); the region names (the drafts in the mod

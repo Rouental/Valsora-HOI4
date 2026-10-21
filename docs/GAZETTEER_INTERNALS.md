@@ -25,7 +25,7 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   nothing is committed when the site is unchanged). Pages redeploys in a minute or two (the
   "pages build and deployment" run in Actions; github.io itself can't be reached from
   Claude's sandbox). Test the page first: `python3 tests/gazetteer/run.py`, `traits.py`, `companies.py`, `ingame.py`,
-  `reset.py`, `guide.py` and `stale.py`.
+  `reset.py`, `guide.py`, `stale.py` and `gender.py`.
 - **Facts of states cut again from a nation's own map** (2026-10-20, Rouental's fiefs: `fief_states.py`): one old
   state became several, and its facts (Carcarelle's population) would land whole on the one new state holding its key.
   `gazetteer.rekey(tag, n)`, called by the import (and run once on `source/gazetteer/ROU.json`), reads the old and new
@@ -132,6 +132,40 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   communist, whose ids its focus tree names) their names, titles, portraits and traits through `NAMED_LEADERS`.
   Unchanged characters stay byte for byte, and without facts the build is byte-identical. `check_mod.py` checks every
   commander's skill (1–9) and stats (0–9), and that they are its role's (mutation-tested, 2 of 2).
+- **A character's gender** (2026-10-21, night; the author: "we should be able to select the gender of characters in the
+  gazetteer. I noticed that Serelle currently seems to be considered male"). HOI4 takes `gender = female` (or `male`)
+  in a character's block, as the base game's women have it (`BUL_dimitrana_ivanova`, `CHI_soong_ching_ling`); a
+  character without it is a man to the game. The page (`genderField`, Male / Female, the field's class `gender`) has
+  it for every character a player fills in or changes: the head of state (`people.ruler.gender`), each party's leader
+  once it has a sub-ideology (`people["party-<ideology>"].gender`), political advisors, generals, admirals and other
+  advisors (`people["c-<id>"].gender`), the characters already in the game (`people["ch-<character id>"].gender`: the
+  author's own, as Roland, Serelle and Mahaut, and the generated leaders shown, as Rouental's democrat and
+  communist), a releasable's ruler (`releasables["rl-<id>"].leader.gender`) and a game releasable's or civil war
+  riser's (`releasables["g-<TAG>"].leader.gender`; one led by the author's own character points to the People tab, as
+  before). The select shows the game's gender now until a player chooses; a choice is kept as it is, even one the game
+  has already (as with the other fields, the game's value comes from the last build, which carries the page's own
+  earlier choice: dropping a choice equal to it would lose it at the next import). `gameGender` finds the game's for a
+  generated ruler or party leader by its id (`<TAG>_leader_<sub-ideology>`, so a sub-ideology picked on the page
+  shows the gender of the leader it gives); new characters and releasables start as men. The rules needed nothing new
+  (the field sits in documents the page already writes). `facts_export.py` gives each in-game character `gender`
+  ("female" where its built block has `gender = female`, else "male", the game's own default; never guessed from a
+  name): the hand-made blocks of `nations.ROU_CHARACTERS` / `CHARACTERS` carry the line (Mahaut, Serelle and their
+  copies at Brillagne and HMMLA since 2026-10-21), the generated ones get it from `nations.GENDERS` (Tara Blanchart,
+  `ROU_leader_constitutional_monarchism`) through `cultures.leaders(..., genders)`. The import keeps `gender` (only
+  "male" or "female") on the ruler, the parties, `characters`, `game_characters`, the releasables' and game
+  releasables' `leader`. The build: `gazetteer.characters` writes `gender = <it>` after the name of the page's
+  generals, admirals and advisors; `gazetteer.leaders` (rulers and party leaders of nations of generated rulers, the
+  releasables' and game releasables' rulers among them, as their facts are a nation's) and
+  `gazetteer.game_character_names` (a hand-made nation's generated leaders) put it into `build_mod.py`'s `genders`
+  (a copy of `nations.GENDERS`, which `cultures.leaders` writes); `gazetteer.patch_characters` replaces a hand-made
+  block's `gender = ...` line or puts one in after its `name` (a man needs none, so a block without the line stays as
+  it is), and the copies (`nations.COPIES`) follow as the other fields do. Without the field in a nation's facts
+  nothing changes: the build is as before, byte for byte (checked on 2026-10-21 against the functions as they were,
+  on the 30 nations' facts in `source/gazetteer/`). Portraits: the base game (1.19.3) has no generic portraits of
+  women generals, admirals or politicians (only its scientists', `GFX_portrait_generic_<region>_female_NN`, the female
+  silhouette `GFX_portrait_unknown_female`, and small advisor icons `GFX_idea_generic_*_female_<region>`; the four
+  Italian women generals `00_portraits.txt` names are not among the base game's sprites), so a woman without a
+  portrait of her own keeps the generic one of her culture she had. `tests/gazetteer/gender.py`.
 - **Portraits are cut round the face** (2026-10-18, the author: "when importing pictures of characters from the
   Gazetteer, try to center the image around the character"; Port Almohavid's ruler stood at the left of his photo, and
   the middle of the picture was cut out): the import finds each picture's face (OpenCV's frontal-face detector, the
@@ -185,11 +219,11 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   slots and vanilla's caps), resources, notes; province terrain (8 types) and supply hubs;
   cities (one per province, victory points, size, the capital, state capitals); rivers (major,
   minor, erase strokes); railways (level 1-5); names, full titles and adjectives under every
-  government and each ideology, the ruling sub-ideology; the head of state (name, titles,
-  portrait, traits), each other party's sub-ideology, leader, portrait and traits, the
+  government and each ideology, the ruling sub-ideology; the head of state (name, gender, titles,
+  portrait, traits), each other party's sub-ideology, leader, gender, portrait and traits, the
   characters already in the game (below), political advisors (a section of their own),
-  generals, admirals and other advisors (traits, an advisor's post, a commander's rank, skill and
-  stats); companies (name, logo, kind, notes); releasables, the game's own and the civil war's
+  generals, admirals and other advisors (gender, traits, an advisor's post, a commander's rank, skill and
+  stats; every character's gender since 2026-10-21); companies (name, logo, kind, notes); releasables, the game's own and the civil war's
   among them (below); flags (one per government too); map colour, culture,
   motto, anthem, description; suggestions (areas, lines and points anywhere on the world,
   labelled); status, notes and requests (new sub-ideologies, subject types, traits, kinds of
@@ -367,3 +401,13 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   victory points and size; Belekria's Tethia while its map is closed; the file of every nation. That file imported and built: Roland's sub-ideology, titles kept, trait and new name; Serelle and
   her HMMLA copy a field marshal of skill 5; the general's logistics 9; Carcarelle Libre with cores on its four states
   (one shared with Ghessone); check_mod clean.
+  `tests/gazetteer/gender.py` (2026-10-21): on Rouental, the game's gender shown for each of its characters (the site's
+  copy of the export given nations.py's genders, whatever the last build), Roland made a woman, Serelle a man, the
+  communist leader the game made a woman, a general and a political advisor of the page's own women (a new one starts
+  a man), Carcarelle's ruler and a releasable's of the page's own women; on Seigne, the ruler and a democratic party
+  leader (once it has a sub-ideology; none before) women; the file of every nation imported into a folder of the
+  test's own (`GAZETTEER_DIR`) keeping each, and the build's functions on it, called directly: `gender = female` after
+  the name of the general, the advisor, Seigne's two, the releasables' rulers and the communist; Roland's line put in,
+  Serelle's and her HMMLA copy's turned to `male`, Mahaut's and her copy's as they were; the facts in
+  `source/gazetteer/` (no gender) writing no line; `facts_export.read_characters` reading it back. Desktop and phone.
+  Each of the six gender paths of `gazetteer.py` broken in turn (a scratch copy) was caught.

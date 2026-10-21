@@ -28,6 +28,7 @@ else
 fi
 python3 scripts/build_mod.py     # every mod file
 python3 scripts/deco_ui.py       # the Valsora Deco UI into the mod (common.DECO_UI)
+python3 scripts/rouental_ui.py   # Rouental's governorates and three powers windows (reads the build)
 # The checks, the previews and the zip at once (each only reads the build: 15 s instead of 33). The new zip is
 # written beside the old one and takes its place only if check_mod.py passes: a clean check is the bar for shipping.
 ZIP=${VALSORA_ZIP:-dist/valsora_test.zip}

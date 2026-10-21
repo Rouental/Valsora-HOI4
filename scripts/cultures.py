@@ -454,13 +454,15 @@ def _comment_words(culture):
     return set(_tokens(" ".join(re.findall(r"#[^\n]*", male + "\n" + sur))))
 
 
-def leaders(tag, continent, subtypes, ideology_of, used, named=None):
+def leaders(tag, continent, subtypes, ideology_of, used, named=None, genders=None):
     """Characters for a country's leaders: a name from its culture's list and a generic
     portrait of its culture, per subtype. Returns (character blocks, loc lines, ids).
     Deterministic: the same tag always gets the same people. `named` maps a character
     id to the author's (name, portrait sprite) for that leader instead, and optionally a
-    description (their titles, shown on the portrait); a None keeps the generated one."""
+    description (their titles, shown on the portrait); a None keeps the generated one. `genders` maps a character id
+    to "female" or "male" (written only when given: the game takes a character without one for a man)."""
     named = named or {}
+    genders = genders or {}
     import zlib
     import numpy as np
     c = culture(tag, continent)
@@ -491,9 +493,10 @@ def leaders(tag, continent, subtypes, ideology_of, used, named=None):
             used.add(name)
         desc_line = f'\n\t\t\tdesc = "{cid}_desc"' if desc else ""  # after the ideology, as check_mod.py reads it
         desc_line += f"\n\t\t\ttraits = {{ {' '.join(traits)} }}" if traits else ""
+        gender_line = f"\t\tgender = {genders[cid]}\n" if cid in genders else ""
         blocks.append(f"""\t{cid} = {{
 \t\tname = {cid}
-\t\tportraits = {{
+{gender_line}\t\tportraits = {{
 \t\t\tcivilian = {{
 \t\t\t\tlarge = {face}
 \t\t\t}}

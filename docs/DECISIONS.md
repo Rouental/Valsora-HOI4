@@ -273,6 +273,15 @@ Moved out of `CLAUDE.md` word for word on 2026-10-17 (`CLAUDE.md` keeps one line
   - **The estates' leanings**: Pious to the Voix, and "Yes, Leal to the Prince and Proud to the Speaker for now.
     Eventually I'll go through and assign each attitude to a side on the balance." The other five attitudes (Grasping,
     Belligerent, Quarrelsome, Mercantile, Timorous) lean to no one until then.
+- **The mockups into the game, bare bones** (author, 2026-10-21, night: "I think we should start to try to put the
+  mockups into practice, to make sure everything were planning will work. Let's get them into the game, even if
+  they're bare bones for now"): the governorates' window and the three powers' triangle, `scripts/rouental_ui.py`
+  (`docs/CONTENT.md`, Rouental); their placeholders stay the mockups'.
+- **Characters' gender** (author, 2026-10-21, night: "we should be able to select the gender of characters in the
+  gazetteer. I noticed that Serelle currently seems to be considered male"): `gender = female` where the author has
+  said so (Serelle, Mahaut and their copies, Tara Blanchart: `nations.GENDERS` for the generated, the blocks for the
+  hand-made), and a Male / Female field for every character on the Gazetteer (`docs/GAZETTEER_INTERNALS.md`). Never
+  guessed from a name.
 - **The game's generic advisors and theorists are back** (author, 2026-10-21: "Sure, might as well bring back generic
   advisors and theorists"): vanilla's `history/general/generic_advisors.txt`, its Earth cases taken out, for every
   country (`docs/MAP_PIPELINE.md`, Vanilla content switched off).

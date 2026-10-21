@@ -6,6 +6,14 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**Serelle taken for a man** (2026-10-21, night, the author: "I noticed that Serelle currently seems to be considered
+male").
+- Cause: HOI4 takes a character without `gender = female` for a man, and none of the mod's characters had the line.
+- Fix: `gender = female` in the blocks of the author's women (Serelle Cahun, Mahaut VI and their copies at HMMLA and
+  Brillagne) and for Tara Blanchart (`nations.GENDERS`, written by `cultures.leaders`); a Male / Female field for every
+  character on the Gazetteer, carried into the build (`gazetteer.py`, `tests/gazetteer/gender.py`). Not a check: a
+  character's gender is the author's to say.
+
 **The commander pickers' bottom buttons cut off** (2026-10-21, the author's screenshots of Select Commander for an army
 and a fleet: "For both the army and navy, the show officers and unassign buttons are cut off").
 - Cause: the game's own layout and the Deco UI's buttons. `unitleaderwindow.gui` anchors Show Field Officers (Show Ship
