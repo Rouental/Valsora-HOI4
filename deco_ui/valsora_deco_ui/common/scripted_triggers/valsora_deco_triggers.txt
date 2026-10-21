@@ -18,7 +18,6 @@ valsora_deco_long_name = {
 		tag = KKB
 		tag = KPF
 		tag = KSP
-		tag = LNT
 		tag = MQS
 		tag = MRC
 		tag = MTN
