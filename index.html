@@ -3289,6 +3289,7 @@ function relCard(r) {
       portraitBox(leader.portrait, () => uploadInto("releasables", [id, "leader", "portrait"], "the portrait"), () => edit1({ leader: { portrait: null } }), "Ruler's portrait"),
       h("div", { class: "fields" },
         fieldOf("rl-lead-" + id, "Ruler", textInput("rl-lead-" + id, leader.name, "Its head of state", v => edit1({ leader: { name: v } }), "", 80), leader.name),
+        genderField("rl-gender-" + id, leader.gender, "male", v => edit1({ leader: { gender: v } })),
         fieldOf("rl-desc-" + id, "Titles", textArea("rl-desc-" + id, leader.desc, "Shown on their portrait in game", v => edit1({ leader: { desc: v } }), 600), leader.desc),
         traitPicker("rl-traits-" + id, traitList("ruler"), leader.traits, v => edit1({ leader: { traits: v } })))),
     fieldOf("rl-notes-" + id, "About it", textArea("rl-notes-" + id, r.notes, "Its people and history, why it would break away", v => edit1({ notes: v }), 2000), r.notes),
@@ -3315,6 +3316,7 @@ function gameRelCard(r) {
         portraitBox(lead.portrait, () => uploadInto("releasables", [id, "leader", "portrait"], "the portrait"), () => edit1({ leader: { portrait: null } }), "Ruler's portrait", false, gamePic),
         h("div", { class: "fields" },
           fieldOf("rl-lead-" + id, "Ruler", textInput("rl-lead-" + id, lead.name, gl.name || "Its head of state", v => edit1({ leader: { name: v } }), "", 80), lead.name),
+          genderField("rl-gender-" + id, lead.gender, gl.gender, v => edit1({ leader: { gender: v } })),
           fieldOf("rl-desc-" + id, "Titles", textArea("rl-desc-" + id, lead.desc, gl.desc || "Shown on their portrait in game", v => edit1({ leader: { desc: v } }), 600), lead.desc),
           traitPicker("rl-traits-" + id, traitList("ruler"), lead.traits !== undefined ? lead.traits : gl.traits, v => edit1({ leader: { traits: v } }), true)));
   return h("div", { class: "relcard" + (app.ui.rel === id ? " sel" : ""), style: `--rel:${col}` },
@@ -3545,6 +3547,18 @@ function rankSelect(id, value, dflt, onval) {
   sel.value = value || dflt || "corps_commander";
   return sel;
 }
+// a character's gender (the author, 2026-10-21, night: "we should be able to select the gender of characters in the
+// gazetteer. I noticed that Serelle currently seems to be considered male"): HOI4's gender = female or male, a
+// character without one a man. dflt is the game's now (facts_export.py: the built character's); a choice is kept as
+// `gender`, even one the game has already, so a later build can't turn it back
+const GENDERS = [["male", "Male"], ["female", "Female"]];
+const genderOk = v => v === "male" || v === "female";
+function genderField(id, value, dflt, onval) {
+  const sel = h("select", { id, onchange: e => onval(e.target.value) }, GENDERS.map(([k, l]) => h("option", { value: k, text: l })));
+  sel.value = genderOk(value) ? value : dflt === "female" ? "female" : "male";
+  return fieldOf(id, "Gender", sel, genderOk(value), "gender");
+}
+const gameGender = id => ((app.N.characters || []).find(c => c.id === id) || {}).gender || "male";
 const generated = c => /^[A-Z][A-Z0-9]{2}_leader_/.test(c.id);   // a ruler the build made, not one of the author's
 function roleLine(c) {
   const out = [];
@@ -3562,6 +3576,7 @@ function gameCharCard(c) {
   const fields = [h("div", { class: "who" }, h("b", { text: o.name || c.name }), h("small", { text: roleLine(c) })),
     fieldOf(idp + "-name", "Name", textInput(idp + "-name", o.name, c.name, v => ed({ name: v }), "", 80), o.name)];
   if (c.regnal != null) fields.push(fieldOf(idp + "-regnal", "Name once ruling", textInput(idp + "-regnal", o.regnal, c.regnal || "As now", v => ed({ regnal: v }), "", 80), o.regnal));
+  fields.push(genderField(idp + "-gender", o.gender, c.gender, v => ed({ gender: v })));
   if (c.ideo) {
     fields.push(fieldOf(idp + "-desc", "Titles or a few words (shown on their portrait in game)", textArea(idp + "-desc", o.desc, c.desc || "e.g. By the Grace of God, Prince of …", v => ed({ desc: v }), 600), o.desc));
     if (!generated(c)) fields.push(fieldOf(idp + "-sub", `Sub-ideology (${ideoName(c.ideo)}: the focus tree names the ideology)`,
@@ -3592,6 +3607,7 @@ function characterRow(id, c) {  // a general, an admiral or an advisor
           s.value = c.slot || ""; return s; })() : null,
         h("button", { class: "btn small danger", type: "button", onclick: () => edit("people", { [id]: null }) }, "Delete")),
       textInput("pp-c-name-" + id, c.name, "Name", v => edit("people", { [id]: { name: v } }), "", 80),
+      genderField("pp-c-gender-" + id, c.gender, "male", v => edit("people", { [id]: { gender: v } })),
       (c.role || "general") === "other" ? null :
         (c.role === "advisor" && !c.slot) ? h("div", { class: "meta", text: "Pick the advisor's post to give them traits." }) :
         traitPicker("pp-c-traits-" + id, traitList(c.role || "general", c.slot), c.traits, v => edit("people", { [id]: { traits: v } })),
@@ -3626,6 +3642,7 @@ function renderPeople(force) {
           h("div", { class: "fields" },
             h("div", { class: "field" + (ruler.name ? " set" : "") }, h("label", { for: "pp-ruler-name", text: "Name" }),
               textInput("pp-ruler-name", ruler.name, rulerDefault || "A name from the nation's culture", v => edit("people", { ruler: { name: v } }), "", 80)),
+            genderField("pp-ruler-gender", ruler.gender, now.sub ? gameGender(`${N.tag}_leader_${now.sub}`) : "male", v => edit("people", { ruler: { gender: v } })),
             h("div", { class: "field" + (ruler.desc ? " set" : "") }, h("label", { for: "pp-ruler-desc", text: "Titles or a few words (shown on their portrait in game)" }),
               textArea("pp-ruler-desc", ruler.desc, (gameRuler && gameRuler.desc) || "e.g. By the Grace of God, Prince of …", v => edit("people", { ruler: { desc: v } }), 600)),
             traitPicker("pp-ruler-traits", traitList("ruler"), ruler.traits, v => edit("people", { ruler: { traits: v } })),
@@ -3635,7 +3652,7 @@ function renderPeople(force) {
     if (P.handmade) {
       const pc = game.filter(c => !c.ruler && c.ideo);
       if (pc.length) out.push(h("div", { class: "sec" }, h("h4", null, "The other parties"),
-        h("div", { class: "meta", text: "The author's own characters, and the leaders the game made for the other parties. Change their names, titles, portraits, traits and, for a general, skills; a sub-ideology stays within its ideology, which the focus tree names." }),
+        h("div", { class: "meta", text: "The author's own characters, and the leaders the game made for the other parties. Change their names, gender, titles, portraits, traits and, for a general, skills; a sub-ideology stays within its ideology, which the focus tree names." }),
         h("div", null, pc.map(gameCharCard))));
     } else {
       const curParty = {};
@@ -3653,6 +3670,7 @@ function renderPeople(force) {
                 subSelect("pp-sub-" + ideo, sub, curParty[ideo] ? `Map default: ${subName(curParty[ideo])}` : "No set leader", x => edit("politics", { parties: { [ideo]: x } }), ideo)),
               have ? h("div", { class: "field" + (p.name ? " set" : "") }, h("label", { for: "pp-name-" + ideo, text: "Leader" }),
                 textInput("pp-name-" + ideo, p.name, ((game.find(c => !c.ruler && c.ideo === ideo && c.sub === have)) || {}).name || "A name from the nation's culture", v => edit("people", { ["party-" + ideo]: { name: v } }), "", 80)) : null,
+              have ? genderField("pp-gender-" + ideo, p.gender, gameGender(`${N.tag}_leader_${have}`), v => edit("people", { ["party-" + ideo]: { gender: v } })) : null,
               have ? traitPicker("pp-traits-" + ideo, traitList("ruler"), p.traits, v => edit("people", { ["party-" + ideo]: { traits: v } })) : null));
         }))));
     }
