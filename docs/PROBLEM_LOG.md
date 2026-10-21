@@ -6,6 +6,35 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**The commander pickers' bottom buttons cut off** (2026-10-21, the author's screenshots of Select Commander for an army
+and a fleet: "For both the army and navy, the show officers and unassign buttons are cut off").
+- Cause: the game's own layout and the Deco UI's buttons. `unitleaderwindow.gui` anchors Show Field Officers (Show Ship
+  Captains), New Leader and Unassign to the window's foot (LOWER_RIGHT, y -32 and -31) in a window 590 px tall; the
+  game's button pictures are 36 px tall with a blank foot, the Deco UI's 34 px drawn to their last row, so the
+  chamfered rim fell 2-3 px past the window's edge, where the game clips.
+- Fix (Deco UI v0.12.3): `deco_ui/tools/make_buttons.py` (new) ships the game's file with those buttons at y -36,
+  centred in the picture's footer band (army, navy and the faction commander's window); it stops if the game's file
+  moves them.
+
+**The load window's Back and Load running into each other** (2026-10-21, the author's screenshot).
+- Cause: the game's own: in `ingamemenu.gui` Back stands at x 100 and Load (Save, in the save window) at x 245, both
+  148 px wide, so they overlap by 3 px; the game's soft-edged button pictures hid it, the Deco UI's gilt rims don't.
+- Fix (Deco UI v0.12.3): `make_buttons.py` sets them 10 px apart, centred on the window's foot picture.
+
+**Two of Earth's flags in error.log** (2026-10-21, the author's error.log of a war: "Error loading country flag
+overlay: gfx/flags/CSA_neutrality.tga : Unexpected pixel depth", and Scotland's "slow to read format - Consider using
+32bpp instead of 24bpp").
+- Cause: the base game's own flags (its CSA_neutrality.tga is 16-bit, SCO_neutrality.tga 24-bit): Earth's tags stay
+  defined (their history stubs, 2026-10-14), so the game loads their flags when a game starts.
+- Fix: `vanilla_parts.EARTH_FLAGS`, plain grey 32-bit flags in their place in each size (neither country is ever on
+  the map). Check: every flag in `gfx/flags` must be uncompressed 32-bit, and the stand-ins present (mutation-tested).
+- The rest of that log, not the mod's: two Steam Workshop mods' descriptors in the author's mod folder ("Invalid
+  supported_version in mod/ugc_...mod"); two of the base game's 3D model lines (ITA_mechanized_vehicle_1_entity,
+  GER_super_heavy_armor_entity), which the base game logs too; and "AI tried to post an invalid command:
+  unlock_trait_command" 40 times in March 2037, during the war: the AI asked the game for a commander trait the game
+  then refused (the AI's commanders are the game's own generated ones, and the mod changes no commander traits; the
+  base game's trait file notes that the AI ignores a trait's `allowed`). Harmless; left as is.
+
 **Sloppy lines and missing pieces in the Deco UI's pictures, again and again** (2026-10-21, the author's screenshot of
 the Army HQ card, its gilt lines broken: "with a lot of the things you've generated recently, there's these weird
 sloppy lines and missing pieces of the design. I've brought it up a few times, and it seems to keep happening. Can you
@@ -984,6 +1013,15 @@ screenshot and `error.log`)
 - Fix: no trailing newline.
 
 ## Map problems found while building
+
+**Two Jourdains in Rouental** (2026-10-21, applying the author's groups: Jourdain et Moterre "One state with two
+provinces and two cities, Jourdain in the North, Moterre in the South").
+- Cause: the city was added at the author's spot (`nations.CITIES`) while Rouental's Gazetteer page already had a
+  Jourdain (15 victory points) in Elbée, where it had stood since the fief states were cut; a nation's page replaces
+  its Cities-layer dots, so the two would both have been built.
+- Fix: `build_mod.py` moves a page city of the same name and owner to the `nations.CITIES` spot, keeping its victory
+  points, and notes it ("nations.CITIES: Jourdain moved from (720, 802) to (750, 800)"). The author may move it on the
+  page too.
 
 **Rouental's fief map at the game's scale: stray one-pixel provinces, two Vedettes, names on the wrong land**
 (2026-10-20, `fief_states.py` on `source/Rouental Fiefs.pdn`)

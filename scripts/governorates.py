@@ -13,11 +13,15 @@ the unnamed are numbered west to east.
 Shown as the strategic regions (author, 2026-10-21: "for now they should be the strategic regions, and lines on the
 state panels"): --apply paints each of the nation's states, in the governorate most of its land lies in, in that
 governorate's region on the Strategic Regions layer (a colour of its own, kept in the file's "regions"; never blue), and
-names the region after it in source/region_names.json. A state in no governorate keeps its region. The build reads the
-file's "regions" to write the state panel's line (build_mod.py, governorate_lines); they "will eventually affect play.
-They'll hook into the levy system" (the author).
+names the region after it in source/region_names.json. A governorate in the file's "split" has several regions instead,
+each of states of its own and of whole nations beside it (2026-10-21: Terres Séparées, South and North Montvallée with
+the Association's Hollier, Evriches, Seigne, Selgrave, Lustiana and Lanzerac). A state in no governorate keeps its
+region. --apply also writes each state's governorate ("states", by its key in source/state_names.json), which the build
+reads for the state panel's line (build_mod.state_lines); run it again after states change. The governorates "will
+eventually affect play. They'll hook into the levy system" (the author).
 """
 import json
+import re
 import sys
 from collections import Counter
 from pathlib import Path
@@ -182,33 +186,77 @@ def apply(tag):
     st, govs = of_states(tag)
     prov, state_of, size, rj, mine, owner = load_build(tag)
     spec = json.loads(spec_path(tag).read_text(encoding="utf-8"))
-    names, L = pdn_tools.load()
+    names = state_name_of(rj)
+    # a governorate's region, or the regions its "split" gives it: each a list of the nation's state names and of
+    # whole nations (tags) around it (2026-10-21, the author: "instead of the Severed Territories in the east being a
+    # weird disconnected region, it should instead be two regions. South Montvallée should encompass Hollier, Evriches,
+    # Seigne, Serpette, and Chirac. North Montvallée should encompass Selgrave, Lustiana, Lanzerac, Moelle, Maieul,
+    # Serieux, and Petit Selgrave")
+    region_of = {s: g for s, g in st.items()}
+    order = []
+    for g in govs:
+        parts = spec.get("split", {}).get(g["name"])
+        if not parts:
+            order.append(g["name"])
+            continue
+        mine_g = {s for s, n in st.items() if n == g["name"]}
+        placed = {}
+        for region, members in parts.items():
+            order.append(region)
+            for m in members:
+                if re.fullmatch(r"[A-Z][A-Z0-9]{2}", m):
+                    ss = [s for s in range(len(owner)) if owner[s] == m]
+                else:
+                    ss = [s for s in mine_g if names.get(s) == m]
+                if not ss:
+                    raise SystemExit(f"governorates_{tag}.json: {m} ({region}) names no state of {g['name']} or nation")
+                for s in ss:
+                    if s in placed:
+                        raise SystemExit(f"governorates_{tag}.json: {names.get(s, s)} is in {placed[s]} and {region}")
+                    placed[s] = region
+        left = sorted(names.get(s, f"#{s}") for s in mine_g - set(placed))
+        if left:
+            raise SystemExit(f"governorates_{tag}.json: {g['name']}'s {', '.join(left)} in none of its regions")
+        region_of.update(placed)
+    names_, L = pdn_tools.load()
     R = pdn_tools.code(L["Strategic Regions"][..., :3])
     regions = spec.get("regions", {})
     others = set(np.unique(R).tolist()) - {int(c, 16) for c in regions.values()}
-    fresh = iter(pdn_tools.palette(len(govs), False, SEED, others | {int(c, 16) for c in regions.values()}))
-    for g in govs:
-        if g["name"] not in regions:
-            regions[g["name"]] = f"{next(fresh):06x}"
-    regions = {g["name"]: regions[g["name"]] for g in govs}     # the list's order; gone names dropped
+    fresh = iter(pdn_tools.palette(len(order), False, SEED, others | {int(c, 16) for c in regions.values()}))
+    for r in order:
+        if r not in regions:
+            regions[r] = f"{next(fresh):06x}"
+    gone = {c for r, c in regions.items() if r not in order}
+    regions = {r: regions[r] for r in order}     # the list's order; gone names dropped
     lut = np.full(int(prov.max()) + 2, -1, np.int64)
-    for q in mine:
-        s = int(state_of[q])
-        if s in st:
-            lut[q] = int(regions[st[s]], 16)
+    for s, r in region_of.items():
+        for q in rj["states"][s]:
+            lut[q] = int(regions[r], 16)
     paint = lut[prov]
     m = paint >= 0
     changed = int((R[m] != paint[m]).sum())
     pdn_tools.put(L["Strategic Regions"], paint, m)
-    pdn_tools.save(names, L)
+    pdn_tools.save(names_, L)
     spec["regions"] = regions
+    # each state's governorate, by its key in source/state_names.json: the state panel's line (build_mod.state_lines),
+    # apart from the regions since a split governorate has several
+    keys = {}
+    for k in json.loads((ROOT / "source/state_names.json").read_text(encoding="utf-8")):
+        x, y = map(int, k.split(","))
+        q = int(prov[y, x])
+        if q >= 0 and int(state_of[q]) in st:
+            keys[k] = st[int(state_of[q])]
+    spec["states"] = dict(sorted(keys.items(), key=lambda kv: (int(kv[0].split(",")[1]), int(kv[0].split(",")[0]))))
     spec_path(tag).write_text(json.dumps(spec, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     rn_path = ROOT / "source/region_names.json"
     rn = json.loads(rn_path.read_text(encoding="utf-8"))
+    for c in gone:
+        rn.pop(c, None)
     for name, col in regions.items():
         rn[col] = name
     rn_path.write_text(json.dumps(rn, ensure_ascii=False, indent=1), encoding="utf-8")
-    print(f"{len(regions)} governorates' regions painted ({changed} px changed); names in {rn_path.name}")
+    print(f"{len(regions)} governorates' regions painted ({changed} px changed), {len(keys)} states' governorates; "
+          f"names in {rn_path.name}")
 
 
 if __name__ == "__main__":

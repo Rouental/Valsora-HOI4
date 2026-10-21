@@ -48,10 +48,14 @@ ROU_TEMPLATES = {
         regiments=[["motorized", "motorized", "motorized"], ["motorized", "motorized", "motorized"]],
         support=["engineer", "recon", "artillery", "anti_air", "logistics_company"]),
 }
+# 2026-10-21 (author): "except for the Oriental troops (who should remain motorized) and the 1e and 2e divisions (who
+# should remain armored,) the rest of the starts units should be mechanized"; the 12th, the Oriental troops, "start the
+# game stationed in Concorde" (its name: rouental_division_names)
 ROU_HOST = [("Division Blindée de la Garde", 2, "Rouental"),
             ("Division Mécanisée Royale", 1, "Saintiers"), ("Division Mécanisée Royale", 1, "Cournin"),
-            ("Division Motorisée Royale", 2, "Rêverie"), ("Division Motorisée Royale", 2, "Charmas"),
-            ("Division Motorisée Royale", 2, "Rochemont"), ("Division Motorisée Royale", 2, "Vendée")]
+            ("Division Mécanisée Royale", 2, "Rêverie"), ("Division Mécanisée Royale", 2, "Charmas"),
+            ("Division Mécanisée Royale", 2, "Rochemont"), ("Division Mécanisée Royale", 1, "Vendée"),
+            ("Division Motorisée Royale", 1, "Concorde et Volonté")]
 # the men each battalion and company takes (the game's common/units, 1.19.3)
 UNIT_MANPOWER = {"medium_armor": 500, "mechanized": 1200, "motorized": 1200, "engineer": 300, "recon": 500,
                  "maintenance_company": 500, "signal_company": 500, "field_hospital": 500, "anti_air": 300,
@@ -82,6 +86,13 @@ FEUDAL_ARMY = """ideas = {
 				political_power_factor = -0.1
 				stability_factor = -0.05
 			}
+		}
+		# Kalaistan's king under the military's regency (the author, 2026-10-21: "Give Kalaistan the national spirit
+		# 'The King in Chains' (Uses the placeholder icon we've used elsewhere.)"); no effects asked for yet
+		KLS_king_in_chains = {
+			picture = KLS_king_in_chains
+			allowed = { always = no }
+			removal_cost = -1
 		}
 	}
 }
@@ -146,6 +157,7 @@ HISTORY = {
     # the politics screen's layout test (TEST_SPIRITS)
     "DVL": ["add_ideas = { " + " ".join(f"DVL_test_spirit_{i}" for i in range(1, len(TEST_SPIRITS) + 1)) + " }"],
     "BRL": ["recruit_character = BRL_mahaut_vi"],
+    "KLS": ["add_ideas = KLS_king_in_chains"],      # author, 2026-10-21
     "RLA": ["recruit_character = RLA_serelle_cahun"],
     # Normania is Anglost's dominion (author, 2026-10-04)
     # ... and New Paradise, the United States of Solitas' until 2026-10-13 (author)
@@ -436,11 +448,12 @@ DISPLAY_COLOUR = {"AIS": (45, 105, 79)}
 RULING = {"BRL": "theocracy", "RLA": "fascism",
           "AIS": "democratic"}  # Merlovich: Liberalism (the author's friend, 2026-10-05)
 
-# Rouental's ten Royal Fiefs (the author's fief list, source/names/rouental_fiefs.txt), by state name: each a state of
-# its own since 2026-10-21 (Aurifort cut out), each with a line on its state panel (build_mod.state_lines; the author,
-# 2026-10-21: "Royal fiefs should also have a line on their state panels"); HMMLA's in the civil war
-ROYAL_FIEFS = ["Rouental", "Saintiers", "Cournin", "Jourdain et Moterre", "Aurifort", "Éislek", "Charmas", "Rochemont",
-               "Bérault", "Brassard"]
+# Rouental's Royal Fiefs, by state name: the capital, Rêverie (the author, 2026-10-21: "Reverie still needs to be
+# marked as a royal fief"), and the ten of the author's fief list (source/names/rouental_fiefs.txt), each a state of
+# its own since 2026-10-21 (Aurifort cut out); each with a line on its state panel (build_mod.state_lines; the author,
+# 2026-10-21: "Royal fiefs should also have a line on their state panels"); HMMLA's in the civil war, Rêverie its capital
+ROYAL_FIEFS = ["Rêverie", "Rouental", "Saintiers", "Cournin", "Jourdain et Moterre", "Aurifort", "Éislek", "Charmas",
+               "Rochemont", "Bérault", "Brassard"]
 
 # The Rouentaise civil war (author, 2026-10-02). When Rouental's communists execute the
 # Prince (focus ROU_execute_the_prince) these countries are released from the states
@@ -448,11 +461,11 @@ ROYAL_FIEFS = ["Rouental", "Saintiers", "Cournin", "Jourdain et Moterre", "Aurif
 # all but the Alliance of the East declare war on Rouental.
 CIVIL_WAR = {
     "BRL": ["Brillagne"],
-    "CRP": ["Crépuscule", "Aube", "Petit Crépuscule", "Noirceur", "Pénombre", "Ténèbres", "Toussaint", "Lyrié et Rivielle", "725,858", "Sorrelle", "Rendanne", "Brouge"],
-    "RLT": ["Reliette", "Oramlitus", "Piscisinum", "Reliquae", "Aureimontes", "Avignalle", "Gourdelle", "Marque", "Sézanne", "Vinterre", "Arduécu", "Plaiserre", "Ariminum", "Shalquoir", "Dortaine", "Thermidor"],
-    "MRC": ["Cylône", "Brochets", "Erdoine", "Élan", "Baïonnette", "Osgrande", "Coidron", "Belleterre", "Monteaux", "La Marche", "Aurillac-de-Ciel", "752,780", "Coffrefort"],
+    "CRP": ["Crépuscule", "Aube", "Petit Crépuscule", "Noirceur", "Ténèbres", "Toussaint", "Lyrié et Rivielle", "725,858", "Sorrelle", "Rendanne", "Brouge"],
+    "RLT": ["Reliette", "Oramlitus", "Piscisinum", "Reliquae", "Aureimontes", "Avignalle", "Marque", "Sézanne", "Vinterre", "Arduécu", "Plaiserre", "Ariminum", "Shalquoir", "Dortaine", "Thermidor"],
+    "MRC": ["Cylône", "Erdoine", "Baïonnette", "Osgrande", "Coidron", "Belleterre", "Monteaux", "La Marche", "Aurillac-de-Ciel", "752,780", "Coffrefort"],
     # 2026-10-21 (author): "HMMLA should have all the royal fiefs"
-    "RLA": ["Rêverie", *ROYAL_FIEFS, "Stofflet", "Charet", "Vendée"],
+    "RLA": [*ROYAL_FIEFS, "Stofflet", "Charet", "Vendée"],
     "VAI": ["Vair", "Pavois", "Fleurent", "Haute Couronne", "Nerice", "Caux-Gautier", "Beaufort", "Leonis", "Ligue Mercéatique"],
     "FTH": ["Hevique", "Antraine", "Rendement", "Blédoré", "Avarre"],
 }
@@ -460,12 +473,12 @@ CIVIL_WAR = {
 # hold cores on these states (the first is the capital), so they show in Rouental's
 # list of releasable nations
 RELEASABLE = {
-    "CRL": ["Carcarelle", "Carrefour", "Hyères", "Chattanay", "Nerié du Nord", "Vareinne", "Maréebleue", "Chantelleux", "Taracourt", "Nerié du Sud", "Clairval", "Bordeleau", "Focislar"],
-    "MTN": ["Everlon", "Merabeau", "Tocsin", "Mabrenne", "Montserrat", "Poitevallée", "Prèsloin", "Falaise", "Fleurmarais", "Hardatre", "Rempart", "Serrié", "Rolantelle"],
+    "CRL": ["Carcarelle", "Carrefour", "Hyères", "Chattanay", "Nerié du Nord", "Vareinne", "Maréebleue", "Taracourt", "Nerié du Sud", "Clairval", "Bordeleau"],
+    "MTN": ["Everlon", "Merabeau", "Tocsin", "Mabrenne", "Montserrat", "Poitevallée", "Falaise", "Fleurmarais", "Hardatre", "Rempart", "Serrié", "Rolantelle"],
     "ORF": ["Oriflamme", "Raocourt", "Thiollier", "Clovis", "Darantes", "Trézelles", "Corraise", "Lillon", "Glacierre"],
     "GHS": ["Ghessone", "Fleurdoux", "Ronnaire", "Archambelle", "Travante"],
-    "RVR": ["Callentroix", "Rivage-d'Argent", "Courrac", "Échirolles", "Carnaux", "Verlayne", "Valdélise", "Frélogne", "Marais Verts", "Vesontio", "Crionique", "Gironte", "Spreivald", "Valenmont"],  # 2026-10-18: Leclerc split in two (the Gazetteer), the larger first
-    "PSC": ["Belleplaine-sur-Mer", "Rathaine", "Lugunica", "Karsten", "Rougeamera", "Baie de Torres", "Côte d'Ambre", "Grand Brume", "Graisivaudan", "Nouveau Brume"],
+    "RVR": ["Callentroix", "Rivage-d'Argent", "Courrac", "Échirolles", "Carnaux", "Verlayne", "Valdélise", "Marais Verts", "Vesontio", "Crionique", "Spreivald", "Valenmont"],  # 2026-10-18: Leclerc split in two (the Gazetteer), the larger first
+    "PSC": ["Belleplaine-sur-Mer", "Rathaine", "Karsten", "Rougeamera", "Baie de Torres", "Côte d'Ambre", "Grand Brume", "Graisivaudan", "Nouveau Brume"],
     # 2026-10-07, later (author). The Alliance of the East's states still go to Lustiana,
     # Hollier and Selgrave in the civil war (ANNEX); it is only releasable by hand.
     "AOE": ["Chirac", "Serpette", "Maïeul", "Moelle", "Petit Selgrave", "Sérieux"],
@@ -473,7 +486,7 @@ RELEASABLE = {
     "SGT": ["Sangterre", "Noiétoile", "Transiger", "Carune la Cœur", "Astre"],
     "KOV": ["Kové", "Leclerc", "Berrige", "Rapproche", "Sumonde", "Ivaine", "Temerre"],  # 2026-10-18: Kové's west half is Temerre (the Gazetteer)
     "HVQ": ["Hevique", "Antraine", "Rendement", "Blédoré", "Avarre"],
-    "SRE": ["Serie", "Quebelle", "Himelle", "Barielle", "Friere", "Daubey", "Verdoyantres", "Pâturage"],
+    "SRE": ["Serie", "Quebelle", "Himelle", "Barielle", "Daubey", "Verdoyantres", "Pâturage"],
     # (2026-10-08, author: Tethia starts as part of Belekria; its land is its subregion since 2026-10-17, SUBREGIONS)
     # 2026-10-09, later (author): Rouental's islets off Solitas
     "ORT": ["Concorde et Volonté"],
@@ -809,7 +822,7 @@ FORMAL_NAMES = {
     "AMH": "the Kingdom of Almohavid",
     "PAM": "the Free Port of Almohavid",
     "MKL": "the Mekele Peoples' State",
-    "KLS": "the Republic of Kalaistan",
+    "KLS": "the Kingdom of Kalaistan",   # author, 2026-10-21 ("rather than republic"; still Authoritarian)
     "RDY": "the Republic of Al-Radiyaa",
     "KHB": "the Kingdom of Al-Khabid",
     "HMN": "the Humanist State",
@@ -861,6 +874,9 @@ LOCALISATION = [
     ' ROU_serelle_cahun:0 "Serelle Cahun"',
     ' ROU_serelle_vi_cahun:0 "Serelle VI Cahun"',  # her name once she rules (REGNAL_NAMES)
     ' BRL_mahaut_vi:0 "Mahaut VI"',
+    ' KLS_king_in_chains:0 "The King in Chains"',
+    # the author's text, 2026-10-21
+    " KLS_king_in_chains_desc:0 \"The people of Kalaistan lost faith in King Aabid al-Murad in 1998, when their southern territories in Al-Radiyaa broke free to form their own nation amidst the black sands of the Nyeusi desert. He lost his peoples' faith, but kept their respect. After all, the citizens of Kalaistan told themselves that it was only their king's peaceable nature that allowed the separatist movement to grow from a minor cut into a festering wound, to the point that amputation was the only possible course. He was to blame, to be sure, but how much could you despise a man for his mercy? He lost even their respect in 2013, when the humiliation was repeated as a small group of separatists in Mekele won their independence in a series of hard-fought battles that saw the outgunned and outmanned guerillas defeat the patently superior Kalai forces. Following the embarrassment that was the Treaty of Almas, few even bothered to raise an objection when the military announced that King Aabid has suffered a stroke that left him incapable of rule, and that they would assume the regency in his name. Since that day, neither the king nor his heir have ever again been seen outside the palace. But now, as the King's health has truly begun to fail, and the day that Aiman shall don his father's crown grows ever closer, many have begun to wonder, will the regency truly be ended? Do they want it to?\"",
     ' ROU_feudal_army:0 "Feudal Army"',
     ' ROU_feudal_army_desc:0 "Rouental fights as it always has: a small, superbly equipped royal host, swelled in war by the levies its vassals owe the crown. Few men answer a recruiting sergeant here, and none train quickly; but the banners can be called."',
     ' RLA_serelle_cahun:0 "Serelle Cahun"',
@@ -1377,6 +1393,15 @@ PORTRAITS = {
     "CNA_han_leji": ("source/portraits/han_leji.png", 5, 0, 440, None),
 }
 
+# Cities the author named outside their Gazetteer page, by a pixel in the province ("x,y"): a city each, as the Cities
+# layer's are (a nation's page replaces those dots on its land, and the next import would drop a city added to its
+# facts); a province where the page has a city keeps the page's, and a city of the same name on the nation's page moves
+# here with its victory points (2026-10-21: the page's Jourdain, 15, stood in Elbée since the fief states were cut). The
+# first in a state is its victory point. The author,
+# 2026-10-21 (the grouping map): Jourdain et Moterre "One state with two provinces and two cities, Jourdain in the
+# North, Moterre in the South"
+CITIES = {"750,800": "Jourdain", "755,806": "Moterre"}
+
 # Hand-picked victory point names. Key either a province id (ids follow the placeholder
 # provinces and shift when the map is rebuilt) or "capital:TAG" for a country's
 # capital city, which stays correct across rebuilds.
@@ -1505,7 +1530,13 @@ def rouental_division_names():
     import cultures
     f = cultures.fiefs()
     royal = f.pop("Royal Fiefs")
-    host = ["%de Garde Royale"] + [f"%de Ost {cultures.noble(x)}" for x in royal]
+    # the ten after their states (ROYAL_FIEFS, the fief list's order; "Jourdain et Moterre", the list's "Motere")
+    assert len(royal) == len(ROYAL_FIEFS) - 1, (royal, ROYAL_FIEFS)
+    host = ["%de Garde Royale"] + [f"%de Ost {cultures.noble(x)}" for x in ROYAL_FIEFS[1:]]
+    # the 12th, in Concorde (the author, 2026-10-21: "rename 12e Compagnie d'Ordinance to 12e Ost des Territoires
+    # Orientale (or whatever the correct term would be,)"): Territoires is masculine, so Orientaux
+    assert len(host) == 11, host
+    host.append("%de Ost des Territoires Orientaux")
     levies = [f"%de Levée {cultures.noble(x)}" for fs in f.values() for x in fs]
 
     def group(key, name, types, fallback, names):
@@ -1579,8 +1610,10 @@ def write_files(write, out, state_ids, state_vp):
     path = out / "gfx/interface/ideas/ROU_feudal_army.dds"
     path.parent.mkdir(parents=True, exist_ok=True)
     write_dds(path, np.asarray(pic))
-    write("interface/valsora_ideas.gfx", 'spriteTypes = {\n\tspriteType = {\n\t\tname = "GFX_idea_ROU_feudal_army"\n'
-          '\t\ttexturefile = "gfx/interface/ideas/ROU_feudal_army.dds"\n\t}\n}\n')
+    # Kalaistan's King in Chains has the same placeholder picture (the author, 2026-10-21), a sprite of its own
+    write("interface/valsora_ideas.gfx", "spriteTypes = {\n" + "".join(
+        f'\tspriteType = {{\n\t\tname = "GFX_idea_{k}"\n\t\ttexturefile = "gfx/interface/ideas/ROU_feudal_army.dds"\n\t}}\n'
+        for k in ("ROU_feudal_army", "KLS_king_in_chains")) + "}\n")
     sprites = []
     for name, (src, x0, y0, w, tint) in PORTRAITS.items():
         rgba = portrait(src, x0, y0, w)

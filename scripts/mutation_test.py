@@ -464,6 +464,17 @@ def m_mapfont_size(mod):
     return "gfx/fonts/hoi_mapfont4.dds is 2048 x 2048"
 
 
+def m_flag_depth(mod):
+    """a 24-bit flag (the game's own SCO_neutrality.tga, error.log of 2026-10-21)"""
+    edit_bytes(mod, "gfx/flags/ROU.tga", lambda b: b[:16] + bytes([24]) + b[17:])
+    return "gfx/flags/ROU.tga is not an uncompressed 32-bit TGA"
+
+
+def m_earth_flag(mod):
+    (mod / "gfx/flags/medium/CSA_neutrality.tga").unlink()
+    return "gfx/flags/medium/CSA_neutrality.tga is missing"
+
+
 def m_autonomy(mod):
     f = next(p.relative_to(mod).as_posix() for p in (mod / "history/countries").glob("KRI - *.txt"))
     edit(mod, f, lambda t: t.replace("autonomy_valsora_protectorate", "autonomy_valsora_protectorat", 1))
@@ -485,7 +496,7 @@ BATCHES = {
                 m_prerequisite, m_state_loc, m_decision_loc, m_trigger_for, m_scripted_effect, m_war_goal, m_song,
                 m_company_include, m_company_tag, m_company_loc, m_concern_trait, m_idea_loc, m_skill_range, m_skill_kind],
     "files": [m_no_bom, m_gui_sprite, m_texture_missing, m_minimap, m_globe, m_case_clash, m_ascii_name,
-              m_font_letter, m_map_letter, m_mapfont_size],
+              m_font_letter, m_map_letter, m_mapfont_size, m_flag_depth, m_earth_flag],
 }
 
 

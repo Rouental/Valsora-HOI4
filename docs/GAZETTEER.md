@@ -225,7 +225,7 @@ with `gazetteer.py paths` and `pull`, which still work.)
 - **Nations whose map tools are closed**: their states, provinces, cities, rivers and railways,
   and their releasables' states, are left out at the import (the file carries your switches;
   the import reads which states are drawn from the last build).
-- **By hand**: requests (new traits and kinds of company among them), advisors without a post, characters' and
+- **By hand**: requests (new traits, national spirits and kinds of company among them), advisors without a post, characters' and
   companies' notes, cultures and flags of other shapes; `status` lists them.
 - **Traits** are the base game's (`source/vanilla/index/traits.json`, made by `scripts/vanilla_sync.py` from your copy of
   the game: the ones its own characters have, Earth's one-country ones left out); the import keeps only those of the right

@@ -10,12 +10,14 @@ measured in game on 2026-10-17).
 
 They show the game's art, so they stay in the git-ignored build/ folder.
 """
+import os
+
 import numpy as np
 from PIL import Image
 
 import preview_panels as PP
 import validate_preview as V
-from paths import BUILD, VANILLA
+from paths import BUILD, MOD, VANILLA
 
 # the designers sit at (0, 0) from the screen's centre, and the game centres them on it: their pictures' half sizes
 WINDOWS = [("tank_designer_view.gui", "tank_designer_view", (-546, -276)),
@@ -37,7 +39,8 @@ HIDE = {"hq_overlay_images", "designerregimentswindow", "division_equipment_view
 def draw(vanilla):
     cvs, boxes = [], {}
     for f, name, (dx, dy) in WINDOWS:
-        path = VANILLA + "interface/" + f
+        # the mod's copy where it ships one (the commander picker's foot buttons, make_buttons.py), else the game's
+        path = (MOD if not vanilla and os.path.exists(MOD + "interface/" + f) else VANILLA) + "interface/" + f
         elems = V.load(path)
         win = PP.find_window(elems, name)
         cv = PP.backdrop(False)

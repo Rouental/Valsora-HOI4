@@ -45,6 +45,13 @@
         Merge COUNTRY's states smaller than MIN_PX into the neighbouring state of the same
         country they share most border with (States layer), e.g. the slivers a moved
         border leaves behind. Provinces stay as they are.
+    python3 scripts/pdn_tools.py join KEEP_X,KEEP_Y=GONE_X,GONE_Y [KEEP+GONE ...]
+        The state at GONE joins the state at KEEP (States layer; its region becomes KEEP's on Strategic Regions), both
+        one country's: with "=" their provinces under the two pixels become one province (Provinces layer), with "+"
+        they stay two provinces of the one state. The Necessary States line between the two states goes (with "+" it
+        moves to Necessary Provinces, as the line between the two provinces). For the author's groups on the grouping
+        map (2026-10-21, province_picker.py: two one-province states made one province, or one state of two). The
+        state names, nations.py's lists and the Gazetteer's facts are the caller's to follow (docs/MAP_PIPELINE.md).
     python3 scripts/pdn_tools.py recut [--keep-states] X,Y [X,Y ...]
         Cut placeholder land again the way apply_outlines.py cuts an outlined patch: the
         piece of a country's land around each pixel (what the Necessary lines enclose, or
@@ -568,6 +575,51 @@ def merge_small(names, L, country, min_px):
             break
         if not done:
             return
+
+
+def join(names, L, pairs):
+    """[(keep (x, y), gone (x, y), one_province)]: the state at gone joins the state at keep (see the docstring)"""
+    from skimage.measure import label as sklabel
+    K = code(L["Countries"][..., :3])
+    for (kx, ky), (gx, gy), one in pairs:
+        S = np.where(L["States"][..., 3] > 0, code(L["States"][..., :3]), -1)
+        P = code(L["Provinces"][..., :3])
+        if K[ky, kx] != K[gy, gx]:
+            sys.exit(f"join: ({kx}, {ky}) and ({gx}, {gy}) are two countries' land")
+        if S[ky, kx] == S[gy, gx] or S[ky, kx] < 0 or S[gy, gx] < 0:
+            sys.exit(f"join: ({kx}, {ky}) and ({gx}, {gy}) are not two states")
+        cut = np.s_[max(min(ky, gy) - 80, 0):min(max(ky, gy) + 81, H), max(min(kx, gx) - 80, 0):min(max(kx, gx) + 81, W)]
+        oy, ox = cut[0].start, cut[1].start
+        st = S[cut]
+        keep = sklabel(st == S[ky, kx], connectivity=1)
+        keep = keep == keep[ky - oy, kx - ox]
+        gone = sklabel(st == S[gy, gx], connectivity=1)
+        gone = gone == gone[gy - oy, gx - ox]
+        if not (ndi.binary_dilation(keep, CROSS) & gone).any():
+            sys.exit(f"join: the states at ({kx}, {ky}) and ({gx}, {gy}) don't touch")
+        lay = L["States"][cut]
+        lay[gone, :3] = lay[ky - oy, kx - ox, :3]
+        R = L["Strategic Regions"][cut]
+        R[gone, :3] = R[ky - oy, kx - ox, :3]
+        if one:
+            pr = P[cut]
+            pg = sklabel(pr == P[gy, gx], connectivity=1)
+            pg = pg == pg[gy - oy, gx - ox]
+            pl = L["Provinces"][cut]
+            pl[pg, :3] = pl[ky - oy, kx - ox, :3]
+        # the line between them: Necessary States pixels on either side of the shared border (not on an outer one)
+        both = keep | gone
+        nl = L["Necessary States"][cut]
+        on = nl[..., 3] > 0
+        shared = (keep & ndi.binary_dilation(gone, CROSS)) | (gone & ndi.binary_dilation(keep, CROSS))
+        shared = ndi.binary_dilation(shared, CROSS) & both & ~ndi.binary_dilation(~both, CROSS)
+        line = on & shared
+        if not one and "Necessary Provinces" in L:
+            L["Necessary Provinces"][cut][line] = nl[line]
+        nl[line] = 0
+        print(f"join: the state at ({gx}, {gy}), {int(gone.sum())} px, into the one at ({kx}, {ky}), "
+              f"{'one province' if one else 'two provinces'}; {int(line.sum())} line px "
+              f"{'cleared' if one else 'moved to Necessary Provinces'}")
 
 
 def recut(names, L, seeds, keep_states=False):
@@ -1302,6 +1354,13 @@ def main():
             return
     elif cmd == "merge_small":
         merge_small(names, L, sys.argv[2], int(sys.argv[3]))
+    elif cmd == "join":
+        pairs = []
+        for a in sys.argv[2:]:
+            one = "=" in a
+            k, g = a.split("=" if one else "+")
+            pairs.append((tuple(int(v) for v in k.split(",")), tuple(int(v) for v in g.split(",")), one))
+        join(names, L, pairs)
     elif cmd == "recut":
         keep = "--keep-states" in sys.argv
         recut(names, L, [tuple(int(v) for v in a.split(",")) for a in sys.argv[2:] if a != "--keep-states"], keep)

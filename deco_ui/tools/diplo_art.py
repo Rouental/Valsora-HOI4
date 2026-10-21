@@ -270,7 +270,10 @@ SPECS = [
     ("dp_join_allies", "diplo_action_join_allies_bg", 527, 360, "chain", 295, ()),
     ("dp_invite_to_faction", "diplo_action_invite_to_faction_bg", 527, 410, "rings_plus", 346, ()),
     ("dp_send_attache", "diplo_action_send_attache_bg", 527, 430, "briefcase", 369, (("divider", 340, 92, 300),)),
-    ("dp_declare_war", "diplo_action_declare_war_bg", 527, 532, "blades", 467,
+    # declare war: the land battle's crossed swords (icons.py "swords", combat_art's attacker medallion), not the blades
+    # (the author, 2026-10-21: "The declare war screen should use the same crossed swords as the battle screen, at
+    # least for now"); the confirmation popups' medallion (window_art.war_icon) keeps the blades
+    ("dp_declare_war", "diplo_action_declare_war_bg", 527, 532, "swords", 467,
      (BAND, ("panel", 273, 127, 505, 466), ("raised", 274, 423, 504, 465))),
     ("dp_justify", "diplo_action_justify_wargoals_bg", 527, 532, "scroll_quill", 467,
      (("strip", 13, 80, 513, 122), JUSTIFY_PANEL)),

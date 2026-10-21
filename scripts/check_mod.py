@@ -19,6 +19,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 from imgio import read_bmp  # noqa: E402
 from borders import LIMIT as BORDER_LIMIT, count as border_count  # noqa: E402
 from rivers import problems as river_problems  # noqa: E402
+from vanilla_parts import EARTH_FLAGS  # noqa: E402
 
 # vanilla 1.19.3 common/state_category: building slots of each
 CATEGORY_SLOTS = {"wasteland": 0, "enclave": 0, "tiny_island": 0, "pastoral": 1, "small_island": 1, "rural": 2,
@@ -625,6 +626,21 @@ def main(mod):
             err(f"letter {ch!r} (U+{ord(ch):04X}) in {where[ch]} is in no font of "
                 f"{', '.join(lacking[:3])}{' ...' if len(lacking) > 3 else ''} ({len(lacking)} of {len(have)}): "
                 f"it would not be drawn (deco_ui/tools/gen_fonts.py: CHARS)")
+
+    # ------------------------------------------------------------ flags
+    # every flag 32-bit uncompressed TGA (the game complains of others: the author's error.log of 2026-10-21, "Unexpected
+    # pixel depth" for the base game's 16-bit CSA_neutrality.tga), and the stand-ins for Earth's flags the game reads
+    # badly in each size (vanilla_parts.EARTH_FLAGS)
+    for name in EARTH_FLAGS:
+        for size in ("", "medium/", "small/"):
+            if not (mod / f"gfx/flags/{size}{name}.tga").exists():
+                err(f"gfx/flags/{size}{name}.tga is missing: the base game's own is not 32-bit and error.log says so "
+                    "(vanilla_parts.EARTH_FLAGS)")
+    for f in sorted((mod / "gfx/flags").rglob("*.tga")):
+        h = f.read_bytes()[:18]
+        if len(h) < 18 or h[2] != 2 or h[16] != 32:
+            err(f"{f.relative_to(mod).as_posix()} is not an uncompressed 32-bit TGA (type {h[2] if len(h) > 2 else '?'}, "
+                f"{h[16] if len(h) > 16 else '?'} bits): the game logs its pixel depth (imgio.write_tga writes 32)")
 
     # ------------------------------------------------------------ characters, focus trees
     chars = set()

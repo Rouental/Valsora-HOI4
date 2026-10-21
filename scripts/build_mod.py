@@ -241,19 +241,21 @@ def neighbours(lab, anchor):
     return out
 
 
-def state_lines(write, regions, state_by_name):
+def state_lines(write, state_by_name):
     """Rouental's governorates and Royal Fiefs on the state panel (the author, 2026-10-21: "for now they should be the
     strategic regions, and lines on the state panels ... Royal fiefs should also have a line on their state panels"):
-    a state in a governorate's region (source/governorates_ROU.json "regions", by colour: governorates.py --apply)
-    reads "Governorate of X", a Royal Fief (nations.ROYAL_FIEFS) "Royal Fief · Governorate of X". A scripted GUI
+    a state in a governorate (source/governorates_ROU.json "states", by its key in state_names.json: governorates.py
+    --apply) reads "Governorate of X", a Royal Fief (nations.ROYAL_FIEFS) "Royal Fief · Governorate of X". A scripted GUI
     docked to the state panel (selected_state_context: its scope the state clicked), its text a scripted localisation
     by state id; the line's place is the Deco UI's (deco_ui/tools/layout_stateview.py STATE_LINE), so it is written
     only with the Deco UI on (the game's own state panel has no room kept for it). Returns the localisation."""
     spec = Path("source/governorates_ROU.json")
-    gov_of_colour = {c: g for g, c in json.loads(spec.read_text(encoding="utf-8")).get("regions", {}).items()} \
-        if spec.exists() else {}
-    gov = {s: gov_of_colour[rg.get("colour")] for rg in regions if rg.get("colour") in gov_of_colour
-           for s in rg["states"]}
+    gov = {}
+    for key, g in (json.loads(spec.read_text(encoding="utf-8")).get("states", {}) if spec.exists() else {}).items():
+        if key not in state_by_name:
+            raise SystemExit(f"{spec}: no state at {key} in source/state_names.json any more: run "
+                             "scripts/governorates.py ROU --apply again")
+        gov[state_by_name[key]] = g
     for nm in nations.ROYAL_FIEFS:
         if nm not in state_by_name:
             raise SystemExit(f"nations.ROYAL_FIEFS: no state named {nm!r}")
@@ -566,6 +568,21 @@ def main():
     state_capital = [max(g, key=lambda i: (size[i], -i)) for g in states]
     # the author's cities (Cities layer): the first in a state becomes its victory point,
     # any others extra ones; all named, worth CITY_VP unless the country's capital
+    cities = [list(c) for c in rj.get("cities", [])]
+    for key, name in nations.CITIES.items():   # the author's cities named outside their Gazetteer page
+        x, y = map(int, key.split(","))
+        q = int(lab[y, x])
+        if kind[q] != 1 or state_of[q] < 0:
+            raise SystemExit(f"nations.CITIES: {name} at ({x}, {y}) is not in a state's land")
+        same = [c for c in cities if c[1] == name and rj["owners"][int(state_of[int(c[0])])] ==
+                rj["owners"][int(state_of[q])]]
+        if same:      # the page's city of that name, elsewhere (Jourdain, left in Elbée by the fief cut): moved here
+            if int(same[0][0]) != q:
+                gnotes.append(f"nations.CITIES: {name} moved from ({same[0][2]}, {same[0][3]}) to ({x}, {y})")
+            same[0][0], same[0][2], same[0][3] = q, x, y
+        elif all(int(c[0]) != q for c in cities):
+            cities.append([q, name, x, y])
+    rj["cities"] = cities
     city_of = {int(c[0]): c[1] for c in rj.get("cities", [])}
     # the Gazetteer's cities carry their victory points and the capital
     city_vp = {int(c[0]): int(c[4]) for c in rj.get("cities", []) if len(c) > 4}
@@ -1091,6 +1108,9 @@ def main():
                 img = np.asarray(big.resize((w, h), Image.LANCZOS if src.exists() else Image.BOX))
                 (OUT / f"gfx/flags/{path}").mkdir(parents=True, exist_ok=True)
                 write_tga(OUT / f"gfx/flags/{path}{name}.tga", img)
+    for name in vanilla_parts.EARTH_FLAGS:      # plain stand-ins for two of Earth's flags the game reads badly
+        for path, (w, h) in (("", FLAG_SIZE), ("medium/", (41, 26)), ("small/", (10, 7))):
+            write_tga(OUT / f"gfx/flags/{path}{name}.tga", np.full((h, w, 4), (96, 96, 96, 255), np.uint8))
     if FLAG_SIZE != (82, 52):   # a test version with larger flags (common.FLAG_SCALE): the game is told their size
         write("common/defines/valsora_flags.lua",
               "-- the large flags' size (common.FLAG_SCALE): a test version of the mod with larger flags\n"
@@ -1236,7 +1256,7 @@ def main():
     # Rouental's test decisions, one per kind of event window (the author, 2026-10-15): out when testing is done
     test_events.write_files(write)
     loc += test_events.LOCALISATION
-    loc += state_lines(write, regions, state_by_name)
+    loc += state_lines(write, state_by_name)
     write("localisation/english/valsora_l_english.yml", "\n".join(loc) + "\n", bom=True)
     nations.write_files(write, OUT, {nm: s + 1 for nm, s in state_by_name.items()},
                         {nm: int(pid[state_capital[s]]) for nm, s in state_by_name.items()})

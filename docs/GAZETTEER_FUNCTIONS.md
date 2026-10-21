@@ -196,8 +196,9 @@ With no state picked, every state is a button (● for the named ones).
 - **NA3 Flags:** the main flag and one per government, each showing the game's until a picture is sent: **Send a
   picture**, **Replace**, **Remove**.
 - **NA4 About the nation:** map colour (**Use the map's**), culture, motto, anthem, description.
-- **NA5 Requests to the author:** kind (a new sub-ideology, trait or kind of company, a subject type, a map change,
-  something else), the request and its details, **Send request**; the list, with its status and your reply;
+- **NA5 Requests to the author:** kind (a new sub-ideology, trait or kind of company, a national spirit (2026-10-21,
+  the author: "allow people to request national spirits"; its prompts ask for the spirit's name and what it should do,
+  how long it lasts or what removes it, and its text), a subject type, a map change, something else), the request and its details, **Send request**; the list, with its status and your reply;
   **Delete** for one's own.
 - **NA6 So far**, **open**: states named, population set, provinces with terrain, cities, capital, rivers,
   railways, total population.

@@ -87,7 +87,7 @@ CITY_SIZES = ("village", "town", "city", "large", "metropolis")   # as the page'
 # victory points (author, 2026-10-15); the page shares a nation's population out by them, the build doesn't read them
 IDEOLOGIES = ("democratic", "fascism", "communism", "neutrality", "theocracy")
 ROLES = ("general", "admiral", "advisor", "other")
-REQ_KINDS = ("subideology", "subject", "trait", "company", "map", "other")   # as the page's
+REQ_KINDS = ("subideology", "subject", "trait", "spirit", "company", "map", "other")   # as the page's
 TRAITS_FILE = Path("source/vanilla/index/traits.json")   # the base game's traits for leaders (vanilla_sync.py)
 COMPANIES_FILE = Path("source/vanilla/index/companies.json")   # the base game's kinds of company (vanilla_sync.py)
 MAX_TRAITS = 6

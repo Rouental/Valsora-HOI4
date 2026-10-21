@@ -1,4 +1,4 @@
-VALSORA DECO UI - v0.12.1 (for HOI4 1.19)
+VALSORA DECO UI - v0.12.3 (for HOI4 1.19)
 =========================================
 
 An art deco interface for the Valsora total conversion: core skin and fonts,
@@ -29,6 +29,23 @@ Valsora repository's scripts/common.py and rebuild (sh scripts/run_all.sh).
 
 The layout is built for 1920 px of UI width: 1920x1080 at 100% UI scale, or
 2560x1440 at up to 133%.
+
+
+NEW IN v0.12.3
+--------------
+  - The commander pickers (army, navy, a faction's commanders): Show
+    Field Officers / Show Ship Captains, New Leader and Unassign whole,
+    no longer cut off at the window's foot.
+  - The load and save windows: Back and Load (Save) apart.
+  - The declare war window: the land battle's crossed swords at both
+    ends of its header.
+
+Things to check in game (v0.12.3):
+  - the commander picker of an army and of a fleet (Select Commander):
+    the buttons at its foot, whole and clickable;
+  - the load window (main menu or in game) and the save window: Back and
+    Load / Save side by side, apart;
+  - Declare War on another country: the swords in the header.
 
 
 NEW IN v0.12.2

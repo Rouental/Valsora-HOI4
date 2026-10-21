@@ -1,8 +1,10 @@
-# Open questions (2026-10-21, later)
+# Open questions (2026-10-21, later still)
 
 The author's answers of 2026-10-19 and 2026-10-20 are in the mod (the go-ahead: "go ahead with the rest of it, and all
 the other changes I had been holding back until now"): `docs/HISTORY.md`, 2026-10-20. Answered on 2026-10-21 and in the mod since: the governorates' names (29), the generic advisors (27), the Kufi
-in gold (30), HMMLA's Royal Fiefs (31) (`docs/NATIONS.md`, 2026-10-21, later). What is still open:
+in gold (30), HMMLA's Royal Fiefs (31) (`docs/NATIONS.md`, 2026-10-21, later); the Royal Host Elite (24: "The troops
+are now elite!"), the Army HQ cards (26: "Army HQ cards seem to work"), the governorate line ("worked just fine"), and
+Rouental's groups (28: applied, `docs/NATIONS.md`, 2026-10-21, later still). What is still open:
 
 | # | question | where |
 |---|---|---|
@@ -11,12 +13,32 @@ in gold (30), HMMLA's Royal Fiefs (31) (`docs/NATIONS.md`, 2026-10-21, later). W
 | 10 | flags for Belekria's eight new republics: "I'll get those to you eventually" | |
 | 14 | state names (the numbered sheets `dist/state_numbers_*.png`) | |
 | 15 | the land regions' names: the drafts are in the mod now ("I'm fine with those for now, I'll edit them later"); change any in `dist/region_names_draft.md`'s last column | |
-| 24 | Rouental's Royal Host: you saw it start below Elite; its divisions were set to 0.6 experience, which the game counts as Seasoned (Elite is 0.9 and up). They start at 1.0 now, full. Does it show Elite now? | in game |
-| 26 | the Army HQ designer: every country now starts with the game's own HQ template; does a new HQ template save now? If not, the button's tooltip or the `error.log` line is the next clue | in game |
-| 28 | Rouental's provinces to merge or make into states: pick them on the grouping map (https://claude.ai/artifact/RsMPNHMPW1PdhS1Soa6W19, private to you), saved there for Claude to apply | your groups |
 | 25 | the tech tree: "I'm not really ready to start with the tech tree in earnest yet" | `docs/TECH_TREE_2036.md` |
+| 32 | the Vale of Reibonne's strategic region: with Hollier, Evriches and Seigne in South Montvallée and Selgrave, Lustiana and Lanzerac in North Montvallée, it holds only Guedelon and the island Brillagne, which don't touch (a region may be in two pieces, but the AI plans by regions). Guedelon into its neighbour's region (Côte d'Ambre's), Brillagne into the sea's nearest land region, or leave it? | |
+| 33 | the groups' way back: "Be prepared for the posibility of returning to how it currently is though": the map before them is kept (`work/pre_groups_1021/`, and the commit before) until you say they stay | |
 
 New to look at:
+- **Rouental's 13 groups** (map 10-21-3): twelve states joined their neighbours as one province (Élan into Cylône,
+  Brochets into Erdoine, Chantelleux into Chattanay, Verrie into Stofflet, Focislar into Vesontio, Gourdelle into
+  Vinterre, Gironte into Valenmont, Friere into Quebelle, Frélogne into Spreivald, Prèsloin into Poitevallée, Lugunica
+  into Karsten, Pénombre into Petit Crépuscule), and Jourdain et Moterre is one state of two provinces, Jourdain in the
+  north, Moterre in the south. Jourdain keeps the 15 victory points your Gazetteer page gives it; the page has its
+  Jourdain in Elbée, where it stood since the fief states, so the build moves it (moving it on the page too keeps them
+  in step). Focislar's land was Carcarelle's releasable and is the Rivage d'Argent's now, with Vesontio.
+- **South and North Montvallée** are two strategic regions for Terres Séparées, as you listed them; their states'
+  panels still say "Governorate of Terres Séparées".
+- **Rêverie** is a Royal Fief on its state panel.
+- **The Royal Host**: the 1e and 2e armoured, nine mechanized divisions, and the 12th, now "12e Ost des Territoires
+  Orientaux" (territoire is masculine, hence Orientaux), motorized and in Concorde et Volonté.
+- **Kalaistan** is the Kingdom of Kalaistan (still Authoritarian) with **The King in Chains** (the Feudal Army's
+  placeholder icon, your text, no effects yet: say if it should do something).
+- **The Gazetteer** takes national spirit requests (Requests for the author, "National spirit").
+- **The Deco UI v0.12.3**: the commander pickers' Show Field Officers / Show Ship Captains, New Leader and Unassign
+  whole; the load and save windows' Back and Load apart; the declare war window with the battle screen's crossed swords.
+- **error.log**: the Confederacy's and Scotland's flag lines are gone (the base game's own flags, at a pixel depth its
+  loader dislikes, replaced by plain stand-ins). The rest is not the mod's: two Workshop mods' descriptors in your mod
+  folder, two of the base game's 3D model lines, and the AI asking for commander traits the game then refuses
+  ("unlock_trait_command"), harmless; if that last one grows into the thousands, send the log again.
 - **The governorates** are Rouental's strategic regions now (the 26: the fief map's 8 and your 20, Terres Séparées
   one), each named; Brillagne and Concorde et Volonté are in none. The state panel has a line under the victory points
   and manpower: "Governorate of Vair", and for the ten "Royal Fief · Governorate of Couronneterre". The line is a

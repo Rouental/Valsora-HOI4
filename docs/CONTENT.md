@@ -92,7 +92,7 @@ Aislada is the worked example of a built-out nation:
           Army; map name HMMLA, the author's, 2026-10-02; Strongman Rule, `RLA_serelle_cahun`; flag the fox quarter of `ROU.png`,
           which is also `ROU_fascism.png`); Vair VAI (Duchy; Feudalism); The Faithful FTH
           (the Faithful Children of the Goddess and Her Saint; Holy Order). States
-          are named in `CIVIL_WAR` (first = capital; HMMLA's holds Rêverie and all ten Royal Fiefs,
+          are named in `CIVIL_WAR` (first = capital; HMMLA's holds all eleven Royal Fiefs, Rêverie first,
           `nations.ROYAL_FIEFS`, the author, 2026-10-21: "HMMLA should have all the royal fiefs"); the focus file writes
           `@STATE:<name>@`, which `nations.fill` turns into ids. Two countries may
           share a name: their country files get the tag appended.
@@ -111,8 +111,12 @@ Aislada is the worked example of a built-out nation:
     (`source/governorates_ROU.json`, the fief map's rough patches until the author draws the Governorate Lines; 8
     named on the fief map, 20 numbered on the grouping map and named by the author, three of them one: Terres
     Séparées, the Alliance of the East's land) are its strategic regions (`scripts/governorates.py --apply`; Brillagne
-    and Concorde et Volonté are in none and keep theirs). A state in one reads "Governorate of X" on its panel, a
-    Royal Fief (`nations.ROYAL_FIEFS`, the ten, all in Couronneterre) "Royal Fief · Governorate of Couronneterre"
+    and Concorde et Volonté are in none and keep theirs), but Terres Séparées, two regions since 2026-10-21 (the
+    author: "South Montvallée should encompass Hollier, Evriches, Seigne, Serpette, and Chirac. North Montvallée
+    should encompass Selgrave, Lustiana, Lanzerac, Moelle, Maieul, Serieux, and Petit Selgrave"; the file's `split`),
+    27 in all. A state in one reads "Governorate of X" on its panel, a Royal Fief (`nations.ROYAL_FIEFS`: Rêverie,
+    "Reverie still needs to be marked as a royal fief", and the ten, all in Couronneterre) "Royal Fief · Governorate
+    of Couronneterre"
     (`build_mod.state_lines`: a scripted GUI docked to the state panel, in the state's scope, its text a scripted
     localisation by state id; with the Deco UI only, which keeps the row for it). Nothing in play yet.
   - **Faction.** ROU starts as leader of "The Association of Reibonnaise States",
@@ -194,8 +198,10 @@ Aislada is the worked example of a built-out nation:
   `common/units/names_divisions/ROU_names_divisions.txt`. The levy-army design is in
   `docs/ROUENTAL_ARMY.md`. Built: the **Feudal Army** spirit (`ROU_feudal_army`:
   recruitable population −80 %, training ×2, PP −10 %, stability −5 %; anime placeholder
-  icon) and the **royal host** (`history/units/ROU_2036.txt`: 2 armoured, 2 mechanised,
-  8 motorised divisions, full support, plus techs, a "Char Royal" tank and a stockpile).
+  icon) and the **royal host** (`nations.ROU_HOST`; 2026-10-21, the author: "except for the Oriental troops (who
+  should remain motorized) and the 1e and 2e divisions (who should remain armored,) the rest of the starts units
+  should be mechanized": 2 armoured, 9 mechanised and 1 motorised division, the 12th, "12e Ost des Territoires
+  Orientaux", in Concorde et Volonté; full support, Elite, plus techs, a "Char Royal" tank and a stockpile).
   The levies themselves are not built: tiers and costs await the author.
   - The author's detailed fief map (`Rouental_Map_TEMP_2.pdn`, 8000×4471, decoded in
     `work/pdn_rmap`) was overlaid on the game's states (axis-aligned fit, IoU 0.885;

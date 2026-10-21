@@ -174,7 +174,23 @@ it before touching the UI. In short:
     equipment's plate, the factory slots, the resource wells) and turned the game's scratches into gilt specks along
     the trade rows (`make_panel_pictures.DRAWN`).
 
-- **v0.12.2** (2026-10-21, not yet seen in game; the author's screenshots of the Army HQ card and the diplomacy tab):
+- **v0.12.3** (2026-10-21, later still, not yet seen in game; the author saw v0.12.2: "The governorate line on the
+  states worked just fine!", "Army HQ cards seem to work"; and sent screenshots of the commander pickers, the load
+  window and the declare war window):
+  - **the commander pickers' foot buttons** ("For both the army and navy, the show officers and unassign buttons are
+    cut off"): the game's `unitleaderwindow.gui` anchors them 32 px above a 590 px window's foot, its button pictures
+    36 px with a blank foot; the Deco UI's 34 px buttons are drawn to their last row, so their rim ran past the window
+    and was clipped. `tools/make_buttons.py` (new) ships the game's file with them at y -36, centred in the picture's
+    footer band (`BUTTON_Y`; the army's, the navy's and the faction commander's window);
+  - **the load and save windows' Back and Load** ("Load and back are running into each other"): the game's own layout
+    overlaps them by 3 px (x 100 and 245, 148 px buttons; `ingamemenu.gui`), hidden by its soft-edged pictures;
+    `make_buttons.py` sets them 10 px apart on the window's foot picture (`BACK_X`, `GO_X`);
+  - **the declare war window's emblem** ("The declare war screen should use the same crossed swords as the battle
+    screen, at least for now"): the icon set's `swords`, the land battle's attacker medallion's, for the crossed blades
+    (`diplo_art.SPECS`); the confirmation popups' war medallion keeps the blades;
+  - `preview_designers.py` draws the mod's copy of a window where it ships one.
+
+- **v0.12.2** (2026-10-21, seen in game the same day: the governorate line and the Army HQ cards work; made from the author's screenshots of the Army HQ card and the diplomacy tab):
   - **no more traced pictures** ("with a lot of the things you've generated recently, there's these weird sloppy lines
     and missing pieces of the design. I've brought it up a few times, and it seems to keep happening"): the 26 pictures
     `make_panel_pictures.py` made by tracing the game's art (`proposals_panel_mockups.translate()`, and the spymaster's

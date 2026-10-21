@@ -24,14 +24,18 @@ themselves are not.
 - **Feudal Army** (`ROU_feudal_army`, author 2026-10-02; placeholder icon, the anime
   picture): recruitable population −80 %, training time ×2, political power −10 %,
   stability −5 %. Its description says it opens the levies.
-- **The royal host** (`history/units/ROU_2036.txt`): 2 armoured ("Division Blindée de la
-  Garde": 4 medium tank + 2 mechanised), 2 mechanised and 8 motorised divisions, all at
+- **The royal host** (`history/units/ROU_2036.txt`, `nations.ROU_HOST`): 2 armoured ("Division Blindée de la
+  Garde": 4 medium tank + 2 mechanised), 9 mechanised and 1 motorised division (2026-10-21, the author: "except for the
+  Oriental troops (who should remain motorized) and the 1e and 2e divisions (who should remain armored,) the rest of
+  the starts units should be mechanized"; until then 2 mechanised and 8 motorised); the motorised one is the 12th,
+  "12e Ost des Territoires Orientaux" (the author's "Territoires Orientale", with the masculine ending), stationed in
+  Concorde et Volonté; all at
   full equipment and full experience (Elite: 1.0, since 2026-10-21; 0.6 was only Seasoned, the
   game's levels being 0.1, 0.3, 0.75 and 0.9), with engineers, recon, AA, signals, logistics or
   maintenance, and field hospitals in support. Stationed around Rouental, Saintiers,
-  Cournin, Rêverie, Charmas, Rochemont and Vendée. Rouental starts with the techs, a
+  Cournin, Rêverie, Charmas, Rochemont and Vendée, the 12th in Concorde et Volonté. Rouental starts with the techs, a
   "Char Royal" tank design (both with and without No Step Back) and a stockpile. Since
-  2026-10-20 it forms on the game's first day (`on_startup`: its own 102,000 men, then
+  2026-10-20 it forms on the game's first day (`on_startup`: its own men, 93,600 since the mechanised host of 2026-10-21 (102,000 before), then
   `load_oob`), so it starts full and keeps its experience (formed by the history file, it
   started short and the game's refill diluted it).
 - **Which state each fief (vassal) lies in**: `docs/ROUENTAL_FIEFS.md` and

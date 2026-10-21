@@ -14,9 +14,16 @@ Treat assumed items as hypotheses.
 
 ---------------------------------------------------------------------------------------------------
 
-## 1. Status (v0.12.2)
+## 1. Status (v0.12.3)
 
-**v0.12.2 (2026-10-21)** is the current version (`docs/VERSIONS.md`): the 26 side panel pictures `make_panel_pictures.py`
+**v0.12.3 (2026-10-21, later still)** is the current version (`docs/VERSIONS.md`), from the author's screenshots of
+v0.12.2: the commander pickers' foot buttons whole (the game's `unitleaderwindow.gui` put them where the Deco UI's
+34 px buttons ran 2-3 px past the window's clipped foot) and the load and save windows' Back and Load apart (the game's
+own `ingamemenu.gui` overlaps them by 3 px), both by `make_buttons.py` (new); the declare war window's emblem the land
+battle's crossed swords (`diplo_art.SPECS`). Not yet seen in game. The author saw v0.12.2 the same day: the state
+panel's governorate line and the Army HQ cards work.
+
+**v0.12.2 (2026-10-21)** came before it (`docs/VERSIONS.md`): the 26 side panel pictures `make_panel_pictures.py`
 traced from the game's art drawn by hand (`panelpics_a_art.py` the officer corps, `panelpics_b_art.py` the faction
 screen, `panelpics_c_art.py` the rest; translate() retired: section 9's first pitfall), `fragments.py`'s check for
 broken gilt in `validate_preview.py`, the diplomacy tab's focus icon at 0.56 inside its octagon, and a row at the state
@@ -345,6 +352,10 @@ tools/
                             Valsora build's work/
   make_setup.py             frontendgamesetupview.gui (v0.10.1): the country selection one card wider (nine cards for
                             the Vale start), the country's details spaced; its pictures are setup_art.py's
+  make_buttons.py           (2026-10-21) unitleaderwindow.gui and ingamemenu.gui: two of the game's button rows the Deco
+                            buttons don't fit, moved: the commander pickers' foot buttons to y -36 (the game's 36 px
+                            pictures have a blank foot, ours are drawn to their last row, and the window clips at 590),
+                            the load and save windows' Back and Load 10 px apart (the game's overlap by 3 px)
   make_popups.py            popupwindow.gui (v0.10.2): the release dialog's text box above its checkboxes (the
                             game's ran 20 px over the first), six whole lines; the bounds are window_art.RELEASE_TEXT_Y/END
   preview_battleplan.py     build/preview_battleplan.png (+ _vanilla); preview_windows.py, preview_mapviews.py,
@@ -1015,6 +1026,11 @@ GP.write_gui(MOD + "interface/x.gui", t)    # braces checked, engine_safe applie
   measured against the elements the .gui puts on it (a sheet with them over it), rims and wells whole, straight lines
   on whole pixels, and look at it at 2x before it goes in. `fragments.py` fails on broken gilt in any plate or
   background; when a report names one broken picture, look for every picture made the same way.
+- The game's layouts lean on its pictures' soft edges (2026-10-21): its standard buttons are 36 px tall with a blank
+  foot and fade at the sides, ours are 34 px drawn to their last row with gilt rims, so a button the game anchors near
+  a window's clipped foot loses its rim (the commander pickers), and two buttons the game overlaps by a few pixels run
+  into each other (the load window's Back and Load). `make_buttons.py` moves such buttons; a screen with another one
+  goes there too.
 - Stretching flags makes them pixelated. Keep them 1:1.
 - A view the game puts at the screen's left edge under its top bar is drawn under the Deco UI's top bar, so the
   medallion hides its top (the armies, air wings and operatives in v0.8.1, the navy in v0.8.3). Side panels and the
@@ -1064,6 +1080,8 @@ GP.write_gui(MOD + "interface/x.gui", t)    # braces checked, engine_safe applie
 
 ## 10. Open items and things to check in game
 
+- **v0.12.3**: the commander picker of an army and of a fleet (the foot buttons whole); the load and save windows
+  (Back and Load / Save apart); the declare war window's swords.
 - **v0.12.1**: the insignia picker with the sliders (the 14 Deco masks and the numbered shields take the colour,
   **(assumed)** multiplied into their greys; the gilt ones keep theirs); the state panel's icons in their tiles and
   slots, a damaged building's bar; the faction logos; the faction goals' background; the diplomacy tab's top; the

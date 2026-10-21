@@ -208,6 +208,10 @@ Moved out of `CLAUDE.md` word for word on 2026-10-17 (`CLAUDE.md` keeps one line
   panels"; "Eventually I will get around to the Governorate Lines"): the fief map's rough patches, named
   (`source/governorates_ROU.json`; 15, 18 and 19 one, Terres Séparées), are Rouental's strategic regions
   (`scripts/governorates.py`), and the state panel says each state's governorate and whether it is a Royal Fief.
+  Terres Séparées is two regions (author, 2026-10-21: "instead of the Severed Territories in the east being a weird
+  disconnected region, it should instead be two regions. South Montvallée should encompass Hollier, Evriches, Seigne,
+  Serpette, and Chirac. North Montvallée should encompass Selgrave, Lustiana, Lanzerac, Moelle, Maieul, Serieux, and
+  Petit Selgrave"), one governorate; Rêverie is a Royal Fief too ("Reverie still needs to be marked as a royal fief").
 - **The game's generic advisors and theorists are back** (author, 2026-10-21: "Sure, might as well bring back generic
   advisors and theorists"): vanilla's `history/general/generic_advisors.txt`, its Earth cases taken out, for every
   country (`docs/MAP_PIPELINE.md`, Vanilla content switched off).

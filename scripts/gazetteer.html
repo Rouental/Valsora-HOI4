@@ -502,7 +502,9 @@ const KINDS = ["states", "provinces", "cities", "rivers", "rails", "politics", "
 const REL_COLOURS = ["#b5543c", "#3c7db5", "#6f9a3a", "#8a4fb0", "#c2912e", "#2f9a93", "#b04f7c", "#5c6670"];
 const MAX_STATE_POP = 500000000;
 const ERASE_R = 3;
-const REQ_KINDS = [["subideology", "New sub-ideology"], ["trait", "New trait"], ["company", "New kind of company"], ["subject", "Subject type"], ["map", "Map change"], ["other", "Something else"]];
+const REQ_KINDS = [["subideology", "New sub-ideology"], ["trait", "New trait"], ["spirit", "National spirit"], ["company", "New kind of company"], ["subject", "Subject type"], ["map", "Map change"], ["other", "Something else"]];
+// what each kind's two fields ask for (2026-10-21, the author: "allow people to request national spirits")
+const REQ_HINTS = { spirit: ["The national spirit's name", "What it should do (e.g. +10% factory output, −5% stability), how long it lasts or what removes it, and the text shown with it"] };
 const MAX_TRAITS = 6;   // a leader's traits from the base game (2026-10-15)
 const REQ_KIND = Object.fromEntries(REQ_KINDS);
 const REQ_STATUS = { open: "Open", done: "Done", declined: "Declined" };
@@ -3834,10 +3836,15 @@ async function sendRequest(kind, title, details) {  // a request to the author, 
 function requestForm() {
   const N = app.N;
   if (app.mode !== "shared") return h("div", { class: "meta", text: "Requests go to the shared atlas, which this view can't save to. Put them in the notes of your file instead." });
-  const kind = h("select", { id: "rq-kind", onchange: e => { app.reqKind = e.target.value; } }, REQ_KINDS.map(([k, l]) => h("option", { value: k, text: l })));
+  const title = h("input", { id: "rq-title", type: "text", maxlength: "100", "data-keep": true });
+  const details = h("textarea", { id: "rq-details", maxlength: "3000", "data-keep": true });
+  const hint = () => {
+    const [t, d] = REQ_HINTS[app.reqKind] || ["In a few words: what you'd like", "Details: how it should work, names, what it's for"];
+    title.placeholder = t; details.placeholder = d;
+  };
+  const kind = h("select", { id: "rq-kind", onchange: e => { app.reqKind = e.target.value; hint(); } }, REQ_KINDS.map(([k, l]) => h("option", { value: k, text: l })));
   kind.value = app.reqKind;
-  const title = h("input", { id: "rq-title", type: "text", maxlength: "100", placeholder: "In a few words: what you'd like", "data-keep": true });
-  const details = h("textarea", { id: "rq-details", maxlength: "3000", placeholder: "Details: how it should work, names, what it's for", "data-keep": true });
+  hint();
   const msg = h("span", { class: "meta" });
   const send = h("button", { class: "btn small primary", type: "button", onclick: async () => {
     if (locked()) { askPassword(); return; }

@@ -796,3 +796,36 @@ Almohavid).
   Vendée as before: Jourdain et Moterre, Aurifort, Éislek, Charmas, Rochemont and Bérault added.
 - **The Royal Host** starts Elite (experience 1.0; it was 0.6, Seasoned).
 - Port Almohavid keeps the Kufi in gold.
+
+## 2026-10-21, later still: Rouental's province groups, Montvallée, Rêverie, the Royal Host, Kalaistan
+
+The author's provinces to combine from the grouping map ("I have gone through the provinces using the program you
+provided, and selected some to be combined. (Be prepared for the posibility of returning to how it currently is
+though.)"), the eastern regions ("South Montvallée should encompass Hollier, Evriches, Seigne, Serpette, and Chirac.
+North Montvallée should encompass Selgrave, Lustiana, Lanzerac, Moelle, Maieul, Serieux, and Petit Selgrave"), "Reverie
+still needs to be marked as a royal fief", the Royal Host ("rename 12e Compagnie d'Ordinance to 12e Ost des Territoires
+Orientale (or whatever the correct term would be,) and have them start the game stationed in Concorde. Also, except for
+the Oriental troops (who should remain motorized) and the 1e and 2e divisions (who should remain armored,) the rest of
+the starts units should be mechanized"), and Kalaistan ("make Kalaistan's official name "the Kingdom of Kalaistan,"
+rather than republic. They should remain authoritarian. Give Kalaistan the national spirit "The King in Chains"").
+- **Rouental's 13 groups** (`pdn_tools.py join`, each a pair of one-province states): twelve states joined their
+  neighbour, one province each now: Élan into Cylône, Brochets into Erdoine, Chantelleux into Chattanay, Verrie into
+  Stofflet, Focislar into Vesontio, Gourdelle into Vinterre, Gironte into Valenmont, Friere into Quebelle, Frélogne into
+  Spreivald, Prèsloin into Poitevallée, Lugunica into Karsten, Pénombre into Petit Crépuscule; and Rochejaquelein into
+  **Jourdain et Moterre**, "One state with two provinces and two cities, Jourdain in the North, Moterre in the South"
+  (`nations.CITIES`: Jourdain keeps its page's 15 victory points, moved there from Elbée where the page had it; Moterre
+  5). Rouental has 165 states. Their populations are summed in its Gazetteer facts. The releasables follow the land:
+  Focislar's land, Carcarelle's, is the Rivage d'Argent's now (Vesontio); the others stayed with the same releasable.
+  The way back: `work/pre_groups_1021/` (the map before) or the commit before this one.
+- **South and North Montvallée** in place of Terres Séparées (`source/governorates_ROU.json`, `split`): two strategic
+  regions, the Association's members in them by tag (Hollier, Evriches and Seigne in the south with Serpette and Chirac;
+  Selgrave, Lustiana and Lanzerac in the north with Moelle, Maïeul, Sérieux and Petit Selgrave). Their states' panels
+  still say "Governorate of Terres Séparées" (one governorate, two regions). The Vale of Reibonne's region keeps
+  Guedelon and the island Brillagne, which no longer touch (an open question).
+- **Rêverie a Royal Fief**: eleven now, the capital first (`nations.ROYAL_FIEFS`); its state panel says so.
+- **The Royal Host**: the 1e and 2e Division Blindée de la Garde armoured, the nine Divisions Royales mechanized, the
+  12th, **12e Ost des Territoires Orientaux** ("Orientaux": territoire is masculine), motorized and in Concorde et
+  Volonté.
+- **Kalaistan** KLS: "the Kingdom of Kalaistan" (Authoritarian still, its Military Junta); the national spirit **The
+  King in Chains** (`nations.FEUDAL_ARMY`'s file, the placeholder icon of the Feudal Army), with the author's text, no
+  effects yet.

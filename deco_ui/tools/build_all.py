@@ -21,6 +21,7 @@ STAGES = [
      "make_leadergroups.py", "make_mapviews.py", "make_events.py", "make_research.py", "make_setup.py",
      "make_popups.py",                                       # v0.10.2: the release dialog's text above its checkboxes
      "make_music.py",                                        # 2026-10-19: the music player's station box
+     "make_buttons.py",                                      # 2026-10-21: the commander pickers' and load window's buttons
      "make_panel_pictures.py",                               # v0.11: the side panels' own pictures
      "make_insignia.py"],                                    # 2026-10-20: the army insignias' frame count
     ["validate_preview.py"],                                 # the checks, before any preview

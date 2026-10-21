@@ -17,7 +17,9 @@ mod has removed. Stand-ins keep that quiet (error.log of 2026-10-14):
     loaded files refer to (1,142 lines: the mod switches vanilla's decisions off);
   - history_stubs(): a history file for each of Earth's 364 country tags, which stay defined
     because vanilla's technologies, peace conference, AI and achievements name them (728
-    lines of "is missing a history file").
+    lines of "is missing a history file");
+  - EARTH_FLAGS: plain 32-bit flags in place of two of Earth's the game loads for those tags and
+    reads badly (error.log of 2026-10-21).
 """
 import re
 from pathlib import Path
@@ -255,6 +257,14 @@ def history_stubs(capital):
             "set_popularities = {\n\tdemocratic = 0\n\tfascism = 0\n\tcommunism = 0\n\tneutrality = 100\n"
             "\ttheocracy = 0\n}\n")
     return out
+
+
+# Earth's flags the base game ships at a pixel depth its own loader complains of (the author's error.log, 2026-10-21:
+# "Error loading country flag overlay: gfx/flags/CSA_neutrality.tga : Unexpected pixel depth" for the Confederacy's 16-bit
+# flag, and a "slow to read format" warning for Scotland's 24-bit one): the tags stay defined (history_stubs), so the
+# game loads their flags when a game starts. build_mod.py writes a plain grey 32-bit flag in their place, in each size;
+# neither country is ever on Valsora's map.
+EARTH_FLAGS = ("SCO_neutrality", "CSA_neutrality")
 
 
 def defines():

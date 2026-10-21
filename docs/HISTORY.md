@@ -10,6 +10,18 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-21, later still (the author's province groups from the grouping map, their notes on the build, screenshots of
+  the commander pickers, the load window and the declare war window, an error.log from a war): **Rouental's 13
+  groups** (`pdn_tools.py join`, new: twelve pairs of states one state and one province, Jourdain et Moterre one state of
+  two provinces with a city each, `nations.CITIES`); **South and North Montvallée** for Terres Séparées
+  (`governorates.py`: a governorate's `split`); **Rêverie a Royal Fief**; **the Royal Host** mechanized but the two
+  armoured divisions and the 12th, Ost des Territoires Orientaux, motorized in Concorde; **Kalaistan** the Kingdom, with
+  the spirit The King in Chains (`docs/NATIONS.md`). The Gazetteer takes **national spirit requests**, republished.
+  **The Deco UI v0.12.3** (`deco_ui/docs/VERSIONS.md`): the commander pickers' foot buttons whole, the load and save
+  windows' Back and Load apart, the declare war window with the battle screen's crossed swords. **error.log**: the base
+  game's 16- and 24-bit flags of Earth's Confederacy and Scotland replaced by plain 32-bit stand-ins
+  (`vanilla_parts.EARTH_FLAGS`), and `check_mod.py` fails on any flag that isn't 32-bit (mutation-tested). The map
+  10-21-3. The build: 21,136 provinces (20,748 land), 62,322 borders (3,214 free), 3,300 states, 206 strategic regions.
 - 2026-10-21, later (the author's answers and screenshots: the Army HQ card's broken gilt, the Royal Host below Elite,
   the diplomacy tab's focus icons): **the Deco UI v0.12.2** (`deco_ui/docs/VERSIONS.md`): the 26 side panel pictures
   that were traced from the game's art (the cause of the "weird sloppy lines and missing pieces of the design") drawn
