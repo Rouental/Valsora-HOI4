@@ -24,7 +24,7 @@ the Valsora Deco UI (`deco_ui/`). The Gazetteer, a web site, lets the author's f
   `deco_ui/docs/VERSIONS.md`); `docs/WORKFLOW.md`: how a map update goes, and what makes it faster for both sides;
 - proposals waiting for the author: `docs/TECH_TREE_2036.md`, `docs/BORDER_LIMIT.md`,
   `deco_ui/art/proposals/`, the larger flags' test version (`docs/HD_FLAGS_TEST.md`); plans: `docs/ROUENTAL_ARMY.md`,
-  `docs/CIVIL_WAR_NOTES.md`.
+  `docs/CIVIL_WAR_NOTES.md`, `docs/ROUENTAL_ESTATES.md` (the three estates in place of the three powers, 2026-10-22).
 
 ## Layout
 
