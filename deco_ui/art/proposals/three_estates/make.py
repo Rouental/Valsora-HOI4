@@ -11,6 +11,7 @@ we can tie things to Serelle winning battles, that'd be great. But otherwise it'
 Three screens:
   three_estates_window.png       1 June 2036: the estates in balance, Royal Authority rising, the Court behind Roland,
                                  the Promised Reforms running; Divide and Rule hovered
+  three_estates_window_inside.png  the same June, each estate's symbol inside its corner of the triangle
   three_estates_lords_realm.png  1 March 2037: the Second Estate over 60, the Lords' Realm: Royal Authority falling, the
                                  Court behind Serelle, the governorates under 40 that would break away
   three_estates_zones.png        the seven zones, Royal Authority and the Court's favour (a sheet for the author)
@@ -189,6 +190,9 @@ SCREENS = {
                         trail=[(32, 36, 32), (30, 40, 30), (28, 46, 26), (27, 51, 22), (25, 56, 19), (24, 60, 16),
                                (23, 63, 14)]),
 }
+# the same June as the first, the symbols inside the triangle's corners (the author: "maybe make a mockup showing what
+# it'd look like if the symbols were in the triangles, rather than off to the side")
+SCREENS["window_inside"] = dict(SCREENS["window"], inside=True)
 
 
 def divide(shares):
@@ -221,6 +225,52 @@ def corners_of(T, shares):
         out += box(cx - 5, cy + r - 6, 10, 10, f"transform:rotate(45deg);background:{rgba(col, 1)};box-shadow:0 0 0 1.5px #16110A")
         out += label(tx, cy - 24, ESTATES[k][0], 10, LABEL, w=190, align=al)
         out += text(tx, cy - 9, str(share), 34, rgba(col, 1) if k != "first" else "#F4ECD9", w=190, align=al, font="fed")
+    return out
+
+
+def triangle(T, zone, trail, ghost, inside=False):
+    """the three powers' triangle drawn with the estates; inside, without the corners' names (their symbols are there)"""
+    if not inside:
+        return TP.triangle(T, zone, trail, ghost)
+    keep = TP.LABEL_AT
+    TP.LABEL_AT = {k: v for k, v in LABEL_AT.items() if k not in ORDER}
+    try:
+        return TP.triangle(T, zone, trail, ghost)
+    finally:
+        TP.LABEL_AT = keep
+
+
+def marker(T, shares):
+    """the balance's marker (the three powers' diamond), drawn again over anything laid on the triangle"""
+    x, y = T.at(*shares)
+    d = TP.diamond_path
+    return (f'<svg class="a" style="left:0;top:0;overflow:visible" width="1" height="1">'
+            f'<path d="{d(x, y, 13)}" fill="rgba(241,220,156,.18)"/>'
+            f'<path d="{d(x, y, 9)}" fill="#E8CD84" stroke="#16110A" stroke-width="1.4"/>'
+            f'<path d="{d(x, y, 4)}" fill="#16110A"/></svg>')
+
+
+def corners_inside(T, shares):
+    """each estate's symbol in its corner of the triangle (the corner zone, which has the triangle's own shape: the
+    symbol on its centre); outside the corners the estate, its zone's name and its share, no medallions"""
+    out = ""
+    n = 80
+    for k, share in zip(ORDER, shares):
+        pts = [T.at(*p) for p in ZONES[k]["pts"]]
+        cx, cy = sum(x for x, _ in pts) / 3, sum(y for _, y in pts) / 3
+        out += (f'<div class="a" style="left:{cx - n / 2:.1f}px;top:{cy - n / 2:.1f}px;'
+                f'filter:drop-shadow(0 1px 2px rgba(0,0,0,.7))">{SY.symbol(k, n)}</div>')
+        x, y = corner(T, k)
+        col = rgba(ESTATES[k][2], 1) if k != "first" else "#F4ECD9"
+        if k == "first":                     # centred above the apex
+            tx, al, ty = x - 120, "center", y - 76
+        elif k == "second":                  # under the bottom corners, clear of the bottom edge's name
+            tx, al, ty = x - 10, "left", y + 34
+        else:
+            tx, al, ty = x + 10 - 240, "right", y + 34
+        out += label(tx, ty, ESTATES[k][0], 10, LABEL, w=240, align=al)
+        out += text(tx, ty + 13, ZONES[k]["name"], 11.5, CREAM2, w=240, align=al, font="bod", weight=500)
+        out += text(tx, ty + 27, str(share), 30, col, w=240, align=al, font="fed")
     return out
 
 
@@ -439,8 +489,8 @@ def window_screen(which):
         ghost = tuple(v + sh.get(k, 0) for k, v in zip(ORDER, shares))
     body += label(LX, Y0 + 62, S["date"], 10, LABEL)
     body += text(LX, Y0 + 77, "The Crown above the estates.", 12.5, CREAM2, w=220, font="bod", weight=500)
-    body += TP.triangle(T, zone, S["trail"], ghost)
-    body += corners_of(T, shares)
+    body += triangle(T, zone, S["trail"], ghost, S.get("inside"))
+    body += corners_inside(T, shares) + marker(T, shares) if S.get("inside") else corners_of(T, shares)
     b, y = zone_plate(Y0 + 618, zone)
     body += b
     if S.get("mission"):

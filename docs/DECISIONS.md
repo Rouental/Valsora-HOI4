@@ -206,6 +206,7 @@ Moved out of `CLAUDE.md` word for word on 2026-10-17 (`CLAUDE.md` keeps one line
   text the player sees says Généralité ("Généralité of Couronneterre", "The Généralités of Rouental", "every
   généralité's loyalty"; "of", not "de", so no name needs its French article); the code, the files and these notes
   keep "governorate" (`governorates.py`, `source/governorates_ROU.json`, `ROU_gov_*`). Their heads are still governors.
+  The French form (de, du, de la ...) waits (the author, the same day: "We can wait to figure out Généralité de / du / whatever for all of them, Im probably going to rename most of them so they don't reuse the names of one of their territories"): "Généralité of X" until the author renames them.
 - **Rouental's governorates are shown first, played later** (author, 2026-10-21: "They should be shown, and will
   eventually affect play. They'll hook into the levy system, with your relationship with the governorates affecting
   manpower in their provinces and the quality of their levies"; "for now they should be the strategic regions, and

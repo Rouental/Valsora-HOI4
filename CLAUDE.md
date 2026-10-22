@@ -119,7 +119,7 @@ New detail goes into those files; this one gets a line.
   rough patches until the author draws the Governorate Lines) are its strategic regions (`scripts/governorates.py`;
   Terres Séparées two, South and North Montvallée, 2026-10-21), and the state panel says each state's governorate and
   "Royal Fief" for the eleven, Rêverie among them (`build_mod.state_lines`). In the game they are **Généralités** (author,
-  2026-10-22: "Let's go with Généralité for the name of the districts": "Généralité of X"); the code and files keep
+  2026-10-22: "Let's go with Généralité for the name of the districts": "Généralité of X" until the author renames them, de / du later); the code and files keep
   "governorate".
 - **Rouental's states are its fiefs** (author, 2026-10-20: "Let's go with the 30 pixel version"): the author's fief map
   `source/Rouental Fiefs.pdn` read onto the game map by `fief_states.py` (each fief of 30 game px a state, the smaller

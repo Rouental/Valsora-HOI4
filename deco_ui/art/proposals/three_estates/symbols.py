@@ -71,7 +71,9 @@ def crown(x, y, w, gem):
 
 def second():
     """three crowns in a triangle, two and one (as heraldry sets three charges): red and blue above, green below"""
-    w, gap = 84, 20                       # the gap between the two above, and between them and the one below
+    # the gap between the two above, and between them and the one below (the author: "space out the three crowns a
+    # little more evenly", then "Spread the crowns out a little more")
+    w, gap = 80, 30
     h = w * .4
     top = 100 - h - gap / 2
     return (crown(100 - gap / 2 - w, top, w, "red") + crown(100 + gap / 2, top, w, "blue")

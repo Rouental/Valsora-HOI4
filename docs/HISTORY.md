@@ -13,7 +13,7 @@ states and countries came next.
 - 2026-10-22, later still: the districts are **Généralités** in the game (the author: "Let's go with Généralité for the
   name of the districts"): the window, the decisions category, the state panel's line ("Généralité of X"), the loyalty
   modifier; the code keeps "governorate". The three estates' symbols as the author wants them (the rogacina alone,
-  three crowns two and one with a red, a blue and a green gem, evenly spaced; the sheaf bound with a key).
+  three crowns two and one with a red, a blue and a green gem, evenly spaced, then spread further; the sheaf bound with a key), and a second window with the symbols inside the triangle's corners (`three_estates_window_inside.png`). The généralités' French forms (de, du) wait for the author's renames.
 - 2026-10-22, later still: Rouental "The Sacred Principality of Rouental" under every government but the communist
   (the author: "Cultural and religious intertia is just too strong for anything else"); the three estates planned in
   place of the three powers (`docs/ROUENTAL_ESTATES.md`) and mocked up (`deco_ui/art/proposals/three_estates/`: the

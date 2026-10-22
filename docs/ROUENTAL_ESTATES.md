@@ -74,9 +74,11 @@ slightly more ornamented version of this? One with a red gem, one with blue, one
 prefer the wheat and key." So: the rogacina alone; three crowns two and one after the author's picture of a crown,
 ornamented, red, blue and green; the sheaf bound with a key.
 
+Then: "space out the three crowns a little more evenly", and "Spread the crowns out a little more I suppose ... Also, maybe make a mockup showing what it'd look like if the symbols were in the triangles, rather than off to the side." The crowns are 30 px apart now (on the 200 px drawing), and `three_estates_window_inside.png` puts each symbol inside its corner zone, the estate's name, zone and share outside it.
+
 ## Open
 
-
+- Symbols beside the triangle, in medallions, or inside its corners (the two windows of the mockup).
 - The Third Estate's champion (the author's to name), and whether the reformer and the secret communist are one person.
 - The mockup's placeholders (the zones, Royal Authority's numbers, the scale's bonuses, the decisions, the breaking
   line at loyalty 40).
