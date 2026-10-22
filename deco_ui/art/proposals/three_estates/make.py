@@ -14,6 +14,9 @@ Three screens:
   three_estates_lords_realm.png  1 March 2037: the Second Estate over 60, the Lords' Realm: Royal Authority falling, the
                                  Court behind Serelle, the governorates under 40 that would break away
   three_estates_zones.png        the seven zones, Royal Authority and the Court's favour (a sheet for the author)
+  three_estates_symbols.png      the estates' symbols large, and the Third Estate's three candidates
+The estates are shown by their symbols, not their holders' portraits (the author: "Instead of portraits, I think I'd
+prefer to use symbols for the three estates": symbols.py).
 Not in the mod; the zones' names and effects, the decisions, Royal Authority's bands and every number but the start
 are placeholders; the Third Estate's champion is the author's to name.
 
@@ -28,8 +31,10 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HERE, "..", "next_screens"))
 sys.path.insert(0, os.path.join(HERE, "..", "governorates"))
 from deco import (CREAM, CREAM2, GILT, LABEL, NEG, POS, backdrop, band, box, close_browser, fade_rule, header,  # noqa: E402
-                  label, lit_bar, bar, note, portrait, render, silhouette, text, title, tooltip, value, well, window)
+                  label, lit_bar, bar, note, portrait, render, text, title, tooltip, value, well, window)
 import realm as RM  # noqa: E402  (the governorates' placeholder estates)
+sys.path.insert(0, HERE)
+import symbols as SY  # noqa: E402  (the estates' symbols, in place of their holders' portraits)
 
 
 def load(name, path):
@@ -220,10 +225,13 @@ def corners_of(T, shares):
 
 
 def picture(k, w, h):
-    pic = HOLDERS[k][2]
-    if not pic:
-        return silhouette(0, 0, w, h)          # the Third Estate's champion: the author's to come
-    return portrait(pic, 0, 0, w, h, "object-position:50% 20%")
+    """the estate's symbol on its ground (the author, 2026-10-22: "Instead of portraits, I think I'd prefer to use
+    symbols for the three estates"): the Third Estate's the beehive, the first of Claude's candidates"""
+    a, b = SY.GROUNDS[k]
+    n = min(w, h)
+    return (f'<div style="position:absolute;left:0;top:0;width:{w}px;height:{h}px;'
+            f'background:radial-gradient(circle at 50% 42%,{a},{b} 78%)"><div style="position:absolute;left:{(w - n) / 2}px;'
+            f'top:{(h - n) / 2}px">{SY.symbol(k, n)}</div></div>')
 
 
 def estate_cards(y, shares, since, mission=None):
@@ -520,12 +528,49 @@ def zones_sheet():
     return body, w, h
 
 
+def symbols_sheet():
+    """the three symbols large in the corners' medallions, the Third Estate's candidates under them"""
+    w, h = 1300, 980
+    body = box(0, 0, w, h, "background:#0B1014")
+    body += window(16, 16, w - 32, h - 32)
+    body += header(22, 22, w - 44, 44, "The Three Estates: their symbols", 22)
+    lines = {"first": ("A golden rogacina issuant from a cauldron", "The symbol of the faith (the author's), over the "
+                       "cauldron's mouth"),
+             "second": ("Three crowns pierced by a sword", "The author's: the crowns gold, the sword steel"),
+             "third": ("A beehive", "No symbol yet: Claude's first choice of the three below")}
+    for i, k in enumerate(ORDER):
+        cx, cy = 240 + i * 410, 270
+        body += TP.octo(cx, cy, 140, picture(k, 276, 276))
+        body += box(cx - 9, cy + 131, 18, 18, f"transform:rotate(45deg);background:{rgba(ESTATES[k][2], 1)};"
+                    "box-shadow:0 0 0 2px #16110A")
+        body += label(cx - 190, cy + 168, ESTATES[k][0], 11, LABEL, w=380, align="center")
+        body += title(cx - 200, cy + 186, lines[k][0], 14.5, w=400, align="center", track=.06)
+        body += text(cx - 190, cy + 214, lines[k][1], 13, CREAM2, w=380, align="center", font="bod", weight=500)
+    y = 540
+    body += label(60, y, "The Third Estate: three candidates", 10, GILT) + fade_rule(330, y + 5, w - 60)
+    for i, (key, name, why) in enumerate(SY.THIRD):
+        cx = 240 + i * 410
+        a, b = SY.GROUNDS["third"]
+        body += (f'<div class="a" style="left:{cx - 100}px;top:{y + 30}px;width:200px;height:200px;'
+                 f'background:radial-gradient(circle at 50% 42%,{a},{b} 78%);box-shadow:0 0 0 1px rgba(201,165,90,.6)">'
+                 f'{SY.symbol(key, 200)}</div>')
+        for top, n in ((y + 30, 38), (y + 78, 76)):   # at the sizes the window shows them
+            body += (f'<div class="a" style="left:{cx + 116}px;top:{top}px;width:{n}px;height:{n}px;'
+                     f'background:radial-gradient(circle at 50% 42%,{a},{b} 78%);box-shadow:0 0 0 1px rgba(201,165,90,.5)">'
+                     f'{SY.symbol(key, n)}</div>')
+        body += title(cx - 190, y + 250, name, 16, w=380, align="center", track=.08)
+        body += text(cx - 190, y + 276, why, 12.5, CREAM2, w=380, align="center", font="bod", weight=500, lh=1.3)
+    return body, w, h
+
+
 def main():
     outs = []
     for which in SCREENS:
         outs.append(render(window_screen(which), os.path.join(HERE, f"three_estates_{which}.png")))
     body, w, h = zones_sheet()
     outs.append(render(body, os.path.join(HERE, "three_estates_zones.png"), w=w, h=h))
+    body, w, h = symbols_sheet()
+    outs.append(render(body, os.path.join(HERE, "three_estates_symbols.png"), w=w, h=h))
     close_browser()
     print("\n".join(outs))
 

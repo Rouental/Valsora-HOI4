@@ -13,6 +13,7 @@ mockup." The plan and the author's words in full: `docs/ROUENTAL_ESTATES.md`.
 |---|---|
 | `three_estates_window.png` | 1 June 2036. The politics screen with the Three Estates' button where the three powers' sits, and its window. The triangle: the First Estate (the clergy, Anserra IX) at the top, the Second (the nobility, Tara Blanchart) bottom left, the Third (the commons, their champion to be named) bottom right; the marker in the Balance of Estates. Beside it: the estates, the Crown (Royal Authority 35 and rising; whom the Court follows, Roland 62, his diplomatic bonuses), the decisions, the estates' leanings. Under the triangle the Promised Reforms running (212 days left). Divide and Rule hovered: the strongest estate gives ground |
 | `three_estates_lords_realm.png` | 1 March 2037. The Second Estate at 63: the Lords' Realm. Royal Authority 12 and falling; the Court behind Serelle (her army bonuses); in place of the decisions, the realm's map with the five governorates under 40 loyalty that would break away, numbered on their seals |
+| `three_estates_symbols.png` | The three estates' symbols, in place of their holders' portraits (the author: "Instead of portraits, I think I'd prefer to use symbols for the three estates. A golden rogacina issuant from a cauldron for the First Estate (the symbol of the faith,) three crowns pierced by a sword for the second estate, and I don't know what the third estate could use"): the rogacina traced from the author's picture, rising from a bronze cauldron; three gold crowns on a steel sword; for the Third Estate three candidates, a beehive (in the screens), a sheaf of wheat bound with a key, a mural crown with wheat; each at the sizes the window draws them |
 | `three_estates_zones.png` | A sheet for the author: the seven zones, where each begins, what each does and where it leads; Royal Authority's bands and how it moves; what Roland and Serelle each give when they lead |
 
 **How it reads.** The three estates' shares make 100, so the balance is one point in the triangle. An estate of 60 or
@@ -43,6 +44,10 @@ step, as the governorates' loyalty bar), moved monthly by the zone (`on_monthly_
 decision (`days_mission_timeout`, its `timeout_effect` the uprising); the Lords' Realm releases the governorates under
 the line as subjects of a level of the mod's own (the base game's `autonomy_integrated_puppet` asks for a DLC and bars
 a fascist overlord with a fascist subject), each won back by a decision.
+
+The estates are shown by their symbols (`symbols.py`, drawn by hand as SVG: the rogacina from the author's picture;
+the cauldron, the crowns and sword and the Third Estate's candidates Claude's), on a dark ground in each estate's colour,
+in the corners' medallions and the estates' cards; their holders' names stay in the cards.
 
 How they are made: `make.py` draws with the pieces of `../next_screens/deco.py` and the three powers' mockup (its
 triangle and politics screen, given the estates), the realm's map from `scripts/rouental_realm.py`.

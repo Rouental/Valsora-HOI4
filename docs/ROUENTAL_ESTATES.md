@@ -63,7 +63,15 @@ focuses are not done when it runs out, the uprising follows.
 "Go ahead with the mockup": `deco_ui/art/proposals/three_estates/` (its README has what is the author's and what is
 Claude's placeholder).
 
+**Symbols, not portraits** (the author, the same day): "Instead of portraits, I think I'd prefer to use symbols for
+the three estates. A golden rogacina issuant from a cauldron for the First Estate (the symbol of the faith,) three crowns
+pierced by a sword for the second estate, and I don't know what the third estate could use." Drawn for the mockup
+(`deco_ui/art/proposals/three_estates/symbols.py`, the rogacina traced from the author's picture); for the Third Estate
+three candidates of Claude's: a beehive, a sheaf of wheat bound with a key, a mural crown with wheat.
+
 ## Open
+
+- The Third Estate's symbol: the beehive in the mockup, or the sheaf and key, or the mural crown, or the author's own.
 
 - The word for the governorates: the author asks whether French has a better one (Claude's suggestions in the chat of
   2026-10-22: *gouvernement*, the old French provinces' own; *généralité*, the Crown's districts under an intendant).
