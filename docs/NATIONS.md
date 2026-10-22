@@ -877,5 +877,15 @@ Guedelon's Council of 6, the executive body." Guedelon's ruler (`GDN_leader_lord
 the **Council of Six** now, as Krionik's is its Council of Marshals (`nations.NAMED_LEADERS`; the generated Jacques
 Anthoine before), its portrait the author's symbol, a gold griffin with a sword on blue, six rings round it
 (`source/portraits/gdn_council_of_six.png`, centred on the dark field as Krionik's emblem). The name written out ("Council
-of Six" for the author's "Council of 6") is Claude's. Two more versions wait for the author, the symbol in a lettered
-ring (CONSEIL DES SIX or COUNCIL OF SIX, and GUEDELON): `dist/portrait_proposals/guedelon_council_of_six/`.
+of Six" for the author's "Council of 6") is Claude's. Two more versions waited for the author, the symbol in a lettered
+ring (CONSEIL DES SIX or COUNCIL OF SIX, and GUEDELON): the author took B, with a new symbol (below).
+
+## 2026-10-22, later still: the Conseil des Sept
+
+The author: "One revision, I'm changing the logo to this and making it the Council of Seven (in french, obviously.)
+Redo option B with this logo, send it to me in a format that'll work to put in the gazeteer, and I'll do it myself so
+you don't have to generate a new build until i send the next gazeteer update." Guedelon's council has seven members
+and a new symbol, seven shields round the griffin (`source/portraits/gdn_council_of_seven.png`); its portrait is version
+B with it, CONSEIL DES SEPT and GUEDELON in the ring (`dist/portrait_proposals/guedelon_council/gazetteer_portrait.png`,
+468 x 630 for the Gazetteer). The author puts it and the ruler's name on Guedelon's Gazetteer page; the build keeps the
+Council of Six until that export is imported, then its `NAMED_LEADERS` and `PORTRAITS` entries for Guedelon go.

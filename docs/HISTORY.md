@@ -10,6 +10,9 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-22, later still: Guedelon's council the **Conseil des Sept**, a new symbol (seven shields): its portrait
+  version B with it, for the author to put on the Gazetteer (`dist/portrait_proposals/guedelon_council/`); no build
+  (the author: "I'll do it myself so you don't have to generate a new build until i send the next gazeteer update").
 - 2026-10-22, later: Rochemont and Bérault Couronneterre's too (the author: "spelling is Couronneterre"); Guedelon's
   ruler the **Council of Six**, its portrait the author's symbol of the council, as Krionik's Council of Marshals (two
   versions in a lettered ring waiting: `dist/portrait_proposals/guedelon_council_of_six/`).

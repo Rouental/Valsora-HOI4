@@ -1403,7 +1403,8 @@ PORTRAITS = {
     # side, so it sits centred on PORTRAIT_BG, 92 % of the portrait's width
     "KRI_council_of_marshals": ("source/portraits/kri_council_of_marshals.png", -130, -694, 3260, None),
     # the author's symbol of Guedelon's Council of Six (2026-10-22), as Krionik's: its disc 92 % of the width
-    # (dist/portrait_proposals/guedelon_council_of_six/: A; B and C, in a lettered ring, wait for the author)
+    # (version A; the author took B with a new symbol, the Conseil des Sept, for their Gazetteer page, 2026-10-22:
+    # dist/portrait_proposals/guedelon_council/; this entry and the NAMED_LEADERS one go at that import)
     "GDN_council_of_six": ("source/portraits/gdn_council_of_six.png", -18, -110, 535, None),
     # the author's (2026-10-08): Leithanien's is already portrait-shaped; Terreich's a photo
     "LTH_helmut_shulz": ("source/portraits/helmut_shulz.png", 0, 0, 267, None),
