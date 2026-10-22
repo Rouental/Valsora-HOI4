@@ -4,20 +4,16 @@ or the cards.
 
     CHROMIUM_PATH=/opt/pw-browsers/chromium python3 dist/teasers/vale_of_reibonne/portraits.py   (after a build)
 
-Writes beside this file portraits_vanilla.png and portraits_plain.png (the two backdrops, in the teaser's arch) and
-portraits_frames.png (the pictures as they are, the top row in the diplomacy screen's octagon, the bottom row in the
-politics screen's arch).
+Writes beside this file portraits_vanilla.png and portraits_plain.png (the two backdrops) and portraits_photo.png (the
+pictures as they are), each with the top row in the diplomacy screen's octagon and the bottom row in the politics
+screen's arch (the author: "Each collage should have the top four on the octagon, the bottom four in the arch").
 """
 import os
 
 import make
 
 H = 300                                  # a frame's height
-SHEETS = {
-    "vanilla": ("vanilla", {}),
-    "plain": ("plain", {}),
-    "frames": ("photo", make.FRAMES_TEST),
-}
+SHEETS = {"vanilla": "vanilla", "plain": "plain", "photo": "photo"}
 
 
 def sheet(name, kind, styles):
@@ -51,5 +47,5 @@ html, body {{ margin: 0; background: #0b1014; }}
 
 
 if __name__ == "__main__":
-    for name, (kind, styles) in SHEETS.items():
-        sheet(name, kind, styles)
+    for name, kind in SHEETS.items():
+        sheet(name, kind, make.FRAMES_TEST)
