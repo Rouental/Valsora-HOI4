@@ -856,3 +856,15 @@ picture for Tara, use this one"), and the Speaker of the Estates General in the 
 women are `gender = female` now ("I noticed that Serelle currently seems to be considered male"): Serelle Cahun and
 Mahaut VI and their copies at HMMLA and Brillagne, and Tara Blanchart; the Gazetteer takes a gender for every character.
 
+## 2026-10-22: the Terres Séparées' peoples; the Royal Fiefs in Couronneterre
+
+The author: "Serpette should be Evrichois culture, Chirac Hollieraine, Maieul Lustianaise, Petite Selgrave / Serieux
+Selgravois (or whatever would work best for Selgrave's culture), and Moelle creole." The governorates' window reads
+each state's people from `rouental_realm.STATE_PEOPLES` before the fief list's groups: Serpette Evrichois, Chirac
+Hollieraine, Maïeul Lustianaise (as it was), Petit Selgrave and Sérieux **Selgravois** (Claude's choice of the forms
+the author offered: French, as Evrichois and Hollieraine, rather than the country's adjective Selgravian, itself a
+guess), Moelle Creole. Their colours and loyalty (none either way) are Claude's.
+And: "Rouental Reverie Sainiters, Cournin, Brassard, Eislek, Jourdain et Moterre, Aurifort and Charmas (the fiefs) are
+technically still part of Couronterre, though in practice they are more bound directly to the crown that to the
+governorate." The build already had all eleven Royal Fiefs in Couronneterre (the spelling of the author's fief map
+kept); the window's Crown's Domain now says so. Rochemont and Bérault, not named, stay there until the author says.

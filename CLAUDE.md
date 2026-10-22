@@ -291,7 +291,10 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   Valsora Atlas (the build in a browser, a private Artifact: `docs/ATLAS.md`). Proposals made the same night, not in
   the mod: the tech tree's full mockup (`docs/tech_tree_mockup/`), a world map poster (`dist/posters/`), the Deco UI's
   next screens (`deco_ui/art/proposals/next_screens/`).
-- **Seen in game last** (2026-10-21, later): v0.12.2 and the build of 2026-10-21, later (the author's notes and
+- **Seen in game last** (2026-10-22): the governorates and the three powers, bare bones ("Looks great so far"): the
+  Open button's text barely readable on its gold, the map clicked only at the seals ("I can't click on Rivage d'argent
+  anywhere but the badge"), the marker out of place, the zone's text cut: all changed the same day, with the Terres
+  Séparées' peoples (`rouental_realm.STATE_PEOPLES`), not yet seen. Before that (2026-10-21, later): v0.12.2 and the build of 2026-10-21, later (the author's notes and
   screenshots): the governorate line works, the Royal Host Elite, the Army HQ cards work; the commander pickers' foot
   buttons cut off, the load window's Back and Load run together, the declare war window's emblem wanted as the battle
   screen's swords, two of Earth's flags in error.log: all changed in v0.12.3 and the build of 2026-10-21, later still,
@@ -309,8 +312,9 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
 - **Waiting on the author:** (`dist/open_questions.md`, 2026-10-21, later still; keep it in step) everything they had
   answered or held is in the mod (2026-10-20, their go-ahead; 2026-10-21, the governorates' names, the generic
   advisors, the Kufi in gold, HMMLA's Royal Fiefs, Rouental's groups, Montvallée, Rêverie, the Royal Host, Kalaistan).
-  New: the governorates' window and the three powers in game, bare bones (2026-10-21, night: what to see in game in
-  `docs/CONTENT.md`, Rouental; the zones' effects and the decisions still placeholders); the Vale of Reibonne's region left with Guedelon and Brillagne apart; whether the groups stay (the way back:
+  New: the governorates' window and the three powers in game, bare bones (2026-10-21, night, seen 2026-10-22: what to
+  see in game in `docs/CONTENT.md`, Rouental; the zones' effects and the decisions still placeholders); whether
+  Rochemont and Bérault are Couronneterre's in name too, as the nine Royal Fiefs the author named (2026-10-22); the Vale of Reibonne's region left with Guedelon and Brillagne apart; whether the groups stay (the way back:
   `work/pre_groups_1021/`, or the commit before them). Open: the strait crossings to add from the red ones
   (`dist/straits_map_red.png`); the old upload's tundra, jungle and desert marks ("I'll add those back in later");
   flags for Belekria's eight republics and state names (later, the author's); the region names (the drafts in the mod

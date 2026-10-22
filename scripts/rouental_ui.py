@@ -122,8 +122,49 @@ def save(name, img, frames=1, effect=None):
     return f"GFX_rou_{name}"
 
 
+def save_tile(name, img):
+    """a picture the game stretches to its element's size (a cornered tile without corners): the click areas"""
+    rel = f"{GFX}/{name}.dds"
+    (OUT / rel).parent.mkdir(parents=True, exist_ok=True)
+    write_dds(OUT / rel, np.asarray(img.convert("RGBA")))
+    SPRITES.append("\n".join(["\tcorneredTileSpriteType = {", f'\t\tname = "GFX_rou_{name}"', f'\t\ttexturefile = "{rel}"',
+                              "\t\tborderSize = { x = 0 y = 0 }", "\t}"]))
+    return f"GFX_rou_{name}"
+
+
 SPRITES = []
 BUTTON_FX = "gfx/FX/buttonstate.lua"
+HIT = 4                                          # the click areas' grain, window px
+
+
+def hit_rects(S, gov_of, royal):
+    """rectangles that tile the governorates at the window's scale, (x, y, w, h, governorate: 27 the Crown's): a cell
+    of HIT px goes to the governorate with most of it once Rouental has 30 % of it; a row's cells of one governorate
+    are one rectangle, and rows alike below one another one too"""
+    lut = {int(s): gov_of.get(int(s), 27 if int(s) in royal else 0) for s in np.unique(S)}
+    cls = np.vectorize(lut.get)(S)
+    MW, MH = S.shape[1] * U // 5, S.shape[0] * U // 5
+    win = cls[(np.arange(MH) * 5 // U)[:, None], (np.arange(MW) * 5 // U)[None, :]]
+    out, open_ = [], {}
+    for r, cy in enumerate(range(0, MH, HIT)):
+        row = []
+        for cx in range(0, MW, HIT):
+            n = np.bincount(win[cy:cy + HIT, cx:cx + HIT].ravel(), minlength=28)
+            row.append(0 if n[1:].sum() < .3 * n.sum() else int(np.argmax(n[1:])) + 1)
+        runs, c = [], 0
+        while c < len(row):
+            c0 = c
+            while c < len(row) and row[c] == row[c0]:
+                c += 1
+            if row[c0]:
+                runs.append((c0, c, row[c0]))
+        nxt = {run: open_.pop(run, r) for run in runs}
+        out += [(c0 * HIT, r0 * HIT, min(c1 * HIT, MW) - c0 * HIT, r * HIT - r0 * HIT, k) for (c0, c1, k), r0 in open_.items()]
+        open_ = nxt
+    rows = -(-MH // HIT)
+    out += [(c0 * HIT, r0 * HIT, min(c1 * HIT, MW) - c0 * HIT, min(rows * HIT, MH) - r0 * HIT, k)
+            for (c0, c1, k), r0 in open_.items()]
+    return sorted(out, key=lambda o: (o[1], o[0]))
 
 
 # ---------------------------------------------------------------- .gui pieces
@@ -428,9 +469,9 @@ def three_powers(write):
     kids += [text("rou_tp_where", 24, ZY, 536, 14, L("ROU_TP_WHERE", "Where the balance stands"), "label"),
              icon("rou_tp_zone_band", head, 24, ZY + 18),
              text("rou_tp_zone_name", 24, ZY + 26, 536, 22, "ROU_TP_BUTTON_ZONE", "head", fmt="center"),
-             text("rou_tp_zone_desc", 24, ZY + 62, 536, 36, L("ROU_TP_ZONE_DESC", "[GetRouTpZoneDesc]"), "italic",
+             text("rou_tp_zone_desc", 24, ZY + 60, 536, 40, L("ROU_TP_ZONE_DESC", "[GetRouTpZoneDesc]"), "italic",
                   fmt="center"),
-             text("rou_tp_zone_effects", 24, ZY + 100, 536, 36, L("ROU_TP_ZONE_EFFECTS", "[GetRouTpZoneEffects]"),
+             text("rou_tp_zone_effects", 24, ZY + 104, 536, 36, L("ROU_TP_ZONE_EFFECTS", "[GetRouTpZoneEffects]"),
                   "small", fmt="center")]
     # the right column: the holders, the decisions, the estates' leanings
     RX = 584
@@ -464,16 +505,18 @@ def three_powers(write):
     bxx, byy = TRI_B
     cxx, cyy = TRI_C
     coef = lambda v: f"{v / 100:.4f}"  # noqa: E731
+    # the marker's place in the window: the properties below set its x and y there, not in the triangle (in game,
+    # 2026-10-22: without the triangle's own place, TX and TY, the marker stood 24 px left and 118 px up)
     pos = ["set_variable = { rou_tp_mx = rou_prince }", f"multiply_variable = {{ rou_tp_mx = {coef(ax)} }}",
            "set_temp_variable = { tp_t = rou_voix }", f"multiply_temp_variable = {{ tp_t = {coef(bxx)} }}",
            "add_to_variable = { rou_tp_mx = tp_t }", "set_temp_variable = { tp_t = rou_speaker }",
            f"multiply_temp_variable = {{ tp_t = {coef(cxx)} }}", "add_to_variable = { rou_tp_mx = tp_t }",
-           f"subtract_from_variable = {{ rou_tp_mx = {MARK // 2} }}",
+           f"add_to_variable = {{ rou_tp_mx = {TX - MARK // 2} }}",
            "set_variable = { rou_tp_my = rou_prince }", f"multiply_variable = {{ rou_tp_my = {coef(ay)} }}",
            "set_temp_variable = { tp_t = rou_voix }", f"multiply_temp_variable = {{ tp_t = {coef(byy)} }}",
            "add_to_variable = { rou_tp_my = tp_t }", "set_temp_variable = { tp_t = rou_speaker }",
            f"multiply_temp_variable = {{ tp_t = {coef(cyy)} }}", "add_to_variable = { rou_tp_my = tp_t }",
-           f"subtract_from_variable = {{ rou_tp_my = {MARK // 2} }}"]
+           f"add_to_variable = {{ rou_tp_my = {TY - MARK // 2} }}"]
     zone_if = []
     order = [("rou_prince > 59.99", 1), ("rou_voix > 59.99", 2), ("rou_speaker > 59.99", 3), ("rou_speaker < 15", 4),
              ("rou_voix < 15", 5), ("rou_prince < 15", 6)]
@@ -685,7 +728,9 @@ def governorates(write):
     wd.polygon(chamfer_poly(0, 0, MW + 7, MH + 7, 6), fill=(*RULE, 200))
     well.paste(Image.fromarray(base.astype(np.uint8)), (4, 4))
     base_spr = save("gov_map", well)
-    # ---- each governorate's fill, one picture per loyalty band (only the one matching shows: a button, to be clicked)
+    # ---- each governorate's fill, one picture per loyalty band (only the one matching shows); not clicked: the game
+    # takes a button's whole box for it, and the boxes overlap (in game, 2026-10-22: "I can't click on Rivage d'argent
+    # anywhere but the badge"), so the clicks are hit_rects() below
     fills, overlays = [], []
 
     def cut(m):
@@ -700,8 +745,7 @@ def governorates(write):
 
     for g in govs:
         cov, ring, at_ = cut(np.isin(S, g["states"]))
-        sprites = [save(f"gov_{g['n']}_b{b + 1}", rgba_from(cov, c, .9), effect=BUTTON_FX)
-                   for b, c in enumerate(BAND_COLOURS)]
+        sprites = [save(f"gov_{g['n']}_b{b + 1}", rgba_from(cov, c, .9)) for b, c in enumerate(BAND_COLOURS)]
         overlays.append(save(f"gov_{g['n']}_sel", rgba_from(np.maximum(ring, cov * .32), HI)))
         fills.append((g, sprites, at_))
     cov, ring, crown_at = cut(np.isin(S, royal))
@@ -709,7 +753,7 @@ def governorates(write):
     crown = np.zeros((*cov.shape, 4), np.uint8)
     crown[..., :3] = np.where(hatch[..., None] > 0, np.array((201, 165, 90)), np.array((110, 86, 38)))
     crown[..., 3] = (cov * 235).astype(np.uint8)
-    crown_spr = save("gov_crown", Image.fromarray(crown), effect=BUTTON_FX)
+    crown_spr = save("gov_crown", Image.fromarray(crown))
     crown_sel = save("gov_crown_sel", rgba_from(np.maximum(ring, cov * .32), HI))
     # ---- the borders: states (dark), governorates (gilt), the realm (bright)
     big = np.repeat(np.repeat(S, U, 0), U, 1)
@@ -776,13 +820,20 @@ def governorates(write):
             icon("rou_gov_map", base_spr, MX, MY)]
     for g, sprites, (x0, y0) in fills:
         for b, spr in enumerate(sprites, start=1):
-            kids.append(button(f"rou_gov_{g['n']}_b{b}", spr, MX + 4 + x0, MY + 4 + y0, tooltip=f"ROU_GOV_{g['n']}_TT"))
-    kids.append(button("rou_gov_crown_fill", crown_spr, MX + 4 + crown_at[0], MY + 4 + crown_at[1], tooltip="ROU_GOV_27_TT"))
+            kids.append(icon(f"rou_gov_{g['n']}_b{b}", spr, MX + 4 + x0, MY + 4 + y0, transparent=True))
+    kids.append(icon("rou_gov_crown_fill", crown_spr, MX + 4 + crown_at[0], MY + 4 + crown_at[1], transparent=True))
     for g, spr in zip(govs, overlays):
         x0, y0 = next(f[2] for f in fills if f[0] is g)
         kids.append(icon(f"rou_gov_{g['n']}_sel", spr, MX + 4 + x0, MY + 4 + y0, transparent=True))
     kids.append(icon("rou_gov_crown_sel", crown_sel, MX + 4 + crown_at[0], MY + 4 + crown_at[1], transparent=True))
     kids.append(icon("rou_gov_lines", lines_spr, MX + 4, MY + 4, transparent=True))
+    # the click areas: rectangles that tile each governorate, under the seals
+    hits = hit_rects(S, gov_of, royal)
+    hit_spr = save_tile("gov_hit", Image.new("RGBA", (8, 8), (0, 0, 0, 1)))   # all but clear, in case the game skips a
+    for i, (x, y, w, h, n) in enumerate(hits, start=1):                       # clear pixel
+        kids.append(box("buttonType", f"rou_gov_hit_{i}", MX + 4 + x, MY + 4 + y,
+                        [f"size = {{ x = {w} y = {h} }}", f"spriteType = {q(hit_spr)}", f"pdx_tooltip = {q(f'ROU_GOV_{n}_TT')}",
+                         "clicksound = click_default"]))
     cap = next(s for s in royal if st[s]["name"] == "Rêverie")
     ys, xs = np.nonzero(R["S"] == cap)
     seals = [(g["n"], g["seal"][0], g["seal"][1]) for g in govs] + [(27, xs.mean() + .5, ys.mean() + .5)]
@@ -832,8 +883,11 @@ def governorates(write):
         text("rou_gov_state_men", 360, 3, 64, 18, L("ROU_GOV_STATE_MEN", "[?rou_manpower_k|0]k"), "small", fmt="right")])
     category = window("rou_gov_category_window", 0, 0, 520, 96, [
         text("rou_gov_cat_text", 10, 6, 500, 40, L("ROU_GOV_CAT_TEXT", "The Prince's governors keep what order they can "
-             "among the vassals of 26 governorates; the eleven Royal Fiefs are the Crown's own."), "italic"),
-        button("rou_gov_open_button", open_btn, 110, 52, L("ROU_GOV_OPEN", "Open the Map of the Realm"), F["button"])])
+             "among the vassals of 26 governorates; the eleven Royal Fiefs answer to the Crown."), "italic"),
+        # dark ink on the gold plate (the Deco fonts' K, as the politics screen's Head of State ribbon): the fonts' cream
+        # was barely readable on it (the author, 2026-10-22)
+        button("rou_gov_open_button", open_btn, 110, 52, L("ROU_GOV_OPEN", "§KOpen the Map of the Realm§!" if DECO_UI
+                                                           else "Open the Map of the Realm"), F["button"])])
 
     # ---- the scripts
     n_all = [g["n"] for g in govs]
@@ -947,12 +1001,10 @@ def governorates(write):
                  f"\t\t\trou_gov_act_demand_click_enabled = {{ {card_ok} NOT = {{ has_country_flag = rou_gov_act_cd }} }}",
                  f"\t\t\trou_gov_act_session_click_enabled = {{ {card_ok} has_political_power > 19.99 NOT = {{ has_country_flag = rou_gov_act_cd }} }}"]
     clicks = []
-    for g in govs:
-        body = f"set_variable = {{ rou_gov_sel = {g['n']} }} ROU_gov_select = yes"
-        clicks += [f"\t\t\trou_gov_{g['n']}_b{b}_click = {{ {body} }}" for b in range(1, 6)]
-        clicks.append(f"\t\t\trou_gov_{g['n']}_seal_click = {{ {body} }}")
-    crown_body = "set_variable = { rou_gov_sel = 27 } ROU_gov_select = yes"
-    clicks += [f"\t\t\trou_gov_crown_fill_click = {{ {crown_body} }}", f"\t\t\trou_gov_27_seal_click = {{ {crown_body} }}",
+    pick = lambda n: f"set_variable = {{ rou_gov_sel = {n} }} ROU_gov_select = yes"  # noqa: E731
+    clicks += [f"\t\t\trou_gov_{n}_seal_click = {{ {pick(n)} }}" for n in n_all + [27]]
+    clicks += [f"\t\t\trou_gov_hit_{i}_click = {{ {pick(n)} }}" for i, (_x, _y, _w, _h, n) in enumerate(hits, start=1)]
+    clicks += [
                "\t\t\trou_gov_close_click = { clr_country_flag = rou_gov_open add_to_variable = { rou_gov_dirty = 1 } }"]
     clicks += [f"\t\t\trou_gov_act_{k}_click = {{ ROU_gov_act_{k} = yes set_country_flag = {{ flag = rou_gov_act_cd days = 1 }} }}"
                for k in ("insp", "grant", "demand", "session")]
@@ -994,7 +1046,8 @@ def governorates(write):
     L("ROU_GOV_NONE", "The Realm")
     L("ROU_GOV_27_NAME", "The Crown's Domain")
     for key, field, crown_text, none in (("GetRouGovGovernor", "governor", "Held by the Prince", "Pick a governorate on the map"),
-                                         ("GetRouGovOrigin", "origin", "No governor and no estates: the Crown's own land", ""),
+                                         ("GetRouGovOrigin", "origin", "Of the Governorate of Couronneterre in name, bound to the Crown in "
+                                          "practice", ""),
                                          ("GetRouGovPeoples", "peoples", "The Crown's", "")):
         sl += ["defined_text = {", f"\tname = {key}"]
         sl.append(f"\ttext = {{ trigger = {{ check_variable = {{ rou_gov_sel = 0 }} }} localization_key = ROU_GOV_0_{field.upper()} }}")
@@ -1013,7 +1066,8 @@ def governorates(write):
                             for p, c in sorted(g["shares"].items(), key=lambda kv: -kv[1]))
         L(f"ROU_GOV_{g['n']}_PEOPLES", peoples)
         L(f"ROU_GOV_{g['n']}_TT", f"§Y{g['name']}§!: loyalty [?rou_gov_{g['n']}_loyalty|0]. Click to see it.")
-    L("ROU_GOV_27_TT", "§YThe Crown's Domain§!: the eleven Royal Fiefs. Click to see them.")
+    L("ROU_GOV_27_TT", "§YThe Crown's Domain§!: the eleven Royal Fiefs, technically of the Governorate of "
+      "Couronneterre, though bound more to the Crown than to its governor. Click to see them.")
     sl += ["defined_text = {", "\tname = GetRouGovLoyalty",
            "\ttext = { trigger = { OR = { check_variable = { rou_gov_sel = 0 } check_variable = { rou_gov_sel = 27 } } } localization_key = ROU_GOV_LOYALTY_NONE }"]
     L("ROU_GOV_LOYALTY_NONE", "")

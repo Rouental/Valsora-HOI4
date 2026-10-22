@@ -609,6 +609,13 @@ Build order matters. `gen_fonts` runs first because `layout.py` measures strings
 - Used in v0.4 and **(assumed)**, from documentation, not yet seen working: `[?political_power|0]`,
   `[?party_popularity_100@ideology|0]`, `[ROOT.GetRulingParty]`, `[ROOT.GetLastElection]`. If one
   shows raw text or nothing in game, swap that cell's loc for another value.
+- **(in game, 2026-10-22, the Valsora build's `scripts/rouental_ui.py`)** a button is clicked anywhere in its box, its
+  picture's clear parts too: overlapping buttons shaped like regions on a map catch each other's clicks (the top one
+  wins). Tile the regions with rectangles instead (a button may take `size = { x y }` with a cornered tile sprite, as
+  the game's own `menubar.gui` does). A scripted GUI's `properties` x and y are the element's position in its parent
+  window (they replace its `position`). `properties` frame, `dynamic_lists` over an array with `change_scope = yes`
+  (its entries in each state's scope, `[This.GetName]` working), `context_type = decision_category` and a top-level
+  window over the map work.
 - Text colour codes `§X...§!` use the font's `textcolors` table. Each bitmap font in
   `valsora_deco_fonts.gfx` carries its own table, and we added `C = {92 160 170}`.
 - Ship localisation for all 9 languages (the generators write the English text into every

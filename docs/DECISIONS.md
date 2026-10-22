@@ -212,6 +212,12 @@ Moved out of `CLAUDE.md` word for word on 2026-10-17 (`CLAUDE.md` keeps one line
   disconnected region, it should instead be two regions. South Montvallée should encompass Hollier, Evriches, Seigne,
   Serpette, and Chirac. North Montvallée should encompass Selgrave, Lustiana, Lanzerac, Moelle, Maieul, Serieux, and
   Petit Selgrave"), one governorate; Rêverie is a Royal Fief too ("Reverie still needs to be marked as a royal fief").
+  The Royal Fiefs are Couronneterre's in name (author, 2026-10-22: "Rouental Reverie Sainiters, Cournin, Brassard,
+  Eislek, Jourdain et Moterre, Aurifort and Charmas (the fiefs) are technically still part of Couronterre, though in
+  practice they are more bound directly to the crown that to the governorate"; Rochemont and Bérault, the other two,
+  asked). The Terres Séparées' peoples (author, 2026-10-22): "Serpette should be Evrichois culture, Chirac
+  Hollieraine, Maieul Lustianaise, Petite Selgrave / Serieux Selgravois (or whatever would work best for Selgrave's
+  culture), and Moelle creole" (`rouental_realm.STATE_PEOPLES`).
 - **The governorates' screen, the design so far** (author, 2026-10-21, night; the mockups in
   `deco_ui/art/proposals/governorates/`): it opens as a larger window from the decisions tab ("Probably open as a
   larger window"), its map following the game's borders exactly ("Don't go with rough shapes"); no world map mode ("how

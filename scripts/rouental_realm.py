@@ -129,7 +129,18 @@ PEOPLES = {
     "Piscan": ("Piscan", "#5D8A84", 0, "Traders, fishermen and sailors of the Piscary sea"),
     "Lustianaise": ("Lustianaise", "#A86B7E", 0, ""),
     "Helvetican": ("Helvetica", "#9B8F7A", 10, "Isolated in their own little valley, extremely pious, generally loyal"),
+    # the neighbours' peoples in the Terres Séparées (the author, 2026-10-22; STATE_PEOPLES); colours Claude's
+    "Evrichois": ("Evrichois", "#C9A93E", 0, ""),
+    "Hollieraine": ("Hollieraine", "#A84A48", 0, ""),
+    "Selgravois": ("Selgravois", "#7E3A48", 0, ""),
+    "Creole": ("Creole", "#6E8A5A", 0, ""),
 }
+# states whose people is not their fief group's (the author, 2026-10-22: "Serpette should be Evrichois culture,
+# Chirac Hollieraine, Maieul Lustianaise, Petite Selgrave / Serieux Selgravois (or whatever would work best for
+# Selgrave's culture), and Moelle creole"): Selgravois rather than the country's adjective Selgravian (a guess of
+# Claude's), as French as the Evrichois beside it
+STATE_PEOPLES = {"Serpette": "Evrichois", "Chirac": "Hollieraine", "Maïeul": "Lustianaise",
+                 "Petit Selgrave": "Selgravois", "Sérieux": "Selgravois", "Moelle": "Creole"}
 ATTITUDE_MOD = {"Leal": 10, "Grasping": -5, "Belligerent": 0, "Quarrelsome": -5, "Pious": 0, "Proud": -10,
                 "Mercantile": 0, "Timorous": 5}
 
@@ -164,7 +175,7 @@ def peoples():
         if sid in R["royal"]:
             out[sid] = "Crown"
             continue
-        g = f2g.get(R["st"][sid]["name"])
+        g = STATE_PEOPLES.get(R["st"][sid]["name"]) or f2g.get(R["st"][sid]["name"])
         if g and g != "Royal Fiefs":
             out[sid] = g
     for sid in R["gov"]:

@@ -167,6 +167,8 @@ def governorates():
     cv = backdrop()
     w = window("rou_gov_window")
     def keep(nm):
+        if (nm or "").startswith("rou_gov_hit_"):          # the click areas: all but clear
+            return False
         m = re.match(r"rou_gov_(\d+)_b(\d)$", nm or "")
         if m:
             return band[int(m.group(1))] == int(m.group(2))

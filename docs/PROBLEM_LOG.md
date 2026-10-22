@@ -6,6 +6,34 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**The governorates' map clicked only at the seals** (2026-10-22, the author: "like you said, clicking doesn't quite work
+right. For example, I can't click on Rivage d'argent anywhere but the badge").
+- Cause: the game takes a button's whole box for it, not its picture's opaque part. Each governorate's fill was a
+  button the size of its box, and the boxes overlap (the Royal Fiefs', spread over the realm, drawn last, covered most
+  of the map), so a click went to whichever box was on top.
+- Fix: the fills are pictures (icons, click-through); the clicks are 680 rectangles that tile the governorates without
+  overlapping (`rouental_ui.hit_rects`: 4 px cells, each the governorate with most of it, merged along rows and down
+  them), nearly clear buttons sized by `size` on a stretched cornered tile, under the seals. Not a check: a
+  layout of our own, drawn and checked for overlaps when it is made.
+
+**The three powers' marker in the wrong zone** (2026-10-22, seen in the author's screenshot: at 40 / 35 / 25 the
+marker stood in Sacred Majesty, not the Unwritten Balance).
+- Cause: a scripted GUI's `properties` x and y replace the element's position in its window; the script worked the
+  marker's place out in the triangle's own coordinates, so it lost the triangle's place in the window (24, 118).
+- Fix: the script adds it (`rouental_ui.three_powers`). The previews had placed the marker the right way, so they
+  didn't show it.
+
+**The Open the Map of the Realm button barely readable** (2026-10-22, the author: "The text to open the governorate
+map is white on gold").
+- Cause: the button's plate is the gold one, and the Deco fonts draw cream.
+- Fix: the text in the fonts' dark ink (`§K`, as the politics screen's Head of State ribbon). The previews hadn't
+  drawn the category's window.
+
+**The three powers' zone description cut short** (2026-10-22, the author's screenshot: "(None over 60, none
+under...").
+- Cause: its box was 36 px for a font of 19 px lines, room for one line; the game's text needed two.
+- Fix: 40 px, two lines, the effects under it 4 px lower.
+
 **Serelle taken for a man** (2026-10-21, night, the author: "I noticed that Serelle currently seems to be considered
 male").
 - Cause: HOI4 takes a character without `gender = female` for a man, and none of the mod's characters had the line.

@@ -1,4 +1,4 @@
-# Open questions (2026-10-21, later still)
+# Open questions (2026-10-22)
 
 The author's answers of 2026-10-19 and 2026-10-20 are in the mod (the go-ahead: "go ahead with the rest of it, and all
 the other changes I had been holding back until now"): `docs/HISTORY.md`, 2026-10-20. Answered on 2026-10-21 and in the mod since: the governorates' names (29), the generic advisors (27), the Kufi
@@ -16,7 +16,8 @@ Rouental's groups (28: applied, `docs/NATIONS.md`, 2026-10-21, later still). Wha
 | 25 | the tech tree: "I'm not really ready to start with the tech tree in earnest yet" | `docs/TECH_TREE_2036.md` |
 | 32 | the Vale of Reibonne's strategic region: with Hollier, Evriches and Seigne in South Montvallée and Selgrave, Lustiana and Lanzerac in North Montvallée, it holds only Guedelon and the island Brillagne, which don't touch (a region may be in two pieces, but the AI plans by regions). Guedelon into its neighbour's region (Côte d'Ambre's), Brillagne into the sea's nearest land region, or leave it? | |
 | 34 | the governorates (`deco_ui/art/proposals/governorates/`): which heading of your fief list is the Vairande's (Vair is listed under Conflans) and the Riverlanders' (Conflans, the largest, is Claude's guess); the Lyrién and the Lustianaise; how loyal the Northmarchers, Southmarchers, Piscans and Recoltaise are (0 in the mockups) | your notes |
-| 35 | the three powers and the governorates, in game since 2026-10-21, night (bare bones): do they work? (the Governorates category: Open the Map of the Realm; the politics screen's Three Powers button; Rouental's Test Events: "Test: the Three Powers to the Next Zone"). Click inside a governorate: does it pick that one, or a neighbour (then the game clicks buttons by their rectangle, and the seals are the way)? The zones' names and effects and the decisions are still Claude's; the other five attitudes' sides later | in game |
+| 35 | the three powers and the governorates, in game since 2026-10-21, night (bare bones), seen 2026-10-22 ("Looks great so far"): the map's clicks redone (the game clicks a button by its box: now rectangles that tile each governorate), the marker in its place, the Open button's text dark. Click anywhere in a governorate: does it pick that one? The zones' names and effects and the decisions are still Claude's; the other five attitudes' sides later | in game |
+| 36 | the Royal Fiefs: you named nine as Couronneterre's in name (Rouental, Rêverie, Saintiers, Cournin, Brassard, Éislek, Jourdain et Moterre, Aurifort, Charmas). Rochemont and Bérault too? (they are in Couronneterre in the build now.) And Selgravois for Petit Selgrave and Sérieux, Creole for Moelle: as you want them? | ask |
 | 33 | the groups' way back: "Be prepared for the posibility of returning to how it currently is though": the map before them is kept (`work/pre_groups_1021/`, and the commit before) until you say they stay | |
 
 New to look at:

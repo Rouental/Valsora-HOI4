@@ -38,7 +38,9 @@ peoples' leanings the author gave, the estates' attitude, the governor, and chan
 four and Claude's four more: `realm.ATTITUDES`), levy quality (`realm.LEVY`, five rungs; a ceremonial corps a sidestep from them, `realm.CEREMONIAL`, the author's Blue Guard of Brume), which states the
 inspectors have seen, the reports. Real: the borders, the states and their names, manpower, the vassals' count, each
 state's people (the fief list's cultural group of the fief it is named for, by the author's names for them: Conflans as the Riverlanders is Claude's guess; 17 states named for no listed fief take
-their governorate's commonest, marked *), the Royal Fiefs, the Royal Host's stations.
+their governorate's commonest, marked *; since 2026-10-22 the author's peoples for six states of the Terres Séparées,
+`rouental_realm.STATE_PEOPLES`), the Royal Fiefs (Couronneterre's in name, the Crown's in practice: the author,
+2026-10-22), the Royal Host's stations.
 
 In game it would be a scripted GUI on a decision category (`context_type = decision_category`, the game's own way:
 `common/scripted_guis/_documentation.md`): the map as one picture a governorate (frames for the loyalty colours, picked

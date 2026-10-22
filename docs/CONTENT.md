@@ -116,7 +116,9 @@ Aislada is the worked example of a built-out nation:
     should encompass Selgrave, Lustiana, Lanzerac, Moelle, Maieul, Serieux, and Petit Selgrave"; the file's `split`),
     27 in all. A state in one reads "Governorate of X" on its panel, a Royal Fief (`nations.ROYAL_FIEFS`: Rêverie,
     "Reverie still needs to be marked as a royal fief", and the ten, all in Couronneterre) "Royal Fief · Governorate
-    of Couronneterre"
+    of Couronneterre" (the author, 2026-10-22: the Royal Fiefs "are technically still part of Couronterre, though in
+    practice they are more bound directly to the crown than to the governorate"; the nine they named, Rochemont and
+    Bérault not among them, asked)
     (`build_mod.state_lines`: a scripted GUI docked to the state panel, in the state's scope, its text a scripted
     localisation by state id; with the Deco UI only, which keeps the row for it).
   - **The governorates and the three powers in game, bare bones** (the author, 2026-10-21, night: "I think we should
@@ -130,9 +132,8 @@ Aislada is the worked example of a built-out nation:
       Graisivaudan's loyalty -20, every governorate's -5, the author's "emergency measure"), Survey the Realm's Levies
       (75 PP, every 180 days: every state inspected; Proud estates -5; it keeps the category from ever emptying). The
       map is a window of its own (1330 x 846, beside the decisions panel): every governorate drawn from the build's
-      state borders at 2.6 times, coloured by its loyalty band (five pictures a governorate, one shown; each a button,
-      to test whether the game clicks a button by its picture's shape or its rectangle) and its seal (a button on top,
-      which always works), the Royal Fiefs hatched gold, the state and governorate borders over them. The card: the
+      state borders at 2.6 times, coloured by its loyalty band (five pictures a governorate, one shown) and its seal (a
+      button), the Royal Fiefs hatched gold, the state and governorate borders over them. The card: the
       governor and how they came (`rouental_realm.governorates`' placeholders), loyalty (a 20-frame bar, the frame set
       by a variable: `properties`), the estates' temper, the peoples, the states (a dynamic list over an array of the
       selected governorate's states, in each state's scope: its name, people, levies (Unknown until inspected; Grand
@@ -140,6 +141,14 @@ Aislada is the worked example of a built-out nation:
       Summon the Estates 20 PP: the temper rolled again). Loyalty = the governorate's fixed part (peoples, governor,
       chance) + its estates' temper + what actions and the three powers have added + the zone's; each state's manpower
       follows it (a dynamic modifier, `local_manpower` = (loyalty - 50) / 200, read from a state variable).
+      **Clicking** (in game, 2026-10-22: "I can't click on Rivage d'argent anywhere but the badge"): the game takes a
+      button's whole box for it, and the governorates' boxes overlap, so the pictures are icons now and the clicks
+      are 680 nearly clear rectangles (`rouental_ui.hit_rects`: cells of 4 px, each the governorate with most of it,
+      merged along rows and down them), under the seals, each with its governorate's tooltip.
+      **Peoples**: a state's is its fief's group in the fief list, but `rouental_realm.STATE_PEOPLES` (the author,
+      2026-10-22): in the Terres Séparées Serpette Evrichois, Chirac Hollieraine, Maïeul Lustianaise, Petit Selgrave
+      and Sérieux Selgravois (the author's "or whatever would work best for Selgrave's culture": Claude kept their
+      French form beside Evrichois, not the country's adjective Selgravian), Moelle Creole.
     - **The Three Powers**: a button on the politics screen where the game's balance of power sits (the Deco UI's
       `layout_politics.BOP`), showing the zone, opening a window beside the panel: the triangle (its zones drawn with
       their names), the marker placed by the shares (`properties` x and y, worked out in script), the six months'
@@ -149,12 +158,16 @@ Aislada is the worked example of a built-out nation:
       (`on_monthly_ROU`); a zone is a national spirit (`ROU_zone_*`, placeholder effects); a move toward a power gives
       the estates who lean to it half the shift as loyalty (Pious to the Voix, Leal to the Prince, Proud to the
       Speaker; the Southmarchers lose a fifth of the Voix's gains). Rouental's Test Events category has "Test: the
-      Three Powers to the Next Zone".
-    - **Assumed, to see in game**: that a button reacts only on its picture's opaque part (if not, clicking inside a
-      governorate may pick a neighbour; the seals work either way); `properties` x, y and frame from variables; the
-      dynamic list's scope and `[This.GetName]`, `[?rou_manpower_k]` in it; a top-level scripted GUI window over the map
-      and its clicks; the politics screen's button docked to `politics_tab`; a dynamic modifier read from a state
-      variable; `on_monthly_ROU`.
+      Three Powers to the Next Zone". `properties` x and y are the element's place in its window (in game, 2026-10-22:
+      the marker stood 24 px left and 118 px up of its place, the triangle's own offset in the window, until the
+      script added it).
+    - **Seen in game** (2026-10-22, the author: "Looks great so far"): both windows open and draw over the map, the
+      politics screen's button, the category, the dynamic list of states with their names, people, levies and men, the
+      loyalty bar's frame, the marker's `properties` (placed, but without the triangle's offset), the seals' clicks.
+      Changed after: the map's clicks (above), the marker, the Open button's text (dark on its gold plate: the fonts'
+      cream was "barely readable"), the zone's description two lines (it was cut short). **Assumed still**: the
+      clear click rectangles (a stretched cornered tile, alpha 1/255 in case the game skips clear pixels); a dynamic
+      modifier read from a state variable; `on_monthly_ROU`.
   - **Faction.** ROU starts as leader of "The Association of Reibonnaise States",
     together with GDN, LST, EVR, HLR, SGV, LZC and SGN.
     - **Reibonnaise opinions** (author, 2026-10-02; `nations.REIBONNAISE`): +20

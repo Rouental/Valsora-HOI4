@@ -10,6 +10,13 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-22 (the author's first look at the governorates and the three powers in game: "Looks great so far"): the
+  Open the Map of the Realm button's text dark on its gold; the three powers' marker in its place (the triangle's
+  offset in the window added) and the zone's description on two lines; the governorates' map clicked anywhere inside
+  a governorate (680 click rectangles, `rouental_ui.hit_rects`; "I can't click on Rivage d'argent anywhere but the
+  badge"); the Terres Séparées' peoples the author's (Serpette Evrichois, Chirac Hollieraine, Maïeul Lustianaise, Petit
+  Selgrave and Sérieux Selgravois, Moelle Creole: `rouental_realm.STATE_PEOPLES`); the Royal Fiefs Couronneterre's in
+  name, the Crown's in practice (the window's text).
 - 2026-10-21, night, the very last, latest (the author: "Add Tara Blanchart in the mod as a character", a gender for
   characters on the Gazetteer, "Let's get them [the mockups] into the game, even if they're bare bones for now"):
   **Tara Blanchart**, democratic Rouental's leader and the Speaker, with the author's painting; **gender** (`gender =
