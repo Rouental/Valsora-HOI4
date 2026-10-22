@@ -215,7 +215,7 @@ def face(tag, src, x0, y0, cw, kind):
 FRAME_H = 198
 
 
-def frame_html(pic, style):
+def frame_html(pic, style, height=FRAME_H):
     if style == "arch":
         return f'<div class="portrait"><img src="{uri(pic)}"></div>'
     if style == "octagon":
@@ -242,8 +242,8 @@ def frame_html(pic, style):
                f'<path d="{rim1}" fill="none" stroke="#B8954F" stroke-width="1"/>'
                f'<path d="{rim2}" fill="none" stroke="url(#gilt)" stroke-width="3"/>'
                f'<path d="M{fw / 2 - 5} 4.5 l5 -3.5 5 3.5 -5 3.5z" fill="#E3C77E"/></svg>')
-    k = FRAME_H / fh
-    return (f'<div class="pf" style="width:{fw * k:.1f}px;height:{FRAME_H}px"><div class="pin_" style="width:{fw}px;'
+    k = height / fh
+    return (f'<div class="pf" style="width:{fw * k:.1f}px;height:{height}px"><div class="pin_" style="width:{fw}px;'
             f'height:{fh}px;transform:scale({k:.4f})"><img style="left:{x}px;top:{y}px;width:{w}px;height:{h}px" '
             f'src="{uri(pic)}">{art}</div></div>')
 

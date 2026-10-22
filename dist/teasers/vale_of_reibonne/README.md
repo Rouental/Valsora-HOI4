@@ -33,6 +33,10 @@ screen's gilt octagon (its rays in the corners), the right column's in the polit
 it), both the Deco UI's own frames (`deco_ui/tools/diplomacy_art.leader_frame`, `gen_textures`' `pol_frame`) drawn at
 the card's height. `photo+frames` makes it; `vanilla+frames` and `plain+frames` put the same frames on the backdrops.
 
+**The portraits alone** (the author: "Do it with just the portraits"): `portraits_vanilla.png`, `portraits_plain.png`
+(the two backdrops, in the teaser's arch) and `portraits_frames.png` (the pictures as they are, the top row in the
+diplomacy screen's octagon, the bottom row in the politics screen's arch), four a row, made by `portraits.py`.
+
 After a build (`pip install rembg onnxruntime` for the backdrops; the model downloads itself the first time):
 
     CHROMIUM_PATH=/opt/pw-browsers/chromium python3 dist/teasers/vale_of_reibonne/make.py [photo] [vanilla] [plain] [photo+frames] ...
