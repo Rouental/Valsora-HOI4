@@ -16,6 +16,16 @@ north-east, north to south, are on the right.
   and Josefin Sans, OFL): nothing of the base game's, so it is committed.
 - The layout, the colours and the wording of the title and the footer are Claude's.
 
-After a build:
+**The backdrop test** (the author, 2026-10-22: "As a test, redo the teaser, but give each leader portrait a consistent
+gradient background like vanilla portraits. Or maybe just a blank background."): the same teaser with every ruler cut out
+of their picture (rembg's `isnet-general-use` model, the cutouts kept in the git-ignored `work/teaser_cut/`; Guedelon's
+seal is its own cutout) and put on one backdrop:
+- `vale_of_reibonne_vanilla_backdrop.png`: a gradient in the colours of the base game's portraits (sampled from them,
+  nothing of theirs copied): pale cream at the top, olive grey low down, a little lighter round the head;
+- `vale_of_reibonne_plain_backdrop.png`: one flat slate, the cards' own colour lifted a little.
 
-    CHROMIUM_PATH=/opt/pw-browsers/chromium python3 dist/teasers/vale_of_reibonne/make.py
+The cut keeps what stands in front of a ruler: Selgrave's microphone and the papers on her desk are still there.
+
+After a build (`pip install rembg onnxruntime` for the backdrops; the model downloads itself the first time):
+
+    CHROMIUM_PATH=/opt/pw-browsers/chromium python3 dist/teasers/vale_of_reibonne/make.py [photo] [vanilla] [plain]

@@ -6,7 +6,8 @@ portraits) or the mod's own fonts (OFL): nothing of the base game's.
 
     CHROMIUM_PATH=/opt/pw-browsers/chromium python3 dist/teasers/vale_of_reibonne/make.py   (after a build)
 
-Writes vale_of_reibonne.png (1920 x 1080) beside this file.
+Writes vale_of_reibonne.png (1920 x 1080) beside this file; with `vanilla` or `plain` (or both, or `photo`) after it,
+the rulers cut out of their pictures and put on one backdrop each: vale_of_reibonne_<backdrop>_backdrop.png.
 """
 import base64
 import glob
@@ -157,7 +158,57 @@ def uri(img, fmt="PNG"):
     return f"data:image/{fmt.lower()};base64," + base64.b64encode(buf.getvalue()).decode()
 
 
-def ruler(tag):
+# the portraits' backdrop (the author, 2026-10-22: "As a test, redo the teaser, but give each leader portrait a consistent
+# gradient background like vanilla portraits. Or maybe just a blank background."): "photo" keeps each picture as it is;
+# "vanilla" cuts the ruler out and puts them on a gradient in the base game's portraits' colours (sampled from them: pale
+# cream at the top, olive grey low down, lighter round the head); "plain" on one flat colour
+BACKDROPS = ("photo", "vanilla", "plain")
+CUT = os.path.join(REPO, "work", "teaser_cut")      # the cutouts, made once (rembg's isnet-general-use)
+SEAL = os.path.join(REPO, "dist", "portrait_proposals", "guedelon_council", "seal.png")
+
+
+def backdrop(kind, size=(312, 420)):
+    w, h = size
+    yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
+    if kind == "plain":
+        return np.broadcast_to(np.array((52, 63, 70), np.float32), (h, w, 3)).copy()
+    light, dark = np.array((231, 229, 212), np.float32), np.array((128, 127, 111), np.float32)
+    t = np.clip((yy / h - .22) / .66, 0, 1)
+    t = t * t * (3 - 2 * t)
+    out = light + (dark - light) * t[..., None]
+    r = np.clip(np.hypot((xx - w / 2) / (w * .8), (yy - h * .3) / (h * .85)), 0, 1)
+    return out * (1.03 - .1 * r)[..., None]
+
+
+def cutout(tag, src):
+    """the picture at src with its background taken away (RGBA, its own size); Guedelon's seal is its own cutout"""
+    os.makedirs(CUT, exist_ok=True)
+    path = os.path.join(CUT, f"{tag}.png")
+    if tag == "GDN":   # the Gazetteer's picture is the seal at 92 % of the width on a flat field: the seal again, clear
+        pic = Image.open(src)
+        out = Image.new("RGBA", pic.size, (0, 0, 0, 0))
+        d = round(pic.size[0] * .92)
+        seal = Image.open(SEAL).convert("RGBA").resize((d, d), Image.LANCZOS)
+        out.alpha_composite(seal, ((pic.size[0] - d) // 2, (pic.size[1] - d) // 2))
+        return out
+    if not os.path.exists(path) or os.path.getmtime(path) < os.path.getmtime(src):
+        from rembg import new_session, remove
+        remove(Image.open(src).convert("RGB"), session=new_session("isnet-general-use")).save(path)
+    return Image.open(path).convert("RGBA")
+
+
+def face(tag, src, x0, y0, cw, kind):
+    """the 312 x 420 portrait: the picture's cut (nations.portrait), or its cutout on a backdrop"""
+    if kind == "photo":
+        return Image.fromarray(nations.portrait(src, x0, y0, cw, size=(312, 420)))
+    im = cutout(tag, src)
+    crop = im.crop((x0, y0, x0 + cw, y0 + round(cw * 210 / 156))).resize((312, 420), Image.LANCZOS)
+    bg = Image.fromarray(np.clip(backdrop(kind), 0, 255).astype(np.uint8)).convert("RGBA")
+    bg.alpha_composite(crop)
+    return bg.convert("RGB")
+
+
+def ruler(tag, kind="photo"):
     """(name, portrait 312 x 420) of a nation's ruler: its Gazetteer page's, else the mod's own"""
     try:
         f = json.load(open(os.path.join(REPO, "source", "gazetteer", f"{tag}.json"), encoding="utf-8"))
@@ -167,11 +218,11 @@ def ruler(tag):
     if r.get("portrait"):
         pic = r["portrait"]
         x0, y0, cw = gazetteer.portrait_box(pic)
-        img = nations.portrait(os.path.join(REPO, "source", "gazetteer", pic["file"]), x0, y0, cw, size=(312, 420))
-        return NAMES.get(tag, r.get("name")), Image.fromarray(img)
+        src = os.path.join(REPO, "source", "gazetteer", pic["file"])
+        return NAMES.get(tag, r.get("name")), face(tag, src, x0, y0, cw, kind)
     if tag == "ROU":
         src, x0, y0, cw, _ = nations.PORTRAITS["ROU_roland_cahun"]
-        return "Roland II Cahun", Image.fromarray(nations.portrait(os.path.join(REPO, src), x0, y0, cw, size=(312, 420)))
+        return "Roland II Cahun", face(tag, os.path.join(REPO, src), x0, y0, cw, kind)
     raise SystemExit(f"{tag}: no ruler with a portrait")
 
 
@@ -187,15 +238,15 @@ def flag(tag):
     return im.resize((164, 104), Image.LANCZOS)
 
 
-def card(tag):
+def card(tag, kind):
     short, formal = loc(tag)
-    name, face = ruler(tag)
-    return f"""<div class="card"><div class="portrait"><img src="{uri(face)}"></div>
+    name, pic = ruler(tag, kind)
+    return f"""<div class="card"><div class="portrait"><img src="{uri(pic)}"></div>
       <div class="text"><img class="flag" src="{uri(flag(tag))}"><div class="nation">{short}</div>
       <div class="ruler">{name}</div><div class="formal">{formal}</div></div></div>"""
 
 
-def main():
+def main(kind):
     O, S = owners()
     tags = LEFT + RIGHT
     bg, lab = render_map(O, S, tags)
@@ -269,9 +320,10 @@ html, body {{ margin: 0; width: {W}px; height: {H}px; overflow: hidden; backgrou
 </style></head><body><div class="bg"></div><div class="shade"></div>{''.join(pins)}
 <div class="title"><div class="kicker">VALSORA</div><div class="name">THE VALE OF REIBONNE</div>
 <div class="date"><i></i><b></b>1 JANUARY 2036<b></b><i></i></div></div>
-<div class="col left">{''.join(card(t) for t in LEFT)}</div><div class="col right">{''.join(card(t) for t in RIGHT)}</div>
+<div class="col left">{''.join(card(t, kind) for t in LEFT)}</div><div class="col right">{''.join(card(t, kind) for t in RIGHT)}</div>
 <div class="foot">THE ASSOCIATION OF REIBONNAISE STATES</div><div class="frame"></div></body></html>"""
     path = os.path.join(HERE, "page.html")
+    png = os.path.join(HERE, "vale_of_reibonne.png" if kind == "photo" else f"vale_of_reibonne_{kind}_backdrop.png")
     open(path, "w", encoding="utf-8").write(html)
     from playwright.sync_api import sync_playwright
     with sync_playwright() as p:
@@ -279,11 +331,14 @@ html, body {{ margin: 0; width: {W}px; height: {H}px; overflow: hidden; backgrou
         pg = b.new_page(viewport={"width": W, "height": H})
         pg.goto("file://" + path)
         pg.wait_for_timeout(400)
-        pg.screenshot(path=os.path.join(HERE, "vale_of_reibonne.png"))
+        pg.screenshot(path=png)
         b.close()
     os.remove(path)
-    print(os.path.join(HERE, "vale_of_reibonne.png"))
+    print(png)
 
 
 if __name__ == "__main__":
-    main()
+    for k in sys.argv[1:] or ["photo"]:
+        if k not in BACKDROPS:
+            raise SystemExit(f"{k}: one of {', '.join(BACKDROPS)}")
+        main(k)
