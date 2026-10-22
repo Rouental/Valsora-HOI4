@@ -313,8 +313,8 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   answered or held is in the mod (2026-10-20, their go-ahead; 2026-10-21, the governorates' names, the generic
   advisors, the Kufi in gold, HMMLA's Royal Fiefs, Rouental's groups, Montvallée, Rêverie, the Royal Host, Kalaistan).
   New: the governorates' window and the three powers in game, bare bones (2026-10-21, night, seen 2026-10-22: what to
-  see in game in `docs/CONTENT.md`, Rouental; the zones' effects and the decisions still placeholders); whether
-  Rochemont and Bérault are Couronneterre's in name too, as the nine Royal Fiefs the author named (2026-10-22); the Vale of Reibonne's region left with Guedelon and Brillagne apart; whether the groups stay (the way back:
+  see in game in `docs/CONTENT.md`, Rouental; the zones' effects and the decisions still placeholders); Guedelon's
+  Council of Six's portrait, A in the mod, B or C (`dist/portrait_proposals/guedelon_council_of_six/`, 2026-10-22); the Vale of Reibonne's region left with Guedelon and Brillagne apart; whether the groups stay (the way back:
   `work/pre_groups_1021/`, or the commit before them). Open: the strait crossings to add from the red ones
   (`dist/straits_map_red.png`); the old upload's tundra, jungle and desert marks ("I'll add those back in later");
   flags for Belekria's eight republics and state names (later, the author's); the region names (the drafts in the mod

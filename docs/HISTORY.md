@@ -10,6 +10,9 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-22, later: Rochemont and Bérault Couronneterre's too (the author: "spelling is Couronneterre"); Guedelon's
+  ruler the **Council of Six**, its portrait the author's symbol of the council, as Krionik's Council of Marshals (two
+  versions in a lettered ring waiting: `dist/portrait_proposals/guedelon_council_of_six/`).
 - 2026-10-22 (the author's first look at the governorates and the three powers in game: "Looks great so far"): the
   Open the Map of the Realm button's text dark on its gold; the three powers' marker in its place (the triangle's
   offset in the window added) and the zone's description on two lines; the governorates' map clicked anywhere inside

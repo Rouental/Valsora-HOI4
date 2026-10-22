@@ -4,7 +4,8 @@ The author's answers of 2026-10-19 and 2026-10-20 are in the mod (the go-ahead: 
 the other changes I had been holding back until now"): `docs/HISTORY.md`, 2026-10-20. Answered on 2026-10-21 and in the mod since: the governorates' names (29), the generic advisors (27), the Kufi
 in gold (30), HMMLA's Royal Fiefs (31) (`docs/NATIONS.md`, 2026-10-21, later); the Royal Host Elite (24: "The troops
 are now elite!"), the Army HQ cards (26: "Army HQ cards seem to work"), the governorate line ("worked just fine"), and
-Rouental's groups (28: applied, `docs/NATIONS.md`, 2026-10-21, later still). What is still open:
+Rouental's groups (28: applied, `docs/NATIONS.md`, 2026-10-21, later still); on 2026-10-22 the Royal Fiefs, all
+eleven Couronneterre's in name, and its spelling (36 then). What is still open:
 
 | # | question | where |
 |---|---|---|
@@ -17,7 +18,7 @@ Rouental's groups (28: applied, `docs/NATIONS.md`, 2026-10-21, later still). Wha
 | 32 | the Vale of Reibonne's strategic region: with Hollier, Evriches and Seigne in South Montvallée and Selgrave, Lustiana and Lanzerac in North Montvallée, it holds only Guedelon and the island Brillagne, which don't touch (a region may be in two pieces, but the AI plans by regions). Guedelon into its neighbour's region (Côte d'Ambre's), Brillagne into the sea's nearest land region, or leave it? | |
 | 34 | the governorates (`deco_ui/art/proposals/governorates/`): which heading of your fief list is the Vairande's (Vair is listed under Conflans) and the Riverlanders' (Conflans, the largest, is Claude's guess); the Lyrién and the Lustianaise; how loyal the Northmarchers, Southmarchers, Piscans and Recoltaise are (0 in the mockups) | your notes |
 | 35 | the three powers and the governorates, in game since 2026-10-21, night (bare bones), seen 2026-10-22 ("Looks great so far"): the map's clicks redone (the game clicks a button by its box: now rectangles that tile each governorate), the marker in its place, the Open button's text dark. Click anywhere in a governorate: does it pick that one? The zones' names and effects and the decisions are still Claude's; the other five attitudes' sides later | in game |
-| 36 | the Royal Fiefs: you named nine as Couronneterre's in name (Rouental, Rêverie, Saintiers, Cournin, Brassard, Éislek, Jourdain et Moterre, Aurifort, Charmas). Rochemont and Bérault too? (they are in Couronneterre in the build now.) And Selgravois for Petit Selgrave and Sérieux, Creole for Moelle: as you want them? | ask |
+| 36 | Guedelon's Council of Six: its portrait is your symbol alone (A, as Krionik's); or the symbol in a lettered ring, CONSEIL DES SIX (B) or COUNCIL OF SIX (C), and GUEDELON? `dist/portrait_proposals/guedelon_council_of_six/sheet.png`. Its name in the game: "Council of Six" | ask |
 | 33 | the groups' way back: "Be prepared for the posibility of returning to how it currently is though": the map before them is kept (`work/pre_groups_1021/`, and the commit before) until you say they stay | |
 
 New to look at:

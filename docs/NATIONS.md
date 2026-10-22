@@ -867,4 +867,15 @@ guess), Moelle Creole. Their colours and loyalty (none either way) are Claude's.
 And: "Rouental Reverie Sainiters, Cournin, Brassard, Eislek, Jourdain et Moterre, Aurifort and Charmas (the fiefs) are
 technically still part of Couronterre, though in practice they are more bound directly to the crown that to the
 governorate." The build already had all eleven Royal Fiefs in Couronneterre (the spelling of the author's fief map
-kept); the window's Crown's Domain now says so. Rochemont and Bérault, not named, stay there until the author says.
+kept); the window's Crown's Domain now says so. Later the same day: "Rochemont and Bérault are in Couronneterre too,
+spelling is Couronneterre."
+
+## 2026-10-22, later: Guedelon's Council of Six
+
+The author: "Could you help me design a leader portrait for Guedelon, similar to Krionik's one? This is the symbol for
+Guedelon's Council of 6, the executive body." Guedelon's ruler (`GDN_leader_lordly_republic`, its Lordly Republic) is
+the **Council of Six** now, as Krionik's is its Council of Marshals (`nations.NAMED_LEADERS`; the generated Jacques
+Anthoine before), its portrait the author's symbol, a gold griffin with a sword on blue, six rings round it
+(`source/portraits/gdn_council_of_six.png`, centred on the dark field as Krionik's emblem). The name written out ("Council
+of Six" for the author's "Council of 6") is Claude's. Two more versions wait for the author, the symbol in a lettered
+ring (CONSEIL DES SIX or COUNCIL OF SIX, and GUEDELON): `dist/portrait_proposals/guedelon_council_of_six/`.

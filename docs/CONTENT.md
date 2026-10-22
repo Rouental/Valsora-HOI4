@@ -117,8 +117,8 @@ Aislada is the worked example of a built-out nation:
     27 in all. A state in one reads "Governorate of X" on its panel, a Royal Fief (`nations.ROYAL_FIEFS`: Rêverie,
     "Reverie still needs to be marked as a royal fief", and the ten, all in Couronneterre) "Royal Fief · Governorate
     of Couronneterre" (the author, 2026-10-22: the Royal Fiefs "are technically still part of Couronterre, though in
-    practice they are more bound directly to the crown than to the governorate"; the nine they named, Rochemont and
-    Bérault not among them, asked)
+    practice they are more bound directly to the crown than to the governorate"; later: "Rochemont and Bérault are in
+    Couronneterre too, spelling is Couronneterre")
     (`build_mod.state_lines`: a scripted GUI docked to the state panel, in the state's scope, its text a scripted
     localisation by state id; with the Deco UI only, which keeps the row for it).
   - **The governorates and the three powers in game, bare bones** (the author, 2026-10-21, night: "I think we should
