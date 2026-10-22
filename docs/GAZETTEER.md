@@ -2,8 +2,8 @@
 
 A web site where friends fill in the facts of their own nations: once you have drawn its
 states on the `.pdn`, state names, terrain, rivers, cities (their victory points and size),
-population, railways, supply hubs, resources and buildings; at any time, its names and titles
-under each government, its sub-ideologies, its flags, its ruler and party leaders (names,
+population, railways, supply hubs, resources and buildings, impassable states and borders; at
+any time, its names and titles under each government, its sub-ideologies, its flags, its ruler and party leaders (names,
 gender, titles, portraits, traits), the characters it already has in the game (Roland and Serelle,
 Rouental's, among them, their skills and stats too), its political advisors, generals, admirals
 and other advisors (with the base game's traits, and the commanders' skill and stats), its
@@ -94,8 +94,12 @@ nation by hand (Automatic, Open, Closed); a nation's own Map tab has the same bu
 On the **Releasables** tab, a player adds the nations that could be released from theirs: its
 name, adjective and full title, its ruling sub-ideology, map colour, flag, ruler (name, titles,
 portrait) and a few words about it, and its land. With the **Releasables** tool they pick its
-states on the map, whole (a state belongs to one releasable; **Take them away** removes them),
-or, while their map tools are closed, draw its land as areas. In the game a releasable is a
+states on the map, whole (a state belongs to one releasable), or, while their map tools are closed, draw its land as
+areas. Land comes off again too (2026-10-22, your words: "There should also be a way to remove terrain from releasables,
+I believe you can currently only add"): a click on one of its states takes it away, and a drag takes away when it starts
+on one of its states and adds when it starts elsewhere (never both in one stroke); **Take states away**, beside **Change
+its states** on its card (and in the tool's row, beside **Add states**), only takes away. A drawn area goes whole with
+**Delete area 1** (2 ...) on the card: there is no rubber for part of one, so draw it again. In the game a releasable is a
 country owning nothing at the start, with cores on its states, so its nation can release it
 from the diplomacy screen. HOI4 gives cores on whole states, never on provinces (a formable
 nation works the same way), so a releasable whose border runs through a state needs that state
@@ -122,12 +126,13 @@ their browser, and **Nation › Save a file** gives them a file to send you. Loa
 
 | Where | Facts | In the game |
 |---|---|---|
-| State tab | name, population, kind of state (building slots), infrastructure, civilian and military factories, dockyards, air base, anti-air, naval base, resources, notes | the state's history file; factories and dockyards are cut to the slots, island bases to vanilla's caps |
+| State tab | name, population, kind of state (building slots), infrastructure, civilian and military factories, dockyards, air base, anti-air, naval base, resources, impassable (ticked as the game has it now), notes | the state's history file; factories and dockyards are cut to the slots, island bases to vanilla's caps; an impassable state is `impassable = yes`, linked (`force_link_ownership_to`) to the passable state of yours it borders most, with no victory points, supply hub or troops (a capital, or a state with no passable state of yours beside it, stays passable: a note for you) |
 | map, Terrain tool | each province's terrain (plains, forest, hills, mountains, desert, marsh, jungle, urban) | `definition.csv` and `terrain.bmp` |
 | map, Rivers tool | major and minor rivers as lines; erase strokes take away rivers already in the game | drawn into the river layers before `rivers.py` traces them, exactly like yours |
 | Cities tab and tool | cities (one per province, as many as they like in a state), their victory points (how much the place matters: 1 minor to 50 foremost), their size (village to metropolis), the national capital (★) and each state's capital (◆) | victory points and their names; the capital city's state becomes the capital; each state's capital is its main city: its first victory point, its supply hub (unless they place their own) and where its troops start. Unmarked, a state's capital is the national capital if it's there, else the city with the most victory points. Size only shares out a total population (Nation tab) |
 | map, Railways tool | railways (level 1-5) through cities and places | `map/railways.txt`: the shortest way over land between the provinces under the points, as the page draws it |
 | map, Hubs tool | supply hubs | `map/supply_nodes.txt`: once a nation has its own, only those and its capital |
+| map, Impassable tool | impassable borders between two provinces (its own, or one of its and a neighbour's): a click marks a border, another opens it; the game's own show marked | `map/adjacencies.csv`, a row of type `impassable` each, as the base game's Himalayas; borders that would wall land off without a coast are left out (a note for you) |
 | map, Suggest tool | states (their own land inside the line, none of an earlier one's), areas, lines and points drawn anywhere on the world (a border, an island that should be theirs, a mountain range, where an undrawn nation goes), each with what it is | nothing by itself: a layer for you (below) |
 | Politics tab | name, full title and adjective under every government and each ideology; ruling sub-ideology | localisation, `nations.LEADERS` |
 | People tab | head of state (name, gender, titles, portrait, traits); each other party's sub-ideology, leader, gender, portrait and traits; the characters already in the game (for your own nations' characters, as Roland and Serelle: name, the name taken on coming to rule, gender, titles, sub-ideology within its ideology, traits, portrait, and a commander's rank, skill and stats); political advisors (a section of their own); generals, admirals and other advisors (name, gender, portrait, traits, an advisor's post, a general's rank, a commander's skill and stats, notes); traits are the base game's (up to six each, picked from lists by kind: a ruler's, a general's, an admiral's, each advisor post's), and **Ask for a new trait** sends you a request for one the game doesn't have; companies (name, logo, kind, notes): an arms maker of one of the base game's 28 kinds (tanks, ships, aircraft, land equipment) or an industrial concern of one of its 14, and **Ask for a new kind of company** sends you a request | the rulers and party leaders, with their titles shown on the portrait and their traits; every character's gender as the game's `gender = female` (or `male`); your characters changed where they are (a copy, as Mahaut at Brillagne, changes with them); generals and admirals as characters from the start (their skill and stats, skill 3 where not given; their traits; their portraits or a generic one of the nation's culture); advisors in their post on the political screen (the post's usual cost, their traits); an arms maker as a military-industrial organisation of its kind (with Arms Against Tyranny) and, without that DLC, the designer of its kind in the political screen; a concern in the political screen's industrial concern slot, with its kind's trait and research bonus; logos as the company's icon (the whole logo fitted into 64 × 64), else the game's for its kind; the notes are a list for you |
@@ -146,6 +151,25 @@ women since 2026-10-21) until a player picks one; a new character starts as a ma
 `gender = female` (or `male`), and a change to Serelle or Mahaut reaches her copy at the head of HMMLA or Brillagne. The
 base game has no generic portraits of women generals, admirals or politicians, so a woman without a portrait of her own
 keeps the generic one of her culture: send her portrait.
+
+**Impassable states** (2026-10-22, your words: "There should be a way to mark states as impassible on the gazeteer"):
+the State tab's **Impassable** box (under Movement) is ticked where the game has the state impassable now (your red and
+striped areas, `scripts/areas.py`) and can be ticked or unticked; the map hatches the impassable states, and the key and
+the status line say so. In the game it is the base game's Sahara: no unit enters, and the state changes hands with the
+passable state of its owner it borders most (`force_link_ownership_to`); it has no victory points, supply hub or troops,
+and its terrain stays as it is. The page warns, and the build keeps the state passable with a note for you, when it is the
+capital (move the capital first, on the Cities tab), when no passable state of the nation borders it, or when marking it
+would leave one of your impassable states with none beside it. **Use the map's** takes the choice away.
+
+**Impassable borders** (2026-10-22, your words: "Yes, add the impassable borders tool too"): HOI4 has no impassable
+province, only impassable states and impassable borders between two provinces, as the base game's Himalayas. The map's
+**Impassable** tool (B) marks the border nearest the click (a tap on a phone), between two of the nation's provinces or
+one of its and a neighbour's, and a second click opens it again; a marked border is a dark line along the edge the two
+provinces share, also in the key and the status line, and the Map tab lists them (**Show**, **Open it**). In the game each
+is a row of type `impassable` in `map/adjacencies.csv`: no unit crosses there, a mountain ridge, a cliff. The build leaves
+out, with a note for you, a border whose provinces no longer touch or aren't both land, one a strait crossing already
+joins, and the walls round a piece of land they would cut off from the rest without a coast (it couldn't be reached).
+Impassable states are the other way, for land no unit enters at all.
 
 **How big a state should be** (2026-10-18, the author: "More important than the guide for provinces is the guide for
 states. I think I might've misspoken earlier and told you to include a guide for provinces, but I meant states.
@@ -232,7 +256,7 @@ with `gazetteer.py paths` and `pull`, which still work.)
 - **Releasables** get a tag each at their first import (from their name, never one in use or
   the base game's), kept from one import to the next. `status` lists their cores; one holding
   no state is left out of the build with a note.
-- **Nations whose map tools are closed**: their states, provinces, cities, rivers and railways,
+- **Nations whose map tools are closed**: their states, provinces, cities, rivers, railways and impassable borders,
   and their releasables' states, are left out at the import (the file carries your switches;
   the import reads which states are drawn from the last build).
 - **By hand**: requests (new traits, national spirits and kinds of company among them), advisors without a post, characters' and

@@ -114,6 +114,33 @@ def m_strait_through_land(mod):
     return f"the sea crossing {land[0]} - {land[1]} must join two land provinces through a sea one"
 
 
+def _adjacency_rows(mod, rows):
+    """rows put in after adjacencies.csv's header"""
+    edit_bytes(mod, "map/adjacencies.csv", lambda b: b.replace(b";Comment\r\n", b";Comment\r\n" + "".join(r + "\r\n" for r in rows).encode(), 1))
+
+
+def m_impassable_border_apart(mod):
+    # an impassable border (the Gazetteer's, 2026-10-22) between the first and last land provinces, which don't touch
+    land = [i for i, d in definition(mod).items() if d[3] == "land"]
+    _adjacency_rows(mod, [f"{land[0]};{land[-1]};impassable;-1;-1;-1;-1;-1;;Test"])
+    return f"the impassable border {land[0]} - {land[-1]} must be between two land provinces that touch"
+
+
+def m_walled_off(mod):
+    # a province with no coast walled off from every land province round it
+    import json
+    d = definition(mod)
+    coast = {int(ln.split(";")[0]) for ln in (mod / "map/definition.csv").read_text().splitlines()[1:] if ln.split(";")[5] == "true"}
+    nb = {}
+    for a, b, _ in json.loads((ROOT / "work/regions.json").read_text())["adjacency"]:
+        nb.setdefault(a + 1, set()).add(b + 1)
+        nb.setdefault(b + 1, set()).add(a + 1)
+    p = next(i for i, v in sorted(d.items()) if v[3] == "land" and i not in coast and len(nb.get(i, ())) >= 2
+             and all(d[j][3] == "land" for j in nb[i]))
+    _adjacency_rows(mod, [f"{min(p, j)};{max(p, j)};impassable;-1;-1;-1;-1;-1;;Test" for j in sorted(nb[p])])
+    return f"impassable borders wall off 1 land province(s) without a coast (province {p})"
+
+
 def m_building_row(mod):
     def drop(t):
         lines = t.splitlines(keepends=True)
@@ -487,7 +514,7 @@ def m_song(mod):
 
 
 BATCHES = {
-    "map": [m_crlf, m_adjacency_end, m_strait_through_land, m_building_row, m_ships_in_port, m_earth_map_file, m_weather_big, m_supply_node_sea,
+    "map": [m_crlf, m_adjacency_end, m_strait_through_land, m_impassable_border_apart, m_walled_off, m_building_row, m_ships_in_port, m_earth_map_file, m_weather_big, m_supply_node_sea,
             m_railway_apart, m_x_crossing, m_land_low, m_terrain_ocean],
     "history": [m_technology, m_module, m_equipment, m_idea, m_battalion, m_define, m_earth_history, m_popularities,
                 m_ruling_party, m_recruit_unknown, m_faction_template, m_bookmark, m_descriptor, m_autonomy, m_claim_tag,

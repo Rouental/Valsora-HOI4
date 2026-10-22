@@ -49,8 +49,9 @@ the nation's password; without it, the page shows the map and what the mod has, 
   without one: **Make a password**.
 - **H5 Undo** (or Ctrl+Z): the last change (a stroke of paint counts as one).
 - **H6 Bigger facts** (↕ beside the tabs): the facts panel wider and the map smaller, and back.
-- **H7 The status line** under the map: what is under the pointer (state, city, releasable, terrain, supply hub,
-  coast, its pixel) and the page's short messages.
+- **H7 The status line** under the map: what is under the pointer (state, impassable, city, releasable, terrain,
+  supply hub, coast, its pixel; with the Impassable tool, the border a click would mark or open) and the page's short
+  messages.
 - **H8 Guide** (beside the nation's name; 2026-10-16): the quick-start guide, six short illustrated steps (welcome
   and saving, the map and its tools (the open map's, or Suggest while the states aren't drawn), how big a state is
   (2026-10-18, in the place of 2026-10-17's province step: Rouental's, Cardonia's and Zukchiva's states at one scale),
@@ -77,8 +78,16 @@ and M8.
   *Game:* railways (only the ones drawn here: the generated network waits).
 - **M6 Hubs (H)**, **open**. Click a province to add or remove a supply hub. *Game:* supply hubs; once a nation has
   its own, only those and its capital.
+- **M17 Impassable (B)**, **open** (2026-10-22, your words: "Yes, add the impassable borders tool too"). Click (tap) a
+  border between two provinces, two of yours or one of yours and a neighbour's, to make it impassable, and again to open
+  it; marked borders are a dark line along the edge, the game's own among them. *Game:* an `impassable` row in
+  `map/adjacencies.csv`, as the base game's Himalayas: no unit crosses there; borders that would wall land off without a
+  coast are left out, with a note for you.
 - **M7 Releasables (E).** Pick a releasable (the nation's own, the game's, the civil war's). Open: **Add states** /
-  **Take them away**, then click or drag over states. Closed: draw its land as areas.
+  **Take states away**, then click or drag over states; adding, a click on one of its states takes it away, and a drag
+  takes away when it starts on one of its states, adds when it starts elsewhere (2026-10-22, your words: "There should
+  also be a way to remove terrain from releasables, I believe you can currently only add"). Closed: draw its land as
+  areas.
 - **M8 Suggest (S).** Draw on the map or on the world: a **State** (closed only: it keeps the nation's land inside
   the line and none of a state drawn before), an **Area**, a **Line** or a **Point**, then say what each is on the
   Map tab (MP2). *Game:* nothing by itself; a layer for you.
@@ -107,6 +116,11 @@ With no state picked, every state is a button (● for the named ones).
   (0–10), anti-air (0–5), naval base (coast, 0–10). *Game:* the state's buildings, factories cut to the slots.
 - **ST6 Resources:** oil, steel, aluminium, rubber, tungsten, chromium.
 - **ST7 Terrain:** how many provinces of each; a button per terrain sets every province of the state.
+- **ST12 Movement: Impassable** (2026-10-22, your words: "There should be a way to mark states as impassible on the
+  gazeteer"): ticked as the game has it now (your red and striped areas), tick or untick it; **Use the map's**; a warning
+  when the game keeps it passable (the capital; no passable state of yours beside it; marking it would cut off one of your
+  impassable states). The map hatches impassable states. *Game:* `impassable = yes`, linked to the passable state of yours
+  it borders most (`force_link_ownership_to`), no victory points, supply hub or troops.
 - **ST8 Selected province:** its terrain and size; **Make a supply hub** / **Remove supply hub**.
 - **ST9 Its cities:** each (★ capital, ◆ state capital, its victory points) opens it on the Cities tab.
 - **ST10 Notes.**
@@ -135,6 +149,8 @@ With no state picked, every state is a button (● for the named ones).
   **Delete**.
 - **MP4 Railways**, **open**: each one's level, a warning where it crosses water, **Show**, **Delete**.
 - **MP5 Supply hubs**, **open**: each by its state; a click shows it.
+- **MP8 Impassable borders**, **open** (2026-10-22): each by the states (or neighbours) on its two sides, the game's
+  marked **In the game**, **Show**, **Open it**.
 
 ## Politics tab
 
@@ -188,11 +204,13 @@ With no state picked, every state is a button (● for the named ones).
 
 - **RL1 Releasables**, the nation's own, made here: **Add a releasable**; each card: map colour; name; **Pick** (for
   the Releasables tool, M7); adjective; ruling sub-ideology; full title; land (**Pick its states** / **Change its
-  states**, or closed **Draw its land**; **Show**; ✕ on a drawn area); flag (**Send a picture**, **Replace**,
+  states** and, once it has some, **Take states away** (2026-10-22), or closed **Draw its land**; **Show**; **Delete area
+  1** … for each drawn area, which goes whole); flag (**Send a picture**, **Replace**,
   **Remove**); ruler (portrait, name, gender (PE9), titles, traits); about it; **Delete this releasable**. *Game:* a
   country with cores on its states, released from the diplomacy screen.
 - **RL2 In the game:** the releasables the mod has (Rouental's 13, Belekria's Tethia), each a card like RL1's with
-  the game's values in grey: a badge, what it is, names, government, map colour, land (open: **Change its states**;
+  the game's values in grey: a badge, what it is, names, government, map colour, land (open: **Change its states**,
+  **Take states away**;
   **Show**; **Back to the game's land**), flag (the game's, or yours: **Back to the game's**), ruler (its gender too,
   PE9; for one of your characters, a pointer to the People tab instead), about it, **Undo every change to it**.
 - **RL3 In the civil war:** the seven that rise against Rouental, the same cards, saying when they rise (and which
@@ -238,7 +256,10 @@ Where one thing can be done from two places, or is split over two tabs:
   (PE1, PE2).
 - The nation's look: names on Politics (PO3), flags and colour on the Nation tab (NA3, NA4); a releasable has all of
   it on its card.
-- Releasables' land: the Releasables tool (M7) and the cards' buttons (RL1–RL3), which switch to the tool.
+- Releasables' land: the Releasables tool (M7) and the cards' buttons (RL1–RL3), which switch to the tool; taking it
+  away: a click on one of its states, the tool's **Take states away** chip and the cards' **Take states away**.
+- Impassable borders: the Impassable tool (M17) and the Map tab's list (MP8).
+- Impassable land: a state's box (ST12) for land no unit enters; the Impassable tool (M17) for a border no unit crosses.
 - Requests: the Nation tab's form (NA5), **Ask for a new trait** under each leader (PE1, PE4, PE5), **Ask for a new
   kind of company** (PE6) and PO2.
 - Suggestions: drawn with Suggest (M8), described on the Map tab (MP2), gathered in Owner tools (O6).

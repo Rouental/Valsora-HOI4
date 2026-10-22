@@ -13,6 +13,8 @@ from pathlib import Path
 
 import numpy as np
 from scipy import ndimage as ndi
+from scipy.sparse import coo_matrix
+from scipy.sparse.csgraph import connected_components
 from skimage.measure import label as sklabel
 
 sys.path.insert(0, str(Path(__file__).parent))
@@ -530,8 +532,9 @@ def main(mod):
     adj = (mod / "map/adjacencies.csv").read_bytes()
     if not adj.rstrip().endswith(b"-1;-1;;-1;-1;-1;-1;-1;-1") or b"\r\n" not in adj:
         err("adjacencies.csv needs CRLF and the -1 end line")
-    # strait crossings (2026-10-17, scripts/straits.py): land to other land through a sea province, each pair once
-    seen_adj = set()
+    # strait crossings (2026-10-17, scripts/straits.py): land to other land through a sea province, each pair once;
+    # impassable borders (2026-10-22, the Gazetteer's, gazetteer.borders): two land provinces that touch
+    seen_adj, crossed, walls = set(), set(), set()
     for ln in adj.decode("utf-8", "replace").splitlines()[1:]:
         f = ln.split(";")
         if f[:2] == ["-1", "-1"]:
@@ -545,9 +548,32 @@ def main(mod):
             continue
         if f[2] == "sea" and (kind[a - 1] != 1 or kind[b - 1] != 1 or not 1 <= t <= n or kind[t - 1] != 0):
             err(f"adjacencies.csv: the sea crossing {a} - {b} must join two land provinces through a sea one ({t})")
+        if f[2] == "impassable" and (kind[a - 1] != 1 or kind[b - 1] != 1
+                                     or (a - 1, b - 1) not in pairs and (b - 1, a - 1) not in pairs):
+            err(f"adjacencies.csv: the impassable border {a} - {b} must be between two land provinces that touch")
         if (min(a, b), max(a, b)) in seen_adj:
             err(f"adjacencies.csv: provinces {a} and {b} are joined twice")
         seen_adj.add((min(a, b), max(a, b)))
+        (walls if f[2] == "impassable" else crossed if f[2] == "sea" else set()).add((min(a, b) - 1, max(a, b) - 1))
+    # no land walled off: a piece of a landmass (land joined by land and the sea crossings) the impassable borders cut
+    # from the rest must have a coast, so it can still be reached, as an island is
+    if walls:
+        links = {(min(x, y), max(x, y)) for x, y in pairs if kind[x] == 1 and kind[y] == 1} | crossed
+
+        def pieces(edges):
+            e = np.array(sorted(edges), np.int64).reshape(-1, 2)
+            m = coo_matrix((np.ones(len(e)), (e[:, 0], e[:, 1])), shape=(n, n))
+            return connected_components(m, directed=False)[1]
+        whole, cut = pieces(links), pieces(links - walls)
+        split = defaultdict(set)
+        for i in np.flatnonzero(kind == 1):
+            split[whole[i]].add(cut[i])
+        shore = {cut[i] for i in np.flatnonzero(coastal)}
+        for ps in split.values():
+            for c in sorted(ps - shore) if len(ps) > 1 else ():
+                inside = np.flatnonzero(cut == c) + 1
+                err(f"adjacencies.csv: impassable borders wall off {len(inside)} land province(s) without a coast "
+                    f"(province {inside[0]}): no unit could ever reach them")
     if not (mod / "map/buildings.txt").read_text().strip():
         err("buildings.txt must not be empty")
 

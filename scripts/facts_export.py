@@ -79,11 +79,23 @@ def read_states():
         naval = re.search(r"\d+ = \{ naval_base = (\d+) \}", t)
         res = re.search(r"\tresources = \{(.*?)\}", t, re.S)
         out[sid] = dict(
+            imp=bool(re.search(r"^\timpassable = yes$", t, re.M)),   # the page's default (2026-10-22)
             pop=int(re.search(r"manpower = (\d+)", t).group(1)),
             cat=re.search(r"state_category = (\w+)", t).group(1),
             b=b, naval=int(naval.group(1)) if naval else 0,
             res=dict((k, int(v)) for k, v in re.findall(r"(\w+) = (\d+)", res.group(1))) if res else {},
             vp=[(int(p), int(v)) for p, v in re.findall(r"victory_points = \{ (\d+) (\d+) \}", t)])
+    return out
+
+
+def read_walls():
+    """the built mod's impassable borders (adjacencies.csv rows of type impassable, 2026-10-22): [(province, province)],
+    0-based, as the build numbers them (id - 1)"""
+    out = []
+    for ln in (MOD / "map/adjacencies.csv").read_text(encoding="utf-8").splitlines()[1:]:
+        f = ln.split(";")
+        if len(f) > 2 and f[2] == "impassable":
+            out.append((int(f[0]) - 1, int(f[1]) - 1))
     return out
 
 
@@ -395,6 +407,7 @@ def main():
     rivers = world["rivers"]
     n = len(kind)
     built = read_states()
+    walls_built = read_walls()
     names = read_loc(MOD / "localisation/english/valsora_l_english.yml", "VAL_STATE_")
     loc = dict(re.findall(r'^ ([A-Za-z0-9_]+):0 "(.*)"$',
                           (MOD / "localisation/english/valsora_l_english.yml").read_text(encoding="utf-8-sig"), re.M))
@@ -415,6 +428,13 @@ def main():
             coastal[b] = True
     terrain = list(p["terrain"])
     city_at = {int(c[0]): c for c in rj.get("cities", [])}
+    touching = defaultdict(set)   # province -> the countries whose land it touches (land to land)
+    for a, b, _ in rj["adjacency"]:
+        if kind[a] == 1 and kind[b] == 1:
+            if prov_owner[b] >= 0:
+                touching[a].add(int(prov_owner[b]))
+            if prov_owner[a] >= 0:
+                touching[b].add(int(prov_owner[a]))
 
     chars, hist, sprites, of = read_characters(), read_histories(), our_sprites(), ideologies.ideology_of()
     game_rel = json.loads(gazetteer.GAME_RELEASABLES.read_text(encoding="utf-8")) if gazetteer.GAME_RELEASABLES.exists() else {}
@@ -449,7 +469,7 @@ def main():
         boxes = parts_of(small == t, PART_GAP // 4)
         own = [i for s in mine for i in states[s]]
         local = {i: k for k, i in enumerate(own)}
-        others, other_t, nb = [], [], {}
+        others, other_t, other_k, nb = [], [], [], {}
         parts = []
         for (y0, y1, x0, x1) in sorted(boxes, key=lambda b: -(b[1] - b[0]) * (b[3] - b[2])):
             Y0 = max(0, y0 * 4 - MARGIN)
@@ -471,6 +491,8 @@ def main():
                         nb[o] = len(nb)
                     others.append(nb[o] if o else -1)
                     other_t.append(terrain[i])  # the neighbours' terrain, as the mod has it (2026-10-18)
+                    # and the keys of those touching its land, for the impassable borders with them (2026-10-22)
+                    other_k.append(key(i) if t in touching[i] else "")
             lut = np.zeros(n, np.uint16)
             for i, k in local.items():
                 lut[i] = k + 2
@@ -536,9 +558,17 @@ def main():
                              **{"def": loc.get(f"{t}_DEF", "")}, colour=colour(t), flag=flag(t), ideo=r_ruling,
                              sub=lead["sub"] if lead else None, ruler=lead,
                              states=[key(max(states[s_], key=lambda i: (size[i], -i))) for s_ in v["states"]]))
+        # the states the game has impassable now (2026-10-22: the author's areas layer, or the page's own choice once
+        # imported), by key, only where there are any: the page's default for each state's Impassable box
+        imp = [st_list[k]["key"] for k, s in enumerate(mine) if built[s + 1]["imp"]]
+        # the impassable borders the game has (adjacencies.csv, the Gazetteer's once imported, 2026-10-22) that touch the
+        # nation, as pairs of the page's province numbers (its own, then `others`): the Impassable tool's defaults
+        walls = sorted(sorted((local[a], local[b])) for a, b in walls_built
+                       if a in local and b in local and tindex[tag] in (prov_owner[a], prov_owner[b]))
         nation = dict(tag=tag, name=c[1], adj=c[2], colour=colour(tag), flag=flag(tag), flags=gov_flags(tag),
                       continent=CONT_NAME.get(cont, cont), final=final[tag], states=st_list, provs=provs,
-                      others=others, otherT=other_t, nb=[dict(tag=o, name=COUNTRIES[by_tag[o]][1], colour=colour(o))
+                      **({"impassable": imp} if imp else {}), **({"walls": walls} if walls else {}),
+                      others=others, otherT=other_t, otherK=other_k, nb=[dict(tag=o, name=COUNTRIES[by_tag[o]][1], colour=colour(o))
                                          for o in sorted(nb, key=nb.get)],
                       cities=cities, politics=politics(tag, loc), characters=people, gameReleasables=rels, parts=parts)
         text = json.dumps(nation, ensure_ascii=False, separators=(",", ":"))

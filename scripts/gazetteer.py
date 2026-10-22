@@ -60,7 +60,7 @@ TAG = re.compile(r"[A-Z][A-Z0-9]{2}")
 KINDS = ("states", "provinces", "cities", "rivers", "rails", "politics", "flags", "people", "about", "suggest",
          "releasables")
 # facts drawn on a nation's provinces: taken only once its states are the author's (finals)
-MAP_KINDS = ("states", "provinces", "cities", "rivers", "rails")
+MAP_KINDS = ("states", "provinces", "cities", "rivers", "rails", "borders")
 REL_ID = re.compile(r"rl-[a-z0-9]{6,40}")
 GAME_CHAR = re.compile(r"[A-Z][A-Z0-9]{2}_[A-Za-z0-9_]{1,60}")   # a character of the game's, by its id (ch-<id> on the page)
 # a commander's skill and stats on the page (2026-10-15, the author: "Their stats should be editable"): the base game's
@@ -381,6 +381,10 @@ def normalise(tag, facts, meta, requests=(), sources=(), todo=None):
             s["res"] = res
         if text(v.get("note"), 2000):
             s["note"] = text(v["note"], 2000)
+        # impassable (2026-10-22, the author: "There should be a way to mark states as impassible on the gazeteer"):
+        # true or false as the page set it, a choice kept even where the game has it already; absent, the map's
+        if isinstance(v.get("impassable"), bool):
+            s["impassable"] = v["impassable"]
         if s:
             states[f"{xy(k)[0]},{xy(k)[1]}"] = s
     if states:
@@ -401,6 +405,21 @@ def normalise(tag, facts, meta, requests=(), sources=(), todo=None):
             continue
     if provs:
         out["provinces"] = provs
+    # impassable borders (2026-10-22, the author: "Yes, add the impassable borders tool too"): kept by the page in the
+    # provinces document under `borders` (so the atlas's rules needed no new kind), {"x,y|x,y": true | false}, a pixel
+    # inside each of the two provinces; kept sorted as border_key makes them, a key of anything else dropped
+    walls = {}
+    bs = (facts.get("provinces") or {}).get("borders") if isinstance(facts.get("provinces"), dict) else None
+    for k, v in (bs.items() if isinstance(bs, dict) else ()):
+        try:
+            a, b = str(k).split("|")
+            if not isinstance(v, bool) or not all(0 <= xy(p)[1] < H for p in (a, b)) or xy(a) == xy(b):
+                continue
+        except ValueError:
+            continue
+        walls[border_key(a, b)] = v
+    if walls:
+        out["borders"] = dict(sorted(walls.items()))
     if facts.get("cities") is not None:  # edited on the page: the whole list, maybe empty
         cities, capital = [], False
         for c in sorted((c for c in (facts.get("cities") or {}).values() if isinstance(c, dict)),
@@ -984,7 +1003,8 @@ def install_flags(G):
 def summary(n):
     parts = []
     for k, what in (("states", "states"), ("provinces", "provinces"), ("cities", "cities"),
-                    ("rivers", "rivers"), ("rails", "railways"), ("suggest", "suggestions")):
+                    ("rivers", "rivers"), ("rails", "railways"), ("borders", "impassable borders"),
+                    ("suggest", "suggestions")):
         if k in n:
             parts.append(f"{len(n[k])} {what}")
     for k in ("politics", "people", "flags", "about"):
@@ -1247,6 +1267,96 @@ def hubs(G, lab, kind, state_of, owners):
         if hs:
             out[tag] = hs
     return out
+
+
+def border_key(a, b):
+    """a border's key: its two "x,y" pixels (one inside each province), sorted by x then y, joined by "|" (the page's)"""
+    p, q = sorted((xy(a), xy(b)))
+    return f"{p[0]},{p[1]}|{q[0]},{q[1]}"
+
+
+def borders(G, lab, kind, state_of, owners, adjacency, joined, coastal, anchor, notes):
+    """The impassable borders the facts mark (2026-10-22, the author: "Yes, add the impassable borders tool too"): HOI4's
+    adjacencies.csv rows of type impassable between two provinces, as the base game's Himalayas. [(a, b, [tags])],
+    provinces a < b, in order.
+
+    Each nation's `borders` key names a pixel inside each province; its keys are read in the page's order (by key, the
+    border's own key, its provinces' anchors, last; later keys win), true marks a border and false opens one. Left out,
+    with a note: a key whose provinces aren't two touching land provinces, aren't on the nation's land (one of the two
+    must be), or are already joined by a strait crossing (`joined`, the build's sea rows). A border one page marks and
+    another opens stays marked, with a note. Walls must not cut land off: a piece of a landmass they separate from the
+    rest must have a coast (it can still be reached, as an island is), or the walls round it are left out, with a note.
+    The page draws the game's own (facts_export.py, the built rows) as its defaults."""
+    own = _owner_of(lab, state_of, owners)
+    touch = {(int(a), int(b)) for a, b, _ in adjacency}
+    marks = defaultdict(dict)   # (a, b) -> {tag: True | False}
+    for tag, f in sorted(G.items()):
+        mine = {}
+        for k, v in (f.get("borders") or {}).items():
+            try:
+                p, q = sorted(at(lab, s) for s in k.split("|")) if k.count("|") == 1 else (None, None)
+            except (ValueError, IndexError):
+                continue
+            if p is None or not isinstance(v, bool):
+                continue
+            canon = border_key(anchor_key(anchor, p), anchor_key(anchor, q)) if anchor is not None else None
+            mine.setdefault((p, q), []).append((k == canon, k, v))
+        for (p, q), items in sorted(mine.items()):
+            k, v = sorted(items)[-1][1:]
+            why = ("both its pixels are in one province" if p == q
+                   else "it isn't between two land provinces" if kind[p] != 1 or kind[q] != 1
+                   else f"neither province is {tag}'s" if own[p] != tag and own[q] != tag
+                   else "its provinces no longer touch" if (p, q) not in touch
+                   else "a strait crossing joins its provinces already" if (p, q) in joined else None)
+            if why:
+                notes.append(f"Gazetteer: {tag}'s impassable border at {k} left out: {why}")
+                continue
+            marks[p, q][tag] = v
+    walls = {}
+    for pq, by in sorted(marks.items()):
+        on = sorted(t for t, v in by.items() if v)
+        if on and len(on) < len(by):
+            off = ", ".join(sorted(t for t, v in by.items() if not v))
+            notes.append(f"Gazetteer: the border of provinces {pq[0] + 1} and {pq[1] + 1} is impassable on "
+                         f"{', '.join(on)}'s page, open on {off}'s: kept impassable")
+        if on:
+            walls[pq] = on
+    if not walls:
+        return []
+    # walls that cut land off: the pieces of each landmass (land joined by land and by strait crossings) without them
+    from scipy.sparse import coo_matrix
+    from scipy.sparse.csgraph import connected_components
+    n = len(kind)
+    links = sorted({(a, b) for a, b in touch if kind[a] == 1 and kind[b] == 1} | set(joined))
+
+    def pieces(edges):
+        a = np.array([e[0] for e in edges], np.int64)
+        b = np.array([e[1] for e in edges], np.int64)
+        return connected_components(coo_matrix((np.ones(len(a)), (a, b)), shape=(n, n)), directed=False)[1]
+    whole = pieces(links)
+    land = np.flatnonzero(np.asarray(kind) == 1)
+    while walls:
+        cut = pieces([e for e in links if e not in walls])
+        split = defaultdict(set)
+        for i in land:
+            split[whole[i]].add(cut[i])
+        shore = {cut[i] for i in land if coastal[i]}
+        bad = sorted({c for ps in split.values() if len(ps) > 1 for c in ps if c not in shore})
+        if not bad:
+            break
+        c = bad[0]
+        round_it = [e for e in walls if (cut[e[0]] == c) != (cut[e[1]] == c)]
+        if not round_it:   # (a piece only the walls make has walls round it)
+            break
+        inside = [int(i) for i in land if cut[i] == c]
+        where = anchor_key(anchor, inside[0]) if anchor is not None else inside[0]
+        notes.append(f"Gazetteer: {len(round_it)} impassable border{'s' if len(round_it) > 1 else ''} of "
+                     f"{', '.join(sorted({t for e in round_it for t in walls[e]}))} left out: "
+                     f"{'they' if len(round_it) > 1 else 'it'} would wall off {len(inside)} province"
+                     f"{'s' if len(inside) > 1 else ''} without a coast, at {where}")
+        for e in round_it:
+            del walls[e]
+    return [(a, b, tags) for (a, b), tags in sorted(walls.items())]
 
 
 def railways(G, lab, kind, centre, adjacency, notes):

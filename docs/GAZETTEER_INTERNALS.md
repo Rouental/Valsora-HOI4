@@ -25,7 +25,7 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   nothing is committed when the site is unchanged). Pages redeploys in a minute or two (the
   "pages build and deployment" run in Actions; github.io itself can't be reached from
   Claude's sandbox). Test the page first: `python3 tests/gazetteer/run.py`, `traits.py`, `companies.py`, `ingame.py`,
-  `reset.py`, `guide.py`, `stale.py` and `gender.py`.
+  `reset.py`, `guide.py`, `stale.py`, `gender.py`, `impassable.py`, `release_remove.py` and `borders.py`.
 - **Facts of states cut again from a nation's own map** (2026-10-20, Rouental's fiefs: `fief_states.py`): one old
   state became several, and its facts (Carcarelle's population) would land whole on the one new state holding its key.
   `gazetteer.rekey(tag, n)`, called by the import (and run once on `source/gazetteer/ROU.json`), reads the old and new
@@ -166,6 +166,66 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   silhouette `GFX_portrait_unknown_female`, and small advisor icons `GFX_idea_generic_*_female_<region>`; the four
   Italian women generals `00_portraits.txt` names are not among the base game's sprites), so a woman without a
   portrait of her own keeps the generic one of her culture she had. `tests/gazetteer/gender.py`.
+- **Impassable states** (2026-10-22, the author: "There should be a way to mark states as impassible on the gazeteer").
+  HOI4's `impassable = yes` with `force_link_ownership_to`, as the base game's Sahara; the map's own are the author's red
+  and striped areas (`scripts/areas.py`, `regions.json` `impassable`). The export gives each nation `impassable`, the keys
+  of its states the built `history/states/` files mark (`read_states`' `imp`), only where there are any. The facts: a
+  state's `impassable`, true or false as the page set it (kept even where the game has it already, as genders are: the
+  default comes from the last build, which carries the page's own earlier choice), absent the map's; `normalise` keeps
+  only booleans. The page: the State tab's **Movement** section (`stateForm`), a checkbox in a `.field.check` showing
+  `stateImpWanted` (the choice, else `N.impGame`, the export's), the field marked set when chosen, the map's default as a
+  hint, **Use the map's** (null); `impassableNow()` (cached in `N.impNow`, cleared by `resolve`) is what the game will make
+  of it, as the build decides, in the same order: a capital (`capitalState`) stays passable, then, until nothing changes,
+  the first state (by index) with no passable state of the nation beside it (`N.stateAdj`, derive's state adjacency) that
+  the page marked is dropped ("alone"), else the lowest marked state beside such a state of the map's ("blocks"); each
+  gives a warning under the box. `renderPart` hatches the states it holds (every sixth diagonal, two pixels, the fill
+  mixed 36 % with ink) in every colouring while the map tools are open; the key (`.legend i.hatch`) and the status line
+  (`hoverText`) say so; the box's text says its cities and hubs are left out there. The build:
+  `build_mod.impassable_states` (called after the capitals, which keep to the map's own, so a mark never moves a capital)
+  adds and removes the Gazetteer's states, keeps a marked capital passable with a note ("can't be impassable: it is TAG's
+  capital"), links each to the passable state of its owner it shares most border with, and drops a mark that would leave
+  a state unlinked ("no passable state of TAG borders it", or "state N (name) beside it would have no passable state of
+  TAG left to change hands with"). Everything after follows (`state_category` wasteland, infrastructure 0, a twentieth of
+  the manpower, no victory points, no supply node, no division); a Gazetteer supply hub in a state that became impassable
+  is left out with a note. Terrain is untouched. `check_mod.py` already checked the link, capitals, supply nodes and units
+  (mutation-tested). Without the field the build is byte-identical (checked on 2026-10-22: `dist/valsora_test.zip` the same
+  as committed), and `impassable_states` gives today's 22 states and links exactly. `tests/gazetteer/impassable.py`.
+- **Taking land away from a releasable** (2026-10-22, the author: "There should also be a way to remove terrain from
+  releasables, I believe you can currently only add"). Until then only the tool's **Take them away** chip took states
+  away, and the cards' buttons always opened the tool to add. `paintRel(p, stroke)`: in the add mode a click on one of the
+  picked releasable's states takes it away; in a drag (`stroke`, the map's `map.drag`, given by `paintAt`) the first state
+  decides for the whole stroke (`stroke.relOp`), so a drag never flips states back and forth; the rules stay (one of the
+  game's releasables keeps its last state, with its message; a state belongs to one releasable per group). The cards
+  (`relCard`, `gameRelCard`) have **Take states away** beside **Change its states** while the map tools are open and it
+  holds a state (`relTool(id, "remove")`); the chips read **Add states** / **Take states away**, and the hint follows the
+  mode. A drawn area's button reads **Delete area N** (`btn small danger`, its aria-label naming the releasable): an area
+  goes whole, there is no rubber for part of one. `tests/gazetteer/release_remove.py`.
+- **Impassable borders** (2026-10-22, the author: "Yes, add the impassable borders tool too"). HOI4 has no impassable
+  province; besides impassable states it takes `map/adjacencies.csv` rows of type `impassable` between two provinces, as
+  the base game's Himalayas (`10825;1991;impassable;-1;-1;-1;-1;-1;;Himalayas`). The page keeps them in the `provinces`
+  document under `borders` (so the rules needed no new kind: they allow only known documents): `{"x,y|x,y": true |
+  false}`, a pixel inside each province (the provinces' keys, their anchors), sorted by x then y (`borderKey`,
+  `gazetteer.border_key`); true marks a border, false opens one of the game's, a mark on a border the game hasn't is
+  cleared (null) when opened. The export gives each nation `otherK` (the keys of the neighbours' provinces in `others`
+  that touch its land, "" for the rest) and `walls`, the built rows touching it as pairs of the page's province numbers
+  (`read_walls`). The page: the tool `wall` (B, `toolsHere` while the map tools are open, not on the world map),
+  `borderAt` (the shared edge nearest the click within 11 screen px, 18 on a touch screen, between two land provinces, one
+  the nation's), `toggleWall` (keys from before a re-cut gathered into the border's own, as `editPlace` does),
+  `resolveWalls` (in `resolve`: the stored keys in the build's order, by key, the own key last, later winning; `keyLabel`
+  through `N.labelOfKey`, else the pixel), `wallsNow` (the game's `N.wallDefault` with the choices over them, by
+  `pairOf`), `wallSegs` (each part's unit edges, recomputed when the set changes) drawn in `draw()` as a `--wall` line on a
+  paper halo, the key (`.legend i.wall`), the status line over a border, and the Map tab's list (**Show**: `wallSpot`;
+  **Open it**). The import keeps `borders` (top level of the nation's file) of two in-map pixels and a boolean, sorted;
+  `MAP_KINDS` drops them for a closed nation. The build: `gazetteer.borders` resolves each key's pixels to provinces and
+  leaves out, with a note, a key of one province, of water, off the nation's land, of provinces that no longer touch, or of
+  a pair a strait crossing joins (`joined`, the sea rows); a border one page marks and another opens stays marked, with a
+  note; then the walled-off guard: the landmasses (land joined by land and by strait crossings, scipy's
+  `connected_components`) cut by the walls must leave every piece a coast, else the walls round the first coastless piece
+  go, with a note ("would wall off N provinces without a coast, at x,y"), until none is left. `build_mod.py` writes the rows
+  after the strait crossings (`pid` numbers, `Gazetteer TAG` as the comment). `check_mod.py` checks that an `impassable`
+  row joins two land provinces that touch and that no piece of land is walled off without a coast (mutation-tested,
+  `m_impassable_border_apart`, `m_walled_off`: 66 of 66 on 2026-10-22). Without the field the build is byte-identical.
+  `tests/gazetteer/borders.py`.
 - **Portraits are cut round the face** (2026-10-18, the author: "when importing pictures of characters from the
   Gazetteer, try to center the image around the character"; Port Almohavid's ruler stood at the left of his photo, and
   the middle of the picture was cut out): the import finds each picture's face (OpenCV's frontal-face detector, the
@@ -216,7 +276,7 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   author's own test edit (one Lanzerac province set to forest, `facts/LZC-provinces` and
   `nations/LZC`); version 2 doesn't read those collections.
 - **What it edits**, per nation: state names, population, kind of state, buildings (within
-  slots and vanilla's caps), resources, notes; province terrain (8 types) and supply hubs;
+  slots and vanilla's caps), resources, impassable, notes; province terrain (8 types), supply hubs and impassable borders;
   cities (one per province, victory points, size, the capital, state capitals); rivers (major,
   minor, erase strokes); railways (level 1-5); names, full titles and adjectives under every
   government and each ideology, the ruling sub-ideology; the head of state (name, gender, titles,

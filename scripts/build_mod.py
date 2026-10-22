@@ -291,6 +291,62 @@ def state_lines(write, state_by_name):
     return loc
 
 
+def impassable_states(impassable, gfacts, tags, adjacency, state_of, is_capital, state_name, notes):
+    """The impassable states and the passable one each is linked to: (set, {state: state}).
+
+    `impassable` is the map's (the author's red areas, areas.py). The Gazetteer's (2026-10-22, the author: "There should
+    be a way to mark states as impassible on the gazeteer"): a state's `impassable` true adds it, false takes one of the
+    map's away. Called after the capitals are chosen (they keep to the map's), so a mark never moves one: a capital stays
+    passable, with a note. Each is linked, as the base game's Sahara, to the passable state of its owner it shares most
+    border with, so it changes hands with it (check_mod.py); a state of the Gazetteer's with none beside it stays
+    passable, with a note, as does one whose mark would leave a state of the map's beside it without one. The page
+    (impassableNow) decides the same way, in the same order."""
+    impassable, gimp = set(impassable), set()
+    for s, f in sorted(gfacts.items()):
+        if f.get("impassable") is True and s not in impassable:
+            impassable.add(s)
+            gimp.add(s)
+        elif f.get("impassable") is False:
+            impassable.discard(s)
+    for s in sorted(s for s in gimp if is_capital(s)):
+        impassable.discard(s)
+        gimp.discard(s)
+        notes.append(f"Gazetteer: state {s + 1} ({state_name[s]}) can't be impassable: it is {tags[s]}'s capital")
+    link_to = {}
+    if not impassable:
+        return impassable, link_to
+    shared = Counter()
+    for x, y, k in adjacency:
+        sx, sy = int(state_of[x]), int(state_of[y])
+        if sx >= 0 and sy >= 0 and sx != sy and tags[sx] == tags[sy]:
+            shared[sx, sy] += k
+            shared[sy, sx] += k
+    beside = defaultdict(set)
+    for f, t in shared:
+        beside[f].add(t)
+    while True:
+        link_to = {}
+        for s in impassable:
+            nb = [(shared[s, t], t) for t in beside[s] if t not in impassable]
+            if nb:
+                link_to[s] = max(nb)[1]
+        lost = sorted(s for s in impassable if s not in link_to and not is_capital(s))
+        alone = [s for s in lost if s in gimp]
+        if alone:
+            s, why = alone[0], f"no passable state of {tags[alone[0]]} borders it"
+        else:
+            block = sorted({t for u in lost for t in beside[u] if t in gimp})
+            if not block:
+                return impassable, link_to
+            s = block[0]
+            o = next(u for u in lost if s in beside[u])
+            why = (f"state {o + 1} ({state_name[o]}) beside it would have no passable state of {tags[o]} left to change "
+                   "hands with")
+        impassable.discard(s)
+        gimp.discard(s)
+        notes.append(f"Gazetteer: state {s + 1} ({state_name[s]}) can't be impassable: {why}")
+
+
 def main():
     if OUT.exists():
         shutil.rmtree(OUT)
@@ -608,21 +664,8 @@ def main():
         big = [s for s in members if len(states[s]) >= 4] or members
         return min(big, key=lambda s: np.hypot(*(np.mean(
             [reg["centre"][i] for i in states[s]], axis=0) - (cy, cx))))
-    # impassable states (the author's red areas, areas.py): each linked, as the base game's Sahara, to the passable state
-    # of its owner it shares most border with, so it changes hands with it
+    # impassable states (the author's red areas, areas.py); the capitals below keep to these, the Gazetteer's come after
     impassable = set(rj.get("impassable", []))
-    link_to = {}
-    if impassable:
-        shared = Counter()
-        for x, y, k in rj["adjacency"]:
-            sx, sy = int(state_of[x]), int(state_of[y])
-            if sx >= 0 and sy >= 0 and sx != sy and owners[sx] == owners[sy]:
-                shared[sx, sy] += k
-                shared[sy, sx] += k
-        for s in impassable:
-            nb = [(k, t) for (f, t), k in shared.items() if f == s and t not in impassable]
-            if nb:
-                link_to[s] = max(nb)[1]
     capital_state = {}
     for c in present:
         members = [s for s in range(len(states)) if owners[s] == c]
@@ -654,6 +697,9 @@ def main():
         if capital_state.get(owners[s]) != s:
             gnotes.append(f"Gazetteer: {COUNTRIES[owners[s]][0]}'s capital is {city_of[p]}")
         capital_state[owners[s]] = s
+    is_capital = lambda s: capital_state.get(owners[s]) == s
+    impassable, link_to = impassable_states(impassable, gfacts, rj["owners"], rj["adjacency"], state_of, is_capital,
+                                            state_name, gnotes)
     for s, g in enumerate(states):
         c = owners[s]
         tag = COUNTRIES[c][0]
@@ -917,7 +963,11 @@ def main():
     nodes = [state_capital[s] for s in range(len(states)) if COUNTRIES[owners[s]][0] not in ghubs
              and (s not in impassable or s == capital_state.get(owners[s]))]
     for tag, hs in ghubs.items():
-        nodes += hs + [state_capital[capital_state[by_tag[tag]]]]
+        off = [p for p in hs if int(state_of[p]) in impassable and not is_capital(int(state_of[p]))]
+        if off:   # a hub placed before its state was marked impassable on the page (2026-10-22)
+            gnotes.append(f"Gazetteer: {tag}'s supply hubs in impassable states left out: provinces "
+                          f"{', '.join(str(pid[p]) for p in off)}")
+        nodes += [p for p in hs if p not in off] + [state_capital[capital_state[by_tag[tag]]]]
     write("map/supply_nodes.txt", "".join(f"1 {pid[c]}\n" for c in dict.fromkeys(nodes)))
     rails = gazetteer.railways(G, lab, kind, reg["centre"], rj["adjacency"], gnotes)
     write("map/railways.txt", "".join(f"{lv} {len(line)} {' '.join(str(pid[i]) for i in line)}\n" for lv, line in rails))
@@ -937,8 +987,15 @@ def main():
     # strait crossings the author approved (source/straits.json, scripts/straits.py: none until then)
     import straits
     crossings = straits.rows(lab, kind, pid)
+    # the Gazetteer's impassable borders (2026-10-22, the author: "Yes, add the impassable borders tool too"), as the base
+    # game's Himalayas: no unit crosses between the two provinces (gazetteer.borders: none that would wall land off)
+    joined = {tuple(sorted(int(v) - 1 for v in r.split(";")[:2])) for r in crossings}
+    walls = gazetteer.borders(G, lab, kind, state_of, rj["owners"], rj["adjacency"], joined, coastal, anchor,
+                              gnotes) if G else []
     write("map/adjacencies.csv", "From;To;Type;Through;start_x;start_y;stop_x;stop_y;adjacency_rule_name;Comment\n"
-          + "".join(r + "\n" for r in crossings) + "-1;-1;;-1;-1;-1;-1;-1;-1\n", crlf=True)
+          + "".join(r + "\n" for r in crossings)
+          + "".join(f"{pid[a]};{pid[b]};impassable;-1;-1;-1;-1;-1;;Gazetteer {' '.join(tags)}\n" for a, b, tags in walls)
+          + "-1;-1;;-1;-1;-1;-1;-1;-1\n", crlf=True)
     write("map/adjacency_rules.txt", "# No canals on the map (the strait crossings are in adjacencies.csv).\n"
           if crossings else "# No straits or canals on the placeholder map.\n")
     # ambient objects: vanilla's wind and frame, water ambience moved to our open seas
