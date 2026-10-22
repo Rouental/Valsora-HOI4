@@ -17,12 +17,17 @@
  ],
  "people": {
   "ruler": {
+   "desc": "By the Grace of the Goddess, Duke of Lustiana, Lord Master of the Greenwood Vale.",
+   "name": "Estienne Bourbaki de Lustiana",
    "portrait": {
     "file": "assets/c126c8c8dfc5c02595c3715a.jpg",
     "h": 640,
     "name": "ad3e7ebb776fb2d08e140cff78b7ed10.jpg",
     "w": 480
-   }
+   },
+   "traits": [
+    "anti_communist"
+   ]
   }
  },
  "provinces": {
@@ -39,7 +44,7 @@
    "t": "forest"
   },
   "837,776": {
-   "t": "forest"
+   "t": "urban"
   }
  },
  "states": {

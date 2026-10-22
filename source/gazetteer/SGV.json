@@ -15,6 +15,22 @@
    "y": 773
   }
  ],
+ "people": {
+  "ruler": {
+   "desc": "By the Grace of the Goddess, Liege Lady of the Selgrave Mountain and its Lesser Monts, Sword of the Faithful and the Farwarden of the Vale.",
+   "gender": "female",
+   "name": "Ansera Dumont",
+   "portrait": {
+    "file": "assets/53fbf4e6ebaedde1937adb4c.jpg",
+    "h": 640,
+    "name": "91c349425b1a5adf0e66d3376726a5fb.jpg",
+    "w": 479
+   },
+   "traits": [
+    "national_integralist"
+   ]
+  }
+ },
  "provinces": {
   "850,772": {
    "t": "forest"

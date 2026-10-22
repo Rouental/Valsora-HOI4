@@ -1,7 +1,22 @@
 {
+ "people": {
+  "ruler": {
+   "desc": "By the Grace of the Goddess, Count of the Seigne and Watcher of the Confluence.",
+   "name": "Aymeri de Seigne",
+   "portrait": {
+    "file": "assets/91a47371606a4774057265dd.jpg",
+    "h": 427,
+    "name": "GettyImages-1187538549-1080x720.jpg",
+    "w": 640
+   },
+   "traits": [
+    "compassionate_gentleman"
+   ]
+  }
+ },
  "provinces": {
   "805,817": {
-   "t": "plains"
+   "t": "urban"
   },
   "813,824": {
    "t": "plains"

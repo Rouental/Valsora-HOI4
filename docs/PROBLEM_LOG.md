@@ -6,6 +6,16 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**The import crashed in `rekey`** (2026-10-22, the Gazetteer's export of that day).
+- Cause: `source/gazetteer/rekey/ROU.npz` (Rouental's page facts moved from its old states to its fiefs) still listed
+  12 provinces the author's groups merged away on 2026-10-21; their masks were empty and `most_common(1)[0]` failed.
+- Fix: `rekey` skips a province with no pixels (its land is the one it joined). Not a check: the import stops loudly.
+
+**Rouental's cities missing from the export** (2026-10-22): the export's Rouental page had 5 of the 29 cities of its
+earlier facts. The page writes the whole list only when the cities document is first made, so the 24 were taken out
+of the page's document after the export of 2026-10-20 (by hand or otherwise; not by the tools published that day,
+which came later). Held: the 29 kept, the export's changes on top, the author asked.
+
 **The governorates' map clicked only at the seals** (2026-10-22, the author: "like you said, clicking doesn't quite work
 right. For example, I can't click on Rivage d'argent anywhere but the badge").
 - Cause: the game takes a button's whole box for it, not its picture's opaque part. Each governorate's fill was a

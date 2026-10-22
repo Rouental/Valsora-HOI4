@@ -836,6 +836,8 @@ def rekey(tag, n):
         by, out = group(n["provinces"], oP)
         for q in z["province_ids"].tolist():
             m = p == q
+            if not m.any():  # merged into another since (the author's groups, 2026-10-21): its pixels are that one's
+                continue
             c = Counter(oP[m].tolist()).most_common(1)[0][0]
             if c in by and pkey[q] not in out:
                 out[pkey[q]] = by[c]

@@ -261,8 +261,8 @@ the page, its rules or its import.
 
 Where things stand; the history, date by date, is `docs/HISTORY.md` (add each day's entry at its top).
 
-- **The build** (2026-10-21): 21,136 provinces (20,748 land, 363 sea, 25 lakes), 62,322 province borders
-  (HOI4 draws 65,536: 3,214 free, `docs/BORDER_LIMIT.md`), 3,300 states (Rouental's its fiefs since 2026-10-20, Aurifort cut out on 2026-10-21, the author's 13 groups the same day; 22 impassable, without supply hubs or troops: Usnistan's deserts and the
+- **The build** (2026-10-22): 21,150 provinces, 62,364 province borders
+  (HOI4 draws 65,536: 3,172 free, `docs/BORDER_LIMIT.md`), 3,298 states (Zwintern's four drawn ones since 2026-10-22) (Rouental's its fiefs since 2026-10-20, Aurifort cut out on 2026-10-21, the author's 13 groups the same day; 22 impassable, without supply hubs or troops: Usnistan's deserts and the
   Cultists' striped jungle, the
   author's areas layer, `scripts/areas.py`; one province each, as the base game's great deserts; their land and the yellow areas desert terrain, cut coarse), 206 strategic
   regions (164 land: 137 made from the nations on 2026-10-16, `land_regions.py`, not redone for the borders since, and
@@ -279,7 +279,7 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   (`map/adjacencies.csv`, `gazetteer.borders`) and taking a releasable's states away by clicking them.
   Rouental has test decisions for every kind of event, a test superevent and one that sets off many alerts at once
   (`test_events.py`).
-  **The Gazetteer's facts are in the mod** (the author's export of 2026-10-20, night, 30 nations, `source/gazetteer/`;
+  **The Gazetteer's facts are in the mod** (the author's export of 2026-10-22, 32 nations, Arovannea's left out at the author's word, Rouental's 24 missing cities held, `source/gazetteer/`;
   the 15 suggestions of 2026-10-18's put on the map by `apply_suggestions.py`), after the blank slate of 2026-10-16. `gazetteer_fetch.py` reads the site directly once the author adds a read-only service
   account's key as the secret `GAZETTEER_SERVICE_ACCOUNT` (`docs/GAZETTEER_INTERNALS.md`); until then their saved file. The Gazetteer offers the base game's traits for every leader and takes requests for new ones,
   and has political advisors and companies (arms makers and industrial concerns of the base game's kinds, with logos;
@@ -315,8 +315,8 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   advisors, the Kufi in gold, HMMLA's Royal Fiefs, Rouental's groups, Montvallée, Rêverie, the Royal Host, Kalaistan).
   New: the governorates' window and the three powers in game, bare bones (2026-10-21, night, seen 2026-10-22: what to
   see in game in `docs/CONTENT.md`, Rouental; the zones' effects and the decisions still placeholders); Guedelon's
-  Conseil des Sept, its portrait for the author to put on the Gazetteer (`dist/portrait_proposals/guedelon_council/`,
-  2026-10-22; at the next import drop `nations.py`'s Council of Six, `NAMED_LEADERS` and `PORTRAITS`); the Vale of Reibonne's region left with Guedelon and Brillagne apart; whether the groups stay (the way back:
+  ruler's name ("The Council of Six" on its page, the portrait the Conseil des Sept's, 2026-10-22); whether Rouental's
+  24 cities missing from the export of 2026-10-22 were meant to go (held: `docs/NATIONS.md`, that day); the Vale of Reibonne's region left with Guedelon and Brillagne apart; whether the groups stay (the way back:
   `work/pre_groups_1021/`, or the commit before them). Open: the strait crossings to add from the red ones
   (`dist/straits_map_red.png`); the old upload's tundra, jungle and desert marks ("I'll add those back in later");
   flags for Belekria's eight republics and state names (later, the author's); the region names (the drafts in the mod

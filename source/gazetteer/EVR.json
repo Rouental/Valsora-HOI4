@@ -14,6 +14,22 @@
    "y": 806
   }
  ],
+ "people": {
+  "ruler": {
+   "desc": "By the Grace of the Goddess, Countess of Evriches.",
+   "gender": "female",
+   "name": "Jehanne Verninac",
+   "portrait": {
+    "file": "assets/491d26a00ed9212ae1ceb4a5.jpg",
+    "h": 640,
+    "name": "635953041488253227-AFP-550491083.webp",
+    "w": 480
+   },
+   "traits": [
+    "ideological_crusader"
+   ]
+  }
+ },
  "provinces": {
   "795,805": {
    "hub": true,

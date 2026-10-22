@@ -258,7 +258,8 @@ print(json.dumps(out))
 
 
 def without_field():
-    """the facts already in source/gazetteer/ (none has a gender): no gender line from the Gazetteer's functions"""
+    """the facts of source/gazetteer/ with every gender taken out (a copy, GAZETTEER_DIR; since 2026-10-22 some carry
+    one): no gender line from the Gazetteer's functions"""
     code = r"""
 import json, sys
 sys.path.insert(0, "scripts")
@@ -275,7 +276,20 @@ for tag, f in G.items():
     lines += "".join(gazetteer.characters(tag, f, {}, set(), {"army": ["A"], "navy": ["N"]})[0]).count("gender")
 print(json.dumps([same, genders == dict(nations.GENDERS), lines, len(G)]))
 """
-    r = subprocess.run([sys.executable, "-c", code], cwd=H.ROOT, capture_output=True, text=True)
+    def strip(v):
+        if isinstance(v, dict):
+            return {k: strip(x) for k, x in v.items() if k != "gender"}
+        return [strip(x) for x in v] if isinstance(v, list) else v
+    with tempfile.TemporaryDirectory() as tmp:
+        src = Path(H.ROOT) / "source" / "gazetteer"
+        for f in src.glob("*.json"):
+            (Path(tmp) / f.name).write_text(json.dumps(strip(json.loads(f.read_text(encoding="utf-8"))),
+                                                       ensure_ascii=False), encoding="utf-8")
+        for d in ("assets", "rekey"):
+            if (src / d).exists():
+                shutil.copytree(src / d, Path(tmp) / d)
+        r = subprocess.run([sys.executable, "-c", code], cwd=H.ROOT, capture_output=True, text=True,
+                           env={**os.environ, "GAZETTEER_DIR": tmp})
     check(r.returncode == 0, f"the check without the field failed: {r.stderr[-800:]}")
     if not r.returncode:
         same, gsame, lines, n = json.loads(r.stdout)

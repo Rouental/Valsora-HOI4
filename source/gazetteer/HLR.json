@@ -29,21 +29,28 @@
  ],
  "people": {
   "ruler": {
+   "desc": "By the Grace of the Goddess, Prince of Hollier and Inheritor to the Reibonne of Yore.",
    "name": "Jacme Thouars-Hollier",
    "portrait": {
-    "file": "assets/7251739ba84f7d68de88d7fe.jpg",
-    "h": 640,
-    "name": "19_janvier_2020_(77)_cropped.jpg",
-    "w": 453
-   }
+    "file": "assets/03f320cb89a1c3a509ee4be6.jpg",
+    "h": 426,
+    "name": "LYNXMPEK6708H-1.jpg",
+    "w": 640
+   },
+   "traits": [
+    "conservative_nationalist"
+   ]
   }
  },
  "provinces": {
-  "826,822": {
+  "828,818": {
    "t": "forest"
   },
-  "829,813": {
-   "t": "forest"
+  "836,799": {
+   "t": "hills"
+  },
+  "839,813": {
+   "t": "hills"
   },
   "841,806": {
    "t": "hills"
@@ -57,14 +64,17 @@
   "848,813": {
    "t": "urban"
   },
+  "852,832": {
+   "t": "forest"
+  },
   "854,808": {
    "t": "mountain"
   },
   "858,823": {
    "t": "mountain"
   },
-  "858,835": {
-   "t": "forest"
+  "864,828": {
+   "t": "mountain"
   }
  },
  "states": {

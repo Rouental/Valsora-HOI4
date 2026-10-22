@@ -163,6 +163,17 @@
    }
   }
  },
+ "provinces": {
+  "2077,704": {
+   "t": "urban"
+  },
+  "2270,946": {
+   "t": "urban"
+  },
+  "2446,761": {
+   "t": "urban"
+  }
+ },
  "releasables": [
   {
    "adj": "Formosan",

@@ -1,0 +1,36 @@
+{
+ "cities": [
+  {
+   "capital": true,
+   "name": "Guedelon",
+   "size": "metropolis",
+   "vp": 50,
+   "x": 748,
+   "y": 871
+  }
+ ],
+ "people": {
+  "ruler": {
+   "desc": "By the Grace of the Goddess and Voice of the People, the Representatives of the Most Ancient and Noble City of Guedelon.",
+   "name": "The Council of Six",
+   "portrait": {
+    "file": "assets/78b203ac4f5ff6ba2fdb8854.png",
+    "h": 630,
+    "name": "image-1792643612486.png",
+    "w": 468
+   }
+  }
+ },
+ "provinces": {
+  "748,871": {
+   "t": "urban"
+  }
+ },
+ "states": {
+  "748,871": {
+   "pop": 1009000
+  }
+ },
+ "status": "draft",
+ "tag": "GDN"
+}

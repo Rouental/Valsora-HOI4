@@ -54,6 +54,9 @@ PLAN = [
     ("UNG", None, "drawn", {}),
     # 2026-10-19: Ostaria's five states, drawn and named on its page (the ones above were applied on 2026-10-18)
     ("OST", None, "drawn", {}),
+    # 2026-10-22: Zwintern's four states, drawn and named on its page (the author: "Some new leaders and borders for
+    # Zwintern")
+    ("ZWT", None, "drawn", {}),
 ]
 
 

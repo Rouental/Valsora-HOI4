@@ -10,13 +10,17 @@
  ],
  "people": {
   "ruler": {
+   "desc": "By the Grace of the Goddess and Voice of the People, Lord Chancellor of Lanzerac and Speaker of the Estates therein.",
    "name": "Aymeric Mesny",
    "portrait": {
-    "file": "assets/de8338efede02724cf99c6e9.jpg",
-    "h": 360,
-    "name": "benoit-payan-2324-2.webp",
-    "w": 640
-   }
+    "file": "assets/0f3e04a442debc152634baa4.jpg",
+    "h": 640,
+    "name": "OIP.webp",
+    "w": 426
+   },
+   "traits": [
+    "resolute_social_democrat"
+   ]
   }
  },
  "provinces": {

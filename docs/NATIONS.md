@@ -889,3 +889,23 @@ and a new symbol, seven shields round the griffin (`source/portraits/gdn_council
 B with it, CONSEIL DES SEPT and GUEDELON in the ring (`dist/portrait_proposals/guedelon_council/gazetteer_portrait.png`,
 468 x 630 for the Gazetteer). The author puts it and the ruler's name on Guedelon's Gazetteer page; the build keeps the
 Council of Six until that export is imported, then its `NAMED_LEADERS` and `PORTRAITS` entries for Guedelon go.
+
+## 2026-10-22, later still: the Gazetteer's export of that day
+
+The author: "Most recent Gazetteer update. Some new leaders and borders for Zwintern. If there's any changes for
+Arovannea, ignore them, they're still a WIP." Imported without Arovannea (its entry taken out of the file first:
+`work/gz_import_1022/`). In it:
+- **Rulers**: Evriches' Jehanne Verninac and Selgrave's Ansera Dumont (both female, as their pages say), Seigne's
+  Aymeri de Seigne; Hollier's, Lustiana's and Lanzerac's rulers changed on their pages; Al-Radiyaa's ruler a portrait.
+- **Guedelon** (its first facts): its ruler from its page, "The Council of Six" with the author's title for it ("By the
+  Grace of the Goddess and Voice of the People, the Representatives of the Most Ancient and Noble City of Guedelon")
+  and the Conseil des Sept's portrait; the city of Guedelon a metropolis (victory points 50), its state 1,009,000
+  people, its province urban. `nations.py`'s stand-in Council of Six (`NAMED_LEADERS`, `PORTRAITS`) is gone. The name
+  on the page still says Six, the portrait Sept: asked.
+- **Zwintern's four states**, drawn and named on its page (Tolles Zwintern, Winterschlaf, Bärisch, Hügelsanfte), put on
+  the map (`apply_suggestions.py --only=ZWT`; the map 10-22); its map tools open with them.
+- **Rouental's cities, held**: the export's Rouental page has 5 of the 29 cities its facts had since 2026-10-19 (the
+  page's cities document lost the other 24 after the export of 2026-10-20: Vair, Carcarelle, Durandal ...). The 29 are
+  kept in `source/gazetteer/ROU.json`, the export's changes on top (Rêverie's victory points 40 ...), until the author
+  says whether the 24 were meant to go. Its other changes (states, provinces, Ghessone) are in.
+

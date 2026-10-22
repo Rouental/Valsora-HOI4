@@ -10,6 +10,12 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-22, later still: the Gazetteer's export of that day imported, Arovannea's left out (the author: "still a
+  WIP"): the Association's rulers (Evriches, Selgrave, Seigne new; Hollier, Lustiana, Lanzerac changed), Guedelon's
+  first facts (its ruler, the Council of Six with the Conseil des Sept's portrait; its city and state), Zwintern's four
+  drawn states on the map (map 10-22); Rouental's 24 cities missing from the export kept until the author says. The
+  import's `rekey` skips the provinces the groups merged away (it crashed on them). 21,150 provinces, 3,298 states,
+  62,364 province borders (3,172 free).
 - 2026-10-22, later still: three Gazetteer tools (the author: "There should be a way to mark states as impassible on
   the gazeteer"; "There should also be a way to remove terrain from releasables"; "Yes, add the impassable borders
   tool too"): **impassable states** (the State tab's Movement section; the build's `impassable_states`, after the

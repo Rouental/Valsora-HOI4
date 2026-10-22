@@ -418,9 +418,6 @@ NAMED_LEADERS = {
     # its regency since 2026-10-17 (author: "Their leader should remain the Council of Marshals"; a Stratocracy
     # until then)
     "KRI_leader_regency_council": ("Kriosaivak Council of Marshals", "GFX_portrait_KRI_council_of_marshals"),
-    # Guedelon's executive (the author, 2026-10-22: "a leader portrait for Guedelon, similar to Krionik's one ... the
-    # symbol for Guedelon's Council of 6, the executive body"): the council, its symbol the portrait
-    "GDN_leader_lordly_republic": ("Council of Six", "GFX_portrait_GDN_council_of_six"),
     "LTH_leader_populism": ("Helmut Shulz", "GFX_portrait_LTH_helmut_shulz"),  # author, 2026-10-08
     "TUP_leader_socialism": ("Charlotte Gustoff", "GFX_portrait_TUP_charlotte_gustoff"),  # author, 2026-10-08
     "CNA_leader_leninism": ("Han Leji", "GFX_portrait_CNA_han_leji"),  # author, 2026-10-12
@@ -1402,10 +1399,6 @@ PORTRAITS = {
     # the author's round 3000x3000 emblem (2026-10-08): the box reaches past it on every
     # side, so it sits centred on PORTRAIT_BG, 92 % of the portrait's width
     "KRI_council_of_marshals": ("source/portraits/kri_council_of_marshals.png", -130, -694, 3260, None),
-    # the author's symbol of Guedelon's Council of Six (2026-10-22), as Krionik's: its disc 92 % of the width
-    # (version A; the author took B with a new symbol, the Conseil des Sept, for their Gazetteer page, 2026-10-22:
-    # dist/portrait_proposals/guedelon_council/; this entry and the NAMED_LEADERS one go at that import)
-    "GDN_council_of_six": ("source/portraits/gdn_council_of_six.png", -18, -110, 535, None),
     # the author's (2026-10-08): Leithanien's is already portrait-shaped; Terreich's a photo
     "LTH_helmut_shulz": ("source/portraits/helmut_shulz.png", 0, 0, 267, None),
     "TUP_charlotte_gustoff": ("source/portraits/charlotte_gustoff.webp", 180, 40, 740, None),
