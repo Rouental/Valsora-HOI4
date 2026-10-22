@@ -11,13 +11,13 @@ we can tie things to Serelle winning battles, that'd be great. But otherwise it'
 Three screens:
   three_estates_window.png       1 June 2036: the estates in balance, Royal Authority rising, the Court behind Roland,
                                  the Promised Reforms running; Divide and Rule hovered
-  three_estates_window_inside.png  the same June, each estate's symbol inside its corner of the triangle
   three_estates_lords_realm.png  1 March 2037: the Second Estate over 60, the Lords' Realm: Royal Authority falling, the
                                  Court behind Serelle, the governorates under 40 that would break away
   three_estates_zones.png        the seven zones, Royal Authority and the Court's favour (a sheet for the author)
   three_estates_symbols.png      the estates' symbols large, and at the sizes the window draws them
 The estates are shown by their symbols, not their holders' portraits (the author: "Instead of portraits, I think I'd
-prefer to use symbols for the three estates": symbols.py).
+prefer to use symbols for the three estates": symbols.py), inside the triangle's corners (the author: "Let's go with the
+symbols inside the triangle"; until then in medallions beside them, corners_of, kept: inside=False).
 Not in the mod; the zones' names and effects, the decisions, Royal Authority's bands and every number but the start
 are placeholders; the Third Estate's champion is the author's to name.
 
@@ -98,7 +98,10 @@ ZONES = {
                   pts=((0, 0, 100), (40, 0, 60), (0, 40, 60)), col=ESTATES["third"][2],
                   eff=[("Democratic support", "+0.05 a day", 0), ("Royal Authority", "−2 a month", -1), ("Stability", "−5 %", -1),
                        ("Mercantile estates' loyalty", "+10", 1)]),
-    "no_third": dict(name="Altar and Manor", where="The Third Estate under 15", ra=0,
+    # "Altar and Arms" (the author: "come up with something besides "altar and manor." Something that fits with the
+    # alliteration of the other equivalents of it"): the altar the clergy's, arms the lords' (their swords and their
+    # coats of arms); Claude's
+    "no_third": dict(name="Altar and Arms", where="The Third Estate under 15", ra=0,
                      desc="Clergy and lords govern between them; the commons go unheard.",
                      leads="No path of its own: the commons' anger grows",
                      pts=((60, 40, 0), (40, 60, 0), (25, 60, 15), (60, 25, 15)),
@@ -184,15 +187,12 @@ START = (35, 35, 30)                       # 1 January 2036: the author's
 BREAK_BELOW = 40                           # a governorate under it breaks away in the Lords' Realm (Claude's)
 
 SCREENS = {
-    "window": dict(date="1 June 2036", since="January", ra=35, favour=62, hover=3, mission=(212, 0),
+    "window": dict(date="1 June 2036", since="January", ra=35, favour=62, hover=3, mission=(212, 0), inside=True,
                    trail=[(35, 35, 30), (36, 35, 29), (33, 41, 26), (29, 37, 34), (33, 35, 32), (32, 36, 32)]),
-    "lords_realm": dict(date="1 March 2037", since="January", ra=12, favour=43,
+    "lords_realm": dict(date="1 March 2037", since="January", ra=12, favour=43, inside=True,
                         trail=[(32, 36, 32), (30, 40, 30), (28, 46, 26), (27, 51, 22), (25, 56, 19), (24, 60, 16),
                                (23, 63, 14)]),
 }
-# the same June as the first, the symbols inside the triangle's corners (the author: "maybe make a mockup showing what
-# it'd look like if the symbols were in the triangles, rather than off to the side")
-SCREENS["window_inside"] = dict(SCREENS["window"], inside=True)
 
 
 def divide(shares):
@@ -228,14 +228,14 @@ def corners_of(T, shares):
     return out
 
 
-def triangle(T, zone, trail, ghost, inside=False):
+def triangle(T, zone, trail, ghost=None, inside=False, **kw):
     """the three powers' triangle drawn with the estates; inside, without the corners' names (their symbols are there)"""
     if not inside:
-        return TP.triangle(T, zone, trail, ghost)
+        return TP.triangle(T, zone, trail, ghost, **kw)
     keep = TP.LABEL_AT
     TP.LABEL_AT = {k: v for k, v in LABEL_AT.items() if k not in ORDER}
     try:
-        return TP.triangle(T, zone, trail, ghost)
+        return TP.triangle(T, zone, trail, ghost, **kw)
     finally:
         TP.LABEL_AT = keep
 
@@ -250,11 +250,10 @@ def marker(T, shares):
             f'<path d="{d(x, y, 4)}" fill="#16110A"/></svg>')
 
 
-def corners_inside(T, shares):
+def corners_inside(T, shares, n=80):
     """each estate's symbol in its corner of the triangle (the corner zone, which has the triangle's own shape: the
     symbol on its centre); outside the corners the estate, its zone's name and its share, no medallions"""
     out = ""
-    n = 80
     for k, share in zip(ORDER, shares):
         pts = [T.at(*p) for p in ZONES[k]["pts"]]
         cx, cy = sum(x for x, _ in pts) / 3, sum(y for _, y in pts) / 3
@@ -531,8 +530,8 @@ def zones_sheet():
     body += window(16, 16, w - 32, h - 32)
     body += header(22, 22, w - 44, 44, "The Three Estates: the seven zones and the Crown", 22)
     T = TP.Tri(390, 210, 600)
-    body += TP.triangle(T, None, [START], size=13)
-    body += corners_of(T, START)
+    body += triangle(T, None, [START], inside=True, size=13)
+    body += corners_inside(T, START, 110) + marker(T, START)
     body += label(60, 84, "Where the balance stands decides where Rouental goes", 10, LABEL)
     body += text(60, 100, "An estate of 60 or more takes Rouental down its path; an estate under 15 is shut out; between "
                  "them, the Crown holds the scales.", 13, CREAM2, w=640, font="bod", weight=500, lh=1.3)
@@ -579,7 +578,7 @@ def zones_sheet():
 
 
 def symbols_sheet():
-    """the three symbols large in the corners' medallions, and each at the sizes the window draws it"""
+    """the three symbols large in medallions, and each at the sizes the window draws it"""
     w, h = 1300, 760
     body = box(0, 0, w, h, "background:#0B1014")
     body += window(16, 16, w - 32, h - 32)
@@ -595,12 +594,19 @@ def symbols_sheet():
         body += label(cx - 190, cy + 168, ESTATES[k][0], 11, LABEL, w=380, align="center")
         body += title(cx - 200, cy + 186, lines[k][0], 14.5, w=400, align="center", track=.06)
         body += text(cx - 200, cy + 214, lines[k][1], 13, CREAM2, w=400, align="center", font="bod", weight=500)
-        # at the window's sizes: the corner's medallion (76) and the card's well (38)
-        body += TP.octo(cx - 40, cy + 300, 38, picture(k, 72, 72))
-        body += (f'<div class="a" style="left:{cx + 20}px;top:{cy + 276}px;width:38px;height:48px;'
+        # at the window's sizes: in its corner of the triangle (a corner zone 160 px a side, the symbol 80 on its centre)
+        # and in the card's well (38)
+        s, ax, ay = 160, cx - 60, cy + 258
+        hh = s * math.sqrt(3) / 2
+        body += (f'<svg class="a" style="left:0;top:0;overflow:visible" width="1" height="1"><polygon points="{ax},{ay} '
+                 f'{ax - s / 2},{ay + hh:.1f} {ax + s / 2},{ay + hh:.1f}" fill="{rgba(ESTATES[k][2], .32)}" '
+                 f'stroke="#F1DC9C" stroke-width="1.4"/></svg>')
+        body += (f'<div class="a" style="left:{ax - 40}px;top:{ay + hh * 2 / 3 - 40:.1f}px;'
+                 f'filter:drop-shadow(0 1px 2px rgba(0,0,0,.7))">{SY.symbol(k, 80)}</div>')
+        body += (f'<div class="a" style="left:{cx + 50}px;top:{cy + 320}px;width:38px;height:48px;'
                  f'box-shadow:0 0 0 1px rgba(201,165,90,.55);overflow:hidden">{picture(k, 38, 48)}</div>')
-    body += label(60, h - 52, "Below each, the symbol at the sizes the window draws it: a corner's medallion and an "
-                  "estate's card", 9.5, LABEL, w=w - 120, align="center")
+    body += label(60, h - 52, "Below each, the symbol at the sizes the window draws it: in its corner of the triangle "
+                  "and in an estate's card", 9.5, LABEL, w=w - 120, align="center")
     return body, w, h
 
 
