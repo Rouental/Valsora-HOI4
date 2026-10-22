@@ -10,6 +10,14 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-22, later still: three Gazetteer tools (the author: "There should be a way to mark states as impassible on
+  the gazeteer"; "There should also be a way to remove terrain from releasables"; "Yes, add the impassable borders
+  tool too"): **impassable states** (the State tab's Movement section; the build's `impassable_states`, after the
+  capitals: a capital, or a state with no passable state of its owner beside it, stays passable with a note),
+  **taking a releasable's states away** (a click on one of its states; Take states away on its card), **impassable
+  borders** (the Impassable tool; `map/adjacencies.csv` rows as the base game's Himalayas, `gazetteer.borders`; walls
+  that would cut land off without a coast are dropped with a note; two new checks). The build without such facts is
+  byte for byte the same; the site republished.
 - 2026-10-22, later still: Guedelon's council the **Conseil des Sept**, a new symbol (seven shields): its portrait
   version B with it, for the author to put on the Gazetteer (`dist/portrait_proposals/guedelon_council/`); no build
   (the author: "I'll do it myself so you don't have to generate a new build until i send the next gazeteer update").

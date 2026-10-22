@@ -218,7 +218,7 @@ the page, its rules or its import.
   - Only the author's Claude publishes the site (`gh-pages`, allowed for it alone: "it's ok to put it on a new branch").
 - **Republish** after map changes: `sh scripts/publish_site.sh "message"`; test the page first, after
   `python3 scripts/facts_export.py`: `python3 tests/gazetteer/run.py`, `traits.py`, `companies.py`, `ingame.py`,
-  `reset.py`, `guide.py`, `stale.py` and `gender.py` (same folder).
+  `reset.py`, `guide.py`, `stale.py`, `gender.py`, `impassable.py`, `release_remove.py` and `borders.py` (same folder).
 - **Into the mod:** the author's **Save every nation as a file**, then `python3 scripts/gazetteer.py import FILE`
   (`source/gazetteer/<TAG>.json`, pictures in `source/gazetteer/assets/`, flags of HOI4's shape into `source/flags/`),
   a rebuild (`river_provinces.py` first after new rivers), `gazetteer.py suggestions` if there are any, and
@@ -275,7 +275,8 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   Gorbastan, Zukchiva, Sennheiser, Sminishia, West Sminishia and Hollier joined; Ungar's six from the Gazetteer on
   2026-10-18). The four great powers, one per
   ideology but Theocratic (author, 2026-10-17): Krionik (Monarchist), Kampf (Authoritarian), Sarkis (Communist),
-  Fraxhemark (Democratic); great in name for now (their industry is as drawn). Two starts, both on 1 January 2036. The Deco UI is v0.12.3 (`deco_ui/docs/VERSIONS.md`). Rouental's rivers run along its borders (97 % of their pixels, 2026-10-20: `river_borders.py`; map-wide 93 %, the other nations' stretches listed in `docs/MAP_PIPELINE.md`). The Royal Host forms on the first day (`on_startup`); every country has the game's Army HQ template. The Gazetteer shows players a quick-start guide the first time they unlock a nation, a state size guide (Cardonia's states the usual size, author 2026-10-18) before the province one, a button to hide suggestions, what each base-game trait does, and (2026-10-18, night) the neighbours' terrain.
+  Fraxhemark (Democratic); great in name for now (their industry is as drawn). Two starts, both on 1 January 2036. The Deco UI is v0.12.3 (`deco_ui/docs/VERSIONS.md`). Rouental's rivers run along its borders (97 % of their pixels, 2026-10-20: `river_borders.py`; map-wide 93 %, the other nations' stretches listed in `docs/MAP_PIPELINE.md`). The Royal Host forms on the first day (`on_startup`); every country has the game's Army HQ template. The Gazetteer shows players a quick-start guide the first time they unlock a nation, a state size guide (Cardonia's states the usual size, author 2026-10-18) before the province one, a button to hide suggestions, what each base-game trait does, and (2026-10-18, night) the neighbours' terrain; (2026-10-22) impassable states, impassable borders between provinces
+  (`map/adjacencies.csv`, `gazetteer.borders`) and taking a releasable's states away by clicking them.
   Rouental has test decisions for every kind of event, a test superevent and one that sets off many alerts at once
   (`test_events.py`).
   **The Gazetteer's facts are in the mod** (the author's export of 2026-10-20, night, 30 nations, `source/gazetteer/`;
