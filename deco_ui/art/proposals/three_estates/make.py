@@ -14,7 +14,7 @@ Three screens:
   three_estates_lords_realm.png  1 March 2037: the Second Estate over 60, the Lords' Realm: Royal Authority falling, the
                                  Court behind Serelle, the governorates under 40 that would break away
   three_estates_zones.png        the seven zones, Royal Authority and the Court's favour (a sheet for the author)
-  three_estates_symbols.png      the estates' symbols large, and the Third Estate's three candidates
+  three_estates_symbols.png      the estates' symbols large, and at the sizes the window draws them
 The estates are shown by their symbols, not their holders' portraits (the author: "Instead of portraits, I think I'd
 prefer to use symbols for the three estates": symbols.py).
 Not in the mod; the zones' names and effects, the decisions, Royal Authority's bands and every number but the start
@@ -226,7 +226,7 @@ def corners_of(T, shares):
 
 def picture(k, w, h):
     """the estate's symbol on its ground (the author, 2026-10-22: "Instead of portraits, I think I'd prefer to use
-    symbols for the three estates"): the Third Estate's the beehive, the first of Claude's candidates"""
+    symbols for the three estates"; symbols.py)"""
     a, b = SY.GROUNDS[k]
     n = min(w, h)
     return (f'<div style="position:absolute;left:0;top:0;width:{w}px;height:{h}px;'
@@ -529,15 +529,14 @@ def zones_sheet():
 
 
 def symbols_sheet():
-    """the three symbols large in the corners' medallions, the Third Estate's candidates under them"""
-    w, h = 1300, 980
+    """the three symbols large in the corners' medallions, and each at the sizes the window draws it"""
+    w, h = 1300, 760
     body = box(0, 0, w, h, "background:#0B1014")
     body += window(16, 16, w - 32, h - 32)
     body += header(22, 22, w - 44, 44, "The Three Estates: their symbols", 22)
-    lines = {"first": ("A golden rogacina issuant from a cauldron", "The symbol of the faith (the author's), over the "
-                       "cauldron's mouth"),
-             "second": ("Three crowns pierced by a sword", "The author's: the crowns gold, the sword steel"),
-             "third": ("A beehive", "No symbol yet: Claude's first choice of the three below")}
+    lines = {"first": ("A golden rogacina issuant from a cauldron", "The symbol of the faith, as the author drew it"),
+             "second": ("Three crowns, two and one", "The author's crown, a jewelled band and pearls added; red, blue, green"),
+             "third": ("A sheaf of wheat bound with a key", "The fields and the towns (the author's choice of three)")}
     for i, k in enumerate(ORDER):
         cx, cy = 240 + i * 410, 270
         body += TP.octo(cx, cy, 140, picture(k, 276, 276))
@@ -545,21 +544,13 @@ def symbols_sheet():
                     "box-shadow:0 0 0 2px #16110A")
         body += label(cx - 190, cy + 168, ESTATES[k][0], 11, LABEL, w=380, align="center")
         body += title(cx - 200, cy + 186, lines[k][0], 14.5, w=400, align="center", track=.06)
-        body += text(cx - 190, cy + 214, lines[k][1], 13, CREAM2, w=380, align="center", font="bod", weight=500)
-    y = 540
-    body += label(60, y, "The Third Estate: three candidates", 10, GILT) + fade_rule(330, y + 5, w - 60)
-    for i, (key, name, why) in enumerate(SY.THIRD):
-        cx = 240 + i * 410
-        a, b = SY.GROUNDS["third"]
-        body += (f'<div class="a" style="left:{cx - 100}px;top:{y + 30}px;width:200px;height:200px;'
-                 f'background:radial-gradient(circle at 50% 42%,{a},{b} 78%);box-shadow:0 0 0 1px rgba(201,165,90,.6)">'
-                 f'{SY.symbol(key, 200)}</div>')
-        for top, n in ((y + 30, 38), (y + 78, 76)):   # at the sizes the window shows them
-            body += (f'<div class="a" style="left:{cx + 116}px;top:{top}px;width:{n}px;height:{n}px;'
-                     f'background:radial-gradient(circle at 50% 42%,{a},{b} 78%);box-shadow:0 0 0 1px rgba(201,165,90,.5)">'
-                     f'{SY.symbol(key, n)}</div>')
-        body += title(cx - 190, y + 250, name, 16, w=380, align="center", track=.08)
-        body += text(cx - 190, y + 276, why, 12.5, CREAM2, w=380, align="center", font="bod", weight=500, lh=1.3)
+        body += text(cx - 200, cy + 214, lines[k][1], 13, CREAM2, w=400, align="center", font="bod", weight=500)
+        # at the window's sizes: the corner's medallion (76) and the card's well (38)
+        body += TP.octo(cx - 40, cy + 300, 38, picture(k, 72, 72))
+        body += (f'<div class="a" style="left:{cx + 20}px;top:{cy + 276}px;width:38px;height:48px;'
+                 f'box-shadow:0 0 0 1px rgba(201,165,90,.55);overflow:hidden">{picture(k, 38, 48)}</div>')
+    body += label(60, h - 52, "Below each, the symbol at the sizes the window draws it: a corner's medallion and an "
+                  "estate's card", 9.5, LABEL, w=w - 120, align="center")
     return body, w, h
 
 

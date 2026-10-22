@@ -67,11 +67,15 @@ Claude's placeholder).
 the three estates. A golden rogacina issuant from a cauldron for the First Estate (the symbol of the faith,) three crowns
 pierced by a sword for the second estate, and I don't know what the third estate could use." Drawn for the mockup
 (`deco_ui/art/proposals/three_estates/symbols.py`, the rogacina traced from the author's picture); for the Third Estate
-three candidates of Claude's: a beehive, a sheaf of wheat bound with a key, a mural crown with wheat.
+three candidates of Claude's: a beehive, a sheaf of wheat bound with a key, a mural crown with wheat. Then: "Ah,
+"rogacina issuant from a cauldron" is the name of the symbol, it didn't mean to put it above an actual cauldron. Maybe
+just have the symbol for the 2nd estate be three crowns arranged in a triangle. Maybe have the crowns look like a
+slightly more ornamented version of this? One with a red gem, one with blue, one with green? For the third estate, I
+prefer the wheat and key." So: the rogacina alone; three crowns two and one after the author's picture of a crown,
+ornamented, red, blue and green; the sheaf bound with a key.
 
 ## Open
 
-- The Third Estate's symbol: the beehive in the mockup, or the sheaf and key, or the mural crown, or the author's own.
 
 - The word for the governorates: the author asks whether French has a better one (Claude's suggestions in the chat of
   2026-10-22: *gouvernement*, the old French provinces' own; *généralité*, the Crown's districts under an intendant).
