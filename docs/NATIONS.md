@@ -909,3 +909,15 @@ Arovannea, ignore them, they're still a WIP." Imported without Arovannea (its en
   kept in `source/gazetteer/ROU.json`, the export's changes on top (Rêverie's victory points 40 ...), until the author
   says whether the 24 were meant to go. Its other changes (states, provinces, Ghessone) are in.
 
+## 2026-10-22, later still: Rouental's cities dropped; the Voix Anserra IX
+
+- **Rouental's cities**: the author, of the 24: "Yes, the cities were meant to go, drop them for now. I wanted a fresh
+  start." `source/gazetteer/ROU.json` is the export's own now, five cities (Rêverie, Grandeau, Basilique, Bienveillance,
+  Concorde); the other states' victory points are the map's again.
+- **The Voix**: the author: "Also, rename Voix Mahaut VI to Voix Anserra IX." Her name is Anserra IX everywhere the
+  game and the Gazetteer show it (`nations.py`'s two names, ROU's and her copy at the head of Brillagne's; the Accept
+  Reality path's description; the superevent's quote; the three powers' window); her character ids stay
+  `ROU_mahaut_vi` and `BRL_mahaut_vi` (and her portrait's sprite), so nothing that names her breaks.
+- **A teaser** of the Vale of Reibonne (the author: "could you create a sort of teaser image for the Vale of Reibonne,
+  showing the flag and leader of each nation, maybe in front of the map?"): `dist/teasers/vale_of_reibonne/`.
+

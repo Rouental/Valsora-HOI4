@@ -10,6 +10,10 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-22, later still: Rouental's 24 cities dropped (the author: "Yes, the cities were meant to go, drop them for
+  now. I wanted a fresh start."): its facts are the export's, five cities; the Voix **Anserra IX**, Mahaut VI until
+  then (the author: "rename Voix Mahaut VI to Voix Anserra IX"; her ids kept); a teaser of the Vale of Reibonne, its
+  eight nations' flags and rulers before the map (`dist/teasers/vale_of_reibonne/`). The site republished.
 - 2026-10-22, later still: the Gazetteer's export of that day imported, Arovannea's left out (the author: "still a
   WIP"): the Association's rulers (Evriches, Selgrave, Seigne new; Hollier, Lustiana, Lanzerac changed), Guedelon's
   first facts (its ruler, the Council of Six with the Conseil des Sept's portrait; its city and state), Zwintern's four

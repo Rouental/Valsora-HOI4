@@ -127,7 +127,7 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   largest first); `gazetteer.patch_characters` patches the hand-made characters' text (`nations.ROU_CHARACTERS`,
   `CHARACTERS`): sub-ideology within its ideology (the focus trees name the ideologies), titles (`desc` after the
   ideology), traits, a commander's rank, skill, stats (its role's only) and traits, names through the localisation
-  (`patch_loc`), a new portrait under the sprite's own name, so a copy (Mahaut at Brillagne, Serelle at HMMLA) changes
+  (`patch_loc`), a new portrait under the sprite's own name, so a copy (Anserra at Brillagne, Serelle at HMMLA) changes
   with the original; `game_character_names` gives the generated leaders of a hand-made nation (Rouental's democrat and
   communist, whose ids its focus tree names) their names, titles, portraits and traits through `NAMED_LEADERS`.
   Unchanged characters stay byte for byte, and without facts the build is byte-identical. `check_mod.py` checks every
@@ -139,7 +139,7 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   it for every character a player fills in or changes: the head of state (`people.ruler.gender`), each party's leader
   once it has a sub-ideology (`people["party-<ideology>"].gender`), political advisors, generals, admirals and other
   advisors (`people["c-<id>"].gender`), the characters already in the game (`people["ch-<character id>"].gender`: the
-  author's own, as Roland, Serelle and Mahaut, and the generated leaders shown, as Rouental's democrat and
+  author's own, as Roland, Serelle and Anserra, and the generated leaders shown, as Rouental's democrat and
   communist), a releasable's ruler (`releasables["rl-<id>"].leader.gender`) and a game releasable's or civil war
   riser's (`releasables["g-<TAG>"].leader.gender`; one led by the author's own character points to the People tab, as
   before). The select shows the game's gender now until a player chooses; a choice is kept as it is, even one the game
@@ -149,7 +149,7 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   shows the gender of the leader it gives); new characters and releasables start as men. The rules needed nothing new
   (the field sits in documents the page already writes). `facts_export.py` gives each in-game character `gender`
   ("female" where its built block has `gender = female`, else "male", the game's own default; never guessed from a
-  name): the hand-made blocks of `nations.ROU_CHARACTERS` / `CHARACTERS` carry the line (Mahaut, Serelle and their
+  name): the hand-made blocks of `nations.ROU_CHARACTERS` / `CHARACTERS` carry the line (Anserra, Serelle and their
   copies at Brillagne and HMMLA since 2026-10-21), the generated ones get it from `nations.GENDERS` (Tara Blanchart,
   `ROU_leader_constitutional_monarchism`) through `cultures.leaders(..., genders)`. The import keeps `gender` (only
   "male" or "female") on the ruler, the parties, `characters`, `game_characters`, the releasables' and game
@@ -457,7 +457,7 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   `tests/gazetteer/ingame.py`: on Rouental, Roland's name, sub-ideology and a trait, Serelle's rank, skill and stats and
   a trait taken away, a site general's skill (and a stat held to 9); the Releasables tab's sections (13 in the game, 7
   in the civil war), Carcarelle renamed and given Ghessone's only state (which Ghessone keeps: a game releasable keeps
-  its last state), Brillagne's ruler pointing to Mahaut, a revolter picked showing the civil war's land apart; a city's
+  its last state), Brillagne's ruler pointing to Anserra, a revolter picked showing the civil war's land apart; a city's
   victory points and size; Belekria's Tethia while its map is closed; the file of every nation. That file imported and built: Roland's sub-ideology, titles kept, trait and new name; Serelle and
   her HMMLA copy a field marshal of skill 5; the general's logistics 9; Carcarelle Libre with cores on its four states
   (one shared with Ghessone); check_mod clean.

@@ -284,7 +284,7 @@ password: https://rouental.github.io/Valsora-HOI4/
   requests of the kind "New kind of company". The build writes them
   (`gazetteer.companies`); `check_mod.py` checks them.
 - **What the game already has** (2026-10-15, later). The People tab shows the author's own
-  characters (Roland, Serelle, Mahaut ...) as the game has them, every field editable over
+  characters (Roland, Serelle, Anserra ...) as the game has them, every field editable over
   the game's (a sub-ideology only within its ideology: the focus trees name the ideologies;
   generals' and admirals' rank, skill and stats too), and the Releasables tab the
   releasables `nations.py` already has (Rouental's 13, Belekria's Tethia) and Rouental's

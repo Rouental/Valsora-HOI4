@@ -172,10 +172,10 @@ With no state picked, every state is a button (● for the named ones).
   - Most nations: for each ideology but the ruling one, a sub-ideology (it gives the party a set leader), and the
     leader's name, gender (PE9), portrait and traits.
   - The nations of your own characters: a card per party leader (PE3), the generated ones too.
-- **PE3 A character already in the game** (Roland, Serelle, Mahaut, the Merlovichs …): name; name once ruling
+- **PE3 A character already in the game** (Roland, Serelle, Anserra, the Merlovichs …): name; name once ruling
   (Serelle VI); gender (PE9); titles; sub-ideology, within its ideology (your own characters: the focus tree names
   the ideology); traits; for a general or admiral, rank (general or field marshal), skill and stats, and a
-  commander's traits; portrait; **Back to the game's**. A change to Serelle or Mahaut reaches her copy at the head of
+  commander's traits; portrait; **Back to the game's**. A change to Serelle or Anserra reaches her copy at the head of
   HMMLA or Brillagne.
 - **PE4 Political advisors.** **Add a political advisor**; each: name, gender (PE9), portrait, traits (a political
   advisor's), **Ask for a new trait**, notes, **Delete**. *Game:* the politics screen's political advisors.
@@ -195,9 +195,9 @@ With no state picked, every state is a button (● for the named ones).
 - **PE9 Gender** (2026-10-21, night; your words: "we should be able to select the gender of characters in the
   gazetteer. I noticed that Serelle currently seems to be considered male"): **Male** or **Female** for every character
   on the People tab (PE1 to PE5) and every ruler on the Releasables tab (RL1, RL2); it shows the game's now (Serelle,
-  Mahaut and Tara Blanchart women, everyone else a man: the game takes a character for a man unless told otherwise)
+  Anserra and Tara Blanchart women, everyone else a man: the game takes a character for a man unless told otherwise)
   until a player picks one; a new character starts as a man. *Game:* the character's `gender = female` (or `male`);
-  a change to Serelle or Mahaut reaches her copy (PE3). The game has no generic portraits of women generals, admirals
+  a change to Serelle or Anserra reaches her copy (PE3). The game has no generic portraits of women generals, admirals
   or politicians, so a woman without a portrait of her own keeps the generic one she had.
 
 ## Releasables tab

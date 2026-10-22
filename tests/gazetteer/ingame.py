@@ -6,7 +6,7 @@ Serelle. Their stats should be editable as well as their traits"), and cities' s
 Rouental (the author's own characters): Roland's name, sub-ideology (within his ideology) and traits, Serelle's rank,
 skills and a general's traits, saved as ch-<character id>; a general of the page's own with skills; the game's
 releasables and civil war revolters on the Releasables tab, Carcarelle renamed and given a state (its whole land saved
-as g-CRL), Brillagne's ruler pointing to Mahaut on the People tab; Belka's Pakitsk (map tools closed: no land editing;
+as g-CRL), Brillagne's ruler pointing to Anserra IX (Mahaut VI until 2026-10-22) on the People tab; Belka's Pakitsk (map tools closed: no land editing;
 Belekria's and its Tethia until 2026-10-17, when the author drew Belekria's states); a city's size and victory points; the every-nation file with all of it. Desktop and phone.
 
     python3 scripts/facts_export.py          # after a build: the map data the page reads
@@ -122,9 +122,9 @@ def owner(b, url, size):
     rel = wait_doc(page, f"{base}/releasables", lambda v: (v.get("g-CRL") or {}).get("states") and len([k for k, on in v["g-CRL"]["states"].items() if on]) == before + 1)
     check(rel is not None, f"{label}: Carcarelle's new land wasn't saved as its whole list of states")
     check(page.evaluate("id => app.N.relSets.get(id).size", one) == 1, f"{label}: {one}, whose only state it was, lost it")
-    # Brillagne's ruler is Mahaut: changed on the People tab
+    # Brillagne's ruler is Anserra IX (Mahaut VI until 2026-10-22): changed on the People tab
     brl = page.inner_text("#pane-release .relcard:has(#rl-name-g-BRL)")
-    check("Mahaut VI" in brl and "People tab" in brl, f"{label}: Brillagne's ruler: {brl[-300:]}")
+    check("Anserra IX" in brl and "People tab" in brl, f"{label}: Brillagne's ruler: {brl[-300:]}")
     # the civil war's revolters are apart: picking one shows their land
     page.evaluate("selectRel('g-VAI')")
     check(page.evaluate("[...app.N.relOf.values()].every(id => ['g-BRL','g-CRP','g-RLT','g-MRC','g-RLA','g-VAI','g-FTH'].includes(id))"),

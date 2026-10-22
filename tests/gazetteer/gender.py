@@ -11,7 +11,7 @@ source/gazetteer/): the import keeps each. The build's functions on it (called d
 gazetteer.characters writes `gender = female` for the general and the advisor; gazetteer.leaders and
 cultures.leaders for Seigne's ruler and party leader and for the releasables' rulers; game_character_names for
 Rouental's communist; patch_characters puts the line in after Roland's name, turns Serelle's into `gender = male`
-and her copy at the head of HMMLA (RLA_serelle_cahun) with her, and leaves Mahaut and her copy as they were. Without
+and her copy at the head of HMMLA (RLA_serelle_cahun) with her, and leaves Anserra IX (ROU_mahaut_vi) and her copy as they were. Without
 the field, nothing of the facts already in source/gazetteer/ writes a gender line. facts_export.read_characters
 reads the line back (a scratch copy of the built characters). Desktop and phone.
 
@@ -44,7 +44,7 @@ def people_tab(page):
 
 
 def site_genders():
-    """the site's copy of Rouental's map data with the genders nations.py gives now (Serelle, Mahaut, Tara Blanchart),
+    """the site's copy of Rouental's map data with the genders nations.py gives now (Serelle, Anserra IX, Tara Blanchart),
     whatever the last build was: the page is to show the export's"""
     sys.path.insert(0, str(SCRIPTS))
     import nations

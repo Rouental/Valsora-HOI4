@@ -99,7 +99,7 @@ Aislada is the worked example of a built-out nation:
     - Left to right: Polite, Brother, Steady, Rudely.
   - The democratic and communist parties have no defined leader, so the game generates one.
   - **Accept Reality** (x = 8) is the fifth mutually exclusive path. It makes Rouental
-    theocratic under **Mahaut VI** (`theocrat`; portrait from
+    theocratic under **Anserra IX** (Mahaut VI until 2026-10-22, the author: "rename Voix Mahaut VI to Voix Anserra IX"; the id `ROU_mahaut_vi` kept; `theocrat`; portrait from
     `source/portraits/mahaut_vi.jpg`; recruited in history as theocratic party leader),
     retires both Cahuns and plays superevent `rou_reality`.
   - **Plans for Cardonia** (x = 11, cost 1, not exclusive) creates an `annex_everything`
@@ -152,7 +152,7 @@ Aislada is the worked example of a built-out nation:
     - **The Three Powers**: a button on the politics screen where the game's balance of power sits (the Deco UI's
       `layout_politics.BOP`), showing the zone, opening a window beside the panel: the triangle (its zones drawn with
       their names), the marker placed by the shares (`properties` x and y, worked out in script), the six months'
-      trail, the lit zone, the holders' portraits (Roland II Cahun, Mahaut VI, Tara Blanchart) and shares, where the
+      trail, the lit zone, the holders' portraits (Roland II Cahun, Anserra IX, Tara Blanchart) and shares, where the
       balance stands and what it does, the four decisions (buttons, each once in 30 days), the estates' leanings
       (loyalty since 1 January). The shares start at 40 / 35 / 25 (the author's); each month they drift a point or two
       (`on_monthly_ROU`); a zone is a national spirit (`ROU_zone_*`, placeholder effects); a move toward a power gives
@@ -262,7 +262,7 @@ Aislada is the worked example of a built-out nation:
   Chatois and Oscarl as named; Conflans (151 fiefs, the most) Claude's guess for the Riverlanders; the Vairande's,
   the Lyrién and the Lustianaise open. Rouental's faith is Seranism, its head the Voix; power "tends to fluctuate
   between the Sacred Prince, the Voix, and the Speaker of the Estates General" (a triangle for it proposed:
-  `deco_ui/art/proposals/three_powers/`). The Voix is **Mahaut VI** (the author, 2026-10-21, night: "The Voix is the
+  `deco_ui/art/proposals/three_powers/`). The Voix is **Anserra IX** (Mahaut VI until 2026-10-22; the author, 2026-10-21, night: "The Voix is the
   leader of Brillagne / theocratic Rouental"), the Speaker **Tara Blanchart** (in the mod since the same night: the
   democratic party's leader, `ROU_leader_constitutional_monarchism` named in `nations.NAMED_LEADERS`, "She is the ruler
   of democratic Rouental as well"; the author's painting, `source/portraits/tara_blanchart.webp`). Rouental "is just coming out of a long
@@ -346,7 +346,7 @@ working; names come from `localisation/english/replace/`:
   LNT Conservatism; RMD Social Democracy; RST Revanchism; VLN Liberalism; ESD, CRZ
   Constitutional Monarchy; PLH Prophetic Rule. The six continent placeholders were not
   chosen and default to Absolute Monarchy. Characters: Roland feudalism, Serelle
-  strongman_rule, Mahaut theocrat, Communist Merlovich anarchist_communism.
+  strongman_rule, Anserra theocrat, Communist Merlovich anarchist_communism.
   `check_mod.py` checks every country has a recruited leader of its ruling ideology
   (mutation-tested). Its party icon `GFX_ideology_theocracy_group` is
   a placeholder, `source/ideologies/theocracy_placeholder.png` (the anime picture),

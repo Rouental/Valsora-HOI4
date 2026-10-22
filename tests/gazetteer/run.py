@@ -203,13 +203,15 @@ def owner(b, theme, size, name, full=True):
     page.click("[data-mode=states]")
     # a city, made the capital
     page.click("[data-tool=city]")
+    # one of the map's cities, which the first save must copy in (Vair until Rouental's page dropped it, 2026-10-22)
+    known = page.evaluate("() => (app.N.cities.find(c => !c.capital) || app.N.cities[0] || {}).name")
     anchor = page.evaluate("""() => { const N = app.N; for (let i = 0; i < N.nOwn; i++) { if (!N.cityInProv.has(i) && N.prov[i].area > 120 && N.stateToPart[N.prov[i].s] === app.ui.part) return [N.prov[i].x, N.prov[i].y]; } }""")
     x, y = canvas_point(page, json.dumps(anchor))
     page.mouse.click(x, y)
     time.sleep(0.3)
     page.keyboard.type("Nouvelle Ville")
     c = wait_doc(page, f"{base}/cities", lambda v: "Nouvelle Ville" in json.dumps(v, ensure_ascii=False))
-    check(c and "Nouvelle Ville" in json.dumps(c, ensure_ascii=False) and "Vair" in json.dumps(c, ensure_ascii=False),
+    check(c and "Nouvelle Ville" in json.dumps(c, ensure_ascii=False) and known and known in json.dumps(c, ensure_ascii=False),
           f"{name}: city not saved (or the map's cities not copied): {str(c)[:200]}")
     page.click(".item.sel button:has-text('Capital')")
     c = wait_doc(page, f"{base}/cities", lambda v: [k for k, x in v.items() if x and x.get("capital") and x["name"] == "Nouvelle Ville"])

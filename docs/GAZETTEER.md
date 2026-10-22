@@ -114,7 +114,7 @@ and states in grey, and anything filled in replaces them: a new name, a flag, a 
 states (with the Releasables tool, while the nation's map tools are open). **Undo every change
 to it** puts the game's back. A state can belong to a releasable and to a riser of the civil war
 at once, as cores can overlap in HOI4; one of the game's releasables always keeps a state. A
-riser led by one of your own characters (Brillagne's Mahaut, HMMLA's Serelle) points to the
+riser led by one of your own characters (Brillagne's Anserra, HMMLA's Serelle) points to the
 People tab: she is changed there, and her copy follows. The changes are made on the page of the
 nation the releasable comes from (the owner of its first state), never on another's.
 
@@ -146,9 +146,9 @@ Pictures (flags, portraits) are kept at up to 640 px, plenty for HOI4's 82 × 52
 gazetteer. I noticed that Serelle currently seems to be considered male"): every character on the People tab (the head
 of state, the party leaders, the characters already in the game, political advisors, generals, admirals and other
 advisors) and every ruler on the Releasables tab has **Gender**, Male or Female. It shows what the game has now (the
-game takes a character for a man unless their block says `gender = female`: Serelle, Mahaut and Tara Blanchart are
+game takes a character for a man unless their block says `gender = female`: Serelle, Anserra and Tara Blanchart are
 women since 2026-10-21) until a player picks one; a new character starts as a man. In the game it is the character's
-`gender = female` (or `male`), and a change to Serelle or Mahaut reaches her copy at the head of HMMLA or Brillagne. The
+`gender = female` (or `male`), and a change to Serelle or Anserra reaches her copy at the head of HMMLA or Brillagne. The
 base game has no generic portraits of women generals, admirals or politicians, so a woman without a portrait of her own
 keeps the generic one of her culture: send her portrait.
 

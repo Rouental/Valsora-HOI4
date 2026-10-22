@@ -55,7 +55,7 @@ SUPEREVENTS = [
          title="The Veiled Throne",
          quote="Rouental asked Heaven for a firm hand. Heaven, in its wisdom, has sent a gloved "
                "one. Kneel, and you will find it gentle.",
-         author="Mahaut VI, Holy Princess of Rouental",
+         author="Anserra IX, Holy Princess of Rouental",
          picture="hair_ruffle.png", song="valsora_gladiators"),
     # the Rouentaise civil war, after the Prince's execution on the communist path
     # (author's picture, quote and song, 2026-10-02, the song replaced the same day;

@@ -5,7 +5,8 @@ the other changes I had been holding back until now"): `docs/HISTORY.md`, 2026-1
 in gold (30), HMMLA's Royal Fiefs (31) (`docs/NATIONS.md`, 2026-10-21, later); the Royal Host Elite (24: "The troops
 are now elite!"), the Army HQ cards (26: "Army HQ cards seem to work"), the governorate line ("worked just fine"), and
 Rouental's groups (28: applied, `docs/NATIONS.md`, 2026-10-21, later still); on 2026-10-22 the Royal Fiefs, all
-eleven Couronneterre's in name, and its spelling (36 then). What is still open:
+eleven Couronneterre's in name, and its spelling (36 then); Rouental's 24 cities, gone from the export of 2026-10-22
+(37: "Yes, the cities were meant to go, drop them for now. I wanted a fresh start." Dropped). What is still open:
 
 | # | question | where |
 |---|---|---|
@@ -19,7 +20,6 @@ eleven Couronneterre's in name, and its spelling (36 then). What is still open:
 | 34 | the governorates (`deco_ui/art/proposals/governorates/`): which heading of your fief list is the Vairande's (Vair is listed under Conflans) and the Riverlanders' (Conflans, the largest, is Claude's guess); the Lyrién and the Lustianaise; how loyal the Northmarchers, Southmarchers, Piscans and Recoltaise are (0 in the mockups) | your notes |
 | 35 | the three powers and the governorates, in game since 2026-10-21, night (bare bones), seen 2026-10-22 ("Looks great so far"): the map's clicks redone (the game clicks a button by its box: now rectangles that tile each governorate), the marker in its place, the Open button's text dark. Click anywhere in a governorate: does it pick that one? The zones' names and effects and the decisions are still Claude's; the other five attitudes' sides later | in game |
 | 36 | Guedelon's ruler: its page names it "The Council of Six", but its portrait says Conseil des Sept (the Council of Seven, you said). Change the name on the page (it comes in with your next export), or tell me what it should be | the Gazetteer |
-| 37 | Rouental's cities: your export has 5 of the 29 cities Rouental's page had (Vair, Carcarelle, Durandal, Castelnau, Chrétienne, Triarus, Augiers, Seraine, Aureimontes, Jourdain, Chécy, Pateinne, Jetanne, Saintiers, Grande Reliette, Charpy, Dernière, Degoutte, Gheso, Carillon, Brume-sur-Mer, Torres, Ombragé, Grande Crépuscule are gone from it). Were they meant to go? They are kept in the mod until you say | ask |
 | 33 | the groups' way back: "Be prepared for the posibility of returning to how it currently is though": the map before them is kept (`work/pre_groups_1021/`, and the commit before) until you say they stay | |
 
 New to look at:

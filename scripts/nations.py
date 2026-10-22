@@ -140,7 +140,7 @@ HISTORY = {
     # recruited at game start too; he waits as communist party leader until "Explode"
     "AIS": ["recruit_character = AIS_merlovich", "recruit_character = AIS_communist_merlovich"],
     # Roland leads the ruling non-aligned party at start; Serelle leads the fascists
-    # Mahaut VI waits as theocratic party leader until "Accept Reality"
+    # the Voix (Anserra IX since 2026-10-22, Mahaut VI before) waits as theocratic party leader until "Accept Reality"
     "ROU": ["recruit_character = ROU_roland_cahun", "recruit_character = ROU_serelle_cahun",
             "recruit_character = ROU_mahaut_vi",
             # Rouental leads the Association of Reibonnaise States from the start
@@ -869,9 +869,9 @@ LOCALISATION = [
     *[f' DVL_test_spirit_{i}:0 "Test Spirit {i}"' for i in range(1, len(TEST_SPIRITS) + 1)],
     *[f' DVL_test_spirit_{i}_desc:0 "A placeholder with no effect, to test how the politics screen shows many '
       'national spirits."' for i in range(1, len(TEST_SPIRITS) + 1)],
-    ' ROU_mahaut_vi:0 "Mahaut VI"',
+    ' ROU_mahaut_vi:0 "Anserra IX"',  # the author, 2026-10-22: "rename Voix Mahaut VI to Voix Anserra IX" (the id kept)
     ' ROU_accept_reality:0 "Accept Reality"',
-    ' ROU_accept_reality_desc:0 "The Cahuns bicker; the faithful pray. Mahaut VI answers the prayers."',
+    ' ROU_accept_reality_desc:0 "The Cahuns bicker; the faithful pray. Anserra IX answers the prayers."',
     ' VAL_reibonnaise_association:0 "The Association of Reibonnaise States"',
     ' VAL_synthesist_internationale:0 "The Synthesist Internationale"',
     ' VAL_great_lake_republics:0 "The Great Lake Republics"',
@@ -880,7 +880,7 @@ LOCALISATION = [
     ' ROU_plans_for_cardonia_desc:0 "A war goal against Cardonia, for testing."',
     ' ROU_serelle_cahun:0 "Serelle Cahun"',
     ' ROU_serelle_vi_cahun:0 "Serelle VI Cahun"',  # her name once she rules (REGNAL_NAMES)
-    ' BRL_mahaut_vi:0 "Mahaut VI"',
+    ' BRL_mahaut_vi:0 "Anserra IX"',
     ' KLS_king_in_chains:0 "The King in Chains"',
     # the author's text, 2026-10-21
     " KLS_king_in_chains_desc:0 \"The people of Kalaistan lost faith in King Aabid al-Murad in 1998, when their southern territories in Al-Radiyaa broke free to form their own nation amidst the black sands of the Nyeusi desert. He lost his peoples' faith, but kept their respect. After all, the citizens of Kalaistan told themselves that it was only their king's peaceable nature that allowed the separatist movement to grow from a minor cut into a festering wound, to the point that amputation was the only possible course. He was to blame, to be sure, but how much could you despise a man for his mercy? He lost even their respect in 2013, when the humiliation was repeated as a small group of separatists in Mekele won their independence in a series of hard-fought battles that saw the outgunned and outmanned guerillas defeat the patently superior Kalai forces. Following the embarrassment that was the Treaty of Almas, few even bothered to raise an objection when the military announced that King Aabid has suffered a stroke that left him incapable of rule, and that they would assume the regency in his name. Since that day, neither the king nor his heir have ever again been seen outside the palace. But now, as the King's health has truly begun to fail, and the day that Aiman shall don his father's crown grows ever closer, many have begun to wonder, will the regency truly be ended? Do they want it to?\"",
@@ -1241,7 +1241,7 @@ ROU_FOCUS_TREE = """focus_tree = {
 		}
 	}
 
-	# the fifth path: Mahaut VI takes the throne in the name of the church
+	# the fifth path: the Voix, Anserra IX, takes the throne in the name of the church
 	focus = {
 		id = ROU_accept_reality
 		icon = GFX_focus_generic_pope

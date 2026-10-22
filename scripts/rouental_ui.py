@@ -278,7 +278,7 @@ DECISIONS = [("Rule by Royal Decree", 50, (6, -2, -4), "stability -2 %"),
              ("Summon the Estates General", 40, (-3, -3, 6), "every governorate's estates change their temper"),
              ("A Royal Progress", 25, (3, 0, -3), "a governorate's loyalty +5")]
 HOLDERS = [("Roland II Cahun", "GFX_portrait_ROU_roland_cahun", "Free of the regency at last."),
-           ("Mahaut VI", "GFX_portrait_ROU_mahaut_vi", "Gave up much of the regency's power."),
+           ("Anserra IX", "GFX_portrait_ROU_mahaut_vi", "Gave up much of the regency's power."),
            ("Tara Blanchart", "GFX_portrait_ROU_tara_blanchart", "Speaks for the estates of the realm.")]
 
 TW, TH = 520, 452                 # the triangle's picture

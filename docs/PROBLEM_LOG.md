@@ -14,7 +14,9 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 **Rouental's cities missing from the export** (2026-10-22): the export's Rouental page had 5 of the 29 cities of its
 earlier facts. The page writes the whole list only when the cities document is first made, so the 24 were taken out
 of the page's document after the export of 2026-10-20 (by hand or otherwise; not by the tools published that day,
-which came later). Held: the 29 kept, the export's changes on top, the author asked.
+which came later). Held: the 29 kept, the export's changes on top, the author asked. Not a problem after all: the
+author, the same day, "Yes, the cities were meant to go, drop them for now. I wanted a fresh start." The export's five
+are the facts now.
 
 **The governorates' map clicked only at the seals** (2026-10-22, the author: "like you said, clicking doesn't quite work
 right. For example, I can't click on Rivage d'argent anywhere but the badge").

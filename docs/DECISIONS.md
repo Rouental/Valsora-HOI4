@@ -271,7 +271,8 @@ Moved out of `CLAUDE.md` word for word on 2026-10-17 (`CLAUDE.md` keeps one line
   - **The start**: "Probably Prince 40, Voix 35, Speaker 25. Rouental is just coming out of a long regency by the
     previous Voix who had tried to cement her power, ended only once the previous Voix died and the new one assumed
     the office and willingly gave up a lot of the power."
-  - **The Voix is Mahaut VI** ("The Voix is the leader of Brillagne / theocratic Rouental": the mod's `ROU_mahaut_vi`
+  - **The Voix is Anserra IX** (the author, 2026-10-22: "rename Voix Mahaut VI to Voix Anserra IX"; before, Mahaut VI:
+    "The Voix is the leader of Brillagne / theocratic Rouental": the mod's `ROU_mahaut_vi`
     and `BRL_mahaut_vi`); **the Speaker is Tara Blanchart** (not yet a character in the mod).
   - **Reformed Seranism** (the Southmarch): "They respect the Voix as a spiritual leader, but don't consider them self
     bound to her. Likewise, the Voix isn't fond of them, as they break with many of the Faith's commandments." So the

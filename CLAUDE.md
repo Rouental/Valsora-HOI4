@@ -169,7 +169,7 @@ New detail goes into those files; this one gets a line.
   Reibonnaise States, the Feudal Army spirit and the royal host (Elite since 2026-10-21; mechanized but the two armoured divisions and the 12th, motorized in Concorde), its 26 governorates (its
   strategic regions, a line on the state panel; HMMLA rises in all eleven Royal Fiefs); since 2026-10-21, night, the
   mockups in game, bare bones (`scripts/rouental_ui.py`): the Governorates category and its map of the realm, and the
-  three powers (the Sacred Prince, the Voix Mahaut VI, the Speaker Tara Blanchart, democratic Rouental's leader) on the
+  three powers (the Sacred Prince, the Voix Anserra IX (Mahaut VI until 2026-10-22), the Speaker Tara Blanchart, democratic Rouental's leader) on the
   politics screen. Merlovich (AIS) has its own focus tree. Every other
   country has its set ruler, generated characters, the generic focus tree and a generic infantry army.
 - **Gender**: HOI4 takes a character without `gender = female` for a man; the author's women carry it
@@ -279,7 +279,7 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   (`map/adjacencies.csv`, `gazetteer.borders`) and taking a releasable's states away by clicking them.
   Rouental has test decisions for every kind of event, a test superevent and one that sets off many alerts at once
   (`test_events.py`).
-  **The Gazetteer's facts are in the mod** (the author's export of 2026-10-22, 32 nations, Arovannea's left out at the author's word, Rouental's 24 missing cities held, `source/gazetteer/`;
+  **The Gazetteer's facts are in the mod** (the author's export of 2026-10-22, 32 nations, Arovannea's left out at the author's word, Rouental's five cities, the other 24 dropped at their word, `source/gazetteer/`;
   the 15 suggestions of 2026-10-18's put on the map by `apply_suggestions.py`), after the blank slate of 2026-10-16. `gazetteer_fetch.py` reads the site directly once the author adds a read-only service
   account's key as the secret `GAZETTEER_SERVICE_ACCOUNT` (`docs/GAZETTEER_INTERNALS.md`); until then their saved file. The Gazetteer offers the base game's traits for every leader and takes requests for new ones,
   and has political advisors and companies (arms makers and industrial concerns of the base game's kinds, with logos;
@@ -315,8 +315,7 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   advisors, the Kufi in gold, HMMLA's Royal Fiefs, Rouental's groups, Montvallée, Rêverie, the Royal Host, Kalaistan).
   New: the governorates' window and the three powers in game, bare bones (2026-10-21, night, seen 2026-10-22: what to
   see in game in `docs/CONTENT.md`, Rouental; the zones' effects and the decisions still placeholders); Guedelon's
-  ruler's name ("The Council of Six" on its page, the portrait the Conseil des Sept's, 2026-10-22); whether Rouental's
-  24 cities missing from the export of 2026-10-22 were meant to go (held: `docs/NATIONS.md`, that day); the Vale of Reibonne's region left with Guedelon and Brillagne apart; whether the groups stay (the way back:
+  ruler's name ("The Council of Six" on its page, the portrait the Conseil des Sept's, 2026-10-22); the Vale of Reibonne's region left with Guedelon and Brillagne apart; whether the groups stay (the way back:
   `work/pre_groups_1021/`, or the commit before them). Open: the strait crossings to add from the red ones
   (`dist/straits_map_red.png`); the old upload's tundra, jungle and desert marks ("I'll add those back in later");
   flags for Belekria's eight republics and state names (later, the author's); the region names (the drafts in the mod
