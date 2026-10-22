@@ -16,7 +16,8 @@ states and countries came next.
   eight nations' flags and rulers before the map (`dist/teasers/vale_of_reibonne/`). The site republished. Then, as a
   test, the teaser with the rulers cut out of their pictures on one backdrop, a gradient in the base game's portraits'
   colours and a plain one (the author: "give each leader portrait a consistent gradient background like vanilla
-  portraits. Or maybe just a blank background").
+  portraits. Or maybe just a blank background"). And the teaser with half the portraits in the diplomacy screen's gilt octagon
+  and half in the politics screen's arch, for the author to ask their friends.
 - 2026-10-22, later still: the Gazetteer's export of that day imported, Arovannea's left out (the author: "still a
   WIP"): the Association's rulers (Evriches, Selgrave, Seigne new; Hollier, Lustiana, Lanzerac changed), Guedelon's
   first facts (its ruler, the Council of Six with the Conseil des Sept's portrait; its city and state), Zwintern's four

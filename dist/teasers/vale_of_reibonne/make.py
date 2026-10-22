@@ -208,6 +208,46 @@ def face(tag, src, x0, y0, cw, kind):
     return bg.convert("RGB")
 
 
+# the portraits' frames (the author, 2026-10-22: "the portraits as they are now, but with half the portraits with the
+# [gilt] octagon of the diplomacy screen, and half with the curved frame of the portrait screen"): the Deco UI's own,
+# drawn as the game's textures are (deco_ui/tools/diplomacy_art.leader_frame; gen_textures' pol_frame, the politics
+# screen's), at the card's height; "arch" is the teaser's first, a rounded top and a gilt line
+FRAME_H = 198
+
+
+def frame_html(pic, style):
+    if style == "arch":
+        return f'<div class="portrait"><img src="{uri(pic)}"></div>'
+    if style == "octagon":
+        sys.path.insert(0, os.path.join(REPO, "deco_ui", "tools"))
+        import diplomacy_art as D
+        fw, fh = D.LEADER["w"], D.LEADER["h"]
+        x, y, w, h = D.LEADER["portrait"]
+        art = D.leader_frame()
+    else:   # the politics screen's: the portrait at (8, 8), an arch over it, lacquer and the sunburst outside it
+        fw, fh, x, y, w, h = 172, 226, 8, 8, 156, 210
+        r = (fw - 16) / 2
+        inner = f"M8 {fh - 8} L8 {8 + r} A{r} {r} 0 0 1 {fw - 8} {8 + r} L{fw - 8} {fh - 8} Z"
+        rim1 = f"M2.5 {fh - 2.5} L2.5 {8 + r} A{r + 5.5} {r + 5.5} 0 0 1 {fw - 2.5} {8 + r} L{fw - 2.5} {fh - 2.5} Z"
+        rim2 = f"M6.5 {fh - 6.5} L6.5 {8 + r} A{r + 1.5} {r + 1.5} 0 0 1 {fw - 6.5} {8 + r} L{fw - 6.5} {fh - 6.5} Z"
+        sx, sy, sr = 86, 100, 118
+        art = (f'<div style="position:absolute;inset:0;clip-path:path(evenodd,\'M0 0H{fw}V{fh}H0Z {inner}\');'
+               'background:repeating-linear-gradient(90deg,rgba(255,255,255,.028) 0 1px,transparent 1px 8px),#11191E">'
+               f'<div style="position:absolute;left:{sx - sr}px;top:{sy - sr}px;width:{2 * sr}px;height:{2 * sr}px;'
+               'border-radius:50%;background:repeating-conic-gradient(rgba(227,199,126,.28) 0deg 3deg,transparent 3deg 11deg);'
+               '-webkit-mask:radial-gradient(circle,#000 30%,transparent 70%)"></div></div>'
+               f'<svg width="{fw}" height="{fh}" style="position:absolute;left:0;top:0"><defs>'
+               '<linearGradient id="gilt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F6E3A6"/>'
+               '<stop offset="1" stop-color="#8B6A2C"/></linearGradient></defs>'
+               f'<path d="{rim1}" fill="none" stroke="#B8954F" stroke-width="1"/>'
+               f'<path d="{rim2}" fill="none" stroke="url(#gilt)" stroke-width="3"/>'
+               f'<path d="M{fw / 2 - 5} 4.5 l5 -3.5 5 3.5 -5 3.5z" fill="#E3C77E"/></svg>')
+    k = FRAME_H / fh
+    return (f'<div class="pf" style="width:{fw * k:.1f}px;height:{FRAME_H}px"><div class="pin_" style="width:{fw}px;'
+            f'height:{fh}px;transform:scale({k:.4f})"><img style="left:{x}px;top:{y}px;width:{w}px;height:{h}px" '
+            f'src="{uri(pic)}">{art}</div></div>')
+
+
 def ruler(tag, kind="photo"):
     """(name, portrait 312 x 420) of a nation's ruler: its Gazetteer page's, else the mod's own"""
     try:
@@ -238,15 +278,16 @@ def flag(tag):
     return im.resize((164, 104), Image.LANCZOS)
 
 
-def card(tag, kind):
+def card(tag, kind, style="arch"):
     short, formal = loc(tag)
     name, pic = ruler(tag, kind)
-    return f"""<div class="card"><div class="portrait"><img src="{uri(pic)}"></div>
+    return f"""<div class="card">{frame_html(pic, style)}
       <div class="text"><img class="flag" src="{uri(flag(tag))}"><div class="nation">{short}</div>
       <div class="ruler">{name}</div><div class="formal">{formal}</div></div></div>"""
 
 
-def main(kind):
+def main(kind, styles=None):
+    styles = styles or {}
     O, S = owners()
     tags = LEFT + RIGHT
     bg, lab = render_map(O, S, tags)
@@ -305,6 +346,9 @@ html, body {{ margin: 0; width: {W}px; height: {H}px; overflow: hidden; backgrou
 .portrait {{ flex: none; width: 140px; height: 190px; border-radius: 70px 70px 4px 4px; margin-top: 4px; overflow: hidden;
   box-shadow: 0 0 0 2px #e3c77e, 0 0 0 5px #11191e, 0 0 0 6px rgba(201,165,90,.6); background: #1e1e20; }}
 .portrait img {{ width: 100%; height: 100%; display: block; }}
+.pf {{ position: relative; flex: none; }}
+.pin_ {{ position: absolute; left: 0; top: 0; transform-origin: 0 0; }}
+.pin_ img {{ position: absolute; display: block; }}
 .text {{ display: flex; flex-direction: column; min-width: 0; padding-top: 2px; }}
 .flag {{ width: 98px; height: 62px; display: block; box-shadow: 0 0 0 1.5px #e3c77e, 0 0 0 4px #0b1014, 0 3px 8px #000;
   margin: 4px 0 12px 3px; }}
@@ -320,10 +364,13 @@ html, body {{ margin: 0; width: {W}px; height: {H}px; overflow: hidden; backgrou
 </style></head><body><div class="bg"></div><div class="shade"></div>{''.join(pins)}
 <div class="title"><div class="kicker">VALSORA</div><div class="name">THE VALE OF REIBONNE</div>
 <div class="date"><i></i><b></b>1 JANUARY 2036<b></b><i></i></div></div>
-<div class="col left">{''.join(card(t, kind) for t in LEFT)}</div><div class="col right">{''.join(card(t, kind) for t in RIGHT)}</div>
+<div class="col left">{''.join(card(t, kind, styles.get(t, "arch")) for t in LEFT)}</div>
+<div class="col right">{''.join(card(t, kind, styles.get(t, "arch")) for t in RIGHT)}</div>
 <div class="foot">THE ASSOCIATION OF REIBONNAISE STATES</div><div class="frame"></div></body></html>"""
     path = os.path.join(HERE, "page.html")
     png = os.path.join(HERE, "vale_of_reibonne.png" if kind == "photo" else f"vale_of_reibonne_{kind}_backdrop.png")
+    if styles:
+        png = png.replace(".png", "_frames.png")
     open(path, "w", encoding="utf-8").write(html)
     from playwright.sync_api import sync_playwright
     with sync_playwright() as p:
@@ -337,8 +384,12 @@ html, body {{ margin: 0; width: {W}px; height: {H}px; overflow: hidden; backgrou
     print(png)
 
 
+# the frames test: the left column's in the diplomacy screen's octagon, the right column's in the politics screen's arch
+FRAMES_TEST = {**{t: "octagon" for t in LEFT}, **{t: "politics" for t in RIGHT}}
+
 if __name__ == "__main__":
     for k in sys.argv[1:] or ["photo"]:
-        if k not in BACKDROPS:
-            raise SystemExit(f"{k}: one of {', '.join(BACKDROPS)}")
-        main(k)
+        b, _, f = k.partition("+")
+        if b not in BACKDROPS or f not in ("", "frames"):
+            raise SystemExit(f"{k}: one of {', '.join(BACKDROPS)}, each with or without +frames")
+        main(b, FRAMES_TEST if f else None)

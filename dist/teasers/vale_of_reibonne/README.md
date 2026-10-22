@@ -26,6 +26,13 @@ seal is its own cutout) and put on one backdrop:
 
 The cut keeps what stands in front of a ruler: Selgrave's microphone and the papers on her desk are still there.
 
+**The frames test** (the author, 2026-10-22: "the portraits as they are now, but with half the portraits with the
+[gilt] octagon of the diplomacy screen, and half with the curved frame of the portrait screen ... I want to get some
+feedback"): `vale_of_reibonne_frames.png`, the portraits as in the first teaser, the left column's in the diplomacy
+screen's gilt octagon (its rays in the corners), the right column's in the politics screen's arch (the sunburst outside
+it), both the Deco UI's own frames (`deco_ui/tools/diplomacy_art.leader_frame`, `gen_textures`' `pol_frame`) drawn at
+the card's height. `photo+frames` makes it; `vanilla+frames` and `plain+frames` put the same frames on the backdrops.
+
 After a build (`pip install rembg onnxruntime` for the backdrops; the model downloads itself the first time):
 
-    CHROMIUM_PATH=/opt/pw-browsers/chromium python3 dist/teasers/vale_of_reibonne/make.py [photo] [vanilla] [plain]
+    CHROMIUM_PATH=/opt/pw-browsers/chromium python3 dist/teasers/vale_of_reibonne/make.py [photo] [vanilla] [plain] [photo+frames] ...
