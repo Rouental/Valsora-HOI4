@@ -118,7 +118,9 @@ New detail goes into those files; this one gets a line.
   eventually affect play. They'll hook into the levy system"): its 26 (`source/governorates_ROU.json`, the fief map's
   rough patches until the author draws the Governorate Lines) are its strategic regions (`scripts/governorates.py`;
   Terres Séparées two, South and North Montvallée, 2026-10-21), and the state panel says each state's governorate and
-  "Royal Fief" for the eleven, Rêverie among them (`build_mod.state_lines`).
+  "Royal Fief" for the eleven, Rêverie among them (`build_mod.state_lines`). In the game they are **Généralités** (author,
+  2026-10-22: "Let's go with Généralité for the name of the districts": "Généralité of X"); the code and files keep
+  "governorate".
 - **Rouental's states are its fiefs** (author, 2026-10-20: "Let's go with the 30 pixel version"): the author's fief map
   `source/Rouental Fiefs.pdn` read onto the game map by `fief_states.py` (each fief of 30 game px a state, the smaller
   merged into a neighbour, crownland with crownland, within the governorate); its lines on Necessary States.
@@ -314,8 +316,7 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   answered or held is in the mod (2026-10-20, their go-ahead; 2026-10-21, the governorates' names, the generic
   advisors, the Kufi in gold, HMMLA's Royal Fiefs, Rouental's groups, Montvallée, Rêverie, the Royal Host, Kalaistan).
   New: the three estates in place of the three powers (`docs/ROUENTAL_ESTATES.md`, the mockup
-  `deco_ui/art/proposals/three_estates/`, 2026-10-22: its placeholders, the Third Estate's champion, a French word for
-  the governorates); the governorates' window and the three powers in game, bare bones (2026-10-21, night, seen 2026-10-22: what to
+  `deco_ui/art/proposals/three_estates/`, 2026-10-22: its placeholders, the Third Estate's champion); the governorates' window and the three powers in game, bare bones (2026-10-21, night, seen 2026-10-22: what to
   see in game in `docs/CONTENT.md`, Rouental; the zones' effects and the decisions still placeholders); Guedelon's
   ruler's name ("The Council of Six" on its page, the portrait the Conseil des Sept's, 2026-10-22); the Vale of Reibonne's region left with Guedelon and Brillagne apart; whether the groups stay (the way back:
   `work/pre_groups_1021/`, or the commit before them). Open: the strait crossings to add from the red ones

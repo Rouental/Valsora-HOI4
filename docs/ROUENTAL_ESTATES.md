@@ -77,8 +77,6 @@ ornamented, red, blue and green; the sheaf bound with a key.
 ## Open
 
 
-- The word for the governorates: the author asks whether French has a better one (Claude's suggestions in the chat of
-  2026-10-22: *gouvernement*, the old French provinces' own; *généralité*, the Crown's districts under an intendant).
 - The Third Estate's champion (the author's to name), and whether the reformer and the secret communist are one person.
 - The mockup's placeholders (the zones, Royal Authority's numbers, the scale's bonuses, the decisions, the breaking
   line at loyalty 40).

@@ -201,6 +201,11 @@ Moved out of `CLAUDE.md` word for word on 2026-10-17 (`CLAUDE.md` keeps one line
   crownland only with crownland (the red Fief Markers: "the areas currently under the direct control of the Sacred
   Prince") and within the governorate; the states' lines on Necessary States for the author to edit. The lore of the
   crownlands and governorates is in `docs/NATIONS.md` (2026-10-20).
+- **The districts are Généralités** (author, 2026-10-22, asked whether French had a better word than "governorate",
+  Claude suggesting *gouvernement* or *généralité*: "Let's go with Généralité for the name of the districts"): every
+  text the player sees says Généralité ("Généralité of Couronneterre", "The Généralités of Rouental", "every
+  généralité's loyalty"; "of", not "de", so no name needs its French article); the code, the files and these notes
+  keep "governorate" (`governorates.py`, `source/governorates_ROU.json`, `ROU_gov_*`). Their heads are still governors.
 - **Rouental's governorates are shown first, played later** (author, 2026-10-21: "They should be shown, and will
   eventually affect play. They'll hook into the levy system, with your relationship with the governorates affecting
   manpower in their provinces and the quality of their levies"; "for now they should be the strategic regions, and

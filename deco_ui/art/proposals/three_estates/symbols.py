@@ -71,10 +71,11 @@ def crown(x, y, w, gem):
 
 def second():
     """three crowns in a triangle, two and one (as heraldry sets three charges): red and blue above, green below"""
-    w = 90
+    w, gap = 84, 20                       # the gap between the two above, and between them and the one below
     h = w * .4
-    return (crown(100 - w - 5, 100 - h - 12, w, "red") + crown(105, 100 - h - 12, w, "blue")
-            + crown(100 - w / 2, 100 + 12, w, "green"))
+    top = 100 - h - gap / 2
+    return (crown(100 - gap / 2 - w, top, w, "red") + crown(100 + gap / 2, top, w, "blue")
+            + crown(100 - w / 2, 100 + gap / 2, w, "green"))
 
 
 def ear(x, y, angle, length=56):

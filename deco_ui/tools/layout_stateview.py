@@ -41,8 +41,8 @@ RESOURCES = dict(x=300, y=72, w=140, h=44)
 
 # 2026-10-21 (the author: Rouental's governorates "should be ... lines on the state panels ... Royal fiefs should also have
 # a line on their state panels"): a row at the stats band's foot, under the victory points and manpower, below the
-# column rules (STAT_RULE) and clear of the resources' icons (from x 309): "Royal Fief · Governorate of Couronneterre",
-# the longest, is 251 px in the body font. Valsora's build writes it (build_mod.py, state_lines: a scripted GUI docked
+# column rules (STAT_RULE) and clear of the resources' icons (from x 309): "Royal Fief · Généralité of Couronneterre",
+# the longest, is 238 px in the body font (251 as "Governorate of", until the author's Généralités, 2026-10-22). Valsora's build writes it (build_mod.py, state_lines: a scripted GUI docked
 # to the state panel, its text by state)
 STATE_LINE = dict(x=X0, y=104, w=270, h=16, font="valsora_deco_body_13")
 

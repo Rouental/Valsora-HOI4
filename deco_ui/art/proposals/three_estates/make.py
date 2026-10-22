@@ -87,7 +87,7 @@ ZONES = {
                        ("Pious estates' loyalty", "+10", 1), ("The Southmarchers' loyalty", "−10", -1)]),
     "second": dict(name="The Lords' Realm", where="The Second Estate holds 60 or more", ra=-2,
                    desc="The vassals take back what the Crown had gathered: the realm comes apart.",
-                   leads="The decentralization: Tara Blanchart governs; the disloyal governorates break away",
+                   leads="The decentralization: Tara Blanchart governs; the disloyal généralités break away",
                    pts=((0, 100, 0), (40, 60, 0), (0, 60, 40)), col=ESTATES["second"][2],
                    eff=[("Royal Authority", "−2 a month", -1), ("Proud estates' loyalty", "+10", 1),
                         ("Demand Levies", "the lords raise their own", 0), ("Replace a Governor", "closed", -1)]),
@@ -411,8 +411,8 @@ def breakaway(y):
         out += value(cx - 8, cy - 5, str(n), 10.5, "#FFF4D0", w=16, align="center")
     y += H + 16
     names = ", ".join(f"{n} {g} ({G[g]['loyalty']})" for n, g in enumerate(goes, 1))
-    out += text(RX, y, f"{len(goes)} governorates would go their own way as the Crown's vassal states: {names}. Tara "
-                "Blanchart governs what stays. No governor can be replaced; each lost governorate can be won back by "
+    out += text(RX, y, f"{len(goes)} généralités would go their own way as the Crown's vassal states: {names}. Tara "
+                "Blanchart governs what stays. No governor can be replaced; each lost généralité can be won back by "
                 "decision, as the base game's Yugoslavia wins back its banovinas.", 11.5, CREAM2, w=RW, font="bod",
                 weight=500, lh=1.35)
     return out

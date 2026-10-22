@@ -158,7 +158,7 @@ def governorates():
     n = pick["n"]
     st = R["st"]
     lab = UI.BAND_NAMES[band[n] - 1]
-    localisation({"[GetRouGovName]": f"Governorate of {pick['name']}", "[GetRouGovGovernor]": V.loc.get(f"ROU_GOV_{n}_GOVERNOR", ""),
+    localisation({"[GetRouGovName]": f"Généralité of {pick['name']}", "[GetRouGovGovernor]": V.loc.get(f"ROU_GOV_{n}_GOVERNOR", ""),
                   "[GetRouGovOrigin]": pick["origin"], "[GetRouGovLoyalty]": f"§Y{pick['loyalty']}§!  {lab}",
                   "[GetRouGovAttitude]": f"{att_names[pick['att'] - 1]}  (next session: their temper may change)",
                   "[GetRouGovAttitudeDesc]": RM.ATTITUDES[pick["att"] - 1][1]})

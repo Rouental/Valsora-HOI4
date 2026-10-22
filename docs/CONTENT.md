@@ -115,7 +115,8 @@ Aislada is the worked example of a built-out nation:
     and Concorde et Volonté are in none and keep theirs), but Terres Séparées, two regions since 2026-10-21 (the
     author: "South Montvallée should encompass Hollier, Evriches, Seigne, Serpette, and Chirac. North Montvallée
     should encompass Selgrave, Lustiana, Lanzerac, Moelle, Maieul, Serieux, and Petit Selgrave"; the file's `split`),
-    27 in all. A state in one reads "Governorate of X" on its panel, a Royal Fief (`nations.ROYAL_FIEFS`: Rêverie,
+    27 in all. In the game they are Généralités (the author, 2026-10-22: "Let's go with Généralité for the name of the
+    districts"). A state in one reads "Généralité of X" on its panel, a Royal Fief (`nations.ROYAL_FIEFS`: Rêverie,
     "Reverie still needs to be marked as a royal fief", and the ten, all in Couronneterre) "Royal Fief · Governorate
     of Couronneterre" (the author, 2026-10-22: the Royal Fiefs "are technically still part of Couronterre, though in
     practice they are more bound directly to the crown than to the governorate"; later: "Rochemont and Bérault are in

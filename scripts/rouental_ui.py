@@ -245,7 +245,7 @@ ZONES = [
     dict(key="prince", name="Sacred Majesty", where="The Prince holds 60 or more",
          desc="The Prince rules by sacred right, and rules alone.", pts=((100, 0, 0), (60, 40, 0), (60, 0, 40)),
          col=POWERS[0][3], mods={"political_power_factor": 0.2, "stability_factor": -0.05},
-         more="Rule by Royal Decree costs half; every governorate's loyalty -5"),
+         more="Rule by Royal Decree costs half; every généralité's loyalty -5"),
     dict(key="voix", name="Rule of the Voix", where="The Voix holds 60 or more",
          desc="The Voix speaks, and Prince and Estates obey.", pts=((0, 100, 0), (40, 60, 0), (0, 60, 40)),
          col=POWERS[1][3], mods={"stability_factor": 0.1, "political_power_factor": -0.1},
@@ -253,7 +253,7 @@ ZONES = [
     dict(key="speaker", name="The Estates Supreme", where="The Speaker holds 60 or more",
          desc="The Estates General governs through its Speaker; the Prince signs what it sends.",
          pts=((0, 0, 100), (40, 0, 60), (0, 40, 60)), col=POWERS[2][3], mods={"political_power_factor": -0.2},
-         more="Every governorate's loyalty +10; Rule by Royal Decree closed"),
+         more="Every généralité's loyalty +10; Rule by Royal Decree closed"),
     dict(key="throne", name="Throne and Altar", where="The Speaker under 15",
          desc="Prince and Voix govern together; the Estates General sits unheard.",
          pts=((60, 40, 0), (40, 60, 0), (25, 60, 15), (60, 25, 15)), col=None,
@@ -275,8 +275,8 @@ MIX = {"throne": (0, 1), "crown": (0, 2), "in_name": (1, 2)}
 # the four decisions (placeholders): name, political power, shifts (prince, voix, speaker), more
 DECISIONS = [("Rule by Royal Decree", 50, (6, -2, -4), "stability -2 %"),
              ("Seek the Voix's Blessing", 30, (-4, 6, -2), None),
-             ("Summon the Estates General", 40, (-3, -3, 6), "every governorate's estates change their temper"),
-             ("A Royal Progress", 25, (3, 0, -3), "a governorate's loyalty +5")]
+             ("Summon the Estates General", 40, (-3, -3, 6), "every généralité's estates change their temper"),
+             ("A Royal Progress", 25, (3, 0, -3), "a généralité's loyalty +5")]
 HOLDERS = [("Roland II Cahun", "GFX_portrait_ROU_roland_cahun", "Free of the regency at last."),
            ("Anserra IX", "GFX_portrait_ROU_mahaut_vi", "Gave up much of the regency's power."),
            ("Tara Blanchart", "GFX_portrait_ROU_tara_blanchart", "Speaks for the estates of the realm.")]
@@ -651,7 +651,7 @@ def three_powers(write):
     L("ROU_test_three_powers", "Test: the Three Powers to the Next Zone")
     L("ROU_test_three_powers_desc", "Moves the balance into each of the seven zones in turn (Sacred Majesty, Rule of the "
       "Voix, the Estates Supreme, Throne and Altar, Crown and Estates, the Prince in Name, back to the start), to see "
-      "their spirits and the governorates' colours. A test: it goes with the others.")
+      "their spirits and the généralités' colours. A test: it goes with the others.")
     return button_gui, win_gui, sgui, effects, sloc
 
 
@@ -815,7 +815,7 @@ def governorates(write):
     # ---- the window
     WX, WY, WW, WH = 566, 104, 1330, 846
     MX, MY = 20, 66
-    kids = [text("rou_gov_title", 0, 16, WW, 30, L("ROU_GOV_TITLE", "The Governorates of Rouental"), "title", fmt="center"),
+    kids = [text("rou_gov_title", 0, 16, WW, 30, L("ROU_GOV_TITLE", "The Généralités of Rouental"), "title", fmt="center"),
             button("rou_gov_close", "GFX_closebutton", WW - 46, 10),
             icon("rou_gov_map", base_spr, MX, MY)]
     for g, sprites, (x0, y0) in fills:
@@ -842,8 +842,8 @@ def governorates(write):
         kids += [button(f"rou_gov_{n}_seal", seal_spr, x, y, tooltip=f"ROU_GOV_{n}_TT"),
                  icon(f"rou_gov_{n}_seal_lit", seal_lit, x, y, transparent=True)]
     kids += [icon("rou_gov_legend", legend_spr, MX, MY + MH + 12),
-             text("rou_gov_hint", MX, MY + MH + 46, MW, 60, L("ROU_GOV_HINT", "Click a governorate, or its seal, to see "
-                  "it. The colours are the governorates' loyalty to the Crown. A state's levies are known once inspectors "
+             text("rou_gov_hint", MX, MY + MH + 46, MW, 60, L("ROU_GOV_HINT", "Click a généralité, or its seal, to see "
+                  "it. The colours are the généralités' loyalty to the Crown. A state's levies are known once inspectors "
                   "have seen it; the Crown knows its own fiefs'."), "italic")]
     CX, CW = 880, 430
     kids += [icon("rou_gov_card_band", band, CX, 66),
@@ -883,7 +883,7 @@ def governorates(write):
         text("rou_gov_state_men", 360, 3, 64, 18, L("ROU_GOV_STATE_MEN", "[?rou_manpower_k|0]k"), "small", fmt="right")])
     category = window("rou_gov_category_window", 0, 0, 520, 96, [
         text("rou_gov_cat_text", 10, 6, 500, 40, L("ROU_GOV_CAT_TEXT", "The Prince's governors keep what order they can "
-             "among the vassals of 26 governorates; the eleven Royal Fiefs answer to the Crown."), "italic"),
+             "among the vassals of 26 généralités; the eleven Royal Fiefs answer to the Crown."), "italic"),
         # dark ink on the gold plate (the Deco fonts' K, as the politics screen's Head of State ribbon): the fonts' cream
         # was barely readable on it (the author, 2026-10-22)
         button("rou_gov_open_button", open_btn, 110, 52, L("ROU_GOV_OPEN", "§KOpen the Map of the Realm§!" if DECO_UI
@@ -1045,8 +1045,8 @@ def governorates(write):
            for g in govs] + ["\ttext = { trigger = { check_variable = { rou_gov_sel = 27 } } localization_key = ROU_GOV_27_NAME }", "}"]
     L("ROU_GOV_NONE", "The Realm")
     L("ROU_GOV_27_NAME", "The Crown's Domain")
-    for key, field, crown_text, none in (("GetRouGovGovernor", "governor", "Held by the Prince", "Pick a governorate on the map"),
-                                         ("GetRouGovOrigin", "origin", "Of the Governorate of Couronneterre in name, bound to the Crown in "
+    for key, field, crown_text, none in (("GetRouGovGovernor", "governor", "Held by the Prince", "Pick a généralité on the map"),
+                                         ("GetRouGovOrigin", "origin", "Of the Généralité of Couronneterre in name, bound to the Crown in "
                                           "practice", ""),
                                          ("GetRouGovPeoples", "peoples", "The Crown's", "")):
         sl += ["defined_text = {", f"\tname = {key}"]
@@ -1059,14 +1059,14 @@ def governorates(write):
         sl.append("}")
     total = {g["n"]: sum(g["shares"].values()) for g in govs}
     for g in govs:
-        L(f"ROU_GOV_{g['n']}_NAME", f"Governorate of {g['name']}")
+        L(f"ROU_GOV_{g['n']}_NAME", f"Généralité of {g['name']}")
         L(f"ROU_GOV_{g['n']}_GOVERNOR", f"Governor: {g['governor']}")
         L(f"ROU_GOV_{g['n']}_ORIGIN", g["origin"])
         peoples = ", ".join(f"{RM.PEOPLES[p][0] if p in RM.PEOPLES else 'Crown'} {100 * c / total[g['n']]:.0f} %"
                             for p, c in sorted(g["shares"].items(), key=lambda kv: -kv[1]))
         L(f"ROU_GOV_{g['n']}_PEOPLES", peoples)
         L(f"ROU_GOV_{g['n']}_TT", f"§Y{g['name']}§!: loyalty [?rou_gov_{g['n']}_loyalty|0]. Click to see it.")
-    L("ROU_GOV_27_TT", "§YThe Crown's Domain§!: the eleven Royal Fiefs, technically of the Governorate of "
+    L("ROU_GOV_27_TT", "§YThe Crown's Domain§!: the eleven Royal Fiefs, technically of the Généralité of "
       "Couronneterre, though bound more to the Crown than to its governor. Click to see them.")
     sl += ["defined_text = {", "\tname = GetRouGovLoyalty",
            "\ttext = { trigger = { OR = { check_variable = { rou_gov_sel = 0 } check_variable = { rou_gov_sel = 27 } } } localization_key = ROU_GOV_LOYALTY_NONE }"]
@@ -1132,18 +1132,18 @@ def governorates(write):
           f"add_to_variable = {{ rou_gov_{g['n']}_favour = -5 }} }}" for g in govs],
         "\t\t\tROU_gov_update = yes", "\t\t}", "\t\tai_will_do = { base = 0 }", "\t}", "}", ""]))
     L("ROU_survey_levies", "Survey the Realm's Levies")
-    L("ROU_survey_levies_desc", "Inspectors through every governorate at once: every state's levies become known. Proud "
+    L("ROU_survey_levies_desc", "Inspectors through every généralité at once: every state's levies become known. Proud "
       "estates resent it (loyalty -5).")
-    L("ROU_governorates", "The Governorates")
+    L("ROU_governorates", "The Généralités")  # the author, 2026-10-22: "Let's go with Généralité for the name of the districts"
     L("ROU_governorates_desc", "The Prince's governors and the estates of the realm.")
     L("ROU_raise_blue_guard", "Raise the Blue Guard of Brume")
     L("ROU_raise_blue_guard_desc", "An emergency measure: Grand Brume's ceremonial corps, two divisions of leg infantry "
       "elite in their drill and poor in their arms, called out. It costs little, but Graisivaudan's loyalty falls by 20, "
-      "and every other governorate's by 5: the vassals are angered.")
+      "and every other généralité's by 5: the vassals are angered.")
     dyn = "\n".join(["ROU_governorate_loyalty = {", "\ticon = GFX_idea_generic_manpower_bonus",
                      "\tenable = { is_owned_by = ROU }", "\tlocal_manpower = rou_mp_mod", "}", ""])
     write("common/dynamic_modifiers/valsora_rouental.txt", dyn)
-    L("ROU_governorate_loyalty", "The Governorate's Loyalty")
+    L("ROU_governorate_loyalty", "The Généralité's Loyalty")
     return [window_gui, entry, category], sgui, effects, sl
 
 

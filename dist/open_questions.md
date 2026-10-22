@@ -6,7 +6,7 @@ in gold (30), HMMLA's Royal Fiefs (31) (`docs/NATIONS.md`, 2026-10-21, later); t
 are now elite!"), the Army HQ cards (26: "Army HQ cards seem to work"), the governorate line ("worked just fine"), and
 Rouental's groups (28: applied, `docs/NATIONS.md`, 2026-10-21, later still); on 2026-10-22 the Royal Fiefs, all
 eleven Couronneterre's in name, and its spelling (36 then); Rouental's 24 cities, gone from the export of 2026-10-22
-(37: "Yes, the cities were meant to go, drop them for now. I wanted a fresh start." Dropped). What is still open:
+(37: "Yes, the cities were meant to go, drop them for now. I wanted a fresh start." Dropped). Answered later the same day: the word for the districts (39: "Let's go with Généralité", in the mod). What is still open:
 
 | # | question | where |
 |---|---|---|
@@ -21,7 +21,6 @@ eleven Couronneterre's in name, and its spelling (36 then); Rouental's 24 cities
 | 35 | the three powers and the governorates, in game since 2026-10-21, night (bare bones), seen 2026-10-22 ("Looks great so far"): the map's clicks redone (the game clicks a button by its box: now rectangles that tile each governorate), the marker in its place, the Open button's text dark. Click anywhere in a governorate: does it pick that one? The zones' names and effects and the decisions are still Claude's; the other five attitudes' sides later | in game |
 | 36 | Guedelon's ruler: its page names it "The Council of Six", but its portrait says Conseil des Sept (the Council of Seven, you said). Change the name on the page (it comes in with your next export), or tell me what it should be | the Gazetteer |
 | 38 | the three estates (`deco_ui/art/proposals/three_estates/`): the Third Estate's champion (a placeholder: your name for them, and whether the reformer and the secret communist are one person); the mockup's placeholders (the zones, Royal Authority's numbers, the Court's bonuses, the decisions, the breaking line at loyalty 40) | the mockup |
-| 39 | a French word for the governorates: *gouvernement* (the old French provinces' own word for a governor's province) or *généralité* (the Crown's districts under an intendant); or keep "governorate" | |
 | 33 | the groups' way back: "Be prepared for the posibility of returning to how it currently is though": the map before them is kept (`work/pre_groups_1021/`, and the commit before) until you say they stay | |
 
 New to look at:

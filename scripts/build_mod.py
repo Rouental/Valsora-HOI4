@@ -245,7 +245,7 @@ def state_lines(write, state_by_name):
     """Rouental's governorates and Royal Fiefs on the state panel (the author, 2026-10-21: "for now they should be the
     strategic regions, and lines on the state panels ... Royal fiefs should also have a line on their state panels"):
     a state in a governorate (source/governorates_ROU.json "states", by its key in state_names.json: governorates.py
-    --apply) reads "Governorate of X", a Royal Fief (nations.ROYAL_FIEFS) "Royal Fief · Governorate of X". A scripted GUI
+    --apply) reads "Généralité of X", a Royal Fief (nations.ROYAL_FIEFS) "Royal Fief · Généralité of X". A scripted GUI
     docked to the state panel (selected_state_context: its scope the state clicked), its text a scripted localisation
     by state id; the line's place is the Deco UI's (deco_ui/tools/layout_stateview.py STATE_LINE), so it is written
     only with the Deco UI on (the game's own state panel has no room kept for it). Returns the localisation."""
@@ -267,7 +267,9 @@ def state_lines(write, state_by_name):
         lines[(s in royal, gov.get(s))].append(s)
     keys, loc, entries = {}, [' VAL_STATE_LINE:0 "[GetValsoraStateLine]"', ' VAL_STATE_LINE_NONE:0 ""'], []
     for k, ((is_royal, g), ss) in enumerate(sorted(lines.items(), key=lambda kv: (not kv[0][0], kv[0][1] or ""))):
-        text = " · ".join((["Royal Fief"] if is_royal else []) + ([f"Governorate of {g}"] if g else []))
+        # the districts are Généralités in the game (the author, 2026-10-22: "Let's go with Généralité for the name of
+        # the districts"); the code and the files keep "governorate"
+        text = " · ".join((["Royal Fief"] if is_royal else []) + ([f"Généralité of {g}"] if g else []))
         loc.append(f' VAL_STATE_LINE_{k + 1}:0 "{text}"')
         entries += ["\ttext = {", "\t\ttrigger = { OR = { " + " ".join(f"state = {s + 1}" for s in ss) + " } }",
                     f"\t\tlocalization_key = VAL_STATE_LINE_{k + 1}", "\t}"]
