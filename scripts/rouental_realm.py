@@ -301,9 +301,10 @@ def _edges(cls_fn, S):
     return {k: "".join(v) for k, v in out.items()}
 
 
-def map_svg(scale, select_gov=None, select_state=None, crown=False, lens="loyalty"):
+def map_svg(scale, select_gov=None, select_state=None, crown=False, lens="loyalty", select_govs=()):
     """the realm at `scale` screen px a map px: governorates by loyalty, the Royal Fiefs the Crown's gilt, the rest of
-    the land dim; state, governorate and coast lines; the selection outlined; each governorate's seal"""
+    the land dim; state, governorate and coast lines; the selection (a governorate, the Crown's, or several
+    governorates: select_govs) outlined; each governorate's seal"""
     R = realm()
     S, st, gov, royal = R["S"], R["st"], R["gov"], R["royal"]
     G = governorates()
@@ -315,6 +316,8 @@ def map_svg(scale, select_gov=None, select_state=None, crown=False, lens="loyalt
         sel = set(G[select_gov]["states"])
     if crown:
         sel = set(royal)
+    for g in select_govs:
+        sel |= set(G[g]["states"])
 
     def fill_key(s):
         if s == 0:

@@ -10,6 +10,11 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-22, later still: Rouental "The Sacred Principality of Rouental" under every government but the communist
+  (the author: "Cultural and religious intertia is just too strong for anything else"); the three estates planned in
+  place of the three powers (`docs/ROUENTAL_ESTATES.md`) and mocked up (`deco_ui/art/proposals/three_estates/`: the
+  estates' triangle, Royal Authority, whom the Court follows, the Promised Reforms, the Lords' Realm and the governorates
+  that would break away). The site republished.
 - 2026-10-22, later still: Rouental's 24 cities dropped (the author: "Yes, the cities were meant to go, drop them for
   now. I wanted a fresh start."): its facts are the export's, five cities; the Voix **Anserra IX**, Mahaut VI until
   then (the author: "rename Voix Mahaut VI to Voix Anserra IX"; her ids kept); a teaser of the Vale of Reibonne, its

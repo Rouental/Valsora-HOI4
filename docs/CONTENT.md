@@ -33,10 +33,11 @@ Aislada is the worked example of a built-out nation:
 - **Rouental (ROU)** is the country the author outlined inside Nonscio. Everything
   first built for NSC moved to it, with `NSC_` renamed `ROU_`; NSC is plain "Nonscio"
   again. `nations.IDEOLOGY_NAMES["ROU"]`: "Rouental" on the map for every government,
-  with the author's formal names (2026-09-30): Monarchist "The Sacred Principality",
-  Authoritarian "The Grand Principality", Theocratic "The Most Seran State",
-  Democratic "The Principality" (a constitutional monarchy, since later that day), Communist
-  "The People's Republic" (all "… of Rouental");
+  with the author's formal names: "The Sacred Principality of Rouental" under every government but the communist
+  "People's Republic of Rouental" (2026-10-22: "In all paths save communist Rouental will remain the Sacred
+  Principality of Rouental. Cultural and religious intertia is just too strong for anything else"; from 2026-09-30
+  until then Authoritarian "The Grand Principality", Theocratic "The Most Seran State", Democratic "The
+  Principality");
   adjective Rouentaise. (The first names, Perfect / Powerful / Boring / Shitty
   Rouental, were dropped.)
   - **Capital: Rêverie**, the one-province state the author drew at (660, 805)

@@ -47,12 +47,26 @@ focuses are not done when it runs out, the uprising follows.
 3. **Roland and Serelle**: "It'd probably be best for it to matter all game, I suppose, though I'm not sure what it'd
    do. Maybe military bonuses for Serelle, diplomacy bonuses for Roland?"
 
+## The author's answers, later the same day
+
+1. "Yeah, that's a good idea, only the disloyal governorates break away. (Is governorates right? Maybe there's a better
+   word in french.)"
+2. "35/35/30 yes, she would lead the decentralized Rouental. In all paths save communist Rouental will remain the Sacred
+   Principality of Rouental. Cultural and religious intertia is just too strong for anything else. I'm not sure on the
+   democratic leader yet, just use a placeholder for now." (Rouental's formal name under every government but the
+   communist is the Sacred Principality since then: `nations.IDEOLOGY_NAMES`.)
+3. "If we can tie things to Serelle winning battles, that'd be great. But otherwise it'll mostly be through decisions. I
+   like those rewards though. And no need to tie it into steady as she goes / kick out your brother. Those are both
+   placeholder focuses and won't stick around. That is the idea though, which character is leading decides who comes
+   out on top." (The game's `on_army_leader_won_combat` fires for a general who wins a combat: it can be tied.)
+
+"Go ahead with the mockup": `deco_ui/art/proposals/three_estates/` (its README has what is the author's and what is
+Claude's placeholder).
+
 ## Open
 
-- The start's shares add up to 90: a triangle's three add up to 100 (40 / 40 / 20 keeps their shape), unless the
-  other 10 are meant for something else.
-- The Second Estate's Rouental: its government, and whether Tara leads it; whether every governorate breaks away or
-  only the disloyal ones.
-- The new Third Estate leader (the author's to name), and whether the reformer and the secret communist are one person.
-- What the Roland and Serelle scale does (proposed: Serelle's side army experience, organisation and the Royal Host's
-  strength, Roland's opinion, trade and the Association's goodwill, each growing with the scale's lean).
+- The word for the governorates: the author asks whether French has a better one (Claude's suggestions in the chat of
+  2026-10-22: *gouvernement*, the old French provinces' own; *généralité*, the Crown's districts under an intendant).
+- The Third Estate's champion (the author's to name), and whether the reformer and the secret communist are one person.
+- The mockup's placeholders (the zones, Royal Authority's numbers, the scale's bonuses, the decisions, the breaking
+  line at loyalty 40).

@@ -909,6 +909,15 @@ Arovannea, ignore them, they're still a WIP." Imported without Arovannea (its en
   kept in `source/gazetteer/ROU.json`, the export's changes on top (Rêverie's victory points 40 ...), until the author
   says whether the 24 were meant to go. Its other changes (states, provinces, Ghessone) are in.
 
+## 2026-10-22, later still: Rouental the Sacred Principality on every path but one
+
+The author, on the three estates (`docs/ROUENTAL_ESTATES.md`): "In all paths save communist Rouental will remain the
+Sacred Principality of Rouental. Cultural and religious intertia is just too strong for anything else." Its formal name
+under the democratic, Authoritarian and Theocratic governments, the Principality, the Grand Principality and the Most
+Seran State since 2026-09-30, is "The Sacred Principality of Rouental" now (`nations.IDEOLOGY_NAMES`); the communist
+"People's Republic of Rouental" stays. Tara Blanchart is still democratic Rouental's leader in the mod: in the estates'
+plan she leads the decentralized Rouental and the democratic leader is a placeholder, for when it is built.
+
 ## 2026-10-22, later still: Rouental's cities dropped; the Voix Anserra IX
 
 - **Rouental's cities**: the author, of the 24: "Yes, the cities were meant to go, drop them for now. I wanted a fresh

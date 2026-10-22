@@ -252,12 +252,15 @@ PROTECTORATE = """autonomy_state = {
 # Country names while a given ideology rules: tag -> ideology -> (name, formal
 # name, adjective). Ideologies left out use the placeholder name from build_mod.py.
 IDEOLOGY_NAMES = {
-    "ROU": {  # author, 2026-09-30: "Rouental" on the map for every government
-        "democratic": ("Rouental", "The Principality of Rouental", "Rouentaise"),
-        "fascism": ("Rouental", "The Grand Principality of Rouental", "Rouentaise"),
+    # author, 2026-09-30: "Rouental" on the map for every government; 2026-10-22: "In all paths save communist
+    # Rouental will remain the Sacred Principality of Rouental. Cultural and religious intertia is just too strong for
+    # anything else" (until then the Principality, the Grand Principality and the Most Seran State)
+    "ROU": {
+        "democratic": ("Rouental", "The Sacred Principality of Rouental", "Rouentaise"),
+        "fascism": ("Rouental", "The Sacred Principality of Rouental", "Rouentaise"),
         "communism": ("Rouental", "The People's Republic of Rouental", "Rouentaise"),
         "neutrality": ("Rouental", "The Sacred Principality of Rouental", "Rouentaise"),
-        "theocracy": ("Rouental", "The Most Seran State of Rouental", "Rouentaise"),
+        "theocracy": ("Rouental", "The Sacred Principality of Rouental", "Rouentaise"),
     },
 }
 
