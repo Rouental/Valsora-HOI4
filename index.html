@@ -7,7 +7,7 @@
   --rule: #cdd3c8; --rule-2: #b3bcb0; --gilt: #8e6d27; --jade: #2b6a5b; --jade-2: #d7e8e2;
   --warn: #ad3f2c; --warn-2: #f5e0d9; --sel: #d6951c; --sug: #a8326e;
   --sea: #b9cdd8; --lake: #a7c4d8; --river: #2c6a98; --other: #d9dcd2; --other-ink: #8a9288;
-  --rail: #2e2722; --rail-2: #f6f7f2; --hub: #7a3e8e;
+  --rail: #2e2722; --rail-2: #f6f7f2; --hub: #7a3e8e; --wall: #8a2b12;
   --st1: #e7d8a3; --st2: #cbdfae; --st3: #f0c9ad; --st4: #d6cae6; --st5: #bddbd4; --st6: #eac5cf; --st7: #dbd3b7; --st8: #c7d6eb;
   --t-plains: #d3dd9c; --t-forest: #6d9a59; --t-hills: #c1a170; --t-mountain: #988b82; --t-desert: #ead399;
   --t-marsh: #7ea699; --t-jungle: #3c8956; --t-urban: #9a98a5;
@@ -21,7 +21,7 @@
   --rule: #263540; --rule-2: #35474f; --gilt: #e3c77e; --jade: #6cc0aa; --jade-2: #1a3a34;
   --warn: #ee8c7e; --warn-2: #3a211d; --sel: #f1c24e; --sug: #f08cbc;
   --sea: #1c3442; --lake: #213f58; --river: #7db6dc; --other: #26313a; --other-ink: #7a8690;
-  --rail: #e8dec5; --rail-2: #16212a; --hub: #c9a1e8;
+  --rail: #e8dec5; --rail-2: #16212a; --hub: #c9a1e8; --wall: #ff8f66;
   --st1: #5b5131; --st2: #485b39; --st3: #65473a; --st4: #4c4366; --st5: #345b55; --st6: #653f4b; --st7: #595341; --st8: #3d4d66;
   --t-plains: #6e7943; --t-forest: #3e6a35; --t-hills: #7c6642; --t-mountain: #6b615b; --t-desert: #89794b;
   --t-marsh: #4b6d65; --t-jungle: #2c6943; --t-urban: #696773;
@@ -32,7 +32,7 @@
   --rule: #263540; --rule-2: #35474f; --gilt: #e3c77e; --jade: #6cc0aa; --jade-2: #1a3a34;
   --warn: #ee8c7e; --warn-2: #3a211d; --sel: #f1c24e; --sug: #f08cbc;
   --sea: #1c3442; --lake: #213f58; --river: #7db6dc; --other: #26313a; --other-ink: #7a8690;
-  --rail: #e8dec5; --rail-2: #16212a; --hub: #c9a1e8;
+  --rail: #e8dec5; --rail-2: #16212a; --hub: #c9a1e8; --wall: #ff8f66;
   --st1: #5b5131; --st2: #485b39; --st3: #65473a; --st4: #4c4366; --st5: #345b55; --st6: #653f4b; --st7: #595341; --st8: #3d4d66;
   --t-plains: #6e7943; --t-forest: #3e6a35; --t-hills: #7c6642; --t-mountain: #6b615b; --t-desert: #89794b;
   --t-marsh: #4b6d65; --t-jungle: #2c6943; --t-urban: #696773;
@@ -235,6 +235,11 @@ fieldset.lockable[disabled] { opacity: .62; }
 .field input::placeholder, textarea::placeholder { color: var(--ink-3); }
 .field .hint { font-size: 11.5px; color: var(--ink-3); }
 .field.set > label::after { content: " ●"; color: var(--jade); font-size: 9px; vertical-align: 2px; }
+/* a yes / no fact (a state's Impassable, 2026-10-22): the box and its words one line, the whole line clickable */
+.field.check > label { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--ink); cursor: pointer; }
+.field.check input[type="checkbox"] { flex: none; width: 18px; height: 18px; margin: 0; padding: 0; accent-color: var(--jade); cursor: pointer; }
+.legend i.hatch { background: repeating-linear-gradient(135deg, var(--ink-2) 0 1.5px, var(--st1) 1.5px 4.5px); }
+.legend i.wall { height: 4px; border: 0; border-radius: 2px; background: var(--wall); box-shadow: 0 0 0 1.5px var(--sheet); }
 textarea { min-height: 70px; resize: vertical; }
 .meter { height: 6px; background: var(--rule); border-radius: 3px; overflow: hidden; }
 .meter i { display: block; height: 100%; background: var(--jade); }
@@ -336,9 +341,11 @@ optgroup { font-style: normal; }
 @media (max-width: 600px) {
   body.in-nation .brand { display: none; }
   .grid2 { grid-template-columns: minmax(0, 1fr); }
+  .toolbar { gap: 4px; }   /* nine tools on one row (2026-10-22, the Impassable borders tool) */
+  .tool { padding-inline: 7px; }
 }
 @media (pointer: coarse) {
-  .tool, .seg button, .tchip, .btn.small, .inset { min-height: 38px; }
+  .tool, .seg button, .tchip, .btn.small, .inset, .field.check > label { min-height: 38px; }
   .mapctl button { width: 42px; height: 42px; }
   .sizes { right: 62px; max-width: calc(100% - 82px); }
 }
@@ -414,6 +421,7 @@ optgroup { font-style: normal; }
         <button class="tool" data-tool="river" aria-pressed="false" title="Draw rivers (R)"><svg viewBox="0 0 24 24"><path d="M3 8c3-3 5 3 8 0s5 3 8 0"/><path d="M3 15c3-3 5 3 8 0s5 3 8 0"/></svg><span>Rivers</span></button>
         <button class="tool" data-tool="rail" aria-pressed="false" title="Draw railways (L)"><svg viewBox="0 0 24 24"><path d="M3 12h18"/><path d="M6 8v8M10 8v8M14 8v8M18 8v8"/></svg><span>Railways</span></button>
         <button class="tool" data-tool="hub" aria-pressed="false" title="Supply hubs (H)"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12"/><path d="M12 9v6M9 12h6"/></svg><span>Hubs</span></button>
+        <button class="tool" data-tool="wall" aria-pressed="false" title="Impassable borders between provinces (B)"><svg viewBox="0 0 24 24"><path d="M3 18l5-8 3.5 5 3-4.5L21 18"/><path d="M3 21h18"/></svg><span>Impassable</span></button>
         <button class="tool" data-tool="release" aria-pressed="false" title="Releasables: their land (E)"><svg viewBox="0 0 24 24"><path d="M6 21V4"/><path d="M6 4h11l-2.5 4 2.5 4H6"/></svg><span>Releasables</span></button>
         <button class="tool" data-tool="suggest" aria-pressed="false" title="Suggest a change to the map (S)"><svg viewBox="0 0 24 24"><path d="M4 20l3-1 11-11-2-2L5 17z"/><path d="M14 6l2 2"/><path d="M15 20h5"/></svg><span>Suggest</span></button>
         <div class="viewctl">
@@ -1443,7 +1451,7 @@ function reconfigure() {  // the owner opened or closed the open nation's map to
 function toolsHere() {
   const P = app.N.parts[app.ui.part];
   if (!mapOpen()) return ["select", "release", "suggest"];  // releasables' land as drawn areas
-  return P.world ? ["select", "suggest"] : ["select", "terrain", "city", "river", "rail", "hub", "release", "suggest"];
+  return P.world ? ["select", "suggest"] : ["select", "terrain", "city", "river", "rail", "hub", "wall", "release", "suggest"];
 }
 function closeNation() {
   flushAll();
@@ -1633,7 +1641,7 @@ function guideSteps(N) {
     ? { pic: "closed", title: "The map", body: [h("p", null, nm, " isn't on the map yet. On the ", B("Map"), " tab, use ", B("Suggest"), " to draw on the world map where it should go, and say what each mark is.")] }
     : N.open
       ? { pic: "open", title: "The map and its tools", body: [
-          h("p", null, "Pick a tool above the map. ", B("Select"), " a state to name it and set its buildings and resources; place ", B("Cities"), "; paint ", B("Terrain"), "; draw ", B("Rivers"), " and ", B("Railways"), "; set supply ", B("Hubs"), "; mark ", B("Releasables"), "' land; ", B("Suggest"), " anything else."),
+          h("p", null, "Pick a tool above the map. ", B("Select"), " a state to name it and set its buildings and resources; place ", B("Cities"), "; paint ", B("Terrain"), "; draw ", B("Rivers"), " and ", B("Railways"), "; set supply ", B("Hubs"), "; make borders ", B("Impassable"), "; mark ", B("Releasables"), "' land; ", B("Suggest"), " anything else."),
           h("p", null, B("Undo"), " takes back your last change. Drag to move the map, scroll or pinch to zoom; the boxes in its corner show your overseas parts and the whole world.")] }
       : { pic: "closed", title: "The map", body: [
           h("p", null, "Your states aren't drawn yet, so the map shows your land plain. With ", B("Suggest"), ", draw the states you'd like (", B("State"), " keeps only your land inside your line), lines along borders, or a point for each city, and say what each is."),
@@ -1822,7 +1830,16 @@ function derive(N) {
     let c = 0; while (used.has(c) && c < 7) c++;
     N.colourOf[s] = c;
   });
+  N.stateAdj = adj;   // the states of the nation's own each one borders (impassableNow)
   N.capitalDefault = N.states.findIndex(s => s.capital);
+  const imp = new Set(N.impassable || []);   // the states the game has impassable now (facts_export.py)
+  N.impGame = N.states.map(s => imp.has(s.key));
+  // impassable borders (2026-10-22): each province's key (its anchor pixel), the nation's and the neighbours' around
+  // it, and the borders the game has impassable now, by the pair of provinces (wallsNow)
+  N.labelOfKey = new Map();
+  N.prov.forEach((p, i) => N.labelOfKey.set(p.key, i + 2));
+  (N.otherK || []).forEach((k, j) => { if (!N.labelOfKey.has(k)) N.labelOfKey.set(k, N.nOwn + 2 + j); });
+  N.wallDefault = new Set((N.walls || []).map(([i, j]) => pairOf(i + 2, j + 2)));
 }
 function partName(N, P, k) {  // the largest piece is the mainland; the others are named after a state
   if (!P.states.length) return `Part ${k + 1}`;
@@ -1871,6 +1888,7 @@ function labelAt(gx, gy, k) {  // label at a game pixel in part k (or any part):
 function ownProvAt(gx, gy) { const r = labelAt(gx, gy); return r && r[0] >= 2 && r[0] < app.N.nOwn + 2 ? r[0] - 2 : -1; }
 function resolve() {  // the facts' pixel keys -> this map's states and provinces
   const N = app.N;
+  N.impNow = null;
   N.stateKey = N.states.map(s => s.key); N.stateFacts = N.states.map(() => null);
   N.provKey = N.prov.map(p => p.key); N.provFacts = N.prov.map(() => null);
   N.orphans = []; N.dupKeys = { states: new Map(), provinces: new Map() };
@@ -1883,7 +1901,7 @@ function resolve() {  // the facts' pixel keys -> this map's states and province
     const all = F(kind), hits = [];
     for (const k of Object.keys(all)) {
       const v = all[k];
-      if (!v || !isObj(v)) continue;
+      if (!v || !isObj(v) || (kind === "provinces" && k === "borders")) continue;   // the impassable borders (resolveWalls)
       const [x, y] = keyXY(k), p = ownProvAt(x, y);
       if (p < 0) { if (Object.keys(compact(v)).length) N.orphans.push([kind, k]); continue; }
       const i = of(p);
@@ -1919,6 +1937,7 @@ function resolve() {  // the facts' pixel keys -> this map's states and province
     const pick = o.find(c => c.capital) || o.find(c => c.stateCapital) || o.reduce((m, c) => ((c.vp || 5) > (m.vp || 5) ? c : m), o[0]);
     N.seatOf.set(s, pick.id);
   }
+  resolveWalls();
   N.sugList = Object.entries(F("suggest")).filter(([, v]) => v && Array.isArray(v.pts) && v.pts.length).map(([id, v]) => ({ id, ...v }));
   // releasables, in the order they were added, and which of them holds each state (HOI4 gives
   // cores on whole states). Those saved before held provinces: they hold the states those cover
@@ -1964,6 +1983,126 @@ function pf(p) { return app.N.provFacts[p] || {}; }
 function stateName(s) { const f = sf(s); return f.name || app.N.states[s].name || `State ${app.N.states[s].id}`; }
 function statePop(s) { const f = sf(s); return f.pop != null ? f.pop : app.N.states[s].pop; }
 function provTerrain(p) { const t = pf(p).t; return t || app.N.prov[p].t; }
+// impassable states (2026-10-22, the author: "There should be a way to mark states as impassible on the gazeteer"): the
+// game's now (the author's areas layer, scripts/areas.py, as the last build has them), with the page's choice over it
+// (`impassable` true or false in a state's facts, kept as chosen, as genders are)
+function stateImpWanted(s) { const v = sf(s).impassable; return v === true || v === false ? v : !!app.N.impGame[s]; }
+// ... and what the game will make of them, as scripts/build_mod.py decides: a capital stays passable, and so does a
+// state with no passable state of the nation's beside it to change hands with (an impassable state is linked to one, as
+// the base game's Sahara), or one whose mark would leave such a state of the map's without one. {set, why: state ->
+// [reason, the state it would cut off]}
+function impassableNow() {
+  const N = app.N;
+  if (N.impNow) return N.impNow;
+  const set = new Set(), mine = new Set(), why = new Map();
+  N.states.forEach((st, s) => { if (stateImpWanted(s)) { set.add(s); if (sf(s).impassable === true) mine.add(s); } });
+  const cap = capitalState();
+  if (set.has(cap)) { set.delete(cap); if (mine.delete(cap)) why.set(cap, ["capital"]); }
+  for (;;) {
+    const lost = [...set].filter(s => ![...N.stateAdj[s]].some(t => !set.has(t))).sort((a, b) => a - b);
+    let s = lost.find(t => mine.has(t)), r = ["alone"];
+    if (s === undefined) {
+      const block = new Set(); for (const t of lost) for (const u of N.stateAdj[t]) if (mine.has(u)) block.add(u);
+      if (!block.size) break;
+      s = Math.min(...block); r = ["blocks", lost.find(t => N.stateAdj[t].has(s))];
+    }
+    set.delete(s); mine.delete(s); why.set(s, r);
+  }
+  return (N.impNow = { set, why });
+}
+function stateImpassable(s) { return mapOpen() && impassableNow().set.has(s); }
+// impassable borders (2026-10-22, the author: "Yes, add the impassable borders tool too"): HOI4's adjacencies.csv rows of
+// type impassable between two provinces, as the base game's Himalayas. Kept in the provinces document under `borders`
+// (so the atlas's rules needed nothing new): {"x,y|x,y": true | false}, a pixel inside each province (their anchors,
+// the provinces' keys), sorted by x then y (gazetteer.border_key); true marks a border, false opens one of the game's
+const pairOf = (a, b) => a < b ? a * 65536 + b : b * 65536 + a;   // two labels (u16) as one number
+function labelKey(l) { const N = app.N, own = N.nOwn + 2; return l < own ? N.prov[l - 2].key : (N.otherK || [])[l - own] || null; }
+function borderKey(ka, kb) { const a = keyXY(ka), b = keyXY(kb); return (a[0] - b[0] || a[1] - b[1]) <= 0 ? `${ka}|${kb}` : `${kb}|${ka}`; }
+function wallKeyOf(a, b) { const ka = labelKey(a), kb = labelKey(b); return ka && kb ? borderKey(ka, kb) : null; }
+function keyLabel(k) {  // the province under a key's pixel in this nation's view (its label), or 0
+  const N = app.N, l = N.labelOfKey.get(k);
+  if (l) return l;
+  const [x, y] = keyXY(k);
+  for (let j = 0; j < N.parts.length; j++) { if (N.parts[j].world) continue; const r = labelAt(x, y, j); if (r && r[0] >= 2) return r[0]; }
+  return 0;
+}
+// the page's borders, read as the build reads them (gazetteer.borders): by key, the border's own key last, later keys
+// winning (a key from before the map was cut again can name the same two provinces)
+function resolveWalls() {
+  const N = app.N, bs = F("provinces").borders, hits = [];
+  N.wallFact = new Map(); N.wallSet = null;
+  if (!isObj(bs)) return;
+  for (const [k, v] of Object.entries(bs)) {
+    const ks = k.split("|");
+    if ((v !== true && v !== false) || ks.length !== 2) continue;
+    const a = keyLabel(ks[0]), b = keyLabel(ks[1]);
+    if (!a || !b || a === b) continue;
+    hits.push([k === wallKeyOf(a, b) ? 1 : 0, k, pairOf(a, b), v]);
+  }
+  hits.sort((x, y) => x[0] - y[0] || (x[1] < y[1] ? -1 : x[1] > y[1] ? 1 : 0));
+  for (const [, k, p, v] of hits) { const o = N.wallFact.get(p) || { keys: [] }; o.on = v; o.keys.push(k); N.wallFact.set(p, o); }
+}
+function wallsNow() {  // the borders impassable now: the game's, with the page's choices over them (pairOf numbers)
+  const N = app.N;
+  if (N.wallSet) return N.wallSet;
+  const s = new Set(N.wallDefault);
+  for (const [p, o] of N.wallFact) { if (o.on) s.add(p); else s.delete(p); }
+  return (N.wallSet = s);
+}
+function wallSegs(P) {  // the unit edges of a part's impassable borders, [x0, y0, x1, y1, ...] in its pixels
+  const set = wallsNow(), sig = [...set].sort((a, b) => a - b).join(",");
+  if (P.wallSig === sig) return P.wallSegs;
+  const out = [], { px, w, h: hh } = P;
+  if (set.size) for (let y = 0; y < hh; y++) for (let x = 0; x < w; x++) {
+    const i = y * w + x, a = px[i];
+    if (a < 2) continue;
+    if (x + 1 < w) { const b = px[i + 1]; if (b >= 2 && b !== a && set.has(pairOf(a, b))) out.push(x + 1, y, x + 1, y + 1); }
+    if (y + 1 < hh) { const b = px[i + w]; if (b >= 2 && b !== a && set.has(pairOf(a, b))) out.push(x, y + 1, x + 1, y + 1); }
+  }
+  P.wallSig = sig; P.wallSegs = out;
+  return out;
+}
+function borderAt(sx, sy) {  // the border of two land provinces nearest a point of the screen, one of them the nation's: [a, b] or null
+  const N = app.N, P = curPart();
+  if (P.world) return null;
+  const [lx, ly] = toLocal(sx, sy), r = (matchMedia("(pointer: coarse)").matches ? 18 : 11) / app.view.s, own = N.nOwn + 2;
+  let best = null, bd = r * r;
+  const x0 = Math.max(0, Math.floor(lx - r)), x1 = Math.min(P.w - 2, Math.ceil(lx + r));
+  const y0 = Math.max(0, Math.floor(ly - r)), y1 = Math.min(P.h - 2, Math.ceil(ly + r));
+  for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) {
+    const i = y * P.w + x, a = P.px[i];
+    if (a < 2) continue;
+    for (const [b, ex, ey] of [[P.px[i + 1], x + 1, y + 0.5], [P.px[i + P.w], x + 0.5, y + 1]]) {
+      if (b < 2 || b === a || (a >= own && b >= own)) continue;
+      const d = (ex - lx) ** 2 + (ey - ly) ** 2;
+      if (d < bd) { bd = d; best = [a, b]; }
+    }
+  }
+  return best;
+}
+function landName(l) { const N = app.N, own = N.nOwn + 2; if (l < own) return stateName(N.prov[l - 2].s); const o = N.others[l - own]; return o >= 0 ? N.nb[o].name : "land of no nation"; }
+function wallName(a, b) { const A = landName(a), B = landName(b); return A === B ? `within ${A}` : `${A} – ${B}`; }
+function toggleWall(a, b) {
+  const N = app.N, p = pairOf(a, b), key = wallKeyOf(a, b);
+  if (!key) { flash("This border can't be marked: reload the page for the newest map."); return; }
+  const on = wallsNow().has(p), o = N.wallFact.get(p), d = {};
+  for (const k of o ? o.keys : []) if (k !== key) d[k] = null;   // keys from before the map was cut again
+  d[key] = on ? (N.wallDefault.has(p) ? false : null) : true;   // a choice kept as made, as the other facts are
+  if (edit("provinces", { borders: d })) flash(on ? `Border opened: ${wallName(a, b)}.` : `Impassable border: ${wallName(a, b)}. No unit can cross it.`);
+}
+function wallSpot(p) {  // a game pixel on a border, and its part, for Show
+  const N = app.N;
+  for (let j = 0; j < N.parts.length; j++) {
+    const P = N.parts[j];
+    if (P.world) continue;
+    for (let i = 0; i < P.px.length - P.w; i++) {
+      const a = P.px[i];
+      if (a >= 2 && ((P.px[i + 1] >= 2 && P.px[i + 1] !== a && pairOf(a, P.px[i + 1]) === p) || (P.px[i + P.w] >= 2 && P.px[i + P.w] !== a && pairOf(a, P.px[i + P.w]) === p)))
+        return [mod(P.x0 + i % P.w, W), P.y0 + ((i / P.w) | 0)];
+    }
+  }
+  return null;
+}
 // an edit goes under the place's own key; keys left from before the map was cut again (resolve) are gathered into it
 // first and cleared, so the place has one key from then on
 function editPlace(kind, keys, facts, i, delta) {
@@ -2036,7 +2175,8 @@ function renderPart(N, P, active, pal) {
   const mode = app.ui.mode, own = N.nOwn + 2, nl = own + N.others.length;
   const plain = !mapOpen(N);  // states not drawn yet: the land alone, not the states the script cut
   const pc = mode === "pop" && !plain ? popClass(N) : null, rel = relView();
-  const fill = new Array(nl), e1 = new Array(nl), e2 = new Array(nl), e4 = new Array(nl);
+  const fill = new Array(nl), e1 = new Array(nl), e2 = new Array(nl), e4 = new Array(nl), hatch = new Uint32Array(nl);
+  const imp = plain ? null : impassableNow().set;   // impassable states hatched (2026-10-22), in every colouring
   fill[0] = pal.sea; fill[1] = pal.lake;
   for (let v = 2; v < nl; v++) {
     let c;
@@ -2058,6 +2198,7 @@ function renderPart(N, P, active, pal) {
     }
     fill[v] = c;
     e1[v] = pack(mix(c, pal.ink, 0.18)); e2[v] = pack(mix(c, pal.ink, 0.5)); e4[v] = pack(mix(c, pal.ink, 0.42));
+    if (imp && v < own && imp.has(N.prov[v - 2].s)) hatch[v] = pack(mix(c, pal.ink, 0.36));
   }
   const fp = fill.map(pack), u = new Uint32Array(P.img.data.buffer), { px, rv, edge, w } = P;
   const inkP = pack(pal.ink), selP = pack(pal.sel), riverP = pack(pal.river), riverW = pack(mix(pal.river, pal.ink, 0.25));
@@ -2069,6 +2210,7 @@ function renderPart(N, P, active, pal) {
     let c = fp[v];
     const e = edge[i];
     if (e && !(plain && e <= 2)) c = e === 1 ? e1[v] : e === 2 ? e2[v] : e === 3 ? inkP : e === 4 ? e4[v] : e === 5 ? otherE : otherC;
+    else if (hatch[v] && (i % w + ((i / w) | 0)) % 6 < 2) c = hatch[v];
     if (rv[i] && v >= 2 && !(erased && erased[i])) c = rv[i] >= 8 ? riverW : riverP;
     u[i] = c;
   }
@@ -2208,6 +2350,8 @@ function renderLegend(pal) {
   } else {
     items.push(sw(pal.st[0], "Your states"), sw(pal.other, "Neighbours"), sw(pal.sea, "Sea"), sw(pal.river, "River"), sw(pal.sel, "Selected"));
   }
+  if (!P.world && mapOpen() && P.states.some(s => impassableNow().set.has(s))) items.push(h("span", null, h("i", { class: "hatch" }), "Impassable"));
+  if (!P.world && mapOpen() && wallSegs(P).length) items.push(h("span", null, h("i", { class: "wall" }), "Impassable border"));
   if (!P.world && relView() && app.N.relList.length) items.push(sw(rgb(relColour(relCurrent() || app.N.relList[0].id)), "Releasable"));
   if (!P.world && (P.sugInfo || []).some(x => x.n)) items.push(sw(rgb(SUG_STATE[0]), "Drawn state"));
   el.replaceChildren(...items);
@@ -2293,6 +2437,15 @@ function draw() {
       const route = railRoute(r.pts);
       if (!route) continue;
       railPath(ctx, route.pts.map(([x, y]) => toScreen(x, y)), r.level || 3, route.ok ? ink : warn, paper, app.ui.sel.line === id ? sel : null);
+    }
+    // impassable borders (2026-10-22), along the edge the two provinces share: a dark line on a light halo
+    const segs = wallSegs(P);
+    if (segs.length) {
+      ctx.beginPath();
+      for (let k = 0; k < segs.length; k += 4) { const a = toScreen(segs[k], segs[k + 1]), b = toScreen(segs[k + 2], segs[k + 3]); ctx.moveTo(a[0], a[1]); ctx.lineTo(b[0], b[1]); }
+      ctx.lineCap = "round"; ctx.lineJoin = "round";
+      ctx.strokeStyle = paper; ctx.lineWidth = Math.max(4.5, v.s * 0.9 + 3); ctx.stroke();
+      ctx.strokeStyle = css("--wall"); ctx.lineWidth = Math.max(2.4, v.s * 0.6 + 1.2); ctx.stroke();
     }
     // supply hubs
     const hs = Math.max(6, Math.min(12, v.s * 2.4));
@@ -2512,6 +2665,10 @@ function hoverText(sx, sy) {
   }
   const v = labelAtScreen(sx, sy);
   if (v < 0) return "";
+  if (app.ui.tool === "wall" && mapOpen()) {   // the border a click would mark or open, from either side of it
+    const b = borderAt(sx, sy);
+    if (b) return `Border ${wallName(...b)} · ${wallsNow().has(pairOf(...b)) ? "impassable: a click opens it" : "a click makes it impassable"}${at}`;
+  }
   if (v === 0) return "Sea" + at;
   if (v === 1) return "Lake" + at;
   if (v >= N.nOwn + 2) { const o = N.others[v - N.nOwn - 2]; return (o >= 0 ? N.nb[o].name + " (neighbour)" : "Land") + at; }
@@ -2520,7 +2677,7 @@ function hoverText(sx, sy) {
     const ds = sugStateAtScreen(sx, sy), it = ds && N.sugList.find(x => x.id === ds);
     return `${N.name}${it ? " · " + (it.label || "a drawn state") : ""}${c ? " · " + c.name : ""}${N.prov[p].coastal ? " · coast" : ""}${at}`;
   }
-  return `${stateName(s)}${c ? " · " + c.name : ""}${r ? " · " + relName(r) : ""} · ${TNAME[provTerrain(p)] || provTerrain(p)}${pf(p).hub ? " · supply hub" : ""}${N.prov[p].coastal ? " · coast" : ""}${at}`;
+  return `${stateName(s)}${stateImpassable(s) ? " · impassable" : ""}${c ? " · " + c.name : ""}${r ? " · " + relName(r) : ""} · ${TNAME[provTerrain(p)] || provTerrain(p)}${pf(p).hub ? " · supply hub" : ""}${N.prov[p].coastal ? " · coast" : ""}${at}`;
 }
 function wireMap() {
   map.cv = $("#map"); map.ctx = map.cv.getContext("2d");
@@ -2640,6 +2797,10 @@ function clickAt(x, y, dbl) {
   } else if (t === "hub") {
     if (p < 0) { flash("Supply hubs go on your own land."); return; }
     editProv(p, { hub: pf(p).hub ? null : true });
+  } else if (t === "wall") {
+    const b = borderAt(x, y);
+    if (!b) { flash("Click on a border between two provinces of land, one of them yours."); return; }
+    toggleWall(...b);
   } else if (t === "suggest" && app.ui.sugKind === "point") {
     const g = localToG(...toLocal(x, y)), id = "s-" + uid();
     if (edit("suggest", { [id]: { type: "point", pts: [g], label: "", note: "" } })) selectSug(id, true);
@@ -2652,7 +2813,7 @@ function clickAt(x, y, dbl) {
 function paintAt(x, y) {
   const N = app.N, v = labelAtScreen(x, y);
   if (v < 2 || v >= N.nOwn + 2) return;
-  if (app.ui.tool === "release") { paintRel(v - 2); return; }
+  if (app.ui.tool === "release") { paintRel(v - 2, map.drag); return; }
   const p = v - 2, t = app.ui.terrain === "unset" ? null : app.ui.terrain;
   if ((pf(p).t || null) === t) return;
   editProv(p, { t });
@@ -2720,7 +2881,9 @@ function hint() {
   const P = app.N && curPart();
   if (P && P.world && app.ui.tool === "select") return "The whole world. Drag to move, scroll or pinch to zoom; pick Suggest to draw on it.";
   if (app.ui.tool === "release") return mapOpen()
-    ? "Click or drag over your states to give them to the releasable picked here (or take them away). For a border through a state, draw it with Suggest."
+    ? (app.ui.relMode === "remove"
+      ? "Click or drag over the releasable's states to take them away from it. For a border through a state, draw it with Suggest."
+      : "Click or drag over your states to give them to the releasable picked here; a click on one of its states takes it away. For a border through a state, draw it with Suggest.")
     : "Draw the releasable's land: click points around it, double-click or Enter to finish, or drag freehand.";
   return {
     select: "Click a state to fill in its facts. Drag to move the map; scroll or pinch to zoom.",
@@ -2729,6 +2892,7 @@ function hint() {
     river: "Click to add points, double-click or Enter to finish, Esc to cancel. Or drag to draw freehand.",
     rail: "Click cities or places in order; points snap to cities and hubs. Double-click or Enter to finish.",
     hub: "Click a province to add or remove a supply hub. Hubs need a railway to the capital to work.",
+    wall: "Click a border between two provinces to make it impassable, and again to open it: no unit can cross it, as the base game's Himalayas (a mountain ridge, a cliff). Borders with your neighbours count too.",
     suggest: mapOpen() || !app.N || app.N.planned
       ? "Show the author what the map should have: draw an area or a line (click points, double-click or Enter to finish; or drag freehand) or drop a point, then say what it is on the Map tab."
       : app.ui.sugKind === "state" && !curPart().world
@@ -2772,7 +2936,7 @@ function renderSubtools() {
         text: (relLabel(r) || "(unnamed)") + (r.game ? (r.game.kind === "civil_war" ? " · civil war" : " · in the game") : "") })));
       sel.value = relCurrent() || "";
       out.push(sel);
-      if (mapOpen()) for (const [k, nm] of [["add", "Add states"], ["remove", "Take them away"]])
+      if (mapOpen()) for (const [k, nm] of [["add", "Add states"], ["remove", "Take states away"]])
         out.push(h("button", { class: "tchip", type: "button", "aria-pressed": String(app.ui.relMode === k), onclick: () => { app.ui.relMode = k; renderSubtools(); } }, nm));
     }
     const d = app.ui.draft;
@@ -2963,6 +3127,23 @@ function stateForm(s) {
     h("div", { class: "chips" }, TERRAINS.map(([k, nm]) => h("button", { class: "tchip", type: "button", onclick: () => {
       beginGroup(); for (const p of st.provs) if (provTerrain(p) !== k || !pf(p).t) editProv(p, { t: k }); endGroup();
     } }, h("i", { style: `background:rgb(${pal.t[k].join(",")})` }), nm)))));
+  // impassable (2026-10-22, the author: "There should be a way to mark states as impassible on the gazeteer"): the box
+  // shows the game's now until a player ticks or unticks it; a choice is kept as `impassable`, true or false
+  const imp = f.impassable, chose = imp === true || imp === false, now = impassableNow(), why = now.why.get(s);
+  const box = h("input", { id: "st-imp", type: "checkbox", checked: stateImpWanted(s), onchange: e => editState(s, { impassable: e.target.checked }) });
+  const WHY = {
+    capital: "This is the capital, which the game keeps passable: make a city in another state the capital (Cities tab) first.",
+    alone: "No passable state of yours borders it, so the game keeps it passable: an impassable state changes hands with one.",
+    blocks: why && why[1] != null ? `${stateName(why[1])} beside it would have no passable state of yours left to change hands with, so the game keeps this one passable.` : "",
+  };
+  out.push(h("div", { class: "sec" }, h("h4", null, "Movement", h("small", { text: now.set.has(s) ? "impassable in the game" : "" })),
+    h("div", { class: "field check" + (chose ? " set" : "") }, h("label", { for: "st-imp" }, box, h("span", { text: "Impassable" })),
+      h("div", { class: "hint", text: "No unit can enter it, as the base game's great deserts; it changes hands with the neighbouring state of yours it borders most." }),
+      h("div", { class: "hint", text: N.impGame[s] ? "Map default: impassable (the author's map). Untick it to let units in." : "Map default: passable." })),
+    why ? h("div", { class: "warn", text: WHY[why[0]] }) : null,
+    now.set.has(s) && (N.cityList.some(c => c.s === s) || st.provs.some(q => pf(q).hub))
+      ? h("div", { class: "meta", text: "The game puts no victory points, supply hubs or troops in impassable land: its cities and hubs are left out there." }) : null,
+    chose ? h("div", null, h("button", { class: "btn small", type: "button", onclick: () => editState(s, { impassable: null }) }, "Use the map's")) : null));
   const p = app.ui.sel.prov;
   if (p >= 0 && N.prov[p].s === s) {
     out.push(h("div", { class: "sec" }, h("h4", null, "Selected province", h("small", { text: N.prov[p].key })),
@@ -3105,6 +3286,18 @@ function renderMapPane(force) {
       out.push(h("div", { class: "sec" }, h("h4", null, "Supply hubs", h("small", { text: `${hubs.length}` })),
         hubs.length ? h("div", { class: "chips" }, hubs.map(i => h("button", { class: "tchip", type: "button", onclick: () => locate(N.prov[i].x, N.prov[i].y, () => selectState(N.prov[i].s, i)) }, stateName(N.prov[i].s))))
           : h("div", { class: "meta", text: "None yet: the game puts one in every state until you place your own (then only yours, plus the capital)." })));
+      // impassable borders (2026-10-22): the game's and the page's, each with Show and Open it
+      const walls = [...wallsNow()].sort((a, b) => a - b);
+      out.push(h("div", { class: "sec" }, h("h4", null, "Impassable borders", h("small", { text: `${walls.length}` })),
+        h("div", { class: "meta", text: "No unit can cross them, as the base game's Himalayas: a mountain ridge, a cliff. Mark them with the Impassable borders tool, between your own provinces or along a neighbour's. Borders that would wall a piece of land off without a coast are left out of the game." }),
+        walls.length ? h("div", null, walls.map(p => {
+          const a = Math.floor(p / 65536), b = p % 65536;
+          return h("div", { class: "item" },
+            h("div", { class: "row" }, h("span", { text: wallName(a, b) }), N.wallDefault.has(p) ? h("span", { class: "badge", text: "In the game" }) : null),
+            h("div", { class: "row" },
+              h("button", { class: "btn small", type: "button", onclick: () => { const g = wallSpot(p); if (g) locate(g[0], g[1]); } }, "Show"),
+              h("button", { class: "btn small danger", type: "button", title: "Let units cross it again", onclick: () => toggleWall(a, b) }, "Open it")));
+        })) : null));
     }
     return paneFrame(out);
   });
@@ -3198,10 +3391,20 @@ function addRelease() {
   setTimeout(() => { const el = document.getElementById("rl-name-" + id); if (el) { el.scrollIntoView({ block: "nearest" }); el.focus(); } }, 60);
 }
 function relStates(id) { return [...(app.N.relSets.get(id) || [])]; }
-function paintRel(p) {  // the state of province p to (or from) the releasable picked
+function relTool(id, mode) { selectRel(id); app.ui.relMode = mode; setTool("release"); }   // a card's buttons: the tool, adding or taking away
+// the state of province p to (or from) the releasable picked. Adding, a click on one of its own states takes it away
+// (2026-10-22, the author: "There should also be a way to remove terrain from releasables, I believe you can currently
+// only add"); in a drag (stroke: the drag's own record) the first state decides for the whole stroke, so a drag never
+// flips states back and forth
+function paintRel(p, stroke) {
   const id = relCurrent(), N = app.N;
   if (!id || p < 0) return;
-  const s = N.prov[p].s, r = relById(id), mine = N.relSets.get(id) || new Set(), remove = app.ui.relMode === "remove";
+  const s = N.prov[p].s, r = relById(id), mine = N.relSets.get(id) || new Set();
+  let remove = app.ui.relMode === "remove";
+  if (!remove) {
+    if (stroke && !stroke.relOp) stroke.relOp = mine.has(s) ? "remove" : "add";
+    remove = stroke ? stroke.relOp === "remove" : mine.has(s);
+  }
   if (remove ? !mine.has(s) : mine.has(s)) return;
   if (remove && r.game && mine.size === 1) { flash("A releasable needs a state: give it another first"); return; }
   const d = {};
@@ -3272,10 +3475,13 @@ function relCard(r) {
     h("div", { class: "relland" },
       h("div", { class: "row" }, h("b", { text: "Land" }), h("span", { class: "meta", text: land })),
       h("div", { class: "chips" },
-        h("button", { class: "btn small", type: "button", onclick: () => { selectRel(id); app.ui.relMode = "add"; setTool("release"); } },
+        h("button", { class: "btn small", type: "button", onclick: () => relTool(id, "add") },
           open ? (nst ? "Change its states" : "Pick its states") : (areas.length ? "Draw more of its land" : "Draw its land")),
+        open && nst ? h("button", { class: "btn small", type: "button", onclick: () => relTool(id, "remove") }, "Take states away") : null,
         nst || areas.length ? h("button", { class: "btn small", type: "button", onclick: () => showRel(id) }, "Show") : null,
-        ...areas.map(([aid], i) => h("button", { class: "tchip", type: "button", title: "Delete this area", onclick: () => edit1({ areas: { [aid]: null } }) }, `Area ${i + 1} ✕`))),
+        // a drawn area goes whole (2026-10-22): there is no rubber for part of one; draw the land again
+        ...areas.map(([aid], i) => h("button", { class: "btn small danger", type: "button", title: `Delete the area ${i + 1} drawn as its land`,
+          "aria-label": `Delete area ${i + 1} of ${r.name || "this releasable"}`, onclick: () => edit1({ areas: { [aid]: null } }) }, `Delete area ${i + 1}`))),
       h("div", { class: "meta", text: open ? "Whole states: HOI4 gives a releasable cores on states, not provinces. For a border through a state, draw it with Suggest and the author can split the state."
         : "Draw it as an area for now: once the author has drawn your states, you pick its states." })),
     h("div", { class: "flagslot" },
@@ -3334,7 +3540,8 @@ function gameRelCard(r) {
     h("div", { class: "relland" },
       h("div", { class: "row" }, h("b", { text: "Land" }), h("span", { class: "meta", text: `${nst} state${nst === 1 ? "" : "s"}` + (moved ? ", changed" : ", as in the game") })),
       h("div", { class: "chips" },
-        open ? h("button", { class: "btn small", type: "button", onclick: () => { selectRel(id); app.ui.relMode = "add"; setTool("release"); } }, "Change its states") : null,
+        open ? h("button", { class: "btn small", type: "button", onclick: () => relTool(id, "add") }, "Change its states") : null,
+        open && nst ? h("button", { class: "btn small", type: "button", onclick: () => relTool(id, "remove") }, "Take states away") : null,
         nst ? h("button", { class: "btn small", type: "button", onclick: () => showRel(id) }, "Show") : null,
         moved ? h("button", { class: "btn small", type: "button", onclick: () => edit1({ states: null }) }, "Back to the game's land") : null),
       h("div", { class: "meta", text: open ? "Whole states: HOI4 gives a releasable cores on states, not provinces." : "Its land can be changed once the author has drawn your states." })),
@@ -3995,7 +4202,7 @@ function wireStatic() {
     if (e.key === "Escape") { if (app.ui.draft) cancelDraft(); else if (mapOpen()) selectState(-1, -1); }
     if (e.key === "Enter" && app.ui.draft) finishDraft();
     if (e.key === "Backspace" && app.ui.draft) { e.preventDefault(); app.ui.draft.pts.pop(); renderSubtools(); requestDraw(); }
-    const t = { v: "select", t: "terrain", c: "city", r: "river", l: "rail", h: "hub", e: "release", s: "suggest" }[e.key.toLowerCase()];
+    const t = { v: "select", t: "terrain", c: "city", r: "river", l: "rail", h: "hub", b: "wall", e: "release", s: "suggest" }[e.key.toLowerCase()];
     if (t && !e.ctrlKey && !e.metaKey && !e.altKey && toolsHere().includes(t)) setTool(t);
   });
   document.addEventListener("keyup", e => { if (e.key === " ") map.space = false; });
