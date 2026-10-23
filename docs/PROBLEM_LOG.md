@@ -6,6 +6,28 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**The Gazetteer's import would have spread Rouental's populations over their neighbours** (2026-10-23, the export of that
+day, before it went in).
+- Cause: the author typed a population for every one of Rouental's 167 fief states on the page; `gazetteer.rekey`, kept
+  since the fiefs (2026-10-20) to share the old states' facts out over the new, grouped every key inside an old state,
+  the new states' own too, and shared the sum by area (Moelle 564,000 on the page would have been about 525,000, Vair
+  3,204,000 about 2,527,000); its docstring said a new place's own key wins, the code didn't.
+- Fix: a place's own key (its anchor in the last build) is never shared out, and every place the page shows facts for
+  takes exactly what the page shows (`page_wins`); checked over Rouental: all 167 states and every province the page
+  shows facts for read in the build as on the page.
+
+**A releasable's tag came out NOT** (2026-10-23, Arovannea's North Serkin).
+- Cause: `gazetteer.new_tag` takes a name's first letters (North Serkin: NOR, the base game's, then NOT); NOT is the
+  game's `NOT = { }`, which a country tag of that name would clash with.
+- Fix: AND and NOT are taken (`tags_taken`); North Serkin is NOH.
+
+**Small drawn states lost, and a name at pixel (0, 0)** (2026-10-23, Arovannea's 87 drawn states, before they went in).
+- Cause: `apply_suggestions.py` cuts the provinces a drawn line crosses and gives pieces under 16 px to a neighbour;
+  three small states drawn across provinces (Citra 29 px, Tresean Cliffs 23 after the states drawn before it, Pershing
+  13) were all pieces, so they came out empty, and the naming put an empty state's name at (0, 0).
+- Fix: a state whose land is all such pieces keeps them, each 16 px or more one province (Citra 19 px, Tresean Cliffs
+  17); an empty state's name isn't kept (Pershing, 13 px of land, under a province's 16: part of its neighbour).
+
 **Tige not cut along its river** (2026-10-23, the author's screenshot: "For whatever reason it looks like Tige isn't cut
 along the river").
 - Cause: the river crossed the corner of one of Tige's provinces, leaving 19 px of it on the far bank; `river_borders.py`

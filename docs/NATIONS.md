@@ -856,6 +856,44 @@ picture for Tara, use this one"), and the Speaker of the Estates General in the 
 women are `gender = female` now ("I noticed that Serelle currently seems to be considered male"): Serelle Cahun and
 Mahaut VI and their copies at HMMLA and Brillagne, and Tara Blanchart; the Gazetteer takes a gender for every character.
 
+## 2026-10-23, later still: the Gazetteer's export of that day
+
+The author: "Update from the Gazeteer", then "Arovannea is okay to change now, by the way" (held on 2026-10-22: "still a
+WIP"). Imported whole (`work/gz_import_1023/`). In it:
+- **Arovannea** (AVN), its first facts:
+  - **its 86 states**, drawn and named on its page, put on the map (`apply_suggestions.py --only=AVN`, as Ungar's,
+    Ostaria's and Zwintern's; the map 10-23-2); its map tools open with them. 87 drawn: Pershing holds 13 px of land,
+    under a province's 16, and stays part of its neighbour; Citra and Tresean Cliffs, drawn across provinces, are one
+    province each (19 and 17 px). Nine are noted "impassable" on the page (Ambanese Alps, Monarchian Desert, Othonian
+    Mountains, Taz er Rhabil, Gaian Interior, Arovian Mountains, Tresean Cliffs, San Segonian Interior, Yucanoan
+    Badlands): passable in the mod until they are marked impassable on the page (the State tab's Movement, open now).
+  - **politics and people**: its parties' sub-ideologies (Marxism, Military Junta, Semi-Constitutional Monarchy, Holy
+    Order) and leaders (Asaia Axami Ma'aine, female as the page says; the General Staff of the Republican Army; Rmispis
+    XVII Kayang of Ahlthurn; Father Basnarius Adelkan); its ruler a President with the Retired Officer trait (still
+    Estúr Illger fön Reegen, `nations.py`: the page gives no name).
+  - **flags**: one picture for every government but the monarchist (428 x 214, fitted by `fit_flag.py`: stripes made
+    taller) and the monarchist's own (640 x 384, fitted by hand: 34 plain columns out of the white hoist and the navy
+    field, the chevron and the crescent whole). Arovannea's colour stays its own (a flag that comes later doesn't change
+    it).
+  - **seven releasables**, each with its flag (fitted: Almatia, Ambany, North Serkin and Baltia by `fit_flag.py`,
+    Nimova as sent; Outer Ambany 34 plain columns out by hand, Diemtroekerrjepublik's wavy saltire 17 px trimmed off each
+    side): Almatia (ALM, 19 states), Nimova (NIM, 8), Ambany (AMB, 16), Outer Ambany (OUT, 12), Diemtroekerrjepublik
+    (DIE, 3), North Serkin (NOH, 3) and Baltia (BAL, 1); cores on the states their drawn areas hold by half (six hold
+    less than half of a few more, which stay Arovannea's alone). North Serkin's tag came out NOT, the game's
+    `NOT = { }`: `tags_taken` keeps AND and NOT out, and it is NOH.
+  - **requests** (open, for the author): the sub-ideology Colonial Republicanism (Authoritarian), and four traits for
+    heads of state: the Jasper Snake, Ýzania (Asaia's), Disjointed Democratic Coalition, Grandmaster of the Athelian
+    Order.
+- **Rouental**: a population for every fief (59,291,000 in all; 42.3 million until now), 92 cities (five before), 13
+  railways, seven supply hubs, terrain on 14 provinces, nine impassable borders, two metropolises and a large city,
+  a naval base and a dockyard, and the Alliance of the East's six states on its page. The import's re-keying (kept
+  since the fiefs, 2026-10-20) would have spread the populations over the neighbours: every state and province the page
+  shows facts for now reads in the build as the page shows it (`docs/PROBLEM_LOG.md`).
+- **Ungar, Ostaria, Zwintern, North Pollana**: their first map facts, their states drawn since: Ungar's seven cities
+  (Tópart its capital, 40), two railways, its states' populations and its provinces' terrain; Ostaria's Silberkrone,
+  Zwintern's Zwintern, North Pollana's "Capitaltown" (its page's name), each 40, and their provinces' terrain.
+- **Lanzerac**: its ruler's portrait changed. **Guedelon**: a supply hub. The rest as before.
+
 ## 2026-10-23, later: the crownlands; Rouental's peoples
 
 The author: "Jourdain et Moterre isn't part of the crowlands at start, but the Oriental Territories are": the Royal

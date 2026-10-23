@@ -753,6 +753,7 @@ def tags_taken(planned=None):
     releasables already named."""
     from common import COUNTRIES
     taken = {v[0] for v in COUNTRIES.values()}
+    taken |= {"AND", "NOT"}  # the game's script words (2026-10-23: North Serkin came out NOT, as in NOT = { })
     f = Path("source/vanilla/index/tags.txt")
     if f.exists():
         taken |= {ln.split("\t")[0] for ln in f.read_text(encoding="utf-8").splitlines() if ln and not ln.startswith("#")}
@@ -781,15 +782,54 @@ def new_tag(name, taken):
     raise SystemExit("no free tag left")
 
 
+def page_places():
+    """the last build's layout as the page reads it (facts_export.py): (the province at a key, the state at a key, a
+    province's own key, a state's own key: its largest province's), or None before a build"""
+    try:
+        lab = np.load("work/provinces.npz")["prov"]
+        reg, rj = np.load("work/regions.npz"), json.load(open("work/regions.json"))
+    except FileNotFoundError:
+        return None
+    anchor, size, state_of, states = reg["anchor"], reg["size"], reg["state_of"], rj["states"]
+    return dict(provinces=(lambda k: at(lab, k), lambda q: anchor_key(anchor, q)),
+                states=(lambda k: int(state_of[at(lab, k)]),
+                        lambda s: anchor_key(anchor, max(states[s], key=lambda i: (size[i], -i)))))
+
+
+def page_wins(facts, out, place_of, own_key):
+    """every place the page shows facts for (its keys merged in page_order) takes exactly those, under its own key, in
+    place of whatever the old layout shared out onto it; the other places keep the shares"""
+    view = {}
+    for k, v in page_order(facts.items(), place_of, own_key):
+        q = place_of(k)
+        if q is not None and q >= 0:
+            view[q] = merge_facts(view.get(q, {}), v)
+    view = {q: v for q, v in view.items() if v}
+    keep = {}
+    for k, v in out.items():
+        try:
+            q = place_of(k)
+        except (ValueError, IndexError):
+            q = None
+        if q not in view:
+            keep[k] = v
+    for q, v in view.items():
+        keep[own_key(q)] = v
+    return keep
+
+
 def rekey(tag, n):
     """A nation whose states were cut again from a map of its own (fief_states.py, 2026-10-20: Rouental's fiefs):
     its page's facts still name the old states and provinces by pixels inside them, and one old state is now several.
     source/gazetteer/rekey/<TAG>.npz holds the old and the new layout of the land; a state's facts (its keys merged in
     page order) go to the new states lying on it: its population shared out by area, its other facts (category ...)
     to the new state lying most on it, its name dropped (the new states take their fiefs' names); a province's to the
-    new provinces lying mostly on it. A key the page wrote since (a pixel of a new state or province, inside a new
-    place no old fact reaches) stays as it is. Delete the file once the nation's page has been saved with the new
-    states."""
+    new provinces lying mostly on it. A key the page wrote since stays as it is: a pixel inside a new place no old fact
+    reaches, or a new place's own key (its anchor, as the last build names it: the page writes every edit there). And
+    every place the page shows facts for (its keys in page_order, as `resolve` reads them) takes exactly those
+    (`page_wins`): only the places the page shows nothing for get the old facts shared out (2026-10-23: the author typed
+    every fief's population, which the sharing would have spread over the neighbours). Delete the file once the
+    nation's page has been saved with the new states and provinces."""
     f = DIR / "rekey" / f"{tag}.npz"
     if not f.exists():
         return n
@@ -799,15 +839,29 @@ def rekey(tag, n):
     skey = dict(zip(z["state_ids"].tolist(), z["state_keys"].tolist()))
     pkey = dict(zip(z["province_ids"].tolist(), z["province_keys"].tolist()))
 
+    cur = page_places()
+    own_s, own_p = set(), set()
+    if cur:
+        for kind, own in (("states", own_s), ("provinces", own_p)):
+            place_of, own_key = cur[kind]
+            for k in n.get(kind) or {}:
+                try:
+                    q = place_of(k)
+                except (ValueError, IndexError):
+                    continue
+                if q >= 0 and k == own_key(q):
+                    own.add(k)
+
     def inside(k):
         x, y = xy(k)
         return X0 <= x < X1 and Y0 <= y < Y1 and u[y - Y0, x - X0] > 0
 
-    def group(facts, old):
-        """old place colour -> its facts, keys merged as strings sort; the rest of the keys as they are"""
+    def group(facts, old, own):
+        """old place colour -> its facts, keys merged as strings sort; the rest of the keys (the new places' own among
+        them) as they are"""
         by, rest = defaultdict(dict), {}
         for k in sorted(facts or {}):
-            if inside(k):
+            if inside(k) and k not in own:
                 x, y = xy(k)
                 by[int(old[y - Y0, x - X0])] = merge_facts(by[int(old[y - Y0, x - X0])], facts[k])
             else:
@@ -815,7 +869,8 @@ def rekey(tag, n):
         return by, rest
 
     if n.get("states"):
-        by, out = group(n["states"], oS)
+        by, out = group(n["states"], oS, own_s)
+        shared = defaultdict(dict)
         for c, v in by.items():
             m = oS == c
             ids, cnt = np.unique(u[m & (u > 0)], return_counts=True)
@@ -823,25 +878,26 @@ def rekey(tag, n):
                 continue
             main = int(ids[np.argmax(cnt)])
             for s, a in zip(ids.tolist(), cnt.tolist()):
-                k = skey[s]
-                g = dict(out.get(k, {}))
+                g = shared[skey[s]]
                 if "pop" in v:
                     g["pop"] = g.get("pop", 0) + int(round(v["pop"] * a / cnt.sum()))
                 if s == main:
                     g.update({kk: vv for kk, vv in v.items() if kk not in ("pop", "name")})
-                if g:
-                    out[k] = g
-        n["states"] = out
+        for k, g in shared.items():
+            if g:
+                out[k] = merge_facts(g, out[k]) if k in out else g
+        n["states"] = page_wins(n["states"], out, *cur["states"]) if cur else out
     if n.get("provinces"):
-        by, out = group(n["provinces"], oP)
+        by, out = group(n["provinces"], oP, own_p)
         for q in z["province_ids"].tolist():
             m = p == q
             if not m.any():  # merged into another since (the author's groups, 2026-10-21): its pixels are that one's
                 continue
             c = Counter(oP[m].tolist()).most_common(1)[0][0]
-            if c in by and pkey[q] not in out:
-                out[pkey[q]] = by[c]
-        n["provinces"] = out
+            if c in by:
+                k = pkey[q]
+                out[k] = merge_facts(by[c], out[k]) if k in out else by[c]
+        n["provinces"] = page_wins(n["provinces"], out, *cur["provinces"]) if cur else out
     return n
 
 

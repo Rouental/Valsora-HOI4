@@ -31,8 +31,12 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   `gazetteer.rekey(tag, n)`, called by the import (and run once on `source/gazetteer/ROU.json`), reads the old and new
   layout from `source/gazetteer/rekey/<TAG>.npz`: an old state's facts (its keys merged as strings sort) go to the new
   states on it, the population shared by area, the rest to the state lying most on it, the name dropped; an old
-  province's to the new provinces lying mostly on it. Keys the page writes since (the new places' own) stay and win.
-  Delete the file once Rouental's page has been saved over the new states.
+  province's to the new provinces lying mostly on it. Keys the page writes since (the new places' own) stay and win:
+  since 2026-10-23 (the author typed all 167 fiefs' populations, which the sharing spread over their neighbours) a key
+  that is a place's own key in the last build (its anchor, `page_places`) is never shared out, and every place the page
+  shows facts for takes exactly what the page shows (`page_wins`: its keys in `page_order`, as `resolve` reads them);
+  only places the page shows nothing for get the old facts shared. Delete the file once Rouental's page has been saved
+  over the new states.
 - **Keys left from before a cut** (2026-10-19, the author's recording: painting one province changed others): a
   state's or province's facts are kept under a pixel key, so once the map is cut again one place can hold several keys.
   The page (`resolve`) and the build (`gazetteer.page_order`) read them in one order, by key with the place's own key

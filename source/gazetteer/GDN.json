@@ -23,6 +23,7 @@
  },
  "provinces": {
   "748,871": {
+   "hub": true,
    "t": "urban"
   }
  },

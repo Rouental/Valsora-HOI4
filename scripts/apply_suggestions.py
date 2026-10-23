@@ -57,6 +57,9 @@ PLAN = [
     # 2026-10-22: Zwintern's four states, drawn and named on its page (the author: "Some new leaders and borders for
     # Zwintern")
     ("ZWT", None, "drawn", {}),
+    # 2026-10-23: Arovannea's 87 states, drawn and named on its page (the author: "Arovannea is okay to change now";
+    # held on 2026-10-22: "still a WIP")
+    ("AVN", None, "drawn", {}),
 ]
 
 
@@ -121,6 +124,23 @@ class Map:
                 else:
                     self.P[py, px] = -2  # to place
                     scraps.append((sc, py, px))
+        # a state whose land is all scraps (a small one drawn across provinces: Arovannea's Citra and Tresean Cliffs,
+        # 2026-10-23) keeps it: each piece of MIN_PROVINCE px or more one province
+        whole = defaultdict(list)
+        for sc, py, px in scraps:
+            whole[sc].append((py, px))
+        for sc, parts in whole.items():
+            py, px = np.concatenate([p for p, _ in parts]), np.concatenate([q for _, q in parts])
+            if len(py) < MIN_PROVINCE or len(py) != int(((self.S == sc) & self.land).sum()):
+                continue
+            m = np.zeros((H, W), bool)
+            m[py, px] = True
+            comp = sklabel(m, connectivity=1)
+            for q in range(1, comp.max() + 1):
+                cy, cx = np.nonzero(comp == q)
+                if len(cy) >= MIN_PROVINCE:
+                    self.P[cy, cx] = next(self.fresh_p)
+        scraps = [(sc, py[k], px[k]) for sc, py, px in scraps for k in [self.P[py, px] == -2] if k.any()]
         for _ in range(20):
             left = []
             for sc, py, px in scraps:
@@ -373,6 +393,9 @@ def main():
             del sn[key]
     for colour, nm in M.names.items():
         m = (M.S == colour) & M.land
+        if not m.any():  # too small for a province (under MIN_PROVINCE px): its land went to a neighbour
+            print(f"  {nm}: no land left, too small for a province: its land joined a neighbour, its name not kept")
+            continue
         d = ndi.distance_transform_edt(m)
         y, x = np.unravel_index(int(np.argmax(d)), d.shape)
         sn[f"{x},{y}"] = nm

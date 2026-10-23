@@ -7,7 +7,7 @@ under OneDrive — keep that segment in any absolute path). Valsora takes place 
 the game starts on 1 January 2036 (see "2036" under Decisions worth keeping).
 
 The map is the author's drawing at game size, 5120×2560: its land, rivers and the countries and states they
-outline region by region (161 nations on the map, 204 countries with the releasables and the civil war's), and the
+outline region by region (161 nations on the map, 211 countries with the releasables and the civil war's), and the
 sea provinces their friend Merlo drew. Rouental is the built-out nation (leaders, focus tree, civil war, army); the
 rest have set rulers and the game's generic content, moved to 2036. The interface is the author's art deco design,
 the Valsora Deco UI (`deco_ui/`). The Gazetteer, a web site, lets the author's friends fill in their own nations.
@@ -85,7 +85,7 @@ New detail goes into those files; this one gets a line.
   `gazetteer_site`, `publish_site.sh`, `tests/gazetteer/`); vanilla (`vanilla_sync`, `pdxscript`); tests not in the
   game (`terrain_test`, `usnistan_prototype`, `coarse_preview`); `build_flags15.sh` (the larger flags' test version).
 - **HOI4's hard rules** (all checked by `check_mod.py`): the map is 5120×2560 (the largest size under the game's cap);
-  **at most 65,536 province borders** (3,169 left on 2026-10-23; new land is cut at ~190 px; `borders.py` counts); provinces
+  **at most 65,536 province borders** (2,656 left on 2026-10-23, later; new land is cut at ~190 px; `borders.py` counts); provinces
   one 4-connected blob of 16+ px, no 2×2 window of four provinces; `definition.csv` CRLF; localisation UTF-8 with BOM;
   every province in one strategic region, a state's provinces in one, naval regions contiguous; the map files exactly
   map-sized. Map errors crash on launch unless the game runs with `-debug`: always test with it.
@@ -135,10 +135,10 @@ New detail goes into those files; this one gets a line.
   - Two starts on 1 January 2036: Valsora (Rouental, Merlovich) and the Vale of Reibonne (the Association's eight);
     two, because with one the game skips its scenario screen and Back loops.
   - Colours follow the flags (author); `pdn_tools.py recolour Countries OLD=NEW` keeps the `.pdn` in step.
-  - **Every nation's record**, who drew, named and decided what and when, is `docs/NATIONS.md`. As built: 204
-    countries in the mod, the 161 on the map and 43 that own nothing at the start (Rouental's 13 releasables,
+  - **Every nation's record**, who drew, named and decided what and when, is `docs/NATIONS.md`. As built: 211
+    countries in the mod, the 161 on the map and 50 that own nothing at the start (Rouental's 13 releasables,
     Belekria's 9 republics, Krionik's 3 principalities, 5 realms, Visokagorod (Sangrád until 2026-10-20), 3 ports and
-    Formosa (the Gazetteer's), Pakitsk, the civil war's 7; the Sisterhood removed 2026-10-20); `dist/countries.md` lists them.
+    Formosa (the Gazetteer's), Arovannea's 7 (the Gazetteer's, 2026-10-23), Pakitsk, the civil war's 7; the Sisterhood removed 2026-10-20); `dist/countries.md` lists them.
     Off the map but kept in `COUNTRIES`: the United States of Solitas and Russovichia.
   - **A new or changed nation** (the rules the record kept to):
     - The author's are the names, governments, formal names and rulers, and whatever else they name. Claude picks
@@ -264,17 +264,17 @@ the page, its rules or its import.
 
 Where things stand; the history, date by date, is `docs/HISTORY.md` (add each day's entry at its top).
 
-- **The build** (2026-10-23): 21,151 provinces (Tige's third, across the river, `pdn_tools.py river_split`), 62,367 province borders
-  (HOI4 draws 65,536: 3,169 free, `docs/BORDER_LIMIT.md`), 3,298 states (Zwintern's four drawn ones since 2026-10-22) (Rouental's its fiefs since 2026-10-20, Aurifort cut out on 2026-10-21, the author's 13 groups the same day; 22 impassable, without supply hubs or troops: Usnistan's deserts and the
+- **The build** (2026-10-23, later still): 21,322 provinces (Tige's third, across the river, `pdn_tools.py river_split`), 62,880 province borders
+  (HOI4 draws 65,536: 2,656 free, `docs/BORDER_LIMIT.md`), 3,358 states (Zwintern's four drawn ones since 2026-10-22, Arovannea's 86 since 2026-10-23) (Rouental's its fiefs since 2026-10-20, Aurifort cut out on 2026-10-21, the author's 13 groups the same day; 22 impassable, without supply hubs or troops: Usnistan's deserts and the
   Cultists' striped jungle, the
   author's areas layer, `scripts/areas.py`; one province each, as the base game's great deserts; their land and the yellow areas desert terrain, cut coarse), 206 strategic
   regions (164 land: 137 made from the nations on 2026-10-16, `land_regions.py`, not redone for the borders since, and
   Rouental's 27 governorate regions, 2026-10-21, `governorates.py`; 42 sea);
   419 strait crossings (none between the Illiriciums or to North Pollana); Belekria 1, 4, 5, 6 and 15 coarse as
-  tundra; Sminishia's claims on West Sminishia's land (`nations.CLAIMS`); the land regions named (the drafts, 2026-10-20; the governorates the author's, 2026-10-21); 204 countries
+  tundra; Sminishia's claims on West Sminishia's land (`nations.CLAIMS`); the land regions named (the drafts, 2026-10-20; the governorates the author's, 2026-10-21); 211 countries
   in the mod, 161 of them on the map (2026-10-19: Krionik's realms, Sangrád (Visokagorod since 2026-10-20) and its ports
-  releasable; Xugang Terreich's puppet; the Sisterhood removed 2026-10-20: `docs/NATIONS.md`), 104 of those with a flag of their own (57 fly a stripe in their map colour); the
-  states of 61 are drawn lines (`gazetteer.finals`, 2026-10-19; 49 on 2026-10-18; 39 until 2026-10-17's map: Belekria, Krionik, Terreich,
+  releasable; Xugang Terreich's puppet; the Sisterhood removed 2026-10-20: `docs/NATIONS.md`), 105 of those with a flag of their own (56 fly a stripe in their map colour); the
+  states of 63 are drawn lines (`gazetteer.finals`, 2026-10-23: Zwintern and Arovannea from the Gazetteer; 61 on 2026-10-19; 49 on 2026-10-18; 39 until 2026-10-17's map: Belekria, Krionik, Terreich,
   Gorbastan, Zukchiva, Sennheiser, Sminishia, West Sminishia and Hollier joined; Ungar's six from the Gazetteer on
   2026-10-18). The four great powers, one per
   ideology but Theocratic (author, 2026-10-17): Krionik (Monarchist), Kampf (Authoritarian), Sarkis (Communist),
@@ -282,7 +282,7 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
   (`map/adjacencies.csv`, `gazetteer.borders`) and taking a releasable's states away by clicking them.
   Rouental has test decisions for every kind of event, a test superevent and one that sets off many alerts at once
   (`test_events.py`).
-  **The Gazetteer's facts are in the mod** (the author's export of 2026-10-22, 32 nations, Arovannea's left out at the author's word, Rouental's five cities, the other 24 dropped at their word, `source/gazetteer/`;
+  **The Gazetteer's facts are in the mod** (the author's export of 2026-10-23, 33 nations, Arovannea's since that day ("okay to change now": its 86 drawn states on the map), Rouental's 92 cities and every fief's population, `source/gazetteer/`;
   the 15 suggestions of 2026-10-18's put on the map by `apply_suggestions.py`), after the blank slate of 2026-10-16. `gazetteer_fetch.py` reads the site directly once the author adds a read-only service
   account's key as the secret `GAZETTEER_SERVICE_ACCOUNT` (`docs/GAZETTEER_INTERNALS.md`); until then their saved file. The Gazetteer offers the base game's traits for every leader and takes requests for new ones,
   and has political advisors and companies (arms makers and industrial concerns of the base game's kinds, with logos;
@@ -351,7 +351,7 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
 4. **What still reads as the 1940s**: the tech tree's names, descriptions and pictures (its dates are 2036's;
    `docs/TECH_TREE_2036.md` is a proposal), the 3D models, and the game's own pictures inside the side panels (the
    Deco UI's proposals wait for approval).
-5. **Province borders**: 3,169 left under HOI4's limit (62,367 of 65,536, 2026-10-23: Rouental's fiefs took 291, its rivers 3, Aurifort 3, its 13 groups gave back 36, Zwintern's states and Tige's third took 45; the
+5. **Province borders**: 2,656 left under HOI4's limit (62,880 of 65,536, 2026-10-23: Rouental's fiefs took 291, its rivers 3, Aurifort 3, its 13 groups gave back 36, Zwintern's states and Tige's third took 45, Arovannea's 86 drawn states 513; the
    coarse deserts gave back 1,368 on 2026-10-18), for the states still to be drawn (`docs/BORDER_LIMIT.md`).
 
 ## Working with the author

@@ -10,6 +10,14 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-23, later still: the Gazetteer's export of that day imported, Arovannea's with it (the author: "Arovannea is
+  okay to change now"): its 86 drawn states on the map (map 10-23-2; Pershing, 13 px of land, too small for a
+  province), its party leaders and sub-ideologies, its flags (two pictures, the monarchist one fitted by hand) and seven
+  releasables with theirs (North Serkin NOH: NOT, the game's `NOT = { }`, kept out of the tags since); Rouental's 92
+  cities, 13 railways, hubs, terrain, nine impassable borders and the author's population for every fief (59.3
+  million; the import's re-keying, which would have spread them over their neighbours, now leaves the page's facts as
+  the page shows them); Ungar's, Ostaria's, Zwintern's and North Pollana's first map facts. 21,322 provinces, 3,358
+  states, 62,880 province borders (2,656 free), 211 countries. The site republished.
 - 2026-10-23, later still (the author's screenshot: "For whatever reason it looks like Tige isn't cut along the
   river"): Tige's 19 px east of the river a province of its own (`pdn_tools.py river_split`, new), so Tige has three
   (196, 117 and 19 px) and the river runs on a border; the author: "don't leave Tige with a massive western province
