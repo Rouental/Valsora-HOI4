@@ -17,7 +17,9 @@ states and countries came next.
   cities, 13 railways, hubs, terrain, nine impassable borders and the author's population for every fief (59.3
   million; the import's re-keying, which would have spread them over their neighbours, now leaves the page's facts as
   the page shows them); Ungar's, Ostaria's, Zwintern's and North Pollana's first map facts. 21,322 provinces, 3,358
-  states, 62,880 province borders (2,656 free), 211 countries. The site republished.
+  states, 62,880 province borders (2,656 free), 211 countries. Two Gazetteer tests followed the new facts (`run.py`
+  clicks a state whose label no city covers, `borders.py` checks the build without the field on a copy without it:
+  Rouental's page has walls of its own now); all eleven pass. The site republished.
 - 2026-10-23, later still (the author's screenshot: "For whatever reason it looks like Tige isn't cut along the
   river"): Tige's 19 px east of the river a province of its own (`pdn_tools.py river_split`, new), so Tige has three
   (196, 117 and 19 px) and the river runs on a border; the author: "don't leave Tige with a massive western province

@@ -197,7 +197,10 @@ for a, b, _ in rj["adjacency"]:
     if {int(kind[a]), int(kind[b])} == {0, 1}:
         coastal[a if kind[a] == 1 else b] = True
 G = gazetteer.load()
-extra = json.loads(sys.argv[1]) if len(sys.argv) > 1 else {}
+if sys.argv[1:] == ["--without"]:   # the facts without the field (2026-10-23: Rouental's page has nine walls of its own)
+    for f in G.values():
+        f.pop("borders", None)
+extra = json.loads(sys.argv[1]) if len(sys.argv) > 1 and sys.argv[1] != "--without" else {}
 if extra:   # borders put in by the test: a ring round an inland province of Rouental's, and one far apart
     G.setdefault("ROU", {}).setdefault("borders", {}).update(extra)
 notes = []
@@ -278,11 +281,11 @@ def _built(res, tmp):
 
 
 def without_field():
-    r = subprocess.run([sys.executable, "-c", BUILD], cwd=H.ROOT, capture_output=True, text=True)
+    r = subprocess.run([sys.executable, "-c", BUILD, "--without"], cwd=H.ROOT, capture_output=True, text=True)
     check(r.returncode == 0, f"the function without the field failed: {r.stderr[-800:]}")
     if not r.returncode:
         o = json.loads(r.stdout)
-        check(o == {"walls": [], "notes": []}, f"the facts in source/gazetteer/ give borders: {o}")
+        check(o == {"walls": [], "notes": []}, f"the facts without the field give borders: {o}")
 
 
 def main():
