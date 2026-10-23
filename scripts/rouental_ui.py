@@ -26,6 +26,7 @@ import math
 import os
 import re
 import sys
+from collections import Counter
 from pathlib import Path
 
 import numpy as np
@@ -1137,8 +1138,14 @@ def governorates(write):
     for g in govs:
         cov, ring, at_ = cut(np.isin(S, g["states"]))
         sprites = [save(f"gov_{g['n']}_b{b + 1}", rgba_from(cov, c, .9)) for b, c in enumerate(BAND_COLOURS)]
-        overlays.append(save(f"gov_{g['n']}_sel", rgba_from(np.maximum(ring, cov * .32), HI)))
         fills.append((g, sprites, at_))
+        # Couronneterre selected lights the crownlands too, which are its in name (the author, 2026-10-23: "include
+        # the crownlands in the Couronterre generalite visually when it is selected, but keep it so that clicking on
+        # them brings up the Crownlands tab": their clicks and seal stay the Crown's Domain's)
+        sel = np.isin(S, g["states"] + (royal if g["name"] == "Couronneterre" else []))
+        if g["name"] == "Couronneterre":
+            cov, ring, at_ = cut(sel)
+        overlays.append((save(f"gov_{g['n']}_sel", rgba_from(np.maximum(ring, cov * .32), HI)), at_))
     cov, ring, crown_at = cut(np.isin(S, royal))
     hatch = ((np.add.outer(np.arange(cov.shape[0]), np.arange(cov.shape[1])) // 3) % 2).astype(np.float32)
     crown = np.zeros((*cov.shape, 4), np.uint8)
@@ -1213,8 +1220,7 @@ def governorates(write):
         for b, spr in enumerate(sprites, start=1):
             kids.append(icon(f"rou_gov_{g['n']}_b{b}", spr, MX + 4 + x0, MY + 4 + y0, transparent=True))
     kids.append(icon("rou_gov_crown_fill", crown_spr, MX + 4 + crown_at[0], MY + 4 + crown_at[1], transparent=True))
-    for g, spr in zip(govs, overlays):
-        x0, y0 = next(f[2] for f in fills if f[0] is g)
+    for g, (spr, (x0, y0)) in zip(govs, overlays):
         kids.append(icon(f"rou_gov_{g['n']}_sel", spr, MX + 4 + x0, MY + 4 + y0, transparent=True))
     kids.append(icon("rou_gov_crown_sel", crown_sel, MX + 4 + crown_at[0], MY + 4 + crown_at[1], transparent=True))
     kids.append(icon("rou_gov_lines", lines_spr, MX + 4, MY + 4, transparent=True))
@@ -1249,12 +1255,14 @@ def governorates(write):
              text("rou_gov_card_estates_desc", CX, 254, CW, 42, L("ROU_GOV_SEL_ATT_DESC", "[GetRouGovAttitudeDesc]"),
                   "italic"),
              text("rou_gov_card_peoples_label", CX, 296, CW, 14, L("ROU_GOV_PEOPLES", "Peoples"), "label"),
-             text("rou_gov_card_peoples", CX, 314, CW, 20, L("ROU_GOV_SEL_PEOPLES", "[GetRouGovPeoples]"), "small"),
-             text("rou_gov_card_states_label", CX + 6, 344, 150, 14, L("ROU_GOV_STATES_HEAD", "State"), "label"),
-             text("rou_gov_card_people_head", CX + 160, 344, 110, 14, L("ROU_GOV_PEOPLE_HEAD", "People"), "label"),
-             text("rou_gov_card_levy_head", CX + 272, 344, 90, 14, L("ROU_GOV_LEVY_HEAD", "Levies"), "label"),
-             text("rou_gov_card_men_head", CX + 360, 344, 64, 14, L("ROU_GOV_MEN_HEAD", "Men"), "label", fmt="right"),
-             grid("rou_gov_states_grid", CX, 362, CW, 12 * 22, CW, 22, 1, 12)]
+             # two lines (in game, 2026-10-23: "Cultures list of severed lands runs off screen": the Terres Séparées' six
+             # peoples), the states' list 8 px lower under them (ten states at most, 220 px of the grid's 264)
+             text("rou_gov_card_peoples", CX, 314, CW, 34, L("ROU_GOV_SEL_PEOPLES", "[GetRouGovPeoples]"), "small"),
+             text("rou_gov_card_states_label", CX + 6, 352, 150, 14, L("ROU_GOV_STATES_HEAD", "State"), "label"),
+             text("rou_gov_card_people_head", CX + 160, 352, 110, 14, L("ROU_GOV_PEOPLE_HEAD", "People"), "label"),
+             text("rou_gov_card_levy_head", CX + 272, 352, 90, 14, L("ROU_GOV_LEVY_HEAD", "Levies"), "label"),
+             text("rou_gov_card_men_head", CX + 360, 352, 64, 14, L("ROU_GOV_MEN_HEAD", "Men"), "label", fmt="right"),
+             grid("rou_gov_states_grid", CX, 370, CW, 12 * 22, CW, 22, 1, 12)]
     for i, (k, nm) in enumerate((("insp", "Send Inspectors"), ("grant", "Grant Privileges"), ("demand", "Demand Levies"),
                                  ("session", "Summon the Estates"))):
         L(f"ROU_GOV_ACT_{k.upper()}", nm)
@@ -1370,9 +1378,9 @@ def governorates(write):
     init = []
     for g in govs:
         init += [f"set_variable = {{ rou_gov_{g['n']}_att = {g['att']} }}", f"set_variable = {{ rou_gov_{g['n']}_favour = 0 }}"]
-    people_keys = list(RM.PEOPLES) + ["Crown"]
+    people_keys = list(RM.PEOPLES)
     for s in sorted(set(gov_of) | set(royal)):
-        p = P.get(s, "Crown")
+        p = P.get(s, RM.ROYAL_PEOPLE)
         lv = RM.levy(s)
         flags = ["set_state_flag = rou_inspected"] if s in royal else []
         if st[s]["name"] in RM.CEREMONIAL:
@@ -1439,10 +1447,14 @@ def governorates(write):
            for g in govs] + ["\ttext = { trigger = { check_variable = { rou_gov_sel = 27 } } localization_key = ROU_GOV_27_NAME }", "}"]
     L("ROU_GOV_NONE", "The Realm")
     L("ROU_GOV_27_NAME", "The Crown's Domain")
+    crown_mp = Counter()
+    for s in royal:
+        crown_mp[P.get(s, RM.ROYAL_PEOPLE)] += st[s]["manpower"]
+    crown_peoples = ", ".join(f"{RM.PEOPLES[p][0]} {100 * c / sum(crown_mp.values()):.0f} %" for p, c in crown_mp.most_common())
     for key, field, crown_text, none in (("GetRouGovGovernor", "governor", "Held by the Prince", "Pick a généralité on the map"),
-                                         ("GetRouGovOrigin", "origin", "Of the Généralité of Couronneterre in name, bound to the Crown in "
-                                          "practice", ""),
-                                         ("GetRouGovPeoples", "peoples", "The Crown's", "")):
+                                         ("GetRouGovOrigin", "origin", "Of the Généralité of Couronneterre in name (but the "
+                                          "Oriental Territories), bound to the Crown in practice", ""),
+                                         ("GetRouGovPeoples", "peoples", crown_peoples, "")):
         sl += ["defined_text = {", f"\tname = {key}"]
         sl.append(f"\ttext = {{ trigger = {{ check_variable = {{ rou_gov_sel = 0 }} }} localization_key = ROU_GOV_0_{field.upper()} }}")
         L(f"ROU_GOV_0_{field.upper()}", none)
@@ -1456,12 +1468,12 @@ def governorates(write):
         L(f"ROU_GOV_{g['n']}_NAME", f"Généralité of {g['name']}")
         L(f"ROU_GOV_{g['n']}_GOVERNOR", f"Governor: {g['governor']}")
         L(f"ROU_GOV_{g['n']}_ORIGIN", g["origin"])
-        peoples = ", ".join(f"{RM.PEOPLES[p][0] if p in RM.PEOPLES else 'Crown'} {100 * c / total[g['n']]:.0f} %"
+        peoples = ", ".join(f"{RM.PEOPLES[p][0]} {100 * c / total[g['n']]:.0f} %"
                             for p, c in sorted(g["shares"].items(), key=lambda kv: -kv[1]))
         L(f"ROU_GOV_{g['n']}_PEOPLES", peoples)
         L(f"ROU_GOV_{g['n']}_TT", f"§Y{g['name']}§!: loyalty [?rou_gov_{g['n']}_loyalty|0]. Click to see it.")
-    L("ROU_GOV_27_TT", "§YThe Crown's Domain§!: the eleven Royal Fiefs, technically of the Généralité of "
-      "Couronneterre, though bound more to the Crown than to its governor. Click to see them.")
+    L("ROU_GOV_27_TT", "§YThe Crown's Domain§!: the eleven Royal Fiefs, all but the Oriental Territories technically of "
+      "the Généralité of Couronneterre, though bound more to the Crown than to its governor. Click to see them.")
     sl += ["defined_text = {", "\tname = GetRouGovLoyalty",
            "\ttext = { trigger = { OR = { check_variable = { rou_gov_sel = 0 } check_variable = { rou_gov_sel = 27 } } } localization_key = ROU_GOV_LOYALTY_NONE }"]
     L("ROU_GOV_LOYALTY_NONE", "")
@@ -1483,7 +1495,7 @@ def governorates(write):
     sl += ["defined_text = {", "\tname = GetRouStatePeople"]
     for i, p in enumerate(people_keys, start=1):
         sl.append(f"\ttext = {{ trigger = {{ check_variable = {{ rou_people = {i} }} }} localization_key = ROU_PEOPLE_{i} }}")
-        L(f"ROU_PEOPLE_{i}", RM.PEOPLES[p][0] if p in RM.PEOPLES else "Crown")
+        L(f"ROU_PEOPLE_{i}", RM.PEOPLES[p][0])
     sl += ["}", "defined_text = {", "\tname = GetRouStateLevy",
            "\ttext = { trigger = { NOT = { has_state_flag = rou_inspected } } localization_key = ROU_LEVY_UNKNOWN }",
            "\ttext = { trigger = { has_state_flag = rou_ceremonial } localization_key = ROU_LEVY_CEREMONIAL }"]

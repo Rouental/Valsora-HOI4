@@ -10,6 +10,10 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-23, later still (the author's screenshot of the Terres Séparées' card and notes): the généralités' peoples
+  in two lines; Rougeamera Brillagnaise, Beaufort and the Royal Fiefs Riverlander (no people "Crown"); Couronneterre
+  selected lights the crownlands too; the crownlands at the start Concorde et Volonté in, Jourdain et Moterre out
+  (HMMLA's civil war states with them). The site republished (HMMLA's states on Rouental's page).
 - 2026-10-23, later still (the author's screenshots of the three estates' build): the diplomacy tab's spirits inside
   their band (Deco UI v0.12.4), the estates' leanings whole, the Généralités category kept after Survey the Realm's
   Levies (it waits by a flag now), the généralité's loyalty on the state panel with the game's 32 px crown. The author asked whether a state needs a victory point: the game's doesn't (124

@@ -134,13 +134,19 @@ PEOPLES = {
     "Hollieraine": ("Hollieraine", "#A84A48", 0, ""),
     "Selgravois": ("Selgravois", "#7E3A48", 0, ""),
     "Creole": ("Creole", "#6E8A5A", 0, ""),
+    # the author, 2026-10-23: "Make Rougeamera the Brillagnaise culture" (its colour Brillagne's map colour, Claude's)
+    "Brillagnaise": ("Brillagnaise", "#E1BE46", 0, ""),
 }
 # states whose people is not their fief group's (the author, 2026-10-22: "Serpette should be Evrichois culture,
 # Chirac Hollieraine, Maieul Lustianaise, Petite Selgrave / Serieux Selgravois (or whatever would work best for
 # Selgrave's culture), and Moelle creole"): Selgravois rather than the country's adjective Selgravian (a guess of
 # Claude's), as French as the Evrichois beside it
 STATE_PEOPLES = {"Serpette": "Evrichois", "Chirac": "Hollieraine", "Maïeul": "Lustianaise",
-                 "Petit Selgrave": "Selgravois", "Sérieux": "Selgravois", "Moelle": "Creole"}
+                 "Petit Selgrave": "Selgravois", "Sérieux": "Selgravois", "Moelle": "Creole",
+                 # the author, 2026-10-23: "Make Rougeamera the Brillagnaise culture. Make Beaufort Riverlander"
+                 "Rougeamera": "Brillagnaise", "Beaufort": "Conflans"}
+# the people of the Royal Fiefs (the author, 2026-10-23: "Crown isn't a culture, make it riverlander")
+ROYAL_PEOPLE = "Conflans"
 ATTITUDE_MOD = {"Leal": 10, "Grasping": -5, "Belligerent": 0, "Quarrelsome": -5, "Pious": 0, "Proud": -10,
                 "Mercantile": 0, "Timorous": 5}
 
@@ -158,7 +164,8 @@ def ALL_FIEFS():
 @functools.lru_cache(maxsize=None)
 def peoples():
     """state -> its people: the cultural group of the fief it is named for; a state named for no fief of the list takes
-    its governorate's commonest people (guessed); the Royal Fiefs are the Crown's"""
+    its governorate's commonest people (guessed); the Royal Fiefs are Riverlander (ROYAL_PEOPLE), as is a Royal Fief
+    outside the governorates (Concorde et Volonté); STATE_PEOPLES before all"""
     R = realm()
     cwd = os.getcwd()
     os.chdir(REPO)
@@ -171,16 +178,16 @@ def peoples():
         for f in fs:
             f2g.setdefault(f, g)
     out, guessed = {}, set()
-    for sid in R["gov"]:
+    for sid in set(R["gov"]) | set(R["royal"]):
         if sid in R["royal"]:
-            out[sid] = "Crown"
+            out[sid] = STATE_PEOPLES.get(R["st"][sid]["name"], ROYAL_PEOPLE)
             continue
         g = STATE_PEOPLES.get(R["st"][sid]["name"]) or f2g.get(R["st"][sid]["name"])
         if g and g != "Royal Fiefs":
             out[sid] = g
     for sid in R["gov"]:
         if sid not in out:
-            c = Counter(out[s] for s, gg in R["gov"].items() if gg == R["gov"][sid] and s in out and out[s] != "Crown")
+            c = Counter(out[s] for s, gg in R["gov"].items() if gg == R["gov"][sid] and s in out and s not in R["royal"])
             out[sid] = c.most_common(1)[0][0] if c else "Conflans"
             guessed.add(sid)
     return out, guessed

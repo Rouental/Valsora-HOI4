@@ -458,12 +458,18 @@ DISPLAY_COLOUR = {"AIS": (45, 105, 79)}
 RULING = {"BRL": "theocracy", "RLA": "fascism",
           "AIS": "democratic"}  # Merlovich: Liberalism (the author's friend, 2026-10-05)
 
-# Rouental's Royal Fiefs, by state name: the capital, Rêverie (the author, 2026-10-21: "Reverie still needs to be
-# marked as a royal fief"), and the ten of the author's fief list (source/names/rouental_fiefs.txt), each a state of
-# its own since 2026-10-21 (Aurifort cut out); each with a line on its state panel (build_mod.state_lines; the author,
-# 2026-10-21: "Royal fiefs should also have a line on their state panels"); HMMLA's in the civil war, Rêverie its capital
-ROYAL_FIEFS = ["Rêverie", "Rouental", "Saintiers", "Cournin", "Jourdain et Moterre", "Aurifort", "Éislek", "Charmas",
-               "Rochemont", "Bérault", "Brassard"]
+# Rouental's Royal Fiefs (the crownlands) at the start, by state name: the capital, Rêverie (the author, 2026-10-21:
+# "Reverie still needs to be marked as a royal fief"), the author's fief list's (source/names/rouental_fiefs.txt) but
+# Jourdain et Moterre, and the Oriental Territories, Concorde et Volonté (the author, 2026-10-23: "Jourdain et Moterre
+# isn't part of the crowlands at start, but the Oriental Territories are"); each with a line on its state panel
+# (build_mod.state_lines; the author, 2026-10-21: "Royal fiefs should also have a line on their state panels"); HMMLA's
+# in the civil war, Rêverie its capital
+ROYAL_FIEFS = ["Rêverie", "Rouental", "Saintiers", "Cournin", "Aurifort", "Éislek", "Charmas", "Rochemont", "Bérault",
+               "Brassard", "Concorde et Volonté"]
+# the Royal Host's Osts are named after the fief list's Royal Fiefs, in its order (rouental_division_names), whatever
+# the crownlands are now
+HOST_FIEFS = ["Rouental", "Saintiers", "Cournin", "Jourdain et Moterre", "Aurifort", "Éislek", "Charmas", "Rochemont",
+              "Bérault", "Brassard"]
 
 # The Rouentaise civil war (author, 2026-10-02). When Rouental's communists execute the
 # Prince (focus ROU_execute_the_prince) these countries are released from the states
@@ -1546,9 +1552,9 @@ def rouental_division_names():
     import cultures
     f = cultures.fiefs()
     royal = f.pop("Royal Fiefs")
-    # the ten after their states (ROYAL_FIEFS, the fief list's order; "Jourdain et Moterre", the list's "Motere")
-    assert len(royal) == len(ROYAL_FIEFS) - 1, (royal, ROYAL_FIEFS)
-    host = ["%de Garde Royale"] + [f"%de Ost {cultures.noble(x)}" for x in ROYAL_FIEFS[1:]]
+    # the ten after their states (HOST_FIEFS, the fief list's order; "Jourdain et Moterre", the list's "Motere")
+    assert len(royal) == len(HOST_FIEFS), (royal, HOST_FIEFS)
+    host = ["%de Garde Royale"] + [f"%de Ost {cultures.noble(x)}" for x in HOST_FIEFS]
     # the 12th, in Concorde (the author, 2026-10-21: "rename 12e Compagnie d'Ordinance to 12e Ost des Territoires
     # Orientale (or whatever the correct term would be,)"): Territoires is masculine, so Orientaux
     assert len(host) == 11, host

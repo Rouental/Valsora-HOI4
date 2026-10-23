@@ -93,7 +93,8 @@ Aislada is the worked example of a built-out nation:
           Army; map name HMMLA, the author's, 2026-10-02; Strongman Rule, `RLA_serelle_cahun`; flag the fox quarter of `ROU.png`,
           which is also `ROU_fascism.png`); Vair VAI (Duchy; Feudalism); The Faithful FTH
           (the Faithful Children of the Goddess and Her Saint; Holy Order). States
-          are named in `CIVIL_WAR` (first = capital; HMMLA's holds all eleven Royal Fiefs, Rêverie first,
+          are named in `CIVIL_WAR` (first = capital; HMMLA's holds all eleven Royal Fiefs, Rêverie first, since
+          2026-10-23 Concorde et Volonté and not Jourdain et Moterre,
           `nations.ROYAL_FIEFS`, the author, 2026-10-21: "HMMLA should have all the royal fiefs"); the focus file writes
           `@STATE:<name>@`, which `nations.fill` turns into ids. Two countries may
           share a name: their country files get the tag appended.
@@ -117,8 +118,10 @@ Aislada is the worked example of a built-out nation:
     should encompass Selgrave, Lustiana, Lanzerac, Moelle, Maieul, Serieux, and Petit Selgrave"; the file's `split`),
     27 in all. In the game they are Généralités (the author, 2026-10-22: "Let's go with Généralité for the name of the
     districts"). A state in one reads "Généralité of X" on its panel, a Royal Fief (`nations.ROYAL_FIEFS`: Rêverie,
-    "Reverie still needs to be marked as a royal fief", and the ten, all in Couronneterre) "Royal Fief · Governorate
-    of Couronneterre" (the author, 2026-10-22: the Royal Fiefs "are technically still part of Couronterre, though in
+    "Reverie still needs to be marked as a royal fief", and nine of the ten, all in Couronneterre, and since 2026-10-23
+    Concorde et Volonté, the Oriental Territories, in no généralité, for Jourdain et Moterre: the author, "Jourdain et
+    Moterre isn't part of the crowlands at start, but the Oriental Territories are") "Royal Fief · Généralité
+    of Couronneterre" (Concorde "Royal Fief") (the author, 2026-10-22: the Royal Fiefs "are technically still part of Couronterre, though in
     practice they are more bound directly to the crown than to the governorate"; later: "Rochemont and Bérault are in
     Couronneterre too, spelling is Couronneterre")
     (`build_mod.state_lines`: a scripted GUI docked to the state panel, in the state's scope, its text a scripted
@@ -150,7 +153,10 @@ Aislada is the worked example of a built-out nation:
       **Peoples**: a state's is its fief's group in the fief list, but `rouental_realm.STATE_PEOPLES` (the author,
       2026-10-22): in the Terres Séparées Serpette Evrichois, Chirac Hollieraine, Maïeul Lustianaise, Petit Selgrave
       and Sérieux Selgravois (the author's "or whatever would work best for Selgrave's culture": Claude kept their
-      French form beside Evrichois, not the country's adjective Selgravian), Moelle Creole.
+      French form beside Evrichois, not the country's adjective Selgravian), Moelle Creole; (2026-10-23) Rougeamera
+      Brillagnaise (a people of its own, Brillagne's map colour Claude's), Beaufort Riverlander, and the Royal Fiefs
+      Riverlander (`rouental_realm.ROYAL_PEOPLE`; the author: "Crown isn't a culture, make it riverlander"). A
+      généralité's peoples take two lines on its card (the Terres Séparées' six ran past the window).
     - **The Three Estates** (in place of the three powers since 2026-10-23; the author: "Put the three estates in game,
       bare bones"; the mockup `deco_ui/art/proposals/three_estates/`, the plan `docs/ROUENTAL_ESTATES.md`): the
       politics screen's button where the game's balance of power sits (the Deco UI's `layout_politics.BOP`), showing

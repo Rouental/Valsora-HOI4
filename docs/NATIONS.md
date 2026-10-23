@@ -856,6 +856,16 @@ picture for Tara, use this one"), and the Speaker of the Estates General in the 
 women are `gender = female` now ("I noticed that Serelle currently seems to be considered male"): Serelle Cahun and
 Mahaut VI and their copies at HMMLA and Brillagne, and Tara Blanchart; the Gazetteer takes a gender for every character.
 
+## 2026-10-23, later: the crownlands; Rouental's peoples
+
+The author: "Jourdain et Moterre isn't part of the crowlands at start, but the Oriental Territories are": the Royal
+Fiefs are Rêverie, Rouental, Saintiers, Cournin, Aurifort, Éislek, Charmas, Rochemont, Bérault, Brassard and Concorde et
+Volonté (`nations.ROYAL_FIEFS`); Jourdain et Moterre is a state of Couronneterre. HMMLA, which rises in every Royal
+Fief, takes Concorde in the civil war and leaves Jourdain. The Royal Host's divisions keep their names (`HOST_FIEFS`).
+Peoples: "Make Rougeamera the Brillagnaise culture. Make Beaufort Riverlander. Crown isn't a culture, make it
+riverlander" (`rouental_realm.STATE_PEOPLES`, `ROYAL_PEOPLE`); Brillagnaise is a people of its own on the Map of the
+Realm, its colour Brillagne's map colour (Claude's).
+
 ## 2026-10-23: the three estates in game
 
 Rouental's balance of power is the three estates now (the author: "Put the three estates in game, bare bones"; the

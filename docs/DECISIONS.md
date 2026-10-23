@@ -221,7 +221,13 @@ Moved out of `CLAUDE.md` word for word on 2026-10-17 (`CLAUDE.md` keeps one line
   The Royal Fiefs are Couronneterre's in name (author, 2026-10-22: "Rouental Reverie Sainiters, Cournin, Brassard,
   Eislek, Jourdain et Moterre, Aurifort and Charmas (the fiefs) are technically still part of Couronterre, though in
   practice they are more bound directly to the crown that to the governorate"; the other two, 2026-10-22, later:
-  "Rochemont and Bérault are in Couronneterre too, spelling is Couronneterre"). The Terres Séparées' peoples (author, 2026-10-22): "Serpette should be Evrichois culture, Chirac
+  "Rochemont and Bérault are in Couronneterre too, spelling is Couronneterre"). **The crownlands at the start**
+  (author, 2026-10-23: "Jourdain et Moterre isn't part of the crowlands at start, but the Oriental Territories are"):
+  Jourdain et Moterre a state of Couronneterre like any other, Concorde et Volonté (the Oriental Territories, off
+  Solitas, in no généralité) a Royal Fief; eleven still, HMMLA's in the civil war by the rule of 2026-10-21; the Royal
+  Host's Osts keep their names from the fief list (`nations.HOST_FIEFS`). On the Map of the Realm Couronneterre
+  selected lights the crownlands too, their clicks the Crown's Domain's ("include the crownlands in the Couronterre
+  generalite visually when it is selected, but keep it so that clicking on them brings up the Crownlands tab"). The Terres Séparées' peoples (author, 2026-10-22): "Serpette should be Evrichois culture, Chirac
   Hollieraine, Maieul Lustianaise, Petite Selgrave / Serieux Selgravois (or whatever would work best for Selgrave's
   culture), and Moelle creole" (`rouental_realm.STATE_PEOPLES`).
 - **The governorates' screen, the design so far** (author, 2026-10-21, night; the mockups in

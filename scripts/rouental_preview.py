@@ -175,7 +175,7 @@ def three_estates(lords=False):
     return save(cv, "rouental_three_estates_lords_realm.png" if lords else "rouental_three_estates.png")
 
 
-def governorates():
+def governorates(which="Graisivaudan"):
     R, G, P, govs, royal = UI.governorate_data()
     att_names = [x for x, _ in RM.ATTITUDES]
     band = {}
@@ -183,7 +183,7 @@ def governorates():
         loy = max(2, min(97, g["static"] + RM.ATTITUDE_MOD[att_names[g["att"] - 1]]))
         band[g["n"]] = 1 if loy >= 80 else 2 if loy >= 60 else 3 if loy >= 40 else 4 if loy >= 20 else 5
         g["loyalty"] = loy
-    pick = next(g for g in govs if g["name"] == "Graisivaudan")
+    pick = next(g for g in govs if g["name"] == which)
     n = pick["n"]
     st = R["st"]
     lab = UI.BAND_NAMES[band[n] - 1]
@@ -212,17 +212,21 @@ def governorates():
     button_texts(cv, body, wx, wy)
     # the states' list: the entry container once a row
     e = window("rou_gov_state_entry")
-    gx, gy = 880, 362
+    gx, gy = 880, 370
     for i, s in enumerate(pick["states"]):
         name = st[s]["name"]
         V.SAMPLE.update({"rou_gov_state_name": name,
-                         "rou_gov_state_people": RM.PEOPLES[P[s]][0] if P[s] in RM.PEOPLES else "Crown",
+                         "rou_gov_state_people": RM.PEOPLES[P.get(s, RM.ROYAL_PEOPLE)][0],
                          "rou_gov_state_levy": "§YCeremonial§!" if name in RM.CEREMONIAL else
                          (RM.LEVY[RM.levy(s)] if i % 2 else "Unknown"),
                          "rou_gov_state_men": f"{round(st[s]['manpower'] / 1000)}k"})
         V.render(cv, [("containerWindowType", e)], wx + gx, wy + gy + i * 22, wx + gx + 430)
     cat = window("rou_gov_category_window")
-    return save(cv, "rouental_governorates.png")
+    return save(cv, "rouental_governorates.png" if which == "Graisivaudan" else f"rouental_governorates_{RM_slug(which)}.png")
+
+
+def RM_slug(name):
+    return re.sub(r"[^a-z]+", "_", name.lower().replace("é", "e")).strip("_")
 
 
 def main():
@@ -230,6 +234,8 @@ def main():
     print(three_estates())
     print(three_estates(lords=True))
     print(governorates())
+    print(governorates("Terres Séparées"))
+    print(governorates("Couronneterre"))
 
 
 if __name__ == "__main__":
