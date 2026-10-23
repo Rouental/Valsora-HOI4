@@ -1062,6 +1062,13 @@ screenshot and `error.log`)
 
 ## Map problems found while building
 
+**The three estates' window, before it shipped** (2026-10-23, in `scripts/rouental_preview.py`'s picture).
+- The decisions' shifts printed the minus sign (U+2212) the mockup uses; the Deco UI's fonts have none, so "-3" read
+  "3". Fix: a hyphen, as the rest of the mod's text (`rouental_ui.sgn`).
+- Royal Authority's bar was 21 frames of 404 px, a strip 8,484 px wide: past 8,192, the widest texture every
+  graphics card loads. Fix: 380 px a frame (7,980). The governorates' loyalty bar, 6,000, was seen to load.
+- The cards' lines ran into their "since January" numbers and the reform's note past the window: shorter lines.
+
 **Two Jourdains in Rouental** (2026-10-21, applying the author's groups: Jourdain et Moterre "One state with two
 provinces and two cities, Jourdain in the North, Moterre in the South").
 - Cause: the city was added at the author's spot (`nations.CITIES`) while Rouental's Gazetteer page already had a

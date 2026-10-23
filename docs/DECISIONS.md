@@ -290,6 +290,12 @@ Moved out of `CLAUDE.md` word for word on 2026-10-17 (`CLAUDE.md` keeps one line
   mockups into practice, to make sure everything were planning will work. Let's get them into the game, even if
   they're bare bones for now"): the governorates' window and the three powers' triangle, `scripts/rouental_ui.py`
   (`docs/CONTENT.md`, Rouental); their placeholders stay the mockups'.
+- **The three estates in place of the three powers** (author, 2026-10-22, the plan `docs/ROUENTAL_ESTATES.md`; 2026-10-23:
+  "Put the three estates in game, bare bones"): the First (the clergy), the Second (the nobility), the Third (the
+  commons) as one point in the triangle, Royal Authority apart from it, whom the Court follows between Roland and
+  Serelle; the symbols inside the triangle ("Let's go with the symbols inside the triangle"), the edge where the Third
+  Estate is shut out Cloister and Castle ("I'll go with Cloister and Castle"). The three powers' window is gone from
+  the mod, its mockup kept.
 - **Characters' gender** (author, 2026-10-21, night: "we should be able to select the gender of characters in the
   gazetteer. I noticed that Serelle currently seems to be considered male"): `gender = female` where the author has
   said so (Serelle, Mahaut and their copies, Tara Blanchart: `nations.GENDERS` for the generated, the blocks for the

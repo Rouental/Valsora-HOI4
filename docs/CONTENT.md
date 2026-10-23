@@ -123,7 +123,7 @@ Aislada is the worked example of a built-out nation:
     Couronneterre too, spelling is Couronneterre")
     (`build_mod.state_lines`: a scripted GUI docked to the state panel, in the state's scope, its text a scripted
     localisation by state id; with the Deco UI only, which keeps the row for it).
-  - **The governorates and the three powers in game, bare bones** (the author, 2026-10-21, night: "I think we should
+  - **The governorates and the three estates in game, bare bones** (the author, 2026-10-21, night: "I think we should
     start to try to put the mockups into practice, to make sure everything were planning will work. Let's get them
     into the game, even if they're bare bones for now"): `scripts/rouental_ui.py`, run after `deco_ui.py` (it reads the
     build through `scripts/rouental_realm.py`, the mockups' data model, moved from `deco_ui/art/proposals/governorates/`)
@@ -141,7 +141,7 @@ Aislada is the worked example of a built-out nation:
       selected governorate's states, in each state's scope: its name, people, levies (Unknown until inspected; Grand
       Brume Ceremonial) and men), four actions (Send Inspectors 25 PP, Grant Privileges 50 PP, Demand Levies +5000 men,
       Summon the Estates 20 PP: the temper rolled again). Loyalty = the governorate's fixed part (peoples, governor,
-      chance) + its estates' temper + what actions and the three powers have added + the zone's; each state's manpower
+      chance) + its estates' temper + what actions and the three estates have added + the zone's; each state's manpower
       follows it (a dynamic modifier, `local_manpower` = (loyalty - 50) / 200, read from a state variable).
       **Clicking** (in game, 2026-10-22: "I can't click on Rivage d'argent anywhere but the badge"): the game takes a
       button's whole box for it, and the governorates' boxes overlap, so the pictures are icons now and the clicks
@@ -151,25 +151,55 @@ Aislada is the worked example of a built-out nation:
       2026-10-22): in the Terres Séparées Serpette Evrichois, Chirac Hollieraine, Maïeul Lustianaise, Petit Selgrave
       and Sérieux Selgravois (the author's "or whatever would work best for Selgrave's culture": Claude kept their
       French form beside Evrichois, not the country's adjective Selgravian), Moelle Creole.
-    - **The Three Powers**: a button on the politics screen where the game's balance of power sits (the Deco UI's
-      `layout_politics.BOP`), showing the zone, opening a window beside the panel: the triangle (its zones drawn with
-      their names), the marker placed by the shares (`properties` x and y, worked out in script), the six months'
-      trail, the lit zone, the holders' portraits (Roland II Cahun, Anserra IX, Tara Blanchart) and shares, where the
-      balance stands and what it does, the four decisions (buttons, each once in 30 days), the estates' leanings
-      (loyalty since 1 January). The shares start at 40 / 35 / 25 (the author's); each month they drift a point or two
-      (`on_monthly_ROU`); a zone is a national spirit (`ROU_zone_*`, placeholder effects); a move toward a power gives
-      the estates who lean to it half the shift as loyalty (Pious to the Voix, Leal to the Prince, Proud to the
-      Speaker; the Southmarchers lose a fifth of the Voix's gains). Rouental's Test Events category has "Test: the
-      Three Powers to the Next Zone". `properties` x and y are the element's place in its window (in game, 2026-10-22:
-      the marker stood 24 px left and 118 px up of its place, the triangle's own offset in the window, until the
-      script added it).
+    - **The Three Estates** (in place of the three powers since 2026-10-23; the author: "Put the three estates in game,
+      bare bones"; the mockup `deco_ui/art/proposals/three_estates/`, the plan `docs/ROUENTAL_ESTATES.md`): the
+      politics screen's button where the game's balance of power sits (the Deco UI's `layout_politics.BOP`), showing
+      the zone, opens a window beside the panel (1010 x 900, the mockup's). The triangle: each estate's symbol in its
+      corner (the author: "Let's go with the symbols inside the triangle"; `source/estates/`, drawn from the mockup's
+      `symbols.py` by `scripts/estate_symbols.py`, by hand), its name, zone and share outside it, the edges' and the
+      middle's names in it (Cloister and Castle the author's), the marker placed by the shares (`properties`), six
+      months' trail, the lit zone. Under it where the balance stands (the zone, its effects, where it leads) and the
+      Promised Reforms while they run. Beside it the estates' cards (symbol, holder, share, since 1 January: Anserra IX
+      for the First, Tara Blanchart for the Second, the Third's champion "To be named"), the Crown (Royal Authority, a
+      21-frame bar and its band; whom the Court follows, a scale between Roland and Serelle), six decisions (buttons,
+      each once in 30 days: Endow the Cathedral Chapters, Confirm the Lords' Charters, Promise Reform, Divide and Rule
+      for 10 Royal Authority, A Royal Embassy, Serelle's Command), and the estates' leanings; in the Lords' Realm,
+      in their place, how many généralités are under 40 and would break away, with a button to the Map of the Realm.
+      - **What moves**: the shares start at 35 / 35 / 30 (the author's) and drift a point or two each month
+        (`on_monthly_ROU`); a zone with effects is a national spirit (`ROU_estates_*`); Royal Authority (starts 30)
+        gains 1 a month in the Balance of Estates, holds while an estate is shut out and loses 2 while one dominates;
+        a move toward an estate gives the estates leaning to it half the shift as loyalty (Pious to the First, Proud
+        to the Second, Mercantile to the Third; the Leal three tenths of Royal Authority's moves; the Southmarchers
+        lose a fifth of the First Estate's gains); the zones' loyalty (`ZONES[...]["loyalty"]`) and Church and
+        Commons' dearer Demand Levies act on the governorates.
+      - **Whom the Court follows** (Roland's share, starts 60): the one who leads gets their side's bonuses, the more
+        the further they lead (all of them at a lead of 50): Roland opinion gain +25 %, relations upkeep -25 %, trade
+        opinion +20 %; Serelle army experience +25 %, land doctrine cost -15 %, army organisation +10 % (the whole
+        army: the mockup's "the Royal Host's" asks for more). A dynamic modifier, `ROU_court_favour`, its values
+        variables; each combat Serelle wins (`on_army_leader_won_combat`, `is_character = ROU_serelle_cahun`) moves it
+        a point toward her, five a month at most.
+      - **The Promised Reforms**: Promise Reform starts a mission (`ROU_promised_reforms`, 365 days, in a category
+        of its own, The Three Estates, shown while it runs); it ends well once `rou_es_reforms_done` is set (by the
+        reform focuses, still to come; Test Events has "Test: the Reforms Carried Out"), else the commons rise
+        (stability -10 %, communism +10 %, the Third Estate +10; the flag `rou_es_commons_risen` for the secret
+        communist path, still to come). The window counts its days down a month at a time.
+      - **Not built**: the breaking away itself (the généralités as countries, their subjects' level, winning them
+        back), the paths the zones lead to, the reform focuses, the Association's opinion with Roland leading.
+      - Rouental's Test Events category has "Test: the Three Estates to the Next Zone".
+    - **The three powers** (2026-10-21, night, to 2026-10-23): the Sacred Prince, the Voix and the Speaker in the same
+      window's place, their shares 40 / 35 / 25, the zones Sacred Majesty to the Unwritten Balance; replaced by the
+      three estates, their mockup kept (`deco_ui/art/proposals/three_powers/`). `properties` x and y are the
+      element's place in its window (in game, 2026-10-22: the three powers' marker stood 24 px left and 118 px up of
+      its place, the triangle's own offset in the window, until the script added it).
     - **Seen in game** (2026-10-22, the author: "Looks great so far"): both windows open and draw over the map, the
       politics screen's button, the category, the dynamic list of states with their names, people, levies and men, the
       loyalty bar's frame, the marker's `properties` (placed, but without the triangle's offset), the seals' clicks.
       Changed after: the map's clicks (above), the marker, the Open button's text (dark on its gold plate: the fonts'
       cream was "barely readable"), the zone's description two lines (it was cut short). **Assumed still**: the
       clear click rectangles (a stretched cornered tile, alpha 1/255 in case the game skips clear pixels); a dynamic
-      modifier read from a state variable; `on_monthly_ROU`.
+      modifier read from a state variable; `on_monthly_ROU`. The three estates (2026-10-23) not yet seen; assumed: a
+      country's dynamic modifier read from its variables, `theocracy_drift` (the game makes a drift modifier for each
+      ideology), `on_army_leader_won_combat` with `is_character`, the mission's category shown only while it runs.
   - **Faction.** ROU starts as leader of "The Association of Reibonnaise States",
     together with GDN, LST, EVR, HLR, SGV, LZC and SGN.
     - **Reibonnaise opinions** (author, 2026-10-02; `nations.REIBONNAISE`): +20

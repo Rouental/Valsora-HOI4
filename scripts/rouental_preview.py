@@ -1,10 +1,10 @@
-"""Previews of Rouental's governorates and three powers windows, drawn from the build's own .gui, .gfx and localisation
+"""Previews of Rouental's governorates and three estates windows, drawn from the build's own .gui, .gfx and localisation
 (scripts/rouental_ui.py's output) with the Deco UI's preview renderer (deco_ui/tools/validate_preview.py: its fonts,
 its reading of positions), over the Deco UI's top bar and politics screen previews. The game's state is sampled: the
-three powers on 1 June 2036 (the mockup's), the governorates' loyalty as they start, one governorate picked.
+three estates on 1 June 2036 (the mockup's), the governorates' loyalty as they start, one governorate picked.
 
     python3 scripts/rouental_preview.py      (after a build and the Deco UI's build: deco_ui/build/preview_*.png)
-Writes work/previews/rouental_three_powers.png and rouental_governorates.png.
+Writes work/previews/rouental_three_estates.png and rouental_governorates.png.
 """
 import contextlib
 import io
@@ -117,33 +117,62 @@ def backdrop(politics=False):
     return a
 
 
-def three_powers():
-    trail = [(40, 35, 25), (40, 35, 25), (42, 32, 26), (48, 30, 22), (45, 29, 26), (42, 34, 24), (42, 35, 23)]
-    p, v, s = trail[-1]
-    localisation({"[GetRouTpZone]": "The Unwritten Balance", "[?rou_prince|0]": str(p), "[?rou_voix|0]": str(v),
-                  "[?rou_speaker|0]": str(s),
-                  "[GetRouTpZoneDesc]": UI.ZONES[6]["desc"] + " (" + UI.ZONES[6]["where"] + ".)",
-                  "[GetRouTpZoneEffects]": "No effects", "[?rou_lean_voix|+0]": "§G+0§!",
-                  "[?rou_lean_prince|+0]": "§G+1§!", "[?rou_lean_speaker|+0]": "§R-1§!"})
+def three_estates(lords=False):
+    """1 June 2036, the mockup's: the estates in balance, Royal Authority 35, the Court behind Roland (62), the Promised
+    Reforms running; or (lords) 1 March 2037: the Second Estate over 60, the Lords' Realm, the Court behind Serelle"""
+    if lords:
+        trail = [(30, 40, 30), (28, 46, 26), (27, 51, 22), (25, 56, 19), (24, 60, 16), (23, 63, 14)]
+        zi, ra, fav, lead = 1, 12, 43, "serelle"
+    else:
+        trail = [(35, 35, 30), (36, 35, 29), (33, 41, 26), (29, 37, 34), (33, 35, 32), (32, 36, 32)]
+        zi, ra, fav, lead = 6, 35, 62, "roland"
+    f, s, t = trail[-1]
+    z = UI.ZONES[zi]
+    k = abs(fav - 50) / 50
+    court = ", ".join(f"{nm} {full * k * 100:+.0f}%" for _key, _m, full, nm in UI.FAVOUR[lead])
+    localisation({"[GetRouEsZone]": z["name"], "[?rou_first|0]": str(f), "[?rou_second|0]": str(s), "[?rou_third|0]": str(t),
+                  "[GetRouEsZoneDesc]": z["desc"], "[GetRouEsZoneWhere]": z["where"],
+                  "[GetRouEsZoneEffects]": UI.zone_effects(z), "[GetRouEsZoneLeads]": z["leads"],
+                  "[GetRouEsFirstLine]": UI.HOLDERS[0][2], "[GetRouEsSecondLine]": UI.HOLDERS[1][2],
+                  "[GetRouEsThirdLine]": "§RShut out: their estates grow restive.§!" if lords else
+                  "§YReform promised: 212 days left.§!",
+                  "[?rou_es_d_first|+0]": "§R-3§!", "[?rou_es_d_second|+0]": "§G+1§!", "[?rou_es_d_third|+0]": "§G+2§!",
+                  "[?rou_es_ra|0]": str(ra), "[GetRouEsRaBand]": UI.RA_BANDS[0 if lords else 1][1],
+                  "[GetRouEsRaChange]": "§R-2 a month§!: one estate dominant" if lords else
+                  "§G+1 a month§!: the estates in balance", "[?rou_es_breaking|0]": "5",
+                  "[?rou_es_favour|0]": str(fav), "[?rou_es_serelle|0]": str(100 - fav),
+                  "[GetRouEsCourt]": f"{lead.capitalize()} leads: {court}.",
+                  "[?rou_es_reform_days|0]": "212", "[?rou_lean_first|+0]": "§R-2§!", "[?rou_lean_second|+0]": "§G+1§!",
+                  "[?rou_lean_third|+0]": "§G+1§!", "[?rou_lean_crown|+0]": "§G+2§!"})
     cv = backdrop(politics=True)
     # the politics screen's button (docked to the politics panel: its x -6, its y 62)
-    b = window("rou_tp_button_window")
+    b = window("rou_es_button_window")
     V.render(cv, [("containerWindowType", b)], -6, 62, 544)
-    w = window("rou_tp_window")
-    body = strip_children(w, lambda n: not n.startswith("rou_tp_zone_") or n in ("rou_tp_zone_balance", "rou_tp_zone_band",
-                                                                                  "rou_tp_zone_name", "rou_tp_zone_desc",
-                                                                                  "rou_tp_zone_effects"))
-    TX, TY = 24, 118
-    mx, my = UI.at(p, v, s)
-    move(body, "rou_tp_marker", TX + mx - UI.MARK / 2, TY + my - UI.MARK / 2)
+    w = window("rou_es_window")
+    hidden = {"rou_es_risen", "rou_es_footer"}
+    if lords:
+        hidden |= {"rou_es_reform_label", "rou_es_reform_band", "rou_es_reform_days", "rou_es_reform_note", "rou_es_risen",
+                   "rou_es_lean_label"} | {f"rou_es_lean_{k}{x}" for _a, k, _t in UI.LEANINGS for x in ("", "_swatch", "_v")}
+        hidden -= {"rou_es_footer"}
+    else:
+        hidden |= {"rou_es_break_label", "rou_es_break_text", "rou_es_break_map"}
+    lit = f"rou_es_zone_{z['key']}"
+    body = strip_children(w, lambda n: n not in hidden and (not n.startswith("rou_es_zone_") or n in (
+        lit, "rou_es_zone_band", "rou_es_zone_name", "rou_es_zone_desc", "rou_es_zone_where", "rou_es_zone_effects")))
+    TX, TY = 30, 120
+    mx, my = UI.at(f, s, t)
+    move(body, "rou_es_marker", TX + mx - UI.MARK / 2, TY + my - UI.MARK / 2)
     for i, sh in enumerate(reversed(trail[:-1]), start=1):
         x, y = UI.at(*sh)
-        move(body, f"rou_tp_trail_{i}", TX + x - UI.DOT / 2, TY + y - UI.DOT / 2)
-    a = V.attrs(w)
+        move(body, f"rou_es_trail_{i}", TX + x - UI.DOT / 2, TY + y - UI.DOT / 2)
+    for i in range(len(trail), 7):
+        body = strip_children(body, lambda n, i=i: n != f"rou_es_trail_{i}")
+    V.FRAME["rou_es_ra_bar"] = round(ra / 5)
+    V.FRAME["rou_es_court_bar"] = round(fav / 5)
     wx, wy = (int(n) for n in V.xy(V.sub(w, "position")))
     V.render(cv, [("containerWindowType", body)], 0, 0, 1920)
     button_texts(cv, body, wx, wy)
-    return save(cv, "rouental_three_powers.png")
+    return save(cv, "rouental_three_estates_lords_realm.png" if lords else "rouental_three_estates.png")
 
 
 def governorates():
@@ -198,7 +227,8 @@ def governorates():
 
 def main():
     sprites()
-    print(three_powers())
+    print(three_estates())
+    print(three_estates(lords=True))
     print(governorates())
 
 

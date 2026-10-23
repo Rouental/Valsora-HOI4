@@ -856,6 +856,15 @@ picture for Tara, use this one"), and the Speaker of the Estates General in the 
 women are `gender = female` now ("I noticed that Serelle currently seems to be considered male"): Serelle Cahun and
 Mahaut VI and their copies at HMMLA and Brillagne, and Tara Blanchart; the Gazetteer takes a gender for every character.
 
+## 2026-10-23: the three estates in game
+
+Rouental's balance of power is the three estates now (the author: "Put the three estates in game, bare bones"; the
+plan `docs/ROUENTAL_ESTATES.md`): the First Estate spoken for by the Voix Anserra IX, the Second by Tara Blanchart (the
+author: "It might make sense to move Tara to the Second Estate path"), the Third by a champion still to be named, the
+Crown above them; Roland and Serelle on the Court's scale. Tara Blanchart is still democratic Rouental's ruler in the
+mod (the author: "I'm not sure on the democratic leader yet, just use a placeholder for now"): her character is
+unchanged until the author names the Third Estate's champion or the democratic leader.
+
 ## 2026-10-22: the Terres Séparées' peoples; the Royal Fiefs in Couronneterre
 
 The author: "Serpette should be Evrichois culture, Chirac Hollieraine, Maieul Lustianaise, Petite Selgrave / Serieux

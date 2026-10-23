@@ -74,8 +74,8 @@ New detail goes into those files; this one gets a line.
 - **The scripts** (each one's detail in `docs/MAP_PIPELINE.md`'s table): the build (`readpdn`, `read_layers`,
   `build_mod`, `deco_ui`, `check_mod`, `export_canvas`, `package`, with `nations`, `cultures`, `ideologies`,
   `superevents`, `superevents_deco`, `test_events`, `minimap`, `globe`, `vanilla_parts`, `straits`, `borders`;
-  `rouental_ui` after `deco_ui`: Rouental's governorates and three powers windows, its data `rouental_realm`, its
-  previews `rouental_preview`);
+  `rouental_ui` after `deco_ui`: Rouental's governorates and three estates windows, its data `rouental_realm`, its
+  previews `rouental_preview`, the estates' symbols by hand `estate_symbols`);
   by hand on the `.pdn` (`pdn_tools`, `apply_outlines`, `regroup_states`, `sea_provinces`, `river_provinces`, `river_borders`,
   `merge_provinces`, `land_regions`, `fief_states` (a nation's states from the author's fief map), `governorates` (a
   nation's governorates: their states, `--apply` their strategic regions), `pdn_diff`, `pdn_check`, `pdn_dotnet` (paint.net's own reader, .NET), `pdn_recover`, `writepdn`, `nrbf`, `organic`, `rivers`);
@@ -170,9 +170,10 @@ New detail goes into those files; this one gets a line.
   As She Goes, Rudely with Execute the Prince and the Rouentaise civil war, Accept Reality), the Association of
   Reibonnaise States, the Feudal Army spirit and the royal host (Elite since 2026-10-21; mechanized but the two armoured divisions and the 12th, motorized in Concorde), its 26 governorates (its
   strategic regions, a line on the state panel; HMMLA rises in all eleven Royal Fiefs); since 2026-10-21, night, the
-  mockups in game, bare bones (`scripts/rouental_ui.py`): the Governorates category and its map of the realm, and the
-  three powers (the Sacred Prince, the Voix Anserra IX (Mahaut VI until 2026-10-22), the Speaker Tara Blanchart, democratic Rouental's leader) on the
-  politics screen. Merlovich (AIS) has its own focus tree. Every other
+  mockups in game, bare bones (`scripts/rouental_ui.py`): the Governorates category and its map of the realm, and on the
+  politics screen the three estates (since 2026-10-23, in place of the three powers: the First Estate the Voix Anserra IX's
+  (Mahaut VI until 2026-10-22), the Second Tara Blanchart's (democratic Rouental's leader still), the Third's champion to
+  be named; Royal Authority; whom the Court follows, Roland or Serelle; the symbols inside the triangle). Merlovich (AIS) has its own focus tree. Every other
   country has its set ruler, generated characters, the generic focus tree and a generic infantry army.
 - **Gender**: HOI4 takes a character without `gender = female` for a man; the author's women carry it
   (`nations.GENDERS`, the hand-made blocks), the Gazetteer's characters by their page's choice; never from a name.
@@ -315,8 +316,9 @@ Where things stand; the history, date by date, is `docs/HISTORY.md` (add each da
 - **Waiting on the author:** (`dist/open_questions.md`, 2026-10-21, later still; keep it in step) everything they had
   answered or held is in the mod (2026-10-20, their go-ahead; 2026-10-21, the governorates' names, the generic
   advisors, the Kufi in gold, HMMLA's Royal Fiefs, Rouental's groups, Montvallée, Rêverie, the Royal Host, Kalaistan).
-  New: the three estates in place of the three powers (`docs/ROUENTAL_ESTATES.md`, the mockup
-  `deco_ui/art/proposals/three_estates/`, 2026-10-22: its placeholders, the Third Estate's champion); the governorates' window and the three powers in game, bare bones (2026-10-21, night, seen 2026-10-22: what to
+  New: the three estates in game, bare bones, in place of the three powers (2026-10-23, not yet seen: `docs/CONTENT.md`,
+  Rouental; `docs/ROUENTAL_ESTATES.md`, the mockup `deco_ui/art/proposals/three_estates/`: its placeholders, the Third
+  Estate's champion); the governorates' window in game, bare bones (2026-10-21, night, seen 2026-10-22: what to
   see in game in `docs/CONTENT.md`, Rouental; the zones' effects and the decisions still placeholders); Guedelon's
   ruler's name ("The Council of Six" on its page, the portrait the Conseil des Sept's, 2026-10-22); the Vale of Reibonne's region left with Guedelon and Brillagne apart; whether the groups stay (the way back:
   `work/pre_groups_1021/`, or the commit before them). Open: the strait crossings to add from the red ones

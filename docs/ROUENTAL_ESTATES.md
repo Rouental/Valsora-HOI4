@@ -1,8 +1,9 @@
 # Rouental's three estates: a plan
 
-The author is considering (2026-10-22) replacing the three powers (Prince, Voix, Speaker; in game, bare bones, since
-2026-10-21: `docs/CONTENT.md`, Rouental) with a balance of **the three estates**. Nothing of it is built; this note
-keeps the author's words and what was proposed, for when it is.
+The author considered (2026-10-22) replacing the three powers (Prince, Voix, Speaker; in game, bare bones, from
+2026-10-21) with a balance of **the three estates**; on 2026-10-23: "Put the three estates in game, bare bones". They
+are in the mod since, in the three powers' place (what is built and what is not: `docs/CONTENT.md`, Rouental, The
+Three Estates). This note keeps the author's words and what was proposed.
 
 ## The idea, in the author's words
 

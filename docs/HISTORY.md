@@ -10,6 +10,13 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-23, later: **the three estates in game, bare bones** (the author: "Put the three estates in game, bare
+  bones"), in the three powers' place (`scripts/rouental_ui.py`; `docs/CONTENT.md`, Rouental): the politics screen's
+  button and the window, the symbols inside the triangle (`source/estates/`, `scripts/estate_symbols.py`), the shares
+  at 35 / 35 / 30, the seven zones (spirits, Royal Authority, the généralités' loyalty), Royal Authority, whom the Court
+  follows (a dynamic modifier; Serelle's won combats move it toward her), six decisions, the Promised Reforms (a
+  mission), the leanings, in the Lords' Realm how many would break away; a test decision for each zone. Not yet seen
+  in game.
 - 2026-10-23: the three estates' edge where the Third Estate is shut out is **Cloister and Castle** (the author: "I'll go with Cloister and Castle", of Altar and Arms, Bell and Banner and Cloister and Castle), in the mockup (`deco_ui/art/proposals/three_estates/`).
 - 2026-10-22, later still: the districts are **Généralités** in the game (the author: "Let's go with Généralité for the
   name of the districts"): the window, the decisions category, the state panel's line ("Généralité of X"), the loyalty
