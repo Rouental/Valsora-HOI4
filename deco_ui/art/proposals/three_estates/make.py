@@ -98,10 +98,9 @@ ZONES = {
                   pts=((0, 0, 100), (40, 0, 60), (0, 40, 60)), col=ESTATES["third"][2],
                   eff=[("Democratic support", "+0.05 a day", 0), ("Royal Authority", "−2 a month", -1), ("Stability", "−5 %", -1),
                        ("Mercantile estates' loyalty", "+10", 1)]),
-    # "Altar and Arms" (the author: "come up with something besides "altar and manor." Something that fits with the
-    # alliteration of the other equivalents of it"): the altar the clergy's, arms the lords' (their swords and their
-    # coats of arms); Claude's
-    "no_third": dict(name="Altar and Arms", where="The Third Estate under 15", ra=0,
+    # "Cloister and Castle", the author's (asked for "something besides "altar and manor." Something that fits with
+    # the alliteration of the other equivalents of it", then: "I'll go with Cloister and Castle")
+    "no_third": dict(name="Cloister and Castle", where="The Third Estate under 15", ra=0,
                      desc="Clergy and lords govern between them; the commons go unheard.",
                      leads="No path of its own: the commons' anger grows",
                      pts=((60, 40, 0), (40, 60, 0), (25, 60, 15), (60, 25, 15)),

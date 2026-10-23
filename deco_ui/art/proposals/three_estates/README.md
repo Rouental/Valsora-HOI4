@@ -18,7 +18,7 @@ mockup." The plan and the author's words in full: `docs/ROUENTAL_ESTATES.md`.
 
 **How it reads.** The three estates' shares make 100, so the balance is one point in the triangle. An estate of 60 or
 more takes Rouental down its path (the corners: the Voix Behind the Curtain, the Lords' Realm, the Commons
-Ascendant); one under 15 is shut out (the edges: Altar and Arms, Church and Commons, Manor and Market; Altar and Arms was Altar and Manor until the author asked for "something that fits with the alliteration of the other equivalents of it"); between them
+Ascendant); one under 15 is shut out (the edges: Cloister and Castle, Church and Commons, Manor and Market; Cloister and Castle the author's, Altar and Manor until they asked for "something that fits with the alliteration of the other equivalents of it"); between them
 is the Balance of Estates, where the Crown holds the scales. **Royal Authority** (0 to 100) is the Crown's own: it
 grows a point a month while the balance holds, stays while an estate is shut out and falls two while one dominates, so
 the Prince's path is keeping the estates in balance on purpose (Divide and Rule spends it to pull the strongest back).
