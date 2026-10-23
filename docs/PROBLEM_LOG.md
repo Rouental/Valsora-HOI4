@@ -6,6 +6,14 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**Tige not cut along its river** (2026-10-23, the author's screenshot: "For whatever reason it looks like Tige isn't cut
+along the river").
+- Cause: the river crossed the corner of one of Tige's provinces, leaving 19 px of it on the far bank; `river_borders.py`
+  gives a sliver across the river only beside a Gazetteer river, and its cuts want both parts big enough, so this one
+  stayed (its list of stretches left after 2026-10-20 counted Rouental at 97 %).
+- Fix: `pdn_tools.py river_split 842,845` (new): the part across the river a province of its own, Tige's others
+  untouched (the author: "just cut off the eastern section into its own province so Tige has three").
+
 **The généralité's loyalty modifier too big for the state panel** (2026-10-23, the author's screenshot: "State modifiers
 also don't quite fit right").
 - Cause: `ROU_governorate_loyalty` took a national spirit's 64 px picture (`GFX_idea_generic_manpower_bonus`); the

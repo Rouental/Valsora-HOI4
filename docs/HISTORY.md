@@ -10,6 +10,10 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-23, later still (the author's screenshot: "For whatever reason it looks like Tige isn't cut along the
+  river"): Tige's 19 px east of the river a province of its own (`pdn_tools.py river_split`, new), so Tige has three
+  (196, 117 and 19 px) and the river runs on a border; the author: "don't leave Tige with a massive western province
+  and tiny eastern one". The map sent as `HOI4 Mod Map 10-23.pdn`; 21,151 provinces, 62,367 borders.
 - 2026-10-23, later still (the author's screenshot of the Terres Séparées' card and notes): the généralités' peoples
   in two lines; Rougeamera Brillagnaise, Beaufort and the Royal Fiefs Riverlander (no people "Crown"); Couronneterre
   selected lights the crownlands too; the crownlands at the start Concorde et Volonté in, Jourdain et Moterre out

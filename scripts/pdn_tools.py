@@ -52,6 +52,11 @@
         moves to Necessary Provinces, as the line between the two provinces). For the author's groups on the grouping
         map (2026-10-21, province_picker.py: two one-province states made one province, or one state of two). The
         state names, nations.py's lists and the Gazetteer's facts are the caller's to follow (docs/MAP_PIPELINE.md).
+    python3 scripts/pdn_tools.py river_split X,Y [X,Y ...]
+        The piece of a province around each pixel that a river (the last build's map/rivers.bmp) cuts off from the rest
+        of it becomes a province of its own, in the same state (Provinces layer; at least MIN_PROVINCE px). For a
+        province a river runs through (2026-10-23, the author: Tige "isn't cut along the river ... just cut off the
+        eastern section into its own province so Tige has three").
     python3 scripts/pdn_tools.py recut [--keep-states] X,Y [X,Y ...]
         Cut placeholder land again the way apply_outlines.py cuts an outlined patch: the
         piece of a country's land around each pixel (what the Necessary lines enclose, or
@@ -620,6 +625,39 @@ def join(names, L, pairs):
         print(f"join: the state at ({gx}, {gy}), {int(gone.sum())} px, into the one at ({kx}, {ky}), "
               f"{'one province' if one else 'two provinces'}; {int(line.sum())} line px "
               f"{'cleared' if one else 'moved to Necessary Provinces'}")
+
+
+def river_split(names, L, seeds):
+    """the piece of the province at each (x, y) that the build's river cuts off becomes a province of its own"""
+    from PIL import Image
+    rivers = Path("build/valsora_test/map/rivers.bmp")
+    if not rivers.exists():
+        sys.exit("river_split: build the mod first (it reads build/valsora_test/map/rivers.bmp)")
+    river = np.array(Image.open(rivers)) < 250                 # 255 land, 254 water: the rest is river
+    P = code(L["Provinces"][..., :3])
+    used = set(np.unique(P).tolist())
+    for x, y in seeds:
+        if river[y, x]:
+            sys.exit(f"river_split: ({x}, {y}) is on the river; give a pixel beside it")
+        pc = int(P[y, x])
+        cut = np.s_[max(y - 80, 0):min(y + 81, H), max(x - 80, 0):min(x + 81, W)]   # the province around the pixel
+        oy, ox = cut[0].start, cut[1].start
+        whole, _ = ndi.label(P[cut] == pc, CROSS)
+        whole = whole == whole[y - oy, x - ox]
+        pieces, n = ndi.label(whole & ~river[cut], CROSS)
+        if n < 2:
+            sys.exit(f"river_split: no river cuts the province at ({x}, {y})")
+        piece = pieces == pieces[y - oy, x - ox]
+        size = int(piece.sum())
+        if size < MIN_PROVINCE:
+            sys.exit(f"river_split: the piece at ({x}, {y}) is {size} px, under HOI4's {MIN_PROVINCE}")
+        if size * 2 > int(whole.sum()):
+            sys.exit(f"river_split: the piece at ({x}, {y}) is the larger part of its province; give the smaller")
+        nc = palette(1, False, x * 7919 + y, used)[0]
+        used.add(nc)
+        put(L["Provinces"][cut], np.full(piece.shape, nc, np.int64), piece)
+        print(f"river_split: {size} px at ({x}, {y}) a province of their own, across the river from the rest "
+              f"({int(whole.sum()) - size} px)")
 
 
 def recut(names, L, seeds, keep_states=False):
@@ -1361,6 +1399,8 @@ def main():
             k, g = a.split("=" if one else "+")
             pairs.append((tuple(int(v) for v in k.split(",")), tuple(int(v) for v in g.split(",")), one))
         join(names, L, pairs)
+    elif cmd == "river_split":
+        river_split(names, L, [tuple(int(v) for v in a.split(",")) for a in sys.argv[2:]])
     elif cmd == "recut":
         keep = "--keep-states" in sys.argv
         recut(names, L, [tuple(int(v) for v in a.split(",")) for a in sys.argv[2:] if a != "--keep-states"], keep)
