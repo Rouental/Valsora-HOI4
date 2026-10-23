@@ -10,6 +10,11 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-23, later still: Pershing, Arovannea's smallest drawn state, a province too: grown by 5 px from New Texaria
+  to 16 (the author: "For provinces too small, just add the minimum number of pixels necessary to make it work from
+  the surrounding states, while trying to keep the general shape of the state intact"); a small piece joins its own
+  province when that takes fewer pixels (Citra's last pixel, by one). Arovannea's states put on again from the map 10-23
+  (map 10-23-3). 21,323 provinces, 3,359 states, 62,883 province borders (2,653 free).
 - 2026-10-23, later still: the Gazetteer's export of that day imported, Arovannea's with it (the author: "Arovannea is
   okay to change now"): its 86 drawn states on the map (map 10-23-2; Pershing, 13 px of land, too small for a
   province), its party leaders and sub-ideologies, its flags (two pictures, the monarchist one fitted by hand) and seven

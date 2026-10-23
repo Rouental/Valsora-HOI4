@@ -25,8 +25,13 @@ day, before it went in).
 - Cause: `apply_suggestions.py` cuts the provinces a drawn line crosses and gives pieces under 16 px to a neighbour;
   three small states drawn across provinces (Citra 29 px, Tresean Cliffs 23 after the states drawn before it, Pershing
   13) were all pieces, so they came out empty, and the naming put an empty state's name at (0, 0).
-- Fix: a state whose land is all such pieces keeps them, each 16 px or more one province (Citra 19 px, Tresean Cliffs
-  17); an empty state's name isn't kept (Pershing, 13 px of land, under a province's 16: part of its neighbour).
+- Fix: a state whose land is all such pieces keeps them, each 16 px or more one province (Tresean Cliffs 17); an empty
+  state's name isn't written. Then (the author, 2026-10-23: "For provinces too small, just add the minimum number of
+  pixels necessary to make it work from the surrounding states, while trying to keep the general shape of the state
+  intact"): a piece under 16 px joins its state's province if that takes fewer pixels (Citra's last pixel, by one:
+  21 px), else grows to 16 px from the states round it, one pixel at a time, its own drawing's land first, then the
+  pixels touching it most (Pershing, 11 px on the layers, by 5); never from its own state, never from a province that
+  would fall under 16 px or come apart (`Map.join`, `Map.grow`, `Map.spare`).
 
 **Tige not cut along its river** (2026-10-23, the author's screenshot: "For whatever reason it looks like Tige isn't cut
 along the river").

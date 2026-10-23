@@ -14,7 +14,7 @@
 | AGL | Anglost | the Kingdom of Anglost | Democratic | Constitutional Monarchy | English | Russell Collin | 58 |  |
 | ARC | Arcadia | the Republic of Arcadia | Democratic | Conservatism | Greek | Spyridion Papagos | 17 | puppet of Terreich und Preußen |
 | ARK | Arklen | the Arklen Free State | Democratic | Conservatism | Dutch | Sijmen Steen | 1 |  |
-| AVN | Arovannea | the Confederative Republics of Arovannea | Democratic | Conservatism | German | Estúr Illger fön Reegen | 86 |  |
+| AVN | Arovannea | the Confederative Republics of Arovannea | Democratic | Conservatism | German | Estúr Illger fön Reegen | 87 |  |
 | ARP | Arpino | the United Empire of Arpino | Monarchist | Enlightened Absolutism | Indian | Narenda Hooda | 109 |  |
 | ESC | Artzen | the Wyrhterrepublik of Artzen | Communist | Orthodox Marxism | German | Johann Will | 5 | in The Synthesist Internationale |
 | ARV | Arvorenia | the United Kingdom of Éden, Santo Domingo, and Arovia | Democratic | Constitutional Monarchy | Portuguese | Daniel Maurício | 56 |  |

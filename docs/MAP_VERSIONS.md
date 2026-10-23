@@ -11,6 +11,7 @@ fingerprint below). Run `python3 scripts/pdn_check.py` on the copy before sendin
 
 | sent as | fingerprint (sha256, first 12) | made | what changed |
 |---|---|---|---|
+| HOI4 Mod Map 10-23-3.pdn | 966f7ed41ea2 | 2026-10-23, later still | Arovannea's 87 states, Pershing too (grown by 5 px from New Texaria to a province's 16: the author, "just add the minimum number of pixels necessary"), Citra one province of 21 px (`apply_suggestions.py --only=AVN` again, from 10-23) |
 | HOI4 Mod Map 10-23-2.pdn | 4f313e3f0f74 | 2026-10-23, later | Arovannea's 86 states drawn and named on its page (`apply_suggestions.py --only=AVN`; 87 drawn, Pershing too small for a province), their lines on Necessary States and their names in `state_names.json` |
 | HOI4 Mod Map 10-23.pdn | f7c8e3009c46 | 2026-10-23 | Tige's 19 px across the river a province of its own (the author: "just cut off the eastern section into its own province so Tige has three"; `pdn_tools.py river_split 842,845`), its other two as they were |
 | HOI4 Mod Map 10-22.pdn | 111e152bc2df | 2026-10-22 | Zwintern's four states from its Gazetteer page (`apply_suggestions.py --only=ZWT`: Tolles Zwintern, Winterschlaf, Bärisch, Hügelsanfte), their lines drawn on Necessary States and their names in `state_names.json` |

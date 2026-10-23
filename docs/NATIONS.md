@@ -861,10 +861,12 @@ Mahaut VI and their copies at HMMLA and Brillagne, and Tara Blanchart; the Gazet
 The author: "Update from the Gazeteer", then "Arovannea is okay to change now, by the way" (held on 2026-10-22: "still a
 WIP"). Imported whole (`work/gz_import_1023/`). In it:
 - **Arovannea** (AVN), its first facts:
-  - **its 86 states**, drawn and named on its page, put on the map (`apply_suggestions.py --only=AVN`, as Ungar's,
-    Ostaria's and Zwintern's; the map 10-23-2); its map tools open with them. 87 drawn: Pershing holds 13 px of land,
-    under a province's 16, and stays part of its neighbour; Citra and Tresean Cliffs, drawn across provinces, are one
-    province each (19 and 17 px). Nine are noted "impassable" on the page (Ambanese Alps, Monarchian Desert, Othonian
+  - **its 87 states**, drawn and named on its page, put on the map (`apply_suggestions.py --only=AVN`, as Ungar's,
+    Ostaria's and Zwintern's; the map 10-23-3); its map tools open with them. All 87: Pershing, drawn round 11 px of
+    land, grown by 5 px from New Texaria to a province's 16 (the author: "For provinces too small, just add the minimum
+    number of pixels necessary to make it work from the surrounding states, while trying to keep the general shape of
+    the state intact"; 10-23-2 had left it out); Citra and Tresean Cliffs, drawn across provinces, one province each (21
+    and 17 px). Nine are noted "impassable" on the page (Ambanese Alps, Monarchian Desert, Othonian
     Mountains, Taz er Rhabil, Gaian Interior, Arovian Mountains, Tresean Cliffs, San Segonian Interior, Yucanoan
     Badlands): passable in the mod until they are marked impassable on the page (the State tab's Movement, open now).
   - **politics and people**: its parties' sub-ideologies (Marxism, Military Junta, Semi-Constitutional Monarchy, Holy

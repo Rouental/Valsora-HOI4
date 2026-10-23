@@ -76,6 +76,7 @@ class Map:
         self.fresh_s = iter(T.palette(400, False, 20261018, set(np.unique(self.S).tolist())))
         self.fresh_p = iter(T.palette(4000, False, 20261019, set(np.unique(self.P).tolist())))
         self.names = {}  # state colour -> name
+        self.shapes = {}  # state colour -> the nation's land its drawing holds (drawn states)
         self.touched = np.zeros((H, W), bool)
 
     def nation(self, tag):
@@ -125,21 +126,37 @@ class Map:
                     self.P[py, px] = -2  # to place
                     scraps.append((sc, py, px))
         # a state whose land is all scraps (a small one drawn across provinces: Arovannea's Citra and Tresean Cliffs,
-        # 2026-10-23) keeps it: each piece of MIN_PROVINCE px or more one province
+        # 2026-10-23) keeps it: each piece one province, one under MIN_PROVINCE px grown to it from the states round it
+        # (the author, 2026-10-23: "just add the minimum number of pixels necessary to make it work from the surrounding
+        # states, while trying to keep the general shape of the state intact")
         whole = defaultdict(list)
         for sc, py, px in scraps:
             whole[sc].append((py, px))
         for sc, parts in whole.items():
             py, px = np.concatenate([p for p, _ in parts]), np.concatenate([q for _, q in parts])
-            if len(py) < MIN_PROVINCE or len(py) != int(((self.S == sc) & self.land).sum()):
+            if len(py) != int(((self.S == sc) & self.land).sum()):
                 continue
             m = np.zeros((H, W), bool)
             m[py, px] = True
             comp = sklabel(m, connectivity=1)
-            for q in range(1, comp.max() + 1):
-                cy, cx = np.nonzero(comp == q)
+            made = np.zeros((H, W), bool)   # its land in provinces so far
+            for q in sorted(range(1, comp.max() + 1), key=lambda q: -int((comp == q).sum())):
+                piece = comp == q
+                n = int(piece.sum())
+                if n < MIN_PROVINCE and made.any():   # joined to its own province, if that takes fewer pixels
+                    path = self.join(piece, sc, made, MIN_PROVINCE - n)
+                    if path is not None:
+                        y, x, to = path
+                        self.P[piece] = to
+                        made |= piece
+                        made[y, x] = True
+                        continue
+                if n < MIN_PROVINCE:
+                    piece = self.grow(piece, sc)
+                cy, cx = np.nonzero(piece)
                 if len(cy) >= MIN_PROVINCE:
                     self.P[cy, cx] = next(self.fresh_p)
+                    made |= piece
         scraps = [(sc, py[k], px[k]) for sc, py, px in scraps for k in [self.P[py, px] == -2] if k.any()]
         for _ in range(20):
             left = []
@@ -165,6 +182,103 @@ class Map:
                     self.P[py, px] = next(self.fresh_p)
                 break
             scraps = left
+
+    def grow(self, piece, sc):
+        """the piece (a small drawn state's land) grown to MIN_PROVINCE px with as few pixels as it takes, one at a time
+        from the land round it in the same country: first the state's own drawing (land a state drawn before it took),
+        then the pixels touching it most, then the nearest its middle; never one that would leave its province under
+        MIN_PROVINCE px or in two pieces. Returns the grown piece (as it was when nothing can be taken)"""
+        piece = piece.copy()
+        ys, xs = np.nonzero(piece)
+        kc, rc = int(self.K[ys[0], xs[0]]), int(self.R[ys[0], xs[0]])
+        shape = self.shapes.get(sc, np.zeros((H, W), bool))
+        took = []
+        while piece.sum() < MIN_PROVINCE:
+            ys, xs = np.nonzero(piece)
+            y0, y1, x0, x1 = max(ys.min() - 2, 0), min(ys.max() + 3, H), max(xs.min() - 2, 0), min(xs.max() + 3, W)
+            sl = np.s_[y0:y1, x0:x1]
+            pc = piece[sl]
+            ring = (ndi.binary_dilation(pc, CROSS) & ~pc & self.land[sl] & (self.K[sl] == kc) & (self.P[sl] >= 0)
+                    & (self.S[sl] != sc))
+            nb = ndi.convolve(pc.astype(int), CROSS, mode="constant") - pc
+            cy, cx = ys.mean() - y0, xs.mean() - x0
+            cands = sorted(zip(*np.nonzero(ring)), key=lambda p: (not shape[sl][p], -nb[p], (p[0] - cy) ** 2 + (p[1] - cx) ** 2, p))
+            for ly, lx in cands:
+                y, x = ly + y0, lx + x0
+                if not self.spare(y, x):
+                    continue
+                piece[y, x] = True
+                self.P[y, x] = -2
+                self.S[y, x], self.R[y, x] = sc, rc
+                self.touched[y, x] = True
+                took.append((x, y))
+                break
+            else:
+                break
+        if took:
+            print(f"  {self.names.get(sc, sc)}: grown by {len(took)} px from the states round it, to {int(piece.sum())}")
+        return piece
+
+    def spare(self, y, x):
+        """whether the pixel's province can give it up: MIN_PROVINCE px left, in one piece"""
+        q = self.P[y, x]
+        qy, qx = np.nonzero(self.P == q)
+        if len(qy) - 1 < MIN_PROVINCE:
+            return False
+        qs = np.s_[qy.min():qy.max() + 1, qx.min():qx.max() + 1]
+        rest = (self.P[qs] == q) & self.land[qs]
+        rest[y - qy.min(), x - qx.min()] = False
+        return sklabel(rest, connectivity=1).max() == 1
+
+    def join(self, piece, sc, made, budget):
+        """the fewest pixels (fewer than budget) of the land round the piece, in its country and not its state's, that
+        join it to the state's provinces (made): taken into the state, the piece and they become part of the province
+        they reach; (ys, xs, its colour), or None"""
+        ys, xs = np.nonzero(piece)
+        kc, rc = int(self.K[ys[0], xs[0]]), int(self.R[ys[0], xs[0]])
+        r = budget + 1
+        y0, y1, x0, x1 = max(ys.min() - r, 0), min(ys.max() + r + 1, H), max(xs.min() - r, 0), min(xs.max() + r + 1, W)
+        sl = np.s_[y0:y1, x0:x1]
+        goal = made[sl]
+        step = self.land[sl] & (self.K[sl] == kc) & (self.P[sl] >= 0) & (self.S[sl] != sc)
+        prev = {(int(a), int(b)): None for a, b in zip(ys - y0, xs - x0)}
+        front, hit = list(prev), None
+        for d in range(budget):
+            nxt = []
+            for a, b in front:
+                for a2, b2 in ((a - 1, b), (a + 1, b), (a, b - 1), (a, b + 1)):
+                    if not (0 <= a2 < y1 - y0 and 0 <= b2 < x1 - x0) or (a2, b2) in prev:
+                        continue
+                    if goal[a2, b2]:
+                        hit = (a, b, a2, b2)
+                        break
+                    if step[a2, b2]:
+                        prev[(a2, b2)] = (a, b)
+                        nxt.append((a2, b2))
+                if hit:
+                    break
+            if hit or not nxt:
+                break
+            front = nxt
+        if hit is None:  # the piece may touch its province already (corner to corner it doesn't)
+            return None
+        path, node = [], (hit[0], hit[1])
+        while prev[node] is not None:
+            path.append(node)
+            node = prev[node]
+        if len(path) >= budget:
+            return None
+        for a, b in path:
+            if not self.spare(a + y0, b + x0):
+                return None
+        to = int(self.P[hit[2] + y0, hit[3] + x0])
+        py = np.array([a + y0 for a, _ in path], int)
+        px = np.array([b + x0 for _, b in path], int)
+        self.P[py, px] = to
+        self.S[py, px], self.R[py, px] = sc, rc
+        self.touched[py, px] = True
+        print(f"  {self.names.get(sc, sc)}: a piece of {int(piece.sum())} px joined to its province by {len(path)} px")
+        return py, px, to
 
     def recut(self, colour, size):
         """the state's provinces cut again at about `size` px, each island one at least"""
@@ -283,13 +397,15 @@ def drawn(M, tag, sugs):
     taken = np.zeros((H, W), bool)
     made = []
     for sug in (s for s in sugs if s["type"] == "state"):  # in the order drawn (the import keeps it)
-        m = mine & M.polygon(sug["pts"]) & ~taken
+        drawing = mine & M.polygon(sug["pts"])
+        m = drawing & ~taken
         if not m.any():
             continue
         taken |= m
         colour = next(M.fresh_s)
         made.append((colour, m))
         M.names[colour] = sug["label"]
+        M.shapes[colour] = drawing
     # the land no drawing holds joins the drawn state it shares most border with
     left = mine & ~taken
     comp = sklabel(left, connectivity=1)
