@@ -1540,7 +1540,10 @@ def governorates(write):
     L("ROU_raise_blue_guard_desc", "An emergency measure: Grand Brume's ceremonial corps, two divisions of leg infantry "
       "elite in their drill and poor in their arms, called out. It costs little, but Graisivaudan's loyalty falls by 20, "
       "and every other généralité's by 5: the vassals are angered.")
-    dyn = "\n".join(["ROU_governorate_loyalty = {", "\ticon = GFX_idea_generic_manpower_bonus",
+    # a state modifier's icon is 32 px (the game's gfx/interface/state_modifiers/; its grid's slots 33): a national
+    # spirit's, 64 px, ran over the province band below it (in game, 2026-10-23: "State modifiers also don't quite fit
+    # right"). The game's crown (its Norwegian monarchism modifier): loyalty to the Crown
+    dyn = "\n".join(["ROU_governorate_loyalty = {", "\ticon = GFX_modifiers_NOR_monarchism",
                      "\tenable = { is_owned_by = ROU }", "\tlocal_manpower = rou_mp_mod", "}", ""])
     write("common/dynamic_modifiers/valsora_rouental.txt", dyn)
     L("ROU_governorate_loyalty", "The Généralité's Loyalty")

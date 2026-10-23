@@ -6,6 +6,14 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**The généralité's loyalty modifier too big for the state panel** (2026-10-23, the author's screenshot: "State modifiers
+also don't quite fit right").
+- Cause: `ROU_governorate_loyalty` took a national spirit's 64 px picture (`GFX_idea_generic_manpower_bonus`); the
+  state panel's modifiers row is for the game's 32 px state modifier icons (slots of 33), so it ran over the province
+  band below.
+- Fix: the game's own 32 px crown, `GFX_modifiers_NOR_monarchism` (loyalty to the Crown). A state's dynamic modifier
+  takes a `GFX_modifiers_*` picture; a country's (the Court's) a spirit's.
+
 **The Généralités category gone after Survey the Realm's Levies** (2026-10-23, the author: "When the survey all levies
 decision is taken, the box to open the map dissapears").
 - Cause: the survey waited 180 days by `days_re_enable`, and a decision waiting to be taken again leaves the list;
