@@ -6,6 +6,21 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**The Généralités category gone after Survey the Realm's Levies** (2026-10-23, the author: "When the survey all levies
+decision is taken, the box to open the map dissapears").
+- Cause: the survey waited 180 days by `days_re_enable`, and a decision waiting to be taken again leaves the list;
+  with the Blue Guard raised (once only) the category had nothing to show, so the game hid it and its map button.
+- Fix: the survey waits by a flag (`rou_survey_cd`, 180 days) in its `available`, with a tooltip, so it stays listed
+  and the category with it.
+
+**The estates' leanings cut short** (2026-10-23, the author's screenshot: "Mercantile estates lean to the Third
+Est..."): the line's box was 300 px, the game's Deco font wider than the preview's measure. Fix: 336 px, the
+loyalty beside it in 70.
+
+**The diplomacy tab's spirits over their band** (2026-10-23, the author: "spirits don't fit in the bar"): the game
+sets the spirits' row level with the band's title, and the Deco UI's band draws its well under the title's tab, so a
+64 px spirit stood 3 px over the well's top. Fix: the row 8 px lower (Deco UI v0.12.4, `layout_panels.DIPLO`).
+
 **The import crashed in `rekey`** (2026-10-22, the Gazetteer's export of that day).
 - Cause: `source/gazetteer/rekey/ROU.npz` (Rouental's page facts moved from its old states to its fiefs) still listed
   12 provinces the author's groups merged away on 2026-10-21; their masks were empty and `most_common(1)[0]` failed.

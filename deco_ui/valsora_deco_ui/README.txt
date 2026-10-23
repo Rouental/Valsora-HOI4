@@ -1,4 +1,4 @@
-VALSORA DECO UI - v0.12.3 (for HOI4 1.19)
+VALSORA DECO UI - v0.12.4 (for HOI4 1.19)
 =========================================
 
 An art deco interface for the Valsora total conversion: core skin and fonts,
@@ -29,6 +29,16 @@ Valsora repository's scripts/common.py and rebuild (sh scripts/run_all.sh).
 
 The layout is built for 1920 px of UI width: 1920x1080 at 100% UI scale, or
 2560x1440 at up to 133%.
+
+
+NEW IN v0.12.4
+--------------
+  - The diplomacy tab: national spirits inside their band, no longer
+    over its top line.
+
+Things to check in game (v0.12.4):
+  - another country's diplomacy tab with one spirit, and with seven or
+    more (the small icons, two rows): all inside the band.
 
 
 NEW IN v0.12.3

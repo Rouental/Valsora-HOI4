@@ -44,7 +44,9 @@ layer names are ignored.
   the layer and their Gazetteer page are `nations.CITIES` (pixel → name, 2026-10-21: Jourdain and Moterre); a page
   city of the same name and owner moves to that spot with its victory points. In
   `build_mod.py` the first city of a state becomes its victory point (worth `CITY_VP` =
-  5, or 10 as the capital), and further ones are extra victory points. Capitals are
+  5, or 10 as the capital), and further ones are extra victory points; a state without a dot gets one worth 1,
+  "<state> City", in its largest province (the impassable ones none). The game itself needs none: 124 of its
+  1,081 states have no victory point (the author asked, 2026-10-23). Capitals are
   set by `nations.CAPITALS` (the dot's pixel); any other country's capital is the
   sizeable state nearest the centre of its land, chosen again on the continent holding
   most of it if it falls on one holding under a third (2026-10-10: Estande's had drifted

@@ -750,9 +750,10 @@ def three_estates(write):
     for i, (att, key, to) in enumerate(LEANINGS):
         y = LY + 20 + i * 34
         kids += [icon(f"rou_es_lean_{key}_swatch", lean_sw[key], RX + 2, y + 3),
-                 text(f"rou_es_lean_{key}", RX + 22, y + 1, 300, 20, L(f"ROU_ES_LEAN_{key.upper()}", f"{att} estates lean to {to}"),
+                 # 336 px: "Mercantile estates lean to the Third Estate" was cut at 300 (in game, 2026-10-23)
+                 text(f"rou_es_lean_{key}", RX + 22, y + 1, 336, 20, L(f"ROU_ES_LEAN_{key.upper()}", f"{att} estates lean to {to}"),
                       "body"),
-                 text(f"rou_es_lean_{key}_v", RX + RW - 140, y + 2, 140, 18,
+                 text(f"rou_es_lean_{key}_v", RX + RW - 70, y + 2, 70, 18,
                       L(f"ROU_ES_LEAN_{key.upper()}_V", f"loyalty [?rou_lean_{key}|+0]"), "small", fmt="right")]
     kids += [text("rou_es_break_label", RX, LY, RW, 14,
                   L("ROU_ES_BREAK_LABEL", f"What would break away (loyalty under {BREAK_BELOW})"), "label"),
@@ -1519,12 +1520,18 @@ def governorates(write):
         "\t\t\tROU_gov_update = yes", "\t\t}", "\t\tai_will_do = { base = 0 }", "\t}",
         # a survey of every governorate's levies: repeatable, so the category (and its map) never empties
         "\tROU_survey_levies = {", "\t\ticon = GFX_decision_generic_civil_support", "\t\tcost = 75",
-        "\t\tfire_only_once = no", "\t\tdays_re_enable = 180", "\t\tcomplete_effect = {",
+        # waiting by a flag, not days_re_enable: a decision waiting to be taken again leaves the list, and with the
+        # Blue Guard raised the category emptied and its map button went with it (in game, 2026-10-23: "When the
+        # survey all levies decision is taken, the box to open the map dissapears")
+        "\t\tfire_only_once = no",
+        "\t\tavailable = { custom_trigger_tooltip = { tooltip = ROU_survey_levies_wait NOT = { has_country_flag = rou_survey_cd } } }",
+        "\t\tcomplete_effect = {", "\t\t\tset_country_flag = { flag = rou_survey_cd days = 180 }",
         *[f"\t\t\t{s_} = {{ set_state_flag = rou_inspected }}" for s_ in sorted(gov_of)],
         *[f"\t\t\tif = {{ limit = {{ check_variable = {{ rou_gov_{g['n']}_att = {att_names.index('Proud') + 1} }} }} "
           f"add_to_variable = {{ rou_gov_{g['n']}_favour = -5 }} }}" for g in govs],
         "\t\t\tROU_gov_update = yes", "\t\t}", "\t\tai_will_do = { base = 0 }", "\t}", "}", ""]))
     L("ROU_survey_levies", "Survey the Realm's Levies")
+    L("ROU_survey_levies_wait", "The inspectors went out less than 180 days ago")
     L("ROU_survey_levies_desc", "Inspectors through every généralité at once: every state's levies become known. Proud "
       "estates resent it (loyalty -5).")
     L("ROU_governorates", "The Généralités")  # the author, 2026-10-22: "Let's go with Généralité for the name of the districts"

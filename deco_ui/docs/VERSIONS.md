@@ -174,6 +174,12 @@ it before touching the UI. In short:
     equipment's plate, the factory slots, the resource wells) and turned the game's scratches into gilt specks along
     the trade rows (`make_panel_pictures.DRAWN`).
 
+- **v0.12.4** (2026-10-23, not yet seen in game; from the author's screenshot of the diplomacy tab, Kalaistan): **the
+  national spirits inside their band** ("I noticed that spirits don't fit in the bar"): the game puts their row level
+  with the band's title, so a spirit's 64 px icon stood 3 px over the top of the well `diplomacy_art.spirits_band`
+  draws under the title's tab; `national_spirit_container` 8 px lower (`layout_panels.DIPLO`) sits them 5 px inside
+  its top and bottom, the over-defined grid's two rows of small icons too.
+
 - **v0.12.3** (2026-10-21, later still, not yet seen in game; the author saw v0.12.2: "The governorate line on the
   states worked just fine!", "Army HQ cards seem to work"; and sent screenshots of the commander pickers, the load
   window and the declare war window):

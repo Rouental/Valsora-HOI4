@@ -14,9 +14,12 @@ Treat assumed items as hypotheses.
 
 ---------------------------------------------------------------------------------------------------
 
-## 1. Status (v0.12.3)
+## 1. Status (v0.12.4)
 
-**v0.12.3 (2026-10-21, later still)** is the current version (`docs/VERSIONS.md`), from the author's screenshots of
+**v0.12.4 (2026-10-23)** is the current version (`docs/VERSIONS.md`): the diplomacy tab's national spirits 8 px
+lower, inside the band (`layout_panels.DIPLO`: the game sets their row level with the title). Not yet seen in game.
+
+**v0.12.3 (2026-10-21, later still)** came before it (`docs/VERSIONS.md`), from the author's screenshots of
 v0.12.2: the commander pickers' foot buttons whole (the game's `unitleaderwindow.gui` put them where the Deco UI's
 34 px buttons ran 2-3 px past the window's clipped foot) and the load and save windows' Back and Load apart (the game's
 own `ingamemenu.gui` overlaps them by 3 px), both by `make_buttons.py` (new); the declare war window's emblem the land
@@ -1087,6 +1090,7 @@ GP.write_gui(MOD + "interface/x.gui", t)    # braces checked, engine_safe applie
 
 ## 10. Open items and things to check in game
 
+- **v0.12.4**: another country's diplomacy tab, with one spirit and with seven or more: inside the band.
 - **v0.12.3**: the commander picker of an army and of a fleet (the foot buttons whole); the load and save windows
   (Back and Load / Save apart); the declare war window's swords.
 - **v0.12.1**: the insignia picker with the sliders (the 14 Deco masks and the numbered shields take the colour,

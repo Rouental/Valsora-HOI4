@@ -10,6 +10,10 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-23, later still (the author's screenshots of the three estates' build): the diplomacy tab's spirits inside
+  their band (Deco UI v0.12.4), the estates' leanings whole, the Généralités category kept after Survey the Realm's
+  Levies (it waits by a flag now). The author asked whether a state needs a victory point: the game's doesn't (124
+  of its 1,081 have none); the build gives every passable state one (`docs/MAP_PIPELINE.md`, Cities).
 - 2026-10-23, later: **the three estates in game, bare bones** (the author: "Put the three estates in game, bare
   bones"), in the three powers' place (`scripts/rouental_ui.py`; `docs/CONTENT.md`, Rouental): the politics screen's
   button and the window, the symbols inside the triangle (`source/estates/`, `scripts/estate_symbols.py`), the shares

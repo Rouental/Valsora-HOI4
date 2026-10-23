@@ -89,7 +89,12 @@ DIPLO = {"country_info>diplo_flag_frame": dict(position=(15 - 8, -4 - 1)),
          # the diplomacy tab"): the game draws it at 0.9, 90 x 79 for a focus's 100 x 88 picture (85 x 68 for the
          # unknown focus's laurel), over an octagon 63 px across its flats (diplomacy_art.TOP["focus"], r 34); at
          # DIPLO_FOCUS_SCALE a focus is 56 x 49, inside the octagon's inner line (55 across)
-         "country_info/active_national_focus_info>goal_icon": dict(scale=str(0.56))}
+         "country_info/active_national_focus_info>goal_icon": dict(scale=str(0.56)),
+         # the spirits inside their band (2026-10-23, the author: "spirits don't fit in the bar"): the game puts their
+         # row level with the title, so its 64 px icons stood 3 px over the top of the band's well (diplomacy_art's
+         # spirits_band, 16-91 of 92 in the picture at y -14: the info's 2-77); 8 px lower they sit in it, 5 px clear of
+         # its top and bottom (the over-defined grid's two 34 px rows too)
+         "country_info>national_spirit_info>national_spirit_container": dict(position=(-380, -5 + 8))}
 DIPLO_FOCUS_SCALE = 0.56
 
 # the decisions tab's events box and rows (v0.11, decisions_art.py): the game wrote their texts in its typewriter faces,
