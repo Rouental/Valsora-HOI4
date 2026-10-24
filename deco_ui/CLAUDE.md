@@ -402,7 +402,8 @@ tools/
 source_fonts/               TTFs + OFL licences (Josefin Sans, Federo, Limelight, Bodoni Moda)
 art/                        menu_world.jpg (main menu map), map_rouental.jpg + flag_ROU.png (preview backdrops),
                             mockups/*.jpg (renders) and mockups/source/ (the boards' HTML + assets)
-docs/                       plans for the next screens; SCREEN_INVENTORY.md (2026-10-17): every game screen by how far
+docs/                       plans for the next screens; OVERNIGHT_PREP.md (2026-10-24): the brief for a session working on the UI
+                            alone overnight; SCREEN_INVENTORY.md (2026-10-17): every game screen by how far
                             the Deco UI changes it, and what to restyle next (thumbnails: build/screen_inventory.png)
 reference/                  vanilla/ and valsora/ inputs (not shipped, not committed)
 build/                      intermediates and previews (safe to delete)

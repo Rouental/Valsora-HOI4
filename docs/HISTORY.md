@@ -10,6 +10,8 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-24: a brief for an instance working on the UI overnight (the author: "I'm gonna set another instance to working
+  on the UI overnight to see what it can do, could you give me a prep file?"): `deco_ui/docs/OVERNIGHT_PREP.md`.
 - 2026-10-23, later still: Pershing, Arovannea's smallest drawn state, a province too: grown by 5 px from New Texaria
   to 16 (the author: "For provinces too small, just add the minimum number of pixels necessary to make it work from
   the surrounding states, while trying to keep the general shape of the state intact"); a small piece joins its own
