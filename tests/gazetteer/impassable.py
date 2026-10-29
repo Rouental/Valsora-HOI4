@@ -212,6 +212,10 @@ caps = {}
 for f in Path("build/valsora_test/history/countries").glob("*.txt"):
     caps[f.name[:3]] = int(re.search(r"^capital = (\d+)", f.read_text(encoding="utf-8-sig"), re.M).group(1)) - 1
 G, notes = gazetteer.load(), []
+if sys.argv[1:] == ["--without"]:   # the facts without the field (2026-10-29: Arovannea's page marks ten states)
+    for f in G.values():
+        for v in (f.get("states") or {}).values():
+            v.pop("impassable", None)
 gfacts = gazetteer.state_facts(G, p["prov"], reg["state_of"], rj["owners"], notes, reg["anchor"], rj["states"], reg["size"])
 names = [f"State {s + 1}" for s in range(len(rj["owners"]))]
 is_cap = lambda s: caps.get(rj["owners"][s]) == s
@@ -271,8 +275,8 @@ def _built(res, tmp):
 
 
 def without_field():
-    """the facts in source/gazetteer/ (none sets it): the map's impassable states alone, every one linked"""
-    r = subprocess.run([sys.executable, "-c", BUILD_RULE], cwd=H.ROOT, capture_output=True, text=True)
+    """the facts in source/gazetteer/ without it: the map's impassable states alone, every one linked"""
+    r = subprocess.run([sys.executable, "-c", BUILD_RULE, "--without"], cwd=H.ROOT, capture_output=True, text=True)
     check(r.returncode == 0, f"the rule without the field failed: {r.stderr[-800:]}")
     if not r.returncode:
         o = json.loads(r.stdout)

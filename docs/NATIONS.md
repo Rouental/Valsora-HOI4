@@ -856,6 +856,45 @@ picture for Tara, use this one"), and the Speaker of the Estates General in the 
 women are `gender = female` now ("I noticed that Serelle currently seems to be considered male"): Serelle Cahun and
 Mahaut VI and their copies at HMMLA and Brillagne, and Tara Blanchart; the Gazetteer takes a gender for every character.
 
+## 2026-10-29: the Cultists' path, Meddacah, the Gazetteer's export of that day
+
+The author sent their map (10-21-3 with their own edits) and the export: "I don't know if there's been any changes on
+the Gazetteer, but there has been some on the map. Take note of the fact that the path through the impassible jungle in
+Cultist lands is supposed to be states. Their capital is deep in the jungle, only accesible through one path."
+- **The Cultists** (CUL): the path through the jungle two states (122 and 127 px) and the circle at its end a third (81
+  px), all three passable and cleared of the jungle's marks; the Cultists' capital is the circle (`nations.CAPITALS`,
+  (2727, 1353): Claude put it there from the author's words). The jungle round them one impassable state, one province
+  (4,113 px); a strip along its north (224 px) a state of its own, passable. 26 states (23 before); none named yet
+  (`dist/state_numbers_cultists.png`: the path 15 and 16, the circle 18, the jungle 19).
+- **Meddacah** (MDC): three states from the author's lines (`dist/state_numbers_meddacah.png`), unnamed.
+- **Rivers**: the author's new rivers through Lafari, Meddacah, New Paradise, the Utopian Republic and Sarza; the 27
+  states they cross cut again along them, none other.
+- **Arovannea** (AVN), from its page:
+  - **its map facts**: its 87 states' populations (128,170,000 in all) and buildings, ten of them impassable (marked on
+    the page: Othonian Mountains, Taz er Rhabil, Ambanese Alps, Monarchian Desert, Subar, Gaian Interior, Tresean
+    Cliffs, Arovian Mountains, Yucanoan Badlands, San Segonian Interior); 38 cities, Meidallan the capital (a
+    metropolis, 50); 78 rivers, 10 railways, 33 supply hubs, every province's terrain, 98 impassable borders.
+    Its provinces cut along its rivers (`river_borders.py AVN`), its facts re-keyed after: 93 walls, four lost where
+    two provinces became one (Neukonrad two, il-Omyn i Sarbajuq, Neo Ionika; for its player to mark again on the page,
+    `dist/open_questions.md`) and two that became one.
+  - **its culture** Indonesian (its page): the base game's Indonesian names (`INS`, copied into
+    `source/names/vanilla_names.txt`); Asian portraits and graphics, Claude's guess (German before).
+  - **its colour** the page's pink (244, 170, 213; teal before).
+  - **ten more releasables** with their flags (fitted to 82:52, `fit_flag.py`; Yimrainul's by hand, 17 px off each
+    side), tags from their names (the import's): Gaia (GAI, the Free Sisterhood of Gaia, Anarcho-Communism, Marikha
+    Biklos), Ionia (ION, the Republic of Ionia, Divine Republicanism, Dysma Nikasopola), Yimrainul (YIM, the Nonite
+    Republic of Yimrainul, Social Democracy, Ysso Ilyss'a Rmwatraung), Arovia (ARO, the Arovian Emergency Defence
+    Council, Military Junta, Mihylo Drystazoqil), Nova Cardonia (NOV, the Centralian Citizen Republic, Strongman Rule,
+    Elija Stourmhart), New Texaria (NEW, the Texarian Republic of North Arovia, Liberalism, Harold Jellicoe Wilson),
+    South Yucanoa (SOU, the Regency of New Vivatan, Regency Council, Juan Presas de la Valenuova), Fransistra (FRN, the
+    Seranist Republic of Fransistra, Divine Republicanism, Jean-Jules de Lafayette), San Segonia (SAN, the Segonian
+    Worker's Republic, Orthodox Marxism, the Worker's Congress of Segonia), Arymia (ARY, the Republic of Arymia,
+    Agrarian Socialism, its Provisional Council); the seven of 2026-10-23 now picked by state, their formal names with
+    "the" (the page's).
+  - **three more requests** (open, for the author): a company kind, "Helicopter companies!", and two national spirits,
+    The Dying Republic and Navy with a Nation.
+- The rest of the export as before.
+
 ## 2026-10-23, later still: the Gazetteer's export of that day
 
 The author: "Update from the Gazeteer", then "Arovannea is okay to change now, by the way" (held on 2026-10-22: "still a

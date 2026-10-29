@@ -27,12 +27,15 @@ one of its two choices is (2026-10-20).
     python3 scripts/river_borders.py TAG --apply    # moves the rivers, gives the slivers, cuts the provinces
 Then rebuild and run it again (a moved river is traced anew; what it still leaves off a border shows in the next
 plan) until nothing is left to do. Then `--rekey`, after the last rebuild: the nation's Gazetteer province facts
-(source/gazetteer/TAG.json) and its re-keying file (source/gazetteer/rekey/TAG.npz) follow the provinces as built.
+(source/gazetteer/TAG.json) and its re-keying file (source/gazetteer/rekey/TAG.npz) follow the provinces as built. A
+nation without a re-keying file (any but Rouental) needs `--from=MAP.pdn` the first time: the map whose provinces its
+page names (the one the site was last published from).
 """
 import heapq
 import json
 import sys
 from collections import Counter, deque
+from pathlib import Path
 
 import numpy as np
 from scipy import ndimage as ndi
@@ -41,7 +44,7 @@ from skimage.measure import label
 import gazetteer
 import pdn_tools as T
 from apply_outlines import Colours, organic_split
-from common import COUNTRIES
+from common import COUNTRIES, MAP_H, MAP_W
 from fief_states import boundary
 
 CROSS = np.array([[0, 1, 0], [1, 1, 1], [0, 1, 0]], bool)
@@ -512,18 +515,76 @@ def apply(m, rows):
 
 # ------------------------------------------------------------------------------------------------- Gazetteer keys
 
-def rekey(tag):
-    """the nation's Gazetteer province facts and its re-keying file onto the provinces as built (work/provinces.npz)"""
+def first_layout(tag, pdn):
+    """a re-keying file's start for a nation that has none (2026-10-29: Arovannea, whose page names its provinces as
+    the map of 10-23-3 had them): the old layout from that map (pdn: its Provinces and States layers, the nation's
+    land on its Countries layer), the new one from the last build"""
+    import subprocess
+    from regions import anchors
+    tmp = Path("work/rekey_from")
+    subprocess.run([sys.executable, str(Path(__file__).parent / "readpdn.py"), str(pdn), str(tmp)], check=True,
+                   stdout=subprocess.DEVNULL)
+    names = (tmp / "layers.txt").read_text().splitlines()
+    lay = lambda nm: np.load(tmp / f"layer{names.index(nm)}.npy")
+    pr = np.load("work/provinces.npz")["prov"]
+    reg = np.load("work/regions.npz")
+    rj = json.load(open("work/regions.json"))
+    owners, states, anchor, size = rj["owners"], rj["states"], reg["anchor"], reg["size"]
+    st = reg["state_of"]
+    mine_new = np.isin(st[pr], [s for s, o in enumerate(owners) if o == tag])
+    colour = next(v[3] for v in COUNTRIES.values() if v[0] == tag)
+    K = T.code(lay("Countries")[..., :3])
+    mine_old = (lay("Countries")[..., 3] > 0) & (K == ((colour[0] << 16) | (colour[1] << 8) | colour[2]))
+    ys, xs = np.nonzero(mine_new | mine_old)
+    X0, Y0 = max(xs.min() - PAD, 0), max(ys.min() - PAD, 0)
+    X1, Y1 = min(xs.max() + 1 + PAD, MAP_W), min(ys.max() + 1 + PAD, MAP_H)
+    sl = np.s_[Y0:Y1, X0:X1]
+
+    def relabel(codes, mask):
+        u, inv = np.unique(np.where(mask, codes, -1), return_inverse=True)
+        out = inv.reshape(codes.shape).astype(np.int32)
+        return out if u[0] == -1 else out + 1  # 0 outside the nation's land
+
+    Pold = T.code(lay("Provinces")[..., :3])
+    old_p_full = relabel(Pold, mine_old)
+    old_p = old_p_full[sl]
+    old_s = relabel(T.code(lay("States")[..., :3])[sl], mine_old[sl])
+    u_old, lab_old = np.unique(Pold, return_inverse=True)
+    lab_old = lab_old.reshape(Pold.shape)
+    a_old = anchors(lab_old, len(u_old))[0]       # the keys the page gave the old provinces
+    lab_old = lab_old.ravel()
+    pids, first = np.unique(old_p_full, return_index=True)
+    okeys = np.array([gazetteer.anchor_key(a_old, int(lab_old[i])) for p, i in zip(pids, first) if p > 0])
+    new_s = np.where(mine_new[sl], st[pr][sl] + 1, 0).astype(np.int32)
+    sids = np.unique(new_s[new_s > 0])
+    skeys = np.array([gazetteer.anchor_key(anchor, max(states[s - 1], key=lambda i: (size[i], -i))) for s in sids])
+    print(f"{tag}: the old layout from {pdn}: {len(okeys)} provinces, {int(old_s.max())} states; "
+          f"the new {len(np.unique(pr[sl][mine_new[sl]]))} provinces, {len(sids)} states")
+    return dict(box=np.array([X0, Y0, X1, Y1]), old_states=old_s, old_provinces=old_p, states=new_s,
+                provinces=old_p, state_ids=sids.astype(np.int32), state_keys=skeys,
+                province_ids=pids[pids > 0].astype(np.int32), province_keys=okeys)
+
+
+def rekey(tag, start=None):
+    """the nation's Gazetteer province facts and its re-keying file onto the provinces as built (work/provinces.npz);
+    a nation without a re-keying file starts one from `start`, the map whose provinces its page's facts name"""
     from regions import anchors
     f = gazetteer.DIR / "rekey" / f"{tag}.npz"
-    z = dict(np.load(f))
+    if f.exists():
+        z = dict(np.load(f))
+    elif start:
+        z = first_layout(tag, start)
+        f.parent.mkdir(parents=True, exist_ok=True)
+    else:
+        raise SystemExit(f"{f} missing: --rekey --from=MAP.pdn, the map whose provinces {tag}'s page names")
     X0, Y0, X1, Y1 = (int(v) for v in z["box"])
     pr = np.load("work/provinces.npz")["prov"]
     n = int(pr.max()) + 1
     anchor = anchors(pr, n)[0]
     box = pr[Y0:Y1, X0:X1]
     inside = z["provinces"] > 0                    # the nation's land as the file has it
-    ids = np.unique(box[inside])
+    ids, cnt = np.unique(box[inside], return_counts=True)
+    ids = ids[2 * cnt > np.bincount(box.ravel(), minlength=n)[ids]]  # a neighbour's province a pixel over: not ours
     newp = np.where(inside, box + 1, 0).astype(np.int32)
     keys = np.array([gazetteer.anchor_key(anchor, int(i)) for i in ids])
     # the facts: each built province takes those of the old province most of it lies on
@@ -541,11 +602,17 @@ def rekey(tag):
                                                                                          gazetteer.xy(k)[0] - X0] > 0)}
     for i, k in zip(ids.tolist(), keys.tolist()):
         c = Counter(oldp[(box == i) & inside].tolist()).most_common(1)[0][0]
-        if c in by_old:
-            out[k] = by_old[c]
+        share = {kk: vv for kk, vv in by_old.get(c, {}).items() if kk != "hub"}
+        if share:
+            out[k] = share
+    # and what the page will show once published from this build wins (each old key on the province round it now),
+    # as the next import would have it (gazetteer.rekey): a supply hub stays one, not one on every piece of its province
+    out = gazetteer.page_wins(facts.get("provinces") or {}, out, *gazetteer.page_places()["provinces"])
     print(f"{tag}: {len(facts.get('provinces') or {})} province facts -> {len(out)} "
           f"({len(old_key)} provinces in the re-keying file -> {len(ids)})")
     facts["provinces"] = out
+    if facts.get("borders"):
+        facts["borders"] = gazetteer.rekey_borders(facts["borders"], oldp, X0, Y0, f"{tag}'s ")
     path.write_text(json.dumps(facts, ensure_ascii=False, indent=1, sort_keys=True) + "\n", encoding="utf-8")
     z["provinces"], z["province_ids"], z["province_keys"] = newp, (ids + 1).astype(np.int32), keys
     np.savez_compressed(f, **z)
@@ -557,7 +624,7 @@ def main():
         raise SystemExit(__doc__)
     tag = args[0]
     if "--rekey" in sys.argv:
-        rekey(tag)
+        rekey(tag, next((a.split("=", 1)[1] for a in sys.argv if a.startswith("--from=")), None))
         return
     m = Map(tag)
     rows = plan(m)

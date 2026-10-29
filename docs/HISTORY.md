@@ -10,6 +10,22 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-29: the author's map (their 10-21-3 with their edits, sent as "HOI4_Mod_Map_10-21-3") and the Gazetteer's export
+  (the author: "I don't know if there's been any changes on the Gazetteer, but there has been some on the map. Take note
+  of the fact that the path through the impassible jungle in Cultist lands is supposed to be states. Their capital is
+  deep in the jungle, only accesible through one path"). Their changes since 10-21-3 put on ours pixel by pixel (ours had
+  Arovannea's state lines since): the Cultists' path through the jungle and the circle at its end three passable states
+  (the circle their capital, `nations.CAPITALS`), the jungle round them one impassable state of one province (it had
+  swallowed the path, painted inside it), a strip along its north a state of its own; Meddacah three states; their new
+  rivers through Lafari, Meddacah, New Paradise, the Utopian Republic and Sarza, the 27 states they cross cut again
+  along them (`river_provinces.py --since`, new). The export: Arovannea's map facts (its 87 states' populations and
+  buildings, 38 cities, 78 rivers, 10 railways, 33 hubs, terrain, 98 impassable borders, ten impassable states), its
+  culture Indonesian, its colour the page's pink, ten more releasables with their flags, three more requests; the rest as
+  before. Arovannea's provinces cut along its 78 rivers (`river_borders.py AVN`, three passes, 65 % of their pixels on
+  borders to 86 %), its facts re-keyed after (`--rekey --from`, new: hubs one each, the walls the cut broke onto the
+  provinces either side; four lost, `dist/open_questions.md`). 21,302 provinces, 3,362 states (31 impassable), 62,820
+  province borders (2,716 free), 221 countries. `impassable.py` followed the new facts (it checks the build without
+  the field on a copy without it, as `borders.py`); all eleven Gazetteer tests pass. The map 10-29; the site republished.
 - 2026-10-24: a brief for an instance working on the UI overnight (the author: "I'm gonna set another instance to working
   on the UI overnight to see what it can do, could you give me a prep file?"): `deco_ui/docs/OVERNIGHT_PREP.md`.
 - 2026-10-23, later still: Pershing, Arovannea's smallest drawn state, a province too: grown by 5 px from New Texaria

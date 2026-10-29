@@ -12,6 +12,7 @@ import hashlib
 import json
 import os
 import re
+import subprocess
 import sys
 from collections import Counter, defaultdict
 
@@ -70,7 +71,12 @@ def realm():
     x0, y0, x1, y1 = box
     crop = S[y0:y1, x0:x1].copy()
     # the vassals: the author's fiefs inside each state (the fief map's numbering, read onto the game map)
-    plan = np.load(os.path.join(REPO, "work", "fief_states", "plan.npz"))
+    plan_f = os.path.join(REPO, "work", "fief_states", "plan.npz")
+    if not os.path.exists(plan_f):  # a fresh clone (2026-10-29): the fit only, nothing written to the map (~4 min)
+        print("note: work/fief_states/plan.npz missing: fief_states.py's plan made again")
+        subprocess.run([sys.executable, os.path.join(REPO, "scripts", "fief_states.py"),
+                        os.path.join(REPO, "source", "Rouental Fiefs.pdn"), TAG], check=True, stdout=subprocess.DEVNULL)
+    plan = np.load(plan_f)
     fx0, fy0, fx1, fy1 = plan["box"]
     fiefs = np.zeros_like(S)
     fiefs[fy0:fy1, fx0:fx1] = plan["fiefs"]

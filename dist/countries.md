@@ -1,6 +1,6 @@
 # Valsora: every country
 
-211 countries, 161 owning land at the start. Read from the built mod; regenerate with `python3 scripts/country_list.py`.
+221 countries, 161 owning land at the start. Read from the built mod; regenerate with `python3 scripts/country_list.py`.
 
 | Tag | Name | Full name | Ideology | Sub-ideology | Culture | Leader | States | Notes |
 |---|---|---|---|---|---|---|---|---|
@@ -8,20 +8,22 @@
 | KHB | Al-Khabid | the Kingdom of Al-Khabid | Monarchist | Oligarchy | Arabic (Saudi) | Uthman ibn Hisham | 5 |  |
 | RDY | Al-Radiyaa | the Republic of Al-Radiyaa | Democratic | Conservatism | Arabic (Kuwaiti) | Amani Ahmed | 4 |  |
 | AOE | Alliance of the East | the Alliance of the East | Monarchist | Oligarchy | French | Louis Canrobert | 0 | no land at the start (releasable or civil war) |
-| ALM | Almatia | Almatian Democratic Republic | Democratic | Populism | German | Qübash Adändülsso | 0 | no land at the start (releasable or civil war) |
+| ALM | Almatia | the Almatian Democratic Republic | Democratic | Populism | Indonesian | Qübash Adändülsso | 0 | no land at the start (releasable or civil war) |
 | AMH | Almohavid | the Kingdom of Almohavid | Democratic | Constitutional Monarchy | Moroccan | Qasim Aamara | 9 |  |
-| AMB | Ambany | Ambanese Plurinational Republic | Democratic | Agrarianism | German | Provisional Revolutionary Council | 0 | no land at the start (releasable or civil war) |
+| AMB | Ambany | the Ambanese Plurinational Republic | Democratic | Agrarianism | Indonesian | Provisional Revolutionary Council | 0 | no land at the start (releasable or civil war) |
 | AGL | Anglost | the Kingdom of Anglost | Democratic | Constitutional Monarchy | English | Russell Collin | 58 |  |
 | ARC | Arcadia | the Republic of Arcadia | Democratic | Conservatism | Greek | Spyridion Papagos | 17 | puppet of Terreich und Preußen |
 | ARK | Arklen | the Arklen Free State | Democratic | Conservatism | Dutch | Sijmen Steen | 1 |  |
-| AVN | Arovannea | the Confederative Republics of Arovannea | Democratic | Conservatism | German | Estúr Illger fön Reegen | 87 |  |
+| AVN | Arovannea | the Confederative Republics of Arovannea | Democratic | Conservatism | Indonesian | Estúr Illger fön Reegen | 87 |  |
+| ARO | Arovia | the Arovian Emergency Defence Council | Authoritarian | Military Junta | Indonesian | Mihylo Drystazoqil | 0 | no land at the start (releasable or civil war) |
 | ARP | Arpino | the United Empire of Arpino | Monarchist | Enlightened Absolutism | Indian | Narenda Hooda | 109 |  |
 | ESC | Artzen | the Wyrhterrepublik of Artzen | Communist | Orthodox Marxism | German | Johann Will | 5 | in The Synthesist Internationale |
 | ARV | Arvorenia | the United Kingdom of Éden, Santo Domingo, and Arovia | Democratic | Constitutional Monarchy | Portuguese | Daniel Maurício | 56 |  |
+| ARY | Arymia | the Republic of Arymia | Communist | Agrarian Socialism | Indonesian | Provisional Council | 0 | no land at the start (releasable or civil war) |
 | ASC | Associated Cities | the Associated Cities of Dahu and Jinhu | Democratic | Liberalism | Chinese | Yu Jiaming | 1 | in The Great Lake Republics |
 | ATR | Atrocha | the Republic of Atrocha | Democratic | Liberalism | Spanish | Astrid Bethancourt | 26 |  |
 | AVE | Avesária | the Avesária Dimokratía | Monarchist | Semi-Constitutional Monarchy | Greek | Nikosanis Coisan II | 6 |  |
-| BAL | Baltia | Beltwerrepublek | Democratic | Conservatism | German | Agner fon Blutr-Dohllwrikte | 0 | no land at the start (releasable or civil war) |
+| BAL | Baltia | the Beltwerrepublek | Democratic | Conservatism | Indonesian | Agner fon Blutr-Dohllwrikte | 0 | no land at the start (releasable or civil war) |
 | BLY | Belayosen | the Socialist Republic of Belayosen | Communist | Vanguardism | Russian | Levan Golivin | 0 | no land at the start (releasable or civil war) |
 | BLK | Belekria | the Union of Belekrian Republics | Communist | Vanguardism | Russian | Roman Voroshilov | 67 |  |
 | BKA | Belka | the Most Serene State of Belka | Authoritarian | Fascism | Russian | Aleksandr Isayev | 49 |  |
@@ -37,13 +39,13 @@
 | CRZ | Coraliza | the Principality of Coraliza | Democratic | Constitutional Monarchy | Portuguese | Bernardo Teixeira | 6 |  |
 | CRV | Crvenognjište | the Principality of Crvenognjište | Monarchist | Absolute Monarchy | Serbian | Anya Ristić | 0 | no land at the start (releasable or civil war) |
 | CRP | Crépuscule | the Principality of Crépuscule | Monarchist | Absolute Monarchy | French | Denis Boué de Lapeyrère | 0 | no land at the start (releasable or civil war) |
-| CUL | Cultists | the Cult of the Great Cthulu | Theocratic | Prophetic Rule | Persian | Ehsan Zahedi | 23 |  |
+| CUL | Cultists | the Cult of the Great Cthulu | Theocratic | Prophetic Rule | Persian | Ehsan Zahedi | 26 |  |
 | CTF | Côtefer | the Bleacherist Republic of Côtefer | Authoritarian | Bleacherism | Italian | Costanzo Solari | 5 | puppet of Republican Illiricium |
 | DHI | Daihai | the Island Principalities of Daihai | Monarchist | Feudalism | Chinese | Wei Lianfeng | 1 |  |
 | DNL | Danelaw | the Kingdom of Danelaw-Scandinavia | Monarchist | Elective Monarchy | Swedish | Martin Nisshagen | 20 |  |
 | DRV | Daravon | the Republik of Daravon | Communist | Orthodox Marxism | German | Arthur Ziegler | 1 | leads The Synthesist Internationale |
 | DVL | Devlon | the Free State of Devlon | Democratic | Agrarianism | American | Raphael Custer | 1 |  |
-| DIE | Diemtroekerrjepublik | Diemtroeker Vrijrjepublik | Authoritarian | Fascism | German | Diemtroekerdjet | 0 | no land at the start (releasable or civil war) |
+| DIE | Diemtroekerrjepublik | the Diemtroeker Vrijrjepublik | Authoritarian | Fascism | Indonesian | Diemtroekerdjet | 0 | no land at the start (releasable or civil war) |
 | DRK | Drakonogolovnik | the Socialist Republic of Drakonogolovnik | Communist | Vanguardism | Russian | Makary Pustobriko | 0 | no land at the start (releasable or civil war) |
 | DRM | Dremaur | the Pangolin Empire of Dremaur | Monarchist | Absolute Monarchy | Dutch | Godfried van Setten | 1 |  |
 | MTN | Duchy of the Mountains | the Duchy of the Mountains | Monarchist | Feudalism | French | Aurelien Duchêne | 0 | no land at the start (releasable or civil war) |
@@ -53,8 +55,10 @@
 | EVR | Evriches | the County of Evriches | Monarchist | Feudalism | French | Jehanne Verninac | 1 | in The Association of Reibonnaise States |
 | FLT | Felter | the Republic of Felter | Democratic | Liberalism | Dutch | Frits Vos | 29 |  |
 | FOM | Formosa | the Federal Republic of Formosa | Democratic | Stratocracy | Serbian | Elena Andronikos | 0 | no land at the start (releasable or civil war) |
+| FRN | Fransistra | the Seranist Republic of Fransistra | Theocratic | Divine Republicanism | Indonesian | Jean-Jules de Lafayette | 0 | no land at the start (releasable or civil war) |
 | FRX | Fraxhemark | Fraxhemark | Democratic | Social Democracy | American | Jerome Wharton | 141 |  |
 | GAE | Gaellia | the Kingdom of Gaellia | Monarchist | Absolute Monarchy | Irish | Patrick McCullough | 6 |  |
+| GAI | Gaia | the Free Sisterhood of Gaia | Communist | Anarcho-Communism | Indonesian | Marikha Biklos | 0 | no land at the start (releasable or civil war) |
 | GND | Ganden | the Republic of Ganden | Authoritarian | Fascism | Tibetan | Ngawang Ozer | 6 |  |
 | GFR | Garfield Republics | the United Greater Garfield Republics | Authoritarian | Fascism | Spanish | Jacobo Asensio | 10 |  |
 | GHS | Ghessone | the Free State of Ghessone | Democratic | Liberalism | French | Eugène Hamelin | 0 | no land at the start (releasable or civil war) |
@@ -74,6 +78,7 @@
 | HLG | Hulinguo | the Hulinguo Republic | Democratic | Populism | Chinese | Qiu Xuewen | 3 | in The Great Lake Republics |
 | HLY | Hulya | the Territory of Hulya | Democratic | Conservatism | Turkish | Emin Koval | 1 |  |
 | HMN | Humanist State | the Humanist State | Authoritarian | Humanism | Persian | Arash Tabrizi | 23 |  |
+| ION | Ionia | the Republic of Ionia | Theocratic | Divine Republicanism | Indonesian | Dysma Nikasopola | 0 | no land at the start (releasable or civil war) |
 | ISG | Isigoriya | the State of Isigoriya | Authoritarian | Military Junta | Ghanaian | James Apea | 3 |  |
 | KZN | Kaizan | the Kingdom of Kaizan | Monarchist | Personal Union | Japanese | Tadakuni Tamon | 4 | puppet of Charity |
 | KLS | Kalaistan | the Kingdom of Kalaistan | Authoritarian | Military Junta | Persian | Mazdak Shahbakhti | 2 |  |
@@ -117,16 +122,18 @@
 | MYH | Myehn | the Imperial Republic of Myehn | Democratic | Conservatism | Burmese | Mun Naung | 63 |  |
 | MYL | Mylostrva | the Principality of Mylostrva | Monarchist | Absolute Monarchy | Serbian | Pribislav Zorić | 0 | no land at the start (releasable or civil war) |
 | NPR | New Paradise | the Dominion of New Paradise | Democratic | Conservatism | English | Richard Nicholson | 8 | dominion of Anglost |
-| NIM | Nimova | Republic of Nimova | Authoritarian | Revanchism | German | Lemiko Kastaynos Arpont | 0 | no land at the start (releasable or civil war) |
+| NEW | New Texaria | the Texarian Republic of North Arovia | Democratic | Liberalism | Indonesian | Harold Jellicoe Wilson | 0 | no land at the start (releasable or civil war) |
+| NIM | Nimova | the Republic of Nimova | Authoritarian | Revanchism | Indonesian | Lemiko Kastaynos Arpont | 0 | no land at the start (releasable or civil war) |
 | NRM | Normania | the Principality of Normania | Democratic | Constitutional Monarchy | English | Hubert Golightly | 5 | dominion of Anglost |
 | NKR | North Koronista | the Republic of North Koronista | Authoritarian | Strongman Rule | Turkish | Musa Mosses | 9 |  |
 | NPL | North Pollana | the Worker's State of Pollana | Communist | Party Centralism | Latin American | Vicente Arista | 1 |  |
-| NOH | North Serkin | Serkin Salvation and Restoration Government | Authoritarian | Revanchism | German | Kelz von Padigen | 0 | no land at the start (releasable or civil war) |
+| NOH | North Serkin | the Serkin Salvation and Restoration Government | Authoritarian | Revanchism | Indonesian | Kelz von Padigen | 0 | no land at the start (releasable or civil war) |
+| NOV | Nova Cardonia | the Centralian Citizen Republic | Authoritarian | Strongman Rule | Indonesian | Elija Stourmhart | 0 | no land at the start (releasable or civil war) |
 | ORT | Oriental Territories | the Oriental Territories | Monarchist | Oligarchy | French | Julien de MacMahon | 0 | no land at the start (releasable or civil war) |
 | ORF | Oriflamme | the Oriflamme Alliance | Monarchist | Oligarchy | French | Gustave Humbert | 0 | no land at the start (releasable or civil war) |
 | OST | Ostaria | the Archcounty of Ostaria | Monarchist | Absolute Monarchy | German | Otto von Maier | 5 |  |
 | OCR | Ostercoirasreich | the Kaiserinnreichfedderation of Ostercoirasreich | Monarchist | Feudalism | German | Ferdinand Lauck | 4 |  |
-| OUT | Outer Ambany | Demetrian Government | Authoritarian | Military Junta | German | Salvation Committee | 0 | no land at the start (releasable or civil war) |
+| OUT | Outer Ambany | the Demetrian Government | Authoritarian | Military Junta | Indonesian | Salvation Committee | 0 | no land at the start (releasable or civil war) |
 | PKT | Pakitsk | the Republic of Pakitsk | Authoritarian | Strongman Rule | Russian | Aslan Selin | 0 | no land at the start (releasable or civil war) |
 | PTK | Peatiktist | the Constitutional Dictatorship of Peatiktist | Authoritarian | Strongman Rule | German | Philipp Gross | 27 |  |
 | PZH | Pinzahao | the Liberated Peoples of Pinzahao | Democratic | Radical Republicanism | Chinese | Yuan Wenzhong | 6 |  |
@@ -151,6 +158,7 @@
 | RYB | Royabad | the Sultanate of Royabad | Monarchist | Absolute Monarchy | Persian | Omid Ahura | 33 |  |
 | KIL | Royalist Illiricium | the Kingdom of Illiricium | Monarchist | Legitimism | Italian | Beatrice di Alqiro | 2 |  |
 | RYS | Ryśny | the United Voivodes of Ryśny | Democratic | Agrarianism | Polish | Marcin Kozłowski | 8 |  |
+| SAN | San Segonia | the Segonian Worker's Republic | Communist | Orthodox Marxism | Indonesian | Worker's Congress of Segonia | 0 | no land at the start (releasable or civil war) |
 | SSA | San Sierra | the People's Republic of San Sierra | Communist | Council Communism | Spanish | Emilio Díaz | 48 |  |
 | SNA | Sanada | the United Sanadan Clans | Monarchist | Khanate | Buryat | Bulgan Barannikov | 84 |  |
 | SGT | Sangterre | the Duchy of Sangterre | Monarchist | Feudalism | French | Lucien Anthoine | 0 | no land at the start (releasable or civil war) |
@@ -179,6 +187,7 @@
 | SMR | Someriania | the People's Republik of Someriania | Communist | Vanguardism | German | Franz Kniss | 12 |  |
 | SPL | South Pollana | the Most Serene Republic of South Pollana | Democratic | Liberalism | Latin American | Agustín Sarmaniego del Castillo | 1 |  |
 | SUS | South Usnistan | the Republic of South Usnistan | Democratic | Conservatism | Persian | Mazdan Turani | 19 |  |
+| SOU | South Yucanoa | the Regency of New Vivatan | Monarchist | Regency Council | Indonesian | Juan Presas de la Valenuova | 0 | no land at the start (releasable or civil war) |
 | SDE | Sredneestvo | the Socialist Republic of Sredneestvo | Communist | Vanguardism | Russian | Vsevolod Agafonov | 0 | no land at the start (releasable or civil war) |
 | STB | Staraya Belekria | the Socialist Republic of Staraya Belekria | Communist | Vanguardism | Russian | Gennady Agafonov | 0 | no land at the start (releasable or civil war) |
 | SRD | Surredia | the Republic of Surredia | Authoritarian | Strongman Rule | American | Sunny Hurricane | 19 |  |
@@ -210,6 +219,7 @@
 | XUG | Xugang | the Territory of Xugang | Democratic | Social Democracy | Chinese | Feng Zhihao | 1 | puppet of Terreich und Preußen |
 | XUE | Xuè | the Republic of Xuè | Democratic | Conservatism | Chinese | Lü Jiahui | 12 | in The Great Lake Republics |
 | YTR | Yatar | the Khanate of Yatar | Monarchist | Khanate | Kazakh | Azat Akhmetov | 7 |  |
+| YIM | Yimrainul | the Nonite Republic of Yimrainul | Democratic | Social Democracy | Indonesian | Ysso Ilyss'a Rmwatraung | 0 | no land at the start (releasable or civil war) |
 | ZNZ | Zanzimibia | the People's Republic of Zanzimibia | Democratic | Social Democracy | Nigerian | Oluwayemisi Amaechi | 9 |  |
 | ZST | Zastava | the Principality of Zastava | Monarchist | Absolute Monarchy | Serbian | Mikael Kozlov | 0 | no land at the start (releasable or civil war) |
 | ZLZ | Zoluzeme | the Kingdom of Zoluzeme | Monarchist | Absolute Monarchy | Latvian | Eduards Krogzems | 2 |  |

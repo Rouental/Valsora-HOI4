@@ -20,7 +20,9 @@ source/HOI4 Mod Map.pdn (its own object graph is the template) and prints, per c
 how many states it had and has, and any two of the author's state names
 (source/state_names.json) that now fall in one state.
 
-    python3 scripts/regroup_states.py [--recut]
+    python3 scripts/regroup_states.py [--recut] [--only=TAG,...]
+
+--only (2026-10-29) regroups only those countries: everywhere else the map stays as it is.
 
 With --recut (2026-10-17, the efficiency night) the provinces the new lines cut into pieces are cut again: every
 state of the countries with their own lines where a province changed is cut into ~190 px organic provinces
@@ -118,6 +120,14 @@ def main():
                 and country[x] == country[y] and tag_of[int(country[x])] not in NOT_DRAWN:
             inner.add(int(country[x]))
     print("countries with their own state lines: " + ", ".join(sorted(tag_of[c] for c in inner)))
+    # --only=TAG,...: only those countries (2026-10-29; the PROBLEM_LOG of 2026-10-18 asked for it: the script redoes
+    # every country with lines of its own, map-wide, which redid states far from the author's new lines)
+    only = next((a.split("=", 1)[1].split(",") for a in sys.argv if a.startswith("--only=")), None)
+    if only:
+        inner = {c for c in inner if tag_of[c] in only}
+        missing = set(only) - {tag_of[c] for c in inner}
+        print("only: " + ", ".join(sorted(tag_of[c] for c in inner))
+              + (f" (no state lines of their own: {', '.join(sorted(missing))})" if missing else ""))
     # slivers the lines close off join their same-country neighbour
     area_of = np.arange(n)
     for c in np.nonzero(touch & (size < SLIVER) & np.isin(country, list(inner)))[0]:

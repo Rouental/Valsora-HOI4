@@ -297,7 +297,7 @@ TAG_CULTURE = {
     **{t: dict(names="MEX", portraits="latin_america", gfx="southamerican")
        for t in ("REC", "GYC", "BRO", "SFE")},  # Zorreguieta, the Cortes, Castañeda; Santa Fe
     "SRD": dict(names="USA", portraits="usa", gfx="western_european"),  # Sunny Hurricane
-    "AVN": dict(names="GER", portraits="europe", gfx="western_european"),  # Illger fön Reegen
+    "AVN": dict(names="INS", portraits="asia", gfx="asian"),  # Indonesian (its page, 2026-10-29)
     "AVE": dict(names="GRE", portraits="europe", gfx="eastern_european"),  # Dimokratía, Nikosanis
     "ABL": dict(names="SPR", portraits="iberia", gfx="western_european"),  # Abalón
     "TEX": dict(names="SOV", portraits="europe", gfx="eastern_european"),  # Iyun', Russian for June

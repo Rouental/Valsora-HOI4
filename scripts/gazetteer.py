@@ -818,6 +818,65 @@ def page_wins(facts, out, place_of, own_key):
     return keep
 
 
+def _across(ma, mb, lab):
+    """Counter of (province on the a side, province on the b side) over every pair of 4-neighbour pixels, one in ma and
+    one in mb, whose provinces differ"""
+    c = Counter()
+    for s1, s2 in ((np.s_[:, :-1], np.s_[:, 1:]), (np.s_[:-1, :], np.s_[1:, :])):
+        for m1, m2, flip in ((ma, mb, False), (mb, ma, True)):
+            hit = m1[s1] & m2[s2]
+            u, v = lab[s1][hit], lab[s2][hit]
+            c.update((int(y), int(x)) if flip else (int(x), int(y)) for x, y in zip(u, v) if x != y)
+    return c
+
+
+def rekey_borders(borders, oP, X0, Y0, label=""):
+    """A nation's impassable borders (its page names each by two pixels, one inside each province) onto the provinces as
+    built, after its provinces were cut again (2026-10-29: Arovannea's, along its rivers, left 8 of its 98 borders in
+    one province or between provinces that no longer touch). A key whose pixels lie in two touching provinces stays as
+    it is (the page shows it so); a broken one goes to the two provinces either side of its old border (oP: the old
+    layout, X0, Y0 its corner; a side off it is the province there now), the pair along most of it, under their own
+    keys; one whose old border lies inside a single province now (merged since) is dropped, with a note. A key the page
+    wrote since wins over a re-keyed one."""
+    try:
+        lab = np.load("work/provinces.npz")["prov"]
+    except FileNotFoundError:
+        return borders
+    own_key = page_places()["provinces"][1]
+    H, W = lab.shape
+    keep, moved = {}, {}
+    for k, v in sorted(borders.items()):
+        try:
+            a, b = (xy(s) for s in k.split("|"))
+            p, q = int(lab[a[1], a[0]]), int(lab[b[1], b[0]])
+        except (ValueError, IndexError):
+            keep[k] = v
+            continue
+        y0, y1 = max(min(a[1], b[1]) - 200, 0), min(max(a[1], b[1]) + 201, H)
+        x0, x1 = max(min(a[0], b[0]) - 200, 0), min(max(a[0], b[0]) + 201, W)
+        L = lab[y0:y1, x0:x1]
+        if p != q and _across(L == p, L == q, L):
+            keep[k] = v
+            continue
+        O = np.zeros(L.shape, oP.dtype)
+        oy0, oy1 = max(y0, Y0), min(y1, Y0 + oP.shape[0])
+        ox0, ox1 = max(x0, X0), min(x1, X0 + oP.shape[1])
+        if oy0 < oy1 and ox0 < ox1:
+            O[oy0 - y0:oy1 - y0, ox0 - x0:ox1 - x0] = oP[oy0 - Y0:oy1 - Y0, ox0 - X0:ox1 - X0]
+        A, B = O[a[1] - y0, a[0] - x0], O[b[1] - y0, b[0] - x0]
+        c = _across(O == A if A > 0 else L == p, O == B if B > 0 else L == q, L) if A != B or A == 0 else Counter()
+        if not c:
+            print(f"note: {label}impassable border at {k}: its old border lies inside one province now; dropped")
+            continue
+        s, t = c.most_common(1)[0][0]
+        nk = border_key(own_key(s), own_key(t))
+        print(f"{label}impassable border at {k} -> {nk}")
+        moved.setdefault(nk, v)
+    for nk, v in moved.items():
+        keep.setdefault(nk, v)
+    return keep
+
+
 def rekey(tag, n):
     """A nation whose states were cut again from a map of its own (fief_states.py, 2026-10-20: Rouental's fiefs):
     its page's facts still name the old states and provinces by pixels inside them, and one old state is now several.
@@ -894,10 +953,13 @@ def rekey(tag, n):
             if not m.any():  # merged into another since (the author's groups, 2026-10-21): its pixels are that one's
                 continue
             c = Counter(oP[m].tolist()).most_common(1)[0][0]
-            if c in by:
+            share = {kk: vv for kk, vv in by.get(c, {}).items() if kk != "hub"}
+            if share:  # a supply hub is one place: it stays where the page shows it (page_wins), not on every piece
                 k = pkey[q]
-                out[k] = merge_facts(by[c], out[k]) if k in out else by[c]
+                out[k] = merge_facts(share, out[k]) if k in out else share
         n["provinces"] = page_wins(n["provinces"], out, *cur["provinces"]) if cur else out
+    if n.get("borders") and cur:
+        n["borders"] = rekey_borders(n["borders"], oP, X0, Y0, f"{tag}'s ")
     return n
 
 

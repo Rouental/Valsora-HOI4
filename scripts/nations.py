@@ -1449,6 +1449,9 @@ CITY_NAMES = {
 CAPITALS = {
     "ROU": (660, 805),  # Rêverie, the small state the author drew for it ("Rouental 27")
     "OST": (541, 1515),  # Silberkrone, "Ostaria's capital city" (its page's states, 2026-10-19)
+    # the circle at the end of the path through the jungle (the author, 2026-10-29: "Their capital is deep in the
+    # jungle, only accesible through one path")
+    "CUL": (2727, 1353),
     "CRD": (805, 670),  # Winterthorn (author, 2026-10-01)
     # the author's cities, made capitals (2026-10-01): the dots on Necessary Cities
     "CTF": (791, 1004),  # Venezzo

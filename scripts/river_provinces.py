@@ -15,7 +15,14 @@ Only states where under ALIGNED of the river pixels lie on a province border are
 never one whose provinces the author drew on "Necessary Provinces" (2026-10-17: Seigne's).
 
     python3 scripts/river_provinces.py        # edits source/HOI4 Mod Map.pdn in place
+    --only=TAG,...    only those countries' states (2026-10-29: run map-wide it would cut every state whose rivers
+                      lie off its borders, the Gazetteer's own provinces among them, far from the new rivers)
+    --since=MAP.pdn   only the states the river lines drawn since that map cross (2026-10-29: the author's new rivers
+                      in Lafari; the older stretches still off a border elsewhere stay as they are)
+    --dry             what it would cut, nothing saved
 """
+import sys
+
 import numpy as np
 from scipy import ndimage as ndi
 from skimage.measure import label
@@ -54,6 +61,31 @@ def main():
     if len(np.intersect1d(touched, drawn)):
         print(f"{len(np.intersect1d(touched, drawn))} of them keep the provinces the author drew")
     touched = np.setdiff1d(touched, drawn)
+    only = next((a.split("=", 1)[1].split(",") for a in sys.argv if a.startswith("--only=")), None)
+    if only:
+        from common import COUNTRIES
+        K = T.code(L["Countries"][..., :3])
+        kcols = [T.code(np.array(v[3])) for v in COUNTRIES.values() if v[0] in only]
+        mine = np.unique(St[np.isin(K, kcols) & land & (St >= 0)])
+        print(f"only {', '.join(only)}: {len(np.intersect1d(touched, mine))} of the {len(touched)} states to cut")
+        touched = np.intersect1d(touched, mine)
+    since = next((a.split("=", 1)[1] for a in sys.argv if a.startswith("--since=")), None)
+    if since:
+        import subprocess
+        from pathlib import Path
+        tmp = Path("work/river_since")
+        subprocess.run([sys.executable, str(Path(__file__).parent / "readpdn.py"), since, str(tmp)], check=True,
+                       stdout=subprocess.DEVNULL)
+        bnames = (tmp / "layers.txt").read_text().splitlines()
+        drawn_new = np.zeros(land.shape, bool)
+        for nm in ("Necessary Major Rivers", "Necessary Minor Rivers"):
+            if nm in bnames and nm in L:
+                drawn_new |= (np.load(tmp / f"layer{bnames.index(nm)}.npy") != L[nm]).any(-1)
+        near = ndi.binary_dilation(drawn_new, iterations=2) & river
+        crossed = np.unique(St[near & (St >= 0)])
+        print(f"since {since}: {int(drawn_new.sum())} px of river lines drawn or erased; "
+              f"{len(np.intersect1d(touched, crossed))} of the {len(touched)} states to cut are on them")
+        touched = np.intersect1d(touched, crossed)
     old = new = 0
     for n, sc in enumerate(touched):
         ys, xs = np.nonzero((St == sc) & land)
@@ -122,6 +154,9 @@ def main():
     T.put(L["Provinces"], P, np.ones(P.shape, bool))
     print(f"{fixed} stray bits joined a neighbouring province")
     print(f"{len(touched)} states crossed by rivers: {old} provinces became {new}")
+    if "--dry" in sys.argv:
+        print("(nothing saved: --dry)")
+        return
     T.save(names, L)
 
 

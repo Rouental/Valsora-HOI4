@@ -1120,6 +1120,39 @@ screenshot and `error.log`)
 
 ## Map problems found while building
 
+**Arovannea's Gazetteer facts after its provinces were cut along its rivers** (2026-10-29, before they went in).
+- Cause: `river_borders.py AVN` cut and reshaped its provinces along its page's 78 rivers (346 provinces to 337); its page names
+  provinces by a pixel inside each, as the map of 10-23-3 had them. `--rekey` needed a re-keying file only Rouental had;
+  and its rule, each new province the facts of the old one most of it lies on, put a supply hub on both pieces of a cut
+  province and none where a hub's small province joined a neighbour (three hubs doubled, three lost); 8 of the 98
+  impassable borders (the build's notes showed one per pair) were left in one province or between provinces no longer
+  touching.
+- Fix: `--rekey --from=MAP.pdn` starts the file from the map the page's keys name; a hub goes only where the page will
+  show it once republished (the new province round the old key), as the next import would have it (`gazetteer.rekey`
+  the same); a broken wall goes to the two provinces either side of its old line (`gazetteer.rekey_borders`, at import
+  too). Four walls stay lost, their two provinces one now: in `dist/open_questions.md` for the page.
+
+**The author's new rivers would have re-cut every state a river crosses** (2026-10-29).
+- Cause: `river_provinces.py` re-cuts the provinces of every state any river crosses: after an upload with a few new
+  rivers, the map's others too.
+- Fix: `--since=BASE.pdn`, only the states the rivers drawn since that map cross (27); `--only=TAG,...`; `--dry`.
+
+**`regroup_states.py --recut` redoes every country with lines of its own** (2026-10-29: the Cultists' and Meddacah's
+lines; known since 2026-10-18).
+- Fix: `--only=TAG,...`, only those countries; the others keep their states and provinces as they are.
+
+**The Cultists' path through the jungle was impassable** (2026-10-29, the author: "the path through the impassible jungle
+in Cultist lands is supposed to be states").
+- Cause: the path was painted inside the striped jungle; a striped patch (red and green, 8-connected) is impassable as
+  a whole (`areas.masks`), so the path's states were part of the two impassable states.
+- Fix: the author's map of 10-29 draws the path and the circle at its end clear of the marks: three passable states,
+  the circle the capital; the jungle round them one impassable state.
+
+**A fresh container stopped the build at Rouental's realm** (2026-10-29).
+- Cause: `rouental_realm.py` reads `work/fief_states/plan.npz`, which only `fief_states.py` writes, and `work/` is not
+  committed.
+- Fix: it makes the plan again when it is missing (the fit only, nothing written to the map; about 4 minutes).
+
 **The three estates' window, before it shipped** (2026-10-23, in `scripts/rouental_preview.py`'s picture).
 - The decisions' shifts printed the minus sign (U+2212) the mockup uses; the Deco UI's fonts have none, so "-3" read
   "3". Fix: a hyphen, as the rest of the mod's text (`rouental_ui.sgn`).
