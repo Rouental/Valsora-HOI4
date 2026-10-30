@@ -856,6 +856,14 @@ picture for Tara, use this one"), and the Speaker of the Estates General in the 
 women are `gender = female` now ("I noticed that Serelle currently seems to be considered male"): Serelle Cahun and
 Mahaut VI and their copies at HMMLA and Brillagne, and Tara Blanchart; the Gazetteer takes a gender for every character.
 
+## 2026-10-30: Lindreland
+
+The author: "Rename Linterre/ Placeholdaire to Lindreland, and make their culture British." **Lindreland** LNT, "the
+Republic of Lindreland" (its formal name's form kept), adjective Lindrelander (Claude's guess); its unnamed states
+"Lindreland N", its region "Lindreland and Selto"; Rouental's Southmarchers, "much influenced by Lindreland". British:
+the base game's English names (`ENG`), Europe's generic portraits and western European graphics; its ruler, a
+generated one, has an English name now (Charles Gallieni before). Its tag, colour and file name (`linterre`) stay.
+
 ## 2026-10-29: the Cultists' path, Meddacah, the Gazetteer's export of that day
 
 The author sent their map (10-21-3 with their own edits) and the export: "I don't know if there's been any changes on

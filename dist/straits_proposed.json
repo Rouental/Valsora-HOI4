@@ -2042,7 +2042,7 @@
    ],
    "gap": 4.0,
    "kind": "link",
-   "name": "Wersh 17 - Placeholdaire 1",
+   "name": "Wersh 17 - Lindreland 1",
    "owners": [
     "WRS",
     "LNT"
@@ -2069,7 +2069,7 @@
    ],
    "gap": 6.3,
    "kind": "link",
-   "name": "Placeholdaire 2 - Placeholdaire 3",
+   "name": "Lindreland 2 - Lindreland 3",
    "owners": [
     "LNT",
     "LNT"
@@ -2096,7 +2096,7 @@
    ],
    "gap": 4.0,
    "kind": "link",
-   "name": "Placeholdaire 7 - Placeholdaire 3",
+   "name": "Lindreland 7 - Lindreland 3",
    "owners": [
     "LNT",
     "LNT"
@@ -2123,7 +2123,7 @@
    ],
    "gap": 2.0,
    "kind": "link",
-   "name": "Placeholdaire 1 - Placeholdaire 2",
+   "name": "Lindreland 1 - Lindreland 2",
    "owners": [
     "LNT",
     "LNT"

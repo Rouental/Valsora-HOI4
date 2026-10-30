@@ -129,7 +129,7 @@ PEOPLES = {
     "Conflans": ("Riverlander", "#8C8A4E", 0, "The most numerous, plying the great rivers of the nation"),   # Claude's guess: the heading
     "Recolt": ("Recoltaise", "#B07A3A", 0, "The breadbasket of Rouental, the least divided: proud and wealthy"),
     "Northmarch": ("Northmarcher", "#5E8E6E", 0, "Grim, serious, disciplined, ever watching the north from their mountain strongholds"),
-    "Southmarch": ("Southmarcher", "#9A9A62", 0, "A martial people, much influenced by Linterre: the home of Reformed Seranism"),
+    "Southmarch": ("Southmarcher", "#9A9A62", 0, "A martial people, much influenced by Lindreland: the home of Reformed Seranism"),
     "Crépuscule": ("Crépusculaise", "#6B5A7E", 0, "The last to join, by a marriage: utterly loyal to their prince, to Rêverie as it varies"),
     "Lyrién": ("Lyrién", "#B9875E", 0, ""),
     "Piscan": ("Piscan", "#5D8A84", 0, "Traders, fishermen and sailors of the Piscary sea"),

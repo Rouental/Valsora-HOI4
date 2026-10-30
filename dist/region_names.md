@@ -20,7 +20,7 @@ colour. The current names are the build's ("<country with most of its states> Re
 | 10 | Romanoddle | Romanoddle Region 2 | |
 | 11 | Romanoddle | Romanoddle Region 1 | |
 | 12 | Volinovia, Rastava | Volinovia Region 1 | |
-| 13 | Placeholdaire, Selto | Placeholdaire Region 1 | |
+| 13 | Lindreland, Selto | Lindreland Region 1 | |
 | 14 | Estande | Estande Region 2 | |
 | 15 | Republican Illiricium, Entroterra, Côtefer, Mezzogiorno ... | Republican Illiricium Region 1 | |
 | 16 | Fraxhemark, Locus | Fraxhemark Region 1 | |

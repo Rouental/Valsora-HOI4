@@ -181,7 +181,7 @@ TAG_CULTURE = {
     "SMN": dict(names="CRO", portraits="europe", gfx="eastern_european"),  # Croatian
     "GOB": dict(names="ALB", portraits="europe", gfx="eastern_european"),  # Albanian (author)
     "ZUK": dict(names="MAC", portraits="europe", gfx="eastern_european"),  # Macedonian
-    "LNT": _FRENCH,  # author, 2026-09-30
+    "LNT": dict(names="ENG", portraits="europe", gfx="western_european"),  # British (author, 2026-10-30); French before
     # Portuguese (author, 2026-09-30): vanilla has no Iberian generic portraits
     **{t: dict(names="POR", portraits="iberia", gfx="western_european")
        for t in ("RST", "VLN", "ESD", "CRZ", "PLH")},

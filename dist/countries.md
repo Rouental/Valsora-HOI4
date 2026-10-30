@@ -106,7 +106,7 @@
 | LTH | Leithanien | the Republic of Leithanien | Democratic | Populism | German | Helmut Shulz | 7 |  |
 | LVN | Levantinin | the Crusader State of Levantinin | Theocratic | Holy Order | French | Ian Westgrove | 8 |  |
 | LEV | Leviathan | the Republic of Leviathan | Democratic | Populism | English | Geoffrey Jellicoe | 1 |  |
-| LNT | Linterre | the Republic of Linterre | Democratic | Conservatism | French | Charles Gallieni | 15 |  |
+| LNT | Lindreland | the Republic of Lindreland | Democratic | Conservatism | English | Dara Nicholson | 15 |  |
 | LCF | Locus | the Worker's Republic of Locus Felicitatis | Communist | Council Communism | American | Stonewall Cleburne | 3 |  |
 | LST | Lustiana | the Duchy of Lustiana | Monarchist | Elective Monarchy | French | Estienne Bourbaki de Lustiana | 1 | in The Association of Reibonnaise States |
 | MAH | Mahina | the Republic of Mahina | Democratic | Liberalism | Polynesian | Wiremu Aumua | 1 |  |

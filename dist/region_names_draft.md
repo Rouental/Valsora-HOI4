@@ -26,7 +26,7 @@ Cities are the ones you named on the Cities layer.
 | 10 | Romanoddle | Romanoddle, the southern part |  | Southern Romanoddle |
 | 11 | Romanoddle | Romanoddle, the northern part |  | Northern Romanoddle |
 | 12 | Volinovia, Rastava | the nations in it |  | Volinovia and Rastava |
-| 13 | Placeholdaire, Selto | the nations in it |  | Placeholdaire and Selto |
+| 13 | Lindreland, Selto | the nations in it |  | Lindreland and Selto |
 | 14 | Estande | Estande |  | Estande |
 | 15 | Republican Illiricium, Entroterra, Côtefer, Mezzogiorno ... | 6 nations (Republican Illiricium, Entroterra, Côtefer, Mezzogiorno ...); its coast faces the Piscary Sea | Venezzo, Alqira, Malin, Prestozza | The Piscary Coast |
 | 16 | Fraxhemark, Locus | Fraxhemark, the north-western part |  | North-Western Fraxhemark |

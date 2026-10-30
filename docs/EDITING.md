@@ -274,7 +274,7 @@ with no land left is simply left out of the game.
 | Cardonia | CRD | 84, 28, 120 |
 | Romanoddle | RMD | 46, 139, 150 |
 | Selto | STO | 214, 120, 40 |
-| Placeholdros (was Linterre) | LNT | 190, 150, 200 |
+| Lindreland (was Linterre, Placeholdros, Placeholdaire) | LNT | 190, 150, 200 |
 | Rastava | RST | 184, 160, 72 |
 | Volinovia | VLN | 70, 100, 170 |
 | Estande | ESD | 153, 0, 0 |

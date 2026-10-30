@@ -290,7 +290,7 @@ Aislada is the worked example of a built-out nation:
   folk"; **Riverlander** ("Riverrain in french?"), "the most numerous of the Rouentaise culture groups, plying the
   great rivers of the nation"; **Northmarcher** ("Marchenordois"?), "A grim, serious, and disciplined people. Ever
   watching the north from their mountain strongholds"; **Southmarcher** ("Marchesudois"?), "a martial people that
-  have been greatly influenced by Linterre to the south ... The home of Reformed Seranism"; **Crépusculaise**, "Not
+  have been greatly influenced by Linterre to the south ... The home of Reformed Seranism" (Lindreland since 2026-10-30); **Crépusculaise**, "Not
   technically Reibonnaise, and geographically outside the Vale, though ancient ties mean they share a language. Was
   the last addition to the realm, joining through a joint marriage. Utterly loyal to their prince, though their
   loyalty to Rêverie varies"; **Piscan**, "Traders, fishermen, and sailors of the Piscary sea"; **Helvetica**,
@@ -444,7 +444,8 @@ don't exist here. That was the cause of "Failed to generate a portrait / name" a
     all ("the sword didn't read well"; the sword flag is now the file's "Spare" layer),
     and redrew Fraxhemark's.
   - Overrides are in `TAG_CULTURE`: the Reibonnaise states (ROU SGN EVR HLR SGV LST LZC
-    GDN) and Placeholdros (LNT) use FRA names and France portraits (author: French for now);
+    GDN) use FRA names and France portraits (author: French for now); Lindreland (LNT, Linterre until
+    2026-10-30) the base game's English names (author, 2026-10-30: British; French until then);
     RST VLN ESD CRZ PLH use POR names (added to `source/names/vanilla_names.txt` from
     vanilla) and Europe portraits.
 - **Scientists** (2026-10-14): every continent and country block also has

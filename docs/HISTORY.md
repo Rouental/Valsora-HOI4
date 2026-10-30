@@ -10,6 +10,8 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-10-30: Linterre renamed Lindreland, its culture British (the author: "Rename Linterre/ Placeholdaire to
+  Lindreland, and make their culture British"): `docs/NATIONS.md`.
 - 2026-10-29: the author's map (their 10-21-3 with their edits, sent as "HOI4_Mod_Map_10-21-3") and the Gazetteer's export
   (the author: "I don't know if there's been any changes on the Gazetteer, but there has been some on the map. Take note
   of the fact that the path through the impassible jungle in Cultist lands is supposed to be states. Their capital is

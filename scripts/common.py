@@ -50,7 +50,9 @@ COUNTRIES = {
     # Linterre, renamed Placeholdros on 2026-10-01
     "romanoddle": ("RMD", "Romanoddle", "Romanoddlian", (46, 139, 150)),
     "selto": ("STO", "Selto", "Seltan", (214, 120, 40)),
-    "linterre": ("LNT", "Linterre", "Linterrois", (190, 150, 200)),  # Linterre again since 2026-10-21 (author: "I'm gonna rename Placeholdaire back to Linterre for now"); Placeholdros 2026-10-01, Placeholdaire 2026-10-07
+    # Lindreland since 2026-10-30 (author: "Rename Linterre/ Placeholdaire to Lindreland"; the adjective Claude's guess);
+    # Linterre 2026-09-30 and again 2026-10-21, Placeholdros 2026-10-01, Placeholdaire 2026-10-07
+    "linterre": ("LNT", "Lindreland", "Lindrelander", (190, 150, 200)),
     # 2026-09-30, south of Romanoddle and Selto; all Portuguese (author). Estande's
     # colour is the red of its flag (author: the green blended with Rouental); the rest are Claude's picks
     "rastava": ("RST", "Rastava", "Rastavan", (184, 160, 72)),
