@@ -30,7 +30,10 @@ the nation's password; without it, the page shows the map and what the mod has, 
 - **O4 Map tools.** Each nation's map tools: Automatic (open once its states are drawn), Open or Closed; find a
   nation; how many are open.
 - **O5 Requests.** Every nation's requests, the open ones first: set Open, Done or Declined, write a reply (the
-  player sees it under the request), **Delete**.
+  player sees it under the request), **Delete**. **Declined** (2026-11-02, your words: "When I decline something, I
+  should be given the option to provide an explanation to the person that submitted it") asks why first (optional),
+  then **Decline** or **Cancel**; a declined trait or spirit is taken out of the game (PE10). What you mark Done or
+  Declined, with your reason, is shown to the nation's players the next time they open it (H9).
 - **O6 Suggestions.** Every nation's suggestions: **Show them on the world map** (or hide them), and **Open** one
   where it was drawn.
 - **O7 Admins.** Who they are; add one by Google address, **Remove** (only you).
@@ -57,6 +60,10 @@ the nation's password; without it, the page shows the map and what the mod has, 
   (2026-10-18, in the place of 2026-10-17's province step: Rouental's, Cardonia's and Zukchiva's states at one scale),
   the tabs, asking for more, the password). It shows by itself once in a browser, the first time a player unlocks a nation (never to the
   owner); Skip, Escape or Start close it. A first version of the tutorial: it will follow the final layout.
+- **H9 The author's answers** (2026-11-02, your words: "Maybe a popup the next time they open their gazeteer page?"):
+  when a player opens their nation, the requests you marked Done or Declined since that browser last showed them, each
+  with your reply (a declined trait or spirit: "It's not in the game"), after the guide if that shows too; **OK** or
+  Escape closes it, and it doesn't come again for those. Never to you.
 
 ## The map
 
@@ -164,16 +171,17 @@ With no state picked, every state is a button (● for the named ones).
 ## People tab
 
 - **PE1 Head of state.**
-  - Most nations: name, gender (PE9), titles (shown on the portrait in game), portrait (the game's, when it is one of
+  - Most nations: name, gender (PE9), description (shown with the portrait in game; titles until 2026-11-02, your
+    words: "instead of 'Titles or a few words' ... you should ask for a character description"), portrait (the game's, when it is one of
     ours; a base-game one is a box saying so), traits, **Ask for a new trait**, and a line saying who rules in the
     game now.
   - The nations of your own characters: a card per ruler (PE3).
 - **PE2 The other parties.**
   - Most nations: for each ideology but the ruling one, a sub-ideology (it gives the party a set leader), and the
-    leader's name, gender (PE9), portrait and traits.
+    leader's name, gender (PE9), portrait, traits and **Ask for a new trait** (2026-11-02).
   - The nations of your own characters: a card per party leader (PE3), the generated ones too.
 - **PE3 A character already in the game** (Roland, Serelle, Anserra, the Merlovichs …): name; name once ruling
-  (Serelle VI); gender (PE9); titles; sub-ideology, within its ideology (your own characters: the focus tree names
+  (Serelle VI); gender (PE9); description; sub-ideology, within its ideology (your own characters: the focus tree names
   the ideology); traits; for a general or admiral, rank (general or field marshal), skill and stats, and a
   commander's traits; portrait; **Back to the game's**. A change to Serelle or Anserra reaches her copy at the head of
   HMMLA or Brillagne.
@@ -199,6 +207,11 @@ With no state picked, every state is a button (● for the named ones).
   until a player picks one; a new character starts as a man. *Game:* the character's `gender = female` (or `male`);
   a change to Serelle or Anserra reaches her copy (PE3). The game has no generic portraits of women generals, admirals
   or politicians, so a woman without a portrait of her own keeps the generic one she had.
+- **PE10 New traits asked for** (2026-11-02, your words: "Created traits should be shown as applied to the character,
+  unless I veto it, in which case it should be removed"): a trait asked for with **Ask for a new trait** shows on that
+  character at once, under **New traits asked for** (dashed, "being made" until Claude has made it from the player's
+  words, then "in the game"); declined (O5), it's taken off. *Game:* the trait on that character (a ruler's or party
+  leader's: an advisor's or commander's Claude gives by hand), with the effects the player listed, unless declined.
 
 ## Releasables tab
 
@@ -226,6 +239,8 @@ With no state picked, every state is a button (● for the named ones).
 - **NA5 Requests to the author:** kind (a new sub-ideology, trait or kind of company, a national spirit (2026-10-21,
   the author: "allow people to request national spirits"; its prompts ask for the spirit's name and what it should do,
   how long it lasts or what removes it, and its text), a subject type, a map change, something else), the request and its details, **Send request**; the list, with its status and your reply;
+  a trait's or spirit's place in the game (in it unless declined, or being made), and for a trait **Whose trait**
+  (the head of state, a party leader, a character, or no one yet; 2026-11-02);
   **Delete** for one's own.
 - **NA6 So far**, **open**: states named, population set, provinces with terrain, cities, capital, rivers,
   railways, total population.

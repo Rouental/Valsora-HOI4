@@ -318,6 +318,9 @@ def main(mod):
     earth = {line.split("\t")[0] for line in vanilla_index("tags.txt")}
     if earth & set(tags):
         err(f"our tags {sorted(earth & set(tags))} are also Earth's (vanilla common/country_tags)")
+    aliases = set(vanilla_index("tag_aliases.txt"))  # "alias is already existing tag SOU" (error.log, 2026-11-02)
+    if aliases & set(tags):
+        err(f"our tags {sorted(aliases & set(tags))} are the game's tag aliases (vanilla common/country_tag_aliases)")
     hist, stubbed = {}, set()
     for f in (mod / "history/countries").glob("*.txt"):
         tag = f.name[:3]
@@ -729,6 +732,21 @@ def main(mod):
     # every trait our characters have is the base game's (2026-10-15: the Gazetteer's picks; a misspelt trait is only an
     # error.log line, and the leader goes without it); an advisor's slot is the game's, its idea token its own
     tdef = json.loads(Path("source/vanilla/index/traits.json").read_text(encoding="utf-8"))["defined"]
+    # ... or the mod's own (2026-11-02: those the Gazetteer's players asked for, scripts/requests_made.py), named, each
+    # of its modifiers one of the game's (a misspelt one is only an error.log line, and the trait does it without)
+    known_mods = set(vanilla_index("modifiers.txt")) | {f"{i}_{k}" for i in ideologies.IDEOLOGIES
+                                                         for k in ("drift", "acceptance")}
+    own_traits = set()
+    for f in (mod / "common/country_leader").glob("*.txt"):
+        for top, body in top_level(strip(f.read_text(encoding="utf-8-sig"))):
+            for name, tbody in (top_level(body) if top == "leader_traits" else ()):
+                own_traits.add(name)
+                if name not in keys:
+                    err(f"{f.relative_to(mod)}: trait {name} has no localisation")
+                for k in re.findall(r"^\s*(\w+)\s*=\s*-?[\d.]+\s*$", tbody, re.M):
+                    if k not in known_mods:
+                        err(f"{f.relative_to(mod)}: trait {name}'s {k} is not one of the game's modifiers")
+    tdef["country"] = list(tdef["country"]) + sorted(own_traits)
     slots_ok = {"political_advisor", "theorist", "army_chief", "navy_chief", "air_chief", "high_command"}
     tokens = {}
     for f in (mod / "common/characters").glob("*.txt"):
@@ -1103,6 +1121,10 @@ def main(mod):
                 body = blocks(cat, name)[0]
                 if name not in keys and not field(body, "name"):
                     err(f"{f.relative_to(mod)}: idea {name} has no localisation")
+                for mb in blocks(body, "modifier"):   # the game's modifiers (2026-11-02, as the traits above)
+                    for k in re.findall(r"^\s*(\w+)\s*=\s*-?[\d.]+\s*$", mb, re.M):
+                        if k not in known_mods:
+                            err(f"{f.relative_to(mod)}: idea {name}'s {k} is not one of the game's modifiers")
                 for tb in blocks(body, "traits"):
                     for t in tb.split():
                         if t not in country_traits:

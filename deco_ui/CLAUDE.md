@@ -14,9 +14,17 @@ Treat assumed items as hypotheses.
 
 ---------------------------------------------------------------------------------------------------
 
-## 1. Status (v0.12.4)
+## 1. Status (v0.12.5)
 
-**v0.12.4 (2026-10-23)** is the current version (`docs/VERSIONS.md`): the diplomacy tab's national spirits 8 px
+**v0.12.5 (2026-11-02)** is the current version (`docs/VERSIONS.md`): the occupied territories' list ends on the
+screen again (its bottom margin grows with the 72 px the panels' content moves down; the author couldn't scroll to the
+last releasables). Not yet seen in game. **The game is 1.19.4 on the author's machine since late October** (the "War
+Effort" update: trade automation, automatic diplomatic responses, a repair queue, a focus tree mini-map, research
+shortcuts): its code looks for elements the Deco UI's screens, made from 1.19.3's, don't have (the author's
+error.log of 2026-11-02: `auto_import_priority_window`, `repair_order_window`, `response_icon`, `mini_map` ...). Every
+patched screen needs making again from 1.19.4's files once they are in `Rouental/HOI4-Files`.
+
+**v0.12.4 (2026-10-23)** came before it: the diplomacy tab's national spirits 8 px
 lower, inside the band (`layout_panels.DIPLO`: the game sets their row level with the title). Not yet seen in game.
 
 **v0.12.3 (2026-10-21, later still)** came before it (`docs/VERSIONS.md`), from the author's screenshots of
@@ -521,6 +529,10 @@ Build order matters. `gen_fonts` runs first because `layout.py` measures strings
   said the game hides a window once it has slid back, which was wrong). Since v0.5.2 every closed panel rests at the
   game's `position` when that is off-screen, else just off the left edge (`layout_politics.closed_x`), and opens at
   once (`OPEN_MS = 0`): sliding in from the left crossed the flag and the name (the user's video, v0.5).
+- **(in game, v0.12.5)** a child's **`100%`** (one percent sign) is its parent's whole height, wherever the child
+  starts, so it runs past the parent's foot by its own y; the game takes that back with a bottom `margin` (the occupied
+  territories' list: y 190, margin 195). Moving such a box down needs the margin grown by as much, or its foot goes
+  under the screen (v0.5 to v0.12.4: the last releasables out of reach). **`100%%`** runs to the edge instead.
 - **(inferred from vanilla)** a **negative size** runs to the parent's edge minus that much (the logistics
   list, `height = -98`, ends where its 98 px footer, LOWER_LEFT at y -98, begins), like `100%%` runs to the
   edge; so moving a box down only shortens it, and bottom-anchored elements stay put.

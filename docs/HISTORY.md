@@ -10,6 +10,17 @@ states and countries came next.
 
 ## Newest first
 
+- 2026-11-02: the author's error.log and notes. The log's new lines are mostly the game's: it updated itself to 1.19.4
+  ("War Effort", late October), whose code looks for elements the interface's screens (made from 1.19.3's) don't have;
+  they wait for 1.19.4's files. One is ours: South Yucanoa's tag SOU is one of the game's tag aliases ("alias is
+  already existing tag SOU"), now SOH, and new tags avoid the aliases (`check_mod.py` too, mutation-tested). The
+  players' requested traits and national spirits are made into the game unless the author declines them (the author:
+  "Created traits should be shown as applied to the character, unless I veto it, in which case it should be removed";
+  `scripts/requests_made.py`): Arovannea's four traits and two spirits, from its player's own lists of effects; the
+  Gazetteer shows a trait on its character as soon as it is asked for, declining asks for a reason, and the player sees
+  the author's answers when they next open their page; a leader's titles are a description now. The Deco UI v0.12.5:
+  the occupied territories' list ends on the screen (the author: "When doing releasables, I can't scroll all the way to
+  the bottom"). 69 of 69 breaks caught; all twelve Gazetteer tests pass (`answers.py` new; `run.py` and `traits.py` follow the answers and the sent note); the site republished.
 - 2026-10-30: Linterre renamed Lindreland, its culture British (the author: "Rename Linterre/ Placeholdaire to
   Lindreland, and make their culture British"): `docs/NATIONS.md`.
 - 2026-10-29: the author's map (their 10-21-3 with their edits, sent as "HOI4_Mod_Map_10-21-3") and the Gazetteer's export

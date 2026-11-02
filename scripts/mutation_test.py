@@ -247,6 +247,11 @@ def m_earth_history(mod):
     return "of Earth's tags have no history file"
 
 
+def m_tag_alias(mod):  # a country tag that is one of the game's aliases (2026-11-02: South Yucanoa as SOU)
+    edit(mod, "common/country_tags/valsora_countries.txt", lambda t: t + 'SPA = "countries/Valsora Rouental.txt"\n')
+    return "our tags ['SPA'] are the game's tag aliases"
+
+
 def m_decision_stand_in(mod):
     edit(mod, "common/decisions/valsora_vanilla_stand_ins.txt",
          lambda t: re.sub(r"\n\t(\w+) = \{\n(\t\t[^\n]*\n)*?\t\}", "", t, count=1))
@@ -293,6 +298,17 @@ def m_ruling_party(mod):
 def m_trait(mod):
     edit(mod, "common/characters/ROU.txt", lambda t: t.replace("traits = { armor_officer }", "traits = { made_up_trait }", 1))
     return "corps_commander trait made_up_trait is not one of the base game's"
+
+
+def m_trait_modifier(mod):   # a misspelt modifier in a trait a player asked for (scripts/requests_made.py, 2026-11-02)
+    edit(mod, "common/country_leader/valsora_requested_traits.txt",
+         lambda t: t.replace("war_support_factor", "war_suport_factor", 1))
+    return "trait AVN_the_jasper_snake's war_suport_factor is not one of the game's modifiers"
+
+
+def m_idea_modifier(mod):
+    edit(mod, "common/ideas/valsora_ideas.txt", lambda t: t.replace("conscription_factor", "conscripton_factor", 1))
+    return "idea ROU_feudal_army's conscripton_factor is not one of the game's modifiers"
 
 
 def m_advisor_slot(mod):
@@ -516,10 +532,11 @@ def m_song(mod):
 BATCHES = {
     "map": [m_crlf, m_adjacency_end, m_strait_through_land, m_impassable_border_apart, m_walled_off, m_building_row, m_ships_in_port, m_earth_map_file, m_weather_big, m_supply_node_sea,
             m_railway_apart, m_x_crossing, m_land_low, m_terrain_ocean],
-    "history": [m_technology, m_module, m_equipment, m_idea, m_battalion, m_define, m_earth_history, m_popularities,
+    "history": [m_technology, m_module, m_equipment, m_idea, m_battalion, m_define, m_earth_history, m_tag_alias, m_popularities,
                 m_ruling_party, m_recruit_unknown, m_faction_template, m_bookmark, m_descriptor, m_autonomy, m_claim_tag,
                 m_impassable_unlinked, m_impassable_capital, m_supply_node_impassable, m_unit_impassable],
-    "content": [m_decision_stand_in, m_event_stand_in, m_old_date, m_tree_label, m_start_year, m_trait, m_advisor_slot,
+    "content": [m_decision_stand_in, m_event_stand_in, m_old_date, m_tree_label, m_start_year, m_trait, m_trait_modifier,
+                m_idea_modifier, m_advisor_slot,
                 m_prerequisite, m_state_loc, m_decision_loc, m_trigger_for, m_scripted_effect, m_war_goal, m_song,
                 m_company_include, m_company_tag, m_company_loc, m_concern_trait, m_idea_loc, m_skill_range, m_skill_kind],
     "files": [m_no_bom, m_gui_sprite, m_texture_missing, m_minimap, m_globe, m_case_clash, m_ascii_name,

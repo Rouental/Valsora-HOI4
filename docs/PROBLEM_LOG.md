@@ -6,6 +6,38 @@ build. "Check" means `scripts/check_mod.py` now catches it, so it can't slip bac
 
 ## In-game problems (reported by the author)
 
+**The occupied territories' list of releasables couldn't be scrolled to its end** (2026-11-02, the author's screenshot:
+"When doing releasables, I can't scroll all the way to the bottom").
+- Cause: the game's list is as tall as its container (`100%`, one percent sign) and takes the container's own y (190)
+  back off with a bottom margin (195); the Deco UI (v0.5) moved the container 72 px down for the medallion's notch and
+  kept the margin, so the list ran about 67 px under the screen's bottom.
+- Fix: the margin grows with the move (267; Deco UI v0.12.5, `layout_panels.PANELS["occupation"]`). The other side
+  panels' lists measure to the window's edge (`100%%` or a negative height), which a move down only shortens.
+
+**error.log filled up after the game's update** (2026-11-02).
+- Cause: the author's game updated itself to 1.19.4 ("War Effort", late October): its code looks for the new screens'
+  elements (automatic imports, repair orders, diplomatic auto-responses, the focus tree's mini-map, research shortcuts,
+  recalling volunteers) in the Deco UI's versions of the screens, made from 1.19.3's, and two windows it can't find
+  "will most likely crash" (their buttons aren't in our screens either, so nothing opens them); the base game's own
+  Japan and India files name decisions the mod switches off (harmless: those countries don't exist here).
+- Open: every patched screen made again from 1.19.4's files, once they are in `Rouental/HOI4-Files`.
+
+**"alias is already existing tag SOU"** (2026-11-02, error.log).
+- Cause: the import gave Arovannea's releasable South Yucanoa the tag SOU (2026-10-29), one of the game's tag aliases
+  (`common/country_tag_aliases`: SOU, SOS, SPA, VIC ...); the tags new countries avoid were only the base game's real
+  ones.
+- Fix: South Yucanoa is SOH; the aliases are indexed (`source/vanilla/index/tag_aliases.txt`, `vanilla_sync.py`), new
+  tags avoid them, and `check_mod.py` fails on one (`m_tag_alias`).
+
+**Arovannea's new traits and national spirits weren't in the game** (2026-11-02, the author: "Is there a reason for
+that?").
+- Cause: by design until then: a request (a trait, a spirit, a sub-ideology ...) waited for the author, listed on
+  `gazetteer.py status` and in `dist/open_questions.md`.
+- Fix: the author's new rule ("Created traits should be shown as applied to the character, unless I veto it"): the
+  traits and spirits asked for are made by Claude from the players' words (`scripts/requests_made.py`) and are in the
+  game unless declined; the page shows a trait on its character at once. Ýzania's title was kept by the page as Y and an
+  accent: titles are compared in one form (NFC).
+
 **The Gazetteer's import would have spread Rouental's populations over their neighbours** (2026-10-23, the export of that
 day, before it went in).
 - Cause: the author typed a population for every one of Rouental's 167 fief states on the page; `gazetteer.rekey`, kept

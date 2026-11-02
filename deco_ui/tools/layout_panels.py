@@ -129,7 +129,13 @@ PANELS = {
                       controls={"viewing_flag": (445, 25), "viewing_flag_border": (440, 20)}),
     "occupation": dict(file="countryoccupationview.gui", window="countryoccupationview", title="title",
                        header_bg=["header_bg"], clear=["bg_cointainer"],
-                       controls={"garrison_log_open": (-138, CONTROLS_Y), "equipment_open": (-98, CONTROLS_Y)}),
+                       controls={"garrison_log_open": (-138, CONTROLS_Y), "equipment_open": (-98, CONTROLS_Y)},
+                       # the list's height is its container's whole (100%, not 100%% to the edge), its bottom margin
+                       # the game's way of taking off the container's own y (190 + 5): moved down, the margin grows
+                       # with it, or the last countries lie under the screen's bottom (the author, 2026-11-02: "When
+                       # doing releasables, I can't scroll all the way to the bottom")
+                       inner_attrs={"occupation_territories_list_container_bottom_margin>occupation_territories_list_container":
+                                    dict(margin="{ top = 0 left = 10 bottom = %d right = 0 }" % (195 + SHIFT))}),
     "officers": dict(file="countryofficercorpview.gui", window="countryofficercorpview", title="army_title",
                      header_bg=["army_header_bg"]),
     "production": dict(file="countryproductionlineview.gui", window="countryproductionlineview",

@@ -34,6 +34,7 @@ import gazetteer
 import ideologies
 import nations
 import pdxscript
+import requests_made
 from common import MAP_W, MAP_H, COUNTRIES, CONTINENTS
 from imgio import read_dds
 
@@ -565,12 +566,18 @@ def main():
         # nation, as pairs of the page's province numbers (its own, then `others`): the Impassable tool's defaults
         walls = sorted(sorted((local[a], local[b])) for a, b in walls_built
                        if a in local and b in local and tindex[tag] in (prov_owner[a], prov_owner[b]))
+        # the traits and spirits made from its players' requests (2026-11-02, scripts/requests_made.py), by the request's
+        # title: what they are and, for a trait, whose (Claude's reading, until the page's request names a character)
+        made = {k[1]: dict(kind=v["kind"], name=v["name"], **({"to": (v.get("to") or "").replace("party_", "party-") or None}
+                                                              if v["kind"] == "trait" else {}))
+                for k, v in requests_made.MADE.items() if k[0] == tag}
         nation = dict(tag=tag, name=c[1], adj=c[2], colour=colour(tag), flag=flag(tag), flags=gov_flags(tag),
                       continent=CONT_NAME.get(cont, cont), final=final[tag], states=st_list, provs=provs,
                       **({"impassable": imp} if imp else {}), **({"walls": walls} if walls else {}),
                       others=others, otherT=other_t, otherK=other_k, nb=[dict(tag=o, name=COUNTRIES[by_tag[o]][1], colour=colour(o))
                                          for o in sorted(nb, key=nb.get)],
-                      cities=cities, politics=politics(tag, loc), characters=people, gameReleasables=rels, parts=parts)
+                      cities=cities, politics=politics(tag, loc), characters=people, gameReleasables=rels, parts=parts,
+                      **({"made": made} if made else {}))
         text = json.dumps(nation, ensure_ascii=False, separators=(",", ":"))
         (OUT / "n" / f"{tag}.json").write_text(text, encoding="utf-8")
         index.append(dict(tag=tag, name=c[1], colour=colour(tag), continent=nation["continent"],

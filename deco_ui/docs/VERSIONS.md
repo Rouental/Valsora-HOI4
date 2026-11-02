@@ -174,6 +174,14 @@ it before touching the UI. In short:
     equipment's plate, the factory slots, the resource wells) and turned the game's scratches into gilt specks along
     the trade rows (`make_panel_pictures.DRAWN`).
 
+- **v0.12.5** (2026-11-02, not yet seen in game; from the author's screenshot of the occupied territories' list of
+  releasables: "When doing releasables, I can't scroll all the way to the bottom"): **the occupied territories' list
+  ends on the screen**. The game's list is as tall as its container (`100%`, not `100%%` to the edge) and takes off
+  the container's own y (190) with its bottom margin (195); v0.5 moved the container 72 px down for the notch and left
+  the margin, so the list ran some 67 px under the screen's bottom with its last countries in it. The margin grows
+  with the move (267, `layout_panels.PANELS["occupation"]`'s `inner_attrs`); the other panels' lists run to the
+  window's edge (`100%%` or a negative height), which moving down only shortens.
+
 - **v0.12.4** (2026-10-23, not yet seen in game; from the author's screenshot of the diplomacy tab, Kalaistan): **the
   national spirits inside their band** ("I noticed that spirits don't fit in the bar"): the game puts their row level
   with the band's title, so a spirit's 64 px icon stood 3 px over the top of the well `diplomacy_art.spirits_band`

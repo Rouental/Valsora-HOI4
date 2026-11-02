@@ -155,6 +155,9 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .tchip[aria-pressed="true"] { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); font-weight: 700; }
 .tchip .x { border: 0; background: none; padding: 0 0 0 2px; font: inherit; line-height: 1; cursor: pointer; color: var(--ink-3); }
 .tchip .x:hover { color: var(--ink); }
+.tchip.asked { border-style: dashed; }
+.tchip.asked small { font-weight: 400; color: var(--ink-3); }
+.req .made { margin-top: 2px; }
 /* what a leader's traits do (2026-10-18): under the chips, and every trait of the list in a fold */
 .teff { margin: 2px 0 2px 16px; padding: 0; font-size: 12px; color: var(--ink-2); line-height: 1.35; }
 .teff b { color: var(--ink); font-weight: 600; }
@@ -514,6 +517,11 @@ const REQ_KINDS = [["subideology", "New sub-ideology"], ["trait", "New trait"], 
 // what each kind's two fields ask for (2026-10-21, the author: "allow people to request national spirits")
 const REQ_HINTS = { spirit: ["The national spirit's name", "What it should do (e.g. +10% factory output, −5% stability), how long it lasts or what removes it, and the text shown with it"] };
 const MAX_TRAITS = 6;   // a leader's traits from the base game (2026-10-15)
+// a leader's description, the tooltip of their portrait in the game (2026-11-02, the author: "instead of 'Titles or a
+// few words' ... you should ask for a character description"; titles until then)
+const DESC_LABEL = "Description (shown with their portrait in game)";
+const DESC_PH = "Who they are, in a few lines: their past, their character, what they want";
+const DESC_MAX = 1000;
 const REQ_KIND = Object.fromEntries(REQ_KINDS);
 const REQ_STATUS = { open: "Open", done: "Done", declined: "Declined" };
 const ROLES = [["general", "General"], ["admiral", "Admiral"], ["advisor", "Advisor"], ["other", "Other"]];
@@ -1661,13 +1669,15 @@ function guideSteps(N) {
       h("p", null, "The tabs on the right hold the rest: ", B("Politics"), " (your names under each government, the ruling sub-ideology, the ruler and party leaders), ", B("People"), " (generals, admirals, advisors, companies), ", B("Releasables"), " (nations that can break away from yours) and ", B("Nation"), " (flag, map colour, culture, motto, anthem, and your name)."),
       N && N.open ? h("p", null, B("State"), " and ", B("Cities"), " show what you select on the map.") : null] },
     { pic: "ask", title: "Asking for more", body: [
-      h("p", null, "Missing something the lists don't have: a sub-ideology, a trait, a kind of company or of subject, a change to the map? Ask for it on the ", B("Nation"), " tab. Your requests go to the author, and their answer shows under each one.")] },
+      h("p", null, "Missing something the lists don't have: a sub-ideology, a trait, a kind of company or of subject, a change to the map? Ask for it on the ", B("Nation"), " tab. Your requests go to the author; their answer shows under each one, and in a note the next time you open your page."),
+      h("p", null, "A trait you ask for shows on its character at once and is in the game, unless the author declines it.")] },
     { pic: "key", title: "Your password", body: [
       h("p", null, "This browser remembers ", nm, "'s password, so it opens by itself next time. On another device, enter it again."),
       h("p", null, "Keep it to yourself: anyone who has it can change your nation. Lost it? Ask the author for a new one.")] },
   ];
 }
 function showGuide(step = 0) {
+  app.answered = null;
   const steps = guideSteps(app.N), s = steps[step], last = step === steps.length - 1;
   const pic = h("div");
   if (s.pic) pic.innerHTML = GPIC[s.pic];   // the page's own drawings, no outside text
@@ -1687,6 +1697,41 @@ function showGuide(step = 0) {
 }
 function closeGuide() {
   store("gazetteer-guided", "1");
+  closeDialog();
+  maybeAnswers();   // the author's answers wait for the guide
+}
+// the author's answers to a nation's requests since this browser last showed them (2026-11-02, the author: "Maybe a
+// popup the next time they open their gazeteer page?"): what was declined or done, with the author's explanation
+function answersToShow() {
+  if (app.isOwner || !app.N || !app.N.K) return [];
+  const seen = +(recall("gazetteer-answers:" + app.N.tag) || 0);
+  return Object.entries(app.reqs || {}).map(([id, r]) => ({ ...r, id }))
+    .filter(r => (r.status === "declined" || r.status === "done") && (r.answeredAt || 0) > seen).sort((a, b) => a.answeredAt - b.answeredAt);
+}
+function maybeAnswers() {
+  const list = answersToShow();
+  if (list.length && $("#guide").hidden) showAnswers(list);
+}
+function showAnswers(list) {
+  const tag = app.N.tag, last = Math.max(...list.map(r => r.answeredAt));
+  app.answered = () => { store("gazetteer-answers:" + tag, String(last)); app.answered = null; closeDialog(); };
+  const ok = h("button", { class: "btn primary", type: "button", onclick: () => app.answered() }, "OK");
+  $("#guide-card").replaceChildren(
+    h("div", { class: "gtop" }, h("p", { class: "eyebrow", text: "From the author" })),
+    h("h3", { id: "guide-title", text: list.length === 1 ? "An answer to your request" : `Answers to ${list.length} of your requests` }),
+    ...list.map(r => h("div", { class: "req" },
+      h("div", { class: "top-line" }, h("span", { class: "kind", text: REQ_KIND[r.kind] || "Request" }),
+        h("span", { class: "kind state-" + r.status, text: REQ_STATUS[r.status] })),
+      h("div", { class: "title", text: r.title || "(no title)" }),
+      r.reply ? h("div", { class: "reply", text: r.reply }) : h("div", { class: "meta", text: r.status === "declined" ? "No reason given." : "" }),
+      r.status === "declined" && (r.kind === "trait" || r.kind === "spirit") ? h("div", { class: "meta", text: "It's not in the game." } ) : null)),
+    h("div", { class: "gfoot" }, ok));
+  const g = $("#guide");
+  app.guideReturn = document.activeElement;
+  g.hidden = false;
+  $("#guide-card").focus();
+}
+function closeDialog() {
   $("#guide").hidden = true;
   const r = app.guideReturn; app.guideReturn = null;
   if (r && r.focus && document.contains(r)) r.focus();
@@ -1787,7 +1832,8 @@ function attach() {
       }
       app.reqs = reqs; app.metaLoaded = true;
       resolveProfiles(ids).then(() => dirtyPanes("nation"));
-      dirtyPanes("nation");
+      dirtyPanes("nation", "people");
+      maybeAnswers();
       if (pics) dirtyPanes("people", "nation");
     }, () => { app.metaLoaded = true; }));
   } catch (e) { /* bad path */ }
@@ -3501,7 +3547,7 @@ function relCard(r) {
       h("div", { class: "fields" },
         fieldOf("rl-lead-" + id, "Ruler", textInput("rl-lead-" + id, leader.name, "Its head of state", v => edit1({ leader: { name: v } }), "", 80), leader.name),
         genderField("rl-gender-" + id, leader.gender, "male", v => edit1({ leader: { gender: v } })),
-        fieldOf("rl-desc-" + id, "Titles", textArea("rl-desc-" + id, leader.desc, "Shown on their portrait in game", v => edit1({ leader: { desc: v } }), 600), leader.desc),
+        fieldOf("rl-desc-" + id, DESC_LABEL, textArea("rl-desc-" + id, leader.desc, DESC_PH, v => edit1({ leader: { desc: v } }), DESC_MAX), leader.desc),
         traitPicker("rl-traits-" + id, traitList("ruler"), leader.traits, v => edit1({ leader: { traits: v } })))),
     fieldOf("rl-notes-" + id, "About it", textArea("rl-notes-" + id, r.notes, "Its people and history, why it would break away", v => edit1({ notes: v }), 2000), r.notes),
     resetButton("Delete this releasable", () => { edit("releasables", { [id]: null }); if (app.ui.rel === id) app.ui.rel = null; renderSubtools(); }, false, "Yes, delete it"));
@@ -3528,7 +3574,7 @@ function gameRelCard(r) {
         h("div", { class: "fields" },
           fieldOf("rl-lead-" + id, "Ruler", textInput("rl-lead-" + id, lead.name, gl.name || "Its head of state", v => edit1({ leader: { name: v } }), "", 80), lead.name),
           genderField("rl-gender-" + id, lead.gender, gl.gender, v => edit1({ leader: { gender: v } })),
-          fieldOf("rl-desc-" + id, "Titles", textArea("rl-desc-" + id, lead.desc, gl.desc || "Shown on their portrait in game", v => edit1({ leader: { desc: v } }), 600), lead.desc),
+          fieldOf("rl-desc-" + id, DESC_LABEL, textArea("rl-desc-" + id, lead.desc, gl.desc || DESC_PH, v => edit1({ leader: { desc: v } }), DESC_MAX), lead.desc),
           traitPicker("rl-traits-" + id, traitList("ruler"), lead.traits !== undefined ? lead.traits : gl.traits, v => edit1({ leader: { traits: v } }), true)));
   return h("div", { class: "relcard" + (app.ui.rel === id ? " sel" : ""), style: `--rel:${col}` },
     h("div", { class: "relhead" },
@@ -3689,25 +3735,89 @@ function askAuthor(id, o) {  // ask the author for something the base game doesn
   const open = h("button", { class: "btn small", type: "button", onclick: () => { box.hidden = !box.hidden; if (!box.hidden) nm.focus(); } }, o.button);
   const nm = h("input", { id: id + "-name", type: "text", maxlength: "60", placeholder: o.namePh, "data-keep": true });
   const what = h("textarea", { id: id + "-what", maxlength: "1500", placeholder: o.whatPh, "data-keep": true });
-  const msg = h("span", { class: "meta" });
+  // the note that it was sent outlives the pane being drawn again (a trait's request redraws the People tab, 2026-11-02)
+  const msg = h("span", { class: "meta", text: (app.ui.askSent || {})[id] || "" });
+  if (msg.textContent) box.hidden = false;
   if (app.mode !== "shared") box.append(h("div", { class: "meta", text: `Requests go to the shared atlas, which this view can't save to: describe ${o.it} in the notes instead.` }));
   else {
     const send = h("button", { class: "btn small primary", type: "button", onclick: async () => {
       if (locked()) { askPassword(); return; }
       const t = nm.value.trim();
       if (!t) { msg.textContent = "Name it first."; nm.focus(); return; }
+      if (app.ui.askSent) delete app.ui.askSent[id];
       send.disabled = true;
-      try { await sendRequest(o.kind, o.title(t), o.details(what.value.trim())); nm.value = ""; what.value = ""; msg.textContent = "Sent. The author sees it with your nation's requests."; }
-      catch (e) { msg.textContent = "Not sent: this view can't save to the shared atlas."; writeFailed(e, null); }
+      try {
+        app.ui.askSent = { ...(app.ui.askSent || {}), [id]: o.sent || "Sent. The author sees it with your nation's requests." };
+        msg.textContent = app.ui.askSent[id];
+        await sendRequest(o.kind, o.title(t), o.details(what.value.trim()), o.extra); nm.value = ""; what.value = "";
+      }
+      catch (e) { delete app.ui.askSent[id]; msg.textContent = "Not sent: this view can't save to the shared atlas."; writeFailed(e, null); }
       finally { send.disabled = false; }
     } }, "Send");
     box.append(h("div", { class: "field" }, h("label", { for: id + "-name", text: o.label }), nm), what, h("div", { class: "chips" }, send, msg));
   }
   return h("div", { style: "display:grid;gap:6px" }, h("div", null, open), box);
 }
-function traitAsk(id, who) {  // a trait the base game doesn't have
+function traitAsk(id, who, ref) {  // a trait the base game doesn't have, for one character (ref: whose, 2026-11-02)
   return askAuthor(id, { kind: "trait", button: "Ask for a new trait", label: "New trait", it: "the trait", namePh: "The trait's name",
-    whatPh: "What it should do (e.g. +10% defence in hills, cheaper advisors …)", title: t => `New trait: ${t}`, details: w => `For ${who}. ${w}` });
+    whatPh: "What it should do (e.g. +10% defence in hills, cheaper advisors …)", title: t => `New trait: ${t}`, details: w => `For ${who}. ${w}`,
+    extra: ref ? { for: ref } : null, sent: "Sent. It shows on them now; the author makes it from your words, and it's in the game unless they decline it." });
+}
+// the traits asked for on a character (2026-11-02, the author: "Created traits should be shown as applied to the
+// character, unless I veto it, in which case it should be removed"): the author's Claude makes each from the player's
+// words (scripts/requests_made.py), and the author's Decline takes it away. Whose: the request's own choice, else the
+// Claude's reading (the nation's `made`), else the head of state's, whose box the early ones were asked from
+// the request's made trait or spirit, by its title in one Unicode form (a page may keep Ý as Y and an accent)
+const madeOf = r => ((app.N && app.N.made) || {})[(r.title || "").normalize("NFC")];
+function traitOwner(r) {
+  if (r.for) return r.for.replace(/^party_/, "party-");
+  const m = madeOf(r);
+  if (m && "to" in m) return m.to || null;
+  return /^For the head of state\b/.test(r.details || "") ? "ruler" : null;
+}
+const traitName = r => (r.title || "").replace(/^New trait:\s*/, "");
+function askedTraits(ref) {
+  return Object.entries(app.reqs || {}).map(([id, r]) => ({ ...r, id }))
+    .filter(r => r.kind === "trait" && r.status !== "declined" && traitOwner(r) === ref).sort((a, b) => (a.at || 0) - (b.at || 0));
+}
+function askedChips(ref) {
+  const list = askedTraits(ref);
+  if (!list.length) return null;
+  return h("div", { class: "field set" }, h("label", { text: "New traits asked for" }),
+    h("div", { class: "chips" }, list.map(r => h("span", { class: "tchip asked", "aria-pressed": "true", title: r.details || "" }, traitName(r),
+      h("small", { text: madeOf(r) ? "in the game" : "being made" })))),
+    h("div", { class: "meta", text: "In the game unless the author declines them, which takes them off. Whose each is can be changed with the request, on the Nation tab." }));
+}
+// whose a trait can be: the head of state, the party leaders, the nation's own characters
+function traitOwners() {
+  const ppl = F("people"), now = rulingNow(), out = [["ruler", "Head of state" + ((ppl.ruler || {}).name ? ` (${ppl.ruler.name})` : "")]];
+  for (const [ideo, nm] of app.index.ideologies) if (ideo !== now.ideo) {
+    const p = ppl["party-" + ideo] || {};
+    out.push(["party-" + ideo, `${nm} party leader` + (p.name ? ` (${p.name})` : "")]);
+  }
+  for (const [k, c] of Object.entries(ppl)) if (k.startsWith("c-") && c && isObj(c) && c.role !== "other")
+    out.push([k, `${(ROLES.find(r => r[0] === (c.role || "general")) || [, "Character"])[1]} ${c.name || "(no name yet)"}`]);
+  return out;
+}
+// a trait or spirit request's place in the game, and whose a trait is (2026-11-02)
+function madeLine(tag, r) {
+  if (r.kind !== "trait" && r.kind !== "spirit") return null;
+  const N = app.N && app.N.tag === tag ? app.N : null, made = N && madeOf(r);
+  const where = r.kind === "spirit" ? " from the start" : "";
+  const state = r.status === "declined" ? "Declined: not in the game." : made ? `In the game${where}, unless the author declines it.`
+    : `In the game${where} once the author has made it from these words, unless they decline it.`;
+  const line = h("div", { class: "meta made", text: state });
+  if (r.kind !== "trait" || !N || !app.index) return line;
+  const who = traitOwner(r), opts = traitOwners();
+  if (app.mode !== "shared" || locked()) {
+    const o = opts.find(x => x[0] === who);
+    return h("div", null, line, h("div", { class: "meta", text: "Whose: " + (o ? o[1] : "no one yet") }));
+  }
+  const sel = h("select", { "aria-label": "Whose trait", onchange: e => updateRequest(tag, r.id, { for: e.target.value || null }) },
+    h("option", { value: "", text: "No one yet" }), opts.map(([k, l]) => h("option", { value: k, text: l })));
+  if (who && !opts.some(x => x[0] === who)) sel.append(h("option", { value: who, text: who }));
+  sel.value = who || "";
+  return h("div", null, line, h("div", { class: "field" }, h("label", { text: "Whose trait" }), sel));
 }
 // a nation's companies (2026-10-15): of the base game's kinds (index.companies, from scripts/vanilla_sync.py), kept in
 // the people document as co-<id>: arms companies (a military-industrial organisation with the Arms Against Tyranny DLC,
@@ -3790,7 +3900,7 @@ function gameCharCard(c) {
   if (c.regnal != null) fields.push(fieldOf(idp + "-regnal", "Name once ruling", textInput(idp + "-regnal", o.regnal, c.regnal || "As now", v => ed({ regnal: v }), "", 80), o.regnal));
   fields.push(genderField(idp + "-gender", o.gender, c.gender, v => ed({ gender: v })));
   if (c.ideo) {
-    fields.push(fieldOf(idp + "-desc", "Titles or a few words (shown on their portrait in game)", textArea(idp + "-desc", o.desc, c.desc || "e.g. By the Grace of God, Prince of …", v => ed({ desc: v }), 600), o.desc));
+    fields.push(fieldOf(idp + "-desc", DESC_LABEL, textArea(idp + "-desc", o.desc, c.desc || DESC_PH, v => ed({ desc: v }), DESC_MAX), o.desc));
     if (!generated(c)) fields.push(fieldOf(idp + "-sub", `Sub-ideology (${ideoName(c.ideo)}: the focus tree names the ideology)`,
       subSelect(idp + "-sub", o.sub, `As in the game: ${subName(c.sub)}`, v => ed({ sub: v }), c.ideo), o.sub));
     fields.push(traitPicker(idp + "-traits", traitList("ruler"), o.traits !== undefined ? o.traits : c.traits, v => ed({ traits: v }), true));
@@ -3825,7 +3935,8 @@ function characterRow(id, c) {  // a general, an admiral or an advisor
         traitPicker("pp-c-traits-" + id, traitList(c.role || "general", c.slot), c.traits, v => edit("people", { [id]: { traits: v } })),
       (c.role || "general") === "general" ? fieldOf("pp-c-rank-" + id, "Rank", rankSelect("pp-c-rank-" + id, c.rank, "corps_commander", v => edit("people", { [id]: { rank: v } })), c.rank) : null,
       ["general", "admiral"].includes(c.role || "general") ? statsBlock("pp-c-st-" + id, c.role || "general", c, STAT_DEFAULT[c.role || "general"], d => edit("people", { [id]: d })) : null,
-      (c.role || "general") === "other" ? null : traitAsk("pp-c-ask-" + id, `${ROLES.find(r => r[0] === (c.role || "general"))[1].toLowerCase()} ${c.name || "(no name yet)"}`),
+      (c.role || "general") === "other" ? null : askedChips(id),
+      (c.role || "general") === "other" ? null : traitAsk("pp-c-ask-" + id, `${ROLES.find(r => r[0] === (c.role || "general"))[1].toLowerCase()} ${c.name || "(no name yet)"}`, id),
       textArea("pp-c-note-" + id, c.notes, "Notes for the author: skills, history", v => edit("people", { [id]: { notes: v } }), 1000)));
 }
 function renderPeople(force) {
@@ -3855,10 +3966,11 @@ function renderPeople(force) {
             h("div", { class: "field" + (ruler.name ? " set" : "") }, h("label", { for: "pp-ruler-name", text: "Name" }),
               textInput("pp-ruler-name", ruler.name, rulerDefault || "A name from the nation's culture", v => edit("people", { ruler: { name: v } }), "", 80)),
             genderField("pp-ruler-gender", ruler.gender, now.sub ? gameGender(`${N.tag}_leader_${now.sub}`) : "male", v => edit("people", { ruler: { gender: v } })),
-            h("div", { class: "field" + (ruler.desc ? " set" : "") }, h("label", { for: "pp-ruler-desc", text: "Titles or a few words (shown on their portrait in game)" }),
-              textArea("pp-ruler-desc", ruler.desc, (gameRuler && gameRuler.desc) || "e.g. By the Grace of God, Prince of …", v => edit("people", { ruler: { desc: v } }), 600)),
+            h("div", { class: "field" + (ruler.desc ? " set" : "") }, h("label", { for: "pp-ruler-desc", text: DESC_LABEL }),
+              textArea("pp-ruler-desc", ruler.desc, (gameRuler && gameRuler.desc) || DESC_PH, v => edit("people", { ruler: { desc: v } }), DESC_MAX)),
             traitPicker("pp-ruler-traits", traitList("ruler"), ruler.traits, v => edit("people", { ruler: { traits: v } })),
-            traitAsk("pp-ruler-ask", "the head of state" + (ruler.name ? ` (${ruler.name})` : "")))),
+            askedChips("ruler"),
+            traitAsk("pp-ruler-ask", "the head of state" + (ruler.name ? ` (${ruler.name})` : ""), "ruler"))),
         portraitNote));
     // party leaders
     if (P.handmade) {
@@ -3883,7 +3995,9 @@ function renderPeople(force) {
               have ? h("div", { class: "field" + (p.name ? " set" : "") }, h("label", { for: "pp-name-" + ideo, text: "Leader" }),
                 textInput("pp-name-" + ideo, p.name, ((game.find(c => !c.ruler && c.ideo === ideo && c.sub === have)) || {}).name || "A name from the nation's culture", v => edit("people", { ["party-" + ideo]: { name: v } }), "", 80)) : null,
               have ? genderField("pp-gender-" + ideo, p.gender, gameGender(`${N.tag}_leader_${have}`), v => edit("people", { ["party-" + ideo]: { gender: v } })) : null,
-              have ? traitPicker("pp-traits-" + ideo, traitList("ruler"), p.traits, v => edit("people", { ["party-" + ideo]: { traits: v } })) : null));
+              have ? traitPicker("pp-traits-" + ideo, traitList("ruler"), p.traits, v => edit("people", { ["party-" + ideo]: { traits: v } })) : null,
+              have ? askedChips("party-" + ideo) : null,
+              have ? traitAsk("pp-ask-" + ideo, `the ${nm} party's leader` + (p.name ? ` (${p.name})` : ""), "party-" + ideo) : null));
         }))));
     }
     // characters: the political advisors on their own (author, 2026-10-15: "allow people to create political
@@ -4027,15 +4141,27 @@ function requestCard(tag, r, withNation) {
     h("div", { class: "title", text: r.title || "(no title)" }),
     r.details ? h("div", { class: "body", text: r.details }) : null,
     r.reply ? h("div", { class: "reply", text: r.reply }) : null,
+    madeLine(tag, r),
     h("div", { class: "meta", text: `${personName(r.by)} · ${r.at ? new Date(r.at).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" }) : ""}` }));
   if (app.mode === "shared" && (app.isOwner || mine)) {
     if (app.isOwner) {
-      const ctl = h("div", { class: "chips" });
-      for (const st of ["open", "done", "declined"]) ctl.append(h("button", { class: "tchip", type: "button", "aria-pressed": String((r.status || "open") === st), onclick: () => updateRequest(tag, r.id, { status: st }) }, REQ_STATUS[st]));
-      const reply = h("textarea", { placeholder: "Reply (shown under the request)", maxlength: "2000" });
+      // an answer (Done or Declined) is shown to the nation's players the next time they open it (2026-11-02, the
+      // author: "When I decline something, I should be given the option to provide an explanation"): answeredAt
+      const ctl = h("div", { class: "chips" }), why = h("div", { class: "reqform", hidden: true });
+      const askWhy = () => {
+        const text = h("textarea", { placeholder: "Why? The player sees it the next time they open their page (optional)", maxlength: "2000" });
+        text.value = r.reply || "";
+        why.replaceChildren(text, h("div", { class: "chips" },
+          h("button", { class: "btn small danger", type: "button", onclick: () => updateRequest(tag, r.id, { status: "declined", reply: text.value.trim().slice(0, 2000) || null, answeredAt: Date.now() }) }, "Decline"),
+          h("button", { class: "btn small", type: "button", onclick: () => { why.hidden = true; } }, "Cancel")));
+        why.hidden = false; text.focus();
+      };
+      for (const st of ["open", "done", "declined"]) ctl.append(h("button", { class: "tchip", type: "button", "aria-pressed": String((r.status || "open") === st),
+        onclick: () => st === "declined" ? askWhy() : updateRequest(tag, r.id, { status: st, answeredAt: st === "done" ? Date.now() : null }) }, REQ_STATUS[st]));
+      const reply = h("textarea", { placeholder: "Reply (shown under the request, and to the player once it's Done or Declined)", maxlength: "2000" });
       reply.value = r.reply || "";
-      let t; reply.addEventListener("input", () => { clearTimeout(t); t = setTimeout(() => updateRequest(tag, r.id, { reply: reply.value.trim().slice(0, 2000) || null }), 800); });
-      card.append(ctl, reply);
+      let t; reply.addEventListener("input", () => { clearTimeout(t); t = setTimeout(() => updateRequest(tag, r.id, { reply: reply.value.trim().slice(0, 2000) || null, ...((r.status || "open") !== "open" ? { answeredAt: Date.now() } : {}) }), 800); });
+      card.append(ctl, why, reply);
     }
     const del = h("div", { class: "confirm" });
     const delBtn = h("button", { class: "btn small danger", type: "button", onclick: () => del.replaceChildren(h("span", { text: "Delete this request?" }),
@@ -4054,9 +4180,9 @@ async function updateRequest(tag, id, delta) {
   try { const ref = await requestRef(tag, id); if (ref) await ref.update(delta); if (app.isOwner && $("#desk").hidden) loadOwnerData(true); }
   catch (e) { writeFailed(e, null); }
 }
-async function sendRequest(kind, title, details) {  // a request to the author, kept with the nation behind its password
+async function sendRequest(kind, title, details, extra) {  // a request to the author, kept with the nation behind its password
   const N = app.N;
-  await app.db.doc(`${nPath(N.tag, N.K)}/req-${uid()}`).set({ t: "req", tag: N.tag, kind, title: title.slice(0, 100), details: (details || "").trim().slice(0, 3000), by: (app.me && app.me.id) || null, byName: (app.fb && app.me.name) || null, at: Date.now(), status: "open" });
+  await app.db.doc(`${nPath(N.tag, N.K)}/req-${uid()}`).set({ t: "req", tag: N.tag, kind, title: title.slice(0, 100), details: (details || "").trim().slice(0, 3000), by: (app.me && app.me.id) || null, byName: (app.fb && app.me.name) || null, at: Date.now(), status: "open", ...(extra || {}) });
 }
 function requestForm() {
   const N = app.N;
@@ -4181,7 +4307,7 @@ function loadFile(file) {
 function wireStatic() {
   $("#back").onclick = goHome;
   $("#guide-btn").onclick = () => showGuide(0);
-  $("#guide").addEventListener("keydown", e => { if (e.key === "Escape") { e.stopPropagation(); closeGuide(); } });
+  $("#guide").addEventListener("keydown", e => { if (e.key === "Escape") { e.stopPropagation(); if (app.answered) app.answered(); else closeGuide(); } });
   $("#guide").addEventListener("click", e => { if (e.target === e.currentTarget) closeGuide(); });
   for (const b of document.querySelectorAll(".tool")) b.onclick = () => setTool(b.dataset.tool);
   for (const b of document.querySelectorAll("[data-mode]")) b.onclick = () => setMapMode(b.dataset.mode);

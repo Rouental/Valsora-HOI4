@@ -4,7 +4,7 @@ A web site where friends fill in the facts of their own nations: once you have d
 states on the `.pdn`, state names, terrain, rivers, cities (their victory points and size),
 population, railways, supply hubs, resources and buildings, impassable states and borders; at
 any time, its names and titles under each government, its sub-ideologies, its flags, its ruler and party leaders (names,
-gender, titles, portraits, traits), the characters it already has in the game (Roland and Serelle,
+gender, descriptions, portraits, traits), the characters it already has in the game (Roland and Serelle,
 Rouental's, among them, their skills and stats too), its political advisors, generals, admirals
 and other advisors (with the base game's traits, and the commanders' skill and stats), its
 companies (arms makers and industrial concerns, with their logos), its colour, culture, motto
@@ -92,7 +92,7 @@ nation by hand (Automatic, Open, Closed); a nation's own Map tab has the same bu
 ## Releasables
 
 On the **Releasables** tab, a player adds the nations that could be released from theirs: its
-name, adjective and full title, its ruling sub-ideology, map colour, flag, ruler (name, titles,
+name, adjective and full title, its ruling sub-ideology, map colour, flag, ruler (name, description,
 portrait) and a few words about it, and its land. With the **Releasables** tool they pick its
 states on the map, whole (a state belongs to one releasable), or, while their map tools are closed, draw its land as
 areas. Land comes off again too (2026-10-22, your words: "There should also be a way to remove terrain from releasables,
@@ -135,7 +135,7 @@ their browser, and **Nation › Save a file** gives them a file to send you. Loa
 | map, Impassable tool | impassable borders between two provinces (its own, or one of its and a neighbour's): a click marks a border, another opens it; the game's own show marked | `map/adjacencies.csv`, a row of type `impassable` each, as the base game's Himalayas; borders that would wall land off without a coast are left out (a note for you) |
 | map, Suggest tool | states (their own land inside the line, none of an earlier one's), areas, lines and points drawn anywhere on the world (a border, an island that should be theirs, a mountain range, where an undrawn nation goes), each with what it is | nothing by itself: a layer for you (below) |
 | Politics tab | name, full title and adjective under every government and each ideology; ruling sub-ideology | localisation, `nations.LEADERS` |
-| People tab | head of state (name, gender, titles, portrait, traits); each other party's sub-ideology, leader, gender, portrait and traits; the characters already in the game (for your own nations' characters, as Roland and Serelle: name, the name taken on coming to rule, gender, titles, sub-ideology within its ideology, traits, portrait, and a commander's rank, skill and stats); political advisors (a section of their own); generals, admirals and other advisors (name, gender, portrait, traits, an advisor's post, a general's rank, a commander's skill and stats, notes); traits are the base game's (up to six each, picked from lists by kind: a ruler's, a general's, an admiral's, each advisor post's), and **Ask for a new trait** sends you a request for one the game doesn't have; companies (name, logo, kind, notes): an arms maker of one of the base game's 28 kinds (tanks, ships, aircraft, land equipment) or an industrial concern of one of its 14, and **Ask for a new kind of company** sends you a request | the rulers and party leaders, with their titles shown on the portrait and their traits; every character's gender as the game's `gender = female` (or `male`); your characters changed where they are (a copy, as Mahaut at Brillagne, changes with them); generals and admirals as characters from the start (their skill and stats, skill 3 where not given; their traits; their portraits or a generic one of the nation's culture); advisors in their post on the political screen (the post's usual cost, their traits); an arms maker as a military-industrial organisation of its kind (with Arms Against Tyranny) and, without that DLC, the designer of its kind in the political screen; a concern in the political screen's industrial concern slot, with its kind's trait and research bonus; logos as the company's icon (the whole logo fitted into 64 × 64), else the game's for its kind; the notes are a list for you |
+| People tab | head of state (name, gender, description, portrait, traits); each other party's sub-ideology, leader, gender, portrait and traits; the characters already in the game (for your own nations' characters, as Roland and Serelle: name, the name taken on coming to rule, gender, description, sub-ideology within its ideology, traits, portrait, and a commander's rank, skill and stats); political advisors (a section of their own); generals, admirals and other advisors (name, gender, portrait, traits, an advisor's post, a general's rank, a commander's skill and stats, notes); traits are the base game's (up to six each, picked from lists by kind: a ruler's, a general's, an admiral's, each advisor post's), and **Ask for a new trait** sends you a request for one the game doesn't have (shown on that character at once, in the game unless you decline it); companies (name, logo, kind, notes): an arms maker of one of the base game's 28 kinds (tanks, ships, aircraft, land equipment) or an industrial concern of one of its 14, and **Ask for a new kind of company** sends you a request | the rulers and party leaders, with their descriptions shown with the portrait and their traits (the new ones Claude made from the requests among them); every character's gender as the game's `gender = female` (or `male`); your characters changed where they are (a copy, as Mahaut at Brillagne, changes with them); generals and admirals as characters from the start (their skill and stats, skill 3 where not given; their traits; their portraits or a generic one of the nation's culture); advisors in their post on the political screen (the post's usual cost, their traits); an arms maker as a military-industrial organisation of its kind (with Arms Against Tyranny) and, without that DLC, the designer of its kind in the political screen; a concern in the political screen's industrial concern slot, with its kind's trait and research bonus; logos as the company's icon (the whole logo fitted into 64 × 64), else the game's for its kind; the notes are a list for you |
 | Releasables tab and tool | releasables: name, adjective, full title, ruling sub-ideology, colour, flag, ruler (and their gender), notes, land (whole states, or drawn areas); the game's own and the civil war's risers: the same, over the game's | a country each, owning nothing, with cores on its states (and those its areas cover by half; the largest is its capital), its names, ruler, colour and flag; culture its nation's. The game's own keep their tags, with what was changed |
 | Nation tab | status (in progress / finished), flags (one, and one per government if they like; each slot shows the game's flag until a picture is sent), map colour, culture, motto, anthem, description, notes for you, requests; how far it is (states named counts the names already on your map) | flags into `source/flags/`; the map colour; the rest is for you |
 
@@ -213,7 +213,8 @@ communist) are changed the same way. The ruling sub-ideology isn't on their Poli
 
 **Owner tools** (only you and your admins see them, signed in): the passwords; nations not on
 the map yet; **map tools** (open, closed or automatic, per nation); every **request** (set it
-done or declined, and reply; the player sees the reply with their nation); every
+done or declined, and reply; the player sees the reply with their nation, and what you marked done or declined, with
+your reason, in a note the next time they open it; **Declined** asks for the reason first, 2026-11-02); every
 **suggestion** (shown on the world map, or opened where it was drawn); **admins** (only you
 change them); **Start over** (2026-10-16, your "blank slate"; yours alone, your admins don't see it): press **Clear
 every nation…**, then **Yes, go on** (the first confirmation), then type CLEAR and press **Clear everything now** (the
@@ -254,12 +255,18 @@ with `gazetteer.py paths` and `pull`, which still work.)
   its line that an earlier one doesn't hold); import it into the `.pdn` as a layer (it lines up
   exactly) and draw from it. `dist/gazetteer_suggestions_preview.png` shows them over the map.
 - **Releasables** get a tag each at their first import (from their name, never one in use or
-  the base game's), kept from one import to the next. `status` lists their cores; one holding
+  the base game's, nor one of its tag aliases since 2026-11-02: South Yucanoa had come out SOU), kept from one import to the next. `status` lists their cores; one holding
   no state is left out of the build with a note.
 - **Nations whose map tools are closed**: their states, provinces, cities, rivers, railways and impassable borders,
   and their releasables' states, are left out at the import (the file carries your switches;
   the import reads which states are drawn from the last build).
-- **By hand**: requests (new traits, national spirits and kinds of company among them), advisors without a post, characters' and
+- **New traits and national spirits** (2026-11-02, your words: "Created traits should be shown as applied to the
+  character, unless I veto it, in which case it should be removed"): Claude makes each from the player's words into
+  the game's modifiers (`scripts/requests_made.py`; what the game has no modifier for is listed by `status`), a trait
+  on the character its request names (the head of state or a party leader by itself; an advisor's or a commander's by
+  hand), a spirit on the nation from the start. **Declined** on the page takes it out at the next import; Done or
+  Open leaves it in. The page shows a trait on its character as soon as it's asked for.
+- **By hand**: other requests (sub-ideologies, kinds of company, subject types, map changes), advisors without a post, characters' and
   companies' notes, cultures and flags of other shapes; `status` lists them.
 - **Traits** are the base game's (`source/vanilla/index/traits.json`, made by `scripts/vanilla_sync.py` from your copy of
   the game: the ones its own characters have, Earth's one-country ones left out); the import keeps only those of the right

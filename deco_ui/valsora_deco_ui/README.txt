@@ -1,4 +1,4 @@
-VALSORA DECO UI - v0.12.4 (for HOI4 1.19)
+VALSORA DECO UI - v0.12.5 (for HOI4 1.19)
 =========================================
 
 An art deco interface for the Valsora total conversion: core skin and fonts,
@@ -29,6 +29,16 @@ Valsora repository's scripts/common.py and rebuild (sh scripts/run_all.sh).
 
 The layout is built for 1920 px of UI width: 1920x1080 at 100% UI scale, or
 2560x1440 at up to 133%.
+
+
+NEW IN v0.12.5
+--------------
+  - The occupied territories (releasables): the list ends on the
+    screen, so its last countries can be scrolled to.
+
+Things to check in game (v0.12.5):
+  - the occupied territories with many releasables: scroll to the last;
+    its Release Nation button whole above the screen's bottom.
 
 
 NEW IN v0.12.4

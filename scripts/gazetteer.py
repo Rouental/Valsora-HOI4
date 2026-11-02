@@ -86,6 +86,7 @@ VPS = {1, 3, 5, 10, 15, 20, 25, 30, 40, 50}
 CITY_SIZES = ("village", "town", "city", "large", "metropolis")   # as the page's: how big a city is, apart from its
 # victory points (author, 2026-10-15); the page shares a nation's population out by them, the build doesn't read them
 IDEOLOGIES = ("democratic", "fascism", "communism", "neutrality", "theocracy")
+DESC_MAX = 1000   # a leader's description, as long as the page lets it be (600 until 2026-11-02, when it held titles)
 ROLES = ("general", "admiral", "advisor", "other")
 # a character's gender (2026-10-21, the author: "we should be able to select the gender of characters in the gazetteer.
 # I noticed that Serelle currently seems to be considered male"): HOI4's `gender = female` / `male` in the character
@@ -474,8 +475,8 @@ def normalise(tag, facts, meta, requests=(), sources=(), todo=None):
     r = {}
     if clean(ruler.get("name"), 80):
         r["name"] = clean(ruler["name"], 80)
-    if clean(ruler.get("desc"), 600):
-        r["desc"] = clean(ruler["desc"], 600)
+    if clean(ruler.get("desc"), DESC_MAX):
+        r["desc"] = clean(ruler["desc"], DESC_MAX)
     pic = picture(ruler.get("portrait"), f"{tag} ruler's portrait", sources, todo)
     if pic:
         r["portrait"] = pic
@@ -546,8 +547,8 @@ def normalise(tag, facts, meta, requests=(), sources=(), todo=None):
         for f_, n in (("name", 80), ("regnal", 80)):
             if clean(v.get(f_), n):
                 g[f_] = clean(v[f_], n)
-        if clean(v.get("desc"), 600):
-            g["desc"] = clean(v["desc"], 600)
+        if clean(v.get("desc"), DESC_MAX):
+            g["desc"] = clean(v["desc"], DESC_MAX)
         pic = picture(v.get("portrait"), f"{tag} {cid}'s portrait", sources, todo)
         if pic:
             g["portrait"] = pic
@@ -642,8 +643,8 @@ def normalise(tag, facts, meta, requests=(), sources=(), todo=None):
         ld, lead = v.get("leader") if isinstance(v.get("leader"), dict) else {}, {}
         if clean(ld.get("name"), 80):
             lead["name"] = clean(ld["name"], 80)
-        if clean(ld.get("desc"), 600):
-            lead["desc"] = clean(ld["desc"], 600)
+        if clean(ld.get("desc"), DESC_MAX):
+            lead["desc"] = clean(ld["desc"], DESC_MAX)
         pic = picture(ld.get("portrait"), f"{label}: ruler's portrait", sources, todo)
         if pic:
             lead["portrait"] = pic
@@ -696,7 +697,7 @@ def normalise(tag, facts, meta, requests=(), sources=(), todo=None):
         if pic:
             g["flag"] = pic
         ld, lead = v.get("leader") if isinstance(v.get("leader"), dict) else {}, {}
-        for k, n in (("name", 80), ("desc", 600)):
+        for k, n in (("name", 80), ("desc", DESC_MAX)):
             if clean(ld.get(k), n):
                 lead[k] = clean(ld[k], n)
         pic = picture(ld.get("portrait"), f"{tag}'s releasable {t}: ruler's portrait", sources, todo)
@@ -726,10 +727,18 @@ def normalise(tag, facts, meta, requests=(), sources=(), todo=None):
     reqs = []
     for v in requests or ():
         if isinstance(v, dict) and clean(v.get("title"), 100):
-            reqs.append({"kind": v.get("kind") if v.get("kind") in REQ_KINDS else "other",
-                         "title": clean(v["title"], 100), "details": text(v.get("details"), 3000),
-                         "status": v.get("status") if v.get("status") in ("open", "done", "declined") else "open",
-                         "reply": text(v.get("reply"), 2000), "at": num(v.get("at"), 0, 10 ** 14) or 0})
+            q = {"kind": v.get("kind") if v.get("kind") in REQ_KINDS else "other",
+                 "title": clean(v["title"], 100), "details": text(v.get("details"), 3000),
+                 "status": v.get("status") if v.get("status") in ("open", "done", "declined") else "open",
+                 "reply": text(v.get("reply"), 2000), "at": num(v.get("at"), 0, 10 ** 14) or 0}
+            # a trait's character (2026-11-02: the page's "ruler", "party-<ideology>" or a character's id), as the
+            # build names them ("party_<ideology>"); the request's id
+            who = v.get("for")
+            if isinstance(who, str) and re.fullmatch(r"ruler|party[-_](?:%s)|[a-z0-9-]{4,40}" % "|".join(IDEOLOGIES), who):
+                q["for"] = re.sub(r"^party-", "party_", who)
+            if isinstance(v.get("id"), str) and re.fullmatch(r"(?:req-)?[a-z0-9]{6,40}", v["id"]):   # the page's doc id
+                q["id"] = v["id"]
+            reqs.append(q)
     if reqs:
         out["requests"] = sorted(reqs, key=lambda r: (r["at"], r["title"]))
     return out
@@ -754,9 +763,10 @@ def tags_taken(planned=None):
     from common import COUNTRIES
     taken = {v[0] for v in COUNTRIES.values()}
     taken |= {"AND", "NOT"}  # the game's script words (2026-10-23: North Serkin came out NOT, as in NOT = { })
-    f = Path("source/vanilla/index/tags.txt")
-    if f.exists():
-        taken |= {ln.split("\t")[0] for ln in f.read_text(encoding="utf-8").splitlines() if ln and not ln.startswith("#")}
+    for name in ("tags.txt", "tag_aliases.txt"):  # the game's aliases too (2026-11-02: South Yucanoa came out SOU)
+        f = Path("source/vanilla/index") / name
+        if f.exists():
+            taken |= {ln.split("\t")[0] for ln in f.read_text(encoding="utf-8").splitlines() if ln and not ln.startswith("#")}
     taken |= set(planned or {})
     if (DIR / "planned.json").exists():
         taken |= set(json.loads((DIR / "planned.json").read_text(encoding="utf-8")))
@@ -1590,6 +1600,9 @@ def leaders(tag, subs, facts, handmade, named, portraits, genders=None):
     out = [ruling] + [parties[i] for i in IDEOLOGIES if i in parties]
     people = [(ruling, "ruler", ppl.get("ruler") or {})]
     people += [(parties[i], f"party_{i}", v) for i, v in sorted((ppl.get("parties") or {}).items()) if i in parties]
+    people += [(parties[i], f"party_{i}", {}) for i in IDEOLOGIES if i in parties and i not in (ppl.get("parties") or {})]
+    import requests_made   # the traits the players asked for, applied unless the author declined them (2026-11-02)
+    made = requests_made.traits_of({tag: facts}, tag)
     for sub, role, v in people:
         cid = f"{tag}_leader_{sub}"
         name, sprite = (named.get(cid) or (None, None))[:2]
@@ -1598,7 +1611,7 @@ def leaders(tag, subs, facts, handmade, named, portraits, genders=None):
             pname = f"{tag}_gazetteer_{role}"
             portraits[pname] = (str(DIR / pic["file"]), *portrait_box(pic), None)
             sprite = f"GFX_portrait_{pname}"
-        traits = tuple(t for t in v.get("traits") or [] if t in trait_index()["ruler"])
+        traits = tuple(t for t in v.get("traits") or [] if t in trait_index()["ruler"]) + tuple(made.get(role, ()))
         if v.get("name") or v.get("desc") or sprite or traits:
             named[cid] = (v.get("name") or name, sprite, v.get("desc"), traits)
         if genders is not None and v.get("gender") in GENDERS:
@@ -2150,9 +2163,21 @@ def status():
                 if own[at(lab, k)] != tag]
         where = "" if tag in on_map else f" (not on the map yet{': ' + planned[tag]['name'] if tag in planned else ''})"
         print(f"{tag}{where}: {summary(f)}" + (f"; {len(lost)} facts no longer on {tag}'s land, e.g. {lost[:3]}" if lost else ""))
+        import requests_made
         for r in f.get("requests", []):
-            if r["status"] == "open":
-                todo.append(f"{tag} asks [{r['kind']}] {r['title']}: {r['details'][:200]}")
+            made = requests_made.made_for(tag, r)
+            if made and r["status"] != "declined":   # in the game unless the author declines it (2026-11-02)
+                who = requests_made.owner(r, made) if made["kind"] == "trait" else None
+                if made["kind"] == "trait" and not who:
+                    todo.append(f"{tag}'s trait {made['name']} is made but no one's: whose is it? (the page's request)")
+                elif who and not re.fullmatch(r"ruler|party_\w+", who):
+                    todo.append(f"{tag}'s trait {made['name']} is for character {who}: give it by hand (only rulers and "
+                                f"party leaders take them by themselves)")
+                for s in made.get("said", []):
+                    todo.append(f"{tag}'s {made['name']}: left out, {s}")
+            elif r["status"] == "open":
+                to_make = " (to make in scripts/requests_made.py)" if r["kind"] in ("trait", "spirit") else ""
+                todo.append(f"{tag} asks [{r['kind']}] {r['title']}{to_make}: {r['details'][:200]}")
         for c in (f.get("people") or {}).get("characters", []):
             built = c.get("name") and (c["role"] in COMMANDER or (c["role"] == "advisor" and c.get("slot") in trait_index()["slots"]))
             if built:   # in the build (characters()); the notes are the author's

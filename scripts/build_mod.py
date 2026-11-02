@@ -25,6 +25,7 @@ import globe
 import vanilla_parts
 import minimap
 import nations
+import requests_made
 import superevents
 import test_events
 from imgio import write_bmp, write_dds, write_tga, palette_from_header
@@ -365,6 +366,8 @@ def main():
     by_tag = {v[0]: c for c, v in COUNTRIES.items()}
     # what friends filled in on the Gazetteer (source/gazetteer/, scripts/gazetteer.py)
     G, gnotes = gazetteer.load(), []
+    # the traits and spirits the players asked for, in the game unless the author declined them (2026-11-02)
+    made_traits, made_ideas, made_loc, made_history, made_sprites = requests_made.files(G)
     gfacts = gazetteer.state_facts(G, lab, state_of, rj["owners"], gnotes, anchor, states, size) if G else {}
     # the releasables the Gazetteer's players made: countries owning nothing, with cores on
     # the states they hold most of, named, led and coloured as their facts say
@@ -1083,6 +1086,13 @@ def main():
         write("common/ideas/valsora_gazetteer_companies.txt", "# The Gazetteer's companies (scripts/gazetteer.py)\nideas = {\n"
               + "".join(f"\t{cat} = {{\n" + ("\t\tdesigner = yes\n" if cat != "industrial_concern" else "")
                         + "".join(blocks) + "\t}\n" for cat, blocks in sorted(company_ideas.items())) + "}\n")
+    if made_traits:
+        write("common/country_leader/valsora_requested_traits.txt", made_traits)
+    if made_ideas:   # their pictures the placeholder of the Feudal Army and the King in Chains, sprites of their own
+        write("common/ideas/valsora_requested_ideas.txt", made_ideas)
+        write("interface/valsora_requested_ideas.gfx", "spriteTypes = {\n" + "".join(
+            f'\tspriteType = {{\n\t\tname = "GFX_idea_{k}"\n\t\ttexturefile = "gfx/interface/ideas/ROU_feudal_army.dds"\n\t}}\n'
+            for k in made_sprites) + "}\n")
     if company_mios:
         write("common/military_industrial_organization/organizations/valsora_gazetteer_organizations.txt",
               "# The Gazetteer's arms companies, with Arms Against Tyranny (scripts/gazetteer.py)\n"
@@ -1141,6 +1151,7 @@ def main():
             *[f"\t{i} = {nations.POPULARITIES.get(tag, {}).get(i, 100 // len(IDEOLOGIES))}" for i in IDEOLOGIES],
             "}",
             *nations.HISTORY.get(tag, []),
+            *made_history.get(tag, []),
             *army[tag],
             *recruits[tag],
             ""]))
@@ -1317,6 +1328,7 @@ def main():
     test_events.write_files(write)
     loc += test_events.LOCALISATION
     loc += state_lines(write, state_by_name)
+    loc += made_loc
     write("localisation/english/valsora_l_english.yml", "\n".join(loc) + "\n", bom=True)
     nations.write_files(write, OUT, {nm: s + 1 for nm, s in state_by_name.items()},
                         {nm: int(pid[state_capital[s]]) for nm, s in state_by_name.items()})

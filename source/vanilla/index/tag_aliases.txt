@@ -1,0 +1,22 @@
+# the game's tag aliases (common/country_tag_aliases) (vanilla 1.19.3, scripts/vanilla_sync.py)
+BUF
+BUZ
+FGR
+FNO
+MOT
+RDS
+RSI
+SB1
+SB2
+SB3
+SB4
+SOB
+SOP
+SOS
+SOT
+SOU
+SPA
+SPB
+SPC
+SPD
+VIC

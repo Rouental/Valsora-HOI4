@@ -856,6 +856,23 @@ picture for Tara, use this one"), and the Speaker of the Estates General in the 
 women are `gender = female` now ("I noticed that Serelle currently seems to be considered male"): Serelle Cahun and
 Mahaut VI and their copies at HMMLA and Brillagne, and Tara Blanchart; the Gazetteer takes a gender for every character.
 
+## 2026-11-02: Arovannea's traits and spirits in the game; South Yucanoa SOH
+
+The author, of Arovannea's requests: "I noticed that the character traits and national spirits that Arovannea came up
+with weren't applied. Is there a reason for that?", and "Created traits should be shown as applied to the character,
+unless I veto it". Made by Claude from the player's own lists of effects (`scripts/requests_made.py`):
+- **The Jasper Snake**, on the head of state (Estúr Illger fön Reegen): asked from the head of state's box.
+- **Ýzania**, on the communists' leader, Asaia Axami Ma'aine ("for Asaia").
+- **Grandmaster of the Athelian Order**, on the Holy Order's leader, Father Basnarius Adelkan: Claude's reading (asked
+  from the head of state's box, the only one the page had then; its theocratic drift and the order's name).
+- **Disjointed Democratic Coalition**: made, no one's yet ("what the initial democratic/communist uprising starts
+  with": no such uprising in the game).
+- **The Dying Republic** and **Navy with a Nation**, Arovannea's from the start, the player's story their description
+  (the Feudal Army's placeholder picture). Left out of Navy with a Nation: "Marine entrenchment +0.2" (the game has no
+  modifier for the marines' alone).
+Whose each trait is can be changed on the page. Still requests: the sub-ideology Colonial Republicanism and the
+helicopter companies. **South Yucanoa** is SOH (SOU, from the import of 2026-10-29, is one of the game's tag aliases).
+
 ## 2026-10-30: Lindreland
 
 The author: "Rename Linterre/ Placeholdaire to Lindreland, and make their culture British." **Lindreland** LNT, "the

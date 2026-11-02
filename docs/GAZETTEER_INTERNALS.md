@@ -25,7 +25,7 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   nothing is committed when the site is unchanged). Pages redeploys in a minute or two (the
   "pages build and deployment" run in Actions; github.io itself can't be reached from
   Claude's sandbox). Test the page first: `python3 tests/gazetteer/run.py`, `traits.py`, `companies.py`, `ingame.py`,
-  `reset.py`, `guide.py`, `stale.py`, `gender.py`, `impassable.py`, `release_remove.py` and `borders.py`.
+  `reset.py`, `guide.py`, `stale.py`, `gender.py`, `impassable.py`, `release_remove.py`, `borders.py` and `answers.py`.
 - **Facts of states cut again from a nation's own map** (2026-10-20, Rouental's fiefs: `fief_states.py`): one old
   state became several, and its facts (Carcarelle's population) would land whole on the one new state holding its key.
   `gazetteer.rekey(tag, n)`, called by the import (and run once on `source/gazetteer/ROU.json`), reads the old and new
@@ -368,6 +368,30 @@ used. One page serves both: `FIREBASE` is null on claude.ai and filled in by
   left out; `facts_export.py` puts them in `index.json`), and **Ask for a new trait** is a request of kind `trait`.
   `check_mod.py` checks every trait of ours against the game's own (country leader traits for rulers and advisors,
   unit leader traits for commanders), each advisor's slot and its own `idea_token` (mutation-tested, 6 of 6).
+  **New traits and spirits, in the game unless declined** (2026-11-02, the author: "Created traits should be shown as
+  applied to the character, unless I veto it, in which case it should be removed"; Arovannea's four traits and two
+  spirits had waited as requests): `scripts/requests_made.py`'s `MADE`, by tag and request title (compared in NFC: the
+  page kept Ýzania's Ý as Y and an accent), holds Claude's translation of each into the game's modifiers
+  (`source/vanilla/index/modifiers.txt`, `vanilla_sync.modifier_names`: the English localisation's `MODIFIER_` keys and
+  every number key in the base game's country leader traits and ideas' modifier blocks), ship stats as
+  `equipment_bonus` by ship type, and what the game has no modifier for in `said` (on `status`). The build
+  (`requests_made.files`) writes the traits to `common/country_leader/valsora_requested_traits.txt`, the spirits to
+  `common/ideas/valsora_requested_ideas.txt` (the Feudal Army's placeholder picture, a sprite each in
+  `interface/valsora_requested_ideas.gfx`; `add_ideas` in the country history; the player's story, the paragraphs
+  without numbers, as the description), and `gazetteer.leaders` gives a trait to the ruler or party leader its request
+  names: the page's `for` ("ruler", "party-<ideology>" or a character's id, kept by the import as "party_<ideology>"),
+  else `MADE`'s `to`. A declined request is left out; a party leader the facts don't name gets the trait if the party
+  has one. A made trait for an advisor or commander is `status`'s, by hand. `check_mod.py` takes the mod's own country
+  leader traits as known, each named and every modifier of theirs, and of our ideas, one of the game's
+  (mutation-tested: `m_trait_modifier`, `m_idea_modifier`). On the page: **Ask for a new trait** writes `for` (the
+  ruler's, each party leader's since 2026-11-02, each character's); `traitOwner` reads `for`, else the nation file's
+  `made` (facts_export.py: each made request's kind, name and `to`), else "For the head of state" in the details;
+  `askedChips` shows a character's under **New traits asked for** (dashed chips, "being made" or "in the game"), a
+  declined one gone; the request card's `madeLine` says where it stands and, for a trait, **Whose trait** (writes
+  `for`). **Declined** asks why (`reply`), and Done or Declined writes `answeredAt`; `maybeAnswers` shows a non-owner the
+  answers newer than this browser's `gazetteer-answers:<TAG>` (after the guide, in its dialog; `app.answered` for OK
+  and Escape). The leaders' **Description** (the country leader's `desc`, its tooltip; titles until 2026-11-02) takes
+  up to 1000 letters (`DESC_MAX`, 600 before). `tests/gazetteer/answers.py`.
   **The neighbours' terrain** (2026-10-18, the author: "there should be an option to be able to see the terrain of your
   neighbors"): each nation's file has `otherT`, the build's terrain of each neighbouring province in its parts (in the
   order of `others`, as the mod has it, the imported Gazetteer terrain included: public map data, as in the mod); the

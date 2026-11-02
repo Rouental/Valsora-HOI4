@@ -460,6 +460,25 @@ def companies(V, earth):
             "templates": sorted(mio)}   # every generic organisation, for check_mod.py
 
 
+def modifier_names(V):
+    """the game's modifiers (2026-11-02, for the traits and spirits the Gazetteer's players ask for): the English
+    localisation's MODIFIER_ keys, and every key with a number in the base game's country leader traits and in its
+    ideas' modifier blocks (the ones the localisation names otherwise, as army_core_attack_factor)"""
+    names = set()
+    for p in (V / "localisation/english").rglob("*.yml"):
+        for m in re.finditer(r"^\s*MODIFIER_(\w+?)(?:_tt|_desc)?:\d* \"", p.read_text(encoding="utf-8-sig", errors="ignore"),
+                             re.M | re.I):
+            names.add(m[1].lower())
+    num = re.compile(r"\b([a-z_][a-z0-9_]*)\s*=\s*-?[\d.]+\b")
+    for p in (V / "common/country_leader").glob("*.txt"):
+        names |= set(num.findall(p.read_text(encoding="utf-8-sig", errors="ignore")))
+    for p in (V / "common/ideas").glob("*.txt"):
+        text = p.read_text(encoding="utf-8-sig", errors="ignore")
+        for m in re.finditer(r"\bmodifier\s*=\s*\{([^{}]*)\}", text):
+            names |= set(num.findall(m[1]))
+    return sorted(names - {"random", "factor", "base", "add", "x", "y", "cost", "removal_cost", "level", "value"})
+
+
 def main():
     V = vanilla_dir(sys.argv)
     files = sorted(Path(p).relative_to(V).as_posix() for p in glob.glob(str(V / "common/technologies/*.txt")))
@@ -485,6 +504,11 @@ def main():
         if m:
             tags.append(f"{m[1]}\t{m[2]}")
     put("tags.txt", tags, "Earth's country tags: tag, country file name")
+    # the tag aliases (SOU, SPA, VIC ...): script words like tags, so no country of ours may take one (2026-11-02:
+    # South Yucanoa came out SOU, "alias is already existing tag SOU" in error.log)
+    aliases = sorted({m[1] for p in sorted((V / "common/country_tag_aliases").glob("*.txt"))
+                      for m in re.finditer(r"^([A-Z][A-Z0-9]{2})\s*=", p.read_text(encoding="utf-8-sig"), re.M)})
+    put("tag_aliases.txt", aliases, "the game's tag aliases (common/country_tag_aliases)")
 
     kinds = decisions(V)
     used = referenced(V, set(kinds))
@@ -538,6 +562,7 @@ def main():
                     if isinstance(group, list):
                         ideas |= {k for k, _, v in group if k and isinstance(v, list) and k != "designer"}
     put("ideas.txt", sorted(ideas), "ideas (national spirits, laws, advisors)")
+    put("modifiers.txt", modifier_names(V), "modifiers: the localisation's and those the base game's traits and ideas use")
     caps = OUT / NAME_CAPS
     caps.parent.mkdir(parents=True, exist_ok=True)
     caps.write_text("\ufeffl_english:\n # the game's lines with a country's name opening a sentence, capitalised "
